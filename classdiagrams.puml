@@ -2,15 +2,36 @@
 ''Style config
 hide circle
 skinparam classFontStyle bold
-skinparam classAttributeIconSize 0
+skinparam groupInheritance 2
+''skinparam classAttributeIconSize 0
 
-''Dichiarazioni classi
-abstract classeastratta
-class classe
-interface starcomp as "Starship Component"
+''legenda: - private + pubblico #protected 
+
+''Class declaration
 
 
+interface $iSC as "Starship Component"{
+    {field} -connectors : int[4]
+    {field} -type : ComponentType
+    --methods--
+    {method} +getConnectors() : int[4]
+    {method} +getType(): ComponentType
+}
+note top of $iSC : Interfaccia comune a tutti i componenti.
 
-''Collegamenti tra classi
-classeastratta "1" <-- "2" classe : sburro
+class $CompCC as "Cabin Component1"{
+}
+
+class $SompCC as "Cabin Component2"{
+}
+
+class $FompCC as "Cabin Component3"{
+}
+
+$iSC ^-- $CompCC
+$iSC ^-- $FompCC
+$iSC ^-- $SompCC
+
+''Relations between classes
+
 @enduml
