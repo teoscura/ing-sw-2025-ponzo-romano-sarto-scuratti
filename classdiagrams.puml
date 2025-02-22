@@ -1,0 +1,16 @@
+@startuml style
+''Style config
+hide circle
+skinparam classFontStyle bold
+skinparam classAttributeIconSize 0
+
+''Dichiarazioni classi
+abstract classeastratta
+class classe
+interface starcomp as "Starship Component"
+
+
+
+''Collegamenti tra classi
+classeastratta "1" <-- "2" classe : sburro
+@enduml
