@@ -3,35 +3,21 @@
 hide circle
 skinparam classFontStyle bold
 skinparam groupInheritance 2
-''skinparam classAttributeIconSize 0
-
-''legenda: - private + pubblico #protected 
+set separator ::
+skinparam classAttributeIconSize 0
 
 ''Class declaration
-
-
-interface $iSC as "Starship Component"{
+interface Model::iSC as "Starship Component"{
     {field} -connectors : int[4]
     {field} -type : ComponentType
+    {field} -rotation: ComponentRotation
     --methods--
     {method} +getConnectors() : int[4]
     {method} +getType(): ComponentType
 }
-note top of $iSC : Interfaccia comune a tutti i componenti.
 
-class $CompCC as "Cabin Component1"{
-}
 
-class $SompCC as "Cabin Component2"{
-}
 
-class $FompCC as "Cabin Component3"{
-}
-
-$iSC ^-- $CompCC
-$iSC ^-- $FompCC
-$iSC ^-- $SompCC
 
 ''Relations between classes
-
 @enduml
