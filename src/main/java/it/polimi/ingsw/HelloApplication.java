@@ -1,4 +1,4 @@
-package it.polimi.provafinale;
+package it.polimi.ingsw;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
