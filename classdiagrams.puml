@@ -8,16 +8,20 @@ skinparam classAttributeIconSize 0
 
 ''Class declaration
 interface Model::iSC as "Starship Component"{
+    --methods--
+    {method} +getConnectors() : int[4]
+    {method} +getType() : ComponentType
+}
+
+class Model::SC as "Base Component" {
     {field} -connectors : int[4]
     {field} -type : ComponentType
     {field} -rotation: ComponentRotation
     --methods--
     {method} +getConnectors() : int[4]
-    {method} +getType(): ComponentType
+    {method} +getType() : ComponentType
 }
 
-
-
-
 ''Relations between classes
+iSC^--SC
 @enduml
