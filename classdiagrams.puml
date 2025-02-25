@@ -22,6 +22,66 @@ class Model::SC as "Base Component" {
     {method} +getType() : ComponentType
 }
 
+class Model::CBC as "Cabin Component" {
+}
+
+class Model::PCC as "Purple Alien Cabin Component" {
+}
+
+class Model::BCC as "Brown Alien Cabin Component" {
+}
+
+class Model::EC as "Engine Component" {
+}
+
+class Model::BEC as "Double Engine Component" {
+}
+
+abstract Model::ASC as "Life Support Component" {
+}
+
+class Model::PLSC as "Purple Life Support Component" {
+}
+
+class Model::BLSC as "Brown Life Suppport Component" {
+}
+
+class Model::CNC as "Cannon Component"{
+}
+
+class Model::DAC as "Double Cannon Component" {
+}
+
+abstract Model::STC as "Storage Component" {
+}
+
+class Model::STDSTC as "Standard Storage Component" {
+}
+
+class Model::SPCSTC as "Special Storage Component" {
+}
+
+class Model::BC as "Battery Component" {
+}
+
+class Model::SHC as "Shield Component" {
+}
+
 ''Relations between classes
 iSC^--SC
+SC^--CBC
+CBC^--PCC
+CBC^--BCC
+SC^--EC
+EC^--BEC
+SC^--ASC
+ASC^--PLSC
+ASC^--BLSC
+SC^--CNC
+CNC^--Model::DAC
+SC^--BC
+SC^--STC
+STC^--Model::STDSTC
+STC^--Model::SPCSTC
+SC^--SHC
 @enduml
