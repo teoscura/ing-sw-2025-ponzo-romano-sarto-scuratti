@@ -5,16 +5,23 @@ skinparam classFontStyle bold
 skinparam groupInheritance 2
 set separator ::
 skinparam classAttributeIconSize 0
+    
+class Model::Player{
+    {field} credits: int
+    {field} crew: int[3]
+    {field} distance: int
+    {field} spaceship: SpaceShip
+}
 
 ''Class declaration
-interface Model::iSC as "Starship Component"{
+interface Model::Components::iSC as "Starship Component"{
     --methods--
-    {method} +getConnectors() : int[4]
+    {method} +getConnectors() : ConnectorType[4]
     {method} +getType() : ComponentType
 }
 
-class Model::SC as "Base Component" {
-    {field} -connectors : int[4]
+abstract Model::Components::SC as "Base Component" {
+    {field} -connectors : ConnectorType
     {field} -type : ComponentType
     {field} -rotation: ComponentRotation
     --methods--
@@ -22,66 +29,73 @@ class Model::SC as "Base Component" {
     {method} +getType() : ComponentType
 }
 
-class Model::CBC as "Cabin Component" {
+class Model::Components::CBC as "Cabin Component" {
 }
 
-class Model::PCC as "Purple Alien Cabin Component" {
+class Model::Components::ACC as "Alien Cabin Component" {
 }
 
-class Model::BCC as "Brown Alien Cabin Component" {
+class Model::Components::EC as "Engine Component" {
 }
 
-class Model::EC as "Engine Component" {
+class Model::Components::BEC as "Double Engine Component" {
 }
 
-class Model::BEC as "Double Engine Component" {
+class Model::Components::ASC as "Life Support Component" {
 }
 
-abstract Model::ASC as "Life Support Component" {
+class Model::Components::CNC as "Cannon Component"{
 }
 
-class Model::PLSC as "Purple Life Support Component" {
+class Model::Components::DAC as "Double Cannon Component" {
 }
 
-class Model::BLSC as "Brown Life Suppport Component" {
+class Model::Components::STC as "Storage Component" {
 }
 
-class Model::CNC as "Cannon Component"{
+class Model::Components::BC as "Battery Component" {
 }
 
-class Model::DAC as "Double Cannon Component" {
+class Model::Components::SHC as "Shield Component" {
 }
 
-abstract Model::STC as "Storage Component" {
+''Il mucchio di celle
+interface Model::iCommonBoard{
+    ---methods---
+    {method} pull_component(): Starship Component
+    {method} discard_component(Starship Component a): void
+    {method} pull_discarded(): Starship Component
 }
 
-class Model::STDSTC as "Standard Storage Component" {
+class Model::CommonBoard{
+    {field} covered_components: Queue<Starship Component>
+    {field} uncovered_components: ArrayList<Starship Component>
+    --methods--
+    {field} covered_components: Queue<Starship Component>
+    {field} uncovered_components: ArrayList<Starship Component>
 }
 
-class Model::SPCSTC as "Special Storage Component" {
-}
-
-class Model::BC as "Battery Component" {
-}
-
-class Model::SHC as "Shield Component" {
+interface Model::iSpaceShip{
+    --methods--
+    {method} verify(): void
+    {method} add_component(Starship Component comp, usize index)
 }
 
 ''Relations between classes
-iSC^--SC
-SC^--CBC
-CBC^--PCC
-CBC^--BCC
-SC^--EC
-EC^--BEC
-SC^--ASC
-ASC^--PLSC
-ASC^--BLSC
-SC^--CNC
-CNC^--Model::DAC
-SC^--BC
-SC^--STC
-STC^--Model::STDSTC
-STC^--Model::SPCSTC
-SC^--SHC
+Model::Components::iSC^----Model::Components::SC
+Model::Components::SC^----Model::Components::CBC
+Model::Components::CBC^----Model::Components::ACC
+Model::Components::SC^----Model::Components::EC
+Model::Components::SC^----Model::Components::BEC
+Model::Components::SC^----Model::Components::ASC
+Model::Components::SC^----Model::Components::CNC
+Model::Components::SC^----Model::Components::DAC
+Model::Components::SC^----Model::Components::BC
+Model::Components::SC^----Model::Components::STC
+Model::Components::SC^----Model::Components::SHC
+
+
+Model::iCommonBoard ^--- Model::CommonBoard
+Model::Components::SC <--* "0..n covered_components" Model::CommonBoard
+
 @enduml
