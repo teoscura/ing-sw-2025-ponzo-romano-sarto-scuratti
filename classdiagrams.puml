@@ -5,7 +5,7 @@ skinparam classFontStyle bold
 skinparam groupInheritance 2
 set separator ::
 skinparam classAttributeIconSize 0
-    
+
 class Model::Player{
     {field} credits: int
     {field} crew: int[3]
@@ -13,89 +13,239 @@ class Model::Player{
     {field} spaceship: SpaceShip
 }
 
+
 ''Class declaration
+
+''Components
+
 interface Model::Components::iSC as "Starship Component"{
-    --methods--
+    ==methods==
     {method} +getConnectors() : ConnectorType[4]
     {method} +getType() : ComponentType
+    {method} +verify(iSpaceShip state, int position): bool
 }
 
 abstract Model::Components::SC as "Base Component" {
     {field} -connectors : ConnectorType
     {field} -type : ComponentType
     {field} -rotation: ComponentRotation
-    --methods--
-    {method} +getConnectors() : int[4]
+    ==methods==
+    {method} +getConnectors() : ConnectorType[4]
     {method} +getType() : ComponentType
+    {method} +verify(iSpaceShip state, int position): bool
 }
 
-class Model::Components::CBC as "Cabin Component" {
+class Model::Components::CC as "Cabin Component" {
+    {field} -crew_number: int
+    ==methods==
+    {method} +getCrew(): int
+    {method} +getCrewType(): AlienType
 }
 
 class Model::Components::ACC as "Alien Cabin Component" {
+    {field} -alien_type: AlienType
+    ==methods==
+    {method} +getAlienType(): AlienType
+    {method} +getCrew(): int
 }
 
 class Model::Components::EC as "Engine Component" {
-}
-
-class Model::Components::BEC as "Double Engine Component" {
+    {field} -max_power: int
+    {field} -powered: boolean
+    {field} -current_power: int
+    ==methods==
+    {method} +turnOn(): void
+    {method} +getCurrentPower(): int
 }
 
 class Model::Components::ASC as "Life Support Component" {
+    {field} -type: AlienType
+    ==methods==
+    {field} +getType(): AlienType
 }
 
 class Model::Components::CNC as "Cannon Component"{
-}
-
-class Model::Components::DAC as "Double Cannon Component" {
+    {field} -max_power: int
+    {field} -powered: boolean
+    {field} -current_power: int
+    ==methods==
+    {method} +turnOn(): void
+    {method} +getCurrentPower(): int
 }
 
 class Model::Components::STC as "Storage Component" {
+    {field} -max_capacity: int
+    {field} -shipments: ShipmentType[]
+    ==methods==
+    {method} +putIn(ShipmentType item): void
+    {method} +getContents(): ShipmentType[]
+    {method} +getCapacity(): int
 }
 
 class Model::Components::BC as "Battery Component" {
+    {field} -max_capacity: int
+    ==methods==
+    {method} +getBatteries(): int
 }
 
 class Model::Components::SHC as "Shield Component" {
+    {field} -shield_type: ShieldType
+    ==methods==
+    {method} +getShield(): ShieldType
 }
 
-''Il mucchio di celle
-interface Model::iCommonBoard{
-    ---methods---
-    {method} pull_component(): Starship Component
-    {method} discard_component(Starship Component a): void
-    {method} pull_discarded(): Starship Component
+''Adventure cards
+
+interface Model::Board::iCards{
+    ==methods==
+    {method} +pullCard(): iCard
 }
 
-class Model::CommonBoard{
-    {field} covered_components: Queue<Starship Component>
-    {field} uncovered_components: ArrayList<Starship Component>
-    --methods--
-    {field} covered_components: Queue<Starship Component>
-    {field} uncovered_components: ArrayList<Starship Component>
+class Model::Board::Cards{
+    {field} -cards: Queue<iCard>
+    ==methods==
+    {method} +pullCard(): iCard
+}
+
+interface Model::iCard{ 
+    ==methods==
+    {method} +getTitle(): String
+    {method} +getText(): String
+    {method} +getEffect(): CardEffect
+}
+
+class Model::Card{
+    {field} -title: String
+    {field} -text: String
+    {field} -effect: CardEffect
+    ==methods==
+    {method} +getTitle(): String
+    {method} +getText(): String
+    {method} +getEffect(): CardEffect
+}
+
+interface Model::iCardEffect{
+    ''TODO
+    ==methods==
+    {method} apply(iSpaceShip ship): function(blablabla)
+}
+
+class Model::CardEffect{
+    ' TODO capire la sintassi per includere una funzione come variabile.
+    {field} test: Functional.Predicate(iSpaceShip ship) 
+    {field} on_satisfy: Functional.Function(Player player)
+    {field} on_unsatisfy: Functional.Function(Player player)
+    ==methods==
+    {method} apply(iSpaceShip ship): Functional.Function(blablabla)
+}
+
+''Il mucchio di celle scoperte e non
+interface Model::Board::iCommonBoard{
+    ==methods==
+    {method} +pullComponent(): Starship Component
+    {method} +discardComponent(Starship Component a): void
+    {method} +pullDiscarded(): Starship Component
+}
+
+class Model::Board::CommonBoard{
+    {field} -covered_components: Queue<Starship Component>
+    {field} -uncovered_components: ArrayList<Starship Component>
+    ==methods==
+    {method} +pullComponent(): Starship Component
+    {method} +discardComponent(Starship Component a): void
+    {method} +pullDiscarded(): Starship Component
 }
 
 interface Model::iSpaceShip{
-    --methods--
-    {method} verify(): void
-    {method} add_component(Starship Component comp, usize index)
+    ==methods==
+    {method} +verify(): void
+    {method} +add_component(Starship Component comp, int position): void
+    {method} +remove_component(int position): void
+    {method} +verify(): bool
+    {method} +turnOn(int position): bool
+    {method} +resetPower(): void
+    'called and evaluates possible
 }
+
+class Model::SpaceShip{
+    {field} -component: Starship Component[35]
+    {field} -total_power: int
+    {field} -total_firing_power: int
+    {field} -total_engine_power: int
+    {field} -batteries: int
+    ==methods==
+    {method} +verify(): void
+    {method} +addComponent(Starship Component comp, int position): void
+    {method} +removeComponent(int position): void
+    {method} +verify(): bool
+    {method} +turnOn(int position): bool
+    {method} +resetPower(): void
+    {method} +getPower(): int
+    {method} +getEnginePower(): int
+    {method} +getSpeed(): int
+    ----
+    {method} -evaluateSpeed(): int
+    {method} -evaluatePower(): int
+}
+
+''under the hood position is calculated by the client or RMI interface before being sent, so this layer of abstraction will be useful for running tests.
+
 
 ''Relations between classes
 Model::Components::iSC^----Model::Components::SC
-Model::Components::SC^----Model::Components::CBC
-Model::Components::CBC^----Model::Components::ACC
+Model::Components::SC^----Model::Components::CC
+Model::Components::CC^----Model::Components::ACC
 Model::Components::SC^----Model::Components::EC
-Model::Components::SC^----Model::Components::BEC
 Model::Components::SC^----Model::Components::ASC
 Model::Components::SC^----Model::Components::CNC
-Model::Components::SC^----Model::Components::DAC
 Model::Components::SC^----Model::Components::BC
 Model::Components::SC^----Model::Components::STC
 Model::Components::SC^----Model::Components::SHC
 
+Model::Board::iCards^---Model::Board::Cards
+Model::iCard<----*Model::Board::Cards
+Model::iCard^--Model::Card
+Model::iCardEffect<--*Model::Card
+Model::iCardEffect^---Model::CardEffect
 
-Model::iCommonBoard ^--- Model::CommonBoard
-Model::Components::SC <--* "0..n covered_components" Model::CommonBoard
+Model::iSpaceShip ^-- Model::SpaceShip
+
+Model::Player <--* Model::iSpaceShip
+
+Model::Board::iCommonBoard ^--- Model::Board::CommonBoard
+Model::Components::SC <--* "0..n covered_components" Model::Board::CommonBoard
 
 @enduml
+
+'⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣤⣤⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+'⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣾⣿⣿⣿⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣼⣿⣿⣿⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+'⠀⠀⠀⠀⠀⠀⠀⠀⢀⣾⣿⣿⣿⣿⣷⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣼⣿⣿⣿⣿⣿⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+'⠀⠀⠀⠀⠀⠀⠀⠀⣾⣿⣿⣿⣿⣿⣿⣧⠀⠀⠀⠀⠀⠀⠀⠀⠀⢰⣿⣿⣿⣿⣿⣿⣧⠀⠀⠀⠀⠀⠀⠀⠀⠀
+'⠀⠀⠀⠀⠀⠀⠀⣼⣿⣿⣿⣿⣿⣿⣿⣿⣇⠀⠀⠀⠀⠀⠀⠀⢀⣿⣿⣿⣿⣿⣿⣿⣿⡆⠀⠀⠀⠀⠀⠀⠀⠀
+'⠀⠀⠀⠀⠀⠀⢰⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡄⠀⠀⠀⠀⠀⠀⣼⣿⣿⣿⣿⣿⣿⣿⣿⣷⠀⠀⠀⠀⠀⠀⠀⠀
+'⠀⠀⠀⠀⠀⢀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣧⠀⠀⠀⠀⠀⢰⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀
+'⠀⠀⠀⠀⠀⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡄⠀⠀⠀⢀⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣇⠀⠀⠀⠀⠀⠀⠀
+'⠀⠀⠀⠀⠀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠀⠀⠀⠀⠀⠀⠀
+'⠀⠀⠀⠀⢀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠀⠀⠀⠀⠀⠀⠀
+'⠀⠀⠀⠀⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠀⠀⠀⠀⠀⠀⠀
+'⠀⠀⠀⠀⠈⣿⣿⣿⣿⣿⣿⠟⠉⠀⠀⠀⠙⢿⣿⣿⣿⣿⣿⣿⣿⡿⠋⠀⠀⠙⢻⣿⣿⣿⣿⠀⠀⠀⠀⠀⠀⠀
+'⠀⠀⠀⠀⠀⣿⣿⣿⣿⣿⠃⠀⠀⠀⠀⣠⣄⠀⢻⣿⣿⣿⣿⣿⡿⠀⣠⣄⠀⠀⠀⢻⣿⣿⣏⠀⠀⠀⠀⠀⠀⠀
+'⠀⠀⠀⠀⠀⣾⣿⣿⣿⣿⠀⠀⠀⠀⠰⣿⣿⠀⢸⣿⣿⣿⣿⣿⡇⠀⣿⣿⡇⠀⠀⢸⣿⣿⣿⠀⠀⠀⠀⠀⠀⠀
+'⠀⠀⠀⠀⠀⣿⣿⣿⣿⣿⣄⠀⠀⠀⠀⠙⠃⠀⣼⣿⣿⣿⣿⣿⣇⠀⠙⠛⠁⠀⠀⣼⣿⣿⣿⡇⠀⠀⠀⠀⠀⠀
+'⠀⠀⠀⠀⠀⣿⣿⣿⣿⣿⣿⣷⣤⣄⣀⣠⣤⣾⣿⣿⣿⣿⣽⣿⣿⣦⣄⣀⣀⣤⣾⣿⣿⣿⣿⠃⠀⠀⢀⣀⠀⠀
+'⠰⡶⠶⠶⠶⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡟⠛⠉⠉⠙⠛⠋⠀
+'⠀⠀⢀⣀⣠⣤⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠷⠶⠶⠶⢤⣤⣀⠀
+'⠀⠛⠋⠉⠁⠀⣀⣴⡿⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣯⣤⣀⡀⠀⠀⠀⠀⠘⠃
+'⠀⠀⢀⣤⡶⠟⠉⠁⠀⠀⠉⠛⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⠟⠉⠀⠀⠀⠉⠙⠳⠶⣄⡀⠀⠀
+'⠀⠀⠙⠁⠀⠀⠀⠀⠀⠀⠀⠀⢰⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠁⠀⠀
+'⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+'⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+'⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣼⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+'⠀⠀⠀⠀⠀⠀⠀⠀⠀⣸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+'⠀⠀⠀⠀⠀⠀⠀⠀⣴⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+'⠀⠀⠀⠀⠀⠀⠀⣴⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+'⠀⠀⠀⠀⠀⠀⣰⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+'⠀⠀⠀⠀⠀⢰⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+'⠀⠀⠀⠀⢀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+'⠀⠀⠀⠀⣸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+
