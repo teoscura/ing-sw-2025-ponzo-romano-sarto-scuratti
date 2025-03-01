@@ -1,22 +1,24 @@
 @startuml classdiagrams
-''Style config
+'Style config
 hide circle
 skinparam classFontStyle bold
 skinparam groupInheritance 2
 set separator ::
 skinparam classAttributeIconSize 0
 
-class Model::Player{
-    {field} credits: int
-    {field} crew: int[3]
-    {field} distance: int
-    {field} spaceship: SpaceShip
+'Class declaration
+
+class Model::Player::Player{
+    {field} -credits: int
+    {field} -crew: int[3]
+    {field} -distance: int
+    {field} -spaceship: SpaceShip
+    {field} -color: PlayerColor
+    ==methods==
+    ' TODO getters and setters
 }
 
-
-''Class declaration
-
-''Components
+'Components
 
 interface Model::Components::iSC as "Starship Component"{
     ==methods==
@@ -94,8 +96,11 @@ class Model::Components::SHC as "Shield Component" {
     {method} +getShield(): ShieldType
 }
 
-''Adventure cards
+class Model::Components::EPC as "Empty Space Component" {
+    'A block with no connectors.
+}
 
+'Adventure cards
 interface Model::Board::iCards{
     ==methods==
     {method} +pullCard(): iCard
@@ -125,21 +130,44 @@ class Model::Card{
 }
 
 interface Model::iCardEffect{
-    ''TODO
     ==methods==
-    {method} apply(iSpaceShip ship): function(blablabla)
+    {method} +apply(iSpaceShip ship): function(blablabla)
 }
 
 class Model::CardEffect{
     ' TODO capire la sintassi per includere una funzione come variabile.
-    {field} test: Functional.Predicate(iSpaceShip ship) 
-    {field} on_satisfy: Functional.Function(Player player)
-    {field} on_unsatisfy: Functional.Function(Player player)
+    {field} -test: Functional.Predicate(iSpaceShip ship) 
+    {field} -on_satisfy: Functional.Function(Player player)
+    {field} -on_unsatisfy: Functional.Function(Player player)
     ==methods==
-    {method} apply(iSpaceShip ship): Functional.Function(blablabla)
+    {method} +apply(iSpaceShip ship): Functional.Function(blablabla)
 }
 
-''Il mucchio di celle scoperte e non
+'La planche su cui giocare
+interface Model::Board::iPlanche {
+    ==methods==
+    {method} +getPlayerPosition(PlayerColor c): int
+    {method} +getPlayersAt(int Position): PlayerColor[]
+    {method} +movePlayer(PlayerColor c, int rel_change): void
+    {method} +won(): PlayerColor
+}
+
+class Model::Board::PlancheCell {
+    {field} -players: PlayerColor[]
+    ==methods==
+    {method} +getPlayers(): PlayerColor[]
+}
+
+class Model::Board::Planche {
+    {field} cells: PlancheCell[]
+    ==methods==
+    {method} +getPlayerPosition(PlayerColor c): int
+    {method} +getPlayersAt(int Position): PlayerColor[]
+    {method} +movePlayer(PlayerColor c, int rel_change): void
+    {method} +won(): PlayerColor
+}
+
+'Il mucchio di celle scoperte e non
 interface Model::Board::iCommonBoard{
     ==methods==
     {method} +pullComponent(): Starship Component
@@ -156,7 +184,7 @@ class Model::Board::CommonBoard{
     {method} +pullDiscarded(): Starship Component
 }
 
-interface Model::iSpaceShip{
+interface Model::Player::iSpaceShip{
     ==methods==
     {method} +verify(): void
     {method} +add_component(Starship Component comp, int position): void
@@ -167,7 +195,7 @@ interface Model::iSpaceShip{
     'called and evaluates possible
 }
 
-class Model::SpaceShip{
+class Model::Player::SpaceShip{
     {field} -component: Starship Component[35]
     {field} -total_power: int
     {field} -total_firing_power: int
@@ -188,10 +216,12 @@ class Model::SpaceShip{
     {method} -evaluatePower(): int
 }
 
-''under the hood position is calculated by the client or RMI interface before being sent, so this layer of abstraction will be useful for running tests.
+'under the hood position is calculated by the client or RMI interface before being sent, so this layer of abstraction will be useful for running tests.
 
 
-''Relations between classes
+'Relations between classes
+
+'Components
 Model::Components::iSC^----Model::Components::SC
 Model::Components::SC^----Model::Components::CC
 Model::Components::CC^----Model::Components::ACC
@@ -201,17 +231,23 @@ Model::Components::SC^----Model::Components::CNC
 Model::Components::SC^----Model::Components::BC
 Model::Components::SC^----Model::Components::STC
 Model::Components::SC^----Model::Components::SHC
+Model::Components::SC^----Model::Components::EPC
 
+'Cards
 Model::Board::iCards^---Model::Board::Cards
 Model::iCard<----*Model::Board::Cards
 Model::iCard^--Model::Card
 Model::iCardEffect<--*Model::Card
 Model::iCardEffect^---Model::CardEffect
 
-Model::iSpaceShip ^-- Model::SpaceShip
+'Players and ships
+Model::Player::Player <--* Model::Player::iSpaceShip
+Model::Player::iSpaceShip ^-- Model::Player::SpaceShip
+Model::Components::SC <--  "35" Model::Player::SpaceShip
 
-Model::Player <--* Model::iSpaceShip
-
+'Board
+Model::Board::iPlanche^--Model::Board::Planche
+Model::Board::PlancheCell<- "n" Model::Board::Planche
 Model::Board::iCommonBoard ^--- Model::Board::CommonBoard
 Model::Components::SC <--* "0..n covered_components" Model::Board::CommonBoard
 
