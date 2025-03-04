@@ -131,16 +131,16 @@ class Model::Card{
 
 interface Model::iCardEffect{
     ==methods==
-    {method} +apply(iSpaceShip ship): function(blablabla)
+    {method} +apply(iSpaceShip ship): Functional.BiConsumer<iStarShip, Player>.
 }
 
 class Model::CardEffect{
     ' TODO capire la sintassi per includere una funzione come variabile.
-    {field} -test: Functional.Predicate(iSpaceShip ship) 
-    {field} -on_satisfy: Functional.Function(Player player)
-    {field} -on_unsatisfy: Functional.Function(Player player)
+    {field} -test: Functional.BiPredicate<iStarShip, Player> 
+    {field} -on_satisfy: Functional.Functional.BiConsumer<iStarShip, Player>.
+    {field} -on_unsatisfy: Functional.Functional.BiConsumer<iStarShip, Player>.
     ==methods==
-    {method} +apply(iSpaceShip ship): Functional.Function(blablabla)
+    {method} +apply(iSpaceShip ship): Functional.BiConsumer<iStarShip, Player>.
 }
 
 'La planche su cui giocare
