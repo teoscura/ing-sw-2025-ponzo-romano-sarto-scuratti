@@ -38,5 +38,6 @@ public class HelloApplication extends Application {
 
         frame.add(panel);
         frame.setVisible(true);
+
     }
 }
