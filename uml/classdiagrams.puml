@@ -17,11 +17,12 @@ skinparam classAttributeIconSize 0
 'Class declaration
 
 'Components
-interface Model::Components::iSC as "Starship Component"{
+interface Model::Components::iSC as "iStarshipComponent"{
     ==methods==
     {method} +getConnectors() : ConnectorType[4]
     {method} +getType() : ComponentType
     {method} +verify(iSpaceShip state, int position): bool
+    {method} +check(iVisitor v): void
 }
 
 interface Model::Components::iVisitable as "iVisitable" {
