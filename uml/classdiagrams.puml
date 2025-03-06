@@ -58,7 +58,7 @@ class Model::Components::Visitor as "Visitor" {
 }
 
 abstract Model::Components::SC as "Base Component" {
-    {field} -connectors : ConnectorType
+    {field} -connectors : ConnectorType[4]
     {field} -rotation: ComponentRotation
     ==methods==
     {method} +getConnectors() : ConnectorType[4]
@@ -74,7 +74,6 @@ class Model::Components::CC as "Cabin Component" {
     {method} +getRotation() : ComponentRotation
     {method} +verify(iSpaceShip state, int position): bool
     {method} +getCrew(): int
-    {method} +getCrewType(): AlienType
     {method} +check(iVisitor v): void
 }
 

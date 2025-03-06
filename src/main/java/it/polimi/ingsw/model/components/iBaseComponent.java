@@ -7,9 +7,22 @@ enum ConnectorType{
     UNIVERSAL,
 }
 
+//Defined clockwise.
+enum ComponentRotation {
+    ZERO, 
+    POSHALFPI,
+    PI,
+    MINHALFPI,
+}
+
 public interface iBaseComponent {
     
     public ConnectorType[] getConnectors();
 
-    public 
+    public ComponentRotation getRotation();
+
+    public boolean verify(iSpaceShip state, int position);
+
+    public void check(iVisitor v);
+    
 }
