@@ -17,7 +17,7 @@ skinparam classAttributeIconSize 0
 'Class declaration
 
 'Components
-interface Model::Components::iSC as "iStarshipComponent"{
+interface Model::Components::iSC as "iBaseComponent"{
     ==methods==
     {method} +getConnectors() : ConnectorType[4]
     {method} +getType() : ComponentType
