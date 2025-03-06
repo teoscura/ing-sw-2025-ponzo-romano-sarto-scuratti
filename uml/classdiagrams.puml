@@ -6,17 +6,14 @@ skinparam groupInheritance 2
 set separator ::
 skinparam classAttributeIconSize 0
 
-'Class declaration
+' =============================================================
+' -!-.-!-.-!-.-!-.-!-.-!-.-!-. -!- .-!-.-!-.-!-.-!-.-!-.-!-.-!-
+' ------ Getters and Setters -> omitted in large classes ------
+' -------------------------------------------------------------
+' -!-.-!-.-!-.-!-.-!-.-!-.-!-. -!- .-!-.-!-.-!-.-!-.-!-.-!-.-!-
+' =============================================================
 
-class Model::Player::Player{
-    {field} -credits: int
-    {field} -crew: int[3]
-    {field} -distance: int
-    {field} -spaceship: SpaceShip
-    {field} -color: PlayerColor
-    ==methods==
-    ' TODO getters and setters
-}
+'Class declaration
 
 'Components
 interface Model::Components::iSC as "Starship Component"{
@@ -253,14 +250,28 @@ class Model::Board::CommonBoard{
     {method} +pullDiscarded(): Starship Component
 }
 
+class Model::Player::Player{
+    {field} -credits: int
+    {field} -crew: int[3]
+    {field} -distance: int
+    {field} -spaceship: SpaceShip
+    {field} -color: PlayerColor
+    ==methods==
+    ' TODO getters and setters
+}
+
 interface Model::Player::iSpaceShip{
     ==methods==
-    {method} +verify(): void
-    {method} +add_component(Starship Component comp, int position): void
-    {method} +remove_component(int position): void
-    {method} +verify(): bool
-    {method} +turnOn(int position): bool
-    {method} +resetPower(): void
+    {method} +verify() : void
+    {method} +add_component(Starship Component comp, int position) : void
+    {method} +remove_component(int position) : void
+    {method} +verify() : bool
+    {method} +turnOn(int position) : bool
+    {method} +resetPower() : void
+    {method} +up(position) : int
+    {method} +down(position) : int
+    {method} +right(position) : int
+    {method} +left(position) : int
     'called and evaluates possible
 }
 
@@ -277,9 +288,10 @@ class Model::Player::SpaceShip{
     {method} +verify(): bool
     {method} +turnOn(int position): bool
     {method} +resetPower(): void
-    {method} +getPower(): int
-    {method} +getEnginePower(): int
-    {method} +getSpeed(): int
+    {method} +up(position) : int
+    {method} +down(position) : int
+    {method} +right(position) : int
+    {method} +left(position) : int
     ----
     {method} -evaluateSpeed(): int
     {method} -evaluatePower(): int
