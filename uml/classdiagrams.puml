@@ -331,7 +331,7 @@ Model::Components::iVisitable^...Model::Components::EPC
 
 
 'Cards
-Model::Board::iCards^...Model::Board::Cards
+Model::Board::iCards^..Model::Board::Cards
 Model::iCard<----*Model::Board::Cards
 Model::iCard^..Model::Card
 Model::iCardEffect<--*Model::Card
