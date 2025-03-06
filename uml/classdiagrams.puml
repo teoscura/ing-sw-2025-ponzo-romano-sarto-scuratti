@@ -20,7 +20,7 @@ skinparam classAttributeIconSize 0
 interface Model::Components::iSC as "iBaseComponent"{
     ==methods==
     {method} +getConnectors() : ConnectorType[4]
-    {method} +getType() : ComponentType
+    
     {method} +verify(iSpaceShip state, int position): bool
     {method} +check(iVisitor v): void
 }
@@ -59,11 +59,10 @@ class Model::Components::Visitor as "Visitor" {
 
 abstract Model::Components::SC as "Base Component" {
     {field} -connectors : ConnectorType
-    {field} -type : ComponentType
     {field} -rotation: ComponentRotation
     ==methods==
     {method} +getConnectors() : ConnectorType[4]
-    {method} +getType() : ComponentType
+    {method} +getRotation() : ComponentRotation
     {method} +verify(iSpaceShip state, int position): bool
     {method} +check(iVisitor v): void
 }
@@ -72,7 +71,7 @@ class Model::Components::CC as "Cabin Component" {
     {field} -crew_number: int
     ==methods==
     {method} +getConnectors() : ConnectorType[4]
-    {method} +getType() : ComponentType
+    {method} +getRotation() : ComponentRotation
     {method} +verify(iSpaceShip state, int position): bool
     {method} +getCrew(): int
     {method} +getCrewType(): AlienType
@@ -83,7 +82,7 @@ class Model::Components::ACC as "Alien Cabin Component" {
     {field} -alien_type: AlienType
     ==methods==
     {method} +getConnectors() : ConnectorType[4]
-    {method} +getType() : ComponentType
+    {method} +getRotation() : ComponentRotation
     {method} +verify(iSpaceShip state, int position): bool
     {method} +getAlienType(): AlienType
     {method} +getCrew(): int
@@ -96,7 +95,7 @@ class Model::Components::EC as "Engine Component" {
     {field} -current_power: int
     ==methods==
     {method} +getConnectors() : ConnectorType[4]
-    {method} +getType() : ComponentType
+    {method} +getRotation() : ComponentRotation
     {method} +verify(iSpaceShip state, int position): bool
     {method} +turnOn(): void
     {method} +getCurrentPower(): int
@@ -107,7 +106,7 @@ class Model::Components::ASC as "Life Support Component" {
     {field} -type: AlienType
     ==methods==
     {method} +getConnectors() : ConnectorType[4]
-    {method} +getType() : ComponentType
+    {method} +getRotation() : ComponentRotation
     {method} +verify(iSpaceShip state, int position): bool
     {method} +getType(): AlienType
     {method} +check(iVisitor v): void
@@ -119,7 +118,7 @@ class Model::Components::CNC as "Cannon Component"{
     {field} -current_power: int
     ==methods==
     {method} +getConnectors() : ConnectorType[4]
-    {method} +getType() : ComponentType
+    {method} +getRotation() : ComponentRotation
     {method} +verify(iSpaceShip state, int position): bool
     {method} +turnOn(): void
     {method} +getCurrentPower(): int
@@ -131,7 +130,7 @@ class Model::Components::STC as "Storage Component" {
     {field} -shipments: ShipmentType[]
     ==methods==
     {method} +getConnectors() : ConnectorType[4]
-    {method} +getType() : ComponentType
+    {method} +getRotation() : ComponentRotation
     {method} +verify(iSpaceShip state, int position): bool
     {method} +putIn(ShipmentType item): void
     {method} +getContents(): ShipmentType[]
@@ -143,7 +142,7 @@ class Model::Components::BC as "Battery Component" {
     {field} -max_capacity: int
     ==methods==
     {method} +getConnectors() : ConnectorType[4]
-    {method} +getType() : ComponentType
+    {method} +getRotation() : ComponentRotation
     {method} +verify(iSpaceShip state, int position): bool
     {method} +getBatteries(): int
     {method} +check(iVisitor v): void
@@ -153,7 +152,7 @@ class Model::Components::SHC as "Shield Component" {
     {field} -shield_type: ShieldType
     ==methods==
     {method} +getConnectors() : ConnectorType[4]
-    {method} +getType() : ComponentType
+    {method} +getRotation() : ComponentRotation
     {method} +verify(iSpaceShip state, int position): bool
     {method} +getShield(): ShieldType
     {method} +check(iVisitor v): void
@@ -162,7 +161,7 @@ class Model::Components::SHC as "Shield Component" {
 class Model::Components::EPC as "Empty Space Component" {
     ==methods==
     {method} +getConnectors() : ConnectorType[4]
-    {method} +getType() : ComponentType
+    {method} +getRotation() : ComponentRotation
     {method} +verify(iSpaceShip state, int position): bool
     {method} +check(iVisitor v): void
     'A block with no connectors.
