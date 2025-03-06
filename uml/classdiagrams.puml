@@ -19,12 +19,43 @@ class Model::Player::Player{
 }
 
 'Components
-
 interface Model::Components::iSC as "Starship Component"{
     ==methods==
     {method} +getConnectors() : ConnectorType[4]
     {method} +getType() : ComponentType
     {method} +verify(iSpaceShip state, int position): bool
+}
+
+interface Model::Components::iVisitable as "iVisitable" {
+    ==methods==
+    {method} +check(iVisitor v): void
+}
+
+interface Model::Components::iVisitor as "iVisitor" {
+    ==methods==
+    {method} +updateSpaceShip(iSpaceShip ship) : void
+    {method} +visit(CC cabin) : void
+    {method} +visit(ACC aliencabin) : void
+    {method} +visit(EC engine) : void
+    {method} +visit(ASC lifesupport) : void
+    {method} +visit(CNC cannon) : void
+    {method} +visit(STC storage) : void
+    {method} +visit(BC battery) : void
+    {method} +visit(SHC component) : void
+    {method} +visit(EPC component) : void 
+}
+
+class Model::Components::Visitor as "Visitor" {
+    {method} +updateSpaceShip(iSpaceShip ship) : void
+    {method} +visit(CC cabin): void
+    {method} +visit(ACC aliencabin): void
+    {method} +visit(EC engine): void
+    {method} +visit(ASC lifesupport): void
+    {method} +visit(CNC cannon): void
+    {method} +visit(STC storage): void
+    {method} +visit(BC battery): void
+    {method} +visit(SHC component): void
+    {method} +visit(EPC component): void 
 }
 
 abstract Model::Components::SC as "Base Component" {
@@ -35,20 +66,29 @@ abstract Model::Components::SC as "Base Component" {
     {method} +getConnectors() : ConnectorType[4]
     {method} +getType() : ComponentType
     {method} +verify(iSpaceShip state, int position): bool
+    {method} +check(iVisitor v): void
 }
 
 class Model::Components::CC as "Cabin Component" {
     {field} -crew_number: int
     ==methods==
+    {method} +getConnectors() : ConnectorType[4]
+    {method} +getType() : ComponentType
+    {method} +verify(iSpaceShip state, int position): bool
     {method} +getCrew(): int
     {method} +getCrewType(): AlienType
+    {method} +check(iVisitor v): void
 }
 
 class Model::Components::ACC as "Alien Cabin Component" {
     {field} -alien_type: AlienType
     ==methods==
+    {method} +getConnectors() : ConnectorType[4]
+    {method} +getType() : ComponentType
+    {method} +verify(iSpaceShip state, int position): bool
     {method} +getAlienType(): AlienType
     {method} +getCrew(): int
+    {method} +check(iVisitor v): void
 }
 
 class Model::Components::EC as "Engine Component" {
@@ -56,14 +96,22 @@ class Model::Components::EC as "Engine Component" {
     {field} -powered: boolean
     {field} -current_power: int
     ==methods==
+    {method} +getConnectors() : ConnectorType[4]
+    {method} +getType() : ComponentType
+    {method} +verify(iSpaceShip state, int position): bool
     {method} +turnOn(): void
     {method} +getCurrentPower(): int
+    {method} +check(iVisitor v): void
 }
 
 class Model::Components::ASC as "Life Support Component" {
     {field} -type: AlienType
     ==methods==
-    {field} +getType(): AlienType
+    {method} +getConnectors() : ConnectorType[4]
+    {method} +getType() : ComponentType
+    {method} +verify(iSpaceShip state, int position): bool
+    {method} +getType(): AlienType
+    {method} +check(iVisitor v): void
 }
 
 class Model::Components::CNC as "Cannon Component"{
@@ -71,32 +119,53 @@ class Model::Components::CNC as "Cannon Component"{
     {field} -powered: boolean
     {field} -current_power: int
     ==methods==
+    {method} +getConnectors() : ConnectorType[4]
+    {method} +getType() : ComponentType
+    {method} +verify(iSpaceShip state, int position): bool
     {method} +turnOn(): void
     {method} +getCurrentPower(): int
+    {method} +check(iVisitor v): void
 }
 
 class Model::Components::STC as "Storage Component" {
     {field} -max_capacity: int
     {field} -shipments: ShipmentType[]
     ==methods==
+    {method} +getConnectors() : ConnectorType[4]
+    {method} +getType() : ComponentType
+    {method} +verify(iSpaceShip state, int position): bool
     {method} +putIn(ShipmentType item): void
     {method} +getContents(): ShipmentType[]
     {method} +getCapacity(): int
+    {method} +check(iVisitor v): void
 }
 
 class Model::Components::BC as "Battery Component" {
     {field} -max_capacity: int
     ==methods==
+    {method} +getConnectors() : ConnectorType[4]
+    {method} +getType() : ComponentType
+    {method} +verify(iSpaceShip state, int position): bool
     {method} +getBatteries(): int
+    {method} +check(iVisitor v): void
 }
 
 class Model::Components::SHC as "Shield Component" {
     {field} -shield_type: ShieldType
     ==methods==
+    {method} +getConnectors() : ConnectorType[4]
+    {method} +getType() : ComponentType
+    {method} +verify(iSpaceShip state, int position): bool
     {method} +getShield(): ShieldType
+    {method} +check(iVisitor v): void
 }
 
 class Model::Components::EPC as "Empty Space Component" {
+    ==methods==
+    {method} +getConnectors() : ConnectorType[4]
+    {method} +getType() : ComponentType
+    {method} +verify(iSpaceShip state, int position): bool
+    {method} +check(iVisitor v): void
     'A block with no connectors.
 }
 
@@ -222,33 +291,49 @@ class Model::Player::SpaceShip{
 'Relations between classes
 
 'Components
-Model::Components::iSC^----Model::Components::SC
-Model::Components::SC^----Model::Components::CC
-Model::Components::CC^----Model::Components::ACC
-Model::Components::SC^----Model::Components::EC
-Model::Components::SC^----Model::Components::ASC
-Model::Components::SC^----Model::Components::CNC
-Model::Components::SC^----Model::Components::BC
-Model::Components::SC^----Model::Components::STC
-Model::Components::SC^----Model::Components::SHC
-Model::Components::SC^----Model::Components::EPC
+Model::Components::iSC^...Model::Components::SC
+Model::Components::SC^...Model::Components::CC
+Model::Components::CC^...Model::Components::ACC
+Model::Components::SC^...Model::Components::EC
+Model::Components::SC^...Model::Components::ASC
+Model::Components::SC^...Model::Components::CNC
+Model::Components::SC^...Model::Components::BC
+Model::Components::SC^...Model::Components::STC
+Model::Components::SC^...Model::Components::SHC
+Model::Components::SC^...Model::Components::EPC
+
+Model::Components::iVisitor^...Model::Components::Visitor
+Model::Components::iVisitor<---Model::Components::iVisitable
+
+'Components are Visitable
+Model::Components::iVisitable^...Model::Components::SC
+Model::Components::iVisitable^...Model::Components::CC
+Model::Components::iVisitable^...Model::Components::ACC
+Model::Components::iVisitable^...Model::Components::EC
+Model::Components::iVisitable^...Model::Components::ASC
+Model::Components::iVisitable^...Model::Components::CNC
+Model::Components::iVisitable^...Model::Components::BC
+Model::Components::iVisitable^...Model::Components::STC
+Model::Components::iVisitable^...Model::Components::SHC
+Model::Components::iVisitable^...Model::Components::EPC
+
 
 'Cards
-Model::Board::iCards^---Model::Board::Cards
+Model::Board::iCards^...Model::Board::Cards
 Model::iCard<----*Model::Board::Cards
-Model::iCard^--Model::Card
+Model::iCard^..Model::Card
 Model::iCardEffect<--*Model::Card
-Model::iCardEffect^---Model::CardEffect
+Model::iCardEffect^...Model::CardEffect
 
 'Players and ships
 Model::Player::Player <--* Model::Player::iSpaceShip
-Model::Player::iSpaceShip ^-- Model::Player::SpaceShip
+Model::Player::iSpaceShip ^.. Model::Player::SpaceShip
 Model::Components::SC <--  "35" Model::Player::SpaceShip
 
 'Board
-Model::Board::iPlanche^--Model::Board::Planche
+Model::Board::iPlanche^..Model::Board::Planche
 Model::Board::PlancheCell<- "n" Model::Board::Planche
-Model::Board::iCommonBoard ^--- Model::Board::CommonBoard
+Model::Board::iCommonBoard ^... Model::Board::CommonBoard
 Model::Components::SC <--* "0..n covered_components" Model::Board::CommonBoard
 
 @enduml
