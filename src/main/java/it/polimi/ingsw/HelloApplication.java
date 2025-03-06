@@ -19,25 +19,6 @@ public class HelloApplication extends Application {
     }
 
     public static void main(String[] args) {
-        //launch();
-        JFrame frame = new JFrame("Label con Immagine e Bottoni");
-        frame.setSize(500, 400);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLayout(null); // Layout assoluto
-
-
-        ImageIcon icon = new ImageIcon("C:\\Users\\utente\\IdeaProjects\\ing-sw-2025-ponzo-romano-sarto-scuratti\\resources\\galaxy_trucker_imgs\\cardboard\\cardboard-1.jpg");
-        JLabel label = new JLabel(icon);
-        label.setBounds(0, 0, icon.getIconWidth(), icon.getIconHeight());
-
-
-        JPanel panel = new JPanel(null);
-        panel.setBounds(0, 0, icon.getIconWidth(), icon.getIconHeight());
-
-        panel.add(label);
-
-        frame.add(panel);
-        frame.setVisible(true);
-
+        launch();
     }
 }
