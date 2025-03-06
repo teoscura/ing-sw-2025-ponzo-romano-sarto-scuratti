@@ -213,7 +213,7 @@ class Model::CardEffect{
 interface Model::Board::iPlanche {
     ==methods==
     {method} +getPlayerPosition(PlayerColor c): int
-    {method} +getPlayersAt(int Position): PlayerColor[]
+    {method} +getPlayersAt(int position): PlayerColor[]
     {method} +movePlayer(PlayerColor c, int rel_change): void
     {method} +won(): PlayerColor
 }
