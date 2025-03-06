@@ -34,3 +34,6 @@ La sala d'attesa della partita perpetua rifiuterà qualsiasi richiesta di join d
 
 >== TODO RESTO ==
 >==================
+
+
+piuttosto che usare instanceof: visitor, metodo "destroy", metodo retrieve, tenere conto di dove stanno le celle che tengono dentro un tipo specifico di cella e oggetto
