@@ -1,4 +1,5 @@
 @startuml classdiagrams
+
 'Style config
 hide circle
 skinparam classFontStyle bold
