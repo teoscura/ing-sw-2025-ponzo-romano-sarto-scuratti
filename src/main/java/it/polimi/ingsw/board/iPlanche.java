@@ -1,26 +1,18 @@
 package it.polimi.ingsw.board;
 
-public class iPlanche {
+public interface iPlanche {
 
 
-	public int getPlayerPosition(PlayerColor c) {
-		return 0; // TODO
-	}
+	int getPlayerPosition(PlayerColor c);
 
 
-	public PlayerColor getPlayersAt(int Position) {
-		return null; //TODO
-	}
+	PlayerColor getPlayersAt(int Position);
 
 
-	public void movePlayer(PlayerColor c, int rel_change) {
-		return;
-	}
+	void movePlayer(PlayerColor c, int rel_change);
 
 
-	public PlayerColor won() {
-		return null; //TODO
-	}
+	PlayerColor won();
 
 
 }
