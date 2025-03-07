@@ -6,7 +6,9 @@ public abstract class BaseComponent implements iBaseComponent {
 
     private ComponentRotation rotation;
 
-    protected BaseComponent(ConnectorType[] connectors, ComponentRotation rotation) throws Exception{
+    protected BaseComponent(ConnectorType[] connectors, 
+                            ComponentRotation rotation) 
+                            throws Exception{
         if(connectors.length!=4){
             //TODO create error type
             throw new Exception();

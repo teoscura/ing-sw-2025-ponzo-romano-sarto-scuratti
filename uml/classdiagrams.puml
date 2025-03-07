@@ -146,7 +146,6 @@ class Model::Components::BC as "Battery Component" {
 }
 
 class Model::Components::SHC as "Shield Component" {
-    {field} -shield_type: ShieldType
     ==methods==
     {method} +getConnectors() : ConnectorType[4]
     {method} +getRotation() : ComponentRotation

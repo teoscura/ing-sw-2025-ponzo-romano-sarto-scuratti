@@ -20,10 +20,12 @@ public class CannonComponent extends BaseComponent{
 
     @Override
     public void check(iVisitor v){
-        //TODO check function
+        v.visit(this);
     }
 
-    public void turnOn(){
+    //TODO exceptions
+    public void turnOn() throws Exception {
+        if(this.powered) throw new Exception();
         this.powered = true;
     }
 
@@ -32,7 +34,7 @@ public class CannonComponent extends BaseComponent{
     }
 
     public int getCurrentPower(iSpaceShip state, int position){
-        //TODO power function check under itself.
+        //TODO power function check over itself.
         if(this.getRotation() != ComponentRotation.ZERO){
             return this.getPower()>>1;
         }

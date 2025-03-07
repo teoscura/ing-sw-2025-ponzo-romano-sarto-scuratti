@@ -1,5 +1,12 @@
 package it.polimi.ingsw.model.components;
 
+enum AlienType{
+    HUMAN,
+    BROWN,
+    PURPLE,
+    BOTH, //Cabina collegata sia a support viola che marrone
+}
+
 public class CabinComponent extends BaseComponent{
     
     private int crew_number = 0;
@@ -12,7 +19,7 @@ public class CabinComponent extends BaseComponent{
 
     @Override
     public void check(iVisitor v){
-        //TODO
+        v.visit(this);
     }
 
     public int getCrew(){
@@ -20,5 +27,5 @@ public class CabinComponent extends BaseComponent{
         return crew_number;
     }
 
-    //TODO: setters for crew with error handling.
+    //TODO: setters for crew with error handling. extend to alien
 }

@@ -20,10 +20,12 @@ public class EngineComponent extends BaseComponent{
 
     @Override
     public void check(iVisitor v){
-        //TODO check function
+        v.visit(this);
     }
 
-    public void turnOn(){
+    //TODO exceptions
+    public void turnOn() throws Exception {
+        if(this.powered) throw new Exception();
         this.powered = true;
     }
 

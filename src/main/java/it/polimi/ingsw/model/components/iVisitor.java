@@ -6,8 +6,6 @@ interface iVisitor {
 
     abstract public void visit(CabinComponent c);
 
-    abstract public void visit(AlienCabinComponent c);
-
     abstract public void visit(EngineComponent c);
 
     abstract public void visit(AlienLifeSupportComponent c);
@@ -17,6 +15,8 @@ interface iVisitor {
     abstract public void visit(StorageComponent c);
 
     abstract public void visit(BatteryComponent c);
+
+    abstract public void visit(ShieldComponent c);
 
     abstract public void visit(EmptyComponent c);
 }

@@ -14,7 +14,7 @@ public class AlienLifeSupportComponent extends BaseComponent{
 
     @Override
     public void check(iVisitor v){
-        //TODO
+        v.visit(this);
     }
 
     public AlienType getType(){
