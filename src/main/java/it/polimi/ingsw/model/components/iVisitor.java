@@ -2,7 +2,7 @@ package it.polimi.ingsw.model.components;
 
 interface iVisitor {
     
-    abstract public void updateSpaceShip(iSpaceShip s)
+    abstract public void updateSpaceShip(iSpaceShip s);
 
     abstract public void visit(CabinComponent c);
 

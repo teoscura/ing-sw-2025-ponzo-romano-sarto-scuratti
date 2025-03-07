@@ -17,25 +17,22 @@ public abstract class BaseComponent implements iBaseComponent {
 
     @Override
     public ConnectorType[] getConnectors(){
-        // TODO
-        return null;
+        return connectors;
     }
 
     @Override
     public ComponentRotation getRotation(){
-        //TODO
-        return null;
+        return rotation;
     }
 
-    @Override
     public boolean verify(iSpaceShip state, int position){
         //TODO
         return false;
     }
 
+    //FIXME: ricordate: non implementare questo metodo, ma va implementato in ogni singola sottoclasse
+    // (e' letteralmente la def di abstract, ma fa bene ricordarlo).
     @Override
-    public void check(iVisitor v){
-        //TODO
-    }
+    abstract public void check(iVisitor v);
     
 }

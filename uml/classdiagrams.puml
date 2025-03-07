@@ -89,9 +89,8 @@ class Model::Components::ACC as "Alien Cabin Component" {
 }
 
 class Model::Components::EC as "Engine Component" {
-    {field} -max_power: int
+    {field} -tpye: EngineType
     {field} -powered: boolean
-    {field} -current_power: int
     ==methods==
     {method} +getConnectors() : ConnectorType[4]
     {method} +getRotation() : ComponentRotation
@@ -112,9 +111,8 @@ class Model::Components::ASC as "Life Support Component" {
 }
 
 class Model::Components::CNC as "Cannon Component"{
-    {field} -max_power: int
+    {field} -type: CannonType
     {field} -powered: boolean
-    {field} -current_power: int
     ==methods==
     {method} +getConnectors() : ConnectorType[4]
     {method} +getRotation() : ComponentRotation
