@@ -1,7 +1,7 @@
-package it.polimi.ingsw.board;
+package it.polimi.ingsw.model.board;
 
 interface iPlanche {
-	
+
 	public int getPlayerPosition(PlayerColor c);
 
 	public PlayerColor getPlayersAt(int Position);

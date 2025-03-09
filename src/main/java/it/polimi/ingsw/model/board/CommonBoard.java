@@ -1,4 +1,4 @@
-package it.polimi.ingsw.board;
+package it.polimi.ingsw.model.board;
 
 public class CommonBoard implements iCommonBoard {
 
