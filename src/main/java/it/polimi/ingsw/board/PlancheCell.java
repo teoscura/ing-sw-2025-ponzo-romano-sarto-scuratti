@@ -5,7 +5,7 @@ public class PlancheCell {
 
 	private PlayerColor[] players;
 
-	public PlayerColor getPlayers() {
+	public PlayerColor[] getPlayers() {
 		return null; // TODO
 	}
 
