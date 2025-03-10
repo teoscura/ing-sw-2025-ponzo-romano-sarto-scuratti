@@ -1,5 +1,8 @@
 package it.polimi.ingsw.model.components;
 
+import it.polimi.ingsw.model.components.visitors.iVisitor;
+import it.polimi.ingsw.model.player.iSpaceShip;
+
 enum ConnectorType{
     EMPTY,
     SINGLE_CONNECTOR,

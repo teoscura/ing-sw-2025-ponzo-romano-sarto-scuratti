@@ -1,7 +1,13 @@
+//HACK da rivedere
 package it.polimi.ingsw.model.components;
 
-public class AlienLifeSupportComponent extends BaseComponent{
+import it.polimi.ingsw.exceptions.IllegalConstructorArgumentException;
+import it.polimi.ingsw.model.components.visitors.*;
+
+public class AlienLifeSupportComponent extends BaseComponent implements iVisitable {
     
+    //FIXME magari usare smartenum e associargli un bonus? boh.
+
     private AlienType type = AlienType.BROWN;
 
     public AlienLifeSupportComponent(ConnectorType[] connectors, 
@@ -9,6 +15,9 @@ public class AlienLifeSupportComponent extends BaseComponent{
                                 AlienType type) 
                                 throws Exception {
         super(connectors, rotation);
+        if(type==AlienType.BOTH){
+            throw new IllegalConstructorArgumentException();
+        }
         this.type = type;
     }
 

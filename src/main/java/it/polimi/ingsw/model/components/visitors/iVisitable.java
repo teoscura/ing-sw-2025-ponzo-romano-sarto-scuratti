@@ -1,4 +1,4 @@
-package it.polimi.ingsw.model.components;
+package it.polimi.ingsw.model.components.visitors;
 
 public interface iVisitable {
     

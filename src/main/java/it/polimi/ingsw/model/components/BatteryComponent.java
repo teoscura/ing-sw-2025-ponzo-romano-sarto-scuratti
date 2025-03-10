@@ -1,13 +1,12 @@
+//DONE.
 package it.polimi.ingsw.model.components;
 
-enum BatteryType {
-    DOUBLE,
-    TRIPLE,
-}
+import it.polimi.ingsw.model.components.exceptions.ContainerEmptyException;
+import it.polimi.ingsw.model.components.exceptions.ContainerFullException;
+import it.polimi.ingsw.model.components.visitors.iVisitor;
 
-public class BatteryComponent extends BaseComponent {
+public class BatteryComponent extends BaseComponent{
     
-    private BatteryType type = BatteryType.DOUBLE;
     private int contains = 0;
     private int max = 2;
 
@@ -16,14 +15,8 @@ public class BatteryComponent extends BaseComponent {
                             BatteryType type)
                             throws Exception{
         super(connectors, rotation);
-        if(type == BatteryType.DOUBLE){
-            this.max = 2;
-            this.contains = 2; 
-        }
-        else{
-            this.max = 3;
-            this.contains = 3;
-        }
+        this.contains = type.getCapacity();
+        this.max = type.getCapacity();
     }
 
     @Override
@@ -35,18 +28,36 @@ public class BatteryComponent extends BaseComponent {
         return this.contains;
     }
 
-    //TODO exceptions
-    public void takeOne() throws Exception{
+    public int getCapacity(){
+        return this.max;
+    }
+
+    public void takeOne(){
         if(contains == 0){
-            throw new Exception();
+            throw new ContainerEmptyException();
         }
         this.contains--;
     }
 
-    public void putOne() throws Exception{
+    public void putOne(){
         if(contains == max){
-            throw new Exception();
+            throw new ContainerFullException();
         }
         contains++;
+    }
+}
+
+enum BatteryType {
+    DOUBLE (2),
+    TRIPLE (3);
+
+    private int capacity;
+
+    BatteryType(int capacity){
+        this.capacity = capacity;
+    }
+
+    public int getCapacity(){
+        return this.capacity;
     }
 }

@@ -1,5 +1,8 @@
 package it.polimi.ingsw.model.components;
 
+import it.polimi.ingsw.model.components.exceptions.AlreadyPoweredException;
+import it.polimi.ingsw.model.components.visitors.iVisitor;
+
 enum ShieldType{
     NE,
     SE,
@@ -23,14 +26,17 @@ public class ShieldComponent extends BaseComponent {
         v.visit(this);
     }
 
-    //TODO Exceptions
     public void turnOn() throws Exception {
-        if(this.powered) throw new Exception();
+        if(this.powered) throw new AlreadyPoweredException();
         this.powered = true;
     }
 
     public void turnOff(){
         this.powered = false;
+    }
+
+    public boolean getPowered(){
+        return this.powered;
     }
 
     public ShieldType getShield(){

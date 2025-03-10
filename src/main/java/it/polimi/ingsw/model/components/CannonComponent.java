@@ -1,10 +1,16 @@
 package it.polimi.ingsw.model.components;
 
+import it.polimi.ingsw.model.components.exceptions.AlreadyPoweredException;
+import it.polimi.ingsw.model.components.visitors.iVisitor;
+import it.polimi.ingsw.model.player.iSpaceShip;
+
 enum CannonType{
     SINGLE,
     DOUBLE
 }
 
+
+//FIXME chiedere a ponzo meccaniche effettive di come funziona. e se si modificare come engine.
 public class CannonComponent extends BaseComponent{
     
     private CannonType type;
@@ -23,9 +29,8 @@ public class CannonComponent extends BaseComponent{
         v.visit(this);
     }
 
-    //TODO exceptions
-    public void turnOn() throws Exception {
-        if(this.powered) throw new Exception();
+    public void turnOn(){
+        if(this.powered) throw new AlreadyPoweredException();
         this.powered = true;
     }
 
@@ -34,7 +39,10 @@ public class CannonComponent extends BaseComponent{
     }
 
     public int getCurrentPower(iSpaceShip state, int position){
-        //TODO power function check over itself.
+        //FIXME chiedere a ponzo 
+        if(!(state.getComponent(state.up(this.getPosition())) == null)){
+            return 0;
+        }
         if(this.getRotation() != ComponentRotation.ZERO){
             return this.getPower()>>1;
         }

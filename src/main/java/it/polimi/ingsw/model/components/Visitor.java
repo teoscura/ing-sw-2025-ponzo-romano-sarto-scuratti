@@ -1,7 +1,10 @@
 package it.polimi.ingsw.model.components;
 
+import it.polimi.ingsw.model.components.visitors.iVisitor;
+
 //FIXME cambia quando fil merga player.
-//import it.polimi.ingsw.model.player.iSpaceShip;
+
+import it.polimi.ingsw.model.player.iSpaceShip;
 
 public class Visitor implements iVisitor {
     
