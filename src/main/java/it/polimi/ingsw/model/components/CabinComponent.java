@@ -57,7 +57,7 @@ public class CabinComponent extends BaseComponent{
         state.getComponent(state.down(position)).check(v);
         state.getComponent(state.left(position)).check(v);
         state.getComponent(state.right(position)).check(v);
-        //TODO: creare un visitor speciale per checkare i possibili tipi alieni che puo' contenere.
+        //TODO: tirare fuori dal visitor i tipi.
     }
 }
 
