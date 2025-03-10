@@ -1,10 +1,10 @@
 package it.polimi.ingsw.model.board;
 
 public interface iCommonBoard {
-	public StarshipComponent pullComponent();
+	public iBaseComponent pullComponent();
 
-	public void discardComponent(StarshipComponent a);
+	public void discardComponent(iBaseComponent a);
 
-	public StarshipComponent pullDiscarded();
+	public iBaseComponent pullDiscarded();
 
 }
