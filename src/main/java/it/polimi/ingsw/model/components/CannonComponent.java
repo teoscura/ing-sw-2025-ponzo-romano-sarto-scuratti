@@ -63,7 +63,7 @@ public class CannonComponent extends BaseComponent{
         if(max_power==2 && !this.powered){
             return 0;
         }
-        return max_power == 2 ? 2 : 1;
+        return max_power;
     } 
 }
 
