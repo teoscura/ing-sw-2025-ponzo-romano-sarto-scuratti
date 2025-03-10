@@ -8,13 +8,12 @@ class Planet{
     boolean is_visited;
 }
 
-public class PlanetCard {
+public class PlanetCard extends Card{
+    private String title;
+    private String text;
+    private CardEffect effect;
     private int days_spent;
     private int level;
     private Planet[] planets;
 
-    int delay_travel(){
-        return days_spent;
-    }
-    void give_load_option(Planet planet, int player_id){}
 }
