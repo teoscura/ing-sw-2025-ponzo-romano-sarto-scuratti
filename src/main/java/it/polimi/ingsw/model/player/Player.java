@@ -1,13 +1,15 @@
 package it.polimi.ingsw.model.player;
 
-
-
 public class Player {
-	private int credits;
+	private iSpaceShip spaceship = null;
+	private int credits = 0;
 	private int[] crew = new int[3];
-	private int shields;
-	private int distance;
 	private PlayerColor color;
+
+	public Player(){
+		this.spaceship = new SpaceShip();
+	}
+	
 }
 
 enum PlayerColor {

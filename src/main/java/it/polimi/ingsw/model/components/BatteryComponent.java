@@ -12,9 +12,17 @@ public class BatteryComponent extends BaseComponent{
 
     public BatteryComponent(ConnectorType[] connectors, 
                             ComponentRotation rotation, 
-                            BatteryType type)
-                            throws Exception{
+                            BatteryType type){
         super(connectors, rotation);
+        this.contains = type.getCapacity();
+        this.max = type.getCapacity();
+    }
+
+    public BatteryComponent(ConnectorType[] connectors, 
+                            ComponentRotation rotation, 
+                            BatteryType type,
+                            int position){
+        super(connectors, rotation, position);
         this.contains = type.getCapacity();
         this.max = type.getCapacity();
     }

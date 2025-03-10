@@ -185,7 +185,7 @@ interface Model::iCard{
 class Model::Card{
     {field} -title: String
     {field} -text: String
-    {field} -effect: CardEffect
+    {field} -effect: iCardEffect
     ==methods==
     {method} +getTitle(): String
     {method} +getText(): String

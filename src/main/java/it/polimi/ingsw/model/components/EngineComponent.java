@@ -13,11 +13,25 @@ public class EngineComponent extends BaseComponent{
 
     public EngineComponent(ConnectorType[] components,
                            ComponentRotation rotation,
-                           EngineType type)
-                           throws Exception {
+                           EngineType type){
         super(components, rotation);
         this.max_power = type.getMaxPower();
         this.powerable = type.getPowerable();        
+    }
+
+    public EngineComponent(ConnectorType[] components,
+                           ComponentRotation rotation,
+                           EngineType type,
+                           int position){
+        super(components, rotation, position);
+        this.max_power = type.getMaxPower();
+        this.powerable = type.getPowerable();        
+    }
+
+    @Override
+    public boolean verify(iSpaceShip state){
+        //TODO
+        return false;
     }
 
     @Override
@@ -35,13 +49,9 @@ public class EngineComponent extends BaseComponent{
         this.powered = false;
     }
 
-    public int getCurrentPower(iSpaceShip state, int position){
-        //TODO chiedere a ponzo se e' giusto.
-        if(!(state.getComponent(state.down(this.getPosition())) == null)){
-            return 0;
-        }
+    public int getCurrentPower(){
         if(this.getRotation() != ComponentRotation.PI){
-            return this.getPower()>>1;
+            return this.getPower()>>1;  //Divide by two.
         }
         return this.getPower();
     }
@@ -49,7 +59,6 @@ public class EngineComponent extends BaseComponent{
     private int getPower(){
         return this.max_power;
     }       
-
 }
 
 enum EngineType{
@@ -57,7 +66,7 @@ enum EngineType{
     DOUBLE (2, false);
 
     private int max_power;
-    private boolean powerable; //FIXME CHIEDERE A PONZO
+    private boolean powerable;
 
     EngineType(int max_power, boolean powerable){
         this.max_power = max_power;

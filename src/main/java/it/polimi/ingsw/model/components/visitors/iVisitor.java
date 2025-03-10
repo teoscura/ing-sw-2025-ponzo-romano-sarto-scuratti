@@ -1,18 +1,8 @@
 package it.polimi.ingsw.model.components.visitors;
 
-import it.polimi.ingsw.model.components.AlienLifeSupportComponent;
-import it.polimi.ingsw.model.components.BatteryComponent;
-import it.polimi.ingsw.model.components.CabinComponent;
-import it.polimi.ingsw.model.components.CannonComponent;
-import it.polimi.ingsw.model.components.EmptyComponent;
-import it.polimi.ingsw.model.components.EngineComponent;
-import it.polimi.ingsw.model.components.ShieldComponent;
-import it.polimi.ingsw.model.components.StorageComponent;
-import it.polimi.ingsw.model.player.iSpaceShip;
+import it.polimi.ingsw.model.components.*;
 
 public interface iVisitor {
-    
-    abstract public void updateSpaceShip(iSpaceShip s);
 
     abstract public void visit(CabinComponent c);
 

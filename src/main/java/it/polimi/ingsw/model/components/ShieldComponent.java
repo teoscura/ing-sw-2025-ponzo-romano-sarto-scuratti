@@ -1,3 +1,4 @@
+//Done.
 package it.polimi.ingsw.model.components;
 
 import it.polimi.ingsw.model.components.exceptions.AlreadyPoweredException;
@@ -16,9 +17,14 @@ public class ShieldComponent extends BaseComponent {
     private boolean powered = false;
 
     public ShieldComponent(ConnectorType[] connectors, 
-                           ComponentRotation rotation)
-                           throws Exception {
+                           ComponentRotation rotation){
         super(connectors, rotation);
+    }
+
+    public ShieldComponent(ConnectorType[] connectors, 
+                           ComponentRotation rotation,
+                           int position){
+        super(connectors, rotation, position);
     }
 
     @Override
@@ -26,7 +32,7 @@ public class ShieldComponent extends BaseComponent {
         v.visit(this);
     }
 
-    public void turnOn() throws Exception {
+    public void turnOn(){
         if(this.powered) throw new AlreadyPoweredException();
         this.powered = true;
     }

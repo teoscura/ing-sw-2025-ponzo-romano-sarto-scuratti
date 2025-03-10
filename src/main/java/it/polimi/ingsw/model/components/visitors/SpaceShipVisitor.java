@@ -1,14 +1,14 @@
-package it.polimi.ingsw.model.components;
+package it.polimi.ingsw.model.components.visitors;
 
-import it.polimi.ingsw.model.components.visitors.iVisitor;
+import it.polimi.ingsw.model.components.*;
 
 //FIXME cambia quando fil merga player.
 
 import it.polimi.ingsw.model.player.iSpaceShip;
 
-public class Visitor implements iVisitor {
-    
-    @Override
+public class SpaceShipVisitor implements iVisitor {
+
+
     public void updateSpaceShip(iSpaceShip s){
         //TODO
     }
@@ -17,8 +17,6 @@ public class Visitor implements iVisitor {
     public void visit(CabinComponent c){
         //TODO
     }
-
-    //FIXME removed alien cabin component to merge with base one.
 
     @Override
     public void visit(EngineComponent c){

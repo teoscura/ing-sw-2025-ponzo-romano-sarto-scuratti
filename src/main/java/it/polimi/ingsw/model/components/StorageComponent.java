@@ -1,3 +1,4 @@
+//Done.
 package it.polimi.ingsw.model.components;
 
 import java.util.Arrays;
@@ -14,9 +15,18 @@ public class StorageComponent extends BaseComponent{
 
     public StorageComponent(ConnectorType[] connectors, 
                             ComponentRotation rotation,
-                            StorageType type)
-                            throws Exception {
+                            StorageType type){
         super(connectors, rotation);
+        this.special = type.getSpecial();
+        this.shipments = new ShipmentType[type.getCapacity()];
+        Arrays.fill(shipments, ShipmentType.EMPTY);
+    }
+
+    public StorageComponent(ConnectorType[] connectors, 
+                            ComponentRotation rotation,
+                            StorageType type,
+                            int position){
+        super(connectors, rotation, position);
         this.special = type.getSpecial();
         this.shipments = new ShipmentType[type.getCapacity()];
         Arrays.fill(shipments, ShipmentType.EMPTY);
@@ -27,7 +37,8 @@ public class StorageComponent extends BaseComponent{
         v.visit(this);
     }
 
-    public void putIn(ShipmentType shipment) throws Exception{
+    public void putIn(ShipmentType shipment){
+        if(shipment==null) throw new NullPointerException();
         if(currently_full==getCapacity()){
             throw new ContainerFullException();
         }
@@ -45,6 +56,7 @@ public class StorageComponent extends BaseComponent{
     }
 
     public boolean takeOut(ShipmentType container){
+        if(container==null) throw new NullPointerException();
         for(int i=0;i<getCapacity();i++){
             if(shipments[i] == container){
                 shipments[i] = ShipmentType.EMPTY;
@@ -56,6 +68,7 @@ public class StorageComponent extends BaseComponent{
     }
 
     public int howMany(ShipmentType container){
+        if(container==null) throw new NullPointerException();
         int tmp = 0;
         for(int i=0; i<getCapacity(); i++){
             if(shipments[i] == container){

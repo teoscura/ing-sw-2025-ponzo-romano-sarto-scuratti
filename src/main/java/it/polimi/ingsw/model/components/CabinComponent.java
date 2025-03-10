@@ -2,21 +2,30 @@ package it.polimi.ingsw.model.components;
 
 import it.polimi.ingsw.exceptions.ArgumentTooBigException;
 import it.polimi.ingsw.exceptions.NegativeArgumentException;
+import it.polimi.ingsw.model.components.visitors.CabinVisitor;
 import it.polimi.ingsw.model.components.visitors.iVisitor;
+import it.polimi.ingsw.model.player.iSpaceShip;
 
 public class CabinComponent extends BaseComponent{
-    //HACK probabilmente devo sistemare il modo in cui la crew viene gestita, troppo ad cazzum e difficile da maneggiare.
     private int max_capacity;
     private int crew_number = 0;
     private AlienType crew_type;
 
     public CabinComponent(ConnectorType[] connectors, 
                           ComponentRotation rotation,
-                          AlienType inhabitant_type)
-                          throws Exception {
+                          AlienType inhabitant_type){
         super(connectors, rotation);
         this.max_capacity = inhabitant_type.getMaxCapacity(); 
     }
+
+    public CabinComponent(ConnectorType[] connectors, 
+                          ComponentRotation rotation,
+                          AlienType inhabitant_type,
+                          int position){
+        super(connectors, rotation, position);
+        this.max_capacity = inhabitant_type.getMaxCapacity(); 
+    }
+
 
     @Override
     public void check(iVisitor v){
@@ -41,7 +50,13 @@ public class CabinComponent extends BaseComponent{
         this.crew_number = new_crew;
     }
     
-    public void updateCrewType(){
+    public void updateCrewType(iSpaceShip state, int position){
+        //TODO: chiedere a ponzo se deve essere connesso coi connettori o no.
+        iVisitor v = new CabinVisitor();
+        state.getComponent(state.up(position)).check(v);
+        state.getComponent(state.down(position)).check(v);
+        state.getComponent(state.left(position)).check(v);
+        state.getComponent(state.right(position)).check(v);
         //TODO: creare un visitor speciale per checkare i possibili tipi alieni che puo' contenere.
     }
 }

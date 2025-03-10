@@ -9,8 +9,6 @@ enum CannonType{
     DOUBLE
 }
 
-
-//FIXME chiedere a ponzo meccaniche effettive di come funziona. e se si modificare come engine.
 public class CannonComponent extends BaseComponent{
     
     private CannonType type;
@@ -18,15 +16,28 @@ public class CannonComponent extends BaseComponent{
 
     public CannonComponent(ConnectorType[] components,
                            ComponentRotation rotation,
-                           CannonType type)
-                           throws Exception {
+                           CannonType type){
         super(components, rotation);
+        this.type = type;        
+    }
+
+    public CannonComponent(ConnectorType[] components,
+                           ComponentRotation rotation,
+                           CannonType type,
+                           int position){
+        super(components, rotation, position);
         this.type = type;        
     }
 
     @Override
     public void check(iVisitor v){
         v.visit(this);
+    }
+
+    @Override
+    public boolean verify(iSpaceShip state){
+        //TODO
+        return false;
     }
 
     public void turnOn(){
@@ -39,10 +50,6 @@ public class CannonComponent extends BaseComponent{
     }
 
     public int getCurrentPower(iSpaceShip state, int position){
-        //FIXME chiedere a ponzo 
-        if(!(state.getComponent(state.up(this.getPosition())) == null)){
-            return 0;
-        }
         if(this.getRotation() != ComponentRotation.ZERO){
             return this.getPower()>>1;
         }
