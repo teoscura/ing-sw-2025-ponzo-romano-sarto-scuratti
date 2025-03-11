@@ -11,7 +11,7 @@ public abstract class Card implements iCard {
     public int getCardId() {
         return cardId;
     }
-    private CardEffect getEffect(){
+    public CardEffect getEffect(){
         return effect;
     }
 }
