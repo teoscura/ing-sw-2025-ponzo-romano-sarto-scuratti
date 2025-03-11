@@ -58,7 +58,7 @@ class Model::Components::Visitor as "Visitor" {
 }
 
 abstract Model::Components::SC as "Base Component" {
-    {field} -connectors : ConnectorType
+    {field} -connectors : ConnectorType[4]
     {field} -rotation: ComponentRotation
     ==methods==
     {method} +getConnectors() : ConnectorType[4]
@@ -74,7 +74,6 @@ class Model::Components::CC as "Cabin Component" {
     {method} +getRotation() : ComponentRotation
     {method} +verify(iSpaceShip state, int position): bool
     {method} +getCrew(): int
-    {method} +getCrewType(): AlienType
     {method} +check(iVisitor v): void
 }
 
@@ -90,9 +89,8 @@ class Model::Components::ACC as "Alien Cabin Component" {
 }
 
 class Model::Components::EC as "Engine Component" {
-    {field} -max_power: int
+    {field} -tpye: EngineType
     {field} -powered: boolean
-    {field} -current_power: int
     ==methods==
     {method} +getConnectors() : ConnectorType[4]
     {method} +getRotation() : ComponentRotation
@@ -113,9 +111,8 @@ class Model::Components::ASC as "Life Support Component" {
 }
 
 class Model::Components::CNC as "Cannon Component"{
-    {field} -max_power: int
+    {field} -type: CannonType
     {field} -powered: boolean
-    {field} -current_power: int
     ==methods==
     {method} +getConnectors() : ConnectorType[4]
     {method} +getRotation() : ComponentRotation
@@ -149,7 +146,6 @@ class Model::Components::BC as "Battery Component" {
 }
 
 class Model::Components::SHC as "Shield Component" {
-    {field} -shield_type: ShieldType
     ==methods==
     {method} +getConnectors() : ConnectorType[4]
     {method} +getRotation() : ComponentRotation
@@ -189,7 +185,7 @@ interface Model::iCard{
 class Model::Card{
     {field} -title: String
     {field} -text: String
-    {field} -effect: CardEffect
+    {field} -effect: iCardEffect
     ==methods==
     {method} +getTitle(): String
     {method} +getText(): String
