@@ -1,4 +1,4 @@
-package it.polimi.ingsw.adventure_cards;
+package it.polimi.ingsw.model.adventure_cards;
 
 import java.util.function.BiConsumer;
 

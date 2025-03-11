@@ -1,4 +1,4 @@
-package it.polimi.ingsw.adventure_cards;
+package it.polimi.ingsw.model.adventure_cards;
 
 public class Planet {
     int red_material;
