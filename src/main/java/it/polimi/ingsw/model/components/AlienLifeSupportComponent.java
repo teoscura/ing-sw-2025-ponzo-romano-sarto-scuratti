@@ -37,6 +37,7 @@ public class AlienLifeSupportComponent extends BaseComponent{
     public AlienType getType(){
         return type;
     }
+    
 }
 
 

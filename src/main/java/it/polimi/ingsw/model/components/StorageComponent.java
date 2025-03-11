@@ -120,7 +120,7 @@ enum ShipmentType{
     YELLOW (false, 3),  //3 - Normal
     GREEN (false, 2),   //2 - Normal
     BLUE (false, 1),    //1 - Normal
-    EMPTY (false, 0);  //0 - Empty Space;
+    EMPTY (false, 0);  //0 - Empty Space
 
     private boolean special;
     private int value;

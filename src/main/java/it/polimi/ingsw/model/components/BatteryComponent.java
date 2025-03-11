@@ -1,4 +1,4 @@
-//DONE.
+//Done.
 package it.polimi.ingsw.model.components;
 
 import it.polimi.ingsw.model.components.exceptions.ContainerEmptyException;

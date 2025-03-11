@@ -1,52 +1,57 @@
+//Done.
 package it.polimi.ingsw.model.components.visitors;
 
 import it.polimi.ingsw.model.components.*;
 
+//This exists just to not do a `instanceof EmptySpace`.
 public class FreeSpaceVisitor implements iVisitor {
-    private boolean spaces_are_free = true;
+    private boolean isfree = true;
 
     @Override
     public void visit(CabinComponent c){
-        this.spaces_are_free = false;
+        this.isfree = false;
     }
 
     @Override
     public void visit(EngineComponent c){
-        this.spaces_are_free = false;   
+        this.isfree = false;   
     }
 
     @Override
     public void visit(AlienLifeSupportComponent c){
-        this.spaces_are_free = false;
+        this.isfree = false;
     }
 
     @Override
     public void visit(CannonComponent c){
-        this.spaces_are_free = false;
+        this.isfree = false;
     }
 
     @Override
     public void visit(StorageComponent c){
-        this.spaces_are_free = false;
+        this.isfree = false;
     }
 
     @Override
     public void visit(BatteryComponent c){
-        this.spaces_are_free = false;
+        this.isfree = false;
     }
 
     @Override
     public void visit(ShieldComponent c){
-        this.spaces_are_free = false;
+        this.isfree = false;
     }
 
     @Override
     public void visit(EmptyComponent c){
-        this.spaces_are_free = true;
+        this.isfree = true;
     }
 
-    //HACK che schifo questo, da rifare.
-    public boolean getSpacesAreFree(){
-        return this.spaces_are_free;
+    public void reset(){
+        this.isfree=false;
+    }
+
+    public boolean getSpaceIsFree(){
+        return this.isfree;
     }
 }

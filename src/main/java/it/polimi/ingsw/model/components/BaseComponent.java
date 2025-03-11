@@ -6,7 +6,7 @@ import it.polimi.ingsw.model.components.visitors.*;
 import it.polimi.ingsw.model.player.iSpaceShip;
 
 public abstract class BaseComponent implements iBaseComponent, iVisitable{
-    
+
     private ConnectorType[] connectors;
     private ComponentRotation rotation;
     private int position;
@@ -73,8 +73,7 @@ public abstract class BaseComponent implements iBaseComponent, iVisitable{
     protected int getPosition(){
         return this.position;
     }
-
-
+    
     //ricordate: non implementare questo metodo, ma va implementato in ogni singola sottoclasse
     // (e' letteralmente la def di abstract, ma fa bene ricordarlo).
     @Override

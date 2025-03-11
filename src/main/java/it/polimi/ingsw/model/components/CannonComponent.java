@@ -1,7 +1,9 @@
+//Done.
 package it.polimi.ingsw.model.components;
 
 import it.polimi.ingsw.model.components.exceptions.AlreadyPoweredException;
 import it.polimi.ingsw.model.components.exceptions.UnpowerableException;
+import it.polimi.ingsw.model.components.visitors.FreeSpaceVisitor;
 import it.polimi.ingsw.model.components.visitors.iVisitor;
 import it.polimi.ingsw.model.player.iSpaceShip;
 
@@ -35,13 +37,16 @@ public class CannonComponent extends BaseComponent{
 
     @Override
     public boolean verify(iSpaceShip state){
-        //TODO
+        FreeSpaceVisitor v = new FreeSpaceVisitor();
+        iBaseComponent tmp = state.getComponent(state.up(this.getPosition()));
+        tmp.check(v);
+        if(v.getSpaceIsFree()) return true;
         return false;
     }
 
     public void turnOn(){
         if(this.powered) throw new AlreadyPoweredException();
-        if(this.powerable) throw new UnpowerableException();
+        if(!this.powerable) throw new UnpowerableException();
         this.powered = true;
     }
 
@@ -49,8 +54,6 @@ public class CannonComponent extends BaseComponent{
         this.powered = false;
     }
 
-
-    //TODO chiedere a ponzo.
     public int getCurrentPower(iSpaceShip state, int position){
         if(this.getRotation() != ComponentRotation.ZERO){
             return this.getPower()>>1;
@@ -58,7 +61,6 @@ public class CannonComponent extends BaseComponent{
         return this.getPower();
     }
 
-    //TODO IDEM
     private int getPower(){
         if(max_power==2 && !this.powered){
             return 0;

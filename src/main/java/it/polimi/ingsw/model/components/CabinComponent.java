@@ -10,6 +10,7 @@ public class CabinComponent extends BaseComponent{
     private int max_capacity;
     private int crew_number = 0;
     private AlienType crew_type;
+    private AlienType can_contain;
 
     public CabinComponent(ConnectorType[] connectors, 
                           ComponentRotation rotation,
@@ -41,6 +42,7 @@ public class CabinComponent extends BaseComponent{
     }
 
     public void setCrew(int new_crew){
+        //TODO change type implem. im not checking if i can contain.
         if(new_crew<0){
             throw new NegativeArgumentException();
         }
@@ -51,36 +53,25 @@ public class CabinComponent extends BaseComponent{
     }
     
     public void updateCrewType(iSpaceShip state, int position){
-        //TODO: chiedere a ponzo se deve essere connesso coi connettori o no.
         iVisitor v = new CabinVisitor();
-        state.getComponent(state.up(position)).check(v);
-        state.getComponent(state.down(position)).check(v);
-        state.getComponent(state.left(position)).check(v);
-        state.getComponent(state.right(position)).check(v);
+        iBaseComponent up = state.getComponent(state.up(position));
+        iBaseComponent right = state.getComponent(state.down(position));
+        iBaseComponent down = state.getComponent(state.left(position));
+        iBaseComponent left = state.getComponent(state.right(position));
+        if(up.getConnector(ComponentRotation.PI).connected(this.getConnector(ComponentRotation.ZERO))){
+            
+        }
+        if(right.getConnector(ComponentRotation.MINHALFPI).connected(this.getConnector(ComponentRotation.POSHALFPI))){
+            
+        }
+        if(down.getConnector(ComponentRotation.ZERO).connected(this.getConnector(ComponentRotation.PI))){
+            
+        }
+        if(left.getConnector(ComponentRotation.POSHALFPI).connected(this.getConnector(ComponentRotation.MINHALFPI))){
+            
+        }
+        
         //TODO: tirare fuori dal visitor i tipi.
-    }
-}
-
-enum AlienType{
-    HUMAN (2, false),
-    BROWN (1, true),
-    PURPLE (1, true),
-    BOTH (1, false);//Cabina collegata sia a support viola che marrone
-
-    private int max_capacity;
-    private boolean need_lifesupport;
-
-    AlienType(int max_capacity, boolean need_lifesupport){
-        this.max_capacity = max_capacity;
-        this.need_lifesupport = need_lifesupport;
-    }
-
-    public int getMaxCapacity(){
-        return this.max_capacity;
-    }
-
-    public boolean getNeedLifeSupport(){
-        return this.need_lifesupport;
     }
 }
 

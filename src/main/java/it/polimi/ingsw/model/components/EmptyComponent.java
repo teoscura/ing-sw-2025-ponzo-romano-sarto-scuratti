@@ -1,4 +1,4 @@
-//DONE.
+//Done.
 package it.polimi.ingsw.model.components;
 
 import java.util.Arrays;

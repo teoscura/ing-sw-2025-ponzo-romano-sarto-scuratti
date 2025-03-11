@@ -1,7 +1,9 @@
+//Done.
 package it.polimi.ingsw.model.components;
 
 import it.polimi.ingsw.model.components.exceptions.AlreadyPoweredException;
 import it.polimi.ingsw.model.components.exceptions.UnpowerableException;
+import it.polimi.ingsw.model.components.visitors.FreeSpaceVisitor;
 import it.polimi.ingsw.model.components.visitors.iVisitor;
 import it.polimi.ingsw.model.player.iSpaceShip;
 
@@ -30,7 +32,10 @@ public class EngineComponent extends BaseComponent{
 
     @Override
     public boolean verify(iSpaceShip state){
-        //TODO
+        FreeSpaceVisitor v = new FreeSpaceVisitor();
+        iBaseComponent tmp = state.getComponent(state.down(this.getPosition()));
+        tmp.check(v);
+        if(v.getSpaceIsFree()) return true;
         return false;
     }
 
@@ -57,13 +62,16 @@ public class EngineComponent extends BaseComponent{
     }
             
     private int getPower(){
+        if(powerable && !powered){
+            return 0;
+        }
         return this.max_power;
     }       
 }
 
 enum EngineType{
     SINGLE (1, false),
-    DOUBLE (2, false);
+    DOUBLE (2, true );
 
     private int max_power;
     private boolean powerable;

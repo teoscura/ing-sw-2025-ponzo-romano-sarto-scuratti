@@ -48,4 +48,5 @@ public class ShieldComponent extends BaseComponent {
     public ShieldType getShield(){
         return this.type;
     }
+    
 }

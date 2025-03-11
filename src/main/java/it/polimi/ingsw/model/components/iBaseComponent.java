@@ -35,8 +35,13 @@ enum ConnectorType{
     }
 
     public boolean compatible(ConnectorType other){
-        if(other.getValue()<=0) return true;
+        if(other.getValue()*this.getValue()<=0) return true;
         else return this.getValue() == other.getValue();
+    }
+
+    public boolean connected(ConnectorType other){
+        if(other.getValue()==0 || this.getValue()==0) return false;
+        return this.compatible(other);
     }
 }
 

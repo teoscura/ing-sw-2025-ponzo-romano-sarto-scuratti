@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.components.*;
 public class CabinVisitor implements iVisitor {
     
     //TODO scrivere funzione che somma tutti i tipi di alieni visitati
+    AlienType type = AlienType.HUMAN;
 
     @Override
     public void visit(CabinComponent c){
@@ -44,6 +45,10 @@ public class CabinVisitor implements iVisitor {
     @Override
     public void visit(EmptyComponent c){
         return;
+    }
+
+    public void reset(){
+        this.type = AlienType.HUMAN;
     }
 }
 
