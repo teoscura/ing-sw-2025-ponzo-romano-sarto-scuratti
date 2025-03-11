@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.board;
 
-import it.polimi.ingsw.model.iCard;
+import it.polimi.ingsw.model.adventure_cards.iCard;
 
 public interface iCards {
 

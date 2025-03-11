@@ -3,6 +3,8 @@ package it.polimi.ingsw.model.board;
 import java.util.ArrayList;
 import java.util.Queue;
 
+import it.polimi.ingsw.model.components.iBaseComponent;
+
 public class CommonBoard implements iCommonBoard {
 
 	private Queue<iBaseComponent> covered_components;
@@ -12,11 +14,13 @@ public class CommonBoard implements iCommonBoard {
 	// methods
 	@Override
 	public iBaseComponent pullComponent() {
+			return null; //TODO
 
 	}
 
 	@Override
 	public void discardComponent(iBaseComponent a) {
+		return; //TODO
 	}
 
 	@Override
