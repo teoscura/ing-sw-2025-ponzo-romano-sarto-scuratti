@@ -1,13 +1,5 @@
 package it.polimi.ingsw.adventure_cards;
 
-class Planet{
-    int red_material;
-    int blue_material;
-    int green_material;
-    int yellow_material;
-    boolean is_visited;
-}
-
 public class PlanetCard extends Card{
     private String title;
     private String text;
