@@ -41,7 +41,7 @@ public class CabinComponent extends BaseComponent{
         return this.crew_type;
     }
 
-    public void setCrew(int new_crew){
+    public void setCrew(int new_crew, AlienType type){
         //TODO change type implem. im not checking if i can contain.
         if(new_crew<0){
             throw new NegativeArgumentException();
@@ -51,27 +51,45 @@ public class CabinComponent extends BaseComponent{
         }
         this.crew_number = new_crew;
     }
+
+    private void upgradeCrewType(AlienType type){
+        if(this.can_contain == AlienType.BOTH) return;
+        if(type==AlienType.BOTH || type==AlienType.HUMAN) throw new IllegalArgumentException();
+        if(this.can_contain == AlienType.HUMAN){
+            this.can_contain = type;
+            return;
+        }
+        if(this.can_contain!=type){
+            this.can_contain = AlienType.BOTH;
+        }
+    }
     
     public void updateCrewType(iSpaceShip state, int position){
-        iVisitor v = new CabinVisitor();
+        CabinVisitor v = new CabinVisitor();
         iBaseComponent up = state.getComponent(state.up(position));
         iBaseComponent right = state.getComponent(state.down(position));
         iBaseComponent down = state.getComponent(state.left(position));
         iBaseComponent left = state.getComponent(state.right(position));
         if(up.getConnector(ComponentRotation.PI).connected(this.getConnector(ComponentRotation.ZERO))){
-            
+            up.check(v);
+            this.upgradeCrewType(v.getType());
+            v.reset();
         }
         if(right.getConnector(ComponentRotation.MINHALFPI).connected(this.getConnector(ComponentRotation.POSHALFPI))){
-            
+            right.check(v);
+            this.upgradeCrewType(v.getType());
+            v.reset(); 
         }
         if(down.getConnector(ComponentRotation.ZERO).connected(this.getConnector(ComponentRotation.PI))){
-            
+            down.check(v);
+            this.upgradeCrewType(v.getType());
+            v.reset();
         }
         if(left.getConnector(ComponentRotation.POSHALFPI).connected(this.getConnector(ComponentRotation.MINHALFPI))){
-            
+            left.check(v);
+            this.upgradeCrewType(v.getType());
+            v.reset();
         }
-        
-        //TODO: tirare fuori dal visitor i tipi.
     }
 }
 

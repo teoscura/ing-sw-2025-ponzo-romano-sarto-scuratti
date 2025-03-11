@@ -2,24 +2,26 @@
 package it.polimi.ingsw.model.components;
 
 public enum AlienType{
-    HUMAN (2, false),
-    BROWN (1, true),
-    PURPLE (1, true),
-    BOTH (1, false);//Cabina collegata sia a support viola che marrone
+    HUMAN (2, false, false, false),
+    BROWN (1, true, true, false),
+    PURPLE (1, true, false, true),
+    BOTH (1, false, true, true);//Cabina collegata sia a support viola che marrone
 
     private int max_capacity;
-    private boolean create_lifesupport;
+    private boolean lifesupport_exists;
+    private boolean supports_brown;
+    private boolean supports_purple;
 
-    AlienType(int max_capacity, boolean need_lifesupport){
+    AlienType(int max_capacity, boolean lifesupport_exists){
         this.max_capacity = max_capacity;
-        this.create_lifesupport = need_lifesupport;
+        this.lifesupport_exists = lifesupport_exists;
     }
 
     public int getMaxCapacity(){
         return this.max_capacity;
     }
 
-    public boolean getNeedLifeSupport(){
-        return this.need_lifesupport;
+    public boolean getLifeSupportExists(){
+        return this.lifesupport_exists;
     }
 }
