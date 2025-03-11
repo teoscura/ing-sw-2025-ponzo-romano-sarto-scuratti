@@ -1,11 +1,15 @@
+//Done.
 package it.polimi.ingsw.model.components;
 
 import it.polimi.ingsw.exceptions.ArgumentTooBigException;
 import it.polimi.ingsw.exceptions.NegativeArgumentException;
+import it.polimi.ingsw.model.components.exceptions.UnsupportedAlienCabinException;
 import it.polimi.ingsw.model.components.visitors.CabinVisitor;
 import it.polimi.ingsw.model.components.visitors.iVisitor;
 import it.polimi.ingsw.model.player.iSpaceShip;
 
+
+//FIXME huge refactor if possible, really dirty implementation.
 public class CabinComponent extends BaseComponent{
     private int max_capacity;
     private int crew_number = 0;
@@ -42,7 +46,16 @@ public class CabinComponent extends BaseComponent{
     }
 
     public void setCrew(int new_crew, AlienType type){
-        //TODO change type implem. im not checking if i can contain.
+        if(type==AlienType.HUMAN){
+            crew_type = type;
+        }
+        else if(type==AlienType.BROWN && (this.can_contain==AlienType.BOTH || this.can_contain==AlienType.BROWN)){
+            crew_type = AlienType.BROWN;
+        }
+        else if(type==AlienType.PURPLE && (this.can_contain==AlienType.BOTH || this.can_contain==AlienType.PURPLE)){
+            crew_type = AlienType.PURPLE;
+        }
+        else throw new UnsupportedAlienCabinException();
         if(new_crew<0){
             throw new NegativeArgumentException();
         }
