@@ -1,0 +1,135 @@
+@startuml controller
+hide circle
+skinparam classFontStyle bold
+skinparam groupInheritance 2
+set separator ::
+skinparam classAttributeIconSize 12
+
+' TODO sistemare tipi
+
+' format unfinished games: list form
+' 1 - game_id - num_players - player_name_0, .. , player_name_num_players-1.
+
+package Controller{
+
+    class ServerController {
+        ' tenerla globale, ci serve modo di sapere a chi mandare poi i pacchetti e a quale match.
+        {field} - match_list : HashMap<String, MatchController>
+        {field} - player_list : ArrayList<ClientDescriptor>
+        ==methods==
+        {method} + getUnfinishedMatches() : void
+        {method} + getOpenWaitingRooms() : void
+        {method} + connectToRoom() : void
+        {method} + connectToUnfinished : void
+        {method} + openRoom(settings: MatchSettings) : void
+        {method} + observe() : void
+        --
+        {method} - closeGame(String uid) : void 
+        {method} - send_message(conn: ConnectionAdapter,message: char[]) : void
+    }
+
+    interface iConnectionObserver{
+        ==methods==
+        {method} - observe() : void
+    }
+
+    interface iConnectionHandler{
+        ==methods==
+        {method} - attach(o: iConnectionObserver) : void
+        {method} - detach(o: iConnectionObserver) : void
+        {method} - notify() : void
+    }
+
+    class RMIHandler{
+        {field} rmi_params : //TODO
+        ==methods==
+        {method} //TODO 
+    }
+
+    class TCPHandler{
+        {field} tcp_params : //TODO
+        ==methods==
+        {method} //TODO 
+    }
+
+    class MatchController{
+        {field} - uid : int
+        {field} - match_player_list : ArrayList<ClientDescriptor>
+        {field} - is_waiting : boolean
+        {field} - max_players : int
+        ==methods==
+        {method} + shutdown() : void
+        {method} + getWaitingStatus() : boolean
+        {method} + getUID : int
+        {method} + getMaxPlayers : int
+        ---
+        {method} + startGame() : void
+
+    }
+
+    class ClientDescriptor {
+        {field} - name : String
+        {field} - in_game : boolean
+        {field} - match_id : long
+        {field} - match_player_number : int
+        {field} - connection : ConnectionAdapter
+        ==methods==
+        {method} + getName() : String
+        {method} + getInGame() : boolean
+        {method} + getMatchID() : int
+        {method} + getConnection() : ConnectionAdapter
+    }
+
+    class UnfinishedGameLoader{
+        ==methods==
+        {method} - findUnfinishedGames() : ArrayList<String>
+        {method} - loadUnfinishedGame(String file_name) : void
+    }
+
+    abstract MatchLogic{
+        {field} - game_turns : int
+        {field} - spaceship_type : SpaceShipType
+        {field} - card_type : CardLevel
+        {field} - players : Array<Player>
+        {field} - common_board : iCommonBoard
+        {field} - card_piles : Array<iCards>
+        {field} - planche : iPlanche
+        {field} - game_state : GameState
+        ==methods==
+        {method} + initialize() : void 
+        {method} + getTurn() : int
+        {method} + getSpaceShipType() : SpaceShipType
+        {method} + getCardType() : CardLevel
+        {method} + getGameState() : GameState
+        {method} + send_message(messaage: char[]) : void
+        //TODO finish methods.
+    }
+
+    abstract GameState{ 
+        //TODO
+    }
+
+    class ConstructionState{
+        //TODO
+    }
+
+    class VoyageState{
+        //TODO
+    }
+
+    class TestFlightLogic{
+        //TODO
+
+    }
+
+    class LevelTwoLogic{
+        //TODO
+    }
+
+    TCPHandler <-- ServerController:tcp_handler
+    RMIHandler <-- ServerController:rmi_handler
+    MatchLogic <-- MatchController:logic
+}
+@enduml
+
+
