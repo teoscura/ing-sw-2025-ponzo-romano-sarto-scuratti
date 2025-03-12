@@ -12,7 +12,7 @@ public class AlienLifeSupportComponent extends BaseComponent{
                                 ComponentRotation rotation, 
                                 AlienType type){
         super(connectors, rotation);
-        if(!type.getNeedLifeSupport()){
+        if(!type.getLifeSupportExists()){
             throw new IllegalConstructorArgumentException();
         }
         this.type = type;
@@ -23,7 +23,7 @@ public class AlienLifeSupportComponent extends BaseComponent{
                                 AlienType type,
                                 int position){
         super(connectors, rotation, position);
-        if(!type.getNeedLifeSupport()){
+        if(!type.getLifeSupportExists()){
             throw new IllegalConstructorArgumentException();
         }
         this.type = type;
