@@ -14,9 +14,4 @@ public class Player {
 
 //TODO add functions for this.
 
-enum PlayerColor {
-	RED, 
-	BLUE, 
-	GREEN, 
-	YELLOW;
-}
+

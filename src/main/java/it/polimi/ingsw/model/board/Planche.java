@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model.board;
 
+import it.polimi.ingsw.model.player.PlayerColor;
+
 public class Planche implements iPlanche {
 
 	private PlancheCell[] cells;
