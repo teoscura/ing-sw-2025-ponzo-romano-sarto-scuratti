@@ -165,7 +165,6 @@ public class SpaceShip implements iSpaceShip{
 		if(coords_target.y<0 || coords_target.y >= this.type.getHeight()) throw new OutOfBoundsException("Illegal getComponent access: Target");
 		if(battery_location.x<0 || battery_location.x >= this.type.getWidth()) throw new OutOfBoundsException("Illegal getComponent access: Battery Provider");
 		if(battery_location.y<0 || battery_location.y >= this.type.getHeight()) throw new OutOfBoundsException("Illegal getComponent access: Battery Provider");
-		//FIXME
 		EnergyVisitor v = new EnergyVisitor(false);
 		iBaseComponent target = getComponent(coords_target);
 		iBaseComponent battery = getComponent(battery_location);  
