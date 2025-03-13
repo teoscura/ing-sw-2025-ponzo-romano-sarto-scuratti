@@ -1,0 +1,103 @@
+@startuml
+skinparam shadowing false
+skinparam defaultFontName "Arial"
+skinparam defaultFontSize 14
+
+rectangle "GALAXY TRUCKER: Game Flow" as Title
+
+rectangle "I. GAME SETUP" as Setup
+rectangle "II. SHIP BUILDING" as Building
+rectangle "III. FLIGHT PHASE" as Flight
+rectangle "IV. JOURNEY'S END" as End
+
+Title -down-> Setup
+Setup -right-> Building
+Building -right-> Flight
+Flight -right-> End
+
+' --- I. GAME SETUP (Details) ---
+package "I. GAME SETUP (Details)" {
+  rectangle "Ship Board (Level I)" as ShipBoard
+  rectangle "Flight Board (L)" as FlightBoard
+  rectangle "Component\nTiles" as Tiles
+  rectangle "Astronauts" as Astronauts
+  rectangle "Goods" as Goods
+  rectangle "Credits" as Credits
+  rectangle "Dice" as Dice
+  rectangle "Adventure\nCards" as AdvCards
+
+  note right of AdvCards : 8 Level I cards\nshuffled (learning game)
+  note bottom of Setup : Players choose colors, get\nship board, starting cabin, rockets.\nComponent tiles face-down\nand mixed in center.
+}
+
+' --- II. SHIP BUILDING ---
+package "II. SHIP BUILDING (Real-Time, Simultaneous)" {
+    rectangle "1. \"GO!\" - Start Building!" as Go
+    rectangle "2. Grab Tiles (One Hand, One at a Time)" as GrabTiles {
+        rectangle "[Pile]" as Pile
+        rectangle "[Hand]" as Hand
+        rectangle "[Ship Board]" as ShipBoard2
+        rectangle "[Discard (Face Up)]" as Discard
+
+        Pile --> Hand : ""
+        Hand --> ShipBoard2 : "Reveal"
+         Hand -[hidden]right-> Discard
+        ShipBoard2 -[dashed]up-> Discard: "Attach (if legal)"
+
+
+    }
+
+    rectangle "3. Connection Rules" as ConnRules {
+      '[One-Pipe] -- [One-Pipe]
+      '[Two-Pipe] -- [Two-Pipe]
+      '[Universal] -- [Any]
+      '[Smooth Side] X [Connector]
+      note right : One Pipe -- One Pipe\n Two Pipe -- Two Pipe\n Universal -- Any\n Smooth X Connector
+    }
+
+  rectangle "4. Component Types (Examples)" as CompTypes {
+    ' [CABIN]   [ENGINE]   [CANNON]  [BATTERY] [SHIELD]   [CARGO]  [STRUCT]
+      note right : Cabin, Engine, Cannon,\nBattery, Shield, Cargo,\nStructural, Alien Support
+    }
+    rectangle "5. Finish Building" as FinishBuild
+    note bottom of FinishBuild: Move rocket to Flight Board\n(order matters).
+}
+
+' --- III. FLIGHT PHASE ---
+package "III. FLIGHT PHASE (Adventure Card Resolution)" {
+    rectangle "[Adventure Deck]" as AdvDeck
+    rectangle "Reveal Top Card" as RevealCard
+    rectangle "Resolve Effects\n(Often in player order)" as ResolveEffects
+
+    AdvDeck --> RevealCard
+    RevealCard --> ResolveEffects
+
+    rectangle "Adventure Card Types (Examples)" as CardTypes {
+       ' [PLANETS] [SMUGGLERS] [OPEN SPACE] [METEOR SWARM] [COMBAT ZONE]
+        note right : Planets, Smugglers,\nOpen Space, Meteor Swarm,\nCombat Zone, Stardust
+    }
+
+    note bottom of ResolveEffects : Players may gain/lose goods,\ncrew, credits, flight days.\nShips can be damaged\n(components destroyed/fall off).
+}
+
+' --- IV. JOURNEY'S END ---
+package "IV. JOURNEY'S END (Scoring)" {
+    rectangle "1. Finish Order Reward" as FinishReward
+    rectangle "2. Best-Looking Ship" as BestLooking
+    rectangle "3. Sale of Goods" as SaleGoods
+    rectangle "4. Losses" as Losses
+
+  note right of FinishReward: 1st: 4c, 2nd: 3c,\n3rd: 2c, 4th: 1c
+  note right of BestLooking : Fewest Exposed\nConnectors: 2c
+  note right of SaleGoods: Red: 4c, Yellow: 3c,\nGreen: 2c, Blue: 1c
+  note right of Losses : -1c per lost component
+  rectangle "WINNER" as Winner
+  note bottom of Winner : Player with the most\nCosmic Credits! (Any profit = a win)
+
+}
+rectangle "V. ADVANCED" as Advanced
+
+note bottom of Advanced : Ship Levels: I, II, III \n Timelimit \n Adventure Deck Piles\n Flight Forcast\n Reserving Components \n Aliens \n Transgalactic Trek
+
+
+@enduml

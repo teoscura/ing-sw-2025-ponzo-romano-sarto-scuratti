@@ -1,0 +1,158 @@
+@startuml
+skinparam shadowing false
+skinparam defaultFontName "Arial"
+skinparam defaultFontSize 12
+skinparam packageStyle rect
+
+rectangle "GALAXY TRUCKER: Game Flow" as Title
+
+rectangle "I. GAME SETUP" as Setup
+rectangle "II. SHIP BUILDING" as Building
+rectangle "III. FLIGHT PHASE" as Flight
+rectangle "IV. JOURNEY'S END" as End
+
+Title -down-> Setup
+Setup -right-> Building
+Building -right-> Flight
+Flight -right-> End
+
+' --- I. GAME SETUP (Details) ---
+package "I. GAME SETUP (Details)" {
+  rectangle "Ship Board (Level I)" as ShipBoard
+    note right of ShipBoard : Starting Cabin Placement: Center
+
+  rectangle "Flight Board (L)" as FlightBoard
+      note right of FlightBoard: Parking Lot\nNumbered Spaces (1, 2, 3...)
+
+  rectangle "Component\nTiles" as Tiles
+      note right of Tiles: Face-down, Mixed
+
+  rectangle "Astronauts" as Astronauts
+  rectangle "Goods\n(Red, Yellow, Green, Blue)" as Goods
+  rectangle "Credits" as Credits
+  rectangle "Dice (2)" as Dice
+  rectangle "Adventure Cards" as AdvCards{
+    rectangle "8 Level I Cards (Learning)" as LearningCards
+    note right of LearningCards: Shuffled
+  }
+  note bottom of Setup :  Each player receives:\n- Ship Board (Level I)\n- Starting Cabin (color-matched)\n- Rockets (color-matched, 2)\n- Astronaut figures\n- (Later: Battery tokens)
+
+}
+
+' --- II. SHIP BUILDING ---
+package "II. SHIP BUILDING (Real-Time, Simultaneous)" {
+    rectangle "1. \"GO!\" - Start Building!" as Go
+
+    rectangle "2. Grab Tiles (One at a Time)" as GrabTiles {
+        rectangle "[Pile]" as Pile
+        rectangle "[Hand]" as Hand
+        rectangle "[Ship Board]" as ShipBoard2
+        rectangle "[Discard Pile\n(Face Up)]" as Discard
+
+        Pile -[#blue]> Hand : "One Hand Only"
+        Hand -[#blue]> ShipBoard2 : "Reveal AFTER taking"
+        Hand -[dashed,#blue]> Discard : "Return if not attached"
+        ShipBoard2 -[dashed,#blue]-> Discard : "Attach (if legal)"
+
+         note right of Hand : Can take face up\nor face down tiles.
+    }
+
+    rectangle "3. Connection Rules" as ConnRules {
+        rectangle "One-Pipe -- One-Pipe" as OnePipe
+        rectangle "Two-Pipe -- Two-Pipe" as TwoPipe
+        rectangle "Universal -- Any" as Universal
+        rectangle "Smooth Side X Connector" as SmoothNo
+        note right of ConnRules :  Connectors MUST match.\nSmooth sides cannot\nconnect to connectors.
+    }
+
+  rectangle "4. Component Types & Restrictions" as CompTypes {
+      rectangle "Cabin" as CabinComp
+      note right of CabinComp : More = Better\n Starting Cabin: Special Rules
+      rectangle "Engine" as EngineComp
+      note right of EngineComp: Point Backward\n Nothing Behind\n More = Better
+      rectangle "Cannon" as CannonComp
+      note right of CannonComp: Ideally Forward\n Nothing in Front\n More = Better
+      rectangle "Double Engine/Cannon" as DoubleComp
+      note right of DoubleComp : Requires Batteries\n More Powerful
+      rectangle "Battery" as BatteryComp
+      note right of BatteryComp: Powers Doubles & Shields\nMore is better
+      rectangle "Shield" as ShieldComp
+      note right of ShieldComp: Protects from\nmeteors & light cannons\n2 cover all directions
+        rectangle "Cargo Hold" as CargoComp
+        note right of CargoComp: Holds Goods\n More is Better
+      rectangle "Special Cargo" as SpecialComp
+      note right of SpecialComp: Required for\nRed Goods
+      rectangle "Structural Module" as StructComp
+      note right of StructComp: Provides Connectors\nIncreases Durability
+      rectangle "Alien Life Support" as AlienComp
+       note right of AlienComp:  (Advanced)\nEnables Alien Crew
+    }
+
+    rectangle "5. Finish Building" as FinishBuild {
+        rectangle "Move rocket to Flight Board" as MoveRocket
+        note bottom of MoveRocket:  Choose available space.\nFirst to finish gets\nfirst choice (space 1).
+    }
+   note bottom of Building :  (Learning Game) No time limit.\n(Advanced) Timer is used.\n(Advanced) Reserve up to 2 components.
+
+}
+
+' --- III. FLIGHT PHASE ---
+package "III. FLIGHT PHASE (Adventure Card Resolution)" {
+    rectangle "[Adventure Deck]" as AdvDeck
+    rectangle "Reveal Top Card" as RevealCard
+    rectangle "Resolve Effects\n(In player order)" as ResolveEffects
+
+    AdvDeck -[#green]> RevealCard
+    RevealCard -[#green]> ResolveEffects
+
+    package "Adventure Card Types (Examples)" {
+       rectangle "Planets\n(Gain Goods)" as PlanetsCard
+       rectangle "Abandoned Ship/Station\n(Gain Goods/Credits)" as AbandonedCard
+       rectangle "Smugglers/Pirates/Slavers\n(Combat)" as CombatCard
+       rectangle "Open Space\n(Gain Flight Days)" as OpenSpaceCard
+       rectangle "Meteor Swarm\n(Ship Damage)" as MeteorCard
+       rectangle "Combat Zone\n(Penalties, Ship Damage)" as CombatZoneCard
+      rectangle "Stardust\n(Lose Flight Days)" as StardustCard
+      rectangle "Epidemic\n(Lose Crew)" as EpidemicCard
+       rectangle "Sabotage\n(Destroy Component)" as SabotageCard
+      rectangle "Good Shortage\n(Not Enough Goods)" as GoodsShortCard
+
+    }
+
+      rectangle "Ship Damage" as ShipDamage {
+          rectangle "Destroyed Components" as DestroyComp
+          rectangle "Disconnected Components Fall Off" as FallOff
+          rectangle "Choose which piece to keep" as ChoosePiece
+           note bottom of ChoosePiece: If ship breaks into\nmultiple pieces
+      }
+      rectangle "Gaining/Losing Flight Days" as FlightDays
+       rectangle "Gaining/Losing Goods" as GoodsChange
+      rectangle "Gaining/Losing Crew" as CrewChange
+      rectangle "Gaining/Losing Credits" as CreditsChange
+
+    note bottom of ResolveEffects :   Events can cause:\n- Ship Damage\n- Gain/Loss of Flight Days\n- Gain/Loss of Goods\n- Gain/Loss of Crew\n- Gain/Loss of Credits\n- Order on flight board can change
+
+}
+
+' --- IV. JOURNEY'S END ---
+package "IV. JOURNEY'S END (Scoring)" {
+    rectangle "1. Finish Order Reward" as FinishReward
+        note right of FinishReward: 1st Place: 4 Credits\n2nd Place: 3 Credits\n3rd Place: 2 Credits\n4th Place: 1 Credit
+
+    rectangle "2. Best-Looking Ship Award" as BestLooking
+        note right of BestLooking: Fewest Exposed Connectors:\nReceives 2 Credits
+
+    rectangle "3. Sale of Goods" as SaleGoods
+        note right of SaleGoods : Red Goods: 4 Credits each\nYellow Goods: 3 Credits each\nGreen Goods: 2 Credits each\nBlue Goods: 1 Credit each
+
+    rectangle "4. Losses (Penalty)" as Losses
+        note right of Losses : -1 Credit per lost component\n(in discard pile)
+
+    rectangle "WINNER" as Winner
+        note bottom of Winner:  Player with the MOST\nCosmic Credits wins.\n(Any profit is a win)
+
+
+}
+rectangle "V. ADVANCED" as Advanced
+ note bottom of Advanced: Ship Levels: I, II, III (Bigger ships/challenges)\n Timelimit: Use timer\n Adventure Deck: More Complex, with Forcast\n Reserving Compontents: Hold up to 2\n Aliens: Special Crew with abilities\n Transgalactic Trek: Three-flight campaign
+@enduml
