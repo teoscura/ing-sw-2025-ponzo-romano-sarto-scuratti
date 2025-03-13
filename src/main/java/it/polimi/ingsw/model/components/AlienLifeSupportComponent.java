@@ -2,7 +2,9 @@
 package it.polimi.ingsw.model.components;
 
 import it.polimi.ingsw.exceptions.IllegalConstructorArgumentException;
+import it.polimi.ingsw.model.components.enums.AlienType;
 import it.polimi.ingsw.model.components.visitors.iVisitor;
+import it.polimi.ingsw.model.player.ShipCoords;
 
 public class AlienLifeSupportComponent extends BaseComponent{
     
@@ -21,8 +23,8 @@ public class AlienLifeSupportComponent extends BaseComponent{
     public AlienLifeSupportComponent(ConnectorType[] connectors, 
                                 ComponentRotation rotation, 
                                 AlienType type,
-                                int position){
-        super(connectors, rotation, position);
+                                ShipCoords coords){
+        super(connectors, rotation, coords);
         if(!type.getLifeSupportExists()){
             throw new IllegalConstructorArgumentException();
         }

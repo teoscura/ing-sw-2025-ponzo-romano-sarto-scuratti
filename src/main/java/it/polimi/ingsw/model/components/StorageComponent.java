@@ -3,9 +3,11 @@ package it.polimi.ingsw.model.components;
 
 import java.util.Arrays;
 
+import it.polimi.ingsw.model.components.enums.ShipmentType;
 import it.polimi.ingsw.model.components.exceptions.ContainerFullException;
 import it.polimi.ingsw.model.components.exceptions.ContainerNotSpecialException;
 import it.polimi.ingsw.model.components.visitors.iVisitor;
+import it.polimi.ingsw.model.player.ShipCoords;
 
 public class StorageComponent extends BaseComponent{
 
@@ -25,8 +27,8 @@ public class StorageComponent extends BaseComponent{
     public StorageComponent(ConnectorType[] connectors, 
                             ComponentRotation rotation,
                             StorageType type,
-                            int position){
-        super(connectors, rotation, position);
+                            ShipCoords coords){
+        super(connectors, rotation, coords);
         this.special = type.getSpecial();
         this.shipments = new ShipmentType[type.getCapacity()];
         Arrays.fill(shipments, ShipmentType.EMPTY);
@@ -112,29 +114,5 @@ enum StorageType{
 
     public int getCapacity(){
         return this.capacity;
-    }
-}
-
-enum ShipmentType{
-    RED (true, 4),     //4 - Special
-    YELLOW (false, 3),  //3 - Normal
-    GREEN (false, 2),   //2 - Normal
-    BLUE (false, 1),    //1 - Normal
-    EMPTY (false, 0);  //0 - Empty Space
-
-    private boolean special;
-    private int value;
-
-    ShipmentType(boolean special, int value){
-        this.special = special;
-        this.value = value;
-    }
-
-    public boolean getSpecial(){
-        return this.special;
-    }
-
-    public int getValue(){
-        return this.value;
     }
 }

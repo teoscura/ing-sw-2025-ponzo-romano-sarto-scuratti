@@ -1,15 +1,10 @@
 //Done.
 package it.polimi.ingsw.model.components;
 
+import it.polimi.ingsw.model.components.enums.ShieldType;
 import it.polimi.ingsw.model.components.exceptions.AlreadyPoweredException;
 import it.polimi.ingsw.model.components.visitors.iVisitor;
-
-enum ShieldType{
-    NE,
-    SE,
-    SW,
-    NW,
-}
+import it.polimi.ingsw.model.player.ShipCoords;
 
 public class ShieldComponent extends BaseComponent {
     
@@ -17,14 +12,20 @@ public class ShieldComponent extends BaseComponent {
     private boolean powered = false;
 
     public ShieldComponent(ConnectorType[] connectors, 
-                           ComponentRotation rotation){
+                           ComponentRotation rotation,
+                           ShieldType type){
         super(connectors, rotation);
+        if(type == ShieldType.NONE) throw new IllegalArgumentException();
+        this.type = type;
     }
 
     public ShieldComponent(ConnectorType[] connectors, 
                            ComponentRotation rotation,
-                           int position){
-        super(connectors, rotation, position);
+                           ShieldType type,
+                           ShipCoords coords){
+        super(connectors, rotation, coords);
+        if(type == ShieldType.NONE) throw new IllegalArgumentException();
+        this.type = type;
     }
 
     @Override
@@ -46,6 +47,7 @@ public class ShieldComponent extends BaseComponent {
     }
 
     public ShieldType getShield(){
+        if(!this.powered) return ShieldType.NONE;
         return this.type;
     }
     

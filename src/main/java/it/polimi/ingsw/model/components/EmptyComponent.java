@@ -4,6 +4,7 @@ package it.polimi.ingsw.model.components;
 import java.util.Arrays;
 
 import it.polimi.ingsw.model.components.visitors.iVisitor;
+import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.player.iSpaceShip;
 
 public class EmptyComponent extends BaseComponent {
@@ -12,8 +13,8 @@ public class EmptyComponent extends BaseComponent {
         super(new ConnectorType[4], ComponentRotation.ZERO);
     }
 
-    public EmptyComponent(int position){
-        super(new ConnectorType[4], ComponentRotation.ZERO, position);
+    public EmptyComponent(ShipCoords coords){
+        super(new ConnectorType[4], ComponentRotation.ZERO, coords);
     }
 
     @Override

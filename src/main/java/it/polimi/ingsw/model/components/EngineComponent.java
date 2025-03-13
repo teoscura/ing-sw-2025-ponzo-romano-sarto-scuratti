@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.components.exceptions.AlreadyPoweredException;
 import it.polimi.ingsw.model.components.exceptions.UnpowerableException;
 import it.polimi.ingsw.model.components.visitors.FreeSpaceVisitor;
 import it.polimi.ingsw.model.components.visitors.iVisitor;
+import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.player.iSpaceShip;
 
 public class EngineComponent extends BaseComponent{
@@ -24,8 +25,8 @@ public class EngineComponent extends BaseComponent{
     public EngineComponent(ConnectorType[] components,
                            ComponentRotation rotation,
                            EngineType type,
-                           int position){
-        super(components, rotation, position);
+                           ShipCoords coords){
+        super(components, rotation, coords);
         this.max_power = type.getMaxPower();
         this.powerable = type.getPowerable();        
     }
@@ -33,7 +34,7 @@ public class EngineComponent extends BaseComponent{
     @Override
     public boolean verify(iSpaceShip state){
         FreeSpaceVisitor v = new FreeSpaceVisitor();
-        iBaseComponent tmp = state.getComponent(state.down(this.getPosition()));
+        iBaseComponent tmp = state.getComponent(state.down(this.getCoords()));
         tmp.check(v);
         if(v.getSpaceIsFree()) return true;
         return false;

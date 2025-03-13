@@ -4,6 +4,7 @@ package it.polimi.ingsw.model.components;
 import it.polimi.ingsw.model.components.exceptions.ContainerEmptyException;
 import it.polimi.ingsw.model.components.exceptions.ContainerFullException;
 import it.polimi.ingsw.model.components.visitors.iVisitor;
+import it.polimi.ingsw.model.player.ShipCoords;
 
 public class BatteryComponent extends BaseComponent{
     
@@ -21,8 +22,8 @@ public class BatteryComponent extends BaseComponent{
     public BatteryComponent(ConnectorType[] connectors, 
                             ComponentRotation rotation, 
                             BatteryType type,
-                            int position){
-        super(connectors, rotation, position);
+                            ShipCoords coords){
+        super(connectors, rotation, coords);
         this.contains = type.getCapacity();
         this.max = type.getCapacity();
     }

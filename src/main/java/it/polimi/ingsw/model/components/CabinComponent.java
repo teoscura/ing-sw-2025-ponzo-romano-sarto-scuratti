@@ -3,9 +3,11 @@ package it.polimi.ingsw.model.components;
 
 import it.polimi.ingsw.exceptions.ArgumentTooBigException;
 import it.polimi.ingsw.exceptions.NegativeArgumentException;
+import it.polimi.ingsw.model.components.enums.AlienType;
 import it.polimi.ingsw.model.components.exceptions.UnsupportedAlienCabinException;
 import it.polimi.ingsw.model.components.visitors.CabinVisitor;
 import it.polimi.ingsw.model.components.visitors.iVisitor;
+import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.player.iSpaceShip;
 
 
@@ -26,8 +28,8 @@ public class CabinComponent extends BaseComponent{
     public CabinComponent(ConnectorType[] connectors, 
                           ComponentRotation rotation,
                           AlienType inhabitant_type,
-                          int position){
-        super(connectors, rotation, position);
+                          ShipCoords coords){
+        super(connectors, rotation, coords);
         this.max_capacity = inhabitant_type.getMaxCapacity(); 
     }
 
@@ -77,12 +79,13 @@ public class CabinComponent extends BaseComponent{
         }
     }
     
-    public void updateCrewType(iSpaceShip state, int position){
+    public void updateCrewType(iSpaceShip state){
+        //FIXME
         CabinVisitor v = new CabinVisitor();
-        iBaseComponent up = state.getComponent(state.up(position));
-        iBaseComponent right = state.getComponent(state.down(position));
-        iBaseComponent down = state.getComponent(state.left(position));
-        iBaseComponent left = state.getComponent(state.right(position));
+        iBaseComponent up = state.getComponent(state.up(this.getCoords()));
+        iBaseComponent right = state.getComponent(state.down(this.getCoords()));
+        iBaseComponent down = state.getComponent(state.left(this.getCoords()));
+        iBaseComponent left = state.getComponent(state.right(this.getCoords()));
         if(up.getConnector(ComponentRotation.PI).connected(this.getConnector(ComponentRotation.ZERO))){
             up.check(v);
             this.upgradeCrewType(v.getType());
