@@ -2,6 +2,7 @@
 package it.polimi.ingsw.model.components;
 
 import it.polimi.ingsw.model.components.visitors.iVisitor;
+import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.player.iSpaceShip;
 
 
@@ -9,6 +10,7 @@ import it.polimi.ingsw.model.player.iSpaceShip;
 public interface iBaseComponent {
     
     //Connectors are stored in this order: UP, RIGHT, DOWN, LEFT;
+    public ShipCoords getCoords();
     public ConnectorType[] getConnectors();
     public ComponentRotation getRotation();
     public boolean verify(iSpaceShip state);

@@ -3,13 +3,14 @@ package it.polimi.ingsw.model.components;
 
 import it.polimi.ingsw.model.components.exceptions.ConnectorsSizeException;
 import it.polimi.ingsw.model.components.visitors.*;
+import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.player.iSpaceShip;
 
 public abstract class BaseComponent implements iBaseComponent, iVisitable{
 
     private ConnectorType[] connectors;
     private ComponentRotation rotation;
-    private int position;
+    private ShipCoords coords;
 
     protected BaseComponent(ConnectorType[] connectors, 
                             ComponentRotation rotation){
@@ -22,13 +23,13 @@ public abstract class BaseComponent implements iBaseComponent, iVisitable{
 
     protected BaseComponent(ConnectorType[] connectors, 
                             ComponentRotation rotation,
-                            int position){
+                            ShipCoords coords){
         if(connectors.length!=4){
             throw new ConnectorsSizeException();
         }
         this.connectors = connectors;
         this.rotation = rotation;
-        this.position = position;
+        this.coords = coords;
     }
 
     @Override
@@ -43,10 +44,10 @@ public abstract class BaseComponent implements iBaseComponent, iVisitable{
 
     @Override
     public boolean verify(iSpaceShip state){
-        iBaseComponent up = state.getComponent(state.up(position));
-        iBaseComponent right = state.getComponent(state.up(position));
-        iBaseComponent down = state.getComponent(state.up(position));
-        iBaseComponent left = state.getComponent(state.up(position));
+        iBaseComponent up = state.getComponent(state.up(this.getCoords()));
+        iBaseComponent right = state.getComponent(state.up(this.getCoords()));
+        iBaseComponent down = state.getComponent(state.up(this.getCoords()));
+        iBaseComponent left = state.getComponent(state.up(this.getCoords()));
 
         if(up!=null){
             if(!up.getConnector(ComponentRotation.PI).compatible(getConnector(ComponentRotation.ZERO))) return false;
@@ -70,8 +71,9 @@ public abstract class BaseComponent implements iBaseComponent, iVisitable{
         return connectors[shift];
     }
 
-    protected int getPosition(){
-        return this.position;
+    @Override
+    public ShipCoords getCoords(){
+        return this.coords;
     }
     
     //ricordate: non implementare questo metodo, ma va implementato in ogni singola sottoclasse
