@@ -1,17 +1,16 @@
 package it.polimi.ingsw.model.adventure_cards;
 
-public abstract class Card implements iCard {
-    private String title;
-    private int cardId;
-    private CardEffect effect;
 
-    public String getTitle() {
-        return title;
+public abstract class Card implements iCard {
+    private CardType type;
+    private int card_Id;
+    
+    public CardType getType() {
+        return type;
     }
     public int getCardId() {
-        return cardId;
+        return card_Id;
     }
-    public CardEffect getEffect(){
-        return effect;
-    }
+
+    //TODO: add general methods
 }
