@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.board;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Queue;
 
@@ -10,6 +11,11 @@ public class CommonBoard implements iCommonBoard {
 	private Queue<iBaseComponent> covered_components;
 	private ArrayList<iBaseComponent> uncovered_components;
 
+	public CommonBoard(){
+		//TODO: factory load from JSON.
+		this.covered_components = new ArrayDeque<iBaseComponent>();
+		this.uncovered_components = new ArrayList<iBaseComponent>();
+	}
 
 	// methods
 	@Override
