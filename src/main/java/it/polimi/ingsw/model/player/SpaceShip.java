@@ -161,10 +161,6 @@ public class SpaceShip implements iSpaceShip{
 	public void turnOn(ShipCoords coords_target, ShipCoords battery_location) {
 		if(coords_target==null) throw new NullPointerException();
 		if(battery_location==null) throw new NullPointerException();
-		if(coords_target.x<0 || coords_target.x >= this.type.getWidth()) throw new OutOfBoundsException("Illegal getComponent access: Target");
-		if(coords_target.y<0 || coords_target.y >= this.type.getHeight()) throw new OutOfBoundsException("Illegal getComponent access: Target");
-		if(battery_location.x<0 || battery_location.x >= this.type.getWidth()) throw new OutOfBoundsException("Illegal getComponent access: Battery Provider");
-		if(battery_location.y<0 || battery_location.y >= this.type.getHeight()) throw new OutOfBoundsException("Illegal getComponent access: Battery Provider");
 		EnergyVisitor v = new EnergyVisitor(false);
 		iBaseComponent target = getComponent(coords_target);
 		iBaseComponent battery = getComponent(battery_location);  
