@@ -19,5 +19,7 @@ public interface iVisitor {
     abstract public void visit(ShieldComponent c);
 
     abstract public void visit(EmptyComponent c);
+
+    public abstract void check(StructuralComponent c);
 }
 

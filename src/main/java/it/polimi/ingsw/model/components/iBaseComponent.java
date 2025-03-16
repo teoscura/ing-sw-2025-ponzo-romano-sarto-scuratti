@@ -10,14 +10,15 @@ import it.polimi.ingsw.model.player.iSpaceShip;
 public interface iBaseComponent {
     
     //Connectors are stored in this order: UP, RIGHT, DOWN, LEFT;
-    public ShipCoords getCoords();
-    public ConnectorType[] getConnectors();
-    public ComponentRotation getRotation();
+    
     public boolean verify(iSpaceShip state);
     public void check(iVisitor v);
 
     //Return the connector pointing up.
+    public ShipCoords getCoords();
     public ConnectorType getConnector(ComponentRotation direction);
+    public ConnectorType[] getConnectors();
+    public ComponentRotation getRotation();
 }
 
 enum ConnectorType{
