@@ -2,13 +2,12 @@ package it.polimi.ingsw.model.board;
 
 import it.polimi.ingsw.model.player.PlayerColor;
 
-
-import java.util.EnumMap;
-import java.util.Map;
+import java.util.*;
 
 public class Planche implements iPlanche {
 
 	private final Map<PlayerColor, Integer> playerMoves;
+	List<PlayerColor> Sorted_Players = new ArrayList<>();
 
 	public Planche() {
 
@@ -17,16 +16,17 @@ public class Planche implements iPlanche {
 			playerMoves.put(color, 0);
 		}
 	}
-	// TODO  initialise the position of players in the beginning. The player behind is at position NUM_OF_SPACES
+	// TODO initialise the position of players in the beginning. The player behind
+	// is at position NUM_OF_SPACES
 
 	@Override
 	public int getPlayerPosition(PlayerColor c) {
-		return playerMoves.get(c) % NUM_OF_SPACES; //TODO find out how to get this from the type of game
+		return playerMoves.get(c) % NUM_OF_SPACES; // TODO find out how to get this from the type of game
 
 	}
 
 	@Override
-	public PlayerColor getPlayersAt(int position) { //TODO refactor this (singular)
+	public PlayerColor getPlayersAt(int position) { // TODO refactor this (singular)
 
 		for (Map.Entry<PlayerColor, Integer> player : playerMoves.entrySet()) {
 			if (player.getValue() % NUM_OF_SPACES == position) {
@@ -39,41 +39,62 @@ public class Planche implements iPlanche {
 	@Override
 	public void movePlayer(PlayerColor c, int rel_change) {
 		// check if player was lapped and if two players are in the same position
-		if (rel_change == 0) return;
+		if (rel_change == 0)
+			return;
 		int exp_position = playerMoves.get(c) + rel_change;
-		boolean different_positions = false;
-		while (!different_positions) {
-			for (Map.Entry<PlayerColor, Integer> p : playerMoves.entrySet()) {
-				if (exp_position == p.getValue()) {
-					if (rel_change > 0) {
-						exp_position++;
-					} else {
-						exp_position--;
-					}
+
+		for (Map.Entry<PlayerColor, Integer> p : playerMoves.entrySet()) {
+			if (exp_position == p.getValue()) {
+				if (rel_change > 0) {
+					exp_position++;
 				} else {
-					different_positions = true;
+					exp_position--;
 				}
+			} else {
+				playerMoves.put(c, exp_position);
+				return;
 			}
 		}
 
-
 		playerMoves.put(c, exp_position);
+		return;
 
+	}
+
+	public void checkLapped() {
 		for (Map.Entry<PlayerColor, Integer> p1 : playerMoves.entrySet()) {
 			for (Map.Entry<PlayerColor, Integer> p2 : playerMoves.entrySet()) {
 				if (p1.getValue() + NUM_OF_SPACES <= p2.getValue()) {
-					playerLost(p1.getKey()); //TODO make this method
+					playerLost(p1.getKey()); // TODO make this method
 				}
 			}
 
 		}
 	}
 
+	public PlayerColor getFirstPlayer() {
+		Map.Entry<PlayerColor, Integer> max = null;
+		for (Map.Entry<PlayerColor, Integer> p : playerMoves.entrySet()) {
+			if (max == null || p.getValue() > max.getValue()) {
+				max = p;
+			}
+		}
+		return max.getKey();
+	}
+
+	public PlayerColor getNextPlayer(PlayerColor previousPlayer) {
+		Map.Entry<PlayerColor, Integer> max = null;
+		for (Map.Entry<PlayerColor, Integer> p : playerMoves.entrySet()) {
+			if ((max == null || p.getValue() > max.getValue()) && p.getValue() < playerMoves.get(previousPlayer)) {
+				max = p;
+			}
+		}
+		return max.getKey();
+	}
 
 	@Override
 	public PlayerColor won() {
-		return null; //TODO
+		return null; // TODO
 	}
-
 
 }
