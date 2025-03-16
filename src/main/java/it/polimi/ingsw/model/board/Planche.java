@@ -89,6 +89,9 @@ public class Planche implements iPlanche {
 				max = p;
 			}
 		}
+		if(max == null){
+			return null;
+		}
 		return max.getKey();
 	}
 
