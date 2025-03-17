@@ -51,8 +51,13 @@ public class CabinVisitor implements iVisitor {
         return;
     }
 
+    @Override
+    public void check(StructuralComponent c) {
+        return;
+    }
+
     public void reset(){
         this.type = AlienType.HUMAN;
-    }
+    }    
 }
 

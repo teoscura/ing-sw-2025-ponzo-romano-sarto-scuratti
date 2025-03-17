@@ -66,6 +66,11 @@ public class SpaceShipUpdateVisitor implements iVisitor {
         return;
     }
 
+    @Override
+    public void check(StructuralComponent c) {
+        return;
+    }
+
     public int getBatteryPower(){
         return this.battery_power;
     }
@@ -89,6 +94,5 @@ public class SpaceShipUpdateVisitor implements iVisitor {
     public boolean[] getDirections(){
         return this.directions;
     }
-
 
 }

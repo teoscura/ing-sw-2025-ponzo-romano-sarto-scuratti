@@ -8,6 +8,7 @@ import it.polimi.ingsw.model.components.EmptyComponent;
 import it.polimi.ingsw.model.components.EngineComponent;
 import it.polimi.ingsw.model.components.ShieldComponent;
 import it.polimi.ingsw.model.components.StorageComponent;
+import it.polimi.ingsw.model.components.StructuralComponent;
 
 public class EnergyVisitor implements iVisitor {
     
@@ -86,6 +87,13 @@ public class EnergyVisitor implements iVisitor {
         return;
     }
 
+    @Override
+    public void check(StructuralComponent c) {
+        this.powerable = false;
+        this.found_battery = false;
+        return;
+    }
+
     public boolean getFoundBatteryComponent(){
         return this.found_battery;
     }
@@ -103,4 +111,5 @@ public class EnergyVisitor implements iVisitor {
         else positive = true;
     }
 
+    
 }

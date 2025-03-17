@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.components.*;
 
 //This exists just to not do a `instanceof EmptySpace`.
 public class FreeSpaceVisitor implements iVisitor {
+    
     private boolean isfree = true;
 
     @Override
@@ -47,6 +48,11 @@ public class FreeSpaceVisitor implements iVisitor {
         this.isfree = true;
     }
 
+    @Override
+    public void check(StructuralComponent structuralComponent) {
+        this.isfree = false;
+    }
+
     public void reset(){
         this.isfree=false;
     }
@@ -54,4 +60,5 @@ public class FreeSpaceVisitor implements iVisitor {
     public boolean getSpaceIsFree(){
         return this.isfree;
     }
+    
 }
