@@ -20,12 +20,12 @@ public class CabinComponent extends BaseComponent{
     private AlienType crew_type;
     private AlienType can_contain;
 
-    // public CabinComponent(ConnectorType[] connectors, 
-    //                       ComponentRotation rotation,
-    //                       AlienType inhabitant_type){
-    //     super(connectors, rotation);
-    //     this.max_capacity = inhabitant_type.getMaxCapacity(); 
-    // }
+    public CabinComponent(ConnectorType[] connectors, 
+                          ComponentRotation rotation,
+                          AlienType inhabitant_type){
+        super(connectors, rotation);
+        this.max_capacity = inhabitant_type.getMaxCapacity(); 
+    }
 
     public CabinComponent(ConnectorType[] connectors, 
                           ComponentRotation rotation,
