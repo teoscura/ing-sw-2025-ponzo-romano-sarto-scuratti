@@ -100,27 +100,27 @@ public class SpaceShip implements iSpaceShip{
 			if(!tmp.verify(this)) res[tmp.getCoords().y][tmp.getCoords().x] = VerifyResult.BROKEN;
 			else res[tmp.getCoords().y][tmp.getCoords().x] = VerifyResult.GOOD;
 			if(tmp.getConnector(ComponentRotation.U000)
-			  .connected(this.getComponent(this.up(tmp.getCoords()))
+			  .connected(this.getComponent(tmp.getCoords().up())
 			    .getConnector(ComponentRotation.U180))){
-				ShipCoords up = this.getComponent(this.up(tmp.getCoords())).getCoords();
+				ShipCoords up = this.getComponent(tmp.getCoords().up()).getCoords();
 				if(res[up.y][up.x]==VerifyResult.UNCHECKED) queue.add(this.getComponent(up));
 			}
 			if(tmp.getConnector(ComponentRotation.U090)
-			  .connected(this.getComponent(this.right(tmp.getCoords()))
+			  .connected(this.getComponent(tmp.getCoords().right())
 			    .getConnector(ComponentRotation.U270))){
-				ShipCoords right = this.getComponent(this.right(tmp.getCoords())).getCoords();
+				ShipCoords right = this.getComponent(tmp.getCoords().right()).getCoords();
 				if(res[right.y][right.x]==VerifyResult.UNCHECKED) queue.add(this.getComponent(right));
 			}
 			if(tmp.getConnector(ComponentRotation.U180)
-			  .connected(this.getComponent(this.down(tmp.getCoords()))
+			  .connected(this.getComponent(tmp.getCoords().down())
 			    .getConnector(ComponentRotation.U000))){
-				ShipCoords left = this.getComponent(this.down(tmp.getCoords())).getCoords();
+				ShipCoords left = this.getComponent(tmp.getCoords().down()).getCoords();
 				if(res[left.y][left.x]==VerifyResult.UNCHECKED) queue.add(this.getComponent(left));
 			}
 			if(tmp.getConnector(ComponentRotation.U270)
-			  .connected(this.getComponent(this.left(tmp.getCoords()))
+			  .connected(this.getComponent(tmp.getCoords().left())
 			    .getConnector(ComponentRotation.U090))){
-				ShipCoords down = this.getComponent(this.left(tmp.getCoords())).getCoords();
+				ShipCoords down = this.getComponent(tmp.getCoords().left()).getCoords();
 				if(res[down.y][down.x]==VerifyResult.UNCHECKED) queue.add(this.getComponent(down));
 			}
 		}
