@@ -1,13 +1,15 @@
 package it.polimi.ingsw.model.adventure_cards;
 import java.util.ArrayList;
 
+import it.polimi.ingsw.model.player.PlayerColor;
+
 
 public class PiratesCard extends Card{
     int cannon_power_needed;
     int coins_earned;
     int days_spent;
     ArrayList<Shot> shots = new ArrayList<Shot>();
-    ArrayList<Player> players_defeated = new ArrayList<Player>();
+    ArrayList<PlayerColor> players_defeated = new ArrayList<PlayerColor>();
 
     /*void fight(first player){
         if (player.cannon_power > cannon_power_needed){

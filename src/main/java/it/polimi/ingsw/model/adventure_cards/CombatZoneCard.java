@@ -6,18 +6,18 @@ public class CombatZoneCard extends Card{
     int crew_lost;
     ArrayList<Shot> shots = new ArrayList<Shot>();
 
-    for(/*players ordered */){
+    /*for(players ordered ){
         //ask to activate cannons and engines
     }
-    player_smallest_crew = player findPlayer();
+    player_smallest_crew = player.findPlayer();
     player_smallest_crew.position -= days_lost;
-    player_lowest_engines = player findPlayer();
+    player_lowest_engines = player.findPlayer();
     //ask player_lowest_engines to remove two crew members
-    player_lowest_cannons = player findPlayer();
+    player_lowest_cannons = player.findPlayer();
     //tiro_dadi
     //cords = shipCords findComponentHit(player_lowest_cannons, tiro_dadi, shots[i].direction);
     //for every shot{
-        /*void hit(shipCords){
+        void hit(shipCords){
             if shipCords == (0,0) missed;
             getComponent(shipCords);
             if (shot.size == SMALL && shield active){

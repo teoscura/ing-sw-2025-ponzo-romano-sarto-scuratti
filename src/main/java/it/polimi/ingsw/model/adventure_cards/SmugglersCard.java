@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model.adventure_cards;
 
+import it.polimi.ingsw.model.player.PlayerColor;
+
 public class SmugglersCard extends Card{
     int cannon_power_required;
     int red_material;
@@ -9,7 +11,7 @@ public class SmugglersCard extends Card{
     int days_spent;
     int good_lost; //(take your n most valuable goods. If you run out of goods, they take batteries instead.) 
 
-    void fight(/*first_player*/){
+    public void fight(PlayerColor current_player/* planche.getFirstPlayer() */){
         /*if player.power > cannon_power_required{
             ask_to_load
             if yes{

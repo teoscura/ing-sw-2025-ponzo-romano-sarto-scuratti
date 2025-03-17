@@ -1,13 +1,16 @@
 package it.polimi.ingsw.model.adventure_cards;
 
+import it.polimi.ingsw.model.player.PlayerColor;
+
 public class SlaversCard extends Card{
     int cannon_power_needed;
     int crew_lost;
     int days_spent;
     int coins_earned;
 
-    /*void fight(first player){
-        if (player.cannon_power > cannon_power_needed){
+    public void fightSlaves(PlayerColor current_player/* planche.getFirstPlayer() */){
+    
+    /*    if (player.cannon_power > cannon_power_needed){
             askForReward
             if yes{
                 player.coins += coins_earned;
@@ -22,4 +25,5 @@ public class SlaversCard extends Card{
             fight(next_player());
         }
     }*/
+}
 }
