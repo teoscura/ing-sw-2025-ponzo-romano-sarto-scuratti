@@ -4,6 +4,8 @@ package it.polimi.ingsw.model.components;
 import it.polimi.ingsw.exceptions.ArgumentTooBigException;
 import it.polimi.ingsw.exceptions.NegativeArgumentException;
 import it.polimi.ingsw.model.components.enums.AlienType;
+import it.polimi.ingsw.model.components.enums.ComponentRotation;
+import it.polimi.ingsw.model.components.enums.ConnectorType;
 import it.polimi.ingsw.model.components.exceptions.UnsupportedAlienCabinException;
 import it.polimi.ingsw.model.components.visitors.CabinVisitor;
 import it.polimi.ingsw.model.components.visitors.iVisitor;
@@ -86,22 +88,22 @@ public class CabinComponent extends BaseComponent{
         iBaseComponent right = state.getComponent(state.down(this.getCoords()));
         iBaseComponent down = state.getComponent(state.left(this.getCoords()));
         iBaseComponent left = state.getComponent(state.right(this.getCoords()));
-        if(up.getConnector(ComponentRotation.PI).connected(this.getConnector(ComponentRotation.ZERO))){
+        if(up.getConnector(ComponentRotation.U180).connected(this.getConnector(ComponentRotation.U000))){
             up.check(v);
             this.upgradeCrewType(v.getType());
             v.reset();
         }
-        if(right.getConnector(ComponentRotation.MINHALFPI).connected(this.getConnector(ComponentRotation.POSHALFPI))){
+        if(right.getConnector(ComponentRotation.U270).connected(this.getConnector(ComponentRotation.U090))){
             right.check(v);
             this.upgradeCrewType(v.getType());
             v.reset(); 
         }
-        if(down.getConnector(ComponentRotation.ZERO).connected(this.getConnector(ComponentRotation.PI))){
+        if(down.getConnector(ComponentRotation.U000).connected(this.getConnector(ComponentRotation.U180))){
             down.check(v);
             this.upgradeCrewType(v.getType());
             v.reset();
         }
-        if(left.getConnector(ComponentRotation.POSHALFPI).connected(this.getConnector(ComponentRotation.MINHALFPI))){
+        if(left.getConnector(ComponentRotation.U090).connected(this.getConnector(ComponentRotation.U270))){
             left.check(v);
             this.upgradeCrewType(v.getType());
             v.reset();

@@ -9,7 +9,7 @@ public interface iSpaceShip {
 	public int giveCredits(int amount);
 	public void updateCrew(int new_num, AlienType type);
 
-	public VerifyResult[] verify();
+	public VerifyResult[][] verify();
 	public void verifyAndClean();
 	public void addComponent(iBaseComponent component, ShipCoords coords);
 	public void removeComponent(ShipCoords coords);
