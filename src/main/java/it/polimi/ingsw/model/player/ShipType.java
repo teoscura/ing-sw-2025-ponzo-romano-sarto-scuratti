@@ -38,10 +38,10 @@ public enum ShipType{
 
     public ShipCoords getCenterCabin(){
         if(this.level==1 || this.level==2){
-            return new ShipCoords(4,3);
+            return new ShipCoords(this,4,3);
         }
         else{
-            return new ShipCoords(4,3);
+            return new ShipCoords(this,4,3);
         }
     }
 }
