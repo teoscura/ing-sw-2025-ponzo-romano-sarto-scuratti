@@ -36,7 +36,7 @@ public class EngineComponent extends BaseComponent{
     @Override
     public boolean verify(iSpaceShip state){
         FreeSpaceVisitor v = new FreeSpaceVisitor();
-        iBaseComponent tmp = state.getComponent(state.down(this.getCoords()));
+        iBaseComponent tmp = state.getComponent(this.coords.down());
         tmp.check(v);
         if(v.getSpaceIsFree()) return true;
         return false;

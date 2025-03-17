@@ -28,8 +28,8 @@ public interface iSpaceShip {
 	public int getHeight();
 	public int getWidth();
 
-	public ShipCoords up(ShipCoords coords);
-	public ShipCoords right(ShipCoords coords);
-	public ShipCoords down(ShipCoords coords);
-	public ShipCoords left(ShipCoords coords);
+	// public ShipCoords up(ShipCoords coords);
+	// public ShipCoords right(ShipCoords coords);
+	// public ShipCoords down(ShipCoords coords);
+	// public ShipCoords left(ShipCoords coords);
 }

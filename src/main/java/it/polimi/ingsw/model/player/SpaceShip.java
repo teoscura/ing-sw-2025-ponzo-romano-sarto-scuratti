@@ -139,7 +139,7 @@ public class SpaceShip implements iSpaceShip{
 		for(int i=0;i<this.type.getHeight();i++){
 			for(int j=0;i<this.type.getWidth();j++){
 				if(ver[i][j]!=VerifyResult.NOT_LINKED) continue;
-				this.removeComponent(new ShipCoords(i,j));
+				this.removeComponent(new ShipCoords(this.type,i,j));
 			}
 		}
 	}
@@ -251,33 +251,33 @@ public class SpaceShip implements iSpaceShip{
 		return this.type.getWidth();
 	}
 
-	public ShipCoords up(ShipCoords coords){
-		if(coords.x<0 || coords.y<0) throw new OutOfBoundsException("Illegal coords: negative");
-		if(coords.x>=this.getWidth() || coords.y>=this.getHeight()) throw new OutOfBoundsException("Illegal coords: too big");
-		if(coords.y==0) return new ShipCoords(0,0);
-		return new ShipCoords(coords.x,coords.y+1);
-	}
+	// public ShipCoords up(ShipCoords coords){
+	// 	if(coords.x<0 || coords.y<0) throw new OutOfBoundsException("Illegal coords: negative");
+	// 	if(coords.x>=this.getWidth() || coords.y>=this.getHeight()) throw new OutOfBoundsException("Illegal coords: too big");
+	// 	if(coords.y==0) return new ShipCoords(this.type,0,0);
+	// 	return new ShipCoords(this.type,coords.x,coords.y+1);
+	// }
 
-	public ShipCoords right(ShipCoords coords){
-		if(coords.x<0 || coords.y<0) throw new OutOfBoundsException("Illegal coords: negative");
-		if(coords.x>=this.getWidth() || coords.y>=this.getHeight()) throw new OutOfBoundsException("Illegal coords: too big");
-		if(coords.x==this.getWidth()-1) return new ShipCoords(0,0);
-		return new ShipCoords(coords.x+1,coords.y);
-	}
+	// public ShipCoords right(ShipCoords coords){
+	// 	if(coords.x<0 || coords.y<0) throw new OutOfBoundsException("Illegal coords: negative");
+	// 	if(coords.x>=this.getWidth() || coords.y>=this.getHeight()) throw new OutOfBoundsException("Illegal coords: too big");
+	// 	if(coords.x==this.getWidth()-1) return new ShipCoords(this.type,0,0);
+	// 	return new ShipCoords(this.type,coords.x+1,coords.y);
+	// }
 
-	public ShipCoords down(ShipCoords coords){
-		if(coords.x<0 || coords.y<0) throw new OutOfBoundsException("Illegal coords: negative");
-		if(coords.x>=this.getWidth() || coords.y>=this.getHeight()) throw new OutOfBoundsException("Illegal coords: too big");
-		if(coords.y==this.getHeight()-1) return new ShipCoords(0,0);
-		return new ShipCoords(coords.x,coords.y-1);
-	}
+	// public ShipCoords down(ShipCoords coords){
+	// 	if(coords.x<0 || coords.y<0) throw new OutOfBoundsException("Illegal coords: negative");
+	// 	if(coords.x>=this.getWidth() || coords.y>=this.getHeight()) throw new OutOfBoundsException("Illegal coords: too big");
+	// 	if(coords.y==this.getHeight()-1) return new ShipCoords(this.type,0,0);
+	// 	return new ShipCoords(this.type,coords.x,coords.y-1);
+	// }
 
-	public ShipCoords left(ShipCoords coords){
-		if(coords.x<0 || coords.y<0) throw new OutOfBoundsException("Illegal coords: negative");
-		if(coords.x>=this.getWidth() || coords.y>=this.getHeight()) throw new OutOfBoundsException("Illegal coords: too big");
-		if(coords.x==0) return new ShipCoords(0,0);
-		return new ShipCoords(coords.x-1,coords.y);
-	}
+	// public ShipCoords left(ShipCoords coords){
+	// 	if(coords.x<0 || coords.y<0) throw new OutOfBoundsException("Illegal coords: negative");
+	// 	if(coords.x>=this.getWidth() || coords.y>=this.getHeight()) throw new OutOfBoundsException("Illegal coords: too big");
+	// 	if(coords.x==0) return new ShipCoords(this.type,0,0);
+	// 	return new ShipCoords(this.type,coords.x-1,coords.y);
+	// }
 
 }
 

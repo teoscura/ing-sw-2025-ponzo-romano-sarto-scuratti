@@ -20,12 +20,12 @@ public class CabinComponent extends BaseComponent{
     private AlienType crew_type;
     private AlienType can_contain;
 
-    public CabinComponent(ConnectorType[] connectors, 
-                          ComponentRotation rotation,
-                          AlienType inhabitant_type){
-        super(connectors, rotation);
-        this.max_capacity = inhabitant_type.getMaxCapacity(); 
-    }
+    // public CabinComponent(ConnectorType[] connectors, 
+    //                       ComponentRotation rotation,
+    //                       AlienType inhabitant_type){
+    //     super(connectors, rotation);
+    //     this.max_capacity = inhabitant_type.getMaxCapacity(); 
+    // }
 
     public CabinComponent(ConnectorType[] connectors, 
                           ComponentRotation rotation,
@@ -84,10 +84,10 @@ public class CabinComponent extends BaseComponent{
     public void updateCrewType(iSpaceShip state){
         //FIXME
         CabinVisitor v = new CabinVisitor();
-        iBaseComponent up = state.getComponent(state.up(this.getCoords()));
-        iBaseComponent right = state.getComponent(state.down(this.getCoords()));
-        iBaseComponent down = state.getComponent(state.left(this.getCoords()));
-        iBaseComponent left = state.getComponent(state.right(this.getCoords()));
+        iBaseComponent up = state.getComponent(this.coords.up());
+        iBaseComponent right = state.getComponent(this.coords.right());
+        iBaseComponent down = state.getComponent(this.coords.down());
+        iBaseComponent left = state.getComponent(this.coords.left());
         if(up.getConnector(ComponentRotation.U180).connected(this.getConnector(ComponentRotation.U000))){
             up.check(v);
             this.upgradeCrewType(v.getType());
