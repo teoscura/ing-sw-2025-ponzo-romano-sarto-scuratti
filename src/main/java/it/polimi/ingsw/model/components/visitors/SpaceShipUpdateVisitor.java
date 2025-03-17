@@ -44,7 +44,8 @@ public class SpaceShipUpdateVisitor implements iVisitor {
 
     @Override
     public void visit(StorageComponent c){
-        for(ShipmentType t : ShipmentType.getTypes()){
+        for(ShipmentType t : ShipmentType.values()){
+            if(t.getValue()<1) continue;
             this.storage_containers[t.getValue()-1] = c.howMany(t);
         }
     }

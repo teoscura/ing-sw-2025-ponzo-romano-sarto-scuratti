@@ -38,7 +38,6 @@ public class CannonComponent extends BaseComponent{
 
     @Override
     public boolean verify(iSpaceShip state){
-        //FIXME
         FreeSpaceVisitor v = new FreeSpaceVisitor();
         iBaseComponent tmp = state.getComponent(state.up(this.getCoords()));
         tmp.check(v);
