@@ -1,7 +1,19 @@
 package it.polimi.ingsw.model.adventure_cards;
 
+import it.polimi.ingsw.model.player.iSpaceShip;
+
 public class SabotageCard extends Card{
     int miss = 0;
+
+    public SabotageCard(int id){
+        super(id);
+    }
+
+    @Override
+    public void apply(iSpaceShip state, iPlayerResponse response){
+        //TODO
+    }
+
     //find player with lowest crew amount, if parity pick furthest one
     /*find_component(player){
         while (miss<3){

@@ -1,14 +1,24 @@
 package it.polimi.ingsw.model.adventure_cards;
 
-import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.model.player.iSpaceShip;
 
 public class SlaversCard extends Card{
-    int cannon_power_needed;
-    int crew_lost;
-    int days_spent;
-    int coins_earned;
+    // int cannon_power_needed;
+    // int crew_lost;
+    // int days_spent;
+    // int coins_earned;
 
-    public void fightSlaves(PlayerColor current_player/* planche.getFirstPlayer() */){
+    public SlaversCard(int id){
+        super(id);
+        //TODO
+    }
+
+    @Override
+    public void apply(iSpaceShip state, iPlayerResponse response){
+        //TODO
+    }
+
+    //public void fightSlavers(PlayerColor current_player/* planche.getFirstPlayer() */){
     
     /*    if (player.cannon_power > cannon_power_needed){
             askForReward
@@ -26,4 +36,4 @@ public class SlaversCard extends Card{
         }
     }*/
 }
-}
+

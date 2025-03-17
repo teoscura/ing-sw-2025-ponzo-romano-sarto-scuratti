@@ -1,22 +1,30 @@
+//Done.
 package it.polimi.ingsw.model.adventure_cards;
 
-public class Planet {
-    private int red_material, blue_material, green_material, yellow_material;
-    private boolean visited;
+import it.polimi.ingsw.model.adventure_cards.exceptions.AlreadyVisitedException;
+import it.polimi.ingsw.model.components.enums.ShipmentType;
 
-    public int getBlueMaterial(){
-        return blue_material;
+public class Planet {
+
+    private int[] contains;
+    private boolean visited = false;
+
+    public Planet(int[] contains){
+        if(contains.length!=4) throw new IllegalArgumentException("Array provided doesn't match number of possible shipments.");
+        this.contains = contains;
     }
-    public int getGreenMaterial(){
-        return green_material;
+
+    public int getQuantity(ShipmentType type){
+        if(type.getValue()==0) throw new IllegalArgumentException("Cannot ask for quantity of empty shipments.");
+        return this.contains[type.getValue()-1];
     }
-    public int getYellowMaterial(){
-        return yellow_material;
+
+    public void visit(){
+        if(this.visited) throw new AlreadyVisitedException();
+        this.visited = true;
     }
-    public int getRedMaterial(){
-        return red_material;
+
+    public boolean getVisited(){
+        return this.visited;
     }
-    public boolean isVisited(){
-        return visited;
-    } 
 }

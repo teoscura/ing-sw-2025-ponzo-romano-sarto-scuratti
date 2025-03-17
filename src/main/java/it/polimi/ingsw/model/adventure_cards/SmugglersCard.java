@@ -1,17 +1,28 @@
 package it.polimi.ingsw.model.adventure_cards;
 
 import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.model.player.iSpaceShip;
 
 public class SmugglersCard extends Card{
-    int cannon_power_required;
-    int red_material;
-    int blue_material;
-    int green_material;
-    int yellow_material;
-    int days_spent;
-    int good_lost; //(take your n most valuable goods. If you run out of goods, they take batteries instead.) 
+    // int cannon_power_required;
+    // int red_material;
+    // int blue_material;
+    // int green_material;
+    // int yellow_material;
+    // int days_spent;
+    // int good_lost; //(take your n most valuable goods. If you run out of goods, they take batteries instead.) 
 
-    public void fight(PlayerColor current_player/* planche.getFirstPlayer() */){
+    public SmugglersCard(int id){
+        super(id);
+        //TODO
+    }
+
+    @Override
+    public void apply(iSpaceShip state, iPlayerResponse response){
+        //TODO
+    }
+
+    // public void fight(PlayerColor current_player/* planche.getFirstPlayer() */){
         /*if player.power > cannon_power_required{
             ask_to_load
             if yes{
@@ -26,5 +37,4 @@ public class SmugglersCard extends Card{
             }
         }
     */
-    }
 }

@@ -2,8 +2,21 @@ package it.polimi.ingsw.model.adventure_cards;
 
 import java.util.ArrayList;
 
+import it.polimi.ingsw.model.player.iSpaceShip;
+
 public class MeteorSwarmCard extends Card{
-    ArrayList<Meteorite> meteorites = new ArrayList<Meteorite>();
+
+    private Projectile[] meteorites;
+
+    public MeteorSwarmCard(Projectile[] meteorites, int id){
+        super(id);
+        this.meteorites = meteorites;
+    }
+
+    @Override
+    public void apply(iSpaceShip state, iPlayerResponse response){
+        //TODO
+    }
     //tiro dadi
     /*for(every_player){
         for (int i = 0; i < meteorites.size(); i++){

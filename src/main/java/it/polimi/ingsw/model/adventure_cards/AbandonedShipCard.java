@@ -1,21 +1,20 @@
 package it.polimi.ingsw.model.adventure_cards;
 
-import it.polimi.ingsw.model.board.Planche;
-import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.model.player.iSpaceShip;
 
 public class AbandonedShipCard extends Card{
-    int crew_lost; //int (?) 
-    int days_spent;
-    int credits_gained;
+    // private int crew_lost; //int (?) 
+    // private int days_spent;
+    // private int credits_gained;
 
-    public void askToExploreShip(PlayerColor current_player/* planche.getFirstPlayer() */){
-        /*if yes
-            remove crew;
-            player.credits += credits_gained;
-            player.position -= days_spent;
-        if no and player != last_player
-        */
-            askToExploreShip(Planche.getNextPlayer(current_player));
-        
+    public AbandonedShipCard(int id){
+        super(id);
+        //TODO
     }
+
+    @Override
+    public void apply(iSpaceShip state, iPlayerResponse response){
+        //TODO
+    }
+
 }

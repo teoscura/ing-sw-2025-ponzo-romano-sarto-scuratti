@@ -1,16 +1,24 @@
 package it.polimi.ingsw.model.adventure_cards;
 
+import it.polimi.ingsw.model.player.iSpaceShip;
 
 public abstract class Card implements iCard {
-    private CardType type;
-    private int card_Id;
     
-    public CardType getType() {
-        return type;
+    private int id;
+    
+    
+
+    protected Card(int id){
+        this.id = id;
     }
-    public int getCardId() {
-        return card_Id;
+
+    @Override
+    public int getId(){
+        return this.id;
     }
+
+    @Override
+    public abstract void apply(iSpaceShip state, iPlayerResponse response);
 
     //TODO: add general methods
 }

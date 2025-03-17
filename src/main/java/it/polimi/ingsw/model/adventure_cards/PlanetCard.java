@@ -5,20 +5,27 @@ import java.util.ArrayList;
 import it.polimi.ingsw.model.player.*;
 import it.polimi.ingsw.model.board.*;
 public class PlanetCard extends Card {
-	public PlanetCard(int id) { // costruttore
+	
+	private int days;
+	Planet[] planets;
+	
+	public PlanetCard(Planet[] planets, int id) { // costruttore
+		super(id);
+		this.planets = planets;
+	}
+
+	@Override
+	public void apply(iSpaceShip state, iPlayerResponse response){
 
 	}
 
-	ArrayList<Planet> planets = new ArrayList<Planet>();
-	int days_spent;
-
-	public void visitPlanet(PlayerColor current_player/* planche.getFirstPlayer() */) {
-		/*
-		 * chiedi di atterrare
-		 * if yes
-		 * load resources // load goods on ship
-		 * player.position -= days_spent
-		 */
-		visitPlanet(Planche.getNextPlayer(current_player));
-	}
+	// public void visitPlanet(PlayerColor current_player/* planche.getFirstPlayer() */) {
+	// 	/*
+	// 	 * chiedi di atterrare
+	// 	 * if yes
+	// 	 * load resources // load goods on ship
+	// 	 * player.position -= days_spent
+	// 	 */
+	// 	visitPlanet(Planche.getNextPlayer(current_player));
+	// }
 }

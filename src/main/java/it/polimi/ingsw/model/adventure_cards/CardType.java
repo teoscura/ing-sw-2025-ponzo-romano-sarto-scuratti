@@ -6,12 +6,12 @@ public enum CardType{
     ABANDONED_SHIP,
     SMUGGLERS,
     OPEN_SPACE,
-    METEOR_SWARM,
+    METEOR_SWARM, //NON SERVE RESPONSE
     COMBAT_ZONE,
     STARDUST,
     SLAVERS,
     PIRATES,
     EPIDEMIC,
     SABOTAGE
-}
+} //???
 

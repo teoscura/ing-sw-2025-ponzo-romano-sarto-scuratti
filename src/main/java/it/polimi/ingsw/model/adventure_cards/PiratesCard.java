@@ -2,14 +2,26 @@ package it.polimi.ingsw.model.adventure_cards;
 import java.util.ArrayList;
 
 import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.model.player.iSpaceShip;
 
 
 public class PiratesCard extends Card{
-    int cannon_power_needed;
-    int coins_earned;
-    int days_spent;
-    ArrayList<Shot> shots = new ArrayList<Shot>();
-    ArrayList<PlayerColor> players_defeated = new ArrayList<PlayerColor>();
+    // int cannon_power_needed;
+    // int coins_earned;
+    // int days_spent;
+    // ArrayList<Shot> shots = new ArrayList<Shot>();
+    // ArrayList<PlayerColor> players_defeated = new ArrayList<PlayerColor>();
+
+    public PiratesCard(int id){
+        super(id);
+        //TODO
+    }
+
+    @Override
+    public void apply(iSpaceShip state, iPlayerResponse response){
+        //TODO
+    }
+
 
     /*void fight(first player){
         if (player.cannon_power > cannon_power_needed){

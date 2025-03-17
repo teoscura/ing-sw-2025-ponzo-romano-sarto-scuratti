@@ -1,11 +1,24 @@
 package it.polimi.ingsw.model.adventure_cards;
 import java.util.ArrayList;
 
-public class CombatZoneCard extends Card{
-    int days_lost;
-    int crew_lost;
-    ArrayList<Shot> shots = new ArrayList<Shot>();
+import it.polimi.ingsw.model.player.iSpaceShip;
 
+public class CombatZoneCard extends Card{
+    // int days_lost;
+    // int crew_lost;
+    // ArrayList<Shot> shots = new ArrayList<Shot>();
+
+
+    public CombatZoneCard(int id){
+        super(id);
+        //TODO
+    }
+
+    @Override
+    public void apply(iSpaceShip state, iPlayerResponse response){
+        //TODO
+    }
+    
     /*for(players ordered ){
         //ask to activate cannons and engines
     }
