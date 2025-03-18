@@ -83,6 +83,16 @@ public abstract class BaseComponent implements iBaseComponent, iVisitable{
         return false;
     }
 
+    @Override
+    public void onCreation(iSpaceShip state){
+        return;
+    }
+
+    @Override
+    public void onDelete(iSpaceShip state){
+        return;
+    }
+
     //ricordate: non implementare questo metodo, ma va implementato in ogni singola sottoclasse
     // (e' letteralmente la def di abstract, ma fa bene ricordarlo).
     @Override

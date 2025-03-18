@@ -33,7 +33,7 @@ public class EnergyVisitor implements iVisitor {
     public void visit(EngineComponent c){
         this.powerable = true;
         this.found_battery = false;
-        if(positive){
+        if(this.positive){
             c.turnOn();
             return;
         }
@@ -51,7 +51,7 @@ public class EnergyVisitor implements iVisitor {
     public void visit(CannonComponent c){
         this.powerable = true;
         this.found_battery = false;
-        if(positive){
+        if(this.positive){
             c.turnOn();
             return;
         }
@@ -77,7 +77,11 @@ public class EnergyVisitor implements iVisitor {
     public void visit(ShieldComponent c){
         this.powerable = true;
         this.found_battery = false;
-        return;
+        if(this.positive){
+            c.turnOn();
+            return;
+        }
+        c.turnOff();
     }
 
     @Override
