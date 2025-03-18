@@ -41,7 +41,25 @@ public class CannonComponent extends BaseComponent{
     @Override
     public boolean verify(iSpaceShip state){
         FreeSpaceVisitor v = new FreeSpaceVisitor();
-        iBaseComponent tmp = state.getComponent(this.coords.up());
+        ComponentRotation r = this.getRotation();
+        iBaseComponent tmp = null; 
+        switch(r.getShift()){
+            case 0: {
+                tmp = state.getComponent(this.coords.up());
+                break;
+            }
+            case 1: {
+                tmp = state.getComponent(this.coords.right());
+                break;
+            }
+            case 2: {
+                tmp = state.getComponent(this.coords.down());
+                break;
+            }
+            case 3: {
+                tmp = state.getComponent(this.coords.left());
+            }
+        }
         tmp.check(v);
         if(v.getSpaceIsFree()) return true;
         return false;

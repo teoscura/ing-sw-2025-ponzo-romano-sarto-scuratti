@@ -23,8 +23,8 @@ public enum ComponentRotation {
             case 1: return ComponentRotation.U270;
             case 2: return ComponentRotation.U000;
             case 3: return ComponentRotation.U090;
-            default: return ComponentRotation.U000;
         }
+        return ComponentRotation.U000;
     }
 
 }

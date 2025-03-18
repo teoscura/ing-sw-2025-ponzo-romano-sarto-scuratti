@@ -38,6 +38,7 @@ public class EngineComponent extends BaseComponent{
         FreeSpaceVisitor v = new FreeSpaceVisitor();
         iBaseComponent tmp = state.getComponent(this.coords.down());
         tmp.check(v);
+        if(this.getRotation()!=ComponentRotation.U000) return false;
         if(v.getSpaceIsFree()) return true;
         return false;
     }
