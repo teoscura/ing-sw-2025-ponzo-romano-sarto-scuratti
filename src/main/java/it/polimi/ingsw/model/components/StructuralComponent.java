@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model.components;
 
+import it.polimi.ingsw.model.components.enums.ComponentRotation;
+import it.polimi.ingsw.model.components.enums.ConnectorType;
 import it.polimi.ingsw.model.components.visitors.iVisitor;
 import it.polimi.ingsw.model.player.ShipCoords;
 

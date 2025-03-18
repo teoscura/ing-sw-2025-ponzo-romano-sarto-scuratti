@@ -1,6 +1,8 @@
 //Done.
 package it.polimi.ingsw.model.components;
 
+import it.polimi.ingsw.model.components.enums.ComponentRotation;
+import it.polimi.ingsw.model.components.enums.ConnectorType;
 import it.polimi.ingsw.model.components.exceptions.AlreadyPoweredException;
 import it.polimi.ingsw.model.components.exceptions.UnpowerableException;
 import it.polimi.ingsw.model.components.visitors.FreeSpaceVisitor;
@@ -34,8 +36,9 @@ public class EngineComponent extends BaseComponent{
     @Override
     public boolean verify(iSpaceShip state){
         FreeSpaceVisitor v = new FreeSpaceVisitor();
-        iBaseComponent tmp = state.getComponent(state.down(this.getCoords()));
+        iBaseComponent tmp = state.getComponent(this.coords.down());
         tmp.check(v);
+        if(this.getRotation()!=ComponentRotation.U000) return false;
         if(v.getSpaceIsFree()) return true;
         return false;
     }
@@ -56,7 +59,7 @@ public class EngineComponent extends BaseComponent{
     }
 
     public int getCurrentPower(){
-        if(this.getRotation() != ComponentRotation.PI){
+        if(this.getRotation() != ComponentRotation.U180){
             return this.getPower()>>1;  //Divide by two.
         }
         return this.getPower();
@@ -67,7 +70,12 @@ public class EngineComponent extends BaseComponent{
             return 0;
         }
         return this.max_power;
-    }       
+    } 
+    
+    @Override
+    public boolean powerable(){
+        return true;
+    }
 }
 
 enum EngineType{
