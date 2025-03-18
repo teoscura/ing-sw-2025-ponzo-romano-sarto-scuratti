@@ -10,7 +10,7 @@ import it.polimi.ingsw.model.player.ShipCoords;
 
 public class ShieldComponent extends BaseComponent {
     
-    private ShieldType type = ShieldType.NE;
+    private ShieldType type = ShieldType.NE; //Nord Est
     private boolean powered = false;
 
     public ShieldComponent(ConnectorType[] connectors, 
