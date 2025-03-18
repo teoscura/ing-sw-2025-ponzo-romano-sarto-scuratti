@@ -5,7 +5,6 @@ import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ConnectorType;
 import it.polimi.ingsw.model.components.exceptions.AlreadyPoweredException;
 import it.polimi.ingsw.model.components.exceptions.UnpowerableException;
-import it.polimi.ingsw.model.components.visitors.FreeSpaceVisitor;
 import it.polimi.ingsw.model.components.visitors.iVisitor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.player.iSpaceShip;
@@ -35,12 +34,12 @@ public class EngineComponent extends BaseComponent{
 
     @Override
     public boolean verify(iSpaceShip state){
-        FreeSpaceVisitor v = new FreeSpaceVisitor();
+        //FreeSpaceVisitor v = new FreeSpaceVisitor();
         iBaseComponent tmp = state.getComponent(this.coords.down());
-        tmp.check(v);
-        if(this.getRotation()!=ComponentRotation.U000) return false;
-        if(v.getSpaceIsFree()) return true;
-        return false;
+        //tmp.check(v);
+        //if(this.getRotation()!=ComponentRotation.U000) return false;
+        //if(v.getSpaceIsFree()) return true;
+        return tmp==state.getEmpty();
     }
 
     @Override
