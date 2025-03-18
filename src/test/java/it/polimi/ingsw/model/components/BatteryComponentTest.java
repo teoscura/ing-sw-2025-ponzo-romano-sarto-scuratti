@@ -8,10 +8,12 @@ class BatteryComponentTest {
 
 	@Test
 	void getConnectors() {
+
 	}
 
 	@Test
 	void getRotation() {
+
 	}
 
 	@Test

@@ -3,14 +3,17 @@ package it.polimi.ingsw.model.components;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ConnectorType;
 import it.polimi.ingsw.model.components.enums.ShieldType;
+import it.polimi.ingsw.model.player.ShipCoords;
+import it.polimi.ingsw.model.player.ShipType;
 import org.junit.jupiter.api.Test;
+
+import java.sql.Struct;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class BaseComponentTest {
 
 	private BaseComponent Base;
-
 
 	@Test
 	void getConnectors(){
@@ -20,11 +23,12 @@ class BaseComponentTest {
 	@Test
 	void getRotation() {
 			ConnectorType[] connectors = new ConnectorType[4];
-			Base = new ShieldComponent(connectors, ComponentRotation.U000, ShieldType.NONE);
+			assertNotNull(Base.getRotation());
+			Base = new StructuralComponent(connectors, ComponentRotation.U000);
 			assertEquals(0, Base.getRotation().getShift());
-			Base = new ShieldComponent(connectors, ComponentRotation.U090, ShieldType.NONE);
+			Base = new StructuralComponent(connectors, ComponentRotation.U090);
 			assertEquals(1, Base.getRotation().getShift());
-			Base = new ShieldComponent(connectors, ComponentRotation.U180, ShieldType.NONE);
+			Base = new StructuralComponent(connectors, ComponentRotation.U180);
 			assertEquals(2, Base.getRotation().getShift());
 			Base = new StructuralComponent(connectors, ComponentRotation.U270);
 			assertEquals(3, Base.getRotation().getShift());
@@ -32,6 +36,7 @@ class BaseComponentTest {
 
 	@Test
 	void verify() {
+
 	}
 
 	@Test
@@ -43,16 +48,32 @@ class BaseComponentTest {
 		connector_test_connectors[3] = ConnectorType.DOUBLE_CONNECTOR;
 		BaseComponent connector_test_component = new StructuralComponent(connector_test_connectors, ComponentRotation.U000);
 		assertEquals(ConnectorType.EMPTY, connector_test_component.getConnector(ComponentRotation.U000));
-		connector_test_component = new StructuralComponent(connector_test_connectors, ComponentRotation.U090);
-		assertEquals(ConnectorType.DOUBLE_CONNECTOR, connector_test_component.getConnector(ComponentRotation.U000));
-		connector_test_component = new StructuralComponent(connector_test_connectors, ComponentRotation.U180);
-		assertEquals(ConnectorType.SINGLE_CONNECTOR, connector_test_component.getConnector(ComponentRotation.U000));
-		connector_test_component = new StructuralComponent(connector_test_connectors, ComponentRotation.U270);
-		assertEquals(ConnectorType.UNIVERSAL, connector_test_component.getConnector(ComponentRotation.U000));
+		assertEquals(ConnectorType.UNIVERSAL, connector_test_component.getConnector(ComponentRotation.U090));
+		assertEquals(ConnectorType.SINGLE_CONNECTOR, connector_test_component.getConnector(ComponentRotation.U180));
+		assertEquals(ConnectorType.DOUBLE_CONNECTOR, connector_test_component.getConnector(ComponentRotation.U270));
+		BaseComponent connector_test_component2 = new StructuralComponent(connector_test_connectors, ComponentRotation.U090);
+		assertEquals(ConnectorType.EMPTY, connector_test_component2.getConnector(ComponentRotation.U000));
 	}
 
 	@Test
 	void getCoords() {
+		ConnectorType[] connectors = new ConnectorType[4];
+		ShipCoords coords = new ShipCoords(ShipType.LVL2, 3, 5);
+		BaseComponent coords_test_component = new StructuralComponent(connectors, ComponentRotation.U000, coords);
+		assertNotNull(coords_test_component.getCoords());
+		ShipCoords up_coords = new ShipCoords(ShipType.LVL2, 3, 4);
+		ShipCoords down_coords = new ShipCoords(ShipType.LVL2, 3, 6);
+		ShipCoords right_coords = new ShipCoords(ShipType.LVL2, 4, 5);
+		ShipCoords left_coords = new ShipCoords(ShipType.LVL2, 2, 5);
+		assertEquals(up_coords, coords_test_component.getCoords().up());
+		assertEquals(down_coords, coords_test_component.getCoords().down());
+		assertEquals(right_coords, coords_test_component.getCoords().right());
+		assertEquals(left_coords, coords_test_component.getCoords().left());
+	}
+
+	@Test
+	void powerable(){
+		assertFalse(Base.powerable());
 	}
 
 	@Test
