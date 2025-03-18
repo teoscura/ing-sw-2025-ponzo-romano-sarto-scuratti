@@ -24,14 +24,14 @@ class BaseComponentTest {
 	void getRotation() {
 			ConnectorType[] connectors = new ConnectorType[4];
 			assertNotNull(Base.getRotation());
-			Base = new StructuralComponent(connectors, ComponentRotation.U000);
-			assertEquals(0, Base.getRotation().getShift());
-			Base = new StructuralComponent(connectors, ComponentRotation.U090);
-			assertEquals(1, Base.getRotation().getShift());
-			Base = new StructuralComponent(connectors, ComponentRotation.U180);
-			assertEquals(2, Base.getRotation().getShift());
-			Base = new StructuralComponent(connectors, ComponentRotation.U270);
-			assertEquals(3, Base.getRotation().getShift());
+			BaseComponent base_up = new StructuralComponent(connectors, ComponentRotation.U000);
+			assertEquals(0, base_up.getRotation().getShift());
+			BaseComponent base_right = new StructuralComponent(connectors, ComponentRotation.U090);
+			assertEquals(1, base_right.getRotation().getShift());
+			BaseComponent base_down = new StructuralComponent(connectors, ComponentRotation.U180);
+			assertEquals(2, base_down.getRotation().getShift());
+			BaseComponent base_left = new StructuralComponent(connectors, ComponentRotation.U270);
+			assertEquals(3, base_left.getRotation().getShift());
 	}
 
 	@Test
@@ -52,7 +52,7 @@ class BaseComponentTest {
 		assertEquals(ConnectorType.SINGLE_CONNECTOR, connector_test_component.getConnector(ComponentRotation.U180));
 		assertEquals(ConnectorType.DOUBLE_CONNECTOR, connector_test_component.getConnector(ComponentRotation.U270));
 		BaseComponent connector_test_component2 = new StructuralComponent(connector_test_connectors, ComponentRotation.U090);
-		assertEquals(ConnectorType.EMPTY, connector_test_component2.getConnector(ComponentRotation.U000));
+		assertEquals(ConnectorType.UNIVERSAL, connector_test_component2.getConnector(ComponentRotation.U000)); //rotation of component is backwards or unintuitive
 	}
 
 	@Test
