@@ -1,12 +1,14 @@
 package it.polimi.ingsw.model.board;
 
 import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.model.player.iSpaceShip;
 
 import java.util.*;
 
 public class Planche implements iPlanche {
 
-	private final Map<PlayerColor, Integer> playerMoves;
+	private final int board_length;
+	private final Map<iSpaceShip, Integer> playerMoves;
 	List<PlayerColor> Sorted_Players = new ArrayList<>();
 
 	public Planche() {
@@ -17,19 +19,18 @@ public class Planche implements iPlanche {
 		}
 	}
 	// TODO initialise the position of players in the beginning. The player behind
-	// is at position NUM_OF_SPACES
+	// is at position board_length
 
 	@Override
-	public int getPlayerPosition(PlayerColor c) {
-		return playerMoves.get(c) % NUM_OF_SPACES; // TODO find out how to get this from the type of game
-
+	public int getPlayerPosition(iSpaceShip c) {
+		return playerMoves.get(c) % board_length; // TODO find out how to get this from the type of game
 	}
 
 	@Override
 	public PlayerColor getPlayersAt(int position) { // TODO refactor this (singular)
 
 		for (Map.Entry<PlayerColor, Integer> player : playerMoves.entrySet()) {
-			if (player.getValue() % NUM_OF_SPACES == position) {
+			if (player.getValue() % board_length == position) {
 				return player.getKey();
 			}
 		}
@@ -61,15 +62,16 @@ public class Planche implements iPlanche {
 
 	}
 
-	public void checkLapped() {
-		for (Map.Entry<PlayerColor, Integer> p1 : playerMoves.entrySet()) {
+	@Override
+	public boolean checkLapped() {
+		for (Map.Entry<iSpaceShip, Integer> p1 : playerMoves.entrySet()) {
 			for (Map.Entry<PlayerColor, Integer> p2 : playerMoves.entrySet()) {
-				if (p1.getValue() + NUM_OF_SPACES <= p2.getValue()) {
-					playerLost(p1.getKey()); // TODO make this method
+				if (p1.getValue() + board_length <= p2.getValue()) {
+					return true;
 				}
 			}
-
 		}
+		return false;
 	}
 
 	public PlayerColor getFirstPlayer() {
@@ -93,11 +95,6 @@ public class Planche implements iPlanche {
 			return null;
 		}
 		return max.getKey();
-	}
-
-	@Override
-	public PlayerColor won() {
-		return null; // TODO
 	}
 
 }
