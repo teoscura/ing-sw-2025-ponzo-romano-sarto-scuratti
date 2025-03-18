@@ -1,35 +1,36 @@
 package it.polimi.ingsw.model.adventure_cards;
 
+import it.polimi.ingsw.exceptions.ArgumentTooBigException;
+import it.polimi.ingsw.model.adventure_cards.exceptions.CrewSizeException;
 import it.polimi.ingsw.model.player.iSpaceShip;
 
 public class AbandonedStationCard extends Card{
-    // int crew_required; //int (?) 
-    // int days_spent;
-    // int credits_gained;
-    // int red_material;
-    // int blue_material;
-    // int green_material;
-    // int yellow_material;
+    
+    private int[] contains;
+    private int contains_num;
+    private int crew;
+    private int days;
 
-    public AbandonedStationCard(int id){
+
+    public AbandonedStationCard(int id, int crew, int days, int[] contains){
         super(id);
-        //TODO
+        int s = 0;
+        if(contains.length!=4) throw new IllegalArgumentException("Contains array isn't lenght 4.");
+        for(int t : contains) if(t<0) throw new IllegalArgumentException("Contains cell is negative.");
+        this.contains = contains;
+        this.crew = crew;
+        this.days = days;
     }
 
     @Override
     public int apply(iSpaceShip state, iPlayerResponse response){
-        //TODO
+        int sum = 0;
+        for(int t: state.getCrew()) sum+= t;
+        if(sum<this.crew) throw new CrewSizeException("Crew size too small to visit abandoned station.");
+        if(response.getCoordArray().length>this.contains_num) throw new ArgumentTooBigException("Too many positions");
+        if() //TODO;
+        
         return 0;
     }
 
-    // public void askToExploreStation(PlayerColor current_player/* planche.getFirstPlayer() */){
-    //     /*if yes and player.crew >= crew_required
-    //         load resources//come planet card
-    //         player.position -= days_spent;
-    //     if no and player != last_player
-
-    //     */
-    //         askToExploreStation(Planche.getNextPlayer(current_player));
-
-    // }
 }

@@ -16,6 +16,11 @@ public abstract class Card implements iCard {
     }
 
     @Override
+    public boolean getExhausted(){
+        return false;
+    }
+
+    @Override
     public abstract int apply(iSpaceShip state, iPlayerResponse response);
 
     //TODO: add general methods
