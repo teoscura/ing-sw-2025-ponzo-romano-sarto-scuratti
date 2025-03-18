@@ -75,6 +75,17 @@ public class EngineComponent extends BaseComponent{
     public boolean powerable(){
         return true;
     }
+
+    @Override
+    public void onCreation(iSpaceShip ship){
+        if(powerable) ship.addPowerableCoords(this.coords);
+    }
+
+    @Override
+    public void onDelete(iSpaceShip ship){
+        if(powerable) ship.delPowerableCoords(this.coords);
+    }
+
 }
 
 enum EngineType{
