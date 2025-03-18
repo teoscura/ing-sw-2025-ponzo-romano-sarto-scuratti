@@ -88,6 +88,11 @@ public class CannonComponent extends BaseComponent{
         }
         return max_power;
     } 
+
+    @Override
+    public boolean powerable(){
+        return true;
+    }
 }
 
 enum CannonType{

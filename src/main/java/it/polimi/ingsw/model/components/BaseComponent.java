@@ -78,6 +78,11 @@ public abstract class BaseComponent implements iBaseComponent, iVisitable{
         return this.coords;
     }
     
+    @Override
+    public boolean powerable(){
+        return false;
+    }
+
     //ricordate: non implementare questo metodo, ma va implementato in ogni singola sottoclasse
     // (e' letteralmente la def di abstract, ma fa bene ricordarlo).
     @Override

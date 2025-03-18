@@ -70,7 +70,12 @@ public class EngineComponent extends BaseComponent{
             return 0;
         }
         return this.max_power;
-    }       
+    } 
+    
+    @Override
+    public boolean powerable(){
+        return true;
+    }
 }
 
 enum EngineType{
