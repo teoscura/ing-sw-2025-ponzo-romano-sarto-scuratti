@@ -20,13 +20,13 @@ import it.polimi.ingsw.model.player.exceptions.NegativeCrewException;
 public class SpaceShip implements iSpaceShip{
 
 	//Player fields
-	PlayerColor color;
+	private final PlayerColor color;
 	private int credits;
 	private int[] crew;
 	//SpaceShip fields
-	private ShipType type;
-	private iBaseComponent[][] components;
-	private iBaseComponent empty;
+	private final ShipType type;
+	private final iBaseComponent[][] components;
+	private final iBaseComponent empty;
 	private int[] containers;
 	private boolean[] shielded_directions;
 	private int cannon_power = 0;
@@ -249,6 +249,11 @@ public class SpaceShip implements iSpaceShip{
 	@Override
 	public int getWidth(){
 		return this.type.getWidth();
+	}
+
+	@Override
+	public iBaseComponent getEmpty() {
+		return this.empty;
 	}
 
 	// public ShipCoords up(ShipCoords coords){
