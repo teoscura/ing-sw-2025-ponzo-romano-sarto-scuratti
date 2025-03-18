@@ -5,8 +5,6 @@ import it.polimi.ingsw.model.player.iSpaceShip;
 public abstract class Card implements iCard {
     
     private int id;
-    
-    
 
     protected Card(int id){
         this.id = id;
@@ -18,7 +16,7 @@ public abstract class Card implements iCard {
     }
 
     @Override
-    public abstract void apply(iSpaceShip state, iPlayerResponse response);
+    public abstract int apply(iSpaceShip state, iPlayerResponse response);
 
     //TODO: add general methods
 }

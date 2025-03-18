@@ -1,12 +1,10 @@
+//Done.
 package it.polimi.ingsw.model.adventure_cards;
 
-import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.model.player.iSpaceShip;
 
 public class OpenSpaceCard {
-   public void travel(PlayerColor current_player/* planche.getFirstPlayer() */){
-       /* getPlayerEnginePower();
-        movePlayer(first_player, engine_power);
-        travel(next_player);*/
-
+   public int apply(iSpaceShip state, iPlayerResponse response){
+       return state.getEnginePower();
     }
 }

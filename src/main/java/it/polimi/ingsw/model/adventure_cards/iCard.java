@@ -4,7 +4,7 @@ import it.polimi.ingsw.model.player.iSpaceShip;
 
 public interface iCard {
     public int getId();
-    public void apply(iSpaceShip player, iPlayerResponse response);
+    public int apply(iSpaceShip player, iPlayerResponse response);
 }
 
 

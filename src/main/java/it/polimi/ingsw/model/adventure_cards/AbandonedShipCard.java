@@ -13,8 +13,9 @@ public class AbandonedShipCard extends Card{
     }
 
     @Override
-    public void apply(iSpaceShip state, iPlayerResponse response){
+    public int apply(iSpaceShip state, iPlayerResponse response){
         //TODO
+        return 0;
     }
 
 }

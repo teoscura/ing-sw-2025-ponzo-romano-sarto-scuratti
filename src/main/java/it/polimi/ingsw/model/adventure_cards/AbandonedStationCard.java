@@ -1,7 +1,5 @@
 package it.polimi.ingsw.model.adventure_cards;
 
-import it.polimi.ingsw.model.board.Planche;
-import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.iSpaceShip;
 
 public class AbandonedStationCard extends Card{
@@ -19,8 +17,9 @@ public class AbandonedStationCard extends Card{
     }
 
     @Override
-    public void apply(iSpaceShip state, iPlayerResponse response){
+    public int apply(iSpaceShip state, iPlayerResponse response){
         //TODO
+        return 0;
     }
 
     // public void askToExploreStation(PlayerColor current_player/* planche.getFirstPlayer() */){

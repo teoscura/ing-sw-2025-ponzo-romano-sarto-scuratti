@@ -1,7 +1,5 @@
 package it.polimi.ingsw.model.adventure_cards;
 
-import java.util.ArrayList;
-
 import it.polimi.ingsw.model.player.iSpaceShip;
 
 public class MeteorSwarmCard extends Card{
@@ -14,10 +12,12 @@ public class MeteorSwarmCard extends Card{
     }
 
     @Override
-    public void apply(iSpaceShip state, iPlayerResponse response){
+    public int apply(iSpaceShip state, iPlayerResponse response){
         //TODO
+
+        return 0;
     }
-    //tiro dadi
+    //tirfo dadi
     /*for(every_player){
         for (int i = 0; i < meteorites.size(); i++){
             cords = shipCords findComponentHit(player, tiro_dadi, meteorites[i].direction){

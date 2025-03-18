@@ -10,8 +10,9 @@ public class SabotageCard extends Card{
     }
 
     @Override
-    public void apply(iSpaceShip state, iPlayerResponse response){
+    public int apply(iSpaceShip state, iPlayerResponse response){
         //TODO
+        return 0;
     }
 
     //find player with lowest crew amount, if parity pick furthest one
