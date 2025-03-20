@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.adventure_cards;
 import java.util.ArrayList;
 
 import it.polimi.ingsw.model.player.*;
+import it.polimi.ingsw.model.adventure_cards.events.iCEvent;
 import it.polimi.ingsw.model.board.*;
 public class PlanetCard extends Card {
 	
@@ -15,7 +16,10 @@ public class PlanetCard extends Card {
 	}
 
 	@Override
-	public Event setup()
+	public iCEvent setup(iSpaceShip ship){
+		//TODO.
+		return null;
+	}
 
 	@Override
 	public int apply(iSpaceShip state, iPlayerResponse response){

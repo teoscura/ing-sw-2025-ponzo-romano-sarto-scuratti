@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.adventure_cards;
 
+import it.polimi.ingsw.model.adventure_cards.events.iCEvent;
 import it.polimi.ingsw.model.player.iSpaceShip;
 
 public class SabotageCard extends Card{
@@ -10,23 +11,16 @@ public class SabotageCard extends Card{
     }
 
     @Override
+    public iCEvent setup(iSpaceShip state) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setup'");
+    }
+
+
+    @Override
     public int apply(iSpaceShip state, iPlayerResponse response){
         //TODO
         return 0;
     }
-
-    //find player with lowest crew amount, if parity pick furthest one
-    /*find_component(player){
-        while (miss<3){
-            throw 4 dice 2 for row and 2 for column
-            if (no component hit){
-                miss++;
-            }
-            else{
-                remove component();
-                return;
-            }
-        }
-        return;
-    }*/
+    
 }

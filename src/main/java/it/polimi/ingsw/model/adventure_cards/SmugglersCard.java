@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.adventure_cards;
 
-import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.model.adventure_cards.events.iCEvent;
 import it.polimi.ingsw.model.player.iSpaceShip;
 
 public class SmugglersCard extends Card{
@@ -18,24 +18,15 @@ public class SmugglersCard extends Card{
     }
 
     @Override
+    public iCEvent setup(iSpaceShip state) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setup'");
+    }
+
+    @Override
     public int apply(iSpaceShip state, iPlayerResponse response){
         //TODO
         return 0;
     }
 
-    // public void fight(PlayerColor current_player/* planche.getFirstPlayer() */){
-        /*if player.power > cannon_power_required{
-            ask_to_load
-            if yes{
-                loose days
-                load goods
-            }
-        else if player.power = cannon_power_required{
-            fight(next_player)
-            }
-        else if player.power < cannon_power_required{
-            lose_merch() //takes n most precious resources, if not enough resources, steals batteries
-            }
-        }
-    */
 }

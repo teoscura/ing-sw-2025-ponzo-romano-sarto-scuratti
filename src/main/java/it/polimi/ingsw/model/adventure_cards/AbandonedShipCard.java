@@ -1,6 +1,7 @@
 //Done.
 package it.polimi.ingsw.model.adventure_cards;
 
+import it.polimi.ingsw.model.adventure_cards.events.iCEvent;
 import it.polimi.ingsw.model.adventure_cards.visitors.CrewRemoveVisitor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.player.iSpaceShip;
@@ -17,6 +18,12 @@ public class AbandonedShipCard extends Card{
         this.days = days;
         this.crew_lost = crew_lost;
         this.credits_gained = credits_gained;
+    }
+
+    @Override
+    public iCEvent setup(iSpaceShip state) {
+        //TODO show merch and crew cost.
+        return null;
     }
 
     @Override

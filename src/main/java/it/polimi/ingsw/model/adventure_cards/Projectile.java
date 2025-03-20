@@ -1,11 +1,30 @@
 package it.polimi.ingsw.model.adventure_cards;
 
+import it.polimi.ingsw.exceptions.OutOfBoundsException;
+import it.polimi.ingsw.model.adventure_cards.enums.ProjectileDimension;
+import it.polimi.ingsw.model.adventure_cards.enums.ProjectileDirection;
+import it.polimi.ingsw.model.player.ShipType;
+
 public class Projectile {
 
     private ProjectileDirection direction;
-    private ProjectileDimension dimension; 
+    private ProjectileDimension dimension;
+    private ShipType type;
+    private int offset = -1; 
 
-    public Projectile(ProjectileDirection direction, ProjectileDimension dimension){
+    public Projectile(ShipType type, ProjectileDirection direction, ProjectileDimension dimension){
+        this.type = type;
+        this.direction = direction;
+        this.dimension = dimension;
+    }
+
+    public Projectile(ShipType type, ProjectileDirection direction, ProjectileDimension dimension, int offset){
+        if(offset<0 || 
+          (offset>=type.getHeight()&&(direction.getShift()-1)%2==0) || 
+          (offset>=type.getWidth()&&(direction.getShift())%2==0))
+            throw new OutOfBoundsException("Offset goes over ship bounds.");
+        this.type = type;
+        this.offset = offset;
         this.direction = direction;
         this.dimension = dimension;
     }
@@ -17,49 +36,16 @@ public class Projectile {
     public ProjectileDimension getDimension(){
         return this.dimension;
     }
+
+    public ShipType getType(){
+        return this.type;
+    }
+
+    public int getOffset(){
+        return this.offset;
+    }
 } 
 
-enum ProjectileDimension{
-    
-    BIG(false),
-    SMALL(true);
 
-    private boolean blockable;
 
-    ProjectileDimension(boolean blockable){
-        this.blockable = blockable;
-    }
 
-    public boolean getBlockable(){
-        return this.blockable;
-    }
-}
-
-//Rotazione relativa in gradi, parte da su e va in senso orario
-enum ProjectileDirection {
-    
-    U000 (0), 
-    U090 (1),
-    U180 (2), 
-    U270 (3);
-
-    private int shift;
-
-    ProjectileDirection(int shift){
-        this.shift = shift;
-    }
-
-    public int getShift(){
-        return this.shift;
-    }
-
-    public ProjectileDirection getOpposite(){
-        switch(this.shift){
-            case 0: return ProjectileDirection.U180;
-            case 1: return ProjectileDirection.U270;
-            case 2: return ProjectileDirection.U000;
-            case 3: return ProjectileDirection.U090;
-            default: return ProjectileDirection.U000;
-        }
-    }
-}

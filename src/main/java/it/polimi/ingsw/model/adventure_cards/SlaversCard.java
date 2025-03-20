@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.adventure_cards;
 
+import it.polimi.ingsw.model.adventure_cards.events.iCEvent;
 import it.polimi.ingsw.model.player.iSpaceShip;
 
 public class SlaversCard extends Card{
@@ -14,27 +15,16 @@ public class SlaversCard extends Card{
     }
 
     @Override
+    public iCEvent setup(iSpaceShip state) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setup'");
+    }
+
+    @Override
     public int apply(iSpaceShip state, iPlayerResponse response){
         //TODO
         return 0;
     }
 
-    //public void fightSlavers(PlayerColor current_player/* planche.getFirstPlayer() */){
-    
-    /*    if (player.cannon_power > cannon_power_needed){
-            askForReward
-            if yes{
-                player.coins += coins_earned;
-                player.position -= days_spent
-            }
-        }
-        else if (player.cannon_power = cannon_power_needed){
-            fight(next_player());
-        }
-        else if (player.cannon_power < cannon_power_needed){
-            remove_crew();
-            fight(next_player());
-        }
-    }*/
 }
 
