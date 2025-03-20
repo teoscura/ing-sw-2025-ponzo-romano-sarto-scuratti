@@ -31,6 +31,8 @@ Gestione persistenza.
 - Ogni partita e ogni turno contribuisce alla creazione e modifica di un file json che elenca lo stato di ogni giocatore, permettendo una ricostruzione ricorsiva delle classi che lo compongono e del giocatore stesso, oltre a qualsiasi stato della partita, della sua tipologia. \
 \
 La sala d'attesa della partita perpetua rifiuterà qualsiasi richiesta di join da giocatori non coinvolti nella sua precedente realizzazione.
+\
+A inizializzazione server si controllano i numeri delle partite non finite, e li si evitano.
 
 >== TODO RESTO ==
 >==================

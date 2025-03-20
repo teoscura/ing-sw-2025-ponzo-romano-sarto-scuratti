@@ -15,10 +15,13 @@ public interface iBaseComponent {
     
     public boolean verify(iSpaceShip state);
     public void check(iVisitor v);
-
+    //On delete/Creation
+    public void onCreation(iSpaceShip state);
+    public void onDelete(iSpaceShip state);
     //Return the connector pointing up.
     public ShipCoords getCoords();
     public ConnectorType getConnector(ComponentRotation direction);
     public ConnectorType[] getConnectors();
     public ComponentRotation getRotation();
+    public boolean powerable();
 }

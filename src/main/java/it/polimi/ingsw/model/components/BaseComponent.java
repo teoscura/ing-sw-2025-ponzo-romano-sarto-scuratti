@@ -68,7 +68,7 @@ public abstract class BaseComponent implements iBaseComponent, iVisitable{
 
     @Override
     public ConnectorType getConnector(ComponentRotation direction){
-        int shift = direction.getShift() + this.rotation.getShift();
+        int shift = direction.getShift() + (4-this.rotation.getShift());
         shift = shift % 4;
         return connectors[shift];
     }
@@ -78,6 +78,21 @@ public abstract class BaseComponent implements iBaseComponent, iVisitable{
         return this.coords;
     }
     
+    @Override
+    public boolean powerable(){
+        return false;
+    }
+
+    @Override
+    public void onCreation(iSpaceShip state){
+        return;
+    }
+
+    @Override
+    public void onDelete(iSpaceShip state){
+        return;
+    }
+
     //ricordate: non implementare questo metodo, ma va implementato in ogni singola sottoclasse
     // (e' letteralmente la def di abstract, ma fa bene ricordarlo).
     @Override

@@ -4,8 +4,8 @@ package it.polimi.ingsw.model.components;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ConnectorType;
 import it.polimi.ingsw.model.components.exceptions.AlreadyPoweredException;
+import it.polimi.ingsw.model.components.exceptions.ComponentNotEmptyException;
 import it.polimi.ingsw.model.components.exceptions.UnpowerableException;
-import it.polimi.ingsw.model.components.visitors.FreeSpaceVisitor;
 import it.polimi.ingsw.model.components.visitors.iVisitor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.player.iSpaceShip;
@@ -20,6 +20,7 @@ public class CannonComponent extends BaseComponent{
                            ComponentRotation rotation,
                            CannonType type){
         super(components, rotation);
+        if(components[0]!=ConnectorType.EMPTY) throw new ComponentNotEmptyException("Top of cannon must be empty!");
         this.max_power = type.getMaxPower();
         this.powerable = type.getPowerable();
     }
@@ -29,6 +30,7 @@ public class CannonComponent extends BaseComponent{
                            CannonType type,
                            ShipCoords coords){
         super(components, rotation, coords);
+        if(components[0]!=ConnectorType.EMPTY) throw new ComponentNotEmptyException("Top of cannon must be empty!");
         this.max_power = type.getMaxPower();
         this.powerable = type.getPowerable();       
     }
@@ -40,11 +42,26 @@ public class CannonComponent extends BaseComponent{
 
     @Override
     public boolean verify(iSpaceShip state){
-        FreeSpaceVisitor v = new FreeSpaceVisitor();
-        iBaseComponent tmp = state.getComponent(this.coords.up());
-        tmp.check(v);
-        if(v.getSpaceIsFree()) return true;
-        return false;
+        ComponentRotation r = this.getRotation();
+        iBaseComponent tmp = null; 
+        switch(r.getShift()){
+            case 0: {
+                tmp = state.getComponent(this.coords.up());
+                break;
+            }
+            case 1: {
+                tmp = state.getComponent(this.coords.right());
+                break;
+            }
+            case 2: {
+                tmp = state.getComponent(this.coords.down());
+                break;
+            }
+            case 3: {
+                tmp = state.getComponent(this.coords.left());
+            }
+        }
+        return tmp == state.getEmpty() && super.verify(state);
     }
 
     public void turnOn(){
@@ -70,6 +87,21 @@ public class CannonComponent extends BaseComponent{
         }
         return max_power;
     } 
+
+    @Override
+    public boolean powerable(){
+        return true;
+    }
+
+    @Override
+    public void onCreation(iSpaceShip ship){
+        if(powerable) ship.addPowerableCoords(this.coords);
+    }
+
+    @Override
+    public void onDelete(iSpaceShip ship){
+        if(powerable) ship.delPowerableCoords(this.coords);
+    }
 }
 
 enum CannonType{

@@ -27,7 +27,12 @@ public interface iSpaceShip {
 	public boolean[] getShieldedDirections();
 	public int getHeight();
 	public int getWidth();
+    public iBaseComponent getEmpty();
 
+	public void addBatteryCoords(ShipCoords coords);
+	public void delBatteryCoords(ShipCoords coords);
+	public void addPowerableCoords(ShipCoords coords);
+	public void delPowerableCoords(ShipCoords coords);
 	// public ShipCoords up(ShipCoords coords);
 	// public ShipCoords right(ShipCoords coords);
 	// public ShipCoords down(ShipCoords coords);

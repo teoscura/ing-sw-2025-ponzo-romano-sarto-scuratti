@@ -7,6 +7,7 @@ import it.polimi.ingsw.model.components.exceptions.ContainerEmptyException;
 import it.polimi.ingsw.model.components.exceptions.ContainerFullException;
 import it.polimi.ingsw.model.components.visitors.iVisitor;
 import it.polimi.ingsw.model.player.ShipCoords;
+import it.polimi.ingsw.model.player.iSpaceShip;
 
 public class BatteryComponent extends BaseComponent{
     
@@ -55,6 +56,16 @@ public class BatteryComponent extends BaseComponent{
             throw new ContainerFullException();
         }
         contains++;
+    }
+
+    @Override
+    public void onCreation(iSpaceShip ship){
+        ship.addBatteryCoords(this.coords);
+    }
+
+    @Override
+    public void onDelete(iSpaceShip ship){
+        ship.delBatteryCoords(this.coords);
     }
 }
 

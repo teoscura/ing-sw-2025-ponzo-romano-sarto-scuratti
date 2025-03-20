@@ -7,10 +7,11 @@ import it.polimi.ingsw.model.components.enums.ShieldType;
 import it.polimi.ingsw.model.components.exceptions.AlreadyPoweredException;
 import it.polimi.ingsw.model.components.visitors.iVisitor;
 import it.polimi.ingsw.model.player.ShipCoords;
+import it.polimi.ingsw.model.player.iSpaceShip;
 
 public class ShieldComponent extends BaseComponent {
     
-    private ShieldType type = ShieldType.NE;
+    private ShieldType type = ShieldType.NE; //Nord Est
     private boolean powered = false;
 
     public ShieldComponent(ConnectorType[] connectors, 
@@ -46,6 +47,20 @@ public class ShieldComponent extends BaseComponent {
 
     public boolean getPowered(){
         return this.powered;
+    }
+    @Override
+    public boolean powerable(){
+        return true;
+    }
+
+    @Override
+    public void onCreation(iSpaceShip ship){
+        ship.addPowerableCoords(this.coords);
+    }
+
+    @Override
+    public void onDelete(iSpaceShip ship){
+        ship.delPowerableCoords(this.coords);
     }
 
     public ShieldType getShield(){

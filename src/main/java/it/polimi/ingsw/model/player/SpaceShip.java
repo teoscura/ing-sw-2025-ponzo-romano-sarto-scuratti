@@ -1,10 +1,14 @@
 package it.polimi.ingsw.model.player;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Queue;
 
+import it.polimi.ingsw.exceptions.NotUniqueException;
+import it.polimi.ingsw.exceptions.NotPresentException;
 import it.polimi.ingsw.exceptions.OutOfBoundsException;
+import it.polimi.ingsw.model.components.BatteryComponent;
 import it.polimi.ingsw.model.components.EmptyComponent;
 import it.polimi.ingsw.model.components.iBaseComponent;
 import it.polimi.ingsw.model.components.enums.AlienType;
@@ -15,17 +19,19 @@ import it.polimi.ingsw.model.components.visitors.EnergyVisitor;
 import it.polimi.ingsw.model.player.exceptions.IllegalComponentAdd;
 import it.polimi.ingsw.model.player.exceptions.NegativeCreditsException;
 import it.polimi.ingsw.model.player.exceptions.NegativeCrewException;
+import it.polimi.ingsw.model.rulesets.GameModeType;
 
 
 public class SpaceShip implements iSpaceShip{
-
+	private final ArrayList<ShipCoords> battery_coords;
+	private final ArrayList<ShipCoords> powerable_coords;
 	//Player fields
 	private final PlayerColor color;
 	private int credits;
 	private int[] crew;
 	private boolean retired = false;
 	//SpaceShip fields
-	private final ShipType type;
+	private final GameModeType type;
 	private final iBaseComponent[][] components;
 	private final iBaseComponent empty;
 	private int[] containers;
@@ -35,7 +41,7 @@ public class SpaceShip implements iSpaceShip{
 	private int battery_power = 0;
 
 
-	public SpaceShip(ShipType type, 
+	public SpaceShip(GameModeType type, 
 					 PlayerColor color){
 		this.type = type;
 		this.color = color;
@@ -47,6 +53,8 @@ public class SpaceShip implements iSpaceShip{
 		for(iBaseComponent[] t : this.components){
 			Arrays.fill(t, this.empty); // E' la stessa reference, ma poi sara' intoccabile.
 		}
+		this.battery_coords = new ArrayList<ShipCoords>();
+		this.powerable_coords = new ArrayList<ShipCoords>();
 		Arrays.fill(shielded_directions, false);
 		Arrays.fill(containers, 0);
 		Arrays.fill(crew, 0);
@@ -192,22 +200,17 @@ public class SpaceShip implements iSpaceShip{
 		}
 	}
 
-	//HACK this is terrible, ask if instanceof is allowed to check for singular classes.
 	@Override
 	public void turnOn(ShipCoords coords_target, ShipCoords battery_location) {
 		if(coords_target==null) throw new NullPointerException();
 		if(battery_location==null) throw new NullPointerException();
-		EnergyVisitor v = new EnergyVisitor(false);
-		iBaseComponent target = getComponent(coords_target);
-		iBaseComponent battery = getComponent(battery_location);  
-		target.check(v);
-		if(!v.getPowerable()) throw new IllegalTargetException("Target is not powerable");
-		battery.check(v);
-		if(!v.getFoundBatteryComponent()) throw new IllegalTargetException("Battery component wasn't present at location");
-		if(!v.hasBattery()) throw new IllegalTargetException("No batteries found at location");
-		v.toggle();
-		battery.check(v);
-		target.check(v);
+		if(!this.powerable_coords.contains(coords_target)) throw new IllegalTargetException("Target is not powerable");
+		if(!this.battery_coords.contains(battery_location)) throw new IllegalTargetException("Battery component wasn't present at location");
+		BatteryComponent c = (BatteryComponent)getComponent(battery_location);
+		EnergyVisitor v = new EnergyVisitor(true);
+		if(c.getContains()==0) throw new IllegalTargetException("No batteries found at location");
+		c.takeOne();
+		c.check(v);
 	}
 
 	@Override
@@ -250,6 +253,31 @@ public class SpaceShip implements iSpaceShip{
 	@Override
 	public int getWidth(){
 		return this.type.getWidth();
+	}
+
+	@Override
+	public iBaseComponent getEmpty() {
+		return this.empty;
+	}
+
+	public void addBatteryCoords(ShipCoords coords){
+		if(this.battery_coords.contains(coords)) throw new NotUniqueException("Coords are already present in battery coords");
+		this.battery_coords.add(coords);
+	}	
+
+	public void delBatteryCoords(ShipCoords coords){
+		if(!this.battery_coords.contains(coords)) throw new NotPresentException("Coords arent present in battery coords");
+		this.battery_coords.remove(coords);
+	}
+
+	public void addPowerableCoords(ShipCoords coords){
+		if(this.powerable_coords.contains(coords)) throw new NotUniqueException("Coords are already present in powerable coords");
+		this.battery_coords.add(coords);
+	}
+
+	public void delPowerableCoords(ShipCoords coords){
+		if(!this.powerable_coords.contains(coords)) throw new NotPresentException("Coords arent present in powerable coords");
+		this.powerable_coords.remove(coords);
 	}
 
 	// public ShipCoords up(ShipCoords coords){
