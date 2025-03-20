@@ -20,7 +20,7 @@ public class EmptyComponent extends BaseComponent {
     }
 
     @Override
-    public boolean verify(iSpaceShip state){
+    public boolean verify(iSpaceShip ship){
         return true;
     }
 

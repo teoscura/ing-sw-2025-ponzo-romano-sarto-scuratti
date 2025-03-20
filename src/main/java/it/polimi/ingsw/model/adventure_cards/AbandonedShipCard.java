@@ -19,13 +19,13 @@ public class AbandonedShipCard extends Card{
     }
 
     @Override
-    public int apply(iSpaceShip state, iPlayerResponse response){
+    public int apply(iSpaceShip ship, iPlayerResponse response){
         if(response.getCoordArray().length != crew_lost) throw new IllegalArgumentException("The list of cells isn't large enough for this abandoned ship.");
         CrewRemoveVisitor v = new CrewRemoveVisitor();
         for(ShipCoords t : response.getCoordArray()){
-            state.getComponent(t).check(v);
+            ship.getComponent(t).check(v);
         }
-        state.giveCredits(this.credits_gained);
+        ship.giveCredits(this.credits_gained);
         return -this.days;
     }
 

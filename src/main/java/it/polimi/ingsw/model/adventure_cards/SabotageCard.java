@@ -2,7 +2,6 @@ package it.polimi.ingsw.model.adventure_cards;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-import it.polimi.ingsw.model.adventure_cards.events.iCEvent;
 import it.polimi.ingsw.model.adventure_cards.utils.iPlayerResponse;
 import it.polimi.ingsw.model.components.iBaseComponent;
 import it.polimi.ingsw.model.player.ShipCoords;
@@ -14,12 +13,6 @@ public class SabotageCard extends Card{
 
     public SabotageCard(int id){
         super(id,0);
-    }
-
-    @Override
-    public iCEvent setup(iSpaceShip ship) {
-        //TODO;
-        return null;
     }
 
     @Override

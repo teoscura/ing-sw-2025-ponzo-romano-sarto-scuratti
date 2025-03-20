@@ -3,8 +3,6 @@ package it.polimi.ingsw.model.adventure_cards;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.random.RandomGenerator;
 
-import it.polimi.ingsw.model.adventure_cards.events.iCEvent;
-import it.polimi.ingsw.model.adventure_cards.events.vMeteoriteColumsEvent;
 import it.polimi.ingsw.model.adventure_cards.exceptions.MismatchedProjectileTypes;
 import it.polimi.ingsw.model.adventure_cards.utils.Projectile;
 import it.polimi.ingsw.model.adventure_cards.utils.iPlayerResponse;

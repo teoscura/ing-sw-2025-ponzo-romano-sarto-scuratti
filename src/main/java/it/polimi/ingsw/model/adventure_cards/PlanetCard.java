@@ -2,8 +2,6 @@ package it.polimi.ingsw.model.adventure_cards;
 
 import it.polimi.ingsw.model.player.*;
 import it.polimi.ingsw.exceptions.ArgumentTooBigException;
-import it.polimi.ingsw.model.adventure_cards.events.iCEvent;
-import it.polimi.ingsw.model.adventure_cards.events.vPlanetInfoEvent;
 import it.polimi.ingsw.model.adventure_cards.exceptions.CoordsIndexLenghtMismatchException;
 import it.polimi.ingsw.model.adventure_cards.utils.Planet;
 import it.polimi.ingsw.model.adventure_cards.utils.iPlayerResponse;
@@ -18,12 +16,7 @@ public class PlanetCard extends Card {
 	}
 
 	@Override
-	public iCEvent setup(iSpaceShip ship){
-		return new vPlanetInfoEvent(this.planets);
-	}
-
-	@Override
-	public int apply(iSpaceShip state, iPlayerResponse response){
+	public int apply(iSpaceShip ship, iPlayerResponse response){
 		if(response.getId()>=this.planets.length) throw new ArgumentTooBigException( "Sent a planet id larger than the list.");
 		if(response.getId()==-1) return 0;
 		validateCargoChoices(response.getCoordArray(), response.getMerchChoices(), response.getId());

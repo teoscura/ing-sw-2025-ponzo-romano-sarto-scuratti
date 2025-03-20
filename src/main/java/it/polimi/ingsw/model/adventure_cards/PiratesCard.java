@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model.adventure_cards;
 import java.util.ArrayList;
 
-import it.polimi.ingsw.model.adventure_cards.events.iCEvent;
 import it.polimi.ingsw.model.adventure_cards.utils.iPlayerResponse;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.iSpaceShip;
@@ -20,7 +19,7 @@ public class PiratesCard extends Card{
     }
 
     @Override
-    public int apply(iSpaceShip state, iPlayerResponse response){
+    public int apply(iSpaceShip ship, iPlayerResponse response){
         //TODO
         return 0;
     }

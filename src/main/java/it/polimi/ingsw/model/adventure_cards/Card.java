@@ -32,7 +32,7 @@ public abstract class Card implements iCard {
     }
 
     @Override
-    public abstract int apply(iSpaceShip state, iPlayerResponse response);
+    public abstract int apply(iSpaceShip ship, iPlayerResponse response);
 
     //TODO: add general methods
 }

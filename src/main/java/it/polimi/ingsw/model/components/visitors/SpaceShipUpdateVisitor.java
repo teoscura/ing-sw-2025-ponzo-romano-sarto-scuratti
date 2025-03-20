@@ -6,7 +6,7 @@ import it.polimi.ingsw.model.player.iSpaceShip;
 
 public class SpaceShipUpdateVisitor implements iVisitor {
 
-    private iSpaceShip state;
+    private iSpaceShip ship;
     private int battery_power;
     private int engine_power;
     private int cannon_power;
@@ -14,8 +14,8 @@ public class SpaceShipUpdateVisitor implements iVisitor {
     private int[] crew_members;
     private boolean[] directions;
 
-    public SpaceShipUpdateVisitor(iSpaceShip state){
-        this.state = state;
+    public SpaceShipUpdateVisitor(iSpaceShip ship){
+        this.ship = ship;
         this.storage_containers = new int[4];
         this.crew_members = new int[3];
         this.directions = new boolean[4];
@@ -23,7 +23,7 @@ public class SpaceShipUpdateVisitor implements iVisitor {
 
     @Override
     public void visit(CabinComponent c){
-        c.updateCrewType(state);
+        c.updateCrewType(ship);
         this.crew_members[c.getCrewType().getArraypos()] += c.getCrew();
     }
 

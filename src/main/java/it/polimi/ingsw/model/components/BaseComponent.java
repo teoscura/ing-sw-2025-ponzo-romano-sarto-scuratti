@@ -45,11 +45,11 @@ public abstract class BaseComponent implements iBaseComponent, iVisitable{
     }
 
     @Override
-    public boolean verify(iSpaceShip state){
-        iBaseComponent up = state.getComponent(this.coords.up());
-        iBaseComponent right = state.getComponent(this.coords.right());
-        iBaseComponent down = state.getComponent(this.coords.down());
-        iBaseComponent left = state.getComponent(this.coords.left());
+    public boolean verify(iSpaceShip ship){
+        iBaseComponent up = ship.getComponent(this.coords.up());
+        iBaseComponent right = ship.getComponent(this.coords.right());
+        iBaseComponent down = ship.getComponent(this.coords.down());
+        iBaseComponent left = ship.getComponent(this.coords.left());
 
         if(up!=null){
             if(!up.getConnector(ComponentRotation.U180).compatible(getConnector(ComponentRotation.U000))) return false;
@@ -84,12 +84,12 @@ public abstract class BaseComponent implements iBaseComponent, iVisitable{
     }
 
     @Override
-    public void onCreation(iSpaceShip state){
+    public void onCreation(iSpaceShip ship){
         return;
     }
 
     @Override
-    public void onDelete(iSpaceShip state){
+    public void onDelete(iSpaceShip ship){
         return;
     }
 

@@ -35,8 +35,4 @@ public interface iSpaceShip {
 	public void delBatteryCoords(ShipCoords coords);
 	public void addPowerableCoords(ShipCoords coords);
 	public void delPowerableCoords(ShipCoords coords);
-	// public ShipCoords up(ShipCoords coords);
-	// public ShipCoords right(ShipCoords coords);
-	// public ShipCoords down(ShipCoords coords);
-	// public ShipCoords left(ShipCoords coords);
 }

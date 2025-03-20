@@ -309,5 +309,7 @@ public class SpaceShip implements iSpaceShip{
 		this.powerable_coords.remove(coords);
 	}
 
+	
+
 }
 

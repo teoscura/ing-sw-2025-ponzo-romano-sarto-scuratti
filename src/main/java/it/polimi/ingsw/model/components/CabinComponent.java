@@ -15,24 +15,20 @@ import it.polimi.ingsw.model.player.iSpaceShip;
 
 //FIXME huge refactor if possible, really dirty implementation.
 public class CabinComponent extends BaseComponent{
-    private int max_capacity;
+    private int max_capacity = AlienType.HUMAN.getMaxCapacity();
     private int crew_number = 0;
-    private AlienType crew_type;
-    private AlienType can_contain;
+    private AlienType crew_type = AlienType.HUMAN;
+    private AlienType can_contain = AlienType.HUMAN;
 
     public CabinComponent(ConnectorType[] connectors, 
-                          ComponentRotation rotation,
-                          AlienType inhabitant_type){
+                          ComponentRotation rotation){
         super(connectors, rotation);
-        this.max_capacity = inhabitant_type.getMaxCapacity(); 
     }
 
     public CabinComponent(ConnectorType[] connectors, 
                           ComponentRotation rotation,
-                          AlienType inhabitant_type,
                           ShipCoords coords){
         super(connectors, rotation, coords);
-        this.max_capacity = inhabitant_type.getMaxCapacity(); 
     }
 
 
@@ -74,6 +70,7 @@ public class CabinComponent extends BaseComponent{
         if(type==AlienType.BOTH || type==AlienType.HUMAN) throw new IllegalArgumentException();
         if(this.can_contain == AlienType.HUMAN){
             this.can_contain = type;
+            this.max_capacity = type.getMaxCapacity();
             return;
         }
         if(this.can_contain!=type){
@@ -81,13 +78,13 @@ public class CabinComponent extends BaseComponent{
         }
     }
     
-    public void updateCrewType(iSpaceShip state){
+    public void updateCrewType(iSpaceShip ship){
         //FIXME
         CabinVisitor v = new CabinVisitor();
-        iBaseComponent up = state.getComponent(this.coords.up());
-        iBaseComponent right = state.getComponent(this.coords.right());
-        iBaseComponent down = state.getComponent(this.coords.down());
-        iBaseComponent left = state.getComponent(this.coords.left());
+        iBaseComponent up = ship.getComponent(this.coords.up());
+        iBaseComponent right = ship.getComponent(this.coords.right());
+        iBaseComponent down = ship.getComponent(this.coords.down());
+        iBaseComponent left = ship.getComponent(this.coords.left());
         if(up.getConnector(ComponentRotation.U180).connected(this.getConnector(ComponentRotation.U000))){
             up.check(v);
             this.upgradeCrewType(v.getType());

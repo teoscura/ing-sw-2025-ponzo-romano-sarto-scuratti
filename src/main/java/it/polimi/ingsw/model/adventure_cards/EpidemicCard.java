@@ -10,7 +10,7 @@ public class EpidemicCard extends Card{
     }
 
     @Override
-    public int apply(iSpaceShip state, iPlayerResponse response){
+    public int apply(iSpaceShip ship, iPlayerResponse response){
         //TODO
         return 0;
     }
