@@ -9,6 +9,7 @@ public class MatchSettings {
     private PlayerCount n_players;
 
     public MatchSettings(GameModeType mode, PlayerCount n_players){
+        
         this.mode = mode;
         this.n_players = n_players;
     }

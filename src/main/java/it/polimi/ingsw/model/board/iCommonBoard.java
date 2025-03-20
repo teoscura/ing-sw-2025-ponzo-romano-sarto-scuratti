@@ -7,6 +7,6 @@ public interface iCommonBoard {
 
 	public void discardComponent(iBaseComponent a);
 
-	public iBaseComponent pullDiscarded();
+	public iBaseComponent pullDiscarded(int i);
 
 }

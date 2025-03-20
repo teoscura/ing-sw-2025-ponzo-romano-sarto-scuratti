@@ -3,17 +3,19 @@ package it.polimi.ingsw.model.rulesets;
 import it.polimi.ingsw.model.player.ShipCoords;
 
 public enum GameModeType{
-	LVL1 (1, 5, 7),
-	LVL2 (2, 5, 7);
+	TEST (1, 5, 7, 18),
+	LVL2 (2, 5, 7, 24);
 
 	private int level;
 	private int height;
 	private int width;
+	private int length;
 
-	GameModeType(int level, int height, int width){
+	GameModeType(int level, int height, int width, int length){
 		this.level = level;
 		this.height = height;
 		this.width = width;
+		this.length = length;
 	}
 
 	public int getLevel(){
@@ -26,6 +28,10 @@ public enum GameModeType{
 
 	public int getWidth(){
 		return this.width;
+	}
+
+	public int getLength(){
+		return this.length;
 	}
 
 	public int[] getShape(){
@@ -44,5 +50,10 @@ public enum GameModeType{
         else{
             return new ShipCoords(this,4,3);
         }
+    }
+
+    int getLenght() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getLenght'");
     }
 }

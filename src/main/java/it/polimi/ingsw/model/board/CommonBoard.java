@@ -4,6 +4,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Queue;
 
+import it.polimi.ingsw.exceptions.OutOfBoundsException;
 import it.polimi.ingsw.model.components.iBaseComponent;
 
 public class CommonBoard implements iCommonBoard {
@@ -20,18 +21,24 @@ public class CommonBoard implements iCommonBoard {
 	// methods
 	@Override
 	public iBaseComponent pullComponent() {
-			return null; //TODO
-
+		if(this.covered_components.isEmpty()) return null;
+		return this.covered_components.poll();
 	}
 
 	@Override
 	public void discardComponent(iBaseComponent a) {
-		return; //TODO
+		//TODO check duplicates
+		this.uncovered_components.add(a);
 	}
 
 	@Override
-	public iBaseComponent pullDiscarded() {
-		return null; //TODO
+	public iBaseComponent pullDiscarded(int i) {
+		if(this.uncovered_components.isEmpty()) return null;
+		if(i<0) throw new OutOfBoundsException();
+		if(i>=this.uncovered_components.size()) throw new OutOfBoundsException();
+		iBaseComponent tmp = this.uncovered_components.get(i);
+		this.uncovered_components.remove(i);
+		return tmp;
 	}
 
 }
