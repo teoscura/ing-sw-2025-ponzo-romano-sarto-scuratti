@@ -44,7 +44,8 @@ public class SpaceShipUpdateVisitor implements iVisitor {
 
     @Override
     public void visit(StorageComponent c){
-        for(ShipmentType t : ShipmentType.getTypes()){
+        for(ShipmentType t : ShipmentType.values()){
+            if(t.getValue()<1) continue;
             this.storage_containers[t.getValue()-1] = c.howMany(t);
         }
     }
@@ -63,6 +64,11 @@ public class SpaceShipUpdateVisitor implements iVisitor {
 
     @Override
     public void visit(EmptyComponent c){
+        return;
+    }
+
+    @Override
+    public void check(StructuralComponent c) {
         return;
     }
 
@@ -89,6 +95,5 @@ public class SpaceShipUpdateVisitor implements iVisitor {
     public boolean[] getDirections(){
         return this.directions;
     }
-
 
 }

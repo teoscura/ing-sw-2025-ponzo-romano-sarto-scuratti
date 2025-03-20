@@ -1,17 +1,40 @@
+//Done.
 package it.polimi.ingsw.model.adventure_cards;
 
-public abstract class Card implements iCard {
-    private String title;
-    private int cardId;
-    private CardEffect effect;
+import it.polimi.ingsw.model.adventure_cards.events.iCEvent;
+import it.polimi.ingsw.model.adventure_cards.exceptions.CardAlreadyExhaustedException;
+import it.polimi.ingsw.model.player.iSpaceShip;
 
-    public String getTitle() {
-        return title;
+public abstract class Card implements iCard {
+    
+    private int id;
+    protected int days;
+    private boolean exhausted;
+
+    protected Card(int id, int days){
+        if(days<0) throw new IllegalArgumentException("Negative arguments not allowed.");
+        this.id = id;
+        this.days = days;
     }
-    public int getCardId() {
-        return cardId;
+
+    @Override
+    public int getId(){
+        return this.id;
     }
-    public CardEffect getEffect(){
-        return effect;
+
+    @Override
+    public boolean getExhausted(){
+        return this.exhausted;
     }
+
+    protected void exhaust(){
+        if(this.exhausted) throw new CardAlreadyExhaustedException("This card's effect was already exhausted.");
+    }
+
+    @Override
+    public abstract int apply(iSpaceShip state, iPlayerResponse response);
+
+    public abstract iCEvent setup(iSpaceShip state);
+
+    //TODO: add general methods
 }

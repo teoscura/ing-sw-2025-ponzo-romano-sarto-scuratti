@@ -2,11 +2,13 @@ package it.polimi.ingsw.model.player;
 
 import java.util.ArrayDeque;
 import java.util.Arrays;
+import java.util.Queue;
 
 import it.polimi.ingsw.exceptions.OutOfBoundsException;
 import it.polimi.ingsw.model.components.EmptyComponent;
 import it.polimi.ingsw.model.components.iBaseComponent;
 import it.polimi.ingsw.model.components.enums.AlienType;
+import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
 import it.polimi.ingsw.model.components.visitors.SpaceShipUpdateVisitor;
 import it.polimi.ingsw.model.components.visitors.EnergyVisitor;
@@ -18,13 +20,14 @@ import it.polimi.ingsw.model.player.exceptions.NegativeCrewException;
 public class SpaceShip implements iSpaceShip{
 
 	//Player fields
-	PlayerColor color;
+	private final PlayerColor color;
 	private int credits;
 	private int[] crew;
+	private boolean retired = false;
 	//SpaceShip fields
-	private ShipType type;
-	private iBaseComponent[][] components;
-	private iBaseComponent empty;
+	private final ShipType type;
+	private final iBaseComponent[][] components;
+	private final iBaseComponent empty;
 	private int[] containers;
 	private boolean[] shielded_directions;
 	private int cannon_power = 0;
@@ -86,27 +89,60 @@ public class SpaceShip implements iSpaceShip{
 		return this.color;
 	}
 
-	//FIXME forse ritornare array di posizioni che non van bene?
 	@Override
-	public VerifyResult[] verify() {
-		//TODO BFS on components.
-		VerifyResult[] res = new VerifyResult[this.type.getHeight()*this.type.getWidth()];
-		ArrayDeque<iBaseComponent> queue = new ArrayDeque<iBaseComponent>();
-		
+	public VerifyResult[][] verify() {
+		VerifyResult[][] res = new VerifyResult[this.type.getHeight()][this.type.getWidth()];
+		Queue<iBaseComponent> queue = new ArrayDeque<iBaseComponent>();
+		Arrays.fill(res, VerifyResult.UNCHECKED);
+		queue.add(this.getComponent(this.type.getCenterCabin()));
+		iBaseComponent tmp = null;
+		while(!queue.isEmpty()){
+			tmp = queue.poll();
+			if(!tmp.verify(this)) res[tmp.getCoords().y][tmp.getCoords().x] = VerifyResult.BROKEN;
+			else res[tmp.getCoords().y][tmp.getCoords().x] = VerifyResult.GOOD;
+			if(tmp.getConnector(ComponentRotation.U000)
+			  .connected(this.getComponent(tmp.getCoords().up())
+			    .getConnector(ComponentRotation.U180))){
+				ShipCoords up = this.getComponent(tmp.getCoords().up()).getCoords();
+				if(res[up.y][up.x]==VerifyResult.UNCHECKED) queue.add(this.getComponent(up));
+			}
+			if(tmp.getConnector(ComponentRotation.U090)
+			  .connected(this.getComponent(tmp.getCoords().right())
+			    .getConnector(ComponentRotation.U270))){
+				ShipCoords right = this.getComponent(tmp.getCoords().right()).getCoords();
+				if(res[right.y][right.x]==VerifyResult.UNCHECKED) queue.add(this.getComponent(right));
+			}
+			if(tmp.getConnector(ComponentRotation.U180)
+			  .connected(this.getComponent(tmp.getCoords().down())
+			    .getConnector(ComponentRotation.U000))){
+				ShipCoords left = this.getComponent(tmp.getCoords().down()).getCoords();
+				if(res[left.y][left.x]==VerifyResult.UNCHECKED) queue.add(this.getComponent(left));
+			}
+			if(tmp.getConnector(ComponentRotation.U270)
+			  .connected(this.getComponent(tmp.getCoords().left())
+			    .getConnector(ComponentRotation.U090))){
+				ShipCoords down = this.getComponent(tmp.getCoords().left()).getCoords();
+				if(res[down.y][down.x]==VerifyResult.UNCHECKED) queue.add(this.getComponent(down));
+			}
+		}
+		for(VerifyResult[] t: res){
+			for(VerifyResult r : t){
+				if(r!=VerifyResult.UNCHECKED) continue;
+				r=VerifyResult.NOT_LINKED; 
+			}
+		}
 		return res;
-	}
-
-	private void DFSRecursive(VerifyResult[] a, ArrayDeque<iBaseComponent> q, iBaseComponent c){
-		//TODO
 	}
 
 	@Override
 	public void verifyAndClean() {
-		VerifyResult[] ver = this.verify();
-		for(VerifyResult v : ver){
-
+		VerifyResult[][] ver = this.verify();
+		for(int i=0;i<this.type.getHeight();i++){
+			for(int j=0;i<this.type.getWidth();j++){
+				if(ver[i][j]!=VerifyResult.NOT_LINKED) continue;
+				this.removeComponent(new ShipCoords(this.type,i,j));
+			}
 		}
-		//TODO BFS on components, unreached are removed.
 	}
 
 	@Override
@@ -216,33 +252,33 @@ public class SpaceShip implements iSpaceShip{
 		return this.type.getWidth();
 	}
 
-	public ShipCoords up(ShipCoords coords){
-		if(coords.x<0 || coords.y<0) throw new OutOfBoundsException("Illegal coords: negative");
-		if(coords.x>=this.getWidth() || coords.y>=this.getHeight()) throw new OutOfBoundsException("Illegal coords: too big");
-		if(coords.y==0) return new ShipCoords(0,0);
-		return new ShipCoords(coords.x,coords.y+1);
-	}
+	// public ShipCoords up(ShipCoords coords){
+	// 	if(coords.x<0 || coords.y<0) throw new OutOfBoundsException("Illegal coords: negative");
+	// 	if(coords.x>=this.getWidth() || coords.y>=this.getHeight()) throw new OutOfBoundsException("Illegal coords: too big");
+	// 	if(coords.y==0) return new ShipCoords(this.type,0,0);
+	// 	return new ShipCoords(this.type,coords.x,coords.y+1);
+	// }
 
-	public ShipCoords right(ShipCoords coords){
-		if(coords.x<0 || coords.y<0) throw new OutOfBoundsException("Illegal coords: negative");
-		if(coords.x>=this.getWidth() || coords.y>=this.getHeight()) throw new OutOfBoundsException("Illegal coords: too big");
-		if(coords.x==this.getWidth()-1) return new ShipCoords(0,0);
-		return new ShipCoords(coords.x+1,coords.y);
-	}
+	// public ShipCoords right(ShipCoords coords){
+	// 	if(coords.x<0 || coords.y<0) throw new OutOfBoundsException("Illegal coords: negative");
+	// 	if(coords.x>=this.getWidth() || coords.y>=this.getHeight()) throw new OutOfBoundsException("Illegal coords: too big");
+	// 	if(coords.x==this.getWidth()-1) return new ShipCoords(this.type,0,0);
+	// 	return new ShipCoords(this.type,coords.x+1,coords.y);
+	// }
 
-	public ShipCoords down(ShipCoords coords){
-		if(coords.x<0 || coords.y<0) throw new OutOfBoundsException("Illegal coords: negative");
-		if(coords.x>=this.getWidth() || coords.y>=this.getHeight()) throw new OutOfBoundsException("Illegal coords: too big");
-		if(coords.y==this.getHeight()-1) return new ShipCoords(0,0);
-		return new ShipCoords(coords.x,coords.y-1);
-	}
+	// public ShipCoords down(ShipCoords coords){
+	// 	if(coords.x<0 || coords.y<0) throw new OutOfBoundsException("Illegal coords: negative");
+	// 	if(coords.x>=this.getWidth() || coords.y>=this.getHeight()) throw new OutOfBoundsException("Illegal coords: too big");
+	// 	if(coords.y==this.getHeight()-1) return new ShipCoords(this.type,0,0);
+	// 	return new ShipCoords(this.type,coords.x,coords.y-1);
+	// }
 
-	public ShipCoords left(ShipCoords coords){
-		if(coords.x<0 || coords.y<0) throw new OutOfBoundsException("Illegal coords: negative");
-		if(coords.x>=this.getWidth() || coords.y>=this.getHeight()) throw new OutOfBoundsException("Illegal coords: too big");
-		if(coords.x==0) return new ShipCoords(0,0);
-		return new ShipCoords(coords.x-1,coords.y);
-	}
+	// public ShipCoords left(ShipCoords coords){
+	// 	if(coords.x<0 || coords.y<0) throw new OutOfBoundsException("Illegal coords: negative");
+	// 	if(coords.x>=this.getWidth() || coords.y>=this.getHeight()) throw new OutOfBoundsException("Illegal coords: too big");
+	// 	if(coords.x==0) return new ShipCoords(this.type,0,0);
+	// 	return new ShipCoords(this.type,coords.x-1,coords.y);
+	// }
 
 }
 
