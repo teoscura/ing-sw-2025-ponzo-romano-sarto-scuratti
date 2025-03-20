@@ -59,7 +59,7 @@ public class EngineComponent extends BaseComponent{
 
     public int getCurrentPower(){
         if(this.getRotation() != ComponentRotation.U180){
-            return this.getPower()>>1;  //engine power is 0, not half, for other directions
+            return 0;  //engine power is 0, not half, for other directions
         }
         return this.getPower();
     }
@@ -74,7 +74,7 @@ public class EngineComponent extends BaseComponent{
     @Override
     public boolean powerable(){
         return true;
-    }
+    } //redundant
 }
 
 enum EngineType{
