@@ -15,6 +15,9 @@ public class PlanetCard extends Card {
 	}
 
 	@Override
+	public Event setup()
+
+	@Override
 	public int apply(iSpaceShip state, iPlayerResponse response){
 		//TODO
 		return -days;

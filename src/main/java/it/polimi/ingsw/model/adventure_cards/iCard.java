@@ -1,10 +1,12 @@
+//Done.
 package it.polimi.ingsw.model.adventure_cards;
 
 import it.polimi.ingsw.model.player.iSpaceShip;
 
 public interface iCard {
     public int getId();
-    public int apply(iSpaceShip player, iPlayerResponse response);
+    public Event setup(iSpaceShip ship);
+    public int apply(iSpaceShip ship, iPlayerResponse response);
     public boolean getExhausted();
 }
 

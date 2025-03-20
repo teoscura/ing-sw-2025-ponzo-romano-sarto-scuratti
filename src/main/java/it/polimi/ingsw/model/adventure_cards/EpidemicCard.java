@@ -15,4 +15,6 @@ public class EpidemicCard extends Card{
         return 0;
     }
 
+    
+
 }
