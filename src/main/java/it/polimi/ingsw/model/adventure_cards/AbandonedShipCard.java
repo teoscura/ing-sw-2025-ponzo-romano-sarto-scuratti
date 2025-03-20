@@ -10,12 +10,10 @@ public class AbandonedShipCard extends Card{
 
     private int credits_gained;
     private int crew_lost;
-    private int days;
 
     public AbandonedShipCard(int id, int days, int crew_lost, int credits_gained){
-        super(id);
-        if(days<=0 || crew_lost <= 0 || credits_gained<= 0) throw new IllegalArgumentException("Negative arguments not allowed.");
-        this.days = days;
+        super(id, days);
+        if(crew_lost <= 0 || credits_gained<= 0) throw new IllegalArgumentException("Negative arguments not allowed.");
         this.crew_lost = crew_lost;
         this.credits_gained = credits_gained;
     }

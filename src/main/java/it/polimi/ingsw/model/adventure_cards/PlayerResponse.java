@@ -3,10 +3,11 @@ package it.polimi.ingsw.model.adventure_cards;
 
 import java.io.Serializable;
 
+import it.polimi.ingsw.model.adventure_cards.exceptions.ResponseFieldUnsetException;
 import it.polimi.ingsw.model.player.ShipCoords;
 
 public class PlayerResponse implements iPlayerResponse, Serializable{
-    
+
     private ShipCoords[] coords = null;
     private int[] merch_choices = null;
     private int id = -2;
@@ -53,4 +54,5 @@ public class PlayerResponse implements iPlayerResponse, Serializable{
     public boolean getAccept(){
         return this.accept;
     }
+
 }

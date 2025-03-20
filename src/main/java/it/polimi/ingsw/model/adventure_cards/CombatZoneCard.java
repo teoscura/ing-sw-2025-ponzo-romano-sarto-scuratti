@@ -7,10 +7,9 @@ public class CombatZoneCard extends Card{
     // int days_lost;
     // int crew_lost;
     // ArrayList<Shot> shots = new ArrayList<Shot>();
-    private int days;
 
     public CombatZoneCard(int id, int days){
-        super(id);
+        super(id, days);
         if(days<=0) throw new IllegalArgumentException("Negative arguments not allowed.");
         //TODO
     }

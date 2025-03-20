@@ -1,4 +1,4 @@
-package it.polimi.ingsw.model.adventure_cards;
+package it.polimi.ingsw.model.adventure_cards.exceptions;
 
 public class ResponseFieldUnsetException extends RuntimeException {
     public ResponseFieldUnsetException(){

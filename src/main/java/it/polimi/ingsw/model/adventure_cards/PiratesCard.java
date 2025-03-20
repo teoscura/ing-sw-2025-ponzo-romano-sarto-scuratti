@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.adventure_cards;
 import java.util.ArrayList;
 
+import it.polimi.ingsw.model.adventure_cards.events.iCEvent;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.iSpaceShip;
 
@@ -12,9 +13,15 @@ public class PiratesCard extends Card{
     // ArrayList<Shot> shots = new ArrayList<Shot>();
     // ArrayList<PlayerColor> players_defeated = new ArrayList<PlayerColor>();
 
-    public PiratesCard(int id){
-        super(id);
+    public PiratesCard(int id, int days){
+        super(id, days);
         //TODO
+    }
+
+    @Override
+    public iCEvent setup(iSpaceShip state) {
+        //TODO send info about pirate and cannon power.
+        return null;
     }
 
     @Override
@@ -22,6 +29,8 @@ public class PiratesCard extends Card{
         //TODO
         return 0;
     }
+
+    
 
 
     /*void fight(first player){

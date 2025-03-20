@@ -1,7 +1,9 @@
 package it.polimi.ingsw.model.adventure_cards;
 
 import it.polimi.ingsw.exceptions.ArgumentTooBigException;
+import it.polimi.ingsw.exceptions.NegativeArgumentException;
 import it.polimi.ingsw.model.adventure_cards.events.iCEvent;
+import it.polimi.ingsw.model.adventure_cards.events.vAbandonedStationInfoEvent;
 import it.polimi.ingsw.model.adventure_cards.exceptions.CoordsIndexLenghtMismatchException;
 import it.polimi.ingsw.model.adventure_cards.exceptions.CrewSizeException;
 import it.polimi.ingsw.model.player.ShipCoords;
@@ -9,36 +11,30 @@ import it.polimi.ingsw.model.player.iSpaceShip;
 
 public class AbandonedStationCard extends Card{
     
-    private int[] contains;
-    private int contains_num;
+    private Planet planet;
     private int crew;
-    private int days;
 
-
-    public AbandonedStationCard(int id, int crew, int days, int[] contains){
-        super(id);
-        if(days<=0) throw new IllegalArgumentException("Negative arguments not allowed.");
-        if(contains.length!=4) throw new IllegalArgumentException("Contains array isn't lenght 4.");
-        for(int t : contains) if(t<0) throw new IllegalArgumentException("Contains cell is negative.");
-        this.contains = contains;
-        this.crew = crew;
-        this.days = days;
+    public AbandonedStationCard(int id, Planet planet, int crew){
+        super(id, 0);
+        if(crew<=0) throw new NegativeArgumentException("Crew required can't be negative.");
+        if(planet==null) throw new NullPointerException();
+        this.crew=crew;
+        this.planet=planet;
     }
 
     @Override
-    public iCEvent setup(iSpaceShip state) {
-        //TODO show merch and crew cost.
-        return null;
+    public iCEvent setup(iSpaceShip ship) {
+        return new vAbandonedStationInfoEvent(this.planet, this.crew);
     }
 
     @Override
     public int apply(iSpaceShip ship, iPlayerResponse response){
-        if(response.getCoordArray().length>this.contains_num) throw new ArgumentTooBigException("Too many positions");
+        if(response.getCoordArray().length>this.planet.getTotalQuantity()) throw new ArgumentTooBigException("Too many positions");
         validateCargoChoices(response.getCoordArray(), response.getMerchChoices());
         validateCrewNumber(ship);
         //FIXME finish.
    
-        return -this.days;
+        return -this.planet.getDays();
     }
 
     private void validateCargoChoices(ShipCoords[] coords, int[] cargo_indexes){

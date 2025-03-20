@@ -8,10 +8,13 @@ import it.polimi.ingsw.model.player.iSpaceShip;
 public abstract class Card implements iCard {
     
     private int id;
+    protected int days;
     private boolean exhausted;
 
-    protected Card(int id){
+    protected Card(int id, int days){
+        if(days<0) throw new IllegalArgumentException("Negative arguments not allowed.");
         this.id = id;
+        this.days = days;
     }
 
     @Override

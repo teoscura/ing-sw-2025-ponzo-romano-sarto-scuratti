@@ -1,30 +1,42 @@
 package it.polimi.ingsw.model.adventure_cards;
 
-import java.util.ArrayList;
-
 import it.polimi.ingsw.model.player.*;
+import it.polimi.ingsw.exceptions.ArgumentTooBigException;
 import it.polimi.ingsw.model.adventure_cards.events.iCEvent;
-import it.polimi.ingsw.model.board.*;
+import it.polimi.ingsw.model.adventure_cards.events.vPlanetInfoEvent;
+import it.polimi.ingsw.model.adventure_cards.exceptions.CoordsIndexLenghtMismatchException;
+
 public class PlanetCard extends Card {
 	
-	private int days;
 	Planet[] planets;
 	
 	public PlanetCard(Planet[] planets, int id) { // costruttore
-		super(id);
+		super(id, 0);
 		this.planets = planets;
 	}
 
 	@Override
 	public iCEvent setup(iSpaceShip ship){
-		//TODO.
-		return null;
+		return new vPlanetInfoEvent(this.planets);
 	}
 
 	@Override
 	public int apply(iSpaceShip state, iPlayerResponse response){
-		//TODO
-		return -days;
+		if(response.getId()>=this.planets.length) throw new ArgumentTooBigException( "Sent a planet id larger than the list.");
+		if(response.getId()==-1) return 0;
+		validateCargoChoices(response.getCoordArray(), response.getMerchChoices(), response.getId());
+		//TODO loading.
+
+		
+		this.planets[response.getId()].visit();
+		return -this.planets[response.getId()].getDays();
+	}
+
+	private void validateCargoChoices(ShipCoords[] coords, int[] cargo_indexes, int id){
+        //TODO. throw exceptions where needed.
+        if(coords.length!=cargo_indexes.length) throw new CoordsIndexLenghtMismatchException("Storage coords and cargo locations aren't the same lenght.");
+		if(coords.length>this.planets[id].getTotalQuantity()) throw new ArgumentTooBigException("Sent more shipment destinations than the amount present on the planet.");
+		
 	}
 
 	// public void visitPlanet(PlayerColor current_player/* planche.getFirstPlayer() */) {

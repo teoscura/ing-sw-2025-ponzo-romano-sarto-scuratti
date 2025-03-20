@@ -11,12 +11,10 @@ import it.polimi.ingsw.model.player.iSpaceShip;
 
 public class MeteorSwarmCard extends Card{
 
-    private boolean set = false; 
-    private vMeteoriteColumsEvent message = null;
     private Projectile[] meteorites;
 
-    public MeteorSwarmCard(Projectile[] meteorites, int id){
-        super(id);
+    public MeteorSwarmCard(int id, Projectile[] meteorites){
+        super(id, 0);
         if(meteorites==null || meteorites.length==0) throw new NullPointerException("Meteorites Array is empty or null");
         int max = 0;
         ShipType type = meteorites[0].getType(); //Tutti i meteoriti devono essere dello stesso tipo.
@@ -34,9 +32,7 @@ public class MeteorSwarmCard extends Card{
 
     @Override
     public iCEvent setup(iSpaceShip state) {
-        if(set) return this.message;
-        this.message = new vMeteoriteColumsEvent();
-        return this.message;
+        return new vMeteoriteColumsEvent(this.meteorites);
     }
 
     @Override
@@ -47,7 +43,6 @@ public class MeteorSwarmCard extends Card{
         //TODO: create visitor for a in-line search and protection.
         return 0;
     }
-
 
 }
 

@@ -6,11 +6,10 @@ import it.polimi.ingsw.model.player.iSpaceShip;
 public class SlaversCard extends Card{
     // int cannon_power_needed;
     // int crew_lost;
-    // int days_spent;
     // int coins_earned;
 
-    public SlaversCard(int id){
-        super(id);
+    public SlaversCard(int id, int days){
+        super(id, days);
         //TODO
     }
 
@@ -23,7 +22,7 @@ public class SlaversCard extends Card{
     @Override
     public int apply(iSpaceShip state, iPlayerResponse response){
         //TODO
-        return 0;
+        return -days;
     }
 
 }

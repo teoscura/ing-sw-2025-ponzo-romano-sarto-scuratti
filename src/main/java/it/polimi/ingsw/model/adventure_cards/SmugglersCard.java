@@ -12,14 +12,14 @@ public class SmugglersCard extends Card{
     // int days_spent;
     // int good_lost; //(take your n most valuable goods. If you run out of goods, they take batteries instead.) 
 
-    public SmugglersCard(int id){
-        super(id);
+    public SmugglersCard(int id, int days){
+        super(id, days);
         //TODO
     }
 
     @Override
     public iCEvent setup(iSpaceShip state) {
-        // TODO Auto-generated method stub
+        // TODO Auto-generated method stub.
         throw new UnsupportedOperationException("Unimplemented method 'setup'");
     }
 
