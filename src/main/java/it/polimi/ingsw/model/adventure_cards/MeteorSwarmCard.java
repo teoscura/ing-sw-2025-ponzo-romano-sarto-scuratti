@@ -12,9 +12,12 @@ public class MeteorSwarmCard extends Card{
     }
 
     @Override
-    public int apply(iSpaceShip state, iPlayerResponse response){
+    public int apply(iSpaceShip ship, iPlayerResponse response){
         //TODO
-
+        for(Projectile p : meteorites){
+            ship.handleMeteorite(p);
+        }
+        //TODO: create visitor for a in-line search and protection.
         return 0;
     }
     //tirfo dadi

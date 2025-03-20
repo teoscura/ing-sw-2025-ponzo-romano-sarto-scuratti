@@ -1,3 +1,4 @@
+//Done.
 package it.polimi.ingsw.model.adventure_cards;
 
 import java.io.Serializable;
@@ -6,12 +7,28 @@ import it.polimi.ingsw.model.player.ShipCoords;
 
 public class PlayerResponse implements iPlayerResponse, Serializable{
     
-    private ShipCoords[] coords;
-    private int[] merch_choices;
-    private int id;
+    private ShipCoords[] coords = null;
+    private int[] merch_choices = null;
+    private int id = -2;
     private boolean accept;
 
+    public PlayerResponse(ShipCoords[] coords, boolean accept){
+        if(coords == null) throw new NullPointerException();
+        if(id<=-2) throw new ResponseFieldUnsetException("Id has been set to illegal value.");
+        this.coords = coords;
+        this.accept = accept;
+    }
+
+    public PlayerResponse(ShipCoords[] coords, int[] merch_choices, boolean accept){
+        if(coords == null || merch_choices == null) throw new NullPointerException();
+        this.coords = coords;
+        this.merch_choices = merch_choices;
+        this.accept = accept;
+    }
+    
     public PlayerResponse(ShipCoords[] coords, int[] merch_choices, int id, boolean accept){
+        if(coords == null || merch_choices == null) throw new NullPointerException();
+        if(id<=-2) throw new ResponseFieldUnsetException("Id has been set to illegal value.");
         this.coords = coords;
         this.merch_choices = merch_choices;
         this.id = id;
@@ -19,14 +36,17 @@ public class PlayerResponse implements iPlayerResponse, Serializable{
     }
 
     public ShipCoords[] getCoordArray(){
+        if(this.coords == null) throw new ResponseFieldUnsetException("Response doesn't have the coordinates.");
         return this.coords;
     }
 
     public int[] getMerchChoices(){
+        if(this.merch_choices == null) throw new ResponseFieldUnsetException("Response doesn't have the merch choices.");
         return this.merch_choices;
     }
 
     public int getId(){
+        if(id==-2) throw new ResponseFieldUnsetException("Response doesn't have an id.");
         return this.id;
     }
 

@@ -1,5 +1,4 @@
 package it.polimi.ingsw.model.adventure_cards;
-import java.util.ArrayList;
 
 import it.polimi.ingsw.model.player.iSpaceShip;
 

@@ -17,7 +17,7 @@ public class PlanetCard extends Card {
 	@Override
 	public int apply(iSpaceShip state, iPlayerResponse response){
 		//TODO
-		return 0;
+		return -days;
 	}
 
 	// public void visitPlanet(PlayerColor current_player/* planche.getFirstPlayer() */) {

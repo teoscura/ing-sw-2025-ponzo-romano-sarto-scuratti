@@ -1,7 +1,7 @@
 //Done.
 package it.polimi.ingsw.model.adventure_cards;
 
-import it.polimi.ingsw.model.components.visitors.CrewRemoveVisitor;
+import it.polimi.ingsw.model.adventure_cards.visitors.CrewRemoveVisitor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.player.iSpaceShip;
 

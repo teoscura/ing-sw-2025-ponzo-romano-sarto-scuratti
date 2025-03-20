@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.adventure_cards;
 
 import it.polimi.ingsw.exceptions.ArgumentTooBigException;
 import it.polimi.ingsw.model.adventure_cards.exceptions.CrewSizeException;
+import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.player.iSpaceShip;
 
 public class AbandonedStationCard extends Card{
@@ -23,14 +24,23 @@ public class AbandonedStationCard extends Card{
     }
 
     @Override
-    public int apply(iSpaceShip state, iPlayerResponse response){
-        int sum = 0;
-        for(int t: state.getCrew()) sum+= t;
-        if(sum<this.crew) throw new CrewSizeException("Crew size too small to visit abandoned station.");
+    public int apply(iSpaceShip ship, iPlayerResponse response){
         if(response.getCoordArray().length>this.contains_num) throw new ArgumentTooBigException("Too many positions");
-        if() //TODO;
-        
-        return 0;
+        validateCargoChoices(response.getCoordArray(), response.getMerchChoices());
+        validateCrewNumber(ship);
+        //FIXME finish.
+   
+        return -this.days;
+    }
+
+    private void validateCargoChoices(ShipCoords[] coords, int[] cargo_indexes){
+        //TODO. throw exceptions where needed.
+    }
+
+    private void validateCrewNumber(iSpaceShip ship){
+        int sum = 0;
+        for(int t: ship.getCrew()) sum+= t;
+        if(sum<this.crew) throw new CrewSizeException("Crew size too small to visit abandoned station.");
     }
 
 }
