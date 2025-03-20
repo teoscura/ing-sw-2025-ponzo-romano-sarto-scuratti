@@ -5,7 +5,6 @@ import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ConnectorType;
 import it.polimi.ingsw.model.components.exceptions.AlreadyPoweredException;
 import it.polimi.ingsw.model.components.exceptions.UnpowerableException;
-import it.polimi.ingsw.model.components.visitors.FreeSpaceVisitor;
 import it.polimi.ingsw.model.components.visitors.iVisitor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.player.iSpaceShip;
@@ -40,7 +39,6 @@ public class CannonComponent extends BaseComponent{
 
     @Override
     public boolean verify(iSpaceShip state){
-        FreeSpaceVisitor v = new FreeSpaceVisitor();
         ComponentRotation r = this.getRotation();
         iBaseComponent tmp = null; 
         switch(r.getShift()){
@@ -60,9 +58,7 @@ public class CannonComponent extends BaseComponent{
                 tmp = state.getComponent(this.coords.left());
             }
         }
-        tmp.check(v);
-        if(v.getSpaceIsFree()) return true;
-        return false;
+        return tmp == state.getEmpty() && super.verify(state);
     }
 
     public void turnOn(){
