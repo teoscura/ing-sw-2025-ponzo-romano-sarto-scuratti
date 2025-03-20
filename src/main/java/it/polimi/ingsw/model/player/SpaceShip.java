@@ -29,6 +29,7 @@ public class SpaceShip implements iSpaceShip{
 	private final PlayerColor color;
 	private int credits;
 	private int[] crew;
+	private boolean retired = false;
 	//SpaceShip fields
 	private final GameModeType type;
 	private final iBaseComponent[][] components;
