@@ -4,6 +4,7 @@ package it.polimi.ingsw.model.components;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ConnectorType;
 import it.polimi.ingsw.model.components.exceptions.AlreadyPoweredException;
+import it.polimi.ingsw.model.components.exceptions.ComponentNotEmptyException;
 import it.polimi.ingsw.model.components.exceptions.UnpowerableException;
 import it.polimi.ingsw.model.components.visitors.iVisitor;
 import it.polimi.ingsw.model.player.ShipCoords;
@@ -19,6 +20,7 @@ public class EngineComponent extends BaseComponent{
                            ComponentRotation rotation,
                            EngineType type){
         super(components, rotation);
+        if(components[2]!=ConnectorType.EMPTY) throw new ComponentNotEmptyException("Bottom of engine must be empty!");
         this.max_power = type.getMaxPower();
         this.powerable = type.getPowerable();        
     }
@@ -28,6 +30,7 @@ public class EngineComponent extends BaseComponent{
                            EngineType type,
                            ShipCoords coords){
         super(components, rotation, coords);
+        if(components[2]!=ConnectorType.EMPTY) throw new ComponentNotEmptyException("Bottom of engine must be empty!");
         this.max_power = type.getMaxPower();
         this.powerable = type.getPowerable();        
     }
