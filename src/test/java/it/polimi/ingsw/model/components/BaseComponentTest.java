@@ -9,7 +9,6 @@ import it.polimi.ingsw.model.player.ShipType;
 import it.polimi.ingsw.model.player.SpaceShip;
 import org.junit.jupiter.api.Test;
 
-import java.sql.Struct;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -70,7 +69,6 @@ class BaseComponentTest {
 
 	@Test
 	void getCoords() {
-		//assert is unable to compare elements, debug showed correct methods
 		ConnectorType[] connectors = new ConnectorType[4];
 		ShipCoords coords = new ShipCoords(ShipType.LVL2, 3, 5);
 		BaseComponent coords_test_component = new StructuralComponent(connectors, ComponentRotation.U000, coords);
@@ -79,10 +77,15 @@ class BaseComponentTest {
 		ShipCoords down_coords = new ShipCoords(ShipType.LVL2, 3, 6);
 		ShipCoords right_coords = new ShipCoords(ShipType.LVL2, 4, 5);
 		ShipCoords left_coords = new ShipCoords(ShipType.LVL2, 2, 5);
-		assertEquals(up_coords, coords_test_component.getCoords().up());
-		assertEquals(down_coords, coords_test_component.getCoords().down());
-		assertEquals(right_coords, coords_test_component.getCoords().right());
-		assertEquals(left_coords, coords_test_component.getCoords().left());
+		assertEquals(up_coords.x, coords_test_component.getCoords().up().x);
+		assertEquals(down_coords.x, coords_test_component.getCoords().down().x);
+		assertEquals(right_coords.x, coords_test_component.getCoords().right().x);
+		assertEquals(left_coords.x, coords_test_component.getCoords().left().x);
+		assertEquals(up_coords.y, coords_test_component.getCoords().up().y);
+		assertEquals(down_coords.y, coords_test_component.getCoords().down().y);
+		assertEquals(right_coords.y, coords_test_component.getCoords().right().y);
+		assertEquals(left_coords.y, coords_test_component.getCoords().left().y);
+
 	}
 
 	@Test
