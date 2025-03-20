@@ -1,5 +1,5 @@
 //Done.
-package it.polimi.ingsw.model.adventure_cards;
+package it.polimi.ingsw.model.adventure_cards.utils;
 
 import it.polimi.ingsw.exceptions.NegativeArgumentException;
 import it.polimi.ingsw.model.adventure_cards.exceptions.AlreadyVisitedException;

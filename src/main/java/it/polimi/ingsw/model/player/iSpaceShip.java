@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.player;
 
 import it.polimi.ingsw.model.components.iBaseComponent;
 import it.polimi.ingsw.model.components.enums.AlienType;
+import it.polimi.ingsw.model.rulesets.GameModeType;
 
 public interface iSpaceShip {
 	
@@ -17,6 +18,7 @@ public interface iSpaceShip {
 	public void resetPower();
 	public void turnOn(ShipCoords coords_target, ShipCoords battery_location);
 	
+	public GameModeType getType();
 	public int getCannonPower();
 	public int getCredits();
 	public int[] getCrew();

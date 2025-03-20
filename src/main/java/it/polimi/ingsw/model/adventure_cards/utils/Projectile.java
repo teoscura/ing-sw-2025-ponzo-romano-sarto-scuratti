@@ -1,25 +1,25 @@
 //Done.
-package it.polimi.ingsw.model.adventure_cards;
+package it.polimi.ingsw.model.adventure_cards.utils;
 
 import it.polimi.ingsw.exceptions.OutOfBoundsException;
 import it.polimi.ingsw.model.adventure_cards.enums.ProjectileDimension;
 import it.polimi.ingsw.model.adventure_cards.enums.ProjectileDirection;
-import it.polimi.ingsw.model.player.ShipType;
+import it.polimi.ingsw.model.rulesets.GameModeType;
 
 public class Projectile {
 
     private ProjectileDirection direction;
     private ProjectileDimension dimension;
-    private ShipType type;
+    private GameModeType type;
     private int offset = -1; 
 
-    public Projectile(ShipType type, ProjectileDirection direction, ProjectileDimension dimension){
+    public Projectile(GameModeType type, ProjectileDirection direction, ProjectileDimension dimension){
         this.type = type;
         this.direction = direction;
         this.dimension = dimension;
     }
 
-    public Projectile(ShipType type, ProjectileDirection direction, ProjectileDimension dimension, int offset){
+    public Projectile(GameModeType type, ProjectileDirection direction, ProjectileDimension dimension, int offset){
         if(offset<0 || 
           (offset>=type.getHeight()&&(direction.getShift()-1)%2==0) || 
           (offset>=type.getWidth()&&(direction.getShift())%2==0))
@@ -38,7 +38,7 @@ public class Projectile {
         return this.dimension;
     }
 
-    public ShipType getType(){
+    public GameModeType getType(){
         return this.type;
     }
 

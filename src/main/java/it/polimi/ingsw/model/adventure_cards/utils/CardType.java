@@ -1,4 +1,4 @@
-package it.polimi.ingsw.model.adventure_cards;
+package it.polimi.ingsw.model.adventure_cards.utils;
 
 public enum CardType{
     PLANETS,   

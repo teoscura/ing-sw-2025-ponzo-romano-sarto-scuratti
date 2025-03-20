@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.adventure_cards;
 
 import it.polimi.ingsw.model.adventure_cards.events.iCEvent;
+import it.polimi.ingsw.model.adventure_cards.utils.iPlayerResponse;
 import it.polimi.ingsw.model.player.iSpaceShip;
 
 public class CombatZoneCard extends Card{
@@ -10,14 +11,7 @@ public class CombatZoneCard extends Card{
 
     public CombatZoneCard(int id, int days){
         super(id, days);
-        if(days<=0) throw new IllegalArgumentException("Negative arguments not allowed.");
         //TODO
-    }
-
-    @Override
-    public iCEvent setup(iSpaceShip state) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setup'");
     }
 
     @Override

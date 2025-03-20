@@ -1,7 +1,7 @@
 //Done.
 package it.polimi.ingsw.model.adventure_cards;
 
-import it.polimi.ingsw.model.adventure_cards.events.iCEvent;
+import it.polimi.ingsw.model.adventure_cards.utils.iPlayerResponse;
 import it.polimi.ingsw.model.adventure_cards.visitors.CrewRemoveVisitor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.player.iSpaceShip;
@@ -16,12 +16,6 @@ public class AbandonedShipCard extends Card{
         if(crew_lost <= 0 || credits_gained<= 0) throw new IllegalArgumentException("Negative arguments not allowed.");
         this.crew_lost = crew_lost;
         this.credits_gained = credits_gained;
-    }
-
-    @Override
-    public iCEvent setup(iSpaceShip state) {
-        //TODO show merch and crew cost.
-        return null;
     }
 
     @Override

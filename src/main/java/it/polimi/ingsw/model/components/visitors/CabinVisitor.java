@@ -52,7 +52,7 @@ public class CabinVisitor implements iVisitor {
     }
 
     @Override
-    public void check(StructuralComponent c) {
+    public void visit(StructuralComponent c) {
         return;
     }
 

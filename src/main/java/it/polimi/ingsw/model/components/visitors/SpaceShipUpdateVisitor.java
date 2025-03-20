@@ -68,7 +68,7 @@ public class SpaceShipUpdateVisitor implements iVisitor {
     }
 
     @Override
-    public void check(StructuralComponent c) {
+    public void visit(StructuralComponent c) {
         return;
     }
 

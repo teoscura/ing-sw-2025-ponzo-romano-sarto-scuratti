@@ -2,10 +2,10 @@ package it.polimi.ingsw.model.adventure_cards;
 
 import it.polimi.ingsw.exceptions.ArgumentTooBigException;
 import it.polimi.ingsw.exceptions.NegativeArgumentException;
-import it.polimi.ingsw.model.adventure_cards.events.iCEvent;
-import it.polimi.ingsw.model.adventure_cards.events.vAbandonedStationInfoEvent;
 import it.polimi.ingsw.model.adventure_cards.exceptions.CoordsIndexLenghtMismatchException;
 import it.polimi.ingsw.model.adventure_cards.exceptions.CrewSizeException;
+import it.polimi.ingsw.model.adventure_cards.utils.Planet;
+import it.polimi.ingsw.model.adventure_cards.utils.iPlayerResponse;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.player.iSpaceShip;
 
@@ -20,11 +20,6 @@ public class AbandonedStationCard extends Card{
         if(planet==null) throw new NullPointerException();
         this.crew=crew;
         this.planet=planet;
-    }
-
-    @Override
-    public iCEvent setup(iSpaceShip ship) {
-        return new vAbandonedStationInfoEvent(this.planet, this.crew);
     }
 
     @Override

@@ -17,7 +17,7 @@ public class StructuralComponent extends BaseComponent{
 
         @Override
     public void check(iVisitor v) {
-        v.check(this);
+        v.visit(this);
     }
     
 }

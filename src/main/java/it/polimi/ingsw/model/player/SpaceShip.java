@@ -23,6 +23,8 @@ import it.polimi.ingsw.model.rulesets.GameModeType;
 
 
 public class SpaceShip implements iSpaceShip{
+	private final ArrayList<ShipCoords> storage_coords;
+	private final ArrayList<ShipCoords> cabin_coords;
 	private final ArrayList<ShipCoords> battery_coords;
 	private final ArrayList<ShipCoords> powerable_coords;
 	//Player fields
@@ -53,11 +55,18 @@ public class SpaceShip implements iSpaceShip{
 		for(iBaseComponent[] t : this.components){
 			Arrays.fill(t, this.empty); // E' la stessa reference, ma poi sara' intoccabile.
 		}
+		this.storage_coords = new ArrayList<ShipCoords>();
+		this.cabin_coords = new ArrayList<ShipCoords>();
 		this.battery_coords = new ArrayList<ShipCoords>();
 		this.powerable_coords = new ArrayList<ShipCoords>();
 		Arrays.fill(shielded_directions, false);
 		Arrays.fill(containers, 0);
 		Arrays.fill(crew, 0);
+	}
+
+	@Override 
+	public GameModeType getType(){
+		return this.type;
 	}
 
 	@Override
@@ -260,6 +269,26 @@ public class SpaceShip implements iSpaceShip{
 		return this.empty;
 	}
 
+	public void addStorageCoords(ShipCoords coords){
+		if(this.storage_coords.contains(coords)) throw new NotUniqueException("Coords are already present in storage coords");
+		this.storage_coords.add(coords);
+	}
+
+	public void delStorageCoords(ShipCoords coords){
+		if(!this.storage_coords.contains(coords)) throw new NotPresentException("Coords arent present in storage coords");
+		this.storage_coords.remove(coords);
+	}
+
+	public void addCabinCoords(ShipCoords coords){
+		if(this.cabin_coords.contains(coords)) throw new NotUniqueException("Coords are already present in cabin coords");
+		this.cabin_coords.add(coords);
+	}
+
+	public void delCabinCoords(ShipCoords coords){
+		if(!this.cabin_coords.contains(coords)) throw new NotPresentException("Coords arent present in cabin coords");
+		this.cabin_coords.remove(coords);
+	}
+
 	public void addBatteryCoords(ShipCoords coords){
 		if(this.battery_coords.contains(coords)) throw new NotUniqueException("Coords are already present in battery coords");
 		this.battery_coords.add(coords);
@@ -272,41 +301,13 @@ public class SpaceShip implements iSpaceShip{
 
 	public void addPowerableCoords(ShipCoords coords){
 		if(this.powerable_coords.contains(coords)) throw new NotUniqueException("Coords are already present in powerable coords");
-		this.battery_coords.add(coords);
+		this.powerable_coords.add(coords);
 	}
 
 	public void delPowerableCoords(ShipCoords coords){
 		if(!this.powerable_coords.contains(coords)) throw new NotPresentException("Coords arent present in powerable coords");
 		this.powerable_coords.remove(coords);
 	}
-
-	// public ShipCoords up(ShipCoords coords){
-	// 	if(coords.x<0 || coords.y<0) throw new OutOfBoundsException("Illegal coords: negative");
-	// 	if(coords.x>=this.getWidth() || coords.y>=this.getHeight()) throw new OutOfBoundsException("Illegal coords: too big");
-	// 	if(coords.y==0) return new ShipCoords(this.type,0,0);
-	// 	return new ShipCoords(this.type,coords.x,coords.y+1);
-	// }
-
-	// public ShipCoords right(ShipCoords coords){
-	// 	if(coords.x<0 || coords.y<0) throw new OutOfBoundsException("Illegal coords: negative");
-	// 	if(coords.x>=this.getWidth() || coords.y>=this.getHeight()) throw new OutOfBoundsException("Illegal coords: too big");
-	// 	if(coords.x==this.getWidth()-1) return new ShipCoords(this.type,0,0);
-	// 	return new ShipCoords(this.type,coords.x+1,coords.y);
-	// }
-
-	// public ShipCoords down(ShipCoords coords){
-	// 	if(coords.x<0 || coords.y<0) throw new OutOfBoundsException("Illegal coords: negative");
-	// 	if(coords.x>=this.getWidth() || coords.y>=this.getHeight()) throw new OutOfBoundsException("Illegal coords: too big");
-	// 	if(coords.y==this.getHeight()-1) return new ShipCoords(this.type,0,0);
-	// 	return new ShipCoords(this.type,coords.x,coords.y-1);
-	// }
-
-	// public ShipCoords left(ShipCoords coords){
-	// 	if(coords.x<0 || coords.y<0) throw new OutOfBoundsException("Illegal coords: negative");
-	// 	if(coords.x>=this.getWidth() || coords.y>=this.getHeight()) throw new OutOfBoundsException("Illegal coords: too big");
-	// 	if(coords.x==0) return new ShipCoords(this.type,0,0);
-	// 	return new ShipCoords(this.type,coords.x-1,coords.y);
-	// }
 
 }
 

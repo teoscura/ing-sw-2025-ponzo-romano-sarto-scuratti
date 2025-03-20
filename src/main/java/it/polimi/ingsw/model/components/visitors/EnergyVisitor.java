@@ -92,7 +92,7 @@ public class EnergyVisitor implements iVisitor {
     }
 
     @Override
-    public void check(StructuralComponent c) {
+    public void visit(StructuralComponent c) {
         this.powerable = false;
         this.found_battery = false;
         return;

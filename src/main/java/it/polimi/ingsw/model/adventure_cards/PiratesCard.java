@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.adventure_cards;
 import java.util.ArrayList;
 
 import it.polimi.ingsw.model.adventure_cards.events.iCEvent;
+import it.polimi.ingsw.model.adventure_cards.utils.iPlayerResponse;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.iSpaceShip;
 
@@ -16,12 +17,6 @@ public class PiratesCard extends Card{
     public PiratesCard(int id, int days){
         super(id, days);
         //TODO
-    }
-
-    @Override
-    public iCEvent setup(iSpaceShip state) {
-        //TODO send info about pirate and cannon power.
-        return null;
     }
 
     @Override

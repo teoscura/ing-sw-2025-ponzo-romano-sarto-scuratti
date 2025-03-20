@@ -5,6 +5,8 @@ import it.polimi.ingsw.exceptions.ArgumentTooBigException;
 import it.polimi.ingsw.model.adventure_cards.events.iCEvent;
 import it.polimi.ingsw.model.adventure_cards.events.vPlanetInfoEvent;
 import it.polimi.ingsw.model.adventure_cards.exceptions.CoordsIndexLenghtMismatchException;
+import it.polimi.ingsw.model.adventure_cards.utils.Planet;
+import it.polimi.ingsw.model.adventure_cards.utils.iPlayerResponse;
 
 public class PlanetCard extends Card {
 	
