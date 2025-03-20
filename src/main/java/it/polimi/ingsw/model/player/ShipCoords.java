@@ -1,11 +1,13 @@
 package it.polimi.ingsw.model.player;
 
+import it.polimi.ingsw.model.rulesets.GameModeType;
+
 public class ShipCoords {
-    private ShipType type = ShipType.LVL2;
+    private GameModeType type = GameModeType.LVL2;
     public int x;
     public int y;
 
-    public ShipCoords(ShipType type, int x, int y){
+    public ShipCoords(GameModeType type, int x, int y){
         if(x<0 || y<0 || x>=type.getWidth() || y>=type.getWidth());
         this.type = type;
         this.x = x; 

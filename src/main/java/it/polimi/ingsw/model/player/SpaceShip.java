@@ -19,6 +19,7 @@ import it.polimi.ingsw.model.components.visitors.EnergyVisitor;
 import it.polimi.ingsw.model.player.exceptions.IllegalComponentAdd;
 import it.polimi.ingsw.model.player.exceptions.NegativeCreditsException;
 import it.polimi.ingsw.model.player.exceptions.NegativeCrewException;
+import it.polimi.ingsw.model.rulesets.GameModeType;
 
 
 public class SpaceShip implements iSpaceShip{
@@ -29,7 +30,7 @@ public class SpaceShip implements iSpaceShip{
 	private int credits;
 	private int[] crew;
 	//SpaceShip fields
-	private final ShipType type;
+	private final GameModeType type;
 	private final iBaseComponent[][] components;
 	private final iBaseComponent empty;
 	private int[] containers;
@@ -39,7 +40,7 @@ public class SpaceShip implements iSpaceShip{
 	private int battery_power = 0;
 
 
-	public SpaceShip(ShipType type, 
+	public SpaceShip(GameModeType type, 
 					 PlayerColor color){
 		this.type = type;
 		this.color = color;
