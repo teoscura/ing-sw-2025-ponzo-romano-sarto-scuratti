@@ -24,6 +24,11 @@ public abstract class Card implements iCard {
     }
 
     @Override
+    public boolean hasMultipleRequirements(){
+        return false;
+    }
+
+    @Override
     public boolean getExhausted(){
         return this.exhausted;
     }
