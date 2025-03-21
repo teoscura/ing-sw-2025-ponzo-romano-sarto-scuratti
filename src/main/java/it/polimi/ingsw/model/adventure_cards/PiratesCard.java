@@ -2,6 +2,7 @@
 package it.polimi.ingsw.model.adventure_cards;
 
 import it.polimi.ingsw.exceptions.NegativeArgumentException;
+import it.polimi.ingsw.model.adventure_cards.utils.BrokenCenterCabinResponse;
 import it.polimi.ingsw.model.adventure_cards.utils.DaysCardResponse;
 import it.polimi.ingsw.model.adventure_cards.utils.PirateCardReward;
 import it.polimi.ingsw.model.adventure_cards.utils.Projectile;
@@ -28,6 +29,7 @@ public class PiratesCard extends Card{
 
     @Override
     public iCardResponse apply(iSpaceShip ship, iPlayerResponse response){
+        boolean broken_center_cabin = false;
         if(ship==null) throw new NullPointerException();
         if(ship.getCannonPower()>this.min_power){
             this.exhaust();
@@ -37,8 +39,9 @@ public class PiratesCard extends Card{
             return new DaysCardResponse(0);
         }
         for(Projectile p : this.shots.getProjectiles()){
-            ship.handleShot(p);
+            broken_center_cabin = ship.handleShot(p);
         }
+        if(broken_center_cabin) return new BrokenCenterCabinResponse();
         return new DaysCardResponse(0);
     }
     

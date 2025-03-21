@@ -1,6 +1,8 @@
 //Done.
 package it.polimi.ingsw.model.adventure_cards;
 
+import java.util.ArrayList;
+
 import it.polimi.ingsw.model.adventure_cards.utils.DaysCardResponse;
 import it.polimi.ingsw.model.adventure_cards.utils.iCardResponse;
 import it.polimi.ingsw.model.adventure_cards.utils.iPlayerResponse;
@@ -16,7 +18,7 @@ public class EpidemicCard extends Card{
 
     @Override
     public iCardResponse apply(iSpaceShip ship, iPlayerResponse response){
-        ShipCoords[] ill_cabins = ship.findConnectedCabins();
+        ArrayList<ShipCoords> ill_cabins = ship.findConnectedCabins();
         CrewRemoveVisitor v = new CrewRemoveVisitor();
         for(ShipCoords s : ill_cabins){
             ship.getComponent(s).check(v);

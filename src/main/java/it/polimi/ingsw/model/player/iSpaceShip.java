@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model.player;
 
+import java.util.ArrayList;
+
 import it.polimi.ingsw.model.adventure_cards.utils.Projectile;
 import it.polimi.ingsw.model.components.iBaseComponent;
 import it.polimi.ingsw.model.components.enums.AlienType;
@@ -38,9 +40,8 @@ public interface iSpaceShip {
 	public void delBatteryCoords(ShipCoords coords);
 	public void addPowerableCoords(ShipCoords coords);
 	public void delPowerableCoords(ShipCoords coords);
-    public ShipCoords[] findConnectedCabins();
+    public ArrayList<ShipCoords> findConnectedCabins();
     public int countExposedConnectors();
-    public void handleMeteorite(Projectile p);
-    public void handleShot(Projectile p);
-
+    public boolean handleMeteorite(Projectile p);
+    public boolean handleShot(Projectile p);
 }

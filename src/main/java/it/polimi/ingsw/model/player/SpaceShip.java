@@ -8,6 +8,9 @@ import java.util.Queue;
 import it.polimi.ingsw.exceptions.NotUniqueException;
 import it.polimi.ingsw.exceptions.NotPresentException;
 import it.polimi.ingsw.exceptions.OutOfBoundsException;
+import it.polimi.ingsw.model.adventure_cards.enums.ProjectileDimension;
+import it.polimi.ingsw.model.adventure_cards.enums.ProjectileDirection;
+import it.polimi.ingsw.model.adventure_cards.utils.Projectile;
 import it.polimi.ingsw.model.components.BatteryComponent;
 import it.polimi.ingsw.model.components.EmptyComponent;
 import it.polimi.ingsw.model.components.iBaseComponent;
@@ -318,7 +321,97 @@ public class SpaceShip implements iSpaceShip{
 			sum+=i;
 		}
 		return sum;
+	}
+
+	@Override
+	public ArrayList<ShipCoords> findConnectedCabins() {
+		ArrayList<ShipCoords> res = new ArrayList<>();
+		iBaseComponent tmp = null;
+		for(ShipCoords c : this.cabin_coords){
+			tmp = this.getComponent(c);
+			if(tmp.getConnector(ComponentRotation.U000)
+			  .connected(this.getComponent(tmp.getCoords().up())
+			    .getConnector(ComponentRotation.U180))){
+				ShipCoords up = this.getComponent(tmp.getCoords().up()).getCoords();
+				if(this.cabin_coords.contains(up)) res.add(c);
+			}
+			if(tmp.getConnector(ComponentRotation.U090)
+			  .connected(this.getComponent(tmp.getCoords().right())
+			    .getConnector(ComponentRotation.U270))){
+				ShipCoords right = this.getComponent(tmp.getCoords().right()).getCoords();
+				if(this.cabin_coords.contains(right)) res.add(c);
+			}
+			if(tmp.getConnector(ComponentRotation.U180)
+			  .connected(this.getComponent(tmp.getCoords().down())
+			    .getConnector(ComponentRotation.U000))){
+				ShipCoords left = this.getComponent(tmp.getCoords().down()).getCoords();
+				if(this.cabin_coords.contains(left)) res.add(c);
+			}
+			if(tmp.getConnector(ComponentRotation.U270)
+			  .connected(this.getComponent(tmp.getCoords().left())
+			    .getConnector(ComponentRotation.U090))){
+				ShipCoords down = this.getComponent(tmp.getCoords().left()).getCoords();
+				if(this.cabin_coords.contains(down)) res.add(c);
+			}
+		}
+		return res;
+	}
+
+	@Override
+	public int countExposedConnectors() {
+		int sum = 0;
+		for(iBaseComponent[] col : this.components){
+			for(iBaseComponent c : col){
+				if(c.getCoords().up()==this.empty){
+					if(c.getConnector(ComponentRotation.U000).getValue()!=0) sum++;
+				}
+				if(c.getCoords().right()==this.empty){
+					if(c.getConnector(ComponentRotation.U090).getValue()!=0) sum++;
+				}
+				if(c.getCoords().down()==this.empty){
+					if(c.getConnector(ComponentRotation.U180).getValue()!=0) sum++;
+				}
+				if(c.getCoords().left()==this.empty){
+					if(c.getConnector(ComponentRotation.U270).getValue()!=0) sum++;
+				}
+			}
+		}
+		return sum;
+	}
+
+	private int normalizeRoll(ProjectileDirection direction, int roll){
+		if(direction.getShift()%2==0){
+			if(roll<this.type.getMinX() || roll>this.type.getMaxX()) return -1;
+			return roll-(this.type.getMinX()+1);
+		}
+		if(roll<this.type.getMinX() || roll>this.type.getMaxX()) return -1;
+		return roll-(this.type.getMinY()+1);
 	}	
+
+	@Override
+	public boolean handleMeteorite(Projectile p) {
+		int index = normalizeRoll(p.getDirection(), p.getOffset());
+		if(index<0) return false;
+		if(p.getDimension()==ProjectileDimension.BIG) return handleBigMeteorite(p);
+
+		// TODO Auto-generated method stub
+	}
+
+	//BIg = also adjacent if from sides
+	private boolean handleBigMeteorite(Projectile p){
+
+	}
+
+	@Override
+	public boolean handleShot(Projectile p) {
+		int index = normalizeRoll(p.getDirection(), p.getOffset());
+		// TODO Auto-generated method stub
+		if(p.getDimension()==ProjectileDimension.BIG) return handleBigShot(p);
+	}
+	
+	private boolean handleBigShot(Projectile p){
+		
+	}
 
 }
 

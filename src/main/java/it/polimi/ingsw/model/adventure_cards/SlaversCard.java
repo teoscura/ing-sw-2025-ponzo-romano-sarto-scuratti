@@ -7,16 +7,14 @@ import it.polimi.ingsw.model.player.iSpaceShip;
 
 public class SlaversCard extends Card{
     
-    private final ProjectileArray shots;
+
     private final int min_power;
     private final int crew_penalty;
     private final int credits;
 
-    public SlaversCard(int id, int days, ProjectileArray shots, int min_power, int crew_penalty, int credits){
+    public SlaversCard(int id, int days, int min_power, int crew_penalty, int credits){
         super(id, days);
         if(credits<=0||crew_penalty<=0) throw new NegativeArgumentException();
-        if(shots==null) throw new NullPointerException();
-        this.shots = shots;
         this.min_power = min_power;
         this.crew_penalty = crew_penalty;
         this.credits = credits;
@@ -30,9 +28,6 @@ public class SlaversCard extends Card{
         }
         else if(ship.getCannonPower()==this.min_power){
             return new DaysCardResponse(0);
-        }
-        for(Projectile p : this.shots.getProjectiles()){
-            ship.handleShot(p);
         }
         return new StaffCardResponse(-this.crew_penalty);
     }

@@ -3,19 +3,27 @@ package it.polimi.ingsw.model.rulesets;
 import it.polimi.ingsw.model.player.ShipCoords;
 
 public enum GameModeType{
-	TEST (1, 5, 7, 18),
-	LVL2 (2, 5, 7, 24);
+	TEST (1, 5, 7, 18, 4, 10, 5, 9),
+	LVL2 (2, 5, 7, 24, 4, 10, 5, 9);
 
 	private int level;
 	private int height;
 	private int width;
 	private int length;
+	private int min_x;
+	private int max_x;
+	private int min_y;
+	private int max_y;	
 
-	GameModeType(int level, int height, int width, int length){
+	GameModeType(int level, int height, int width, int length, int min_x, int max_x, int min_y, int max_y){
 		this.level = level;
 		this.height = height;
 		this.width = width;
 		this.length = length;
+		this.min_x = min_x;
+		this.max_x = max_x;
+		this.min_y = min_y;
+		this.max_y = max_y;
 	}
 
 	public int getLevel(){
@@ -32,6 +40,22 @@ public enum GameModeType{
 
 	public int getLength(){
 		return this.length;
+	}
+
+	public int getMinX(){
+		return this.min_x;
+	}
+	
+	public int getMaxX(){
+		return this.max_x;
+	}	
+
+	public int getMinY(){
+		return this.min_y;
+	}
+
+	public int getMaxY(){
+		return this.max_y;
 	}
 
 	public int[] getShape(){
@@ -52,8 +76,7 @@ public enum GameModeType{
         }
     }
 
-    int getLenght() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getLenght'");
+    public int getLenght() {
+        return this.length;
     }
 }

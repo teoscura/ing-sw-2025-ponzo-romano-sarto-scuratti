@@ -7,4 +7,7 @@ public interface iCardResponse {
     public int getStaffChange();
     public int getCredits();
     public int getRequiredMerch();
+    public default boolean hasShot(){
+        return false;
+    }
 }
