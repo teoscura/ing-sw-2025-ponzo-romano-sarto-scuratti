@@ -5,7 +5,7 @@ import java.util.List;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.iSpaceShip;
 
-interface iPlanche {
+public interface iPlanche {
 
 	public int getPlayerPosition(iSpaceShip ship);
 
