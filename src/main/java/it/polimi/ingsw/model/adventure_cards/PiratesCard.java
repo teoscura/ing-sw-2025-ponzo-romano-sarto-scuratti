@@ -1,60 +1,45 @@
+//Done.
 package it.polimi.ingsw.model.adventure_cards;
-import java.util.ArrayList;
 
+import it.polimi.ingsw.exceptions.NegativeArgumentException;
+import it.polimi.ingsw.model.adventure_cards.utils.DaysCardResponse;
+import it.polimi.ingsw.model.adventure_cards.utils.PirateCardReward;
+import it.polimi.ingsw.model.adventure_cards.utils.Projectile;
+import it.polimi.ingsw.model.adventure_cards.utils.ProjectileArray;
 import it.polimi.ingsw.model.adventure_cards.utils.iCardResponse;
 import it.polimi.ingsw.model.adventure_cards.utils.iPlayerResponse;
-import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.iSpaceShip;
 
 
 public class PiratesCard extends Card{
-    // int cannon_power_needed;
-    // int coins_earned;
-    // int days_spent;
-    // ArrayList<Shot> shots = new ArrayList<Shot>();
 
-    public PiratesCard(int id, int days){
+    private final ProjectileArray shots;
+    private final int credits;
+    private final int min_power;
+
+    public PiratesCard(int id, int days, ProjectileArray shots, int min_power, int credits){
         super(id, days);
-        //TODO
+        if(shots == null) throw new NullPointerException();
+        if(min_power<=0 || credits <=0) throw new NegativeArgumentException("Pirate power/rewards cannot be less than one.");
+        this.credits = credits;
+        this.shots = shots;
+        this.min_power = min_power;
     }
 
     @Override
     public iCardResponse apply(iSpaceShip ship, iPlayerResponse response){
-        //TODO
-
-        return 0;
+        if(ship==null) throw new NullPointerException();
+        if(ship.getCannonPower()>this.min_power){
+            this.exhaust();
+            return new PirateCardReward(this.credits, this.days);
+        }
+        else if(ship.getCannonPower()==this.min_power){
+            return new DaysCardResponse(0);
+        }
+        for(Projectile p : this.shots.getProjectiles()){
+            ship.handleShot(p);
+        }
+        return new DaysCardResponse(0);
     }
-
-    
-
-
-    /*void fight(first player){
-        if (player.cannon_power > cannon_power_needed){
-            askForReward
-            if yes{
-                player.coins += coins_earned;
-                player.position -= days_spent
-            }
-        }
-        else if (player.cannon_power = cannon_power_needed){
-            fight(next_player());
-        }
-        else if (player.cannon_power < cannon_power_needed){
-            add player to players_defeated;
-            fight(next_player());
-        }
-    }
-    for every player in players defeated{
-        //for every shot{
-            /*void hit(shipCords){
-                if shipCords == (0,0) missed;
-                getComponent(shipCords);
-                if (shot.size == SMALL && shield active){
-                    deflected
-                }
-                else component_destroyed();
-            }
-        }
-    }*/
     
 }

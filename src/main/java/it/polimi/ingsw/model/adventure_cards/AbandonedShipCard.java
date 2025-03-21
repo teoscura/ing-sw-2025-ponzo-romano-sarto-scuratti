@@ -5,7 +5,7 @@ import it.polimi.ingsw.model.adventure_cards.utils.StaffCardResponse;
 import it.polimi.ingsw.model.adventure_cards.utils.iCardResponse;
 import it.polimi.ingsw.model.adventure_cards.utils.iPlayerResponse;
 import it.polimi.ingsw.model.player.iSpaceShip;
-
+    
 public class AbandonedShipCard extends Card{
 
     private int credits_gained;

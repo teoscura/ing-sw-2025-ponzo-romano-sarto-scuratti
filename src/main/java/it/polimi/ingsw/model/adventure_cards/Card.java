@@ -5,7 +5,7 @@ import it.polimi.ingsw.model.adventure_cards.exceptions.CardAlreadyExhaustedExce
 import it.polimi.ingsw.model.adventure_cards.utils.iCardResponse;
 import it.polimi.ingsw.model.adventure_cards.utils.iPlayerResponse;
 import it.polimi.ingsw.model.player.iSpaceShip;
-
+    
 public abstract class Card implements iCard {
     
     private int id;

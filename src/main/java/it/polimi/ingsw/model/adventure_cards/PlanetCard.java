@@ -10,7 +10,7 @@ import it.polimi.ingsw.model.adventure_cards.utils.iCardResponse;
 import it.polimi.ingsw.model.adventure_cards.utils.iPlayerResponse;
 
 public class PlanetCard extends Card {
-	
+		
 	private final Planet[] planets;
 	private int left;
 

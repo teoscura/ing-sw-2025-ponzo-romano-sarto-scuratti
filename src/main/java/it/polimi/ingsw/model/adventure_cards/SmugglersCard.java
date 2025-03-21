@@ -1,26 +1,37 @@
+//Done.
 package it.polimi.ingsw.model.adventure_cards;
 
-import it.polimi.ingsw.model.adventure_cards.utils.iPlayerResponse;
+import it.polimi.ingsw.exceptions.NegativeArgumentException;
+import it.polimi.ingsw.model.adventure_cards.utils.*;
 import it.polimi.ingsw.model.player.iSpaceShip;
 
 public class SmugglersCard extends Card{
-    // int cannon_power_required;
-    // int red_material;
-    // int blue_material;
-    // int green_material;
-    // int yellow_material;
-    // int days_spent;
-    // int good_lost; //(take your n most valuable goods. If you run out of goods, they take batteries instead.) 
+    
+    private final Planet reward;
+    private final int cargo_taken;
+    private final int min_power;
+    
 
-    public SmugglersCard(int id, int days){
-        super(id, days);
-        //TODO
+    public SmugglersCard(int id, Planet reward, int cargo_taken, int min_power){
+        super(id, 0);
+        if(reward == null) throw new NullPointerException();
+        if(min_power<=0 || cargo_taken<=0) throw new NegativeArgumentException();
+        this.reward = reward;
+        this.cargo_taken = cargo_taken;
+        this.min_power = min_power;
     }
 
     @Override
-    public int apply(iSpaceShip ship, iPlayerResponse response){
-        //TODO
-        return 0;
+    public iCardResponse apply(iSpaceShip ship, iPlayerResponse response){
+        if(ship==null) throw new NullPointerException();
+        if(ship.getCannonPower()>this.min_power){
+            this.exhaust();
+            return new SmugglerCardRewardResponse(reward);
+        }
+        else if(ship.getCannonPower()==this.min_power){
+            return new DaysCardResponse(0);
+        }
+        return new SmugglerCardPenaltyResponse(this.cargo_taken);
     }
 
 }

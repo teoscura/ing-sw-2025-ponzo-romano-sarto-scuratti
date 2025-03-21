@@ -11,7 +11,7 @@ import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.player.iSpaceShip;
 
 public class SabotageCard extends Card{
-    
+      
     ShipCoords target = null;
 
     public SabotageCard(int id){

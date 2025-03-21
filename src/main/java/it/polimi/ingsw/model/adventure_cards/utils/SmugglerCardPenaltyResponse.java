@@ -1,17 +1,20 @@
 //Done.
 package it.polimi.ingsw.model.adventure_cards.utils;
 
-public class DaysCardResponse implements iCardResponse{
-    
-    private final int days;
+import it.polimi.ingsw.exceptions.NegativeArgumentException;
 
-    public DaysCardResponse(int days){
-        this.days = days;
+public class SmugglerCardPenaltyResponse implements iCardResponse {
+
+    private final int required_merch;
+
+    public SmugglerCardPenaltyResponse(int required_merch){
+        if(required_merch<=0) throw new NegativeArgumentException();
+        this.required_merch = required_merch;
     }
 
     @Override
     public int getDays() {
-        return this.days;
+        return 0;
     }
 
     @Override
@@ -31,6 +34,7 @@ public class DaysCardResponse implements iCardResponse{
 
     @Override
     public int getRequiredMerch() {
-        return 0;
+        return this.required_merch;
     }
+
 }

@@ -1,3 +1,4 @@
+//Done.
 package it.polimi.ingsw.model.adventure_cards;
 
 import it.polimi.ingsw.model.adventure_cards.utils.iCardResponse;

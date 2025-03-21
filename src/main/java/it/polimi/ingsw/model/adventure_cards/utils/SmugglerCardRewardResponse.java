@@ -1,14 +1,13 @@
-//Done.
 package it.polimi.ingsw.model.adventure_cards.utils;
 
 import it.polimi.ingsw.model.components.enums.ShipmentType;
 
-public class PlanetCardResponse implements iCardResponse{
-
+public class SmugglerCardRewardResponse implements iCardResponse {
+    
     private final int[] contains;
     private final int days;
 
-    public PlanetCardResponse(Planet planet){
+    public SmugglerCardRewardResponse(Planet planet){
         this.days = planet.getDays();
         this.contains = new int[4];
         for(ShipmentType t : ShipmentType.values()){
@@ -41,5 +40,4 @@ public class PlanetCardResponse implements iCardResponse{
     public int getRequiredMerch() {
         return 0;
     }
-    
 }

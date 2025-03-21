@@ -6,7 +6,7 @@ import it.polimi.ingsw.model.adventure_cards.exceptions.AlreadyVisitedException;
 import it.polimi.ingsw.model.components.enums.ShipmentType;
 
 public class Planet {
-
+    
     private int[] contains;
     private int days;
     private boolean visited = false;

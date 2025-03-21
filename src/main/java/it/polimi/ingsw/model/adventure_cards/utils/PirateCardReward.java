@@ -1,11 +1,16 @@
 //Done.
 package it.polimi.ingsw.model.adventure_cards.utils;
 
-public class DaysCardResponse implements iCardResponse{
-    
+import it.polimi.ingsw.exceptions.NegativeArgumentException;
+
+public class PirateCardReward implements iCardResponse {
+
+    private final int credits;
     private final int days;
 
-    public DaysCardResponse(int days){
+    public PirateCardReward(int credits, int days){
+        if(credits<=0) throw new NegativeArgumentException("Credits cannot be negative.");
+        this.credits = credits;
         this.days = days;
     }
 
@@ -26,11 +31,12 @@ public class DaysCardResponse implements iCardResponse{
 
     @Override
     public int getCredits() {
-        return 0;
+        return this.credits;
     }
 
     @Override
     public int getRequiredMerch() {
         return 0;
     }
+    
 }

@@ -1,23 +1,40 @@
+//Done.
 package it.polimi.ingsw.model.adventure_cards;
 
-import it.polimi.ingsw.model.adventure_cards.utils.iCardResponse;
-import it.polimi.ingsw.model.adventure_cards.utils.iPlayerResponse;
+import it.polimi.ingsw.exceptions.NegativeArgumentException;
+import it.polimi.ingsw.model.adventure_cards.utils.*;
 import it.polimi.ingsw.model.player.iSpaceShip;
 
 public class SlaversCard extends Card{
-    // int cannon_power_needed;
-    // int crew_lost;
-    // int coins_earned;
+    
+    private final ProjectileArray shots;
+    private final int min_power;
+    private final int crew_penalty;
+    private final int credits;
 
-    public SlaversCard(int id, int days){
+    public SlaversCard(int id, int days, ProjectileArray shots, int min_power, int crew_penalty, int credits){
         super(id, days);
-        //TODO
+        if(credits<=0||crew_penalty<=0) throw new NegativeArgumentException();
+        if(shots==null) throw new NullPointerException();
+        this.shots = shots;
+        this.min_power = min_power;
+        this.crew_penalty = crew_penalty;
+        this.credits = credits;
     }
 
     @Override
     public iCardResponse apply(iSpaceShip ship, iPlayerResponse response){
-        //TODO
-        return -days;
+        if(ship.getCannonPower()>this.min_power){
+            this.exhaust();
+            return new PirateCardReward(credits, days);
+        }
+        else if(ship.getCannonPower()==this.min_power){
+            return new DaysCardResponse(0);
+        }
+        for(Projectile p : this.shots.getProjectiles()){
+            ship.handleShot(p);
+        }
+        return new StaffCardResponse(-this.crew_penalty);
     }
 
     

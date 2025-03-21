@@ -4,13 +4,12 @@ package it.polimi.ingsw.model.adventure_cards.visitors;
 import it.polimi.ingsw.model.components.*;
 import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
 import it.polimi.ingsw.model.components.visitors.iVisitor;
-import it.polimi.ingsw.model.player.iSpaceShip;
 
 public class CrewRemoveVisitor implements iVisitor {
 
     @Override
     public void visit(CabinComponent c) {
-        if(c.getCrew()==0) throw new IllegalTargetException("Coords correspond to empty cabin.");
+        if(c.getCrew()==0) return;
         c.setCrew(c.getCrew()-1, c.getCrewType());
     }
 
