@@ -92,7 +92,7 @@ class BaseComponentTest {
 	void powerable(){
 		ConnectorType[] connectors = {ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL};
 		BaseComponent test_component = new StructuralComponent(connectors, ComponentRotation.U000);
-		assertFalse(Base.powerable());
+		assertFalse(test_component.powerable());
 	}
 
 	@Test

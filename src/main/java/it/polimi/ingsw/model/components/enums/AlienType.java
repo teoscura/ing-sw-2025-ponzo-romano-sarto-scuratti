@@ -14,6 +14,7 @@ public enum AlienType{
 
     AlienType(int max_capacity, boolean lifesupport_exists, int arraypos){
         this.max_capacity = max_capacity;
+        this.arraypos = arraypos;
         this.lifesupport_exists = lifesupport_exists;
     }
 

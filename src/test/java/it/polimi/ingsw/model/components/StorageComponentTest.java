@@ -61,6 +61,8 @@ class StorageComponentTest {
 		StorageComponent howmany_storage_component1 = new StorageComponent(connectors, ComponentRotation.U000, StorageType.DOUBLENORMAL);
 		ShipmentType shipment1 = ShipmentType.BLUE;
 		ShipmentType shipment2 = ShipmentType.BLUE;
+		howmany_storage_component1.putIn(shipment2);
+		howmany_storage_component1.putIn(shipment1);
 		assertEquals(2, howmany_storage_component1.howMany(shipment1));
 	}
 

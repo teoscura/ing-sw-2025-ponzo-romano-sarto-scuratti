@@ -4,73 +4,51 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.BeforeEach;
+
 class AlienTypeTest {
 
-	@Test
-	void name() {
+	private AlienType human_cabin;
+	private AlienType brown_cabin;
+	private AlienType purple_cabin;
+	private AlienType both_cabin;
+
+	
+	@BeforeEach
+	void setup(){
+		human_cabin = AlienType.HUMAN;
+		brown_cabin = AlienType.BROWN;
+		purple_cabin = AlienType.PURPLE;
+		both_cabin = AlienType.BOTH;
 	}
 
-	@Test
-	void ordinal() {
-	}
-
-	@Test
-	void testToString() {
-	}
-
-	@Test
-	void testEquals() {
-	}
-
-	@Test
-	void testHashCode() {
-	}
-
-	@Test
-	void testClone() {
-	}
-
-	@Test
-	void compareTo() {
-	}
-
-	@Test
-	void getDeclaringClass() {
-	}
-
-	@Test
-	void describeConstable() {
-	}
-
-	@Test
-	void valueOf() {
-	}
-
-	@Test
-	void testFinalize() {
-	}
 
 	@Test
 	void getMaxCapacity() {
+		assertEquals(2, human_cabin.getMaxCapacity());
+		assertEquals(1, brown_cabin.getMaxCapacity());
+		assertEquals(1, purple_cabin.getMaxCapacity());
+		assertEquals(1, both_cabin.getMaxCapacity());
 	}
 
 	@Test
 	void getLifeSupportExists() {
+		assertFalse(human_cabin.getLifeSupportExists());
+		assertTrue(brown_cabin.getLifeSupportExists());
+		assertTrue(purple_cabin.getLifeSupportExists());
+		assertFalse(both_cabin.getLifeSupportExists());
 	}
 
 	@Test
 	void getArraypos() {
+		assertEquals(0, human_cabin.getArraypos());
+		assertEquals(1, brown_cabin.getArraypos());
+		assertEquals(2, purple_cabin.getArraypos());
+		assertEquals(-1, both_cabin.getArraypos());
 	}
 
 	@Test
 	void getNCrewTypes() {
-	}
-
-	@Test
-	void values() {
-	}
-
-	@Test
-	void testValueOf() {
+		assertEquals(3, both_cabin.getNCrewTypes());
 	}
 }
