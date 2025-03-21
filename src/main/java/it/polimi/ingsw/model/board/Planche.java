@@ -19,14 +19,14 @@ public class Planche implements iPlanche {
 		int i = 0;
 		for(PlayerColor p : PlayerColor.values()){
 			if(i==settings.getPlayerNumber().getNumber()) break;
-			planche.put(p, 0);
+			planche.put(p, this.length);
 			i++;
 		}
 	}
 
 	@Override
 	public int getPlayerPosition(iSpaceShip ship) {
-		return this.planche.get(ship.getColor());
+		return this.planche.get(ship.getColor()) - this.length;
 	}
 
 	@Override
@@ -42,8 +42,13 @@ public class Planche implements iPlanche {
 	public void movePlayer(iSpaceShip ship, int rel_change) {
 		if(!this.planche.containsKey(ship.getColor())) throw new IllegalArgumentException("Color is not present in the current game.");
 		int position = (this.planche.get(ship.getColor())+rel_change) % this.length;
-		if()
-		//TODO.
+		while(true){
+			if(this.getPlayersAt(position)==PlayerColor.NONE){
+				this.planche.put(ship.getColor(), position);
+				return;
+			}
+			position = (position + (rel_change >= 0 ? +1 : -1 ))%this.length;
+		}
 	}
 
 

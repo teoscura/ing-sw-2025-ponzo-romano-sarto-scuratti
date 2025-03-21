@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.board;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Queue;
+import java.util.Set;
 
 import it.polimi.ingsw.exceptions.OutOfBoundsException;
 import it.polimi.ingsw.model.components.iBaseComponent;
@@ -12,13 +13,11 @@ public class CommonBoard implements iCommonBoard {
 	private Queue<iBaseComponent> covered_components;
 	private ArrayList<iBaseComponent> uncovered_components;
 
-	public CommonBoard(){
-		//TODO: factory load from JSON.
-		this.covered_components = new ArrayDeque<iBaseComponent>();
-		this.uncovered_components = new ArrayList<iBaseComponent>();
+	public CommonBoard(Set<iBaseComponent> starting_pile){
+		this.covered_components = new ArrayDeque<iBaseComponent>(starting_pile);
+		this.uncovered_components = new ArrayList<iBaseComponent>(0);
 	}
 
-	// methods
 	@Override
 	public iBaseComponent pullComponent() {
 		if(this.covered_components.isEmpty()) return null;
@@ -26,9 +25,9 @@ public class CommonBoard implements iCommonBoard {
 	}
 
 	@Override
-	public void discardComponent(iBaseComponent a) {
-		//TODO check duplicates
-		this.uncovered_components.add(a);
+	public void discardComponent(iBaseComponent c) {
+		if(this.uncovered_components.contains(c)) throw new IllegalArgumentException("Tried to insert a duplicate component.");
+		this.uncovered_components.add(c);
 	}
 
 	@Override
