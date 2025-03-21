@@ -171,16 +171,18 @@ public class SpaceShip implements iSpaceShip{
 		for(int i : type.getShape()){
 			if(i== (coords.y*type.getWidth()+coords.x)) throw new IllegalComponentAdd();
 		}
+		component.onCreation(this);
 		this.components[coords.y][coords.x] = component;
 	}
 
 	@Override
 	public void removeComponent(ShipCoords coords) {
 		if(coords==null) throw new NullPointerException();
-		if(coords.x<0 || coords.x >= this.type.getWidth()) throw new OutOfBoundsException("Illegal getComponent access.");
-		if(coords.y<0 || coords.y >= this.type.getHeight()) throw new OutOfBoundsException("Illegal getComponent access.");
+		iBaseComponent tmp = this.getComponent(coords);
 		if(this.components[coords.y][coords.x]==this.empty) return;
 		this.components[coords.y][coords.x] = this.empty;
+		tmp.onDelete(this);
+		this.verifyAndClean();
 	}
 
 	@Override
@@ -309,7 +311,14 @@ public class SpaceShip implements iSpaceShip{
 		this.powerable_coords.remove(coords);
 	}
 
-	
+	@Override
+	public int getTotalCrew() {
+		int sum = 0;
+		for(int i : this.getCrew()){
+			sum+=i;
+		}
+		return sum;
+	}	
 
 }
 

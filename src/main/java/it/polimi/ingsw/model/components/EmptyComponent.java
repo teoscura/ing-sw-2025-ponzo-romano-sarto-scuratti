@@ -35,4 +35,14 @@ public class EmptyComponent extends BaseComponent {
         Arrays.fill(tmp, ConnectorType.EMPTY);
         return tmp;
     }
+
+    @Override
+    public void onCreation(iSpaceShip ship) {
+        return;
+    }
+
+    @Override
+    public void onDelete(iSpaceShip ship) {
+        return;
+    }
 }

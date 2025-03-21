@@ -31,8 +31,13 @@ public interface iSpaceShip {
 	public int getWidth();
     public iBaseComponent getEmpty();
 
+	public void addStorageCoords(ShipCoords coords);
+	public void delStorageCoords(ShipCoords coords);
+	public void addCabinCoords(ShipCoords coords);
+	public void delCabinCoords(ShipCoords coords);
 	public void addBatteryCoords(ShipCoords coords);
 	public void delBatteryCoords(ShipCoords coords);
 	public void addPowerableCoords(ShipCoords coords);
 	public void delPowerableCoords(ShipCoords coords);
+    public int getTotalCrew();
 }

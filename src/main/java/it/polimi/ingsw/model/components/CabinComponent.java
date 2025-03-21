@@ -31,7 +31,6 @@ public class CabinComponent extends BaseComponent{
         super(connectors, rotation, coords);
     }
 
-
     @Override
     public void check(iVisitor v){
         v.visit(this);
@@ -105,6 +104,16 @@ public class CabinComponent extends BaseComponent{
             this.upgradeCrewType(v.getType());
             v.reset();
         }
+    }
+
+    @Override
+    public void onCreation(iSpaceShip ship) {
+        ship.addCabinCoords(this.coords);
+    }
+
+    @Override
+    public void onDelete(iSpaceShip ship) {
+        ship.delCabinCoords(this.coords);
     }
 }
 
