@@ -1,6 +1,10 @@
 package it.polimi.ingsw.model.adventure_cards;
 
+import it.polimi.ingsw.model.adventure_cards.utils.DaysCardResponse;
+import it.polimi.ingsw.model.adventure_cards.utils.iCardResponse;
 import it.polimi.ingsw.model.adventure_cards.utils.iPlayerResponse;
+import it.polimi.ingsw.model.adventure_cards.visitors.CrewRemoveVisitor;
+import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.player.iSpaceShip;
 
 public class EpidemicCard extends Card{
@@ -10,9 +14,13 @@ public class EpidemicCard extends Card{
     }
 
     @Override
-    public int apply(iSpaceShip ship, iPlayerResponse response){
-        //TODO
-        return 0;
+    public iCardResponse apply(iSpaceShip ship, iPlayerResponse response){
+        ShipCoords[] ill_cabins = ship.findConnectedCabins();
+        CrewRemoveVisitor v = new CrewRemoveVisitor();
+        for(ShipCoords s : ill_cabins){
+            ship.getComponent(s).check(v);
+        }
+        return new DaysCardResponse(0);
     }
 
 }

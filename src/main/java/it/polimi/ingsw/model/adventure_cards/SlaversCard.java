@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.adventure_cards;
 
+import it.polimi.ingsw.model.adventure_cards.utils.iCardResponse;
 import it.polimi.ingsw.model.adventure_cards.utils.iPlayerResponse;
 import it.polimi.ingsw.model.player.iSpaceShip;
 
@@ -14,10 +15,12 @@ public class SlaversCard extends Card{
     }
 
     @Override
-    public int apply(iSpaceShip ship, iPlayerResponse response){
+    public iCardResponse apply(iSpaceShip ship, iPlayerResponse response){
         //TODO
         return -days;
     }
+
+    
 
 }
 

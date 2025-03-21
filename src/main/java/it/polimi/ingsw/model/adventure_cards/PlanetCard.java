@@ -1,46 +1,33 @@
+//Done.
 package it.polimi.ingsw.model.adventure_cards;
 
 import it.polimi.ingsw.model.player.*;
 import it.polimi.ingsw.exceptions.ArgumentTooBigException;
-import it.polimi.ingsw.model.adventure_cards.exceptions.CoordsIndexLenghtMismatchException;
+import it.polimi.ingsw.model.adventure_cards.utils.DaysCardResponse;
 import it.polimi.ingsw.model.adventure_cards.utils.Planet;
+import it.polimi.ingsw.model.adventure_cards.utils.PlanetCardResponse;
+import it.polimi.ingsw.model.adventure_cards.utils.iCardResponse;
 import it.polimi.ingsw.model.adventure_cards.utils.iPlayerResponse;
 
 public class PlanetCard extends Card {
 	
-	Planet[] planets;
-	
+	private final Planet[] planets;
+	private int left;
+
 	public PlanetCard(Planet[] planets, int id) { // costruttore
 		super(id, 0);
 		this.planets = planets;
+		this.left = planets.length;
 	}
 
 	@Override
-	public int apply(iSpaceShip ship, iPlayerResponse response){
+	public iCardResponse apply(iSpaceShip ship, iPlayerResponse response){
 		if(response.getId()>=this.planets.length) throw new ArgumentTooBigException( "Sent a planet id larger than the list.");
-		if(response.getId()==-1) return 0;
-		validateCargoChoices(response.getCoordArray(), response.getMerchChoices(), response.getId());
-		//TODO loading.
-
-		
+		if(response.getId()==-1) return new DaysCardResponse(0);
 		this.planets[response.getId()].visit();
-		return -this.planets[response.getId()].getDays();
+		this.left-=1;
+		if(this.left==0) this.exhaust();
+		return new PlanetCardResponse(this.planets[response.getId()]);
 	}
 
-	private void validateCargoChoices(ShipCoords[] coords, int[] cargo_indexes, int id){
-        //TODO. throw exceptions where needed.
-        if(coords.length!=cargo_indexes.length) throw new CoordsIndexLenghtMismatchException("Storage coords and cargo locations aren't the same lenght.");
-		if(coords.length>this.planets[id].getTotalQuantity()) throw new ArgumentTooBigException("Sent more shipment destinations than the amount present on the planet.");
-		
-	}
-
-	// public void visitPlanet(PlayerColor current_player/* planche.getFirstPlayer() */) {
-	// 	/*
-	// 	 * chiedi di atterrare
-	// 	 * if yes
-	// 	 * load resources // load goods on ship
-	// 	 * player.position -= days_spent
-	// 	 */
-	// 	visitPlanet(Planche.getNextPlayer(current_player));
-	// }
 }

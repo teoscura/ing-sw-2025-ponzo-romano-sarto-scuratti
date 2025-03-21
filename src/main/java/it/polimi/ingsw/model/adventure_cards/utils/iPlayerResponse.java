@@ -7,5 +7,5 @@ public interface iPlayerResponse {
     public ShipCoords[] getCoordArray();
     public int[] getMerchChoices();
     public int getId();
-
+    public boolean getAccept();
 }

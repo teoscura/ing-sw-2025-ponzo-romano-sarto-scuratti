@@ -2,11 +2,12 @@ package it.polimi.ingsw.model.adventure_cards;
 
 import it.polimi.ingsw.exceptions.ArgumentTooBigException;
 import it.polimi.ingsw.exceptions.NegativeArgumentException;
-import it.polimi.ingsw.model.adventure_cards.exceptions.CoordsIndexLenghtMismatchException;
 import it.polimi.ingsw.model.adventure_cards.exceptions.CrewSizeException;
+import it.polimi.ingsw.model.adventure_cards.utils.DaysCardResponse;
 import it.polimi.ingsw.model.adventure_cards.utils.Planet;
+import it.polimi.ingsw.model.adventure_cards.utils.PlanetCardResponse;
+import it.polimi.ingsw.model.adventure_cards.utils.iCardResponse;
 import it.polimi.ingsw.model.adventure_cards.utils.iPlayerResponse;
-import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.player.iSpaceShip;
 
 public class AbandonedStationCard extends Card{
@@ -23,26 +24,11 @@ public class AbandonedStationCard extends Card{
     }
 
     @Override
-    public int apply(iSpaceShip ship, iPlayerResponse response){
+    public iCardResponse apply(iSpaceShip ship, iPlayerResponse response){
         if(response.getCoordArray().length>this.planet.getTotalQuantity()) throw new ArgumentTooBigException("Too many positions");
-        validateCargoChoices(response.getCoordArray(), response.getMerchChoices());
-        validateCrewNumber(ship);
-        //FIXME finish.
-   
-        return -this.planet.getDays();
+        if(!response.getAccept()) return new DaysCardResponse(0);
+        if(ship.getTotalCrew()<this.crew) throw new CrewSizeException("Crew too small to salvage station.");
+        this.exhaust();
+        return new PlanetCardResponse(this.planet);
     }
-
-    private void validateCargoChoices(ShipCoords[] coords, int[] cargo_indexes){
-        //TODO. throw exceptions where needed.
-        if(coords.length!=cargo_indexes.length) throw new CoordsIndexLenghtMismatchException("Storage coords and cargo locations aren't the same lenght.");
-    }
-
-    private void validateCrewNumber(iSpaceShip ship){
-        int sum = 0;
-        for(int t: ship.getCrew()) sum+= t;
-        if(sum<this.crew) throw new CrewSizeException("Crew size too small to visit abandoned station.");
-    }
-
-    
-
 }

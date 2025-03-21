@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model.adventure_cards;
 
+import it.polimi.ingsw.model.adventure_cards.utils.DaysCardResponse;
+import it.polimi.ingsw.model.adventure_cards.utils.iCardResponse;
 import it.polimi.ingsw.model.adventure_cards.utils.iPlayerResponse;
 import it.polimi.ingsw.model.player.iSpaceShip;
 
@@ -10,9 +12,9 @@ public class StardustCard extends Card {
     }
 
     @Override
-    public int apply(iSpaceShip ship, iPlayerResponse response){
-        //TODO visitor count exposed positions.
-        return 0;
+    public iCardResponse apply(iSpaceShip ship, iPlayerResponse response){
+        int lost_days = ship.countExposedConnectors();
+        return new DaysCardResponse(-lost_days);
     }
     
 }

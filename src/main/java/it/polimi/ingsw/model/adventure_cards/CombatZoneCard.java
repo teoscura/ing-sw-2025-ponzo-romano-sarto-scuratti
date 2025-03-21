@@ -1,22 +1,43 @@
 package it.polimi.ingsw.model.adventure_cards;
 
+import java.util.concurrent.ThreadLocalRandom;
+
+import it.polimi.ingsw.model.adventure_cards.exceptions.MismatchedProjectileTypes;
+import it.polimi.ingsw.model.adventure_cards.utils.DaysCardResponse;
+import it.polimi.ingsw.model.adventure_cards.utils.Projectile;
+import it.polimi.ingsw.model.adventure_cards.utils.iCardResponse;
 import it.polimi.ingsw.model.adventure_cards.utils.iPlayerResponse;
 import it.polimi.ingsw.model.player.iSpaceShip;
+import it.polimi.ingsw.model.rulesets.GameModeType;
 
 public class CombatZoneCard extends Card{
-    // int days_lost;
-    // int crew_lost;
-    // ArrayList<Shot> shots = new ArrayList<Shot>();
+    
+    private Projectile[] shots;
+    private int crew;
 
-    public CombatZoneCard(int id, int days){
+    public CombatZoneCard(int id, int days, int crew, Projectile[] shots){
         super(id, days);
-        //TODO
+        if(shots==null || shots.length==0) throw new NullPointerException("Shots array is empty or null");
+        int max = 12;
+        GameModeType type = shots[0].getType(); //Tutti i proiettili devono essere dello stesso tipo di gamemode.
+        for(int i = 0; i<shots.length; i++){
+            if(shots[i].getType()!=type) throw new MismatchedProjectileTypes("The provided projectile array has got different setups for its types.");
+            if(shots[i].getOffset()!=-1) continue;
+            int value = ThreadLocalRandom.current().nextInt(1, max+1);
+            shots[i] = new Projectile(shots[i].getType(), 
+                                      shots[i].getDirection(), 
+                                      shots[i].getDimension(), 
+                                      value);
+        }
+        this.shots = shots;
     }
 
+    // WRONG: 0 fastest, 1 smallest crew, 2 lowest engines, 3 lowest cannons.
     @Override
-    public int apply(iSpaceShip ship, iPlayerResponse response){
-        //TODO
-        return 0;
+    public iCardResponse apply(iSpaceShip ship, iPlayerResponse response){
+        if(ship==null || response == null) throw new NullPointerException();
+        //TODO: rework with variable conditions.
+        return new DaysCardResponse(0);
     }
 
     

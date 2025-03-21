@@ -2,6 +2,7 @@
 package it.polimi.ingsw.model.adventure_cards;
 
 import it.polimi.ingsw.model.adventure_cards.exceptions.CardAlreadyExhaustedException;
+import it.polimi.ingsw.model.adventure_cards.utils.iCardResponse;
 import it.polimi.ingsw.model.adventure_cards.utils.iPlayerResponse;
 import it.polimi.ingsw.model.player.iSpaceShip;
 
@@ -32,7 +33,5 @@ public abstract class Card implements iCard {
     }
 
     @Override
-    public abstract int apply(iSpaceShip ship, iPlayerResponse response);
-
-    //TODO: add general methods
+    public abstract iCardResponse apply(iSpaceShip ship, iPlayerResponse response);
 }

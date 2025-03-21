@@ -1,9 +1,9 @@
 //Done.
 package it.polimi.ingsw.model.adventure_cards;
 
+import it.polimi.ingsw.model.adventure_cards.utils.StaffCardResponse;
+import it.polimi.ingsw.model.adventure_cards.utils.iCardResponse;
 import it.polimi.ingsw.model.adventure_cards.utils.iPlayerResponse;
-import it.polimi.ingsw.model.adventure_cards.visitors.CrewRemoveVisitor;
-import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.player.iSpaceShip;
 
 public class AbandonedShipCard extends Card{
@@ -19,14 +19,10 @@ public class AbandonedShipCard extends Card{
     }
 
     @Override
-    public int apply(iSpaceShip ship, iPlayerResponse response){
-        if(response.getCoordArray().length != crew_lost) throw new IllegalArgumentException("The list of cells isn't large enough for this abandoned ship.");
-        CrewRemoveVisitor v = new CrewRemoveVisitor();
-        for(ShipCoords t : response.getCoordArray()){
-            ship.getComponent(t).check(v);
-        }
+    public iCardResponse apply(iSpaceShip ship, iPlayerResponse response){
+        if(ship.getTotalCrew()<=this.crew_lost) throw new IllegalArgumentException("The crew isn't big enough for this abandoned ship.");
         ship.giveCredits(this.credits_gained);
-        return -this.days;
+        return new StaffCardResponse(-this.crew_lost);
     }
 
 }

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.adventure_cards;
 import java.util.ArrayList;
 
+import it.polimi.ingsw.model.adventure_cards.utils.iCardResponse;
 import it.polimi.ingsw.model.adventure_cards.utils.iPlayerResponse;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.iSpaceShip;
@@ -11,7 +12,6 @@ public class PiratesCard extends Card{
     // int coins_earned;
     // int days_spent;
     // ArrayList<Shot> shots = new ArrayList<Shot>();
-    // ArrayList<PlayerColor> players_defeated = new ArrayList<PlayerColor>();
 
     public PiratesCard(int id, int days){
         super(id, days);
@@ -19,8 +19,9 @@ public class PiratesCard extends Card{
     }
 
     @Override
-    public int apply(iSpaceShip ship, iPlayerResponse response){
+    public iCardResponse apply(iSpaceShip ship, iPlayerResponse response){
         //TODO
+
         return 0;
     }
 
