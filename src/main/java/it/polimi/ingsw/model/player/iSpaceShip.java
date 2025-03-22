@@ -40,6 +40,8 @@ public interface iSpaceShip {
 	public void delBatteryCoords(ShipCoords coords);
 	public void addPowerableCoords(ShipCoords coords);
 	public void delPowerableCoords(ShipCoords coords);
+	public void setCenterCabin(ShipCoords new_center);
+	public ShipCoords getCenterCabin();
     public ArrayList<ShipCoords> findConnectedCabins();
     public int countExposedConnectors();
     public boolean handleMeteorite(Projectile p);

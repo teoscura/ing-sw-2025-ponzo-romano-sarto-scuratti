@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.player;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Queue;
 
 import it.polimi.ingsw.exceptions.NotUniqueException;
@@ -11,11 +12,13 @@ import it.polimi.ingsw.exceptions.OutOfBoundsException;
 import it.polimi.ingsw.model.adventure_cards.enums.ProjectileDimension;
 import it.polimi.ingsw.model.adventure_cards.enums.ProjectileDirection;
 import it.polimi.ingsw.model.adventure_cards.utils.Projectile;
+import it.polimi.ingsw.model.adventure_cards.visitors.LargeMeteorVisitor;
 import it.polimi.ingsw.model.components.BatteryComponent;
 import it.polimi.ingsw.model.components.EmptyComponent;
 import it.polimi.ingsw.model.components.iBaseComponent;
 import it.polimi.ingsw.model.components.enums.AlienType;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
+import it.polimi.ingsw.model.components.enums.ConnectorType;
 import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
 import it.polimi.ingsw.model.components.visitors.SpaceShipUpdateVisitor;
 import it.polimi.ingsw.model.components.visitors.EnergyVisitor;
@@ -39,6 +42,7 @@ public class SpaceShip implements iSpaceShip{
 	private final GameModeType type;
 	private final iBaseComponent[][] components;
 	private final iBaseComponent empty;
+	private ShipCoords center;
 	private int[] containers;
 	private boolean[] shielded_directions;
 	private int cannon_power = 0;
@@ -62,6 +66,7 @@ public class SpaceShip implements iSpaceShip{
 		this.cabin_coords = new ArrayList<ShipCoords>();
 		this.battery_coords = new ArrayList<ShipCoords>();
 		this.powerable_coords = new ArrayList<ShipCoords>();
+		this.center = type.getCenterCabin();
 		Arrays.fill(shielded_directions, false);
 		Arrays.fill(containers, 0);
 		Arrays.fill(crew, 0);
@@ -274,41 +279,49 @@ public class SpaceShip implements iSpaceShip{
 		return this.empty;
 	}
 
+	@Override
 	public void addStorageCoords(ShipCoords coords){
 		if(this.storage_coords.contains(coords)) throw new NotUniqueException("Coords are already present in storage coords");
 		this.storage_coords.add(coords);
 	}
 
+	@Override
 	public void delStorageCoords(ShipCoords coords){
 		if(!this.storage_coords.contains(coords)) throw new NotPresentException("Coords arent present in storage coords");
 		this.storage_coords.remove(coords);
 	}
 
+	@Override
 	public void addCabinCoords(ShipCoords coords){
 		if(this.cabin_coords.contains(coords)) throw new NotUniqueException("Coords are already present in cabin coords");
 		this.cabin_coords.add(coords);
 	}
 
+	@Override
 	public void delCabinCoords(ShipCoords coords){
 		if(!this.cabin_coords.contains(coords)) throw new NotPresentException("Coords arent present in cabin coords");
 		this.cabin_coords.remove(coords);
 	}
 
+	@Override
 	public void addBatteryCoords(ShipCoords coords){
 		if(this.battery_coords.contains(coords)) throw new NotUniqueException("Coords are already present in battery coords");
 		this.battery_coords.add(coords);
 	}	
 
+	@Override
 	public void delBatteryCoords(ShipCoords coords){
 		if(!this.battery_coords.contains(coords)) throw new NotPresentException("Coords arent present in battery coords");
 		this.battery_coords.remove(coords);
 	}
 
+	@Override
 	public void addPowerableCoords(ShipCoords coords){
 		if(this.powerable_coords.contains(coords)) throw new NotUniqueException("Coords are already present in powerable coords");
 		this.powerable_coords.add(coords);
 	}
 
+	@Override
 	public void delPowerableCoords(ShipCoords coords){
 		if(!this.powerable_coords.contains(coords)) throw new NotPresentException("Coords arent present in powerable coords");
 		this.powerable_coords.remove(coords);
@@ -321,6 +334,17 @@ public class SpaceShip implements iSpaceShip{
 			sum+=i;
 		}
 		return sum;
+	}
+
+	@Override
+	public void setCenterCabin(ShipCoords new_center) {
+		if(this.type.isForbidden(new_center) || this.getComponent(new_center)==this.empty) throw new IllegalTargetException("New center is either forbidden or illegal.");
+		this.center = new_center;
+	}
+
+	@Override
+	public ShipCoords getCenterCabin() {
+		return this.center;
 	}
 
 	@Override
@@ -384,33 +408,89 @@ public class SpaceShip implements iSpaceShip{
 			if(roll<this.type.getMinX() || roll>this.type.getMaxX()) return -1;
 			return roll-(this.type.getMinX()+1);
 		}
-		if(roll<this.type.getMinX() || roll>this.type.getMaxX()) return -1;
+		if(roll<this.type.getMinY() || roll>this.type.getMaxY()) return -1;
 		return roll-(this.type.getMinY()+1);
 	}	
 
 	@Override
 	public boolean handleMeteorite(Projectile p) {
+		//Normalize Roll and see if it grazes or is in a possible row.
 		int index = normalizeRoll(p.getDirection(), p.getOffset());
 		if(index<0) return false;
-		if(p.getDimension()==ProjectileDimension.BIG) return handleBigMeteorite(p);
-
-		// TODO Auto-generated method stub
-	}
-
-	//BIg = also adjacent if from sides
-	private boolean handleBigMeteorite(Projectile p){
-
+		//If it is in a possible row, handle the logic.
+		if(p.getDimension()==ProjectileDimension.BIG){
+			//Handle adjacent rows.
+			boolean found_cannon = findCannon(p.getDirection(), index);
+			if(found_cannon) return false;
+			ShipCoords tmp = this.getFirst(p.getDirection(), index);
+			if(tmp.equals(this.empty.getCoords())) return false;
+			this.removeComponent(tmp);
+			return tmp.equals(this.getCenterCabin()) ? true : false;
+		}
+		boolean shielded = p.getDimension()!=ProjectileDimension.BIG && this.shielded_directions[p.getDirection().getOpposite().getShift()];
+		if(shielded) return false;
+		ShipCoords tmp = this.getFirst(p.getDirection(), index);
+		if(tmp.equals(this.empty.getCoords())) return false;
+		if(this.getComponent(tmp).getConnectors()[p.getDirection().getOpposite().getShift()]==ConnectorType.EMPTY) return false;
+		this.removeComponent(tmp);
+		return tmp.equals(this.getCenterCabin()) ? true : false;
 	}
 
 	@Override
 	public boolean handleShot(Projectile p) {
+		//Normalize Roll and see if it grazes or is in a possible row.
 		int index = normalizeRoll(p.getDirection(), p.getOffset());
-		// TODO Auto-generated method stub
-		if(p.getDimension()==ProjectileDimension.BIG) return handleBigShot(p);
-	}
-	
-	private boolean handleBigShot(Projectile p){
+		if(index<0) return false;
+		//If it is in a possible row, handle the logic.
+		boolean shielded = p.getDimension()!=ProjectileDimension.BIG && this.shielded_directions[p.getDirection().getOpposite().getShift()];
+		if(shielded) return false;
+		//Traverse row/column and destroy first block found.
+		ShipCoords tmp = this.getFirst(p.getDirection(), index);
+		if(tmp.equals(this.empty.getCoords())) return false;
+		this.removeComponent(tmp);
+		return tmp.equals(this.getCenterCabin()) ? true : false;	
+	}	
 		
+	private ShipCoords getFirst(ProjectileDirection d, int index){
+		if(index<0||index>=(d.getShift()%2==0?this.getWidth():this.getHeight())) throw new OutOfBoundsException("Offset goes out of bounds");
+		iBaseComponent[] line = d.getShift()%2==0 ? this.constructCol(index) : this.components[index];
+		if(d.getShift()%2!=0) Collections.reverse(Arrays.asList(line));
+		for(iBaseComponent c : line){
+			if(this.type.isForbidden(c.getCoords()) || c==this.empty) continue;
+			return c.getCoords();
+		}
+		return this.empty.getCoords();
+	}
+
+	private iBaseComponent[] constructCol(int index){
+		//No validation needed, its only used in getFirst.
+		iBaseComponent[] res = new iBaseComponent[this.type.getHeight()];
+		for(int i = 0; i<this.type.getHeight(); i++){
+			res[i] = this.components[i][index];
+		}
+		return res;
+	}
+
+	private boolean findCannon(ProjectileDirection d, int index){
+		LargeMeteorVisitor v = new LargeMeteorVisitor(d);
+		if(d==ProjectileDirection.U180){
+			for(iBaseComponent t : constructCol(index)){
+				t.check(v);
+			}
+			return v.getFoundCannon();
+		}
+		int[] indexes = new int[]{0,0,0};
+		for(int i = -1; i<=1; i++){
+			indexes[i+1]=index+i;
+		}
+		for(int i : indexes){
+			if(i<0) continue;
+			iBaseComponent[] line = d.getShift()%2==0? constructCol(i) : this.components[i];
+			for(iBaseComponent t : line){
+				t.check(v);
+			}
+		}
+		return v.getFoundCannon();
 	}
 
 }

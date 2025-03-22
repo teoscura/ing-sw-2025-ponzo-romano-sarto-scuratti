@@ -24,6 +24,16 @@ public abstract class Card implements iCard {
     }
 
     @Override
+    public boolean multiPhase(){
+        return false;
+    }
+
+    @Override
+    public void nextPhase(){
+        return;
+    }
+
+    @Override
     public boolean hasMultipleRequirements(){
         return false;
     }

@@ -8,6 +8,8 @@ import it.polimi.ingsw.model.player.iSpaceShip;
 public interface iCard {
     public int getId();
     public iCardResponse apply(iSpaceShip ship, iPlayerResponse response);
+    public boolean multiPhase();
+    public void nextPhase();
     public boolean hasMultipleRequirements();
     public boolean getExhausted();
 }
