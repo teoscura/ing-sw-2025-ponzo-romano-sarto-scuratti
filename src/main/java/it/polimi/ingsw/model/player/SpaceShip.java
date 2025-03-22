@@ -14,6 +14,7 @@ import it.polimi.ingsw.model.adventure_cards.enums.ProjectileDirection;
 import it.polimi.ingsw.model.adventure_cards.utils.Projectile;
 import it.polimi.ingsw.model.adventure_cards.visitors.LargeMeteorVisitor;
 import it.polimi.ingsw.model.components.BatteryComponent;
+import it.polimi.ingsw.model.components.CabinComponent;
 import it.polimi.ingsw.model.components.EmptyComponent;
 import it.polimi.ingsw.model.components.iBaseComponent;
 import it.polimi.ingsw.model.components.enums.AlienType;
@@ -59,14 +60,20 @@ public class SpaceShip implements iSpaceShip{
 		this.containers = new int[4];
 		this.crew = new int[3];
 		this.empty = new EmptyComponent();
-		for(iBaseComponent[] t : this.components){
-			Arrays.fill(t, this.empty); // E' la stessa reference, ma poi sara' intoccabile.
-		}
 		this.storage_coords = new ArrayList<ShipCoords>();
 		this.cabin_coords = new ArrayList<ShipCoords>();
 		this.battery_coords = new ArrayList<ShipCoords>();
 		this.powerable_coords = new ArrayList<ShipCoords>();
 		this.center = type.getCenterCabin();
+		this.addComponent(new CabinComponent(new ConnectorType[]{ConnectorType.UNIVERSAL,
+																 ConnectorType.UNIVERSAL,
+																 ConnectorType.UNIVERSAL,
+																 ConnectorType.UNIVERSAL}, 
+											ComponentRotation.U000), 
+											center);
+		for(iBaseComponent[] t : this.components){
+			Arrays.fill(t, this.empty); // E' la stessa reference;
+		}
 		Arrays.fill(shielded_directions, false);
 		Arrays.fill(containers, 0);
 		Arrays.fill(crew, 0);
@@ -125,35 +132,14 @@ public class SpaceShip implements iSpaceShip{
 			tmp = queue.poll();
 			if(!tmp.verify(this)) res[tmp.getCoords().y][tmp.getCoords().x] = VerifyResult.BROKEN;
 			else res[tmp.getCoords().y][tmp.getCoords().x] = VerifyResult.GOOD;
-			if(tmp.getConnector(ComponentRotation.U000)
-			  .connected(this.getComponent(tmp.getCoords().up())
-			    .getConnector(ComponentRotation.U180))){
-				ShipCoords up = this.getComponent(tmp.getCoords().up()).getCoords();
-				if(res[up.y][up.x]==VerifyResult.UNCHECKED) queue.add(this.getComponent(up));
-			}
-			if(tmp.getConnector(ComponentRotation.U090)
-			  .connected(this.getComponent(tmp.getCoords().right())
-			    .getConnector(ComponentRotation.U270))){
-				ShipCoords right = this.getComponent(tmp.getCoords().right()).getCoords();
-				if(res[right.y][right.x]==VerifyResult.UNCHECKED) queue.add(this.getComponent(right));
-			}
-			if(tmp.getConnector(ComponentRotation.U180)
-			  .connected(this.getComponent(tmp.getCoords().down())
-			    .getConnector(ComponentRotation.U000))){
-				ShipCoords left = this.getComponent(tmp.getCoords().down()).getCoords();
-				if(res[left.y][left.x]==VerifyResult.UNCHECKED) queue.add(this.getComponent(left));
-			}
-			if(tmp.getConnector(ComponentRotation.U270)
-			  .connected(this.getComponent(tmp.getCoords().left())
-			    .getConnector(ComponentRotation.U090))){
-				ShipCoords down = this.getComponent(tmp.getCoords().left()).getCoords();
-				if(res[down.y][down.x]==VerifyResult.UNCHECKED) queue.add(this.getComponent(down));
+			for(iBaseComponent c : tmp.getConnectedComponents(this)){
+				ShipCoords xy = c.getCoords();
+				if(res[xy.y][xy.x]==VerifyResult.UNCHECKED) queue.add(c);
 			}
 		}
 		for(VerifyResult[] t: res){
 			for(VerifyResult r : t){
-				if(r!=VerifyResult.UNCHECKED) continue;
-				r=VerifyResult.NOT_LINKED; 
+				if(r!=VerifyResult.UNCHECKED) r=VerifyResult.NOT_LINKED;
 			}
 		}
 		return res;
@@ -350,33 +336,12 @@ public class SpaceShip implements iSpaceShip{
 	@Override
 	public ArrayList<ShipCoords> findConnectedCabins() {
 		ArrayList<ShipCoords> res = new ArrayList<>();
-		iBaseComponent tmp = null;
-		for(ShipCoords c : this.cabin_coords){
-			tmp = this.getComponent(c);
-			if(tmp.getConnector(ComponentRotation.U000)
-			  .connected(this.getComponent(tmp.getCoords().up())
-			    .getConnector(ComponentRotation.U180))){
-				ShipCoords up = this.getComponent(tmp.getCoords().up()).getCoords();
-				if(this.cabin_coords.contains(up)) res.add(c);
-			}
-			if(tmp.getConnector(ComponentRotation.U090)
-			  .connected(this.getComponent(tmp.getCoords().right())
-			    .getConnector(ComponentRotation.U270))){
-				ShipCoords right = this.getComponent(tmp.getCoords().right()).getCoords();
-				if(this.cabin_coords.contains(right)) res.add(c);
-			}
-			if(tmp.getConnector(ComponentRotation.U180)
-			  .connected(this.getComponent(tmp.getCoords().down())
-			    .getConnector(ComponentRotation.U000))){
-				ShipCoords left = this.getComponent(tmp.getCoords().down()).getCoords();
-				if(this.cabin_coords.contains(left)) res.add(c);
-			}
-			if(tmp.getConnector(ComponentRotation.U270)
-			  .connected(this.getComponent(tmp.getCoords().left())
-			    .getConnector(ComponentRotation.U090))){
-				ShipCoords down = this.getComponent(tmp.getCoords().left()).getCoords();
-				if(this.cabin_coords.contains(down)) res.add(c);
-			}
+		for(ShipCoords coords : this.cabin_coords){
+			for(iBaseComponent c : this.getComponent(coords).getConnectedComponents(this)){
+				if(c.getCoords()==coords || !this.cabin_coords.contains(c.getCoords())) continue;
+				res.add(coords);
+				break;
+			}	
 		}
 		return res;
 	}
@@ -401,15 +366,6 @@ public class SpaceShip implements iSpaceShip{
 			}
 		}
 		return sum;
-	}
-
-	private int normalizeRoll(ProjectileDirection direction, int roll){
-		if(direction.getShift()%2==0){
-			if(roll<this.type.getMinX() || roll>this.type.getMaxX()) return -1;
-			return roll-(this.type.getMinX()+1);
-		}
-		if(roll<this.type.getMinY() || roll>this.type.getMaxY()) return -1;
-		return roll-(this.type.getMinY()+1);
 	}	
 
 	@Override
@@ -450,6 +406,15 @@ public class SpaceShip implements iSpaceShip{
 		this.removeComponent(tmp);
 		return tmp.equals(this.getCenterCabin()) ? true : false;	
 	}	
+
+	private int normalizeRoll(ProjectileDirection direction, int roll){
+		if(direction.getShift()%2==0){
+			if(roll<this.type.getMinX() || roll>this.type.getMaxX()) return -1;
+			return roll-(this.type.getMinX()+1);
+		}
+		if(roll<this.type.getMinY() || roll>this.type.getMaxY()) return -1;
+		return roll-(this.type.getMinY()+1);
+	}
 		
 	private ShipCoords getFirst(ProjectileDirection d, int index){
 		if(index<0||index>=(d.getShift()%2==0?this.getWidth():this.getHeight())) throw new OutOfBoundsException("Offset goes out of bounds");

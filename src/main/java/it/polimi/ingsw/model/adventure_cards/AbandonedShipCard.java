@@ -20,6 +20,7 @@ public class AbandonedShipCard extends Card{
 
     @Override
     public iCardResponse apply(iSpaceShip ship, iPlayerResponse response){
+        if(ship==null) throw new NullPointerException();
         if(ship.getTotalCrew()<=this.crew_lost) throw new IllegalArgumentException("The crew isn't big enough for this abandoned ship.");
         ship.giveCredits(this.credits_gained);
         return new StaffCardResponse(-this.crew_lost);

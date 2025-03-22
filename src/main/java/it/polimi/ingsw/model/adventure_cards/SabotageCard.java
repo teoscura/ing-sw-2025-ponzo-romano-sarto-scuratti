@@ -20,6 +20,7 @@ public class SabotageCard extends Card{
 
     @Override
     public iCardResponse apply(iSpaceShip ship, iPlayerResponse response){
+        if(ship==null) throw new NullPointerException();
         int i = ThreadLocalRandom.current().nextInt(0, ship.getHeight());
         int j = ThreadLocalRandom.current().nextInt(0, ship.getWidth());
         this.target = new ShipCoords(ship.getType(), i, j);

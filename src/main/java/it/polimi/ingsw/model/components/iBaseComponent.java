@@ -23,5 +23,6 @@ public interface iBaseComponent {
     public ConnectorType getConnector(ComponentRotation direction);
     public ConnectorType[] getConnectors();
     public ComponentRotation getRotation();
+    public iBaseComponent[] getConnectedComponents(iSpaceShip ship);
     public boolean powerable();
 }

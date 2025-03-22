@@ -29,8 +29,8 @@ public class PiratesCard extends Card{
 
     @Override
     public iCardResponse apply(iSpaceShip ship, iPlayerResponse response){
-        boolean broken_center_cabin = false;
         if(ship==null) throw new NullPointerException();
+        boolean broken_center_cabin = false;
         if(ship.getCannonPower()>this.min_power){
             this.exhaust();
             return new PirateCardReward(this.credits, this.days);

@@ -22,6 +22,7 @@ public class PlanetCard extends Card {
 
 	@Override
 	public iCardResponse apply(iSpaceShip ship, iPlayerResponse response){
+		if(ship==null || response == null) throw new NullPointerException();
 		if(response.getId()>=this.planets.length) throw new ArgumentTooBigException( "Sent a planet id larger than the list.");
 		if(response.getId()==-1) return new DaysCardResponse(0);
 		this.planets[response.getId()].visit();

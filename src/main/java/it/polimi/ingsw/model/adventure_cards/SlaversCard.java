@@ -22,6 +22,7 @@ public class SlaversCard extends Card{
 
     @Override
     public iCardResponse apply(iSpaceShip ship, iPlayerResponse response){
+        if(ship==null) throw new NullPointerException();
         if(ship.getCannonPower()>this.min_power){
             this.exhaust();
             return new PirateCardReward(credits, days);

@@ -13,7 +13,8 @@ public class OpenSpaceCard extends Card {
     }
 
     public iCardResponse apply(iSpaceShip ship, iPlayerResponse response){
-       return new DaysCardResponse(ship.getEnginePower());
+        if(ship==null) throw new NullPointerException();
+        return new DaysCardResponse(ship.getEnginePower());
     }
 
 }

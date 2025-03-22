@@ -7,7 +7,7 @@ public class CabinVisitor implements iVisitor {
     
     AlienType type = AlienType.HUMAN;
 
-    public AlienType getType(){
+    public AlienType getSupportedType(){
         return this.type;
     }
 
@@ -23,7 +23,15 @@ public class CabinVisitor implements iVisitor {
 
     @Override
     public void visit(AlienLifeSupportComponent c){
-        this.type = c.getType();
+        if(this.type==AlienType.BOTH) return;
+        if(this.type==AlienType.HUMAN){
+            this.type = c.getType();
+            return;
+        }
+        if(this.type!=c.getType()){
+            this.type = AlienType.BOTH;
+            return;
+        }
     }
 
     @Override
@@ -54,10 +62,6 @@ public class CabinVisitor implements iVisitor {
     @Override
     public void visit(StructuralComponent c) {
         return;
-    }
-
-    public void reset(){
-        this.type = AlienType.HUMAN;
-    }    
+    }  
 }
 

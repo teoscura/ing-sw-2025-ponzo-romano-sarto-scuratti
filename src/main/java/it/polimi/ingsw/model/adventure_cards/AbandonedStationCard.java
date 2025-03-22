@@ -26,6 +26,7 @@ public class AbandonedStationCard extends Card{
 
     @Override
     public iCardResponse apply(iSpaceShip ship, iPlayerResponse response){
+        if(ship==null || response == null) throw new NullPointerException();
         if(response.getCoordArray().length>this.planet.getTotalQuantity()) throw new ArgumentTooBigException("Too many positions");
         if(!response.getAccept()) return new DaysCardResponse(0);
         if(ship.getTotalCrew()<this.crew) throw new CrewSizeException("Crew too small to salvage station.");

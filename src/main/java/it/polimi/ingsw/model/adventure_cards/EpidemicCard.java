@@ -18,8 +18,9 @@ public class EpidemicCard extends Card{
 
     @Override
     public iCardResponse apply(iSpaceShip ship, iPlayerResponse response){
+        if(ship==null||response==null) throw new NullPointerException();
         ArrayList<ShipCoords> ill_cabins = ship.findConnectedCabins();
-        CrewRemoveVisitor v = new CrewRemoveVisitor();
+        CrewRemoveVisitor v = new CrewRemoveVisitor(ship);
         for(ShipCoords s : ill_cabins){
             ship.getComponent(s).check(v);
         }
