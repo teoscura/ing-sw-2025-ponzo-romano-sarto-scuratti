@@ -133,6 +133,7 @@ public class SpaceShip implements iSpaceShip{
 			if(!tmp.verify(this)) res[tmp.getCoords().y][tmp.getCoords().x] = VerifyResult.BROKEN;
 			else res[tmp.getCoords().y][tmp.getCoords().x] = VerifyResult.GOOD;
 			for(iBaseComponent c : tmp.getConnectedComponents(this)){
+				if(c==this.empty) continue;
 				ShipCoords xy = c.getCoords();
 				if(res[xy.y][xy.x]==VerifyResult.UNCHECKED) queue.add(c);
 			}
