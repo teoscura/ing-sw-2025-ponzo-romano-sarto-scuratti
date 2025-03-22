@@ -182,7 +182,7 @@ public class SpaceShip implements iSpaceShip{
 
 	@Override
 	public void updateShip(){
-		SpaceShipUpdateVisitor v = new SpaceShipUpdateVisitor(this);
+		SpaceShipUpdateVisitor v = new SpaceShipUpdateVisitor();
 		for(iBaseComponent[] col : this.components){
 			for(iBaseComponent cell : col){
 				cell.check(v);
