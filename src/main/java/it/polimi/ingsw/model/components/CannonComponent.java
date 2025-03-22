@@ -41,27 +41,27 @@ public class CannonComponent extends BaseComponent{
     }
 
     @Override
-    public boolean verify(iSpaceShip state){
+    public boolean verify(iSpaceShip ship){
         ComponentRotation r = this.getRotation();
         iBaseComponent tmp = null; 
         switch(r.getShift()){
             case 0: {
-                tmp = state.getComponent(this.coords.up());
+                tmp = ship.getComponent(this.coords.up());
                 break;
             }
             case 1: {
-                tmp = state.getComponent(this.coords.right());
+                tmp = ship.getComponent(this.coords.right());
                 break;
             }
             case 2: {
-                tmp = state.getComponent(this.coords.down());
+                tmp = ship.getComponent(this.coords.down());
                 break;
             }
             case 3: {
-                tmp = state.getComponent(this.coords.left());
+                tmp = ship.getComponent(this.coords.left());
             }
         }
-        return tmp == state.getEmpty() && super.verify(state);
+        return tmp == ship.getEmpty() && super.verify(ship);
     }
 
     public void turnOn(){

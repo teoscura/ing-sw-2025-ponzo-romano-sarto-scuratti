@@ -1,0 +1,20 @@
+//Done.
+package it.polimi.ingsw.model.adventure_cards;
+
+import it.polimi.ingsw.model.adventure_cards.utils.DaysCardResponse;
+import it.polimi.ingsw.model.adventure_cards.utils.iCardResponse;
+import it.polimi.ingsw.model.adventure_cards.utils.iPlayerResponse;
+import it.polimi.ingsw.model.player.iSpaceShip;
+
+public class OpenSpaceCard extends Card {
+    
+    protected OpenSpaceCard(int id) {
+        super(id, 0);
+    }
+
+    public iCardResponse apply(iSpaceShip ship, iPlayerResponse response){
+        if(ship==null) throw new NullPointerException();
+        return new DaysCardResponse(ship.getEnginePower());
+    }
+
+}

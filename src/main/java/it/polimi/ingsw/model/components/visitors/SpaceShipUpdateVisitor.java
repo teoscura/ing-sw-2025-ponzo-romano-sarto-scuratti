@@ -2,11 +2,9 @@ package it.polimi.ingsw.model.components.visitors;
 
 import it.polimi.ingsw.model.components.*;
 import it.polimi.ingsw.model.components.enums.ShipmentType;
-import it.polimi.ingsw.model.player.iSpaceShip;
 
 public class SpaceShipUpdateVisitor implements iVisitor {
 
-    private iSpaceShip state;
     private int battery_power;
     private int engine_power;
     private int cannon_power;
@@ -14,8 +12,7 @@ public class SpaceShipUpdateVisitor implements iVisitor {
     private int[] crew_members;
     private boolean[] directions;
 
-    public SpaceShipUpdateVisitor(iSpaceShip state){
-        this.state = state;
+    public SpaceShipUpdateVisitor(){
         this.storage_containers = new int[4];
         this.crew_members = new int[3];
         this.directions = new boolean[4];
@@ -23,7 +20,6 @@ public class SpaceShipUpdateVisitor implements iVisitor {
 
     @Override
     public void visit(CabinComponent c){
-        c.updateCrewType(state);
         this.crew_members[c.getCrewType().getArraypos()] += c.getCrew();
     }
 
@@ -68,7 +64,7 @@ public class SpaceShipUpdateVisitor implements iVisitor {
     }
 
     @Override
-    public void check(StructuralComponent c) {
+    public void visit(StructuralComponent c) {
         return;
     }
 

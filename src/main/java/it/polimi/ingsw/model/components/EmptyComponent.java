@@ -20,7 +20,7 @@ public class EmptyComponent extends BaseComponent {
     }
 
     @Override
-    public boolean verify(iSpaceShip state){
+    public boolean verify(iSpaceShip ship){
         return true;
     }
 
@@ -34,5 +34,15 @@ public class EmptyComponent extends BaseComponent {
         ConnectorType[] tmp = new ConnectorType[4];
         Arrays.fill(tmp, ConnectorType.EMPTY);
         return tmp;
+    }
+
+    @Override
+    public void onCreation(iSpaceShip ship) {
+        return;
+    }
+
+    @Override
+    public void onDelete(iSpaceShip ship) {
+        return;
     }
 }

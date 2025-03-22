@@ -7,6 +7,7 @@ import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ConnectorType;
 import it.polimi.ingsw.model.components.visitors.iVisitor;
 import it.polimi.ingsw.model.player.ShipCoords;
+import it.polimi.ingsw.model.player.iSpaceShip;
 
 public class AlienLifeSupportComponent extends BaseComponent{
     
@@ -40,6 +41,16 @@ public class AlienLifeSupportComponent extends BaseComponent{
 
     public AlienType getType(){
         return type;
+    }
+
+    @Override
+    public void onCreation(iSpaceShip ship) {
+        return;
+    }
+
+    @Override
+    public void onDelete(iSpaceShip ship) {
+        return;
     }
     
 }

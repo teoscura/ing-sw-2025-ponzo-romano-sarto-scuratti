@@ -36,9 +36,9 @@ public class EngineComponent extends BaseComponent{
     }
 
     @Override
-    public boolean verify(iSpaceShip state){
-        iBaseComponent tmp = state.getComponent(this.coords.down());
-        return tmp==state.getEmpty() && super.verify(state);
+    public boolean verify(iSpaceShip ship){
+        iBaseComponent tmp = ship.getComponent(this.coords.down());
+        return tmp==ship.getEmpty() && super.verify(ship);
     }
 
     @Override
@@ -57,8 +57,8 @@ public class EngineComponent extends BaseComponent{
     }
 
     public int getCurrentPower(){
-        if(this.getRotation() != ComponentRotation.U180){
-            return this.getPower()>>1;  //Divide by two.
+        if(this.getRotation() != ComponentRotation.U000){
+            return 0;  //Divide by two.
         }
         return this.getPower();
     }

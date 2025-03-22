@@ -1,15 +1,17 @@
 package it.polimi.ingsw.model.board;
 
+import java.util.List;
+
 import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.model.player.iSpaceShip;
 
-interface iPlanche {
+public interface iPlanche {
 
-	public int getPlayerPosition(PlayerColor c);
+	public int getPlayerPosition(iSpaceShip ship);
 
 	public PlayerColor getPlayersAt(int Position);
 
-	public void movePlayer(PlayerColor c, int rel_change);
+	public void movePlayer(iSpaceShip ship, int rel_change);
 
-	public PlayerColor won();
-
+	public List<PlayerColor> getOrder();
 }

@@ -49,7 +49,7 @@ public class FreeSpaceVisitor implements iVisitor {
     }
 
     @Override
-    public void check(StructuralComponent structuralComponent) {
+    public void visit(StructuralComponent structuralComponent) {
         this.isfree = false;
     }
 
