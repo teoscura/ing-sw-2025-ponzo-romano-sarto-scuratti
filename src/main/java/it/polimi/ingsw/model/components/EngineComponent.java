@@ -4,6 +4,7 @@ package it.polimi.ingsw.model.components;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ConnectorType;
 import it.polimi.ingsw.model.components.exceptions.AlreadyPoweredException;
+import it.polimi.ingsw.model.components.exceptions.ComponentNotEmptyException;
 import it.polimi.ingsw.model.components.exceptions.UnpowerableException;
 import it.polimi.ingsw.model.components.visitors.iVisitor;
 import it.polimi.ingsw.model.player.ShipCoords;
@@ -19,6 +20,7 @@ public class EngineComponent extends BaseComponent{
                            ComponentRotation rotation,
                            EngineType type){
         super(components, rotation);
+        if(components[2]!=ConnectorType.EMPTY) throw new ComponentNotEmptyException("Bottom of engine must be empty!");
         this.max_power = type.getMaxPower();
         this.powerable = type.getPowerable();        
     }
@@ -28,18 +30,15 @@ public class EngineComponent extends BaseComponent{
                            EngineType type,
                            ShipCoords coords){
         super(components, rotation, coords);
+        if(components[2]!=ConnectorType.EMPTY) throw new ComponentNotEmptyException("Bottom of engine must be empty!");
         this.max_power = type.getMaxPower();
         this.powerable = type.getPowerable();        
     }
 
     @Override
-    public boolean verify(iSpaceShip state){
-        //FreeSpaceVisitor v = new FreeSpaceVisitor();
-        iBaseComponent tmp = state.getComponent(this.coords.down());
-        //tmp.check(v);
-        //if(this.getRotation()!=ComponentRotation.U000) return false;
-        //if(v.getSpaceIsFree()) return true;
-        return tmp==state.getEmpty();
+    public boolean verify(iSpaceShip ship){
+        iBaseComponent tmp = ship.getComponent(this.coords.down());
+        return tmp==ship.getEmpty() && super.verify(ship);
     }
 
     @Override
@@ -58,8 +57,8 @@ public class EngineComponent extends BaseComponent{
     }
 
     public int getCurrentPower(){
-        if(this.getRotation() != ComponentRotation.U180){
-            return 0;  //engine power is 0, not half, for other directions
+        if(this.getRotation() != ComponentRotation.U000){
+            return 0;  //Divide by two.
         }
         return this.getPower();
     }
@@ -75,6 +74,17 @@ public class EngineComponent extends BaseComponent{
     public boolean powerable(){
         return true;
     } //redundant
+
+    @Override
+    public void onCreation(iSpaceShip ship){
+        if(powerable) ship.addPowerableCoords(this.coords);
+    }
+
+    @Override
+    public void onDelete(iSpaceShip ship){
+        if(powerable) ship.delPowerableCoords(this.coords);
+    }
+
 }
 
 enum EngineType{

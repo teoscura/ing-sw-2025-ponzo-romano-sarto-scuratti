@@ -5,8 +5,8 @@ import it.polimi.ingsw.model.components.iBaseComponent;
 public interface iCommonBoard {
 	public iBaseComponent pullComponent();
 
-	public void discardComponent(iBaseComponent a);
+	public void discardComponent(iBaseComponent c);
 
-	public iBaseComponent pullDiscarded();
+	public iBaseComponent pullDiscarded(int i);
 
 }

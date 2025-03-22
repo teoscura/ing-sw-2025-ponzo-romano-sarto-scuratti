@@ -4,6 +4,7 @@ import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ConnectorType;
 import it.polimi.ingsw.model.components.visitors.iVisitor;
 import it.polimi.ingsw.model.player.ShipCoords;
+import it.polimi.ingsw.model.player.iSpaceShip;
 
 public class StructuralComponent extends BaseComponent{
 
@@ -17,7 +18,17 @@ public class StructuralComponent extends BaseComponent{
 
         @Override
     public void check(iVisitor v) {
-        v.check(this);
+        v.visit(this);
+    }
+
+    @Override
+    public void onCreation(iSpaceShip ship) {
+        return;
+    }
+
+    @Override
+    public void onDelete(iSpaceShip ship) {
+        return;
     }
     
 }

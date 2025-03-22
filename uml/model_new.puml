@@ -1,0 +1,433 @@
+@startuml
+set separator ::
+class adventure_cards::AbandonedShipCard {
+  + AbandonedShipCard(int): 
+  + apply(iSpaceShip, iPlayerResponse): int
+}
+class adventure_cards::AbandonedStationCard {
+  + AbandonedStationCard(int): 
+  + apply(iSpaceShip, iPlayerResponse): int
+}
+class components::AlienLifeSupportComponent {
+  + AlienLifeSupportComponent(ConnectorType[], ComponentRotation, AlienType): 
+  + AlienLifeSupportComponent(ConnectorType[], ComponentRotation, AlienType, ShipCoords): 
+  - type: AlienType
+  + check(iVisitor): void
+   type: AlienType
+}
+
+class components::BaseComponent {
+  # BaseComponent(ConnectorType[], ComponentRotation): 
+  # BaseComponent(ConnectorType[], ComponentRotation, ShipCoords): 
+  # coords: ShipCoords
+  - rotation: ComponentRotation
+  - connectors: ConnectorType[]
+  + check(iVisitor): void
+  + getConnector(ComponentRotation): ConnectorType
+  + verify(iSpaceShip): boolean
+   rotation: ComponentRotation
+   connectors: ConnectorType[]
+   coords: ShipCoords
+}
+class components::BatteryComponent {
+  + BatteryComponent(ConnectorType[], ComponentRotation, BatteryType): 
+  + BatteryComponent(ConnectorType[], ComponentRotation, BatteryType, ShipCoords): 
+  - contains: int
+  + putOne(): void
+  + takeOne(): void
+  + check(iVisitor): void
+   capacity: int
+   contains: int
+}
+
+class components::CabinComponent {
+  + CabinComponent(ConnectorType[], ComponentRotation, AlienType, ShipCoords): 
+  + CabinComponent(ConnectorType[], ComponentRotation, AlienType): 
+  - upgradeCrewType(AlienType): void
+  + check(iVisitor): void
+  + setCrew(int, AlienType): void
+  + updateCrewType(iSpaceShip): void
+   crew: int
+   crewType: AlienType
+}
+class components::visitors::CabinVisitor {
+  + CabinVisitor(): 
+  ~ type: AlienType
+  + visit(AlienLifeSupportComponent): void
+  + visit(BatteryComponent): void
+  + check(StructuralComponent): void
+  + visit(CabinComponent): void
+  + reset(): void
+  + visit(EngineComponent): void
+  + visit(EmptyComponent): void
+  + visit(StorageComponent): void
+  + visit(CannonComponent): void
+  + visit(ShieldComponent): void
+   type: AlienType
+}
+class components::CannonComponent {
+  + CannonComponent(ConnectorType[], ComponentRotation, CannonType): 
+  + CannonComponent(ConnectorType[], ComponentRotation, CannonType, ShipCoords): 
+  + check(iVisitor): void
+  + verify(iSpaceShip): boolean
+  + turnOn(): void
+  + turnOff(): void
+   currentPower: int
+   power: int
+}
+
+class adventure_cards::Card {
+  # Card(int): 
+  - id: int
+  + apply(iSpaceShip, iPlayerResponse): int
+   id: int
+}
+
+class board::Cards {
+  + Cards(): 
+  + pullCard(): iCard
+}
+class adventure_cards::CombatZoneCard {
+  + CombatZoneCard(int): 
+  + apply(iSpaceShip, iPlayerResponse): int
+}
+class board::CommonBoard {
+  + CommonBoard(): 
+  + pullComponent(): iBaseComponent
+  + discardComponent(iBaseComponent): void
+  + pullDiscarded(): iBaseComponent
+}
+
+class components::EmptyComponent {
+  + EmptyComponent(ShipCoords): 
+  + EmptyComponent(): 
+  + check(iVisitor): void
+  + verify(iSpaceShip): boolean
+   connectors: ConnectorType[]
+}
+class components::visitors::EnergyVisitor {
+  + EnergyVisitor(boolean): 
+  - powerable: boolean
+  + visit(BatteryComponent): void
+  + check(StructuralComponent): void
+  + visit(CannonComponent): void
+  + hasBattery(): boolean
+  + visit(AlienLifeSupportComponent): void
+  + visit(ShieldComponent): void
+  + visit(EngineComponent): void
+  + visit(EmptyComponent): void
+  + toggle(): void
+  + visit(StorageComponent): void
+  + visit(CabinComponent): void
+   foundBatteryComponent: boolean
+   powerable: boolean
+}
+class components::EngineComponent {
+  + EngineComponent(ConnectorType[], ComponentRotation, EngineType): 
+  + EngineComponent(ConnectorType[], ComponentRotation, EngineType, ShipCoords): 
+  + turnOff(): void
+  + check(iVisitor): void
+  + verify(iSpaceShip): boolean
+  + turnOn(): void
+   currentPower: int
+   power: int
+}
+
+class adventure_cards::EpidemicCard {
+  + EpidemicCard(int): 
+  + apply(iSpaceShip, iPlayerResponse): int
+}
+class components::visitors::FreeSpaceVisitor {
+  + FreeSpaceVisitor(): 
+  + visit(EmptyComponent): void
+  + check(StructuralComponent): void
+  + visit(CannonComponent): void
+  + visit(EngineComponent): void
+  + visit(BatteryComponent): void
+  + visit(StorageComponent): void
+  + visit(ShieldComponent): void
+  + visit(AlienLifeSupportComponent): void
+  + visit(CabinComponent): void
+  + reset(): void
+   spaceIsFree: boolean
+}
+class adventure_cards::MeteorSwarmCard {
+  + MeteorSwarmCard(Projectile[], int): 
+  + apply(iSpaceShip, iPlayerResponse): int
+}
+class adventure_cards::OpenSpaceCard {
+  + OpenSpaceCard(): 
+  + apply(iSpaceShip, iPlayerResponse): int
+}
+class adventure_cards::PiratesCard {
+  + PiratesCard(int): 
+  + apply(iSpaceShip, iPlayerResponse): int
+}
+class board::Planche {
+  + Planche(): 
+  + checkLapped(): void
+  + won(): PlayerColor
+  + getPlayersAt(int): PlayerColor
+  + movePlayer(PlayerColor, int): void
+  + getNextPlayer(PlayerColor): PlayerColor?
+  + getPlayerPosition(PlayerColor): int
+   firstPlayer: PlayerColor
+}
+class board::PlancheCell {
+  + PlancheCell(): 
+  - players: PlayerColor[]
+   players: PlayerColor[]
+}
+class adventure_cards::Planet {
+  + Planet(int[]): 
+  - visited: boolean
+  + getQuantity(ShipmentType): int
+  + visit(): void
+   visited: boolean
+}
+class adventure_cards::PlanetCard {
+  + PlanetCard(Planet[], int): 
+  + apply(iSpaceShip, iPlayerResponse): int
+}
+class adventure_cards::PlanetShipments {
+  + PlanetShipments(): 
+}
+
+class adventure_cards::Projectile {
+  + Projectile(ProjectileDirection, ProjectileDimension): 
+  - dimension: ProjectileDimension
+  - direction: ProjectileDirection
+   dimension: ProjectileDimension
+   direction: ProjectileDirection
+}
+
+class adventure_cards::SabotageCard {
+  + SabotageCard(int): 
+  + apply(iSpaceShip, iPlayerResponse): int
+}
+class components::ShieldComponent {
+  + ShieldComponent(ConnectorType[], ComponentRotation, ShieldType, ShipCoords): 
+  + ShieldComponent(ConnectorType[], ComponentRotation, ShieldType): 
+  - powered: boolean
+  + turnOn(): void
+  + turnOff(): void
+  + check(iVisitor): void
+   shield: ShieldType
+   powered: boolean
+}
+
+class player::ShipCoords {
+  + ShipCoords(ShipType, int, int): 
+  + right(): ShipCoords
+  + down(): ShipCoords
+  + left(): ShipCoords
+  + up(): ShipCoords
+}
+class adventure_cards::SlaversCard {
+  + SlaversCard(int): 
+  + apply(iSpaceShip, iPlayerResponse): int
+}
+class adventure_cards::SmugglersCard {
+  + SmugglersCard(int): 
+  + apply(iSpaceShip, iPlayerResponse): int
+}
+class player::SpaceShip {
+  + SpaceShip(ShipType, PlayerColor): 
+  - color: PlayerColor
+  - crew: int[]
+  - credits: int
+  + updateCrew(int, AlienType): void
+  + addComponent(iBaseComponent, ShipCoords): void
+  + takeCredits(int): int
+  + verify(): VerifyResult[][]
+  + getComponent(ShipCoords): iBaseComponent
+  + turnOn(ShipCoords, ShipCoords): void
+  + resetPower(): void
+  + verifyAndClean(): void
+  + giveCredits(int): int
+  + updateShip(): void
+  + removeComponent(ShipCoords): void
+   credits: int
+   cannonPower: int
+   shieldedDirections: boolean[]
+   enginePower: int
+   width: int
+   energyPower: int
+   crew: int[]
+   color: PlayerColor
+   height: int
+}
+class components::visitors::SpaceShipUpdateVisitor {
+  + SpaceShipUpdateVisitor(iSpaceShip): 
+  - directions: boolean[]
+  + visit(ShieldComponent): void
+  + visit(EmptyComponent): void
+  + check(StructuralComponent): void
+  + visit(AlienLifeSupportComponent): void
+  + visit(StorageComponent): void
+  + visit(CabinComponent): void
+  + visit(BatteryComponent): void
+  + visit(EngineComponent): void
+  + visit(CannonComponent): void
+   storageContainers: int[]
+   cannonPower: int
+   enginePower: int
+   batteryPower: int
+   crewMembers: int[]
+   directions: boolean[]
+}
+class adventure_cards::StardustCard {
+  + StardustCard(int): 
+  + apply(iSpaceShip, iPlayerResponse): int
+}
+class components::StorageComponent {
+  + StorageComponent(ConnectorType[], ComponentRotation, StorageType): 
+  + StorageComponent(ConnectorType[], ComponentRotation, StorageType, ShipCoords): 
+  - special: boolean
+  + howMany(ShipmentType): int
+  + putIn(ShipmentType): void
+  + takeOut(ShipmentType): boolean
+  + check(iVisitor): void
+   special: boolean
+   capacity: int
+   freeSpaces: int
+}
+
+class components::StructuralComponent {
+  + StructuralComponent(ConnectorType[], ComponentRotation, ShipCoords): 
+  + StructuralComponent(ConnectorType[], ComponentRotation): 
+  + check(iVisitor): void
+}
+
+interface components::iBaseComponent << interface >> {
+  + verify(iSpaceShip): boolean
+  + check(iVisitor): void
+  + getConnector(ComponentRotation): ConnectorType
+   rotation: ComponentRotation
+   connectors: ConnectorType[]
+   coords: ShipCoords
+}
+interface adventure_cards::iCard << interface >> {
+  + apply(iSpaceShip, iPlayerResponse): int
+   id: int
+}
+interface board::iCards << interface >> {
+  + pullCard(): iCard
+}
+interface board::iCommonBoard << interface >> {
+  + discardComponent(iBaseComponent): void
+  + pullDiscarded(): iBaseComponent
+  + pullComponent(): iBaseComponent
+}
+interface board::iPlanche << interface >> {
+  + getPlayerPosition(PlayerColor): int
+  + movePlayer(PlayerColor, int): void
+  + won(): PlayerColor
+  + getPlayersAt(int): PlayerColor
+}
+interface adventure_cards::iPlayerResponse << interface >> {
+   merchChoices: int[]
+   accept: boolean
+   id: int
+   coordArray: ShipCoords[]
+}
+interface player::iSpaceShip << interface >> {
+  + giveCredits(int): int
+  + verify(): VerifyResult[][]
+  + resetPower(): void
+  + updateShip(): void
+  + updateCrew(int, AlienType): void
+  + verifyAndClean(): void
+  + addComponent(iBaseComponent, ShipCoords): void
+  + getComponent(ShipCoords): iBaseComponent
+  + removeComponent(ShipCoords): void
+  + takeCredits(int): int
+  + turnOn(ShipCoords, ShipCoords): void
+   credits: int
+   cannonPower: int
+   shieldedDirections: boolean[]
+   enginePower: int
+   width: int
+   energyPower: int
+   crew: int[]
+   color: PlayerColor
+   height: int
+}
+interface components::visitors::iVisitable << interface >> {
+  + check(iVisitor): void
+}
+interface components::visitors::iVisitor << interface >> {
+  + visit(AlienLifeSupportComponent): void
+  + visit(BatteryComponent): void
+  + visit(EngineComponent): void
+  + visit(StorageComponent): void
+  + visit(CabinComponent): void
+  + visit(ShieldComponent): void
+  + visit(EmptyComponent): void
+  + check(StructuralComponent): void
+  + visit(CannonComponent): void
+}
+
+
+AbandonedShipCard                 -[#000082,plain]-^  Card                             
+AbandonedStationCard              -[#000082,plain]-^  Card                             
+AlienLifeSupportComponent        "1" *-[#595959,plain]-> "type\n1" AlienType                        
+AlienLifeSupportComponent         -[#000082,plain]-^  BaseComponent                    
+BaseComponent                    "1" *-[#595959,plain]-> "rotation\n1" ComponentRotation                
+BaseComponent                    "1" *-[#595959,plain]-> "connectors\n*" ConnectorType                    
+BaseComponent                    "1" *-[#595959,plain]-> "coords\n1" ShipCoords                       
+BaseComponent                     -[#008200,dashed]-^  iBaseComponent                   
+BaseComponent                     -[#008200,dashed]-^  iVisitable                       
+BatteryComponent                  -[#000082,plain]-^  BaseComponent                    
+CabinComponent                   "1" *-[#595959,plain]-> "crew_type\n1" AlienType                        
+CabinComponent                    -[#000082,plain]-^  BaseComponent                    
+CabinComponent                    -[#595959,dashed]->  CabinVisitor                     : "«create»"
+CabinVisitor                     "1" *-[#595959,plain]-> "type\n1" AlienType                        
+CabinVisitor                      -[#008200,dashed]-^  iVisitor                         
+CannonComponent                   -[#000082,plain]-^  BaseComponent                    
+CannonComponent                   -[#595959,dashed]->  FreeSpaceVisitor                 : "«create»"
+Card                              -[#008200,dashed]-^  iCard                            
+Cards                             -[#008200,dashed]-^  iCards                           
+CombatZoneCard                    -[#000082,plain]-^  Card                             
+CommonBoard                       -[#008200,dashed]-^  iCommonBoard                     
+EmptyComponent                    -[#000082,plain]-^  BaseComponent                    
+EmptyComponent                    -[#595959,dashed]->  ConnectorType                    : "«create»"
+EnergyVisitor                     -[#008200,dashed]-^  iVisitor                         
+EngineComponent                   -[#000082,plain]-^  BaseComponent                    
+EngineComponent                   -[#595959,dashed]->  FreeSpaceVisitor                 : "«create»"
+EpidemicCard                      -[#000082,plain]-^  Card                             
+FreeSpaceVisitor                  -[#008200,dashed]-^  iVisitor                         
+MeteorSwarmCard                   -[#000082,plain]-^  Card                             
+MeteorSwarmCard                  "1" *-[#595959,plain]-> "meteorites\n*" Projectile                       
+PiratesCard                       -[#000082,plain]-^  Card                             
+Planche                           -[#008200,dashed]-^  iPlanche                         
+PlancheCell                      "1" *-[#595959,plain]-> "players\n*" PlayerColor                      
+PlanetCard                        -[#000082,plain]-^  Card                             
+PlanetCard                       "1" *-[#595959,plain]-> "planets\n*" Planet                           
+Projectile                       "1" *-[#595959,plain]-> "dimension\n1" ProjectileDimension              
+Projectile                       "1" *-[#595959,plain]-> "direction\n1" ProjectileDirection              
+SabotageCard                      -[#000082,plain]-^  Card                             
+ShieldComponent                   -[#000082,plain]-^  BaseComponent                    
+ShieldComponent                  "1" *-[#595959,plain]-> "type\n1" ShieldType                       
+ShipCoords                       "1" *-[#595959,plain]-> "type\n1" ShipType                         
+ShipType                          -[#595959,dashed]->  ShipCoords                       : "«create»"
+SlaversCard                       -[#000082,plain]-^  Card                             
+SmugglersCard                     -[#000082,plain]-^  Card                             
+SpaceShip                         -[#595959,dashed]->  EmptyComponent                   : "«create»"
+SpaceShip                         -[#595959,dashed]->  EnergyVisitor                    : "«create»"
+SpaceShip                        "1" *-[#595959,plain]-> "color\n1" PlayerColor                      
+SpaceShip                         -[#595959,dashed]->  ShipCoords                       : "«create»"
+SpaceShip                        "1" *-[#595959,plain]-> "type\n1" ShipType                         
+SpaceShip                         -[#595959,dashed]->  SpaceShipUpdateVisitor           : "«create»"
+SpaceShip                         -[#595959,dashed]->  VerifyResult                     : "«create»"
+SpaceShip                         -[#595959,dashed]->  iBaseComponent                   : "«create»"
+SpaceShip                        "1" *-[#595959,plain]-> "components\n*" iBaseComponent                   
+SpaceShip                         -[#008200,dashed]-^  iSpaceShip                       
+SpaceShipUpdateVisitor           "1" *-[#595959,plain]-> "state\n1" iSpaceShip                       
+SpaceShipUpdateVisitor            -[#008200,dashed]-^  iVisitor                         
+StardustCard                      -[#000082,plain]-^  Card                             
+StorageComponent                  -[#000082,plain]-^  BaseComponent                    
+StorageComponent                 "1" *-[#595959,plain]-> "shipments\n*" ShipmentType                     
+StorageComponent                  -[#595959,dashed]->  ShipmentType                     : "«create»"
+StructuralComponent               -[#000082,plain]-^  BaseComponent                    
+@enduml

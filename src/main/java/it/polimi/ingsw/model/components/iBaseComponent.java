@@ -13,13 +13,16 @@ public interface iBaseComponent {
     
     //Connectors are stored in this order: UP, RIGHT, DOWN, LEFT;
     
-    public boolean verify(iSpaceShip state);
+    public boolean verify(iSpaceShip ship);
     public void check(iVisitor v);
-
+    //On delete/Creation
+    public void onCreation(iSpaceShip ship);
+    public void onDelete(iSpaceShip ship);
     //Return the connector pointing up.
     public ShipCoords getCoords();
     public ConnectorType getConnector(ComponentRotation direction);
     public ConnectorType[] getConnectors();
     public ComponentRotation getRotation();
+    public iBaseComponent[] getConnectedComponents(iSpaceShip ship);
     public boolean powerable();
 }

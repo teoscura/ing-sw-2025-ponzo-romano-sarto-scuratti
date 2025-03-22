@@ -12,29 +12,21 @@ import it.polimi.ingsw.model.components.visitors.iVisitor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.player.iSpaceShip;
 
-
-//FIXME huge refactor if possible, really dirty implementation.
 public class CabinComponent extends BaseComponent{
-    private int max_capacity;
+    
     private int crew_number = 0;
-    private AlienType crew_type;
-    private AlienType can_contain;
+    private AlienType crew_type = AlienType.HUMAN;
 
     public CabinComponent(ConnectorType[] connectors, 
-                          ComponentRotation rotation,
-                          AlienType inhabitant_type){
+                          ComponentRotation rotation){
         super(connectors, rotation);
-        this.max_capacity = inhabitant_type.getMaxCapacity(); 
     }
 
     public CabinComponent(ConnectorType[] connectors, 
                           ComponentRotation rotation,
-                          AlienType inhabitant_type,
                           ShipCoords coords){
         super(connectors, rotation, coords);
-        this.max_capacity = inhabitant_type.getMaxCapacity(); 
     }
-
 
     @Override
     public void check(iVisitor v){
@@ -49,65 +41,25 @@ public class CabinComponent extends BaseComponent{
         return this.crew_type;
     }
 
-    public void setCrew(int new_crew, AlienType type){
-        if(type==AlienType.HUMAN){
-            crew_type = type;
+    public void setCrew(iSpaceShip ship, int new_crew, AlienType type){
+        if(new_crew<=0) throw new NegativeArgumentException("Crew size can't be zero or negative");
+        if(type.getArraypos()<0) throw new IllegalArgumentException("Type must be a single alien type, not a collector");
+        if(new_crew>type.getMaxCapacity()) throw new ArgumentTooBigException("Crew size exceeds type's max capacity");
+        CabinVisitor v = new CabinVisitor();
+        for(iBaseComponent c : this.getConnectedComponents(ship)){
+            c.check(v);
         }
-        else if(type==AlienType.BROWN && (this.can_contain==AlienType.BOTH || this.can_contain==AlienType.BROWN)){
-            crew_type = AlienType.BROWN;
-        }
-        else if(type==AlienType.PURPLE && (this.can_contain==AlienType.BOTH || this.can_contain==AlienType.PURPLE)){
-            crew_type = AlienType.PURPLE;
-        }
-        else throw new UnsupportedAlienCabinException();
-        if(new_crew<0){
-            throw new NegativeArgumentException();
-        }
-        if(new_crew>max_capacity){
-            throw new ArgumentTooBigException();
-        }
-        this.crew_number = new_crew;
+        if(!type.compatible(v.getSupportedType())) throw new UnsupportedAlienCabinException("Tried to insert crew type in cabin that doesn't support it."); 
     }
 
-    private void upgradeCrewType(AlienType type){
-        if(this.can_contain == AlienType.BOTH) return;
-        if(type==AlienType.BOTH || type==AlienType.HUMAN) throw new IllegalArgumentException();
-        if(this.can_contain == AlienType.HUMAN){
-            this.can_contain = type;
-            return;
-        }
-        if(this.can_contain!=type){
-            this.can_contain = AlienType.BOTH;
-        }
+    @Override
+    public void onCreation(iSpaceShip ship) {
+        ship.addCabinCoords(this.coords);
     }
-    
-    public void updateCrewType(iSpaceShip state){
-        //FIXME
-        CabinVisitor v = new CabinVisitor();
-        iBaseComponent up = state.getComponent(this.coords.up());
-        iBaseComponent right = state.getComponent(this.coords.right());
-        iBaseComponent down = state.getComponent(this.coords.down());
-        iBaseComponent left = state.getComponent(this.coords.left());
-        if(up.getConnector(ComponentRotation.U180).connected(this.getConnector(ComponentRotation.U000))){
-            up.check(v);
-            this.upgradeCrewType(v.getType());
-            v.reset();
-        }
-        if(right.getConnector(ComponentRotation.U270).connected(this.getConnector(ComponentRotation.U090))){
-            right.check(v);
-            this.upgradeCrewType(v.getType());
-            v.reset(); 
-        }
-        if(down.getConnector(ComponentRotation.U000).connected(this.getConnector(ComponentRotation.U180))){
-            down.check(v);
-            this.upgradeCrewType(v.getType());
-            v.reset();
-        }
-        if(left.getConnector(ComponentRotation.U090).connected(this.getConnector(ComponentRotation.U270))){
-            left.check(v);
-            this.upgradeCrewType(v.getType());
-            v.reset();
-        }
+
+    @Override
+    public void onDelete(iSpaceShip ship) {
+        ship.delCabinCoords(this.coords);
     }
 }
 

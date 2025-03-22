@@ -45,11 +45,11 @@ public abstract class BaseComponent implements iBaseComponent, iVisitable{
     }
 
     @Override
-    public boolean verify(iSpaceShip state){
-        iBaseComponent up = state.getComponent(this.coords.up());
-        iBaseComponent right = state.getComponent(this.coords.right());
-        iBaseComponent down = state.getComponent(this.coords.down());
-        iBaseComponent left = state.getComponent(this.coords.left());
+    public boolean verify(iSpaceShip ship){
+        iBaseComponent up = ship.getComponent(this.coords.up());
+        iBaseComponent right = ship.getComponent(this.coords.right());
+        iBaseComponent down = ship.getComponent(this.coords.down());
+        iBaseComponent left = ship.getComponent(this.coords.left());
 
         if(up!=null){
             if(!up.getConnector(ComponentRotation.U180).compatible(getConnector(ComponentRotation.U000))) return false;
@@ -68,7 +68,7 @@ public abstract class BaseComponent implements iBaseComponent, iVisitable{
 
     @Override
     public ConnectorType getConnector(ComponentRotation direction){
-        int shift = direction.getShift() + this.rotation.getShift();
+        int shift = direction.getShift() + (4-this.rotation.getShift());
         shift = shift % 4;
         return connectors[shift];
     }
@@ -83,9 +83,37 @@ public abstract class BaseComponent implements iBaseComponent, iVisitable{
         return false;
     }
 
-    //ricordate: non implementare questo metodo, ma va implementato in ogni singola sottoclasse
-    // (e' letteralmente la def di abstract, ma fa bene ricordarlo).
+    @Override
+    public abstract void onCreation(iSpaceShip ship);
+
+    @Override
+    public  abstract void onDelete(iSpaceShip ship);
+    
     @Override
     abstract public void check(iVisitor v);
-    
+
+    public iBaseComponent[] getConnectedComponents(iSpaceShip ship){
+        iBaseComponent[] res = new iBaseComponent[]{ship.getEmpty(), ship.getEmpty(), ship.getEmpty(), ship.getEmpty()};
+        if(this.getConnector(ComponentRotation.U000)
+			  .connected(ship.getComponent(this.getCoords().up())
+			  .getConnector(ComponentRotation.U180))){
+			res[0] = ship.getComponent(this.getCoords().up());
+		}
+        if(this.getConnector(ComponentRotation.U090)
+			  .connected(ship.getComponent(this.getCoords().right())
+			  .getConnector(ComponentRotation.U270))){
+			res[1] = ship.getComponent(this.getCoords().right());
+		}
+        if(this.getConnector(ComponentRotation.U180)
+			  .connected(ship.getComponent(this.getCoords().down())
+			  .getConnector(ComponentRotation.U000))){
+			res[2] = ship.getComponent(this.getCoords().down());
+		}
+        if(this.getConnector(ComponentRotation.U270)
+			  .connected(ship.getComponent(this.getCoords().left())
+			  .getConnector(ComponentRotation.U090))){
+			res[3] = ship.getComponent(this.getCoords().left());
+		}
+        return res;
+    }
 }
