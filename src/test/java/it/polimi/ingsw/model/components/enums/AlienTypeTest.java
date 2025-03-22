@@ -12,6 +12,7 @@ class AlienTypeTest {
 	private AlienType brown_cabin;
 	private AlienType purple_cabin;
 	private AlienType both_cabin;
+	private AlienType none_cabin;
 
 	
 	@BeforeEach
@@ -20,6 +21,7 @@ class AlienTypeTest {
 		brown_cabin = AlienType.BROWN;
 		purple_cabin = AlienType.PURPLE;
 		both_cabin = AlienType.BOTH;
+		none_cabin = AlienType.NONE;
 	}
 
 
@@ -48,7 +50,19 @@ class AlienTypeTest {
 	}
 
 	@Test
-	void getNCrewTypes() {
-		assertEquals(3, both_cabin.getNCrewTypes());
+	void compatible(){
+		/*working cases
+		cabin type is both
+		input type is human
+
+		*/
+		assertFalse(none_cabin.compatible(AlienType.PURPLE));
+		assertFalse(none_cabin.compatible(AlienType.BROWN));
+		assertFalse(none_cabin.compatible(AlienType.NONE));
+		assertFalse(none_cabin.compatible(AlienType.BOTH));
+		assertFalse(none_cabin.compatible(AlienType.HUMAN));
+		assertFalse(human_cabin.compatible(AlienType.BROWN));
+		//assertTrue(both_cabin.compatible(AlienType.BROWN));
+		//assertTrue(both_cabin.compatible(AlienType.PURPLE));
 	}
 }
