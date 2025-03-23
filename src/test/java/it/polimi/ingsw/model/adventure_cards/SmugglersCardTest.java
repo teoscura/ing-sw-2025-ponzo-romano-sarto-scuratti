@@ -1,0 +1,12 @@
+package it.polimi.ingsw.model.adventure_cards;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class SmugglersCardTest {
+
+	@Test
+	void apply() {
+	}
+}
