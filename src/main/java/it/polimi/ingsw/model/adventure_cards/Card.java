@@ -45,6 +45,7 @@ public abstract class Card implements iCard {
 
     protected void exhaust(){
         if(this.exhausted) throw new CardAlreadyExhaustedException("This card's effect was already exhausted.");
+        this.exhausted = true;
     }
 
     @Override
