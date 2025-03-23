@@ -19,6 +19,11 @@ class CannonComponentTest {
 	void setUp() {
 
 		ConnectorType[] connectors = new ConnectorType[4];
+		connectors[0] = ConnectorType.EMPTY;
+		connectors[1] = ConnectorType.EMPTY;
+		connectors[2] = ConnectorType.EMPTY;
+		connectors[3] = ConnectorType.EMPTY;
+
 
 		cannon1 = new CannonComponent(connectors, ComponentRotation.U000, CannonType.SINGLE);
 		cannon_wrong = new CannonComponent(connectors, ComponentRotation.U090, CannonType.SINGLE);
@@ -39,14 +44,14 @@ class CannonComponentTest {
 	void turnOnOff() {
 		assertEquals(0, cannon2.getCurrentPower());
 
-		UnpowerableException e2 = assertThrows(UnpowerableException.class, () -> {
+		assertThrows(UnpowerableException.class, () -> {
 			cannon2.turnOn();
 		});
 		assertEquals(0, cannon2.getCurrentPower());
 
 
 		assertEquals(0, cannon_wrong.getCurrentPower());
-		UnpowerableException e1 = assertThrows(UnpowerableException.class, () -> {
+		assertThrows(UnpowerableException.class, () -> {
 			cannon_wrong.turnOn();
 		});
 		assertEquals(0, cannon_wrong.getCurrentPower());
