@@ -2,7 +2,7 @@
 package it.polimi.ingsw.model.components.enums;
 
     public enum AlienType{
-        NONE (0, false, -2),
+        NONE (0, false, -1),
         HUMAN (2, false, 0),
         BROWN (1, true, 1),
         PURPLE (1, true, 2),
