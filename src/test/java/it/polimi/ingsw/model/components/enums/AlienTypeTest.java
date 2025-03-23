@@ -51,18 +51,24 @@ class AlienTypeTest {
 
 	@Test
 	void compatible(){
-		/*working cases
-		cabin type is both
-		input type is human
-
-		*/
 		assertFalse(none_cabin.compatible(AlienType.PURPLE));
 		assertFalse(none_cabin.compatible(AlienType.BROWN));
 		assertFalse(none_cabin.compatible(AlienType.NONE));
 		assertFalse(none_cabin.compatible(AlienType.BOTH));
 		assertFalse(none_cabin.compatible(AlienType.HUMAN));
+
 		assertFalse(human_cabin.compatible(AlienType.BROWN));
-		//assertTrue(both_cabin.compatible(AlienType.BROWN));
-		//assertTrue(both_cabin.compatible(AlienType.PURPLE));
+		assertFalse(human_cabin.compatible(AlienType.PURPLE));
+
+		assertTrue(brown_cabin.compatible(AlienType.BROWN));
+		assertTrue(purple_cabin.compatible(AlienType.PURPLE));
+		assertTrue(both_cabin.compatible(AlienType.BROWN));
+		assertTrue(both_cabin.compatible(AlienType.HUMAN));
+		assertTrue(both_cabin.compatible(AlienType.PURPLE));
+
+		assertTrue(brown_cabin.compatible(AlienType.HUMAN));
+		assertTrue(purple_cabin.compatible(AlienType.HUMAN));
+		assertFalse(brown_cabin.compatible(AlienType.PURPLE));
+		assertFalse(purple_cabin.compatible(AlienType.BROWN));
 	}
 }

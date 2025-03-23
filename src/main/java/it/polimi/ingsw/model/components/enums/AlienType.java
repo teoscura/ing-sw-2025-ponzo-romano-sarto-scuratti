@@ -2,7 +2,7 @@
 package it.polimi.ingsw.model.components.enums;
 
     public enum AlienType{
-        NONE (0, false, -1),
+        NONE (0, false, -2),
         HUMAN (2, false, 0),
         BROWN (1, true, 1),
         PURPLE (1, true, 2),
@@ -14,7 +14,6 @@ package it.polimi.ingsw.model.components.enums;
 
     AlienType(int max_capacity, boolean lifesupport_exists, int arraypos){
         this.max_capacity = max_capacity;
-        this.arraypos = arraypos;
         this.lifesupport_exists = lifesupport_exists;
         this.arraypos = arraypos;
     }
@@ -33,7 +32,8 @@ package it.polimi.ingsw.model.components.enums;
 
     public boolean compatible(AlienType type){
         if(max_capacity==0) return false;
-        //if(this.getArraypos() == 0
+        if(this.getArraypos() == type.getArraypos()) return true;
+        if(this.getArraypos() == 0 && type.getArraypos() > 0) return false;
         return type.getArraypos()*this.getArraypos()<=0;
     }
 }
