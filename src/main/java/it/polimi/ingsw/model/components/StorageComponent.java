@@ -6,6 +6,7 @@ import java.util.Arrays;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ConnectorType;
 import it.polimi.ingsw.model.components.enums.ShipmentType;
+import it.polimi.ingsw.model.components.enums.StorageType;
 import it.polimi.ingsw.model.components.exceptions.ContainerFullException;
 import it.polimi.ingsw.model.components.exceptions.ContainerNotSpecialException;
 import it.polimi.ingsw.model.components.visitors.iVisitor;
@@ -105,27 +106,4 @@ public class StorageComponent extends BaseComponent{
         ship.delStorageCoords(this.coords);
     }
 
-}
-
-enum StorageType{
-    DOUBLENORMAL (false, 2),
-    TRIPLENORMAL (false, 3),
-    SINGLESPECIAL (true, 1),
-    DOUBLESPECIAL (true, 2);
-
-    private boolean special;
-    private int capacity;
-
-    StorageType(boolean special, int capacity){
-        this.special = special;
-        this.capacity = capacity;
-    }
-
-    public boolean getSpecial(){
-        return this.special;
-    }
-
-    public int getCapacity(){
-        return this.capacity;
-    }
 }

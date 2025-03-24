@@ -1,6 +1,7 @@
 //Done.
 package it.polimi.ingsw.model.components;
 
+import it.polimi.ingsw.model.components.enums.BatteryType;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ConnectorType;
 import it.polimi.ingsw.model.components.exceptions.ContainerEmptyException;
@@ -69,17 +70,4 @@ public class BatteryComponent extends BaseComponent{
     }
 }
 
-enum BatteryType {
-    DOUBLE (2),
-    TRIPLE (3);
 
-    private int capacity;
-
-    BatteryType(int capacity){
-        this.capacity = capacity;
-    }
-
-    public int getCapacity(){
-        return this.capacity;
-    }
-}

@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.components;
 
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ConnectorType;
+import it.polimi.ingsw.model.components.enums.EngineType;
 import it.polimi.ingsw.model.components.exceptions.AlreadyPoweredException;
 import it.polimi.ingsw.model.components.exceptions.ComponentNotEmptyException;
 import it.polimi.ingsw.model.components.exceptions.UnpowerableException;
@@ -85,25 +86,4 @@ public class EngineComponent extends BaseComponent{
         if(powerable) ship.delPowerableCoords(this.coords);
     }
 
-}
-
-enum EngineType{
-    SINGLE (1, false),
-    DOUBLE (2, true );
-
-    private int max_power;
-    private boolean powerable;
-
-    EngineType(int max_power, boolean powerable){
-        this.max_power = max_power;
-        this.powerable = powerable;
-    }
-
-    public int getMaxPower(){
-        return this.max_power;
-    }
-
-    public boolean getPowerable(){
-        return this.powerable;
-    }
 }
