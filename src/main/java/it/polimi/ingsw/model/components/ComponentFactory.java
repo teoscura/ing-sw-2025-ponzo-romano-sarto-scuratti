@@ -66,40 +66,134 @@ public class ComponentFactory {
             put(6, new BatteryComponent(
                         new ConnectorType[]{
                             ConnectorType.UNIVERSAL,
+                            ConnectorType.SINGLE_CONNECTOR,
+                            ConnectorType.SINGLE_CONNECTOR,
+                            ConnectorType.SINGLE_CONNECTOR
                         },
+                        ComponentRotation.U000,
+                        BatteryType.DOUBLE
                 )
             );
-            put(7, new CaCACA
+            put(7, new BatteryComponent(
+                    new ConnectorType[]{
+                            ConnectorType.UNIVERSAL,
+                            ConnectorType.DOUBLE_CONNECTOR,
+                            ConnectorType.DOUBLE_CONNECTOR,
+                            ConnectorType.DOUBLE_CONNECTOR
+                    },
+                    ComponentRotation.U000,
+                    BatteryType.DOUBLE
+                    )
             );
-            put(8, new CaCACA
-                
+            put(8, new BatteryComponent(
+                    new ConnectorType[]{
+                            ConnectorType.EMPTY,
+                            ConnectorType.EMPTY,
+                            ConnectorType.EMPTY,
+                            ConnectorType.UNIVERSAL
+                    },
+                    ComponentRotation.U000,
+                    BatteryType.DOUBLE
+                    )
             );
-            put(9, new CaCACA
-                
+            put(9, new BatteryComponent(
+                    new ConnectorType[]{
+                            ConnectorType.EMPTY,
+                            ConnectorType.EMPTY,
+                            ConnectorType.EMPTY,
+                            ConnectorType.UNIVERSAL
+                    },
+                    ComponentRotation.U000,
+                    BatteryType.DOUBLE
+                    )
             );
-            put(10, new CaCACA
-                
+            put(10, new BatteryComponent(
+                    new ConnectorType[]{
+                            ConnectorType.EMPTY,
+                            ConnectorType.UNIVERSAL,
+                            ConnectorType.EMPTY,
+                            ConnectorType.UNIVERSAL
+                    },
+                    ComponentRotation.U000,
+                    BatteryType.DOUBLE
+                    )
             );
-            put(11, new CaCACA
-                
+            put(11, new BatteryComponent(
+                    new ConnectorType[]{
+                            ConnectorType.UNIVERSAL,
+                            ConnectorType.EMPTY,
+                            ConnectorType.EMPTY,
+                            ConnectorType.UNIVERSAL
+                    },
+                    ComponentRotation.U000,
+                    BatteryType.DOUBLE
+                    )
             );
-            put(12, new CaCACA
-                
+            put(12, new BatteryComponent(
+                    new ConnectorType[]{
+                            ConnectorType.SINGLE_CONNECTOR,
+                            ConnectorType.EMPTY,
+                            ConnectorType.DOUBLE_CONNECTOR,
+                            ConnectorType.EMPTY
+                    },
+                    ComponentRotation.U000,
+                    BatteryType.TRIPLE
+                    )
             );
-            put(13, new CaCACA
-                
+            put(13, new BatteryComponent(
+                    new ConnectorType[]{
+                            ConnectorType.SINGLE_CONNECTOR,
+                            ConnectorType.SINGLE_CONNECTOR,
+                            ConnectorType.DOUBLE_CONNECTOR,
+                            ConnectorType.EMPTY
+                    },
+                    ComponentRotation.U000,
+                    BatteryType.TRIPLE
+                    )
             );
-            put(14, new CaCACA
-                
+            put(14, new BatteryComponent(
+                    new ConnectorType[]{
+                            ConnectorType.DOUBLE_CONNECTOR,
+                            ConnectorType.EMPTY,
+                            ConnectorType.EMPTY,
+                            ConnectorType.EMPTY
+                    },
+                    ComponentRotation.U000,
+                    BatteryType.TRIPLE
+                    )
             );
-            put(15, new CaCACA
-                
+            put(15, new BatteryComponent(
+                    new ConnectorType[]{
+                            ConnectorType.DOUBLE_CONNECTOR,
+                            ConnectorType.SINGLE_CONNECTOR,
+                            ConnectorType.EMPTY,
+                            ConnectorType.EMPTY
+                    },
+                    ComponentRotation.U000,
+                    BatteryType.TRIPLE
+                    )
             );
-            put(16, new CaCACA
-                
+            put(16, new BatteryComponent(
+                    new ConnectorType[]{
+                            ConnectorType.DOUBLE_CONNECTOR,
+                            ConnectorType.DOUBLE_CONNECTOR,
+                            ConnectorType.SINGLE_CONNECTOR,
+                            ConnectorType.EMPTY
+                    },
+                    ComponentRotation.U000,
+                    BatteryType.TRIPLE
+                    )
             );
-            put(17, new CaCACA
-                
+            put(17, new BatteryComponent(
+                    new ConnectorType[]{
+                            ConnectorType.EMPTY,
+                            ConnectorType.EMPTY,
+                            ConnectorType.EMPTY,
+                            ConnectorType.SINGLE_CONNECTOR
+                    },
+                    ComponentRotation.U000,
+                    BatteryType.TRIPLE
+                    )
             );
             put(18, new StorageComponent(
                         new ConnectorType[]{
@@ -343,35 +437,107 @@ public class ComponentFactory {
             put(60, new CaCACA
                 
             );
-            put(61, new CaCACA
+            put(61, new YELLOWSTARTINGCABIN
                 
             );
-            put(62, new YELLOWSTARTINGCABIN
-                
+            put(62, new StorageComponent(
+                    new ConnectorType[]{
+                            ConnectorType.EMPTY,
+                            ConnectorType.DOUBLE_CONNECTOR,
+                            ConnectorType.SINGLE_CONNECTOR,
+                            ConnectorType.UNIVERSAL
+                    },
+                    ComponentRotation.U000,
+                    StorageType.SINGLESPECIAL
+                    )
             );
-            put(63, new CaCACA
-                
+            put(63, new StorageComponent(
+                    new ConnectorType[]{
+                            ConnectorType.EMPTY,
+                            ConnectorType.UNIVERSAL,
+                            ConnectorType.EMPTY,
+                            ConnectorType.UNIVERSAL
+                    },
+                    ComponentRotation.U000,
+                    StorageType.SINGLESPECIAL
+                    )
             );
-            put(64, new CaCACA
-                
+            put(64, new StorageComponent(
+                    new ConnectorType[]{
+                            ConnectorType.SINGLE_CONNECTOR,
+                            ConnectorType.SINGLE_CONNECTOR,
+                            ConnectorType.SINGLE_CONNECTOR,
+                            ConnectorType.UNIVERSAL
+                    },
+                    ComponentRotation.U000,
+                    StorageType.SINGLESPECIAL
+                    )
             );
-            put(65, new CaCACA
-                
+            put(65, new StorageComponent(
+                    new ConnectorType[]{
+                            ConnectorType.DOUBLE_CONNECTOR,
+                            ConnectorType.SINGLE_CONNECTOR,
+                            ConnectorType.EMPTY,
+                            ConnectorType.UNIVERSAL
+                    },
+                    ComponentRotation.U000,
+                    StorageType.SINGLESPECIAL
+                    )
             );
-            put(66, new CaCACA
-                
+            put(66, new StorageComponent(
+                    new ConnectorType[]{
+                            ConnectorType.DOUBLE_CONNECTOR,
+                            ConnectorType.DOUBLE_CONNECTOR,
+                            ConnectorType.DOUBLE_CONNECTOR,
+                            ConnectorType.UNIVERSAL
+                    },
+                    ComponentRotation.U000,
+                    StorageType.SINGLESPECIAL
+                    )
             );
-            put(67, new CaCACA
-                
+            put(67, new StorageComponent(
+                    new ConnectorType[]{
+                            ConnectorType.UNIVERSAL,
+                            ConnectorType.EMPTY,
+                            ConnectorType.EMPTY,
+                            ConnectorType.UNIVERSAL
+                    },
+                    ComponentRotation.U000,
+                    StorageType.SINGLESPECIAL
+                    )
             );
-            put(68, new CaCACA
-                
+            put(68, new StorageComponent(
+                    new ConnectorType[]{
+                            ConnectorType.EMPTY,
+                            ConnectorType.EMPTY,
+                            ConnectorType.EMPTY,
+                            ConnectorType.SINGLE_CONNECTOR
+                    },
+                    ComponentRotation.U000,
+                    StorageType.DOUBLESPECIAL
+                    )
             );
-            put(69, new CaCACA
-                
+            put(69, new StorageComponent(
+                    new ConnectorType[]{
+                            ConnectorType.EMPTY,
+                            ConnectorType.DOUBLE_CONNECTOR,
+                            ConnectorType.EMPTY,
+                            ConnectorType.SINGLE_CONNECTOR
+                    },
+                    ComponentRotation.U000,
+                    StorageType.DOUBLESPECIAL
+                    )
             );
-            put(70, new CaCACA
-                
+            put(70, new StorageComponent(
+                    new ConnectorType[]{
+                            ConnectorType.EMPTY,
+                            ConnectorType.EMPTY,
+                            ConnectorType.EMPTY,
+                            ConnectorType.DOUBLE_CONNECTOR
+                    },
+                    ComponentRotation.U000,
+                    StorageType.DOUBLESPECIAL
+                    )
             );
 			//BEGIN ENGINE
             put(71, new EngineComponent(
@@ -1110,41 +1276,137 @@ public class ComponentFactory {
             // END CANNON
 
 
-            put(137, new CaCACA
-
+            put(137, new AlienLifeSupportComponent(
+                    new ConnectorType[]{
+                            ConnectorType.SINGLE_CONNECTOR,
+                            ConnectorType.SINGLE_CONNECTOR,
+                            ConnectorType.EMPTY,
+                            ConnectorType.SINGLE_CONNECTOR
+                    },
+                    ComponentRotation.U000,
+                    AlienType.BROWN
+                    )
             );
-            put(138, new CaCACA
-
+            put(138, new AlienLifeSupportComponent(
+                    new ConnectorType[]{
+                            ConnectorType.DOUBLE_CONNECTOR,
+                            ConnectorType.SINGLE_CONNECTOR,
+                            ConnectorType.EMPTY,
+                            ConnectorType.SINGLE_CONNECTOR
+                    },
+                    ComponentRotation.U000,
+                    AlienType.BROWN
+                    )
             );
-            put(139, new CaCACA
-
+            put(139, new AlienLifeSupportComponent(
+                    new ConnectorType[]{
+                            ConnectorType.EMPTY,
+                            ConnectorType.EMPTY,
+                            ConnectorType.EMPTY,
+                            ConnectorType.UNIVERSAL
+                    },
+                    ComponentRotation.U000,
+                    AlienType.BROWN
+                    )
             );
-            put(140, new CaCACA
-
+            put(140, new AlienLifeSupportComponent(
+                    new ConnectorType[]{
+                            ConnectorType.EMPTY,
+                            ConnectorType.EMPTY,
+                            ConnectorType.SINGLE_CONNECTOR,
+                            ConnectorType.UNIVERSAL
+                    },
+                    ComponentRotation.U000,
+                    AlienType.BROWN
+                    )
             );
-            put(141, new CaCACA
-
+            put(141, new AlienLifeSupportComponent(
+                    new ConnectorType[]{
+                            ConnectorType.EMPTY,
+                            ConnectorType.DOUBLE_CONNECTOR,
+                            ConnectorType.EMPTY,
+                            ConnectorType.UNIVERSAL
+                    },
+                    ComponentRotation.U000,
+                    AlienType.BROWN
+                    )
             );
-            put(142, new CaCACA
-
+            put(142, new AlienLifeSupportComponent(
+                    new ConnectorType[]{
+                            ConnectorType.SINGLE_CONNECTOR,
+                            ConnectorType.EMPTY,
+                            ConnectorType.EMPTY,
+                            ConnectorType.UNIVERSAL
+                    },
+                    ComponentRotation.U000,
+                    AlienType.BROWN
+                    )
             );
-            put(143, new CaCACA
-
+            put(143, new AlienLifeSupportComponent(
+                    new ConnectorType[]{
+                            ConnectorType.SINGLE_CONNECTOR,
+                            ConnectorType.DOUBLE_CONNECTOR,
+                            ConnectorType.EMPTY,
+                            ConnectorType.DOUBLE_CONNECTOR
+                    },
+                    ComponentRotation.U000,
+                    AlienType.PURPLE
+                    )
             );
-            put(144, new CaCACA
-
+            put(144, new AlienLifeSupportComponent(
+                    new ConnectorType[]{
+                            ConnectorType.DOUBLE_CONNECTOR,
+                            ConnectorType.DOUBLE_CONNECTOR,
+                            ConnectorType.EMPTY,
+                            ConnectorType.DOUBLE_CONNECTOR
+                    },
+                    ComponentRotation.U000,
+                    AlienType.PURPLE
+                    )
             );
-            put(145, new CaCACA
-
+            put(145, new AlienLifeSupportComponent(
+                    new ConnectorType[]{
+                            ConnectorType.EMPTY,
+                            ConnectorType.EMPTY,
+                            ConnectorType.EMPTY,
+                            ConnectorType.UNIVERSAL
+                    },
+                    ComponentRotation.U000,
+                    AlienType.PURPLE
+                    )
             );
-            put(146, new CaCACA
-
+            put(146, new AlienLifeSupportComponent(
+                    new ConnectorType[]{
+                            ConnectorType.EMPTY,
+                            ConnectorType.EMPTY,
+                            ConnectorType.DOUBLE_CONNECTOR,
+                            ConnectorType.UNIVERSAL
+                    },
+                    ComponentRotation.U000,
+                    AlienType.PURPLE
+                    )
             );
-            put(147, new CaCACA
-
+            put(147, new AlienLifeSupportComponent(
+                    new ConnectorType[]{
+                            ConnectorType.EMPTY,
+                            ConnectorType.SINGLE_CONNECTOR,
+                            ConnectorType.EMPTY,
+                            ConnectorType.UNIVERSAL
+                    },
+                    ComponentRotation.U000,
+                    AlienType.PURPLE
+                    )
             );
-            put(148, new CaCACA
-
+            put(148, new AlienLifeSupportComponent(
+                    new ConnectorType[]{
+                            ConnectorType.DOUBLE_CONNECTOR,
+                            ConnectorType.EMPTY,
+                            ConnectorType.EMPTY,
+                            ConnectorType.UNIVERSAL
+                    },
+                    ComponentRotation.U000,
+                    AlienType.PURPLE
+                    )
             );
             put(149, new CaCACA
 
