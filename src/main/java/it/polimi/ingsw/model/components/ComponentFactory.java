@@ -7,8 +7,8 @@ import it.polimi.ingsw.model.components.enums.*;
 
 //TODO.
 public class ComponentFactory {
-    
-    private HashMap<Integer,iBaseComponent> components;
+
+    private HashMap<Integer, iBaseComponent> components;
 
     public ComponentFactory(){
         this.components = new HashMap<Integer, iBaseComponent>() {{
@@ -375,6 +375,651 @@ public class ComponentFactory {
             );
 			//BEGIN ENGINE
             put(71, new EngineComponent(
+				new ConnectorType[]{
+					ConnectorType.EMPTY,
+					ConnectorType.UNIVERSAL,
+					ConnectorType.EMPTY,
+					ConnectorType.EMPTY    
+				},
+				ComponentRotation.U000,
+				EngineType.SINGLE
+		));
+
+		put(72, new EngineComponent(
+				new ConnectorType[]{
+					ConnectorType.EMPTY,
+					ConnectorType.UNIVERSAL,
+					ConnectorType.EMPTY,
+					ConnectorType.EMPTY    
+				},
+				ComponentRotation.U000,
+				EngineType.SINGLE
+		));
+
+		put(73, new EngineComponent(
+				new ConnectorType[]{
+					ConnectorType.SINGLE_CONNECTOR,
+					ConnectorType.EMPTY,
+					ConnectorType.EMPTY,
+					ConnectorType.EMPTY
+				},
+				ComponentRotation.U000,
+				EngineType.SINGLE
+		));
+
+		put(74, new EngineComponent(
+				new ConnectorType[]{
+					ConnectorType.SINGLE_CONNECTOR,
+					ConnectorType.EMPTY,
+					ConnectorType.EMPTY,
+					ConnectorType.EMPTY           
+				},
+				ComponentRotation.U000,
+				EngineType.SINGLE
+		));
+
+		put(75, new EngineComponent(
+				new ConnectorType[]{
+					ConnectorType.SINGLE_CONNECTOR,
+					ConnectorType.SINGLE_CONNECTOR,
+					ConnectorType.EMPTY,
+					ConnectorType.EMPTY           
+				},
+				ComponentRotation.U000,
+				EngineType.SINGLE
+		));
+
+		put(76, new EngineComponent(
+				new ConnectorType[]{
+					ConnectorType.DOUBLE_CONNECTOR,
+					ConnectorType.EMPTY,
+					ConnectorType.EMPTY,
+					ConnectorType.EMPTY           
+				},
+				ComponentRotation.U000,
+				EngineType.SINGLE
+		));
+
+		put(77, new EngineComponent(
+				new ConnectorType[]{
+					ConnectorType.DOUBLE_CONNECTOR,
+					ConnectorType.EMPTY,
+					ConnectorType.EMPTY,
+					ConnectorType.EMPTY           
+				},
+				ComponentRotation.U000,
+				EngineType.SINGLE
+		));
+
+		put(78, new EngineComponent(
+				new ConnectorType[]{
+					ConnectorType.DOUBLE_CONNECTOR,
+					ConnectorType.UNIVERSAL,
+					ConnectorType.EMPTY,
+					ConnectorType.EMPTY
+				},
+				ComponentRotation.U000,
+				EngineType.SINGLE
+		));
+
+		put(79, new EngineComponent(
+				new ConnectorType[]{
+					ConnectorType.UNIVERSAL,
+					ConnectorType.DOUBLE_CONNECTOR,
+					ConnectorType.EMPTY,
+					ConnectorType.EMPTY           
+				},
+				ComponentRotation.U000,
+				EngineType.SINGLE
+		));
+
+		put(80, new EngineComponent(
+				new ConnectorType[]{
+					ConnectorType.EMPTY,
+					ConnectorType.UNIVERSAL,
+					ConnectorType.EMPTY,
+					ConnectorType.SINGLE_CONNECTOR
+				},
+				ComponentRotation.U000,
+				EngineType.SINGLE
+		));
+
+		put(81, new EngineComponent(
+				new ConnectorType[]{
+					ConnectorType.DOUBLE_CONNECTOR,
+					ConnectorType.SINGLE_CONNECTOR,
+					ConnectorType.EMPTY,
+					ConnectorType.SINGLE_CONNECTOR
+				},
+				ComponentRotation.U000,
+				EngineType.SINGLE
+		));
+
+		put(82, new EngineComponent(
+				new ConnectorType[]{
+					ConnectorType.UNIVERSAL,
+					ConnectorType.EMPTY,
+					ConnectorType.EMPTY,
+					ConnectorType.SINGLE_CONNECTOR
+				},
+				ComponentRotation.U000,
+				EngineType.SINGLE
+		));
+
+		put(83, new EngineComponent(
+				new ConnectorType[]{
+					ConnectorType.UNIVERSAL,
+					ConnectorType.DOUBLE_CONNECTOR,
+					ConnectorType.EMPTY,
+					ConnectorType.SINGLE_CONNECTOR
+				},
+				ComponentRotation.U000,
+				EngineType.SINGLE
+		));
+
+		put(84, new EngineComponent(
+				new ConnectorType[]{
+					ConnectorType.EMPTY,
+					ConnectorType.SINGLE_CONNECTOR,
+					ConnectorType.EMPTY,
+					ConnectorType.DOUBLE_CONNECTOR
+				},
+				ComponentRotation.U000,
+				EngineType.SINGLE
+		));
+
+		put(85, new EngineComponent(
+				new ConnectorType[]{
+					ConnectorType.SINGLE_CONNECTOR,
+					ConnectorType.DOUBLE_CONNECTOR,
+					ConnectorType.EMPTY,
+					ConnectorType.DOUBLE_CONNECTOR
+				},
+				ComponentRotation.U000,
+				EngineType.SINGLE
+		));
+
+		put(86, new EngineComponent(
+				new ConnectorType[]{
+					ConnectorType.DOUBLE_CONNECTOR,
+					ConnectorType.EMPTY,
+					ConnectorType.EMPTY,
+					ConnectorType.DOUBLE_CONNECTOR
+				},
+				ComponentRotation.U000,
+				EngineType.SINGLE
+		));
+
+		put(87, new EngineComponent(
+				new ConnectorType[]{
+					ConnectorType.UNIVERSAL,
+					ConnectorType.SINGLE_CONNECTOR,
+					ConnectorType.EMPTY,
+					ConnectorType.DOUBLE_CONNECTOR
+				},
+				ComponentRotation.U000,
+				EngineType.SINGLE
+		));
+
+		put(88, new EngineComponent(
+				new ConnectorType[]{
+						ConnectorType.EMPTY,
+					ConnectorType.EMPTY,
+					ConnectorType.EMPTY,
+					ConnectorType.UNIVERSAL
+				},
+				ComponentRotation.U000,
+				EngineType.SINGLE
+		));
+
+		put(89, new EngineComponent(
+				new ConnectorType[]{
+							ConnectorType.EMPTY,
+							ConnectorType.EMPTY,
+							ConnectorType.EMPTY,
+							ConnectorType.UNIVERSAL
+				},
+						ComponentRotation.U000,
+						EngineType.SINGLE
+		));
+
+		put(90, new EngineComponent(
+				new ConnectorType[]{
+							ConnectorType.EMPTY,
+							ConnectorType.DOUBLE_CONNECTOR,
+							ConnectorType.EMPTY,
+							ConnectorType.UNIVERSAL
+				},
+						ComponentRotation.U000,
+						EngineType.SINGLE
+		));
+
+		put(91, new EngineComponent(
+						new ConnectorType[]{
+							ConnectorType.SINGLE_CONNECTOR,
+							ConnectorType.EMPTY,
+							ConnectorType.EMPTY,
+							ConnectorType.UNIVERSAL
+				},
+						ComponentRotation.U000,
+						EngineType.SINGLE
+			));
+
+
+			put(92, new EngineComponent(
+						new ConnectorType[]{
+							ConnectorType.SINGLE_CONNECTOR,
+							ConnectorType.EMPTY,
+							ConnectorType.EMPTY,
+							ConnectorType.EMPTY
+						},
+						ComponentRotation.U000,
+						EngineType.DOUBLE
+			));
+
+			put(93, new EngineComponent(
+						new ConnectorType[]{
+							ConnectorType.SINGLE_CONNECTOR,
+							ConnectorType.UNIVERSAL,
+							ConnectorType.EMPTY,
+							ConnectorType.EMPTY
+						},
+						ComponentRotation.U000,
+						EngineType.DOUBLE
+			));
+
+			put(94, new EngineComponent(
+						new ConnectorType[]{
+							ConnectorType.DOUBLE_CONNECTOR,
+							ConnectorType.EMPTY,
+							ConnectorType.EMPTY,
+							ConnectorType.EMPTY
+						},
+						ComponentRotation.U000,
+						EngineType.DOUBLE
+			));
+
+			put(95, new EngineComponent(
+						new ConnectorType[]{
+							ConnectorType.UNIVERSAL,
+							ConnectorType.SINGLE_CONNECTOR,
+							ConnectorType.EMPTY,
+							ConnectorType.EMPTY
+						},
+						ComponentRotation.U000,
+						EngineType.DOUBLE
+			));
+
+			put(96, new EngineComponent(
+						new ConnectorType[]{
+							ConnectorType.SINGLE_CONNECTOR,
+							ConnectorType.SINGLE_CONNECTOR,
+							ConnectorType.EMPTY,
+							ConnectorType.SINGLE_CONNECTOR
+						},
+						ComponentRotation.U000,
+						EngineType.DOUBLE
+			));
+
+			put(97, new EngineComponent(
+						new ConnectorType[]{
+							ConnectorType.DOUBLE_CONNECTOR,
+							ConnectorType.DOUBLE_CONNECTOR,
+							ConnectorType.EMPTY,
+							ConnectorType.DOUBLE_CONNECTOR
+						},
+						ComponentRotation.U000,
+						EngineType.DOUBLE
+			));
+
+			put(98, new EngineComponent(
+						new ConnectorType[]{
+							ConnectorType.UNIVERSAL,
+							ConnectorType.EMPTY,
+							ConnectorType.EMPTY,
+							ConnectorType.DOUBLE_CONNECTOR
+						},
+						ComponentRotation.U000,
+						EngineType.DOUBLE
+			));
+
+			put(99, new EngineComponent(
+						new ConnectorType[]{
+							ConnectorType.EMPTY,
+							ConnectorType.UNIVERSAL,
+							ConnectorType.EMPTY,
+							ConnectorType.UNIVERSAL
+						},
+						ComponentRotation.U000,
+						EngineType.DOUBLE
+			));
+
+			put(100, new EngineComponent(
+						new ConnectorType[]{
+							ConnectorType.DOUBLE_CONNECTOR,
+							ConnectorType.EMPTY,
+							ConnectorType.EMPTY,
+							ConnectorType.UNIVERSAL
+						},
+						ComponentRotation.U000,
+						EngineType.DOUBLE
+			));
+
+			//END ENGINE 
+            
+            //BEGIN CANNON
+
+
+            put(101, new CannonComponent(
+                        new ConnectorType[]{
+                            ConnectorType.EMPTY,
+                            ConnectorType.EMPTY,
+                            ConnectorType.SINGLE_CONNECTOR,
+                            ConnectorType.EMPTY
+                        },
+                        ComponentRotation.U000,
+                        CannonType.SINGLE
+            ));
+
+            put(102, new CannonComponent(
+                        new ConnectorType[]{
+                            ConnectorType.EMPTY,
+                            ConnectorType.EMPTY,
+                            ConnectorType.SINGLE_CONNECTOR,
+                            ConnectorType.EMPTY
+                        },
+                        ComponentRotation.U000,
+                        CannonType.SINGLE
+            ));
+
+            put(103, new CannonComponent(
+                        new ConnectorType[]{
+                            ConnectorType.EMPTY,
+                            ConnectorType.EMPTY,
+                            ConnectorType.DOUBLE_CONNECTOR,
+                            ConnectorType.EMPTY
+                        },
+                        ComponentRotation.U000,
+                        CannonType.SINGLE
+            ));
+
+            put(104, new CannonComponent(
+                        new ConnectorType[]{
+                            ConnectorType.EMPTY,
+                            ConnectorType.EMPTY,
+                            ConnectorType.DOUBLE_CONNECTOR,
+                            ConnectorType.EMPTY
+                        },
+                        ComponentRotation.U000,
+                        CannonType.SINGLE
+            ));
+
+            put(105, new CannonComponent(
+                        new ConnectorType[]{
+                            ConnectorType.EMPTY,
+                            ConnectorType.SINGLE_CONNECTOR,
+                            ConnectorType.EMPTY,
+                            ConnectorType.EMPTY
+                        },
+                        ComponentRotation.U000,
+                        CannonType.SINGLE
+            ));
+
+            put(106, new CannonComponent(
+                        new ConnectorType[]{
+                            ConnectorType.EMPTY,
+                            ConnectorType.SINGLE_CONNECTOR,
+                            ConnectorType.DOUBLE_CONNECTOR,
+                            ConnectorType.EMPTY
+                        },
+                        ComponentRotation.U000,
+                        CannonType.SINGLE
+            ));
+
+            put(107, new CannonComponent(
+                        new ConnectorType[]{
+                            ConnectorType.EMPTY,
+                            ConnectorType.SINGLE_CONNECTOR,
+                            ConnectorType.UNIVERSAL,
+                            ConnectorType.EMPTY
+                        },
+                        ComponentRotation.U000,
+                        CannonType.SINGLE
+            ));
+
+            put(108, new CannonComponent(
+                        new ConnectorType[]{
+                            ConnectorType.EMPTY,
+                            ConnectorType.DOUBLE_CONNECTOR,
+                            ConnectorType.EMPTY,
+                            ConnectorType.EMPTY
+                        },
+                        ComponentRotation.U000,
+                        CannonType.SINGLE
+            ));
+
+            put(109, new CannonComponent(
+                        new ConnectorType[]{
+                            ConnectorType.EMPTY,
+                            ConnectorType.DOUBLE_CONNECTOR,
+                            ConnectorType.SINGLE_CONNECTOR,
+                            ConnectorType.EMPTY
+                        },
+                        ComponentRotation.U000,
+                        CannonType.SINGLE
+            ));
+
+            put(110, new CannonComponent(
+                        new ConnectorType[]{
+                            ConnectorType.EMPTY,
+                            ConnectorType.DOUBLE_CONNECTOR,
+                            ConnectorType.UNIVERSAL,
+                            ConnectorType.EMPTY
+                        },
+                        ComponentRotation.U000,
+                        CannonType.SINGLE
+            ));
+
+            put(111, new CannonComponent(
+                        new ConnectorType[]{
+                            ConnectorType.EMPTY,
+                            ConnectorType.UNIVERSAL,
+                            ConnectorType.SINGLE_CONNECTOR,
+                            ConnectorType.EMPTY
+                        },
+                        ComponentRotation.U000,
+                        CannonType.SINGLE
+            ));
+
+            put(112, new CannonComponent(
+                        new ConnectorType[]{
+                            ConnectorType.EMPTY,
+                            ConnectorType.EMPTY,
+                            ConnectorType.EMPTY,
+                            ConnectorType.SINGLE_CONNECTOR
+                        },
+                        ComponentRotation.U000,
+                        CannonType.SINGLE
+            ));
+
+            put(113, new CannonComponent(
+                        new ConnectorType[]{
+                            ConnectorType.EMPTY,
+                            ConnectorType.EMPTY,
+                            ConnectorType.DOUBLE_CONNECTOR,
+                            ConnectorType.SINGLE_CONNECTOR
+                        },
+                        ComponentRotation.U000,
+                        CannonType.SINGLE
+            ));
+
+            put(114, new CannonComponent(
+                        new ConnectorType[]{
+                            ConnectorType.EMPTY,
+                            ConnectorType.EMPTY,
+                            ConnectorType.UNIVERSAL,
+                            ConnectorType.SINGLE_CONNECTOR
+                        },
+                        ComponentRotation.U000,
+                        CannonType.SINGLE
+            ));
+
+            put(115, new CannonComponent(
+                        new ConnectorType[]{
+                            ConnectorType.EMPTY,
+                            ConnectorType.SINGLE_CONNECTOR,
+                            ConnectorType.SINGLE_CONNECTOR,
+                            ConnectorType.SINGLE_CONNECTOR
+                        },
+                        ComponentRotation.U000,
+                        CannonType.SINGLE
+            ));
+
+            put(116, new CannonComponent(
+                        new ConnectorType[]{
+                            ConnectorType.EMPTY,
+                            ConnectorType.DOUBLE_CONNECTOR,
+                            ConnectorType.UNIVERSAL,
+                            ConnectorType.SINGLE_CONNECTOR
+                        },
+                        ComponentRotation.U000,
+                        CannonType.SINGLE
+            ));
+
+            put(117, new CannonComponent(
+                        new ConnectorType[]{
+                            ConnectorType.EMPTY,
+                            ConnectorType.UNIVERSAL,
+                            ConnectorType.EMPTY,
+                            ConnectorType.SINGLE_CONNECTOR
+                        },
+                        ComponentRotation.U000,
+                        CannonType.SINGLE
+            ));
+
+            put(118, new CannonComponent(
+                        new ConnectorType[]{
+                            ConnectorType.EMPTY,
+                            ConnectorType.EMPTY,
+                            ConnectorType.EMPTY,
+                            ConnectorType.DOUBLE_CONNECTOR
+                        },
+                        ComponentRotation.U000,
+                        CannonType.SINGLE
+            ));
+
+            put(119, new CannonComponent(
+                        new ConnectorType[]{
+                            ConnectorType.EMPTY,
+                            ConnectorType.EMPTY,
+                            ConnectorType.SINGLE_CONNECTOR,
+                            ConnectorType.DOUBLE_CONNECTOR
+                        },
+                        ComponentRotation.U000,
+                        CannonType.SINGLE
+            ));
+
+            put(120, new CannonComponent(
+                        new ConnectorType[]{
+                            ConnectorType.EMPTY,
+                            ConnectorType.EMPTY,
+                            ConnectorType.UNIVERSAL,
+                            ConnectorType.DOUBLE_CONNECTOR
+                        },
+                        ComponentRotation.U000,
+                        CannonType.SINGLE
+            ));
+
+
+
+            put(121, new CannonComponent(
+                        new ConnectorType[]{
+                            ConnectorType.EMPTY,
+                            ConnectorType.SINGLE_CONNECTOR,
+                            ConnectorType.EMPTY,
+                            ConnectorType.DOUBLE_CONNECTOR
+                        },
+                        ComponentRotation.U000,
+                        CannonType.SINGLE
+            ));
+
+            put(122, new CannonComponent(
+                        new ConnectorType[]{
+                            ConnectorType.EMPTY,
+                            ConnectorType.SINGLE_CONNECTOR,
+                            ConnectorType.UNIVERSAL,
+                            ConnectorType.DOUBLE_CONNECTOR
+                        },
+                        ComponentRotation.U000,
+                        CannonType.SINGLE
+            ));
+
+            put(123, new CannonComponent(
+                        new ConnectorType[]{
+                            ConnectorType.EMPTY,
+                            ConnectorType.DOUBLE_CONNECTOR,
+                            ConnectorType.DOUBLE_CONNECTOR,
+                            ConnectorType.DOUBLE_CONNECTOR
+                        },
+                        ComponentRotation.U000,
+                        CannonType.SINGLE
+            ));
+
+            put(124, new CannonComponent(
+                        new ConnectorType[]{
+                            ConnectorType.EMPTY,
+                            ConnectorType.EMPTY,
+                            ConnectorType.DOUBLE_CONNECTOR,
+                            ConnectorType.UNIVERSAL
+                        },
+                        ComponentRotation.U000,
+                        CannonType.SINGLE
+            ));
+
+            put(125, new CannonComponent(
+                        new ConnectorType[]{
+                            ConnectorType.EMPTY,
+                            ConnectorType.DOUBLE_CONNECTOR,
+                            ConnectorType.EMPTY,
+                            ConnectorType.UNIVERSAL
+                        },
+                        ComponentRotation.U000,
+                        CannonType.SINGLE
+            ));
+            put(126, new CannonComponent(
+                        new ConnectorType[]{
+                            ConnectorType.EMPTY,
+                            ConnectorType.EMPTY,
+                            ConnectorType.SINGLE_CONNECTOR,
+                            ConnectorType.EMPTY
+                        },
+                        ComponentRotation.U000,
+                        CannonType.DOUBLE
+            ));
+
+            put(127, new CannonComponent(
+                        new ConnectorType[]{
+                            ConnectorType.EMPTY,
+                            ConnectorType.EMPTY,
+                            ConnectorType.DOUBLE_CONNECTOR,
+                            ConnectorType.EMPTY
+                        },
+                        ComponentRotation.U000,
+                        CannonType.DOUBLE
+            ));
+
+            put(128, new CannonComponent(
+                        new ConnectorType[]{
+                            ConnectorType.EMPTY,
+                            ConnectorType.SINGLE_CONNECTOR,
+                            ConnectorType.UNIVERSAL,
+                            ConnectorType.EMPTY
+                        },
+                        ComponentRotation.U000,
+                        CannonType.DOUBLE
+            ));
+
+            put(129, new CannonComponent(
                         new ConnectorType[]{
                             ConnectorType.EMPTY,
                             ConnectorType.UNIVERSAL,
@@ -382,207 +1027,89 @@ public class ComponentFactory {
                             ConnectorType.EMPTY
                         },
                         ComponentRotation.U000,
-                        EngineType.SINGLE;
-                )
-            );
+                        CannonType.DOUBLE
+            ));
+
+            put(130, new CannonComponent(
+                        new ConnectorType[]{
+                            ConnectorType.EMPTY,
+                            ConnectorType.UNIVERSAL,
+                            ConnectorType.DOUBLE_CONNECTOR,
+                            ConnectorType.EMPTY
+                        },
+                        ComponentRotation.U000,
+                        CannonType.DOUBLE
+            ));
+
+            put(131, new CannonComponent(
+                        new ConnectorType[]{
+                            ConnectorType.EMPTY,
+                            ConnectorType.SINGLE_CONNECTOR,
+                            ConnectorType.DOUBLE_CONNECTOR,
+                            ConnectorType.SINGLE_CONNECTOR
+                        },
+                        ComponentRotation.U000,
+                        CannonType.DOUBLE
+            ));
+
+            put(132, new CannonComponent(
+                        new ConnectorType[]{
+                            ConnectorType.EMPTY,
+                            ConnectorType.DOUBLE_CONNECTOR,
+                            ConnectorType.EMPTY,
+                            ConnectorType.SINGLE_CONNECTOR
+                        },
+                        ComponentRotation.U000,
+                        CannonType.DOUBLE
+            ));
+
+            put(133, new CannonComponent(
+                        new ConnectorType[]{
+                            ConnectorType.EMPTY,
+                            ConnectorType.EMPTY,
+                            ConnectorType.UNIVERSAL,
+                            ConnectorType.DOUBLE_CONNECTOR
+                        },
+                        ComponentRotation.U000,
+                        CannonType.DOUBLE
+            ));
+
+            put(134, new CannonComponent(
+                        new ConnectorType[]{
+                            ConnectorType.EMPTY,
+                            ConnectorType.DOUBLE_CONNECTOR,
+                            ConnectorType.SINGLE_CONNECTOR,
+                            ConnectorType.DOUBLE_CONNECTOR
+                        },
+                        ComponentRotation.U000,
+                        CannonType.DOUBLE
+            ));
+
+            put(135, new CannonComponent(
+                        new ConnectorType[]{
+                            ConnectorType.EMPTY,
+                            ConnectorType.EMPTY,
+                            ConnectorType.EMPTY,
+                            ConnectorType.UNIVERSAL
+                        },
+                        ComponentRotation.U000,
+                        CannonType.DOUBLE
+            ));
+
+            put(136, new CannonComponent(
+                        new ConnectorType[]{
+                            ConnectorType.EMPTY,
+                            ConnectorType.EMPTY,
+                            ConnectorType.SINGLE_CONNECTOR,
+                            ConnectorType.UNIVERSAL
+                        },
+                        ComponentRotation.U000,
+                        CannonType.DOUBLE
+            ));
+
+            // END CANNON
 
-    
-            put(72, new CaCACA
 
-            );
-            put(73, new CaCACA
-
-            );
-            put(74, new CaCACA
-
-            );
-            put(75, new CaCACA
-
-            );
-            put(76, new CaCACA
-
-            );
-            put(77, new CaCACA
-
-            );
-            put(78, new CaCACA
-
-            );
-            put(79, new CaCACA
-
-            );
-            put(80, new CaCACA
-
-            );
-            put(81, new CaCACA
-
-            );
-            put(82, new CaCACA
-
-            );
-            put(83, new CaCACA
-
-            );
-            put(84, new CaCACA
-
-            );
-            put(85, new CaCACA
-
-            );
-            put(86, new CaCACA
-
-            );
-            put(87, new CaCACA
-
-            );
-            put(88, new CaCACA
-
-            );
-            put(89, new CaCACA
-
-            );
-            put(90, new CaCACA
-
-            );
-            put(91, new CaCACA
-
-            );
-			//END ENGINE
-            put(92, new CaCACA
-
-            );
-            put(93, new CaCACA
-
-            );
-            put(94, new CaCACA
-
-            );
-            put(95, new CaCACA
-
-            );
-            put(96, new CaCACA
-
-            );
-            put(97, new CaCACA
-
-            );
-            put(98, new CaCACA
-
-            );
-            put(99, new CaCACA
-
-            );
-            put(100, new CaCACA
-            
-            );
-            put(101, new CaCACA
-
-            );
-            put(102, new CaCACA
-
-            );
-            put(103, new CaCACA
-
-            );
-            put(104, new CaCACA
-
-            );
-            put(105, new CaCACA
-
-            );
-            put(106, new CaCACA
-
-            );
-            put(107, new CaCACA
-
-            );
-            put(108, new CaCACA
-
-            );
-            put(109, new CaCACA
-
-            );
-            put(110, new CaCACA
-
-            );
-            put(111, new CaCACA
-
-            );
-            put(112, new CaCACA
-
-            );
-            put(113, new CaCACA
-
-            );
-            put(114, new CaCACA
-
-            );
-            put(115, new CaCACA
-
-            );
-            put(116, new CaCACA
-
-            );
-            put(117, new CaCACA
-
-            );
-            put(118, new CaCACA
-
-            );
-            put(119, new CaCACA
-
-            );
-            put(120, new CaCACA
-
-            );
-            put(121, new CaCACA
-
-            );
-            put(122, new CaCACA
-
-            );
-            put(123, new CaCACA
-
-            );
-            put(124, new CaCACA
-
-            );
-            put(125, new CaCACA
-
-            );
-            put(126, new CaCACA
-
-            );
-            put(127, new CaCACA
-
-            );
-            put(128, new CaCACA
-
-            );
-            put(129, new CaCACA
-
-            );
-            put(130, new CaCACA
-
-            );
-            put(131, new CaCACA
-
-            );
-            put(132, new CaCACA
-
-            );
-            put(133, new CaCACA
-
-            );
-            put(134, new CaCACA
-
-            );
-            put(135, new CaCACA
-
-            );
-            put(136, new CaCACA
-
-            );
             put(137, new CaCACA
 
             );
@@ -650,5 +1177,5 @@ public class ComponentFactory {
     }
 }
 
-//TODO: RIPROGRAMMARE LE CABIN PERMETTERE QUELLI SPECIALI XD XD XD XD XD XD 
-//TODO: RIFARE SHIELD PERCHE' SONO UN MONA.
+// TODO: RIPROGRAMMARE LE CABIN PERMETTERE QUELLI SPECIALI XD XD XD XD XD XD
+// TODO: RIFARE SHIELD PERCHE' SONO UN MONA.
