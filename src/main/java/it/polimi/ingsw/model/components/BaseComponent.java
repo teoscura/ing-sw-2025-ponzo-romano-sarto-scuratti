@@ -94,26 +94,34 @@ public abstract class BaseComponent implements iBaseComponent, iVisitable{
 
     public iBaseComponent[] getConnectedComponents(iSpaceShip ship){
         iBaseComponent[] res = new iBaseComponent[]{ship.getEmpty(), ship.getEmpty(), ship.getEmpty(), ship.getEmpty()};
-        if(this.getConnector(ComponentRotation.U000)
-			  .connected(ship.getComponent(this.getCoords().up())
-			  .getConnector(ComponentRotation.U180))){
-			res[0] = ship.getComponent(this.getCoords().up());
-		}
-        if(this.getConnector(ComponentRotation.U090)
-			  .connected(ship.getComponent(this.getCoords().right())
-			  .getConnector(ComponentRotation.U270))){
-			res[1] = ship.getComponent(this.getCoords().right());
-		}
-        if(this.getConnector(ComponentRotation.U180)
-			  .connected(ship.getComponent(this.getCoords().down())
-			  .getConnector(ComponentRotation.U000))){
-			res[2] = ship.getComponent(this.getCoords().down());
-		}
-        if(this.getConnector(ComponentRotation.U270)
-			  .connected(ship.getComponent(this.getCoords().left())
-			  .getConnector(ComponentRotation.U090))){
-			res[3] = ship.getComponent(this.getCoords().left());
-		}
+        if(ship.getComponent(this.getCoords().up()) != ship.getEmpty()){
+            if(this.getConnector(ComponentRotation.U000)
+                    .connected(ship.getComponent(this.getCoords().up())
+                            .getConnector(ComponentRotation.U180))){
+                res[0] = ship.getComponent(this.getCoords().up());
+            }
+        }
+        if(ship.getComponent(this.getCoords().right()) != ship.getEmpty()) {
+            if (this.getConnector(ComponentRotation.U090)
+                    .connected(ship.getComponent(this.getCoords().right())
+                            .getConnector(ComponentRotation.U270))) {
+                res[1] = ship.getComponent(this.getCoords().right());
+            }
+        }
+        if(ship.getComponent(this.getCoords().down()) != ship.getEmpty()){
+            if(this.getConnector(ComponentRotation.U180)
+                    .connected(ship.getComponent(this.getCoords().down())
+                            .getConnector(ComponentRotation.U000))){
+                res[2] = ship.getComponent(this.getCoords().down());
+            }
+        }
+        if(ship.getComponent(this.getCoords().left()) != ship.getEmpty()){
+            if(this.getConnector(ComponentRotation.U270)
+                    .connected(ship.getComponent(this.getCoords().left())
+                            .getConnector(ComponentRotation.U090))){
+                res[3] = ship.getComponent(this.getCoords().left());
+            }
+        }
         return res;
     }
 }

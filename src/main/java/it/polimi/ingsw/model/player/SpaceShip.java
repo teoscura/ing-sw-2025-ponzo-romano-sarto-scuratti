@@ -50,7 +50,6 @@ public class SpaceShip implements iSpaceShip{
 	private int engine_power = 0;
 	private int battery_power = 0;
 
-
 	public SpaceShip(GameModeType type, 
 					 PlayerColor color){
 		this.type = type;
