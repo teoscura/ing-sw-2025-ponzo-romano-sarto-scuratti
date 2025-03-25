@@ -101,9 +101,11 @@ public class LevelOneCardFactory implements iCardFactory {
             put(18, new AbandonedShipCard(18, 1, 3, 4));
             put(19, new AbandonedStationCard(19, 1, 
                         new Planet(new int[]{0,1,1,0}), 
-                        5));
+                        5)
+            );
             put(20, new AbandonedStationCard(20, 1, 
-                        new Planet(new int[]{0,0,0,2}), 6)
+                        new Planet(new int[]{0,0,0,2}), 
+                        6)
             );
         }};
     }
