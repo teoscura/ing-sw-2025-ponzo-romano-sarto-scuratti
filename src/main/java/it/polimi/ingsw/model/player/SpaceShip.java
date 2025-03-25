@@ -20,6 +20,7 @@ import it.polimi.ingsw.model.components.iBaseComponent;
 import it.polimi.ingsw.model.components.enums.AlienType;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ConnectorType;
+import it.polimi.ingsw.model.components.exceptions.AlreadyPoweredException;
 import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
 import it.polimi.ingsw.model.components.visitors.SpaceShipUpdateVisitor;
 import it.polimi.ingsw.model.components.visitors.EnergyVisitor;
@@ -30,6 +31,7 @@ import it.polimi.ingsw.model.rulesets.GameModeType;
 
 
 public class SpaceShip implements iSpaceShip{
+	
 	private final ArrayList<ShipCoords> storage_coords;
 	private final ArrayList<ShipCoords> cabin_coords;
 	private final ArrayList<ShipCoords> battery_coords;
@@ -459,6 +461,17 @@ public class SpaceShip implements iSpaceShip{
 			}
 		}
 		return v.getFoundCannon();
+	}
+
+	@Override
+	public void retire() {
+		if(retired) throw new AlreadyPoweredException("Ship is alredy retired.");
+		this.retired = true;
+	}
+
+	@Override
+	public boolean getRetired() {
+		return this.retired;
 	}
 
 }
