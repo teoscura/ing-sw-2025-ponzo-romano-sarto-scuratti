@@ -4,11 +4,11 @@ package it.polimi.ingsw.model.adventure_cards;
 import it.polimi.ingsw.exceptions.ArgumentTooBigException;
 import it.polimi.ingsw.exceptions.NegativeArgumentException;
 import it.polimi.ingsw.model.adventure_cards.exceptions.CrewSizeException;
-import it.polimi.ingsw.model.adventure_cards.utils.DaysCardResponse;
+import it.polimi.ingsw.model.adventure_cards.responses.DaysCardResponse;
+import it.polimi.ingsw.model.adventure_cards.responses.PlanetCardResponse;
+import it.polimi.ingsw.model.adventure_cards.responses.iCardResponse;
+import it.polimi.ingsw.model.adventure_cards.responses.iPlayerResponse;
 import it.polimi.ingsw.model.adventure_cards.utils.Planet;
-import it.polimi.ingsw.model.adventure_cards.utils.PlanetCardResponse;
-import it.polimi.ingsw.model.adventure_cards.utils.iCardResponse;
-import it.polimi.ingsw.model.adventure_cards.utils.iPlayerResponse;
 import it.polimi.ingsw.model.player.iSpaceShip;
 
 public class AbandonedStationCard extends Card{
@@ -16,8 +16,8 @@ public class AbandonedStationCard extends Card{
     private Planet planet;
     private int crew;
 
-    public AbandonedStationCard(int id, Planet planet, int crew){
-        super(id, 0);
+    public AbandonedStationCard(int id, int days, Planet planet, int crew){
+        super(id, days);
         if(crew<=0) throw new NegativeArgumentException("Crew required can't be negative.");
         if(planet==null) throw new NullPointerException();
         this.crew=crew;
@@ -31,6 +31,6 @@ public class AbandonedStationCard extends Card{
         if(!response.getAccept()) return new DaysCardResponse(0);
         if(ship.getTotalCrew()<this.crew) throw new CrewSizeException("Crew too small to salvage station.");
         this.exhaust();
-        return new PlanetCardResponse(this.planet);
+        return new PlanetCardResponse(this.planet, this.days);
     }
 }

@@ -1,6 +1,12 @@
-package it.polimi.ingsw.model.adventure_cards.utils;
+package it.polimi.ingsw.model.adventure_cards.responses;
 
-public class CombatZoneProjectilesResponse implements iCardResponse{
+public class StaffCardResponse implements iCardResponse {
+
+    private final int staff_change;
+
+    public StaffCardResponse(int staff_change){
+        this.staff_change = staff_change;
+    }
 
     @Override
     public int getDays() {
@@ -14,7 +20,7 @@ public class CombatZoneProjectilesResponse implements iCardResponse{
 
     @Override
     public int getStaffChange() {
-        return 0;
+        return this.staff_change;
     }
 
     @Override
@@ -25,11 +31,6 @@ public class CombatZoneProjectilesResponse implements iCardResponse{
     @Override
     public int getRequiredMerch() {
         return 0;
-    }
-
-    @Override
-    public boolean hasShot(){
-        return true;
     }
     
 }

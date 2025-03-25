@@ -1,5 +1,5 @@
 //Done.
-package it.polimi.ingsw.model.adventure_cards.utils;
+package it.polimi.ingsw.model.adventure_cards.responses;
 
 public interface iCardResponse {
     public int getDays();
