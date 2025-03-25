@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.components;
 
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ConnectorType;
+import it.polimi.ingsw.model.components.enums.EngineType;
 import it.polimi.ingsw.model.components.exceptions.AlreadyPoweredException;
 import it.polimi.ingsw.model.components.exceptions.UnpowerableException;
 import org.junit.jupiter.api.Test;

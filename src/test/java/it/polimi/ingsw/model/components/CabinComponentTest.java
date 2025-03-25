@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.components;
 
+import it.polimi.ingsw.exceptions.ArgumentTooBigException;
 import it.polimi.ingsw.exceptions.NegativeArgumentException;
 import it.polimi.ingsw.model.components.enums.AlienType;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
@@ -21,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class CabinComponentTest {
 
 	private ShipCoords coords;
+	ShipCoords coords2;
 	private CabinComponent component_both;
 	private CabinComponent component_brown;
 	private CabinComponent component_purple;
@@ -31,11 +33,12 @@ class CabinComponentTest {
 	@BeforeEach
 	void setUp() {
 		coords = new ShipCoords(GameModeType.LVL2, 3, 3);
+		coords2 = new ShipCoords(GameModeType.LVL2, 4, 4);
 		ConnectorType[] connectors = {ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL,
 				ConnectorType.UNIVERSAL};
 		component_both = new CabinComponent(connectors, ComponentRotation.U000, coords);
 		component_brown = new CabinComponent(connectors, ComponentRotation.U000,coords);
-		component_purple = new CabinComponent(connectors, ComponentRotation.U000, coords);
+		component_purple = new CabinComponent(connectors, ComponentRotation.U000, coords2);
 		component_human = new CabinComponent(connectors, ComponentRotation.U000, coords);
 		ship = new SpaceShip(GameModeType.LVL2, PlayerColor.RED);
 	}
@@ -63,21 +66,25 @@ class CabinComponentTest {
 	@Test
 	void getCrewType() {
 		assertEquals(AlienType.HUMAN, component_human.getCrewType());
-		ConnectorType[] connectors2 = {ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL,
-				ConnectorType.UNIVERSAL};
-		AlienLifeSupportComponent brown_support = new AlienLifeSupportComponent(connectors2, ComponentRotation.U000, AlienType.BROWN);
-		CabinVisitor v = new CabinVisitor();
-		//assertEquals(AlienType.BROWN, brown_support.check(v));
+		ship.addComponent(component_human, coords);
+		component_brown.setCrew(ship, 1, AlienType.BROWN);
 		assertEquals(AlienType.BROWN, component_brown.getCrewType());
+
+		ship.addComponent(component_purple, coords2);
+		component_purple.setCrew(ship, 1, AlienType.PURPLE);
 		assertEquals(AlienType.PURPLE, component_purple.getCrewType());
-		assertEquals(AlienType.BOTH, component_both.getCrewType());
 	}
 
 	@Test
 	void setCrew() {
+		ship.addComponent(component_human, coords);
 		NegativeArgumentException e1 = assertThrows(NegativeArgumentException.class, () -> component_both.setCrew(ship, 0, AlienType.HUMAN));
 		IllegalArgumentException e2 = assertThrows(IllegalArgumentException.class, () -> component_both.setCrew(ship, 1, AlienType.BOTH));
-		ship.addComponent(component_human, coords);
-		UnsupportedAlienCabinException e3 = assertThrows(UnsupportedAlienCabinException.class, () -> component_human.setCrew(ship, 1, AlienType.BROWN));
+		ArgumentTooBigException e3 = assertThrows(ArgumentTooBigException.class, () -> component_both.setCrew(ship, 3, AlienType.HUMAN));
+		assertEquals(0, component_both.getCrew());
+
+		UnsupportedAlienCabinException e4 = assertThrows(UnsupportedAlienCabinException.class, () -> component_human.setCrew(ship, 1, AlienType.BROWN));
+		component_both.setCrew(ship, 2, AlienType.HUMAN);
+		assertEquals(2, component_both.getCrew());
 	}
 }

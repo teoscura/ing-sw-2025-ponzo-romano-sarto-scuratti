@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.components;
 
+import it.polimi.ingsw.model.components.enums.CannonType;
 import org.junit.jupiter.api.Test;
 
 import it.polimi.ingsw.model.components.enums.ComponentRotation;

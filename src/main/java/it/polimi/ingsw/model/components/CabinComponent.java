@@ -49,7 +49,7 @@ public class CabinComponent extends BaseComponent{
         for(iBaseComponent c : this.getConnectedComponents(ship)){
             c.check(v);
         }
-        if(!type.compatible(v.getSupportedType())) throw new UnsupportedAlienCabinException("Tried to insert crew type in cabin that doesn't support it.");
+        if(!v.getSupportedType().compatible(type)) throw new UnsupportedAlienCabinException("Tried to insert crew type in cabin that doesn't support it.");
         crew_number = new_crew;
         crew_type = type;
     }

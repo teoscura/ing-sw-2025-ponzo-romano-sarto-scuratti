@@ -346,7 +346,7 @@ public class ComponentFactory {
                 ComponentRotation.U000,
                 StorageType.TRIPLENORMAL)
             );
-            put(33, new BLUESTARTINGCABIN(
+            /*put(33, new BLUESTARTINGCABIN(
                 new ConnectorType[]{
                     ConnectorType.SINGLE_CONNECTOR,
                     ConnectorType.EMPTY,
@@ -439,7 +439,7 @@ public class ComponentFactory {
             );
             put(61, new YELLOWSTARTINGCABIN
                 
-            );
+            );*/
             put(62, new StorageComponent(
                     new ConnectorType[]{
                             ConnectorType.EMPTY,
@@ -1408,7 +1408,7 @@ public class ComponentFactory {
                     AlienType.PURPLE
                     )
             );
-            put(149, new CaCACA
+            /*put(149, new CaCACA
 
             );
             put(150, new CaCACA
@@ -1434,7 +1434,7 @@ public class ComponentFactory {
             );
             put(157, new CaCACA
 
-            );
+            );*/
         }};
     }
 }

@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.components;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ConnectorType;
 import it.polimi.ingsw.model.components.enums.ShipmentType;
+import it.polimi.ingsw.model.components.enums.StorageType;
 import it.polimi.ingsw.model.components.exceptions.ContainerFullException;
 import it.polimi.ingsw.model.components.exceptions.ContainerNotSpecialException;
 import org.junit.jupiter.api.Test;

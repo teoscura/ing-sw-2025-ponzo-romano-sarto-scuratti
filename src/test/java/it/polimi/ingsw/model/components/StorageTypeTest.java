@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.components;
 
+import it.polimi.ingsw.model.components.enums.StorageType;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
