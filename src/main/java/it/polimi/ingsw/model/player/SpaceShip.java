@@ -14,8 +14,8 @@ import it.polimi.ingsw.model.adventure_cards.enums.ProjectileDirection;
 import it.polimi.ingsw.model.adventure_cards.utils.Projectile;
 import it.polimi.ingsw.model.adventure_cards.visitors.LargeMeteorVisitor;
 import it.polimi.ingsw.model.components.BatteryComponent;
-import it.polimi.ingsw.model.components.CabinComponent;
 import it.polimi.ingsw.model.components.EmptyComponent;
+import it.polimi.ingsw.model.components.StartingCabinComponent;
 import it.polimi.ingsw.model.components.iBaseComponent;
 import it.polimi.ingsw.model.components.enums.AlienType;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
@@ -64,11 +64,14 @@ public class SpaceShip implements iSpaceShip{
 		this.battery_coords = new ArrayList<ShipCoords>();
 		this.powerable_coords = new ArrayList<ShipCoords>();
 		this.center = type.getCenterCabin();
-		this.addComponent(new CabinComponent(new ConnectorType[]{ConnectorType.UNIVERSAL,
-																 ConnectorType.UNIVERSAL,
-																 ConnectorType.UNIVERSAL,
-																 ConnectorType.UNIVERSAL}, 
-											ComponentRotation.U000), 
+		this.addComponent(new StartingCabinComponent(new ConnectorType[]{
+														 ConnectorType.UNIVERSAL,
+														 ConnectorType.UNIVERSAL,
+														 ConnectorType.UNIVERSAL,
+														 ConnectorType.UNIVERSAL}, 
+											ComponentRotation.U000,
+											color,
+											center),
 											center);
 		for(iBaseComponent[] t : this.components){
 			Arrays.fill(t, this.empty); // E' la stessa reference;

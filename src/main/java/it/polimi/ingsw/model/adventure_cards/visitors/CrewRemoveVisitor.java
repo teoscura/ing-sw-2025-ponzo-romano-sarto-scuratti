@@ -60,5 +60,11 @@ public class CrewRemoveVisitor implements iVisitor {
     public void visit(StructuralComponent c) {
         throw new IllegalTargetException("Coords don't correspond to a cabin");
     }
+
+    @Override
+    public void visit(StartingCabinComponent c) {
+        if(c.getCrew()==0) return;
+        c.setCrew(this.ship, c.getCrew()-1, c.getCrewType());
+    }
     
 }
