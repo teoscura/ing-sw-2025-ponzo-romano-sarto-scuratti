@@ -32,6 +32,10 @@ public enum GameModeType{
 		return this.level;
 	}
 
+	public boolean getLifeSupport(){
+		return this.lifesupports;
+	}
+
 	public int getHeight(){
 		return this.height;
 	}
