@@ -5,15 +5,17 @@ import java.util.HashMap;
 import it.polimi.ingsw.model.components.enums.*;
 import it.polimi.ingsw.model.player.PlayerColor;
 
-public class ComponentFactory implements iComponentFactory {
+public class ComponentFactory{
 
     private HashMap<Integer, iBaseComponent> components;
 
-    //FIXME quando carichiamo dentro common board ricordarsi di non chiedere per le 4 starting cabin e per l'empty component.
-    @Override
     public iBaseComponent getComponent(int id){
         if(this.components.containsKey(id)) throw new IllegalArgumentException("Asked for a non-existant component.");
         return this.components.get(id);
+    }
+
+    public int[] getForbiddenID(){
+        return new int[]{33,34,52,61,157};
     }
 
     public ComponentFactory(){
