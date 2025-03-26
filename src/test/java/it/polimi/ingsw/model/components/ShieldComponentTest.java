@@ -27,8 +27,8 @@ class ShieldComponentTest {
 	@BeforeEach
 	void setUp() {
 		ConnectorType[] connectors = new ConnectorType[]{ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY};
-		shield = new ShieldComponent(connectors, ComponentRotation.U000);
-		ship = new StructuralComponent(connectors, ComponentRotation.U000);
+		shield = new ShieldComponent(1, connectors, ComponentRotation.U000);
+		ship = new StructuralComponent(1, connectors, ComponentRotation.U000);
 	}
 
 	@Test
@@ -58,7 +58,7 @@ class ShieldComponentTest {
 	void testOnCreation() {
 		iSpaceShip ship = new SpaceShip(GameModeType.LVL2, PlayerColor.RED);
 		ShipCoords coords = new ShipCoords(GameModeType.LVL2, 4, 4);
-		ShieldComponent shieldWithCoords = new ShieldComponent(new ConnectorType[]{ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY}, ComponentRotation.U000, coords);
+		ShieldComponent shieldWithCoords = new ShieldComponent(1, new ConnectorType[]{ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY}, ComponentRotation.U000, coords);
 
 		assertDoesNotThrow(() -> ship.addComponent(shieldWithCoords, coords));
 		assertEquals(shieldWithCoords, ship.getComponent(coords));
@@ -69,7 +69,7 @@ class ShieldComponentTest {
 	void testOnDelete() {
 		iSpaceShip ship = new SpaceShip(GameModeType.LVL2, PlayerColor.RED);
 		ShipCoords coords = new ShipCoords(GameModeType.LVL2, 4, 4);
-		ShieldComponent shieldWithCoords = new ShieldComponent(
+		ShieldComponent shieldWithCoords = new ShieldComponent(1,
 				new ConnectorType[]{ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY},
 				ComponentRotation.U000,
 				coords
@@ -86,10 +86,10 @@ class ShieldComponentTest {
 	void getShield() {
 		ConnectorType[] connectors = {ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL};
 
-		ShieldComponent shieldNE = new ShieldComponent(connectors, ComponentRotation.U000);
-		ShieldComponent shieldSE = new ShieldComponent(connectors, ComponentRotation.U090);
-		ShieldComponent shieldSW = new ShieldComponent(connectors, ComponentRotation.U180);
-		ShieldComponent shieldNW = new ShieldComponent(connectors, ComponentRotation.U270);
+		ShieldComponent shieldNE = new ShieldComponent(1, connectors, ComponentRotation.U000);
+		ShieldComponent shieldSE = new ShieldComponent(1, connectors, ComponentRotation.U090);
+		ShieldComponent shieldSW = new ShieldComponent(1, connectors, ComponentRotation.U180);
+		ShieldComponent shieldNW = new ShieldComponent(1, connectors, ComponentRotation.U270);
 
 		assertEquals(ShieldType.NONE, shieldNE.getShield());
 		assertEquals(ShieldType.NONE, shieldSE.getShield());

@@ -118,7 +118,7 @@ class SpaceShipTest {
     void addCabinCoords() {
         ConnectorType[] connectors = {ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL};
         ShipCoords coords = new ShipCoords(GameModeType.LVL2, 3, 3);
-        CabinComponent cabin = new CabinComponent(connectors, ComponentRotation.U000, coords);
+        CabinComponent cabin = new CabinComponent(1, connectors, ComponentRotation.U000, coords);
         ship.addComponent(cabin, coords);
 
     }

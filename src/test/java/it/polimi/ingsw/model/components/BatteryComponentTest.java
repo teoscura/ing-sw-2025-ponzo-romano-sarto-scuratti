@@ -19,8 +19,8 @@ class BatteryComponentTest {
 	void setup() {
 		ConnectorType[] connectors = { ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL,
 				ConnectorType.UNIVERSAL };
-		component2 = new BatteryComponent(connectors, ComponentRotation.U000, BatteryType.DOUBLE);
-		component3 = new BatteryComponent(connectors, ComponentRotation.U000, BatteryType.TRIPLE);
+		component2 = new BatteryComponent(1, connectors, ComponentRotation.U000, BatteryType.DOUBLE);
+		component3 = new BatteryComponent(1, connectors, ComponentRotation.U000, BatteryType.TRIPLE);
 
 	}
 

@@ -17,7 +17,7 @@ class AlienLifeSupportComponentTest {
 	@Test
 	void getType() {
 		ConnectorType[] connectors = new ConnectorType[4];
-		AlienLifeSupportComponent test_alien = new AlienLifeSupportComponent(connectors, ComponentRotation.U000,
+		AlienLifeSupportComponent test_alien = new AlienLifeSupportComponent(1, connectors, ComponentRotation.U000,
 				AlienType.BROWN);
 		assertEquals(AlienType.BROWN, test_alien.getType());
 	}

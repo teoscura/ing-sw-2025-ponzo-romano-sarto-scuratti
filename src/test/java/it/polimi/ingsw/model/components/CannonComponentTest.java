@@ -26,9 +26,9 @@ class CannonComponentTest {
 		connectors[3] = ConnectorType.EMPTY;
 
 
-		cannon1 = new CannonComponent(connectors, ComponentRotation.U000, CannonType.SINGLE);
-		cannon_wrong = new CannonComponent(connectors, ComponentRotation.U090, CannonType.SINGLE);
-		cannon2 = new CannonComponent(connectors, ComponentRotation.U000, CannonType.DOUBLE);
+		cannon1 = new CannonComponent(1, connectors, ComponentRotation.U000, CannonType.SINGLE);
+		cannon_wrong = new CannonComponent(1, connectors, ComponentRotation.U090, CannonType.SINGLE);
+		cannon2 = new CannonComponent(1, connectors, ComponentRotation.U000, CannonType.DOUBLE);
 
 	}
 

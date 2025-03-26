@@ -23,7 +23,7 @@ class StorageComponentTest {
 	@Test
 	void putIn() {
 		ConnectorType[] connectors = {ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL};
-		StorageComponent putin_storage_component1 = new StorageComponent(connectors, ComponentRotation.U000, StorageType.DOUBLENORMAL);
+		StorageComponent putin_storage_component1 = new StorageComponent(1, connectors, ComponentRotation.U000, StorageType.DOUBLENORMAL);
 		try{
 			putin_storage_component1.putIn(null);
 			fail("NullPointerException did not occur");
@@ -47,7 +47,7 @@ class StorageComponentTest {
 	@Test
 	void takeOut() {
 		ConnectorType[] connectors = {ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL};
-		StorageComponent takeout_storage_component1 = new StorageComponent(connectors, ComponentRotation.U000, StorageType.DOUBLENORMAL);
+		StorageComponent takeout_storage_component1 = new StorageComponent(1, connectors, ComponentRotation.U000, StorageType.DOUBLENORMAL);
 		ShipmentType shipment1 = ShipmentType.BLUE;
 		ShipmentType shipment2 = ShipmentType.GREEN;
 		NullPointerException e = assertThrows(NullPointerException.class, () -> takeout_storage_component1.takeOut(null));
@@ -59,7 +59,7 @@ class StorageComponentTest {
 	@Test
 	void howMany() {
 		ConnectorType[] connectors = {ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL};
-		StorageComponent howmany_storage_component1 = new StorageComponent(connectors, ComponentRotation.U000, StorageType.DOUBLENORMAL);
+		StorageComponent howmany_storage_component1 = new StorageComponent(1, connectors, ComponentRotation.U000, StorageType.DOUBLENORMAL);
 		ShipmentType shipment1 = ShipmentType.BLUE;
 		ShipmentType shipment2 = ShipmentType.BLUE;
 		howmany_storage_component1.putIn(shipment2);
@@ -70,7 +70,7 @@ class StorageComponentTest {
 	@Test
 	void getFreeSpaces() {
 		ConnectorType[] connectors = {ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL};
-		StorageComponent freespaces_storage_component1 = new StorageComponent(connectors, ComponentRotation.U000, StorageType.TRIPLENORMAL);
+		StorageComponent freespaces_storage_component1 = new StorageComponent(1, connectors, ComponentRotation.U000, StorageType.TRIPLENORMAL);
 		assertEquals(3, freespaces_storage_component1.getFreeSpaces());
 		ShipmentType shipment1 = ShipmentType.BLUE;
 		freespaces_storage_component1.putIn(shipment1);
@@ -80,8 +80,8 @@ class StorageComponentTest {
 	@Test
 	void getSpecial() {
 		ConnectorType[] connectors = {ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL};
-		StorageComponent getspecial_storage_component1 = new StorageComponent(connectors, ComponentRotation.U000, StorageType.TRIPLENORMAL);
-		StorageComponent getspecial_storage_component2 = new StorageComponent(connectors, ComponentRotation.U000, StorageType.DOUBLESPECIAL);
+		StorageComponent getspecial_storage_component1 = new StorageComponent(1, connectors, ComponentRotation.U000, StorageType.TRIPLENORMAL);
+		StorageComponent getspecial_storage_component2 = new StorageComponent(1, connectors, ComponentRotation.U000, StorageType.DOUBLESPECIAL);
 		assertFalse(getspecial_storage_component1.getSpecial());
 		assertTrue(getspecial_storage_component2.getSpecial());
 	}
@@ -89,7 +89,7 @@ class StorageComponentTest {
 	@Test
 	void getCapacity() {
 		ConnectorType[] connectors = {ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL};
-		StorageComponent getcapacity_storage_component1 = new StorageComponent(connectors, ComponentRotation.U000, StorageType.TRIPLENORMAL);
+		StorageComponent getcapacity_storage_component1 = new StorageComponent(1, connectors, ComponentRotation.U000, StorageType.TRIPLENORMAL);
 		assertEquals(3, getcapacity_storage_component1.getCapacity());
 	}
 }

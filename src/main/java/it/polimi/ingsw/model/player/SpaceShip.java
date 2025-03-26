@@ -66,7 +66,7 @@ public class SpaceShip implements iSpaceShip{
 		this.battery_coords = new ArrayList<ShipCoords>();
 		this.powerable_coords = new ArrayList<ShipCoords>();
 		this.center = type.getCenterCabin();
-		this.addComponent(new StartingCabinComponent(new ConnectorType[]{
+		this.addComponent(new StartingCabinComponent(1, new ConnectorType[]{
 														 ConnectorType.UNIVERSAL,
 														 ConnectorType.UNIVERSAL,
 														 ConnectorType.UNIVERSAL,

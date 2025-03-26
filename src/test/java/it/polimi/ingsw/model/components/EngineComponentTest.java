@@ -23,8 +23,8 @@ class EngineComponentTest {
 	@Test
 	void turnOn() {
 		ConnectorType[] connectors = {ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL};
-		EngineComponent turnon_test_component1 = new EngineComponent(connectors, ComponentRotation.U000, EngineType.SINGLE);
-		EngineComponent turnon_test_component2 = new EngineComponent(connectors, ComponentRotation.U000, EngineType.DOUBLE);
+		EngineComponent turnon_test_component1 = new EngineComponent(1, connectors, ComponentRotation.U000, EngineType.SINGLE);
+		EngineComponent turnon_test_component2 = new EngineComponent(1, connectors, ComponentRotation.U000, EngineType.DOUBLE);
 		turnon_test_component2.turnOn();
 		try{
 			turnon_test_component2.turnOn();
@@ -39,7 +39,7 @@ class EngineComponentTest {
 	@Test
 	void turnOff() {
 		ConnectorType[] connectors = {ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL};
-		EngineComponent turnoff_engine_component = new EngineComponent(connectors, ComponentRotation.U000, EngineType.DOUBLE);
+		EngineComponent turnoff_engine_component = new EngineComponent(1, connectors, ComponentRotation.U000, EngineType.DOUBLE);
 		turnoff_engine_component.turnOn();
 		turnoff_engine_component.turnOff();
 		try{
@@ -53,9 +53,9 @@ class EngineComponentTest {
 	@Test
 	void getCurrentPower() {
 		ConnectorType[] connectors = {ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL};
-		EngineComponent currentpower_engine_component1 = new EngineComponent(connectors, ComponentRotation.U180, EngineType.SINGLE);
-		EngineComponent currentpower_engine_component2 = new EngineComponent(connectors, ComponentRotation.U000, EngineType.SINGLE);
-		EngineComponent currentpower_engine_component3 = new EngineComponent(connectors, ComponentRotation.U180, EngineType.DOUBLE);
+		EngineComponent currentpower_engine_component1 = new EngineComponent(1, connectors, ComponentRotation.U180, EngineType.SINGLE);
+		EngineComponent currentpower_engine_component2 = new EngineComponent(1, connectors, ComponentRotation.U000, EngineType.SINGLE);
+		EngineComponent currentpower_engine_component3 = new EngineComponent(1, connectors, ComponentRotation.U180, EngineType.DOUBLE);
 		currentpower_engine_component3.turnOn();
 		assertEquals(1, currentpower_engine_component1.getCurrentPower());
 		assertEquals(0, currentpower_engine_component2.getCurrentPower());
