@@ -2,6 +2,7 @@
 package it.polimi.ingsw.model.adventure_cards;
 
 import it.polimi.ingsw.model.adventure_cards.responses.DaysCardResponse;
+import it.polimi.ingsw.model.adventure_cards.responses.GameLostResponse;
 import it.polimi.ingsw.model.adventure_cards.responses.iCardResponse;
 import it.polimi.ingsw.model.adventure_cards.responses.iPlayerResponse;
 import it.polimi.ingsw.model.player.iSpaceShip;
@@ -14,7 +15,7 @@ public class OpenSpaceCard extends Card {
 
     public iCardResponse apply(iSpaceShip ship, iPlayerResponse response){
         if(ship==null) throw new NullPointerException();
-        return new DaysCardResponse(ship.getEnginePower());
+        return ship.getEnginePower()>0 ? new DaysCardResponse(ship.getEnginePower()) : new GameLostResponse(); //
     }
 
 }
