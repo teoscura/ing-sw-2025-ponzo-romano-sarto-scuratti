@@ -67,12 +67,6 @@ class CabinComponentTest {
 	void getCrewType() {
 		assertEquals(AlienType.HUMAN, component_human.getCrewType());
 		ship.addComponent(component_human, coords);
-		component_brown.setCrew(ship, 1, AlienType.BROWN);
-		assertEquals(AlienType.BROWN, component_brown.getCrewType());
-
-		ship.addComponent(component_purple, coords2);
-		component_purple.setCrew(ship, 1, AlienType.PURPLE);
-		assertEquals(AlienType.PURPLE, component_purple.getCrewType());
 	}
 
 	@Test

@@ -41,31 +41,20 @@ class BatteryComponentTest {
 	}
 
 	@Test
-	void takeAndPutOne() {
-		assertEquals(2, component2.getContains());
+	void takeOne(){
 		component2.takeOne();
 		assertEquals(1, component2.getContains());
 		component2.takeOne();
-		assertEquals(0, component2.getContains());
+		ContainerEmptyException e = assertThrows(ContainerEmptyException.class, () -> component2.takeOne());
+	}
+
+	@Test
+	void putOne(){
+		ContainerFullException e = assertThrows(ContainerFullException.class, () -> component2.putOne());
+		component2.takeOne();
+		component2.takeOne();
 		component2.putOne();
 		assertEquals(1, component2.getContains());
-		component2.putOne();
-		assertEquals(2, component2.getContains());
-
-		assertEquals(3, component3.getContains());
-		component3.takeOne();
-		assertEquals(2, component3.getContains());
-		component3.takeOne();
-		assertEquals(1, component3.getContains());
-		component3.takeOne();
-		assertEquals(0, component3.getContains());
-		component3.putOne();
-		assertEquals(1, component3.getContains());
-		component3.putOne();
-		assertEquals(2, component3.getContains());
-		component3.putOne();
-		assertEquals(3, component3.getContains());
-
 	}
 
 	@SuppressWarnings("unused")

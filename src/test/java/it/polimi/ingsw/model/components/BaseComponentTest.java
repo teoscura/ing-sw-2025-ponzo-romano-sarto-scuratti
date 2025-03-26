@@ -2,7 +2,6 @@ package it.polimi.ingsw.model.components;
 
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ConnectorType;
-import it.polimi.ingsw.model.components.enums.ShieldType;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.rulesets.GameModeType;
@@ -42,11 +41,14 @@ class BaseComponentTest {
 		ShipCoords coords = new ShipCoords(GameModeType.LVL2, 3, 3);
 		ShipCoords coords_up = new ShipCoords(GameModeType.LVL2, 3, 2);
 		ConnectorType[] connectors = {ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL};
-		BaseComponent verify_test_component = new StructuralComponent(1, connectors, ComponentRotation.U000);
-		BaseComponent verify_test_component_up = new StructuralComponent(1, connectors, ComponentRotation.U000);
+		BaseComponent verify_component_empty = new StructuralComponent(1, connectors, ComponentRotation.U000);
+		BaseComponent verify_test_component = new StructuralComponent(1, connectors, ComponentRotation.U000,coords);
+		BaseComponent verify_test_component2 = new StructuralComponent(1, connectors, ComponentRotation.U000, coords_up);
 		SpaceShip test_ship = new SpaceShip(GameModeType.LVL2, PlayerColor.RED);
 		test_ship.addComponent(verify_test_component, coords);
-		test_ship.addComponent(verify_test_component_up, coords_up);
+		test_ship.addComponent(verify_test_component2, coords_up);
+		NullPointerException e = assertThrows(NullPointerException.class, () -> {verify_component_empty.verify(test_ship);});
+		assertEquals("Coords are not set", e.getMessage());
 		assertTrue(verify_test_component.verify(test_ship));
 	}
 

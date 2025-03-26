@@ -61,7 +61,7 @@ public class EngineComponent extends BaseComponent{
 
     public int getCurrentPower(){
         if(this.getRotation() != ComponentRotation.U000){
-            return 0;  //Divide by two.
+            return 0;
         }
         return this.getPower();
     }

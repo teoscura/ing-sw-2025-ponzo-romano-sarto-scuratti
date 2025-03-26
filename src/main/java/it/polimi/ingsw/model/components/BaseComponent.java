@@ -56,21 +56,22 @@ public abstract class BaseComponent implements iBaseComponent, iVisitable{
 
     @Override
     public boolean verify(iSpaceShip ship){
+        if (this.coords == null) throw new NullPointerException("Coords are not set");
         iBaseComponent up = ship.getComponent(this.coords.up());
         iBaseComponent right = ship.getComponent(this.coords.right());
         iBaseComponent down = ship.getComponent(this.coords.down());
         iBaseComponent left = ship.getComponent(this.coords.left());
 
-        if(up!=null){
+        if(up!= ship.getEmpty()){
             if(!up.getConnector(ComponentRotation.U180).compatible(getConnector(ComponentRotation.U000))) return false;
         }
-        if(right!=null){
+        if(right!= ship.getEmpty()){
             if(!right.getConnector(ComponentRotation.U270).compatible(getConnector(ComponentRotation.U090))) return false;
         }
-        if(down!=null){
+        if(down!=ship.getEmpty()){
             if(!down.getConnector(ComponentRotation.U000).compatible(getConnector(ComponentRotation.U180))) return false;
         }
-        if(left!=null){
+        if(left!= ship.getEmpty()){
             if(!left.getConnector(ComponentRotation.U090).compatible(getConnector(ComponentRotation.U270))) return false;
         }
         return true;

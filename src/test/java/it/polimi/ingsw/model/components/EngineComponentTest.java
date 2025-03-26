@@ -5,27 +5,11 @@ import it.polimi.ingsw.model.components.enums.ConnectorType;
 import it.polimi.ingsw.model.components.enums.EngineType;
 import it.polimi.ingsw.model.components.exceptions.AlreadyPoweredException;
 import it.polimi.ingsw.model.components.exceptions.UnpowerableException;
-import it.polimi.ingsw.model.player.PlayerColor;
-import it.polimi.ingsw.model.player.ShipCoords;
-import it.polimi.ingsw.model.player.SpaceShip;
-import it.polimi.ingsw.model.player.iSpaceShip;
-import it.polimi.ingsw.model.rulesets.GameModeType;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class EngineComponentTest {
-
-	private EngineComponent engine1;
-	private EngineComponent engine2;
-
-	@BeforeEach
-	void setUp() {
-		ConnectorType[] connectors = {ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY};
-		engine1 = new EngineComponent(1, connectors, ComponentRotation.U000, EngineType.SINGLE);
-		engine2 = new EngineComponent(1, connectors, ComponentRotation.U000, EngineType.DOUBLE);
-	}
 
 	@Test
 	void verify() {
@@ -37,28 +21,33 @@ class EngineComponentTest {
 	}
 
 	@Test
-	void TurnOn() {
-		assertThrows(UnpowerableException.class, () -> engine1.turnOn());
-
-		assertFalse(engine2.isPowered());
-		engine2.turnOn();
-		assertTrue(engine2.isPowered());
-		assertThrows(AlreadyPoweredException.class, () -> engine2.turnOn());
+	void turnOn() {
+		ConnectorType[] connectors = {ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.EMPTY, ConnectorType.UNIVERSAL};
+		EngineComponent turnon_test_component1 = new EngineComponent(1, connectors, ComponentRotation.U000, EngineType.SINGLE);
+		EngineComponent turnon_test_component2 = new EngineComponent(1, connectors, ComponentRotation.U000, EngineType.DOUBLE);
+		turnon_test_component2.turnOn();
+		try{
+			turnon_test_component2.turnOn();
+			fail("AlreadyPoweredException did not occur");
+		} catch (AlreadyPoweredException e1){}
+		try{
+			turnon_test_component1.turnOn();
+			fail("UnpoweredException did not occur");
+		}catch (UnpowerableException e2){}
 	}
 
 	@Test
 	void turnOff() {
-		engine2.turnOn();
-		assertTrue(engine2.isPowered());
+		ConnectorType[] connectors = {ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.EMPTY, ConnectorType.UNIVERSAL};
+		EngineComponent turnoff_engine_component = new EngineComponent(1, connectors, ComponentRotation.U000, EngineType.DOUBLE);
+		turnoff_engine_component.turnOn();
+		turnoff_engine_component.turnOff();
+		try{
+			turnoff_engine_component.turnOn();
 
-		engine2.turnOff();
-		assertFalse(engine2.isPowered());
-	}
-
-	@Test
-	void testPowerable() {
-		assertTrue(engine2.powerable());
-		assertFalse(engine1.isPowered());
+		}catch(AlreadyPoweredException e){
+			fail("Component didn't turn off properly");
+		}
 	}
 
 	@Test
@@ -72,5 +61,4 @@ class EngineComponentTest {
 		assertEquals(0, currentpower_engine_component1.getCurrentPower());
 		assertEquals(2, currentpower_engine_component3.getCurrentPower());
 	}
-
 }

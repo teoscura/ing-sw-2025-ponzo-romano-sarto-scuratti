@@ -1,6 +1,10 @@
 package it.polimi.ingsw.model.components;
 
 import it.polimi.ingsw.model.components.enums.CannonType;
+import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.model.player.ShipCoords;
+import it.polimi.ingsw.model.player.SpaceShip;
+import it.polimi.ingsw.model.rulesets.GameModeType;
 import org.junit.jupiter.api.Test;
 
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
@@ -21,14 +25,15 @@ class CannonComponentTest {
 
 		ConnectorType[] connectors = new ConnectorType[4];
 		connectors[0] = ConnectorType.EMPTY;
-		connectors[1] = ConnectorType.EMPTY;
-		connectors[2] = ConnectorType.EMPTY;
-		connectors[3] = ConnectorType.EMPTY;
+		connectors[1] = ConnectorType.UNIVERSAL;
+		connectors[2] = ConnectorType.UNIVERSAL;
+		connectors[3] = ConnectorType.UNIVERSAL;
 
+		ShipCoords coords = new ShipCoords(GameModeType.LVL2, 2, 3);
 
-		cannon1 = new CannonComponent(1, connectors, ComponentRotation.U000, CannonType.SINGLE);
-		cannon_wrong = new CannonComponent(1, connectors, ComponentRotation.U090, CannonType.SINGLE);
-		cannon2 = new CannonComponent(1, connectors, ComponentRotation.U000, CannonType.DOUBLE);
+		cannon1 = new CannonComponent(1, connectors, ComponentRotation.U000, CannonType.SINGLE, coords);
+		cannon_wrong = new CannonComponent(1, connectors, ComponentRotation.U090, CannonType.SINGLE, coords);
+		cannon2 = new CannonComponent(1, connectors, ComponentRotation.U000, CannonType.DOUBLE, coords);
 
 	}
 
@@ -37,7 +42,22 @@ class CannonComponentTest {
 	}
 
 	@Test
-	void testVerify() {
+	void verify() {
+		ConnectorType[] connectors2 = new ConnectorType[4];
+		connectors2[0] = ConnectorType.EMPTY;
+		connectors2[1] = ConnectorType.UNIVERSAL;
+		connectors2[2] = ConnectorType.UNIVERSAL;
+		connectors2[3] = ConnectorType.UNIVERSAL;
+		ShipCoords coords = new ShipCoords(GameModeType.LVL2, 2, 3);
+		ShipCoords coords2 = new ShipCoords(GameModeType.LVL2, 2, 4);
+		ShipCoords coords_up = new ShipCoords(GameModeType.LVL2, 2, 2);
+		StructuralComponent component = new StructuralComponent(1, connectors2, ComponentRotation.U000, coords_up);
+		SpaceShip ship = new SpaceShip(GameModeType.LVL2, PlayerColor.RED);
+		ship.addComponent(cannon1, coords);
+		ship.addComponent(component, coords_up);
+		assertFalse(cannon1.verify(ship));
+		ship.addComponent(cannon_wrong, coords2);
+		assertTrue(cannon_wrong.verify(ship));
 	}
 
 	// the exceptions are wrong
