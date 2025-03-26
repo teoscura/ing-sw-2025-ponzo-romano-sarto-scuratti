@@ -16,19 +16,21 @@ public class StartingCabinComponent extends BaseComponent {
     private PlayerColor color;
     private int crew_number = 0;
 
-    public StartingCabinComponent(ConnectorType[] connectors, 
+    public StartingCabinComponent(int id, 
+                          ConnectorType[] connectors, 
                           ComponentRotation rotation,
                           PlayerColor color){
-        super(connectors, rotation);
+        super(id, connectors, rotation);
         if(color.getOrder()<0) throw new IllegalArgumentException("Color can't be \"NONE\".");
         this.color = color;
     }
 
-    public StartingCabinComponent(ConnectorType[] connectors, 
+    public StartingCabinComponent(int id, 
+                          ConnectorType[] connectors, 
                           ComponentRotation rotation,
                           PlayerColor color,
                           ShipCoords coords){
-        super(connectors, rotation, coords);
+        super(id, connectors, rotation, coords);
         if(color.getOrder()<0) throw new IllegalArgumentException("Color can't be \"NONE\".");
         this.color = color;
     }

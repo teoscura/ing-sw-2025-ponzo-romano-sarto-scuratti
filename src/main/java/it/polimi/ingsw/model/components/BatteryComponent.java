@@ -15,19 +15,21 @@ public class BatteryComponent extends BaseComponent{
     private int contains = 0;
     private int max = 2;
 
-    public BatteryComponent(ConnectorType[] connectors, 
+    public BatteryComponent(int id, 
+                            ConnectorType[] connectors, 
                             ComponentRotation rotation, 
                             BatteryType type){
-        super(connectors, rotation);
+        super(id, connectors, rotation);
         this.contains = type.getCapacity();
         this.max = type.getCapacity();
     }
 
-    public BatteryComponent(ConnectorType[] connectors, 
+    public BatteryComponent(int id, 
+                            ConnectorType[] connectors, 
                             ComponentRotation rotation, 
                             BatteryType type,
                             ShipCoords coords){
-        super(connectors, rotation, coords);
+        super(id, connectors, rotation, coords);
         this.contains = type.getCapacity();
         this.max = type.getCapacity();
     }

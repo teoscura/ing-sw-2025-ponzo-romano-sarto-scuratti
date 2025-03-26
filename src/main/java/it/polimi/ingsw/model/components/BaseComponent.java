@@ -10,28 +10,38 @@ import it.polimi.ingsw.model.player.iSpaceShip;
 
 public abstract class BaseComponent implements iBaseComponent, iVisitable{
 
+    private final int id;
     private final ConnectorType[] connectors;
     private final ComponentRotation rotation;
     protected ShipCoords coords;
 
-    protected BaseComponent(ConnectorType[] connectors, 
+    protected BaseComponent(int id, ConnectorType[] connectors, 
                             ComponentRotation rotation){
         if(connectors.length!=4){
             throw new ConnectorsSizeException();
         }
+        if(id<1 || id > 157) throw new IllegalArgumentException("Id is not valid.");
+        this.id = id;
         this.connectors = connectors;
         this.rotation = rotation;
     }
 
-    protected BaseComponent(ConnectorType[] connectors, 
+    protected BaseComponent(int id, ConnectorType[] connectors, 
                             ComponentRotation rotation,
                             ShipCoords coords){
         if(connectors.length!=4){
             throw new ConnectorsSizeException();
         }
+        if(id<1 || id > 157) throw new IllegalArgumentException("Id is not valid.");
+        this.id = id;
         this.connectors = connectors;
         this.rotation = rotation;
         this.coords = coords;
+    }
+
+    @Override
+    public int getID(){
+        return this.id;
     }
 
     @Override

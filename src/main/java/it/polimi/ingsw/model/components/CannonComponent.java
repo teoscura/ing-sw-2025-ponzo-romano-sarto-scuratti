@@ -17,20 +17,22 @@ public class CannonComponent extends BaseComponent{
     private boolean powered = false;
     private boolean powerable = false;
 
-    public CannonComponent(ConnectorType[] components,
+    public CannonComponent(int id, 
+                           ConnectorType[] components,
                            ComponentRotation rotation,
                            CannonType type){
-        super(components, rotation);
+        super(id, components, rotation);
         if(components[0]!=ConnectorType.EMPTY) throw new ComponentNotEmptyException("Top of cannon must be empty!");
         this.max_power = type.getMaxPower();
         this.powerable = type.getPowerable();
     }
 
-    public CannonComponent(ConnectorType[] components,
+    public CannonComponent(int id, 
+                           ConnectorType[] components,
                            ComponentRotation rotation,
                            CannonType type,
                            ShipCoords coords){
-        super(components, rotation, coords);
+        super(id, components, rotation, coords);
         if(components[0]!=ConnectorType.EMPTY) throw new ComponentNotEmptyException("Top of cannon must be empty!");
         this.max_power = type.getMaxPower();
         this.powerable = type.getPowerable();       

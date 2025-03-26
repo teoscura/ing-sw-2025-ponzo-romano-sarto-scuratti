@@ -13,15 +13,15 @@ public class ShieldComponent extends BaseComponent {
     
     private boolean powered = false;
 
-    public ShieldComponent(ConnectorType[] connectors, 
+    public ShieldComponent(int id, ConnectorType[] connectors, 
                            ComponentRotation rotation){
-        super(connectors, rotation);
+        super(id, connectors, rotation);
     }
 
-    public ShieldComponent(ConnectorType[] connectors, 
+    public ShieldComponent(int id, ConnectorType[] connectors, 
                            ComponentRotation rotation,
                            ShipCoords coords){
-        super(connectors, rotation, coords);
+        super(id, connectors, rotation, coords);
     }
 
     @Override

@@ -19,20 +19,22 @@ public class StorageComponent extends BaseComponent{
     private int currently_full = 0;
     private boolean special = false;
 
-    public StorageComponent(ConnectorType[] connectors, 
+    public StorageComponent(int id, 
+                            ConnectorType[] connectors, 
                             ComponentRotation rotation,
                             StorageType type){
-        super(connectors, rotation);
+        super(id, connectors, rotation);
         this.special = type.getSpecial();
         this.shipments = new ShipmentType[type.getCapacity()];
         Arrays.fill(shipments, ShipmentType.EMPTY);
     }
 
-    public StorageComponent(ConnectorType[] connectors, 
+    public StorageComponent(int id, 
+                            ConnectorType[] connectors, 
                             ComponentRotation rotation,
                             StorageType type,
                             ShipCoords coords){
-        super(connectors, rotation, coords);
+        super(id, connectors, rotation, coords);
         this.special = type.getSpecial();
         this.shipments = new ShipmentType[type.getCapacity()];
         Arrays.fill(shipments, ShipmentType.EMPTY);

@@ -9,12 +9,17 @@ import it.polimi.ingsw.model.player.iSpaceShip;
 
 public class StructuralComponent extends BaseComponent{
 
-    public StructuralComponent(ConnectorType[] connectors, ComponentRotation rotation) {
-        super(connectors, rotation);
+    public StructuralComponent(int id, 
+                               ConnectorType[] connectors, 
+                               ComponentRotation rotation) {
+        super(id, connectors, rotation);
     }
     
-    public StructuralComponent(ConnectorType[] connectors, ComponentRotation rotation, ShipCoords coords) {
-        super(connectors, rotation, coords);
+    public StructuralComponent(int id, 
+                               ConnectorType[] connectors, 
+                               ComponentRotation rotation, 
+                               ShipCoords coords) {
+        super(id, connectors, rotation, coords);
     }
 
         @Override

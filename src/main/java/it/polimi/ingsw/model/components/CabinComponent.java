@@ -17,15 +17,17 @@ public class CabinComponent extends BaseComponent{
     private int crew_number = 0;
     private AlienType crew_type = AlienType.HUMAN;
 
-    public CabinComponent(ConnectorType[] connectors, 
+    public CabinComponent(int id, 
+                          ConnectorType[] connectors, 
                           ComponentRotation rotation){
-        super(connectors, rotation);
+        super(id, connectors, rotation);
     }
 
-    public CabinComponent(ConnectorType[] connectors, 
+    public CabinComponent(int id, 
+                          ConnectorType[] connectors, 
                           ComponentRotation rotation,
                           ShipCoords coords){
-        super(connectors, rotation, coords);
+        super(id, connectors, rotation, coords);
     }
 
     @Override

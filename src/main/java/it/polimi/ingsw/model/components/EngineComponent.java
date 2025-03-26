@@ -17,20 +17,22 @@ public class EngineComponent extends BaseComponent{
     private boolean powerable;
     private boolean powered = false;
 
-    public EngineComponent(ConnectorType[] components,
+    public EngineComponent(int id, 
+                           ConnectorType[] components,
                            ComponentRotation rotation,
                            EngineType type){
-        super(components, rotation);
+        super(id, components, rotation);
         if(components[2]!=ConnectorType.EMPTY) throw new ComponentNotEmptyException("Bottom of engine must be empty!");
         this.max_power = type.getMaxPower();
         this.powerable = type.getPowerable();        
     }
 
-    public EngineComponent(ConnectorType[] components,
+    public EngineComponent(int id, 
+                           ConnectorType[] components,
                            ComponentRotation rotation,
                            EngineType type,
                            ShipCoords coords){
-        super(components, rotation, coords);
+        super(id, components, rotation, coords);
         if(components[2]!=ConnectorType.EMPTY) throw new ComponentNotEmptyException("Bottom of engine must be empty!");
         this.max_power = type.getMaxPower();
         this.powerable = type.getPowerable();        
