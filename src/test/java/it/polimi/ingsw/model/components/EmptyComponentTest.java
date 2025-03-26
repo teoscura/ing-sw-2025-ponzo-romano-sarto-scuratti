@@ -1,40 +1,65 @@
 package it.polimi.ingsw.model.components;
 
+import it.polimi.ingsw.model.components.enums.ComponentRotation;
+import it.polimi.ingsw.model.components.enums.ConnectorType;
+import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.model.player.ShipCoords;
+import it.polimi.ingsw.model.player.SpaceShip;
+import it.polimi.ingsw.model.player.iSpaceShip;
+import it.polimi.ingsw.model.rulesets.GameModeType;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class EmptyComponentTest {
 
-	@Test
-	void getConnectors() {
+	private EmptyComponent empty;
+
+	@BeforeEach
+	void setUp() {
+		empty = new EmptyComponent();
+		assertEquals(157, empty.getID());
+		assertArrayEquals(new ConnectorType[]{ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY}, empty.getConnectors());
+		assertEquals(ComponentRotation.U000, empty.getRotation());
 	}
 
 	@Test
-	void getRotation() {
+	void check(){
+
 	}
 
 	@Test
 	void verify() {
+
 	}
 
 	@Test
-	void getConnector() {
+	void GetConnectors() {
+		ConnectorType[] expected = {ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY};
+		assertArrayEquals(expected, empty.getConnectors());
 	}
 
 	@Test
-	void getCoords() {
+	void OnCreation() {
+		iSpaceShip ship = new SpaceShip(GameModeType.LVL2, PlayerColor.RED);
+		ShipCoords coords = new ShipCoords(GameModeType.LVL2, 4, 4);
+		EmptyComponent emptyWithCoords = new EmptyComponent(coords);
+
+		assertDoesNotThrow(() -> ship.addComponent(emptyWithCoords, coords));
+		assertEquals(emptyWithCoords, ship.getComponent(coords));
 	}
 
 	@Test
-	void testVerify() {
+	void OnDelete() {
+		iSpaceShip ship = new SpaceShip(GameModeType.LVL2, PlayerColor.RED);
+		ShipCoords coords = new ShipCoords(GameModeType.LVL2, 4, 4);
+		EmptyComponent emptyWithCoords = new EmptyComponent(coords);
+
+		assertDoesNotThrow(() -> ship.addComponent(emptyWithCoords, coords));
+		assertEquals(emptyWithCoords, ship.getComponent(coords));
+
+		assertDoesNotThrow(() -> emptyWithCoords.onDelete(ship));
 	}
 
-	@Test
-	void check() {
-	}
-
-	@Test
-	void testGetConnectors() {
-	}
 }
