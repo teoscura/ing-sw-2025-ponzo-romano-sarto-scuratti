@@ -37,25 +37,25 @@ class ShieldComponentTest {
 	}
 
 	@Test
-	void testTurnOn() {
+	void TurnOn() {
 		assertFalse(shield.getPowered());
 		shield.turnOn();
 		assertTrue(shield.getPowered());
 	}
 	@Test
-	void testTurnOff() {
+	void TurnOff() {
 		shield.turnOn();
 		shield.turnOff();
 		assertFalse(shield.getPowered());
 	}
 
 	@Test
-	void testPowerable() {
+	void Powerable() {
 		assertTrue(shield.powerable());
 	}
 
 	@Test
-	void testOnCreation() {
+	void OnCreation() {
 		iSpaceShip ship = new SpaceShip(GameModeType.LVL2, PlayerColor.RED);
 		ShipCoords coords = new ShipCoords(GameModeType.LVL2, 4, 4);
 		ShieldComponent shieldWithCoords = new ShieldComponent(1, new ConnectorType[]{ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY}, ComponentRotation.U000, coords);
@@ -66,7 +66,7 @@ class ShieldComponentTest {
 
 	}
 	@Test
-	void testOnDelete() {
+	void OnDelete() {
 		iSpaceShip ship = new SpaceShip(GameModeType.LVL2, PlayerColor.RED);
 		ShipCoords coords = new ShipCoords(GameModeType.LVL2, 4, 4);
 		ShieldComponent shieldWithCoords = new ShieldComponent(1,
