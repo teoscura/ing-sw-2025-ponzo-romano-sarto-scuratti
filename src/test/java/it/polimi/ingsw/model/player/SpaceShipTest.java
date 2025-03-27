@@ -2,13 +2,17 @@ package it.polimi.ingsw.model.player;
 
 import it.polimi.ingsw.exceptions.NotPresentException;
 import it.polimi.ingsw.exceptions.NotUniqueException;
+import it.polimi.ingsw.exceptions.OutOfBoundsException;
 import it.polimi.ingsw.model.components.*;
 import it.polimi.ingsw.model.components.enums.*;
 import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
+import it.polimi.ingsw.model.player.exceptions.IllegalComponentAdd;
 import it.polimi.ingsw.model.player.exceptions.NegativeCreditsException;
 import it.polimi.ingsw.model.rulesets.GameModeType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -90,10 +94,34 @@ class SpaceShipTest {
 
     @Test
     void addComponent() {
+        ShipCoords coords = new ShipCoords(GameModeType.LVL2,4, 4);
+        iBaseComponent component = new StructuralComponent(2, new ConnectorType[]{ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY}, ComponentRotation.U000, coords);
+        assertDoesNotThrow(() -> {ship.addComponent(component, coords);});
+        assertEquals(component, ship.getComponent(coords));
+
+        assertThrows(NullPointerException.class, () -> {ship.addComponent(null, coords);});
+        assertThrows(NullPointerException.class, () -> {ship.addComponent(component, null);});
+
+        ShipCoords Invalidcoords1 = new ShipCoords(GameModeType.LVL2,-1, 4);
+        ShipCoords Invalidcoords2 = new ShipCoords(GameModeType.LVL2,4, -1);
+        assertThrows(OutOfBoundsException.class, () -> {ship.addComponent(component, Invalidcoords1);});
+        assertThrows(OutOfBoundsException.class, () -> {ship.addComponent(component, Invalidcoords2);});
+
+        ShipCoords ForbiddenCoords = new ShipCoords(GameModeType.LVL2,0, 0);
+        assertThrows(IllegalComponentAdd.class, () -> {ship.addComponent(component, ForbiddenCoords);});
+
+        ShipCoords newcoords = new ShipCoords(GameModeType.LVL2,5, 4);
+
+        iBaseComponent newcomponent1 = new StructuralComponent(2, new ConnectorType[]{ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY}, ComponentRotation.U000, newcoords);
+        assertDoesNotThrow(() -> ship.addComponent(newcomponent1, newcoords));
+        assertEquals(newcomponent1, ship.getComponent(newcoords));
+        iBaseComponent newcomponent2 = new StructuralComponent(2, new ConnectorType[]{ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY}, ComponentRotation.U000, newcoords);
+        assertThrows(IllegalComponentAdd.class, () -> ship.addComponent(newcomponent2, newcoords));
     }
 
     @Test
     void removeComponent() {
+
     }
 
     @Test
@@ -252,11 +280,21 @@ class SpaceShipTest {
 
     @Test
     void getCenterCabin() {
-
+        ShipCoords expected = new ShipCoords(GameModeType.LVL2, 3, 2);
+        ShipCoords actual = ship.getCenterCabin();
+        assertEquals(expected.x, actual.x);
+        assertEquals(expected.y, actual.y);
     }
 
     @Test
     void findConnectedCabins() {
+        ConnectorType[] connectors = {ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL};
+        ShipCoords coords = new ShipCoords(GameModeType.LVL2, 3, 3);
+        CabinComponent cabin1 = new CabinComponent(1, connectors, ComponentRotation.U000, coords);
+        ship.addComponent(cabin1, coords);
+        ArrayList<ShipCoords> results = ship.findConnectedCabins();
+        assertTrue(results.contains(coords));
+        assertTrue(results.contains(ship.getCenterCabin()));
     }
 
     @Test

@@ -75,10 +75,10 @@ public enum GameModeType{
 
     public ShipCoords getCenterCabin(){
         if(this.level==1 || this.level==2){
-            return new ShipCoords(this,4,3);
+            return new ShipCoords(this,3,2);
         }
         else{
-            return new ShipCoords(this,4,3);
+            return new ShipCoords(this,3,2);
         }
     }
 
