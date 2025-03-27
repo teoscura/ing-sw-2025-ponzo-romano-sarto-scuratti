@@ -1,6 +1,7 @@
 package it.polimi.ingsw.controller.match.state;
 
 import it.polimi.ingsw.controller.match.MatchController;
+import it.polimi.ingsw.model.ModelInstance;
 import it.polimi.ingsw.model.rulesets.GameModeType;
 
 public abstract class GameState {

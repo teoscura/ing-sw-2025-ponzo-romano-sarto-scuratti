@@ -12,6 +12,7 @@ import it.polimi.ingsw.model.rulesets.GameModeType;
 
 public class ModelInstance {
     
+    private final PlayerCount count;
     private final iCommonBoard board;
     private final iSpaceShip[] ships;
     private final iPlanche planche;
@@ -19,6 +20,10 @@ public class ModelInstance {
 
     public ModelInstance(GameModeType type, PlayerCount count){
         //TODO LOGIC
+    }
+
+    public PlayerCount getCount(){
+        return this.count;
     }
 
     public iCommonBoard getBoard(){

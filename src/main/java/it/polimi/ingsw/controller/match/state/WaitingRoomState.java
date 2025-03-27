@@ -1,21 +1,21 @@
 package it.polimi.ingsw.controller.match.state;
 
-
-import java.util.ArrayList;
-
 import it.polimi.ingsw.controller.match.MatchController;
 import it.polimi.ingsw.controller.match.PlayerCount;
 import it.polimi.ingsw.controller.server.ClientDescriptor;
+import it.polimi.ingsw.model.ModelInstance;
 import it.polimi.ingsw.model.rulesets.GameModeType;
 
 public class WaitingRoomState extends GameState {
 
+    private ClientDescriptor[] connected;
 
-    public WaitingRoomState(MatchController match, 
+    public WaitingRoomState(MatchController match,
+                            ModelInstance model, 
                             GameModeType type, 
                             PlayerCount count,
                             ClientDescriptor host){
-        super(match, type);
+        super(match, model, type);
         //XXX finish.
     }
 
@@ -26,12 +26,12 @@ public class WaitingRoomState extends GameState {
 
     @Override
     public boolean finished() {
-        return players == count.getNumber();
+        return connected.length == this.model.getCount().getNumber();
     }
 
     @Override
     public GameState getNext() {
-        return new ConstructionState();
+        return new ConstructionState(match, model, type);
     }
     
 }

@@ -1,14 +1,15 @@
 package it.polimi.ingsw.controller.match.state;
 
 import it.polimi.ingsw.controller.match.MatchController;
+import it.polimi.ingsw.model.ModelInstance;
 import it.polimi.ingsw.model.rulesets.GameModeType;
 
 public class VoyageState extends GameState {
 
     private int turn = 0;
 
-    protected VoyageState(MatchController match, GameModeType type) {
-        super(match, type);
+    protected VoyageState(MatchController match, ModelInstance model, GameModeType type) {
+        super(match, model, type);
         //TODO
     }
 
@@ -28,7 +29,7 @@ public class VoyageState extends GameState {
 
     @Override
     public GameState getNext() {
-        return new LeaderboardState();
+        return new LeaderboardState(match, model, type);
     }
     
 }

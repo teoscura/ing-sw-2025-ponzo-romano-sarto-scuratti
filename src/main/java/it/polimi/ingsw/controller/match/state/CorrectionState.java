@@ -1,12 +1,13 @@
 package it.polimi.ingsw.controller.match.state;
 
 import it.polimi.ingsw.controller.match.MatchController;
+import it.polimi.ingsw.model.ModelInstance;
 import it.polimi.ingsw.model.rulesets.GameModeType;
 
 public class CorrectionState extends GameState {
 
-    protected CorrectionState(MatchController match, GameModeType type) {
-            super(match, type);
+    protected CorrectionState(MatchController match, ModelInstance model, GameModeType type) {
+            super(match, model, type);
             //TODO 
     }
     
@@ -24,7 +25,7 @@ public class CorrectionState extends GameState {
 
     @Override
     public GameState getNext() {
-        return new VoyageState();
+        return new VoyageState(this.match, this.model, this.type);
     }
 
 }
