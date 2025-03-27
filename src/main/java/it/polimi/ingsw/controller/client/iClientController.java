@@ -15,7 +15,5 @@ public interface iClientController {
     public void moveOnBoard(PlayerColor c, int rel_change);
     public void pauseGame();
     public void endGame();
-
-    
     public void ping();
 }

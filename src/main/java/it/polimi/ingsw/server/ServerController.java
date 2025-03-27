@@ -3,13 +3,8 @@ package it.polimi.ingsw.server;
 import java.util.HashMap;
 
 import it.polimi.ingsw.controller.match.MatchController;
-import it.polimi.ingsw.net.RMIHandler;
-import it.polimi.ingsw.net.TCPHandler;
 
 public class ServerController {
-    //Connections
-    private RMIHandler rmi_handler;
-    private TCPHandler tcp_handler;
     //Data Storage
     private HashMap<Long, MatchController> match_list;
     private HashMap<Long, String> unfinished_games;
