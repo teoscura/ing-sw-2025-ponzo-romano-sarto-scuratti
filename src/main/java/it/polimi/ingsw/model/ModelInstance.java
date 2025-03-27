@@ -3,6 +3,7 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.controller.match.PlayerCount;
 import it.polimi.ingsw.exceptions.PlayerNotFoundException;
 import it.polimi.ingsw.model.adventure_cards.iCard;
+import it.polimi.ingsw.model.board.Planche;
 import it.polimi.ingsw.model.board.iCards;
 import it.polimi.ingsw.model.board.iCommonBoard;
 import it.polimi.ingsw.model.board.iPlanche;
@@ -22,6 +23,13 @@ public class ModelInstance {
         //TODO LOGIC
         this.count = count;
         this.board = new CommonBoard();
+        this.ships = new iSpaceShip[count.getNumber()];
+        for(PlayerColor c : PlayerColor.values()){
+            if(c.getOrder()>=ships.length) break;
+            this.ships[c.getOrder()] = new iSpaceShip();
+        }
+        this.planche = new Planche(type, count);
+
     }
 
     public PlayerCount getCount(){
