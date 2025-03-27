@@ -357,17 +357,19 @@ public class SpaceShip implements iSpaceShip{
 		int sum = 0;
 		for(iBaseComponent[] col : this.components){
 			for(iBaseComponent c : col){
-				if(c.getCoords().up()==this.empty){
-					if(c.getConnector(ComponentRotation.U000).getValue()!=0) sum++;
-				}
-				if(c.getCoords().right()==this.empty){
-					if(c.getConnector(ComponentRotation.U090).getValue()!=0) sum++;
-				}
-				if(c.getCoords().down()==this.empty){
-					if(c.getConnector(ComponentRotation.U180).getValue()!=0) sum++;
-				}
-				if(c.getCoords().left()==this.empty){
-					if(c.getConnector(ComponentRotation.U270).getValue()!=0) sum++;
+				if(c != this.empty){
+					if(this.getComponent(c.getCoords().up())==this.empty){
+						if(c.getConnector(ComponentRotation.U000).getValue()!=0) sum++;
+					}
+					if(this.getComponent(c.getCoords().right())==this.empty){
+						if(c.getConnector(ComponentRotation.U090).getValue()!=0) sum++;
+					}
+					if(this.getComponent(c.getCoords().down())==this.empty){
+						if(c.getConnector(ComponentRotation.U180).getValue()!=0) sum++;
+					}
+					if(this.getComponent(c.getCoords().left())==this.empty){
+						if(c.getConnector(ComponentRotation.U270).getValue()!=0) sum++;
+					}
 				}
 			}
 		}

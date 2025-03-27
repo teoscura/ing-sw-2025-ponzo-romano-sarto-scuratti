@@ -3,8 +3,10 @@ package it.polimi.ingsw.model.player;
 import it.polimi.ingsw.exceptions.NotPresentException;
 import it.polimi.ingsw.exceptions.NotUniqueException;
 import it.polimi.ingsw.exceptions.OutOfBoundsException;
+import it.polimi.ingsw.model.adventure_cards.enums.ProjectileDirection;
 import it.polimi.ingsw.model.components.*;
 import it.polimi.ingsw.model.components.enums.*;
+import it.polimi.ingsw.model.components.exceptions.AlreadyPoweredException;
 import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
 import it.polimi.ingsw.model.player.exceptions.IllegalComponentAdd;
 import it.polimi.ingsw.model.player.exceptions.NegativeCreditsException;
@@ -86,6 +88,7 @@ class SpaceShipTest {
 
     @Test
     void verify() {
+
     }
 
     @Test
@@ -299,6 +302,12 @@ class SpaceShipTest {
 
     @Test
     void countExposedConnectors() {
+        assertEquals(4, ship.countExposedConnectors());
+        ConnectorType[] connectors = {ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.UNIVERSAL, ConnectorType.EMPTY};
+        ShipCoords coords = new ShipCoords(GameModeType.LVL2, 3, 1);
+        StructuralComponent component1 = new StructuralComponent(1, connectors, ComponentRotation.U000, coords);
+        ship.addComponent(component1, coords);
+        assertEquals(3, ship.countExposedConnectors());
     }
 
     @Test
@@ -306,6 +315,15 @@ class SpaceShipTest {
     }
 
     @Test
-    void handleShot() {
+    void handleShot(){
+
+    }
+
+    @Test
+    void retireGetRetired(){
+        assertFalse(ship.getRetired());
+        ship.retire();
+        assertTrue(ship.getRetired());
+        AlreadyPoweredException e = assertThrows(AlreadyPoweredException.class, () -> ship.retire());
     }
 }
