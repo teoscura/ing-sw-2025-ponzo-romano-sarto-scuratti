@@ -20,6 +20,8 @@ public class ModelInstance {
 
     public ModelInstance(GameModeType type, PlayerCount count){
         //TODO LOGIC
+        this.count = count;
+        this.board = new CommonBoard();
     }
 
     public PlayerCount getCount(){
