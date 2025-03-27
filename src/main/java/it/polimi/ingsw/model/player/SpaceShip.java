@@ -168,6 +168,8 @@ public class SpaceShip implements iSpaceShip{
 		if(coords.y<0 || coords.y >= this.type.getHeight()) throw new OutOfBoundsException("Illegal getComponent access.");
 		if(component==null) throw new NullPointerException();
 		if(this.type.isForbidden(coords)) throw new IllegalComponentAdd();
+		if(this.getComponent(coords.up())==this.getEmpty() && this.getComponent(coords.down())==this.getEmpty() && this.getComponent(coords.left())==this.getEmpty() && this.getComponent(coords.right())==this.getEmpty())
+			throw new IllegalTargetException("Component is not adjacent to others.");
 		component.onCreation(this);
 		this.components[coords.y][coords.x] = component;
 	}

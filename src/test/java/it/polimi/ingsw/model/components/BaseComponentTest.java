@@ -106,6 +106,16 @@ class BaseComponentTest {
 
 	@Test
 	void getConnectedComponents(){
-		//TODO
+		SpaceShip ship = new SpaceShip(GameModeType.LVL2, PlayerColor.RED);
+		ShipCoords coords = new ShipCoords(GameModeType.LVL2, 3, 3);
+		ShipCoords up_coords = new ShipCoords(GameModeType.LVL2, 3, 2);
+		ShipCoords right_coords = new ShipCoords(GameModeType.LVL2, 4, 3);
+		ShipCoords down_coords = new ShipCoords(GameModeType.LVL2, 3, 4);
+		ShipCoords left_coords = new ShipCoords(GameModeType.LVL2, 2, 3);
+		StructuralComponent central_component = new StructuralComponent(1, new ConnectorType[]{ConnectorType.UNIVERSAL, ConnectorType.SINGLE_CONNECTOR, ConnectorType.DOUBLE_CONNECTOR, ConnectorType.EMPTY}, ComponentRotation.U000, coords);
+		StructuralComponent up_component = new StructuralComponent(1, new ConnectorType[]{ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.SINGLE_CONNECTOR, ConnectorType.EMPTY}, ComponentRotation.U000, up_coords);
+		StructuralComponent right_component = new StructuralComponent(1, new ConnectorType[]{ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.SINGLE_CONNECTOR}, ComponentRotation.U000, right_coords);
+		StructuralComponent down_component = new StructuralComponent(1, new ConnectorType[]{ConnectorType.UNIVERSAL, ConnectorType.SINGLE_CONNECTOR, ConnectorType.DOUBLE_CONNECTOR, ConnectorType.EMPTY}, ComponentRotation.U000, down_coords);
+		StructuralComponent left_component = new StructuralComponent(1, new ConnectorType[]{ConnectorType.UNIVERSAL, ConnectorType.SINGLE_CONNECTOR, ConnectorType.DOUBLE_CONNECTOR, ConnectorType.EMPTY}, ComponentRotation.U000, left_coords);
 	}
 }
