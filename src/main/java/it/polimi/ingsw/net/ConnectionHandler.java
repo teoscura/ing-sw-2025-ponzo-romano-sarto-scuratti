@@ -1,4 +1,4 @@
-package it.polimi.ingsw.controller.net;
+package it.polimi.ingsw.net;
 
 import java.util.ArrayList;
 

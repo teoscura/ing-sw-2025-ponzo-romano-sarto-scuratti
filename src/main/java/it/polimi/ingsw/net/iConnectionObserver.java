@@ -1,4 +1,4 @@
-package it.polimi.ingsw.controller.net;
+package it.polimi.ingsw.net;
 
 public interface iConnectionObserver {
     public void observe(iConnectionHandler h);

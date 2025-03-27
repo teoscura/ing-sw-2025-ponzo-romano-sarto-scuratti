@@ -1,10 +1,10 @@
-package it.polimi.ingsw.controller.server;
+package it.polimi.ingsw.server;
 
 import java.util.HashMap;
 
 import it.polimi.ingsw.controller.match.MatchController;
-import it.polimi.ingsw.controller.net.RMIHandler;
-import it.polimi.ingsw.controller.net.TCPHandler;
+import it.polimi.ingsw.net.RMIHandler;
+import it.polimi.ingsw.net.TCPHandler;
 
 public class ServerController {
     //Connections

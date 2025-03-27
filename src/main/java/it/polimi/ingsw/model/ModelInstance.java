@@ -3,12 +3,8 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.controller.match.PlayerCount;
 import it.polimi.ingsw.exceptions.PlayerNotFoundException;
 import it.polimi.ingsw.model.adventure_cards.iCard;
-import it.polimi.ingsw.model.board.Planche;
-import it.polimi.ingsw.model.board.iCards;
-import it.polimi.ingsw.model.board.iCommonBoard;
-import it.polimi.ingsw.model.board.iPlanche;
-import it.polimi.ingsw.model.player.PlayerColor;
-import it.polimi.ingsw.model.player.iSpaceShip;
+import it.polimi.ingsw.model.board.*;
+import it.polimi.ingsw.model.player.*;
 import it.polimi.ingsw.model.rulesets.GameModeType;
 
 public class ModelInstance {
@@ -20,16 +16,24 @@ public class ModelInstance {
     private final iCards[] card_piles;
 
     public ModelInstance(GameModeType type, PlayerCount count){
-        //TODO LOGIC
         this.count = count;
         this.board = new CommonBoard();
         this.ships = new iSpaceShip[count.getNumber()];
         for(PlayerColor c : PlayerColor.values()){
             if(c.getOrder()>=ships.length) break;
-            this.ships[c.getOrder()] = new iSpaceShip();
+            this.ships[c.getOrder()] = new SpaceShip(type, c);
         }
         this.planche = new Planche(type, count);
-
+        //TODO load from factory.
+        if(type.getLevel()==1){
+            this.card_piles = new iCards[1];
+            //LOAD FROM FACTORY.
+            this.card_piles[0] = new Cards();
+        }
+        else{
+            this.card_piles = new iCards[4];
+            //TODO fill with different levels.
+        }
     }
 
     public PlayerCount getCount(){

@@ -1,8 +1,8 @@
-package it.polimi.ingsw.controller.server;
+package it.polimi.ingsw.server;
 
 import it.polimi.ingsw.controller.exceptions.UserAlreadyInGameException;
 import it.polimi.ingsw.controller.exceptions.UserNotInGameException;
-import it.polimi.ingsw.controller.net.ConnectionAdapter;
+import it.polimi.ingsw.net.ConnectionAdapter;
 
 public class ClientDescriptor {
     private String username = null;

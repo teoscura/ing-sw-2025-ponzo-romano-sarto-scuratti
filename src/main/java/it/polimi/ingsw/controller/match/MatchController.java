@@ -6,11 +6,11 @@ import it.polimi.ingsw.controller.match.exceptions.GameAlreadyEndedException;
 import it.polimi.ingsw.controller.match.exceptions.GameAlreadyStartedException;
 import it.polimi.ingsw.controller.match.state.GameState;
 import it.polimi.ingsw.controller.match.state.WaitingRoomState;
-import it.polimi.ingsw.controller.server.ClientDescriptor;
-import it.polimi.ingsw.controller.server.ServerController;
 import it.polimi.ingsw.exceptions.NegativeArgumentException;
 import it.polimi.ingsw.model.ModelInstance;
 import it.polimi.ingsw.model.rulesets.GameModeType;
+import it.polimi.ingsw.server.ClientDescriptor;
+import it.polimi.ingsw.server.ServerController;
 
 public class MatchController {
     private final ServerController server;

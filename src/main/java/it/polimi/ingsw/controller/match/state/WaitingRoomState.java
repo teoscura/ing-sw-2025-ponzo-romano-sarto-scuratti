@@ -2,9 +2,9 @@ package it.polimi.ingsw.controller.match.state;
 
 import it.polimi.ingsw.controller.match.MatchController;
 import it.polimi.ingsw.controller.match.PlayerCount;
-import it.polimi.ingsw.controller.server.ClientDescriptor;
 import it.polimi.ingsw.model.ModelInstance;
 import it.polimi.ingsw.model.rulesets.GameModeType;
+import it.polimi.ingsw.server.ClientDescriptor;
 
 public class WaitingRoomState extends GameState {
 
