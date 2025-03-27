@@ -1,8 +1,6 @@
 //Done.
 package it.polimi.ingsw.controller.match;
 
-import it.polimi.ingsw.model.rulesets.GameModeType;
-
 public class MatchSettings {
     //TODO.
     private GameModeType mode;
