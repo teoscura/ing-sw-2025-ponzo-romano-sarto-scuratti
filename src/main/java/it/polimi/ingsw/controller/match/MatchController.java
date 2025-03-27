@@ -5,12 +5,9 @@ import java.io.IOException;
 import it.polimi.ingsw.controller.match.exceptions.GameAlreadyStartedException;
 import it.polimi.ingsw.controller.match.state.GameState;
 import it.polimi.ingsw.controller.match.state.WaitingRoomState;
-import it.polimi.ingsw.controller.message.Message;
 import it.polimi.ingsw.controller.server.ClientDescriptor;
 import it.polimi.ingsw.controller.server.ServerController;
 import it.polimi.ingsw.exceptions.NegativeArgumentException;
-import it.polimi.ingsw.controller.message.server.ServerMessage;
-import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.rulesets.GameModeType;
 
 public class MatchController {
@@ -35,20 +32,20 @@ public class MatchController {
         //XXX All json loader logic.
     }
 
-    public void sendMessage(ServerMessage m){
-        this.server.sendMessage(m);
-    }
-
-    public synchronized void recieveMessage(PlayerColor color, Message message){
-        message.sendTo(this.state);
-    }
-
     public void setState(GameState state){
         this.state = state;
     }
 
+    public void gameLoop(){
+        while(true){
+            if(this.state.finished()) this.state = this.state.getNext();
+            this.state.action();
+        }
+    }
+
     public void startGame() throws GameAlreadyStartedException{
         if(!this.waiting) throw new GameAlreadyStartedException("Game is already ongoing.");
+        this.waiting = false;
     }
 
     public long getMatchId(){

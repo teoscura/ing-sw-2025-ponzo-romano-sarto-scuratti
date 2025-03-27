@@ -3,10 +3,11 @@ package it.polimi.ingsw.model.rulesets;
 import it.polimi.ingsw.model.player.ShipCoords;
 
 public enum GameModeType{
-	TEST (1, 5, 7, 18, 4, 10, 5, 9),
-	LVL2 (2, 5, 7, 24, 4, 10, 5, 9);
+	TEST (1, 8, 5, 7, 18, 4, 10, 5, 9),
+	LVL2 (2, 12, 5, 7, 24, 4, 10, 5, 9);
 
 	private int level;
+	private int num_cards;
 	private int height;
 	private int width;
 	private int length;
@@ -15,8 +16,9 @@ public enum GameModeType{
 	private int min_y;
 	private int max_y;	
 
-	GameModeType(int level, int height, int width, int length, int min_x, int max_x, int min_y, int max_y){
+	GameModeType(int level, int num_cards, int height, int width, int length, int min_x, int max_x, int min_y, int max_y){
 		this.level = level;
+		this.num_cards = num_cards;
 		this.height = height;
 		this.width = width;
 		this.length = length;
@@ -28,6 +30,10 @@ public enum GameModeType{
 
 	public int getLevel(){
 		return this.level;
+	}
+
+	public int getNumCards(){
+		return this.num_cards;
 	}
 
 	public int getHeight(){
