@@ -66,6 +66,9 @@ public class SpaceShip implements iSpaceShip{
 		this.battery_coords = new ArrayList<ShipCoords>();
 		this.powerable_coords = new ArrayList<ShipCoords>();
 		this.center = type.getCenterCabin();
+		for(iBaseComponent[] t : this.components){
+			Arrays.fill(t, this.empty); // E' la stessa reference;
+		}
 		this.addComponent(new StartingCabinComponent(1, new ConnectorType[]{
 														 ConnectorType.UNIVERSAL,
 														 ConnectorType.UNIVERSAL,
@@ -75,9 +78,6 @@ public class SpaceShip implements iSpaceShip{
 											color,
 											center),
 											center);
-		for(iBaseComponent[] t : this.components){
-			Arrays.fill(t, this.empty); // E' la stessa reference;
-		}
 		Arrays.fill(shielded_directions, false);
 		Arrays.fill(containers, 0);
 		Arrays.fill(crew, 0);
@@ -167,7 +167,7 @@ public class SpaceShip implements iSpaceShip{
 		if(coords.x<0 || coords.x >= this.type.getWidth()) throw new OutOfBoundsException("Illegal getComponent access.");
 		if(coords.y<0 || coords.y >= this.type.getHeight()) throw new OutOfBoundsException("Illegal getComponent access.");
 		if(component==null) throw new NullPointerException();
-		if(this.getComponent(coords) != this.getEmpty()) throw new IllegalComponentAdd("Component is already present at these coords"); //temporary, probably checked elsewhere
+		if(this.getComponent(coords) != this.getEmpty()) throw new IllegalComponentAdd("Component is already present at these coords.");
 		if(this.type.isForbidden(coords)) throw new IllegalComponentAdd();
 		//if(this.getComponent(coords.up())==this.getEmpty() && this.getComponent(coords.down())==this.getEmpty() && this.getComponent(coords.left())==this.getEmpty() && this.getComponent(coords.right())==this.getEmpty())
 			//throw new IllegalTargetException("Component is not adjacent to others."); temporary, dirty implemetation
