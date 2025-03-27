@@ -2,12 +2,13 @@ package it.polimi.ingsw.server;
 
 import it.polimi.ingsw.controller.exceptions.UserAlreadyInGameException;
 import it.polimi.ingsw.controller.exceptions.UserNotInGameException;
+import it.polimi.ingsw.controller.match.MatchController;
 import it.polimi.ingsw.net.ConnectionAdapter;
 
 public class ClientDescriptor {
     private String username = null;
     private boolean in_game = false;
-    private long match_id = -1;
+    private MatchController current_match;
     private ConnectionAdapter connection;
 
     public ClientDescriptor(String username, ConnectionAdapter connection){
@@ -25,24 +26,25 @@ public class ClientDescriptor {
     }
 
     public long getMatchId(){
-        return this.match_id;
+        if(this.current_match==null) return -1;
+        return this.current_match.getMatchId();
     }
     
     public ConnectionAdapter getConnectionAdapter(){
         return this.connection;
     }
 
-    public void setMatch(long match_id) throws UserAlreadyInGameException{
+    public void setMatch(MatchController controller) throws UserAlreadyInGameException{
         if(this.in_game) throw new UserAlreadyInGameException("Selected user is already in game!");
         this.in_game = true;
-        this.match_id = match_id;
+        this.current_match = controller;
     }
 
     public void removeFromGame(String message) throws UserNotInGameException{
         //TODO: send client message and state change event;
         if(!this.in_game) throw new UserNotInGameException("The user: \""+this.username+"\" is not in a ongoing game or waiting room!");
         this.in_game = false;
-        this.match_id = -1;
+        this.current_match = null;
     }
     
 }
