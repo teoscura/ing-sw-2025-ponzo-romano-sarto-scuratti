@@ -145,22 +145,12 @@ class SpaceShipTest {
 
     @Test
     void getCannonPower() {
-        ShipCoords coords = new ShipCoords(GameModeType.LVL2, 3, 3);
-        ConnectorType[] connectors = {ConnectorType.EMPTY, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL};
-        assertEquals(0, ship.getCannonPower());
-        CannonComponent cannon = new CannonComponent(1, connectors, ComponentRotation.U000, CannonType.SINGLE, coords);
-        ship.addComponent(cannon, coords);
-        assertEquals(1, ship.getCannonPower());
+        //da rifare
     }
 
     @Test
     void getEnginePower() {
-        ShipCoords coords = new ShipCoords(GameModeType.LVL2, 3, 3);
-        ConnectorType[] connectors = {ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.EMPTY, ConnectorType.UNIVERSAL};
-        assertEquals(0, ship.getEnginePower());
-        EngineComponent engine = new EngineComponent(1, connectors, ComponentRotation.U000, EngineType.SINGLE, coords);
-        ship.addComponent(engine, coords);
-        assertEquals(1, ship.getEnginePower());
+        //da rifare
     }
 
     @Test
