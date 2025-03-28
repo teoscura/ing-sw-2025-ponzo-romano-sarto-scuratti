@@ -1,7 +1,7 @@
 @startuml controller
 hide circle
 skinparam classFontStyle bold
-skinparam groupInheritance 2
+skinparam groupInheritance 1
 set separator ::
 skinparam classAttributeIconSize 12
 
@@ -12,123 +12,212 @@ skinparam classAttributeIconSize 12
 
 package Controller{
 
-    class ServerController {
-        ' tenerla globale, ci serve modo di sapere a chi mandare poi i pacchetti e a quale match.
-        {field} - match_list : HashMap<String, MatchController>
-        {field} - player_list : ArrayList<ClientDescriptor>
-        ==methods==
-        {method} + getUnfinishedMatches() : void
-        {method} + getOpenWaitingRooms() : void
-        {method} + connectToRoom() : void
-        {method} + connectToUnfinished : void
-        {method} + openRoom(settings: MatchSettings) : void
-        {method} + observe() : void
-        --
-        {method} - closeGame(String uid) : void 
-        {method} - send_message(conn: ConnectionAdapter,message: char[]) : void
-    }
+    package Client{
 
-    interface iConnectionObserver{
-        ==methods==
-        {method} - observe() : void
-    }
+        abstract ClientConnection{
+            {method} # sendMessage(Message) : void
+            {method} # close() : void
+        }
 
-    interface iConnectionHandler{
-        ==methods==
-        {method} - attach(o: iConnectionObserver) : void
-        {method} - detach(o: iConnectionObserver) : void
-        {method} - notify() : void
-    }
+        ClientConnection^..ClientRMIServerStub
+        class ClientRMIServerStub{
+            TODO
+            {method} + sendMessage(Message) : void
+            {method} + close() : void
+        }
 
-    class RMIHandler{
-        {field} rmi_params : //TODO
-        ==methods==
-        {method} //TODO 
-    }
+        ClientConnection^..ClientSocket
+        class ClientSocket{
+            TODO
+            {method} + sendMessage(Message) : void
+            {method} + close() : void
+        }
 
-    class TCPHandler{
-        {field} tcp_params : //TODO
-        ==methods==
-        {method} //TODO 
-    }
+        interface iClientGameController <<interface>> {
+            {method} + throwException(Exception) : void 
+            {method} + updateTurn(int, PlayerColor) : void 
+            {method} + showCard(int) : void 
+            {method} + updatePhase(GameState) : void 
+            {method} + updateShip(PlayerColor, iSpaceShip) : void 
+            {method} + updateShipValidationResult(boolean, VerifyResult[]) : void 
+            {method} + moveOnBoard(PlayerColor, int) : void 
+            {method} + pauseGame() : void 
+            {method} + endGame() : void 
+            {method} + ping() : void 
+        }
 
-    class MatchController{
-        {field} - uid : int
-        {field} - match_player_list : ArrayList<ClientDescriptor>
-        {field} - is_waiting : boolean
-        {field} - max_players : int
-        ==methods==
-        {method} + shutdown() : void
-        {method} + getWaitingStatus() : boolean
-        {method} + getUID : int
-        {method} + getMaxPlayers : int
-        ---
-        {method} + startGame() : void
-
-    }
-
-    class ClientDescriptor {
-        {field} - name : String
-        {field} - in_game : boolean
-        {field} - match_id : long
-        {field} - match_player_number : int
-        {field} - connection : ConnectionAdapter
-        ==methods==
-        {method} + getName() : String
-        {method} + getInGame() : boolean
-        {method} + getMatchID() : int
-        {method} + getConnection() : ConnectionAdapter
-    }
-
-    class UnfinishedGameLoader{
-        ==methods==
-        {method} - findUnfinishedGames() : ArrayList<String>
-        {method} - loadUnfinishedGame(String file_name) : void
-    }
-
-    abstract MatchLogic{
-        {field} - game_turns : int
-        {field} - spaceship_type : SpaceShipType
-        {field} - card_type : CardLevel
-        {field} - players : Array<Player>
-        {field} - common_board : iCommonBoard
-        {field} - card_piles : Array<iCards>
-        {field} - planche : iPlanche
-        {field} - game_state : GameState
-        ==methods==
-        {method} + initialize() : void 
-        {method} + getTurn() : int
-        {method} + getSpaceShipType() : SpaceShipType
-        {method} + getCardType() : CardLevel
-        {method} + getGameState() : GameState
-        {method} + send_message(messaage: char[]) : void
-        //TODO finish methods.
-    }
-
-    abstract GameState{ 
-        //TODO
-    }
-
-    class ConstructionState{
-        //TODO
-    }
-
-    class VoyageState{
-        //TODO
-    }
-
-    class TestFlightLogic{
-        //TODO
+        iClientGameController^--ClientGameController
+        ClientConnection<-*ClientGameController
+        class ClientGameController{
+            {field} - model : ModelView
+            {field} - state : GameState
+            {field} - server : ClientConnection
+            {field} - listener : ViewListener
+            {method} + throwException(Exception) : void 
+            {method} + updateTurn(int, PlayerColor) : void 
+            {method} + showCard(int) : void 
+            {method} + updatePhase(GameState) : void 
+            {method} + updateShip(PlayerColor, iSpaceShip) : void 
+            {method} + updateShipValidationResult(boolean, VerifyResult[]) : void 
+            {method} + moveOnBoard(PlayerColor, int) : void 
+            {method} + pauseGame() : void 
+            {method} + endGame() : void 
+            {method} + ping() : void 
+        }
 
     }
 
-    class LevelTwoLogic{
-        //TODO
+    package Server{
+
+        class ClientDescriptor{
+            {field} - username: String
+            {field} - color : PlayerColor
+            {field} - connection : Connection
+            {field} - disconnected : boolean
+            {method} + getUsername() : String
+            {method} + getColor() : PlayerColor
+            {method} + getDisconnected() : boolean
+            {method} + sendMessage(ClientMessage m) : void
+        }
+
+        abstract Connection {
+            {method} # sendMessage(Message) : void
+            {method} # close() : void
+        }
+
+        class RmiConnection {
+            TODO
+            {method} + sendMessage(Message) : void
+            {method} + close() : void
+        }
+
+        class SocketConnection {
+            TODO
+            {method} + sendMessage(Message) : void
+            {method} + close() : void
+        }
+
+        class Server <<singleton>>{
+            {field} - instance : Server
+            {method} + run() : void
+            {method} + accept(RmiConnection) : ClientRMIServerStub
+            {method} + getInstance() : Server  <<static>>
+        }
+
+        class ModelInstance{
+            {field} - player_ships : iSpaceShip[]
+            {field} - planche : iPlanche
+            {field} - board : iCommonBoard
+            {field} - card_piles : iCards[]
+            {method} + getShip(PlayerColor) : iSpaceShip
+            {method} + getPlanche() : iPlanche 
+            {method} + getBoard() : iCommonBoard
+            {method} + getCard(int) : iCard
+        }
+
+        class ServerController{
+            {field} - player_list : ClientDescriptor[]
+            {field} - game : ModelInstance
+            {field} - waiting : boolean
+            {method} + connect() : void
+            {method} + disconnect() : void
+            {method} + sendContinue() : void
+            {method} + putComponent(ClientDescriptor, ShipCoords, ComponentRotation, int) : void
+            {method} + takeComponent(ClientDescriptor) : void
+            {method} + takeDiscarded(ClientDescriptor, int) : void
+            {method} + discardComponent(ClientDescriptor, int component_id) : void
+            {method} + toggleHourglass(ClientDescriptor) : void
+            {method} + removeComponent(ClientDescriptor, ShipCoords) : void
+            {method} + setCrewType(ClientDescriptor, ShipCoords, AlienType) : void
+            {method} + setNewShipCenter(ClientDescriptor, ShipCoords) : void
+            {method} + turnOn(ClientDescriptor, ShipCoords, ShipCoords) : void
+            {method} + removeCrew(ClientDescriptor, ShipCoords[]) : void
+            {method} + takeCargo(ClientDescriptor, ShipmentType, ShipCoords) : void
+            {method} + askUpdateState(ClientDescriptor) : void
+            {method} + progressTurn(ClientDescriptor) : void
+            {method} + ping(ClientDescriptor) : void
+        }
+
+        abstract GameState <<abstract>> {
+            {field} - match : MatchController
+            {field} - model : ModelInstance
+            {field} - plist : ClientDescriptor[]
+            {method} + action(ModelInstance instance) : void
+            {method} + finished() : boolean
+            {method} + transition() : void 
+            {method} + ping(ClientDescriptor) : void
+        }
+
+        class ConstructionState{
+            {field} - match : MatchController
+            {field} - model : ModelInstance
+            {field} - plist : ClientDescriptor[]
+            {method} + action(ModelInstance instance) : void
+            {method} + finished() : boolean
+            {method} + transition() : void 
+            {method} + putComponent(ClientDescriptor, ShipCoords, ComponentRotation, int) : void
+            {method} + takeComponent(ClientDescriptor) : void
+            {method} + takeDiscarded(ClientDescriptor, int) : void
+            {method} + discardComponent(ClientDescriptor, int component_id) : void
+            {method} + toggleHourglass(ClientDescriptor) : void
+        }
+
+        class VerifyState{
+            {field} - match : MatchController
+            {field} - model : ModelInstance
+            {field} - plist : ClientDescriptor[]
+            {method} + action(ModelInstance instance) : void
+            {method} + finished() : boolean
+            {method} + transition() : void 
+            {method} + removeComponent(ClientDescriptor, ShipCoords) : void
+            {method} + setCrewType(ClientDescriptor, ShipCoords, AlienType) : void
+        }
+        
+        class VoyageState{
+            {field} - match : MatchController
+            {field} - model : ModelInstance
+            {field} - plist : ClientDescriptor[]
+            {method} + action(ModelInstance instance) : void
+            {method} + finished() : boolean
+            {method} + transition() : void 
+            {method} + setNewShipCenter(ClientDescriptor, ShipCoords) : void
+            {method} + turnOn(ClientDescriptor, ShipCoords, ShipCoords) : void
+            {method} + removeCrew(ClientDescriptor, ShipCoords[]) : void
+            {method} + takeCargo(ClientDescriptor, ShipmentType, ShipCoords) : void
+            {method} + askUpdateState(ClientDescriptor) : void
+            {method} + progressTurn(ClientDescriptor) : void
+        }
+
+        class LeaderboardState{
+            {field} - match : MatchController
+            {field} - model : ModelInstance
+            {field} - plist : ClientDescriptor[]
+            {method} + action(ModelInstance instance) : void
+            {method} + finished() : boolean
+            {method} + transition() : void 
+        }
+
     }
 
-    TCPHandler <-- ServerController:tcp_handler
-    RMIHandler <-- ServerController:rmi_handler
-    MatchLogic <-- MatchController:logic
+    package Message{
+
+        interface Message <<interface, serializable>> {
+        }
+        Message^--ServerMessage::ServerMessage
+        package ServerMessage{
+            abstract ServerMessage <<abstract>> {
+
+            }
+        }
+        Message^--ClientMessage::ClientMessage
+        package ClientMessage {
+            abstract ClientMessage <<abstract>> {
+
+            }
+        }
+        
+    }
+
 }
 @enduml
 

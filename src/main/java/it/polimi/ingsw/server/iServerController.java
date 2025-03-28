@@ -7,12 +7,12 @@ import it.polimi.ingsw.model.rulesets.GameModeType;
 
 public interface iServerController {
     //Lobby
-    public void getOpenWaitingRooms(ClientDescriptor client);
-    public void openWaitingRoom(ClientDescriptor client, GameModeType type, PlayerCount count);
-    public void quitWaitingRoom(ClientDescriptor client);
-    public void joinWaitingRoom(ClientDescriptor client, long match_id);
-    public void getUnfinishedGames(ClientDescriptor client);
-    public void getMyUnfinishedGames(ClientDescriptor client);
+    // public void getOpenWaitingRooms(ClientDescriptor client);
+    // public void openWaitingRoom(ClientDescriptor client, GameModeType type, PlayerCount count);
+    // public void quitWaitingRoom(ClientDescriptor client);
+    // public void joinWaitingRoom(ClientDescriptor client, long match_id);
+    // public void getUnfinishedGames(ClientDescriptor client);
+    // public void getMyUnfinishedGames(ClientDescriptor client);
     //Construction
     public void putComponent(ClientDescriptor client, ShipCoords coords, ComponentRotation rotation, int component_id);
     public void takeComponent(ClientDescriptor client);
