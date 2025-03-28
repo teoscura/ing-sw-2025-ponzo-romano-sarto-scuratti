@@ -129,7 +129,6 @@ public class SpaceShip implements iSpaceShip{
 	public VerifyResult[][] verify() {
 		VerifyResult[][] res = new VerifyResult[this.type.getHeight()][];
 		Queue<iBaseComponent> queue = new ArrayDeque<iBaseComponent>();
-		VerifyResult[] row = new VerifyResult[this.type.getWidth()];
 		for (int i = 0; i < res.length; i++) {
 			res[i] = new VerifyResult[this.type.getWidth()];
 			Arrays.fill(res[i], VerifyResult.UNCHECKED);
