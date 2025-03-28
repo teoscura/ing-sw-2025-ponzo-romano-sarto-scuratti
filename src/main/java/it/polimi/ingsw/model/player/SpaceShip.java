@@ -197,12 +197,16 @@ public class SpaceShip implements iSpaceShip{
 				cell.check(v);
 			}
 		}
-		this.cannon_power = v.getCannonPower();
-		this.battery_power = v.getBatteryPower();
-		this.engine_power = v.getEnginePower();
 		this.crew = v.getCrewMembers();
+		this.battery_power = v.getBatteryPower();
 		this.shielded_directions = v.getDirections();
 		this.containers = v.getStorageContainers();
+		if(v.getCannonPower()>0){
+			this.cannon_power += 2*this.crew[2];
+		}
+		if(v.getEnginePower()>0){
+			this.engine_power += 2*this.crew[1];
+		}
 	}
 
 	@Override
