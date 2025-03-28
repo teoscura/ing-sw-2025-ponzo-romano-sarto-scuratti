@@ -35,17 +35,20 @@ package Controller{
 
         interface iClientGameController <<interface>> {
             {method} + throwException(Exception) : void 
-            {method} + updateTurn(int, PlayerColor) : void 
             {method} + showCard(int) : void 
             {method} + updateState(GameState) : void 
             {method} + updateShip(PlayerColor, iSpaceShip) : void 
             {method} + updateShipValidationResult(boolean, VerifyResult[]) : void 
+
+            {method} + updateTurn(int, PlayerColor) : void 
             {method} + askRemoveCrew(int) : void
             {method} + askRemoveCargo(int) : void
             {method} + askChooseNewCabin() : void
             {method} + giveCargo(int[]) : void
             {method} + earnCredits(int) : void
             {method} + askLanding() : void
+
+            {method} + setLost();
             {method} + moveOnBoard(PlayerColor, int) : void 
             {method} + pauseGame() : void 
             {method} + endGame() : void 
@@ -53,24 +56,26 @@ package Controller{
         }
 
         iClientGameController^--ClientGameController
-        ClientConnection<-*ClientGameController
+        ClientConnection<--ClientGameController:Server
         class ClientGameController{
             {field} - model : ModelView
             {field} - state : GameState
-            {field} - server : ClientConnection
             {field} - listener : ViewListener
-            {method} + throwException(Exception) : void 
-            {method} + updateTurn(int, PlayerColor) : void 
+            {method} + throwException(Exception) : void
             {method} + showCard(int) : void 
             {method} + updateState(GameState) : void 
             {method} + updateShip(PlayerColor, iSpaceShip) : void 
             {method} + updateShipValidationResult(boolean, VerifyResult[]) : void 
+
+            {method} + updateTurn(int, PlayerColor) : void 
             {method} + askRemoveCrew(int) : void
             {method} + askRemoveCargo(int) : void
             {method} + askChooseNewCabin() : void
             {method} + giveCargo(int[]) : void
             {method} + earnCredits(int) : void
             {method} + askLanding() : void
+
+            {method} + setLost();
             {method} + moveOnBoard(PlayerColor, int) : void 
             {method} + pauseGame() : void 
             {method} + endGame() : void 
@@ -91,7 +96,7 @@ package Controller{
             {method} + sendMessage(ClientMessage m) : void
         }
 
-        Connection<-*ClientDescriptor:connection
+        Connection<-ClientDescriptor:connection
         abstract Connection {
             {method} # sendMessage(Message) : void
             {method} # close() : void
@@ -111,7 +116,7 @@ package Controller{
             {method} + close() : void
         }
 
-        ServerController <-- Server:Controller
+        ServerController <---> Server:Controller
         class Server <<singleton>>{
             {field} - instance : Server
             {method} + run() : void
@@ -131,12 +136,12 @@ package Controller{
             {method} + getCard(int) : iCard
         }
 
-        ClientDescriptor <-- "0..4  " ServerController:players
-        ModelInstance<--*ServerController:model
+        ClientDescriptor <--- "0..4  " ServerController:players
+        ModelInstance<-ServerController:model
         class ServerController{
             {field} - waiting : boolean
-            {method} + connect() : void
             {method} + disconnect() : void
+
             {method} + sendContinue() : void
             {method} + putComponent(ClientDescriptor, ShipCoords, ComponentRotation, int) : void
             {method} + takeComponent(ClientDescriptor) : void
@@ -145,6 +150,7 @@ package Controller{
             {method} + toggleHourglass(ClientDescriptor) : void
             {method} + removeComponent(ClientDescriptor, ShipCoords) : void
             {method} + setCrewType(ClientDescriptor, ShipCoords, AlienType) : void
+
             {method} + setNewShipCenter(ClientDescriptor, ShipCoords) : void
             {method} + turnOn(ClientDescriptor, ShipCoords, ShipCoords) : void
             {method} + removeCrew(ClientDescriptor, ShipCoords[]) : void
@@ -154,10 +160,12 @@ package Controller{
             {method} + removeCrew(ClientDescriptor, ShipCoords) : void
             {method} + askUpdateState(ClientDescriptor) : void
             {method} + progressTurn(ClientDescriptor) : void
+
+            {method} + giveUp(ClientDescriptor) : void
             {method} + ping(ClientDescriptor) : void
         }
 
-        GameState<--* ServerController:state
+        GameState<-- ServerController:state
         abstract GameState <<abstract>> {
             {field} - match : MatchController
             {field} - model : ModelInstance
@@ -197,6 +205,8 @@ package Controller{
         
         GameState^.. VoyageState
         class VoyageState{
+            {field} - await : PlayerColor
+            {field} - respt : ResponseType
             {field} - match : MatchController
             {field} - model : ModelInstance
             {field} - plist : ClientDescriptor[]
@@ -225,18 +235,105 @@ package Controller{
 
     }
 
+    'TODO creare classe stub per il client.
+    iClientGameController .. SocketConnection
+    iClientGameController .. RMIConnection
+
+    ClientRMIServerStub .. Server::Server
+    ClientSocket .. Server::Server
+
     package Message{
 
         interface Message <<interface, serializable>>
 
-        Message^-- ServerMessage::ServerMessage
+        Message^------ ServerMessage::ServerMessage
         package ServerMessage{
             abstract ServerMessage <<abstract>> {
 
             }
 
-            ServerMessage^... AcceptMessage
+            ServerMessage^... DisconnectMessage
+            class DisconnectMessage{
+
+            }
+
+            ServerMessage^..... AcceptMessage
             class AcceptMessage{
+
+            }
+
+            ServerMessage^... PlaceComponentMessage
+            class PlaceComponentMessage{
+
+            }
+
+            ServerMessage^..... PullComponentMessage
+            class PullComponentMessage{
+
+            }
+
+            ServerMessage^... PullDiscardedMessage
+            class PullDiscardedMessage{
+
+            }
+
+            ServerMessage^..... DiscardComponentMessage
+            class DiscardComponentMessage{
+
+            }
+
+            ServerMessage^... ToggleHourglassMessage
+            class ToggleHourglassMessage{
+
+            }
+
+            ServerMessage^..... ComponentDeleteMessage
+            class ComponentDeleteMessage{
+
+            }
+            
+            ServerMessage^... SetCrewMessage
+            class SetCrewMessage{
+
+            }
+
+            ServerMessage^..... NewShipCenterMessage
+            class NewShipCenterMessage{
+
+            }
+
+            ServerMessage^... TurnOnMessage
+            class TurnOnMessage{
+
+            }
+            
+            ServerMessage^..... RemoveCrewMessage
+            class RemoveCrewMessage{
+
+            }
+            
+            ServerMessage^... RemoveCargoMessage
+            class RemoveCargoMessage{
+
+            }
+            
+            ServerMessage^..... TakeCargoMessage
+            class TakeCargoMessage{
+
+            }
+
+            ServerMessage^... SelectLandingMessage
+            class SelectLandingMessage{
+
+            }
+            
+            ServerMessage^..... GiveUpMessage
+            class GiveUpMessage{
+
+            }
+
+            ServerMessage^... ServerPingMessage
+            class ServerPingMessage{
 
             }
 
@@ -248,83 +345,83 @@ package Controller{
 
             }
 
-            ClientMessage^... ExceptionMessage 
+            ClientMessage^.. ExceptionMessage 
             class ExceptionMessage{
 
             }
 
-            ClientMessage^... TurnMessage
+            ClientMessage^.... TurnMessage
             class TurnMessage{
 
             }
 
-            ClientMessage^... ShowCardMessage
+            ClientMessage^.. ShowCardMessage
             class ShowCardMessage{
 
             }
 
-            ClientMessage^... UpdateStateMessage
+            ClientMessage^.... UpdateStateMessage
             class UpdateStateMessage{
 
             }
 
-            ClientMessage^... UpdateShipMessage
+            ClientMessage^.. UpdateShipMessage
             class UpdateShipMessage{
 
             }
 
-            ClientMessage^... ValidateResultMessage
+            ClientMessage^.... ValidateResultMessage
             class ValidateResultMessage{
 
             }
 
-            ClientMessage^... RemoveCrewMessage
-            class RemoveCrewMessage{
+            ClientMessage^.. AskRemoveCrewMessage
+            class AskRemoveCrewMessage{
 
             }
 
-            ClientMessage^... RemoveMerchMessage
+            ClientMessage^.... RemoveMerchMessage
             class RemoveMerchMessage{
 
             }
 
-            ClientMessage^... BrokenCabinMessage
+            ClientMessage^.. BrokenCabinMessage
             class BrokenCabinMessage{
 
             }
 
-            ClientMessage^... GainCargoMessage
+            ClientMessage^.... GainCargoMessage
             class GainCargoMessage{
 
             }
 
-            ClientMessage^... CreditsMessage
+            ClientMessage^.. CreditsMessage
             class CreditsMessage{
 
             }
 
-            ClientMessage^... AskLandingMessage
+            ClientMessage^.... AskLandingMessage
             class AskLandingMessage{
 
             }
 
-            ClientMessage^... MoveOnBoardMessage
+            ClientMessage^.. MoveOnBoardMessage
             class MoveOnBoardMessage{
 
             }
 
-            ClientMessage^... GamePauseMessage
+            ClientMessage^.... GamePauseMessage
             class GamePauseMessage{
 
             }
 
-            ClientMessage^... GameEndMessage
+            ClientMessage^.. GameEndMessage
             class GameEndMessage{
 
             }
 
-            ClientMessage^... PingMessage
-            class PingMessage{
+            ClientMessage^.... ClientPingMessage
+            class ClientPingMessage{
 
             }
         }
