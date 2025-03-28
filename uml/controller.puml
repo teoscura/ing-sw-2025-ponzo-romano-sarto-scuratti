@@ -72,7 +72,6 @@ package Controller{
         class ClientDescriptor{
             {field} - username: String
             {field} - color : PlayerColor
-            {field} - connection : Connection
             {field} - disconnected : boolean
             {method} + getUsername() : String
             {method} + getColor() : PlayerColor
@@ -80,29 +79,34 @@ package Controller{
             {method} + sendMessage(ClientMessage m) : void
         }
 
+        Connection<-*ClientDescriptor:connection
         abstract Connection {
             {method} # sendMessage(Message) : void
             {method} # close() : void
         }
 
-        class RmiConnection {
+        Connection^.. RMIConnection
+        class RMIConnection {
             TODO
             {method} + sendMessage(Message) : void
             {method} + close() : void
         }
 
+        Connection^.. SocketConnection
         class SocketConnection {
             TODO
             {method} + sendMessage(Message) : void
             {method} + close() : void
         }
 
+        ServerController <-- Server:Controller
         class Server <<singleton>>{
             {field} - instance : Server
             {method} + run() : void
             {method} + accept(RmiConnection) : ClientRMIServerStub
             {method} + getInstance() : Server  <<static>>
         }
+
 
         class ModelInstance{
             {field} - player_ships : iSpaceShip[]
@@ -115,9 +119,9 @@ package Controller{
             {method} + getCard(int) : iCard
         }
 
+        ClientDescriptor <-- "0..4  " ServerController:players
+        ModelInstance<--*ServerController:model
         class ServerController{
-            {field} - player_list : ClientDescriptor[]
-            {field} - game : ModelInstance
             {field} - waiting : boolean
             {method} + connect() : void
             {method} + disconnect() : void
@@ -138,6 +142,7 @@ package Controller{
             {method} + ping(ClientDescriptor) : void
         }
 
+        GameState<--* ServerController:state
         abstract GameState <<abstract>> {
             {field} - match : MatchController
             {field} - model : ModelInstance
@@ -148,6 +153,7 @@ package Controller{
             {method} + ping(ClientDescriptor) : void
         }
 
+        GameState^.. ConstructionState
         class ConstructionState{
             {field} - match : MatchController
             {field} - model : ModelInstance
@@ -162,6 +168,7 @@ package Controller{
             {method} + toggleHourglass(ClientDescriptor) : void
         }
 
+        GameState^.. VerifyState
         class VerifyState{
             {field} - match : MatchController
             {field} - model : ModelInstance
@@ -173,6 +180,7 @@ package Controller{
             {method} + setCrewType(ClientDescriptor, ShipCoords, AlienType) : void
         }
         
+        GameState^.. VoyageState
         class VoyageState{
             {field} - match : MatchController
             {field} - model : ModelInstance
@@ -188,6 +196,7 @@ package Controller{
             {method} + progressTurn(ClientDescriptor) : void
         }
 
+        GameState^.. LeaderboardState
         class LeaderboardState{
             {field} - match : MatchController
             {field} - model : ModelInstance
