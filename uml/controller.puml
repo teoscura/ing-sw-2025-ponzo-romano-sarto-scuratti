@@ -37,9 +37,15 @@ package Controller{
             {method} + throwException(Exception) : void 
             {method} + updateTurn(int, PlayerColor) : void 
             {method} + showCard(int) : void 
-            {method} + updatePhase(GameState) : void 
+            {method} + updateState(GameState) : void 
             {method} + updateShip(PlayerColor, iSpaceShip) : void 
             {method} + updateShipValidationResult(boolean, VerifyResult[]) : void 
+            {method} + askRemoveCrew(int) : void
+            {method} + askRemoveCargo(int) : void
+            {method} + askChooseNewCabin() : void
+            {method} + giveCargo(int[]) : void
+            {method} + earnCredits(int) : void
+            {method} + askLanding() : void
             {method} + moveOnBoard(PlayerColor, int) : void 
             {method} + pauseGame() : void 
             {method} + endGame() : void 
@@ -56,9 +62,15 @@ package Controller{
             {method} + throwException(Exception) : void 
             {method} + updateTurn(int, PlayerColor) : void 
             {method} + showCard(int) : void 
-            {method} + updatePhase(GameState) : void 
+            {method} + updateState(GameState) : void 
             {method} + updateShip(PlayerColor, iSpaceShip) : void 
             {method} + updateShipValidationResult(boolean, VerifyResult[]) : void 
+            {method} + askRemoveCrew(int) : void
+            {method} + askRemoveCargo(int) : void
+            {method} + askChooseNewCabin() : void
+            {method} + giveCargo(int[]) : void
+            {method} + earnCredits(int) : void
+            {method} + askLanding() : void
             {method} + moveOnBoard(PlayerColor, int) : void 
             {method} + pauseGame() : void 
             {method} + endGame() : void 
@@ -136,7 +148,10 @@ package Controller{
             {method} + setNewShipCenter(ClientDescriptor, ShipCoords) : void
             {method} + turnOn(ClientDescriptor, ShipCoords, ShipCoords) : void
             {method} + removeCrew(ClientDescriptor, ShipCoords[]) : void
+            {method} + removeCargo(ClientDescriptor, ShipCoords[]) : void
             {method} + takeCargo(ClientDescriptor, ShipmentType, ShipCoords) : void
+            {method} + selectLanding(ClientDescriptor, int) : void
+            {method} + removeCrew(ClientDescriptor, ShipCoords) : void
             {method} + askUpdateState(ClientDescriptor) : void
             {method} + progressTurn(ClientDescriptor) : void
             {method} + ping(ClientDescriptor) : void
@@ -192,8 +207,10 @@ package Controller{
             {method} + turnOn(ClientDescriptor, ShipCoords, ShipCoords) : void
             {method} + removeCrew(ClientDescriptor, ShipCoords[]) : void
             {method} + takeCargo(ClientDescriptor, ShipmentType, ShipCoords) : void
+            {method} + selectLanding(ClientDescriptor, int) : void
             {method} + askUpdateState(ClientDescriptor) : void
             {method} + progressTurn(ClientDescriptor) : void
+            {method} + removeCrew(ClientDescriptor, ShipCoords) : void
         }
 
         GameState^.. LeaderboardState
@@ -210,17 +227,104 @@ package Controller{
 
     package Message{
 
-        interface Message <<interface, serializable>> {
-        }
-        Message^--ServerMessage::ServerMessage
+        interface Message <<interface, serializable>>
+
+        Message^-- ServerMessage::ServerMessage
         package ServerMessage{
             abstract ServerMessage <<abstract>> {
 
             }
+
+            ServerMessage^... AcceptMessage
+            class AcceptMessage{
+
+            }
+
         }
-        Message^--ClientMessage::ClientMessage
+
+        Message^-- ClientMessage::ClientMessage
         package ClientMessage {
             abstract ClientMessage <<abstract>> {
+
+            }
+
+            ClientMessage^... ExceptionMessage 
+            class ExceptionMessage{
+
+            }
+
+            ClientMessage^... TurnMessage
+            class TurnMessage{
+
+            }
+
+            ClientMessage^... ShowCardMessage
+            class ShowCardMessage{
+
+            }
+
+            ClientMessage^... UpdateStateMessage
+            class UpdateStateMessage{
+
+            }
+
+            ClientMessage^... UpdateShipMessage
+            class UpdateShipMessage{
+
+            }
+
+            ClientMessage^... ValidateResultMessage
+            class ValidateResultMessage{
+
+            }
+
+            ClientMessage^... RemoveCrewMessage
+            class RemoveCrewMessage{
+
+            }
+
+            ClientMessage^... RemoveMerchMessage
+            class RemoveMerchMessage{
+
+            }
+
+            ClientMessage^... BrokenCabinMessage
+            class BrokenCabinMessage{
+
+            }
+
+            ClientMessage^... GainCargoMessage
+            class GainCargoMessage{
+
+            }
+
+            ClientMessage^... CreditsMessage
+            class CreditsMessage{
+
+            }
+
+            ClientMessage^... AskLandingMessage
+            class AskLandingMessage{
+
+            }
+
+            ClientMessage^... MoveOnBoardMessage
+            class MoveOnBoardMessage{
+
+            }
+
+            ClientMessage^... GamePauseMessage
+            class GamePauseMessage{
+
+            }
+
+            ClientMessage^... GameEndMessage
+            class GameEndMessage{
+
+            }
+
+            ClientMessage^... PingMessage
+            class PingMessage{
 
             }
         }
