@@ -127,9 +127,13 @@ public class SpaceShip implements iSpaceShip{
 
 	@Override
 	public VerifyResult[][] verify() {
-		VerifyResult[][] res = new VerifyResult[this.type.getHeight()][this.type.getWidth()];
+		VerifyResult[][] res = new VerifyResult[this.type.getHeight()][];
 		Queue<iBaseComponent> queue = new ArrayDeque<iBaseComponent>();
-		Arrays.fill(res, VerifyResult.UNCHECKED);
+		VerifyResult[] row = new VerifyResult[this.type.getWidth()];
+		for (int i = 0; i < res.length; i++) {
+			res[i] = new VerifyResult[this.type.getWidth()];
+			Arrays.fill(res[i], VerifyResult.UNCHECKED);
+		}
 		queue.add(this.getComponent(this.type.getCenterCabin()));
 		iBaseComponent tmp = null;
 		while(!queue.isEmpty()){
@@ -142,9 +146,9 @@ public class SpaceShip implements iSpaceShip{
 				if(res[xy.y][xy.x]==VerifyResult.UNCHECKED) queue.add(c);
 			}
 		}
-		for(VerifyResult[] t: res){
-			for(VerifyResult r : t){
-				if(r!=VerifyResult.UNCHECKED) r=VerifyResult.NOT_LINKED;
+		for(int t = 0; t < this.getHeight(); t++){
+			for(int r = 0; r<this.getWidth(); r++){
+				if(res[t][r]==VerifyResult.UNCHECKED) res[t][r]=VerifyResult.NOT_LINKED;
 			}
 		}
 		return res;

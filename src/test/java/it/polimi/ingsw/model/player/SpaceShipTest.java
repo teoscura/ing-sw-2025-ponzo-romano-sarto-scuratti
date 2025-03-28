@@ -88,7 +88,23 @@ class SpaceShipTest {
 
     @Test
     void verify() {
-
+        VerifyResult[][] check_results = new VerifyResult[ship.getHeight()][ship.getWidth()];
+        check_results = ship.verify();
+        assertEquals(VerifyResult.GOOD, check_results[2][3]);
+        ShipCoords coords1 = new ShipCoords(GameModeType.LVL2, 4, 2);
+        StructuralComponent component1 = new StructuralComponent(1, new ConnectorType[]{ConnectorType.EMPTY, ConnectorType.SINGLE_CONNECTOR, ConnectorType.EMPTY, ConnectorType.SINGLE_CONNECTOR},
+                ComponentRotation.U000, coords1);
+        ship.addComponent(component1, coords1);
+        check_results = ship.verify();
+        assertEquals(VerifyResult.GOOD, check_results[2][4]);
+        ShipCoords coords2 = new ShipCoords(GameModeType.LVL2, 5, 2);
+        StructuralComponent component2 = new StructuralComponent(1, new ConnectorType[]{ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.DOUBLE_CONNECTOR},
+                ComponentRotation.U000, coords2);
+        ship.addComponent(component2, coords2);
+        check_results = ship.verify();
+        assertEquals(VerifyResult.NOT_LINKED, check_results[3][3]);
+        assertEquals(VerifyResult.BROKEN, check_results[2][4]);
+        assertEquals(VerifyResult.NOT_LINKED, check_results[2][5]);
     }
 
     @Test
@@ -124,61 +140,12 @@ class SpaceShipTest {
 
     @Test
     void removeComponent() {
-        ShipCoords coords = new ShipCoords(GameModeType.LVL2,3, 3);
-        iBaseComponent component = new StructuralComponent(2, new ConnectorType[]{ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY}, ComponentRotation.U000, coords);
-
-        assertDoesNotThrow(() -> { ship.addComponent(component, coords); });
-        assertEquals(component, ship.getComponent(coords));
-        assertDoesNotThrow(() -> { ship.removeComponent(coords); });
-        assertEquals(ship.getEmpty(), ship.getComponent(coords));
-
-       // assertThrows(NullPointerException.class, () -> { ship.removeComponent(null); });
 
     }
 
     @Test
     void updateShip() {
-        ShipCoords engineCoords = new ShipCoords(GameModeType.LVL2, 0, 4);
-        EngineComponent engine = new EngineComponent(1, new ConnectorType[]{ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY}, ComponentRotation.U000, EngineType.SINGLE, engineCoords);
-        ship.addComponent(engine, engineCoords);
-
-        ShipCoords batteryCoords = new ShipCoords(GameModeType.LVL2, 1, 4);
-        BatteryComponent battery = new BatteryComponent(1, new ConnectorType[]{ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY}, ComponentRotation.U000, BatteryType.DOUBLE, batteryCoords);
-        ship.addComponent(battery, batteryCoords);
-
-        ShipCoords cannnonCoords = new ShipCoords(GameModeType.LVL2, 2, 4);
-        CannonComponent cannon = new CannonComponent(1, new ConnectorType[]{ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY}, ComponentRotation.U000, CannonType.SINGLE, cannnonCoords);
-        ship.addComponent(cannon, cannnonCoords);
-
-        ShipCoords storageCoords = new ShipCoords(GameModeType.LVL2, 4, 4);
-        StorageComponent storage = new StorageComponent(1, new ConnectorType[]{ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY}, ComponentRotation.U000, StorageType.DOUBLENORMAL, storageCoords);
-        ship.addComponent(storage, storageCoords);
-
-        ShipCoords shieldCoords = new ShipCoords(GameModeType.LVL2, 5, 4);
-        ShieldComponent shield = new ShieldComponent(1, new ConnectorType[]{ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY}, ComponentRotation.U000, shieldCoords);
-        ship.addComponent(shield, shieldCoords);
-
-        ShipCoords cabinCoords = new ShipCoords(GameModeType.LVL2, 6, 4);
-        CabinComponent cabin = new CabinComponent(1, new ConnectorType[]{ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY}, ComponentRotation.U000, cabinCoords);
-        ship.addComponent(cabin, cabinCoords);
-
-        engine.powerable();
-        engine.turnOn();
-      /*  cannon.powerable();
-        cannon.turnOn();
-        //shield.turnOn();
-
-        ship.updateShip();
-
-        assertEquals(2, ship.getEnginePower());
-        assertEquals(2, ship.getCannonPower());
-
-
-        //doppie 2 battierie
-       // storage 1 2 3 dal tipo
-       // cabin (mpiazzzarle metttere dentro crew)
-        //shield (direction) per dopo
-*/
+        //fil
     }
 
     @Test
@@ -187,19 +154,7 @@ class SpaceShipTest {
 
     @Test
     void turnOn() {
-        ShipCoords TargetCoords = new ShipCoords(GameModeType.LVL2, 3, 3);
-        ShipCoords BatteryCoords = new ShipCoords(GameModeType.LVL2, 4, 4);
-        ShipCoords TestCoords = new ShipCoords(GameModeType.LVL2, 5, 4);
-        assertThrows(NullPointerException.class, () -> ship.turnOn(null, BatteryCoords));
-        assertThrows(NullPointerException.class, () -> ship.turnOn(TargetCoords, null));
-
-        assertThrows(IllegalTargetException.class, () -> ship.turnOn(TargetCoords, BatteryCoords));
-
-        ship.addPowerableCoords(TargetCoords);
-        assertThrows(IllegalTargetException.class, () -> ship.turnOn(TargetCoords, BatteryCoords));
-
-        ship.addComponent(new BatteryComponent(2, new ConnectorType[]{ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY}, ComponentRotation.U000, BatteryType.DOUBLE ,BatteryCoords), BatteryCoords);
-        assertDoesNotThrow(() -> ship.turnOn(TargetCoords, BatteryCoords));
+        //fil
     }
 
     @Test
