@@ -3,7 +3,7 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.model.player.ShipCoords;
 
 public enum GameModeType{
-	TEST (1, 8, 5, 7, 18, 4, 10, 5, 9),
+	TEST (-1, 8, 5, 7, 18, 4, 10, 5, 9),
 	LVL2 (2, 12, 5, 7, 24, 4, 10, 5, 9);
 
 	private int level;

@@ -24,7 +24,7 @@ public class ModelInstance {
         }
         this.planche = new Planche(type, count);
         //TODO load from factory.
-        if(type.getLevel()==1){
+        if(type.getLevel()==-1){
             this.card_piles = new iCards[1];
             //LOAD FROM FACTORY.
             this.card_piles[0] = new Cards();
