@@ -91,10 +91,91 @@
 
 EACH CARD GOT:
 
-setExpectedResponse\
+getResponse\
 getOrder\
 getExhausted\
 
+public void action(){
+    try synchronized(this.cardlock){    
+        if(this.card==null){
+            this.model.getLead().getDescriptor().sendMessage(new AskPickCardMessage());
+            return;
+        }
+        if(this.card.getOrder()==COMBATZONE){
+            this.color = ALL;
+            this.expected = this.card.getResponse();
+            for(iSpaceShip s : this.model.getOrder(NORMAL)){
+                s.getDescriptor().sendMessage(new AskTurnOnMessage());
+            }
+            while(this.accepted.length!=4) this.cardlock.wait();
+            int i = 0;
+            for(iSpaceShip s : this.model.getCriteriaOrder(((CombatZoneCard)this.card).getCriteriaOrder())){
+                PlayerResponse x = new PlayerResponse(i);
+                s.getDescriptor().sendMessage(this.card.apply(s, x));
+                i++;
+            }
+            for(iSpaceShip s : this.model.getOrder(NORMAL)){
+                s.getDescriptor().sendMessage(new UpdateShipMessage(s));
+            }
+            this.card = null;
+            this.color = NONE;
+            this.expected = NONE;
+        }
+        else if(this.card.getOrder()==METEORSWARM){
+            int i = 0;
+            for(Projectile p : ((MeteorSwarmCard)this.card).getProjectiles()){
+                this.color = ALL;
+                this.expected = this.card.getResponse();
+                for(iSpaceShip s : this.model.getOrder(NORMAL)){
+                    s.getDescriptor().sendMessage(new AskTurnOnMessage());
+                }
+                while(!this.missing.empty()) this.cardlock.wait();
+                for(iSpaceShip s : this.model.getOrder(NORMAL)){
+                    PlayerResponse x = new PlayerResponse(i);
+                    s.getDescriptor().sendMessage(this.card.apply(s, x));
+                }
+                for(iSpaceShip s : this.model.getOrder(NORMAL)){
+                    s.getDescriptor().sendMessage(new UpdateShipMessage(s));
+                }
+                i++;
+            }
+            this.card = null;
+            this.color = NONE;
+            this.expected = NONE;
+        }
+        else {
+            iSpaceShip[] tmp = this.model.getOrder(this.card.getOrder());
+            for(iSpaceShip s : tmp){
+                if(this.card.getExpectedResponse()!=NULL){
+                    this.expected = this.card.getExpectedResponse();
+                    this.color = s.getColor();
+                    s.getDescriptor().sendMessage(this.card.getRequest());
+                    while(this.response==NULL) this.cardlock.wait();
+                }
+                s.getDescriptor().sendMessage(this.card.apply(s, this.response));
+                if(this.card.getAfterResponse()!=NULL){
+                    this.expected = this.card.getAfterResponse();
+                    this.response = null;
+                    s.getDescriptor().sendMessage(this.card.getAfterRequest());
+                    while(!this.done) this.cardlock.wait();
+                }
+                s.getDescriptor().sendMessage(new UpdateShipMessage(s)); 
+                this.response = null;
+                if(this.card.getExhausted()){
+                    this.card = null;
+                    this.color = NONE;
+                    this.expected = NONE;
+                    return;
+                }
+            }
+            this.card = null;
+            this.color = NONE;
+            this.expected = NONE;
+        }
+    } catch (Expression e){
+        //TODO.
+    }
+}
 
 
 
