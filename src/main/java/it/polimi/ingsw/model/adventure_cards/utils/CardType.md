@@ -89,6 +89,13 @@
 
     ask prof if present.
 
+EACH CARD GOT:
+
+setExpectedResponse\
+getOrder\
+getExhausted\
+
+
 
 
 
