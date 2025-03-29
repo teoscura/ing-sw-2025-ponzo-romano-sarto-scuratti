@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ConnectorType;
+import it.polimi.ingsw.model.components.exceptions.AlreadyPoweredException;
 import it.polimi.ingsw.model.components.exceptions.UnpowerableException;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -60,16 +61,17 @@ class CannonComponentTest {
 		assertTrue(cannon_wrong.verify(ship));
 	}
 
-	// the exceptions are wrong
 	@Test
 	void turnOnOff() {
 		assertEquals(0, cannon2.getCurrentPower());
-
-		assertThrows(UnpowerableException.class, () -> {
+		cannon2.turnOn();
+		assertEquals(2, cannon2.getCurrentPower());
+		assertThrows(AlreadyPoweredException.class, () -> {
 			cannon2.turnOn();
 		});
+		assertEquals(2, cannon2.getCurrentPower());
+		cannon2.turnOff();
 		assertEquals(0, cannon2.getCurrentPower());
-
 
 		assertEquals(0, cannon_wrong.getCurrentPower());
 		assertThrows(UnpowerableException.class, () -> {
@@ -78,7 +80,6 @@ class CannonComponentTest {
 		assertEquals(0, cannon_wrong.getCurrentPower());
 
 	}
-
 
 	@Test
 	void getCurrentPower() {
