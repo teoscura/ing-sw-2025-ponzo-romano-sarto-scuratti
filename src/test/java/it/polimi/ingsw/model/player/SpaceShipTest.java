@@ -177,7 +177,7 @@ class SpaceShipTest {
         ship.addComponent(cannon, cannnonCoords);
 
         ShipCoords storageCoords = new ShipCoords(GameModeType.LVL2, 4, 4);
-        StorageComponent storage = new StorageComponent(1, new ConnectorType[]{ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY}, ComponentRotation.U000, StorageType.DOUBLENORMAL, storageCoords);
+        StorageComponent storage = new StorageComponent(1, new ConnectorType[]{ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY}, ComponentRotation.U000, StorageType.TRIPLENORMAL, storageCoords);
         ship.addComponent(storage, storageCoords);
 
         ShipCoords shieldCoords = new ShipCoords(GameModeType.LVL2, 5, 4);
@@ -185,9 +185,42 @@ class SpaceShipTest {
         ship.addComponent(shield, shieldCoords);
 
         ShipCoords cabinCoords = new ShipCoords(GameModeType.LVL2, 6, 4);
-        CabinComponent cabin = new CabinComponent(1, new ConnectorType[]{ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY}, ComponentRotation.U000, cabinCoords);
+        CabinComponent cabin = new CabinComponent(1, new ConnectorType[]{ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL}, ComponentRotation.U000, cabinCoords);
         ship.addComponent(cabin, cabinCoords);
 
+        ShipCoords cabinAdiacentCoords = new ShipCoords(GameModeType.LVL2, 6, 3);
+        AlienLifeSupportComponent cabinAdiacent = new AlienLifeSupportComponent(1, new ConnectorType[]{ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL}, ComponentRotation.U000, AlienType.BROWN);
+        ship.addComponent(cabinAdiacent, cabinAdiacentCoords);
+
+        cabin.setCrew(ship, 1, AlienType.BROWN);
+       // cabin.setCrew(ship, 2, AlienType.PURPLE);
+
+
+        // storage.putIn(ShipmentType.RED);
+        storage.putIn(ShipmentType.BLUE);
+        storage.putIn(ShipmentType.GREEN);
+        storage.putIn(ShipmentType.YELLOW);
+
+        ship.updateShip();
+
+        assertNotNull(ship.getCrew());
+
+        assertEquals(1, ship.getCrew()[1]); //brown
+
+        assertEquals(2, ship.getEnergyPower()); //double
+
+        assertEquals(1, ship.getCannonPower());  //single
+
+        assertEquals(3, ship.getEnginePower());  //single
+
+        //assertNotNull(ship.getShieldedDirections());
+
+        assertEquals(1, ship.getStorageContainers()[0]);
+        assertEquals(1, ship.getStorageContainers()[1]);
+        assertEquals(1, ship.getStorageContainers()[2]);
+
+        assertEquals(1, ship.getCannonPower());
+        assertEquals(3, ship.getEnginePower());
     }
 
     @Test
