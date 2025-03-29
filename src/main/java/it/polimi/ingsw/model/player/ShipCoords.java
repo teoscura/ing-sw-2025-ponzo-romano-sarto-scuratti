@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.player;
 
-import it.polimi.ingsw.model.rulesets.GameModeType;
+import it.polimi.ingsw.model.GameModeType;
 
 public class ShipCoords {
     private GameModeType type = GameModeType.LVL2;

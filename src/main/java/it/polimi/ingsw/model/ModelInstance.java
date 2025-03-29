@@ -1,11 +1,10 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.controller.match.PlayerCount;
+import it.polimi.ingsw.model.PlayerCount;
 import it.polimi.ingsw.exceptions.PlayerNotFoundException;
 import it.polimi.ingsw.model.adventure_cards.iCard;
 import it.polimi.ingsw.model.board.*;
 import it.polimi.ingsw.model.player.*;
-import it.polimi.ingsw.model.rulesets.GameModeType;
 
 public class ModelInstance {
     

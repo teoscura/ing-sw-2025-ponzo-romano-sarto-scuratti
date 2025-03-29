@@ -1,9 +1,9 @@
 package it.polimi.ingsw.model.board;
 
-import it.polimi.ingsw.controller.match.PlayerCount;
+import it.polimi.ingsw.model.PlayerCount;
+import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.iSpaceShip;
-import it.polimi.ingsw.model.rulesets.GameModeType;
 
 import java.util.*;
 import java.util.Map.Entry;
