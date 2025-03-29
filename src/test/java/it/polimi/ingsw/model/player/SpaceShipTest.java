@@ -109,6 +109,15 @@ class SpaceShipTest {
 
     @Test
     void verifyAndClean() {
+        ShipCoords coords1 = new ShipCoords(GameModeType.LVL2, 5, 2);
+        StructuralComponent component1 = new StructuralComponent(1, new ConnectorType[]{ConnectorType.EMPTY, ConnectorType.SINGLE_CONNECTOR, ConnectorType.EMPTY, ConnectorType.SINGLE_CONNECTOR},
+                ComponentRotation.U000, coords1);
+        ship.addComponent(component1, coords1);
+        VerifyResult[][] check_results = ship.verify();
+        assertEquals(VerifyResult.NOT_LINKED, check_results[2][5]);
+        assertEquals(component1, ship.getComponent(coords1));
+        ship.verifyAndClean();
+        assertEquals(ship.getEmpty(), ship.getComponent(coords1));
     }
 
     @Test
@@ -140,7 +149,17 @@ class SpaceShipTest {
 
     @Test
     void removeComponent() {
-
+        ShipCoords coords1 = new ShipCoords(GameModeType.LVL2, 4, 2);
+        StructuralComponent component1 = new StructuralComponent(1, new ConnectorType[]{ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL},
+                ComponentRotation.U000, coords1);
+        ship.addComponent(component1, coords1);
+        ShipCoords coords2 = new ShipCoords(GameModeType.LVL2, 5, 2);
+        StructuralComponent component2 = new StructuralComponent(1, new ConnectorType[]{ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL},
+                ComponentRotation.U000, coords2);
+        ship.addComponent(component2, coords2);
+        ship.removeComponent(coords1);
+        assertEquals(ship.getEmpty(), ship.getComponent(coords1));
+        assertEquals(ship.getEmpty(), ship.getComponent(coords2));
     }
 
     @Test
@@ -173,10 +192,27 @@ class SpaceShipTest {
 
     @Test
     void resetPower() {
+        ConnectorType[] connectors = {ConnectorType.EMPTY, ConnectorType.UNIVERSAL, ConnectorType.EMPTY, ConnectorType.UNIVERSAL};
+        ShipCoords cannon_coords = new ShipCoords(GameModeType.LVL2, 4, 2);
+        ShipCoords engine_coords = new ShipCoords(GameModeType.LVL2, 5, 2);
+        CannonComponent cannon = new CannonComponent(1, connectors, ComponentRotation.U000, CannonType.DOUBLE, cannon_coords);
+        ship.addComponent(cannon, cannon_coords);
+        EngineComponent engine = new EngineComponent(1, connectors, ComponentRotation.U000, EngineType.DOUBLE, engine_coords);
+        ship.addComponent(engine, engine_coords);
+        assertEquals(0, ship.getEnginePower());
+        assertEquals(0, ship.getCannonPower());
+        cannon.turnOn();
+        engine.turnOn();
+        ship.updateShip();
+        assertEquals(2, ship.getEnginePower());
+        assertEquals(2, ship.getCannonPower());
+        ship.resetPower();
+        assertEquals(0, ship.getEnginePower());
+        assertEquals(0, ship.getCannonPower());
     }
 
     @Test
-    void turnOn() {
+    void turnOn() { //to finish
         ShipCoords TargetCoords = new ShipCoords(GameModeType.LVL2, 3, 3);
         ShipCoords BatteryCoords = new ShipCoords(GameModeType.LVL2, 4, 4);
         ShipCoords TestCoords = new ShipCoords(GameModeType.LVL2, 5, 4);
@@ -194,16 +230,26 @@ class SpaceShipTest {
 
     @Test
     void getComponent() {
+        ShipCoords illegal_coords1 = new ShipCoords(GameModeType.LVL2, -1, 4);
+        ShipCoords illegal_coords2 = new ShipCoords(GameModeType.LVL2, 3, 8);
+        ShipCoords coords = new ShipCoords(GameModeType.LVL2, 4, 2);
+        NullPointerException e = assertThrows(NullPointerException.class, () -> ship.getComponent(null));
+        OutOfBoundsException e1 = assertThrows(OutOfBoundsException.class, () -> ship.getComponent(illegal_coords1));
+        OutOfBoundsException e2 = assertThrows(OutOfBoundsException.class, () -> ship.getComponent(illegal_coords2));
+        StructuralComponent component = new StructuralComponent(1, new ConnectorType[]{ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL},
+                ComponentRotation.U000, coords);
+        ship.addComponent(component, coords);
+
     }
 
     @Test
     void getCannonPower() {
-        //da rifare
+
     }
 
     @Test
     void getEnginePower() {
-        //da rifare
+
     }
 
     @Test

@@ -2,7 +2,7 @@ package it.polimi.ingsw.model.components.enums;
 
 public enum CannonType{
     SINGLE (1, false),
-    DOUBLE (2, false);
+    DOUBLE (2, true);
 
     private int max_power;
     private boolean powerable;

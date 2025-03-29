@@ -157,9 +157,9 @@ public class SpaceShip implements iSpaceShip{
 	public void verifyAndClean() {
 		VerifyResult[][] ver = this.verify();
 		for(int i=0;i<this.type.getHeight();i++){
-			for(int j=0;i<this.type.getWidth();j++){
+			for(int j=0;j<this.type.getWidth();j++){
 				if(ver[i][j]!=VerifyResult.NOT_LINKED) continue;
-				this.removeComponent(new ShipCoords(this.type,i,j));
+				this.removeComponent(new ShipCoords(this.type,j,i));
 			}
 		}
 	}
@@ -200,6 +200,8 @@ public class SpaceShip implements iSpaceShip{
 		this.battery_power = v.getBatteryPower();
 		this.shielded_directions = v.getDirections();
 		this.containers = v.getStorageContainers();
+		this.cannon_power = v.getCannonPower();
+		this.engine_power = v.getEnginePower();
 		if(v.getCannonPower()>0){
 			this.cannon_power += 2*this.crew[2];
 		}
