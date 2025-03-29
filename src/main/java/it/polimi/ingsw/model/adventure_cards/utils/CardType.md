@@ -92,6 +92,7 @@
 EACH CARD GOT:
 
 getResponse\
+getAfterResponse\
 getOrder\
 getExhausted\
 
