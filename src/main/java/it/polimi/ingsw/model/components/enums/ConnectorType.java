@@ -17,7 +17,7 @@ public enum ConnectorType{
     }
 
     public boolean compatible(ConnectorType other){
-        if(other.getValue()*this.getValue()<=0) return true;
+        if(other.getValue()*this.getValue()<0) return true;
         else return this.getValue() == other.getValue();
     }
 

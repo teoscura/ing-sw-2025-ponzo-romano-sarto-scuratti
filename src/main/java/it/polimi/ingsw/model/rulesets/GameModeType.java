@@ -83,6 +83,7 @@ public enum GameModeType{
     }
 
 	public boolean isForbidden(ShipCoords coords){
+
 		int tmp = coords.y*this.width+coords.x;
 		for(int i : this.getShape()){
 			if(i==tmp) return true;

@@ -397,6 +397,7 @@ public class SpaceShip implements iSpaceShip{
 			if(found_cannon) return false;
 			ShipCoords tmp = this.getFirst(p.getDirection(), index);
 			if(tmp.equals(this.empty.getCoords())) return false;
+			//if (tmp==this.getCenterCabin()) return true -> gestita response nuova nave nuovo centro
 			this.removeComponent(tmp);
 			return tmp.equals(this.getCenterCabin()) ? true : false;
 		}
@@ -427,25 +428,25 @@ public class SpaceShip implements iSpaceShip{
 	private int normalizeRoll(ProjectileDirection direction, int roll){
 		if(direction.getShift()%2==0){
 			if(roll<this.type.getMinX() || roll>this.type.getMaxX()) return -1;
-			return roll-(this.type.getMinX()+1);
+			return roll-(this.type.getMinX());
 		}
 		if(roll<this.type.getMinY() || roll>this.type.getMaxY()) return -1;
-		return roll-(this.type.getMinY()+1);
+		return roll-(this.type.getMinY());
 	}
 		
 	private ShipCoords getFirst(ProjectileDirection d, int index){
 		if(index<0||index>=(d.getShift()%2==0?this.getWidth():this.getHeight())) throw new OutOfBoundsException("Offset goes out of bounds");
 		iBaseComponent[] line = d.getShift()%2==0 ? this.constructCol(index) : this.components[index];
-		if(d.getShift()%2!=0) Collections.reverse(Arrays.asList(line));
+		if(d.getShift() == 0 || d.getShift() == 3) Collections.reverse(Arrays.asList(line));
 		for(iBaseComponent c : line){
-			if(this.type.isForbidden(c.getCoords()) || c==this.empty) continue;
+			if(c==this.empty || this.type.isForbidden(c.getCoords())) continue;
 			return c.getCoords();
 		}
 		return this.empty.getCoords();
 	}
 
 	private iBaseComponent[] constructCol(int index){
-		//No validation needed, its only used in getFirst.
+		//No validation needed, it's only used in getFirst.
 		iBaseComponent[] res = new iBaseComponent[this.type.getHeight()];
 		for(int i = 0; i<this.type.getHeight(); i++){
 			res[i] = this.components[i][index];

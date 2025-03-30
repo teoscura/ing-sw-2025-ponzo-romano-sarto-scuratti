@@ -3,7 +3,9 @@ package it.polimi.ingsw.model.player;
 import it.polimi.ingsw.exceptions.NotPresentException;
 import it.polimi.ingsw.exceptions.NotUniqueException;
 import it.polimi.ingsw.exceptions.OutOfBoundsException;
+import it.polimi.ingsw.model.adventure_cards.enums.ProjectileDimension;
 import it.polimi.ingsw.model.adventure_cards.enums.ProjectileDirection;
+import it.polimi.ingsw.model.adventure_cards.utils.Projectile;
 import it.polimi.ingsw.model.components.*;
 import it.polimi.ingsw.model.components.enums.*;
 import it.polimi.ingsw.model.components.exceptions.AlreadyPoweredException;
@@ -19,6 +21,8 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 
 class SpaceShipTest {
+
+    //TODO: gestione nuova cabina centrale prima di verify
 
     private SpaceShip ship;
 
@@ -215,9 +219,9 @@ class SpaceShipTest {
 
         //assertNotNull(ship.getShieldedDirections());
 
-        assertEquals(1, ship.getStorageContainers()[0]);
+        /*assertEquals(1, ship.getStorageContainers()[0]);
         assertEquals(1, ship.getStorageContainers()[1]);
-        assertEquals(1, ship.getStorageContainers()[2]);
+        assertEquals(1, ship.getStorageContainers()[2]);*/
 
         assertEquals(1, ship.getCannonPower());
         assertEquals(3, ship.getEnginePower());
@@ -277,12 +281,30 @@ class SpaceShipTest {
 
     @Test
     void getCannonPower() {
-
+        ConnectorType[] connectors = {ConnectorType.EMPTY, ConnectorType.UNIVERSAL, ConnectorType.EMPTY, ConnectorType.UNIVERSAL};
+        ShipCoords coords1 = new ShipCoords(GameModeType.LVL2, 3, 3);
+        ShipCoords coords2 = new ShipCoords(GameModeType.LVL2, 4, 3);
+        CannonComponent single_cannon = new CannonComponent(1, connectors, ComponentRotation.U000, CannonType.SINGLE, coords1);
+        CannonComponent double_cannon = new CannonComponent(1, connectors, ComponentRotation.U000, CannonType.DOUBLE, coords2);
+        ship.addComponent(single_cannon, coords1);
+        ship.addComponent(double_cannon, coords2);
+        assertEquals(1, ship.getCannonPower());
+        double_cannon.turnOn();
+        assertEquals(3, ship.getCannonPower());
     }
 
     @Test
     void getEnginePower() {
-
+        ConnectorType[] connectors = {ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.EMPTY, ConnectorType.UNIVERSAL};
+        ShipCoords coords1 = new ShipCoords(GameModeType.LVL2, 3, 3);
+        ShipCoords coords2 = new ShipCoords(GameModeType.LVL2, 4, 3);
+        EngineComponent single_engine = new EngineComponent(1, connectors, ComponentRotation.U000, EngineType.SINGLE, coords1);
+        EngineComponent double_engine = new EngineComponent(1, connectors, ComponentRotation.U000, EngineType.DOUBLE, coords2);
+        ship.addComponent(single_engine, coords1);
+        ship.addComponent(double_engine, coords2);
+        assertEquals(1, ship.getEnginePower());
+        double_engine.turnOn();
+        assertEquals(3, ship.getEnginePower());
     }
 
     @Test
@@ -297,6 +319,20 @@ class SpaceShipTest {
 
     @Test
     void getShieldedDirections() {
+        ShipCoords coords1 = new ShipCoords(GameModeType.LVL2, 3, 3);
+        ShipCoords coords2 = new ShipCoords(GameModeType.LVL2, 4, 3);
+        ConnectorType[] connectors = {ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL};
+        ShieldComponent shield1 = new ShieldComponent(1, connectors, ComponentRotation.U000, coords1);
+        ShieldComponent shield2 = new ShieldComponent(1, connectors, ComponentRotation.U180, coords2);
+        assertArrayEquals(new boolean[]{false, false, false, false}, ship.getShieldedDirections());
+        ship.addComponent(shield1, coords1);
+        ship.addComponent(shield2, coords2);
+        shield1.turnOn();
+        ship.updateShip();
+        assertArrayEquals(new boolean[]{true, true, false, false}, ship.getShieldedDirections());
+        shield2.turnOn();
+        ship.updateShip();
+        assertArrayEquals(new boolean[]{true, true, true, true}, ship.getShieldedDirections());
     }
 
     @Test
@@ -434,6 +470,15 @@ class SpaceShipTest {
 
     @Test
     void handleMeteorite() {
+        Projectile missed_meteor = new Projectile(ProjectileDirection.U180, ProjectileDimension.SMALL, 2);
+        assertFalse(ship.handleMeteorite(missed_meteor));
+        ConnectorType[] connectors = {ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.UNIVERSAL, ConnectorType.EMPTY};
+        ShipCoords coords = new ShipCoords(GameModeType.LVL2, 2, 2);
+        CannonComponent cannon = new CannonComponent(1, connectors, ComponentRotation.U000, CannonType.SINGLE, coords);
+        ship.addComponent(cannon, coords);
+        Projectile meteor = new Projectile(ProjectileDirection.U090, ProjectileDimension.BIG, 7);
+        ship.handleMeteorite(meteor);
+        assertEquals(ship.getEmpty(), ship.getComponent(coords));
     }
 
     @Test

@@ -38,8 +38,8 @@ class BaseComponentTest {
 
 	@Test
 	void verify() {
-		ShipCoords coords = new ShipCoords(GameModeType.LVL2, 3, 3);
-		ShipCoords coords_up = new ShipCoords(GameModeType.LVL2, 3, 2);
+		ShipCoords coords = new ShipCoords(GameModeType.LVL2, 4, 3);
+		ShipCoords coords_up = new ShipCoords(GameModeType.LVL2, 4, 2);
 		ConnectorType[] connectors = {ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL};
 		BaseComponent verify_component_empty = new StructuralComponent(1, connectors, ComponentRotation.U000);
 		BaseComponent verify_test_component = new StructuralComponent(1, connectors, ComponentRotation.U000,coords);
@@ -107,11 +107,11 @@ class BaseComponentTest {
 	@Test
 	void getConnectedComponents(){
 		SpaceShip ship = new SpaceShip(GameModeType.LVL2, PlayerColor.RED);
-		ShipCoords coords = new ShipCoords(GameModeType.LVL2, 3, 2);
-		ShipCoords up_coords = new ShipCoords(GameModeType.LVL2, 3, 1);
-		ShipCoords right_coords = new ShipCoords(GameModeType.LVL2, 4, 2);
-		ShipCoords down_coords = new ShipCoords(GameModeType.LVL2, 3, 3);
-		ShipCoords left_coords = new ShipCoords(GameModeType.LVL2, 2, 2);
+		ShipCoords coords = new ShipCoords(GameModeType.LVL2, 2, 1);
+		ShipCoords up_coords = new ShipCoords(GameModeType.LVL2, 2, 0);
+		ShipCoords right_coords = new ShipCoords(GameModeType.LVL2, 3, 1);
+		ShipCoords down_coords = new ShipCoords(GameModeType.LVL2, 2, 2);
+		ShipCoords left_coords = new ShipCoords(GameModeType.LVL2, 1, 1);
 		StructuralComponent central_component = new StructuralComponent(1, new ConnectorType[]{ConnectorType.UNIVERSAL, ConnectorType.SINGLE_CONNECTOR, ConnectorType.DOUBLE_CONNECTOR, ConnectorType.EMPTY}, ComponentRotation.U000, coords);
 		StructuralComponent up_component = new StructuralComponent(1, new ConnectorType[]{ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.SINGLE_CONNECTOR, ConnectorType.EMPTY}, ComponentRotation.U000, up_coords);
 		StructuralComponent right_component = new StructuralComponent(1, new ConnectorType[]{ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.DOUBLE_CONNECTOR}, ComponentRotation.U000, right_coords);
@@ -127,5 +127,11 @@ class BaseComponentTest {
 		assertEquals(ship.getEmpty(), results[1]);
 		assertEquals(down_component, results[2]);
 		assertEquals(ship.getEmpty(), results[3]);
+		StructuralComponent non_empty = new StructuralComponent(1, new ConnectorType[]{ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL}, ComponentRotation.U000, new ShipCoords(GameModeType.LVL2, 4, 4));
+		StructuralComponent empty = new StructuralComponent(1, new ConnectorType[]{ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY}, ComponentRotation.U000, new ShipCoords(GameModeType.LVL2, 5, 4));
+		ship.addComponent(non_empty, new ShipCoords(GameModeType.LVL2, 4, 4));
+		ship.addComponent(empty, new ShipCoords(GameModeType.LVL2, 5, 4));
+		iBaseComponent result[] = non_empty.getConnectedComponents(ship);
+		assertEquals(ship.getEmpty(), result[1]);
 	}
 }
