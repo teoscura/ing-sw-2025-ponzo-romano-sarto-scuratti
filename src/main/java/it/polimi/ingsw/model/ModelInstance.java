@@ -1,19 +1,28 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.model.PlayerCount;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 import it.polimi.ingsw.exceptions.PlayerNotFoundException;
+import it.polimi.ingsw.model.adventure_cards.LevelOneCardFactory;
+import it.polimi.ingsw.model.adventure_cards.LevelTwoCardFactory;
 import it.polimi.ingsw.model.adventure_cards.iCard;
+import it.polimi.ingsw.model.adventure_cards.utils.CardOrder;
 import it.polimi.ingsw.model.board.*;
 import it.polimi.ingsw.model.player.*;
 
 public class ModelInstance {
-    
+
     private final PlayerCount count;
     private final iCommonBoard board;
     private final iSpaceShip[] ships;
     private final iPlanche planche;
-    private final iCards[] card_piles;
-
+    private final int[] construction_cards;
+    private final iCards voyage_deck;
+    
     public ModelInstance(GameModeType type, PlayerCount count){
         this.count = count;
         this.board = new CommonBoard();
@@ -23,25 +32,67 @@ public class ModelInstance {
             this.ships[c.getOrder()] = new SpaceShip(type, c);
         }
         this.planche = new Planche(type, count);
-        //TODO load from factory.
+        LevelOneCardFactory l1 = new LevelOneCardFactory();
+        LevelTwoCardFactory l2 = new LevelTwoCardFactory();
         if(type.getLevel()==-1){
-            this.card_piles = new iCards[1];
-            //LOAD FROM FACTORY.
-            this.card_piles[0] = new Cards();
+            ArrayList<iCard> test_cards = new ArrayList<>(){{
+                add(l1.getCard(2));
+                add(l1.getCard(4));
+                add(l1.getCard(5));
+                add(l1.getCard(9));
+                add(l1.getCard(13));
+                add(l1.getCard(16));
+                add(l1.getCard(18));
+                add(l1.getCard(19));
+            }};
+            Collections.shuffle(test_cards);
+            this.construction_cards = null;
+            this.voyage_deck = new Cards(test_cards);
         }
         else{
-            this.card_piles = new iCards[4];
-            //TODO fill with different levels.
+            ArrayList<iCard> lv1_cards = new ArrayList<>(){{
+                for(int i=1;i<=20;i++) add(l1.getCard(i));
+            }};
+            ArrayList<iCard> lv2_cards = new ArrayList<>(){{
+                for(int i=101;i<=120;i++) add(l2.getCard(i));
+            }};
+            Collections.shuffle(lv1_cards);
+            ArrayDeque<iCard> lv1_queue = new ArrayDeque<>(lv1_cards);
+            Collections.shuffle(lv2_cards);
+            ArrayDeque<iCard> lv2_queue = new ArrayDeque<>(lv2_cards);
+            ArrayList<iCard> tmp = new ArrayList<>(){{
+                for(int i=0;i<4;i++){
+                    add(lv2_queue.poll());
+                    add(lv2_queue.poll());
+                    add(lv1_queue.poll());
+                }
+            }};
+            this.construction_cards = tmp.stream().mapToInt((c)->c.getId()).toArray();
+            this.voyage_deck = new Cards(tmp);
         }
     }
 
-    public void startVoyage(){
-        //TODO
+    public List<iSpaceShip> getOrder(CardOrder order){
+        List<iSpaceShip> tmp = Arrays.asList(this.ships);
+        switch(order){
+            case NORMAL: {
+                Collections.sort(tmp, (s1,s2) -> this.planche.getPlayerPosition(s1)>this.planche.getPlayerPosition(s2) ? 1: -1);
+                return tmp;
+            }
+            case INVERSE: {
+                Collections.sort(tmp, (s1,s2) -> this.planche.getPlayerPosition(s1)>this.planche.getPlayerPosition(s2) ? -1: 1);
+                return tmp;
+            }
+            case COMBATZONE: {
+                throw new UnsupportedOperationException("Under no case should getOrder be called with CombatZone");
+            }
+            case METEORS: throw new UnsupportedOperationException("Under no case should getOrder be called with Meteors");
+        }
+        return tmp;
     }
 
     public int[] getShowed(){
-        //TODO
-        return null;
+        return this.construction_cards;
     }
 
     public PlayerCount getCount(){
@@ -62,7 +113,6 @@ public class ModelInstance {
     }
 
     public iCard pickCard(){
-        //TODO
-        return null;
+        return this.voyage_deck.pullCard();
     }
 }

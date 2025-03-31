@@ -11,7 +11,12 @@ public class PlayerResponse implements iPlayerResponse, Serializable{
     private ShipCoords[] coords = null;
     private int[] merch_choices = null;
     private int id = -2;
-    private boolean accept;
+    private boolean accept = false;
+
+    public PlayerResponse(int id){
+        if(id<=-2) throw new ResponseFieldUnsetException("Id has been set to illegal value.");
+        this.id = id;
+    }
 
     public PlayerResponse(ShipCoords[] coords, boolean accept){
         if(coords == null) throw new NullPointerException();

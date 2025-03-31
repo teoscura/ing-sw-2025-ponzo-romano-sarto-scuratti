@@ -3,15 +3,14 @@ package it.polimi.ingsw.model.board;
 import it.polimi.ingsw.model.adventure_cards.iCard;
 
 import java.util.ArrayDeque;
+import java.util.Collection;
 import java.util.Queue;
-import java.util.Set;
 
 public class Cards implements iCards {
 
 	private Queue<iCard> cards;
 
-	//TODO FIXME.
-	public Cards(Set<iCard> cards){
+	public Cards(Collection<iCard> cards){
 		this.cards = new ArrayDeque<iCard>(cards);
 	}
 
