@@ -2,8 +2,8 @@
 package it.polimi.ingsw.model.adventure_cards;
 
 import it.polimi.ingsw.model.adventure_cards.exceptions.CardAlreadyExhaustedException;
-import it.polimi.ingsw.model.adventure_cards.utils.iCardResponse;
-import it.polimi.ingsw.model.adventure_cards.utils.iPlayerResponse;
+import it.polimi.ingsw.model.adventure_cards.responses.iCardResponse;
+import it.polimi.ingsw.model.adventure_cards.responses.iPlayerResponse;
 import it.polimi.ingsw.model.player.iSpaceShip;
     
 public abstract class Card implements iCard {
@@ -45,6 +45,7 @@ public abstract class Card implements iCard {
 
     protected void exhaust(){
         if(this.exhausted) throw new CardAlreadyExhaustedException("This card's effect was already exhausted.");
+        this.exhausted = true;
     }
 
     @Override

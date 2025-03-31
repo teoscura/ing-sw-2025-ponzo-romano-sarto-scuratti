@@ -62,6 +62,11 @@ public class CabinVisitor implements iVisitor {
     @Override
     public void visit(StructuralComponent c) {
         return;
+    }
+
+    @Override
+    public void visit(StartingCabinComponent c) {
+        return;
     }  
 }
 

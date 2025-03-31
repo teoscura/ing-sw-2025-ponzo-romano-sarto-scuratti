@@ -1,12 +1,12 @@
 //Done.
 package it.polimi.ingsw.model.components.enums;
 
-public enum AlienType{
-    NONE (0, false, -1),
-    HUMAN (2, false, 0),
-    BROWN (1, true, 1),
-    PURPLE (1, true, 2),
-    BOTH (1, false, -1);
+    public enum AlienType{
+        NONE (0, false, -1),
+        HUMAN (2, false, 0),
+        BROWN (1, true, 1),
+        PURPLE (1, true, 2),
+        BOTH (1, false, -1);
 
     private int max_capacity;
     private boolean lifesupport_exists;
@@ -32,7 +32,8 @@ public enum AlienType{
 
     public boolean compatible(AlienType type){
         if(max_capacity==0) return false;
+        if(this.getArraypos() == type.getArraypos()) return true;
+        if(this.getArraypos() == 0 && type.getArraypos() > 0) return false;
         return type.getArraypos()*this.getArraypos()<=0;
     }
-
 }

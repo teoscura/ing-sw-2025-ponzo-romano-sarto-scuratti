@@ -10,6 +10,7 @@ public enum ShieldType{
     private boolean[] shielded;
 
     ShieldType(boolean n, boolean e, boolean s, boolean w){
+        this.shielded = new boolean[4];
         this.shielded[0] = n;
         this.shielded[1] = e;
         this.shielded[2] = s;
@@ -33,6 +34,6 @@ public enum ShieldType{
     }
 
     public boolean[] getShielded(){
-        return this.getShielded();
+        return this.shielded;
     }
 }

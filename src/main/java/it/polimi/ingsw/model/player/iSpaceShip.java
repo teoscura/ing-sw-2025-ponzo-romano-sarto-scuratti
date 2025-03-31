@@ -46,4 +46,7 @@ public interface iSpaceShip {
     public int countExposedConnectors();
     public boolean handleMeteorite(Projectile p);
     public boolean handleShot(Projectile p);
+
+	public void retire();
+	public boolean getRetired();
 }

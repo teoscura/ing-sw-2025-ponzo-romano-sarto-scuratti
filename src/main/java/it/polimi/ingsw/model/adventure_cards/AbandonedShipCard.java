@@ -1,9 +1,9 @@
 //Done.
 package it.polimi.ingsw.model.adventure_cards;
 
-import it.polimi.ingsw.model.adventure_cards.utils.StaffCardResponse;
-import it.polimi.ingsw.model.adventure_cards.utils.iCardResponse;
-import it.polimi.ingsw.model.adventure_cards.utils.iPlayerResponse;
+import it.polimi.ingsw.model.adventure_cards.responses.StaffCardResponse;
+import it.polimi.ingsw.model.adventure_cards.responses.iCardResponse;
+import it.polimi.ingsw.model.adventure_cards.responses.iPlayerResponse;
 import it.polimi.ingsw.model.player.iSpaceShip;
     
 public class AbandonedShipCard extends Card{
@@ -23,6 +23,7 @@ public class AbandonedShipCard extends Card{
         if(ship==null) throw new NullPointerException();
         if(ship.getTotalCrew()<=this.crew_lost) throw new IllegalArgumentException("The crew isn't big enough for this abandoned ship.");
         ship.giveCredits(this.credits_gained);
+        this.exhaust();
         return new StaffCardResponse(-this.crew_lost);
     }
 

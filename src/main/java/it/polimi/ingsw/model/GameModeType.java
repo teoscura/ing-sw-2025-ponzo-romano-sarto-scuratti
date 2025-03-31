@@ -3,11 +3,11 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.model.player.ShipCoords;
 
 public enum GameModeType{
-	TEST (-1, 8, 5, 7, 18, 4, 10, 5, 9),
-	LVL2 (2, 12, 5, 7, 24, 4, 10, 5, 9);
+	TEST (1, false,5, 7, 18, 4, 10, 5, 9),
+	LVL2 (2, true, 5, 7, 24, 4, 10, 5, 9);
 
+	private boolean lifesupports;
 	private int level;
-	private int num_cards;
 	private int height;
 	private int width;
 	private int length;
@@ -16,9 +16,9 @@ public enum GameModeType{
 	private int min_y;
 	private int max_y;	
 
-	GameModeType(int level, int num_cards, int height, int width, int length, int min_x, int max_x, int min_y, int max_y){
+  GameModeType(int level, boolean lifesupports, int height, int width, int length, int min_x, int max_x, int min_y, int max_y){
 		this.level = level;
-		this.num_cards = num_cards;
+		this.lifesupports = lifesupports;
 		this.height = height;
 		this.width = width;
 		this.length = length;
@@ -32,8 +32,8 @@ public enum GameModeType{
 		return this.level;
 	}
 
-	public int getNumCards(){
-		return this.num_cards;
+  public boolean getLifeSupport(){
+		return this.lifesupports;
 	}
 
 	public int getHeight(){
@@ -64,7 +64,7 @@ public enum GameModeType{
 		return this.max_y;
 	}
 
-	public int[] getShape(){
+	private int[] getShape(){
 		if(this.level==1){
 			return new int[]{0, 1, 2, 4, 5, 6, 7, 8 , 12, 13, 14, 20, 21, 27, 28, 31, 34};
 		}
@@ -75,15 +75,15 @@ public enum GameModeType{
 
     public ShipCoords getCenterCabin(){
         if(this.level==1 || this.level==2){
-            return new ShipCoords(this,4,3);
+            return new ShipCoords(this,3,2);
         }
         else{
-            return new ShipCoords(this,4,3);
+            return new ShipCoords(this,3,2);
         }
     }
 
 	public boolean isForbidden(ShipCoords coords){
-		int tmp = coords.y*this.height+coords.x;
+  int tmp = coords.y*this.width+coords.x;
 		for(int i : this.getShape()){
 			if(i==tmp) return true;
 		}

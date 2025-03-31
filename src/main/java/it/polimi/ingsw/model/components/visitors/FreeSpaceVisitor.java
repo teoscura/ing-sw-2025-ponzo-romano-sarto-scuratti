@@ -53,6 +53,11 @@ public class FreeSpaceVisitor implements iVisitor {
         this.isfree = false;
     }
 
+    @Override
+    public void visit(StartingCabinComponent c) {
+        this.isfree = false;
+    }
+
     public void reset(){
         this.isfree=false;
     }

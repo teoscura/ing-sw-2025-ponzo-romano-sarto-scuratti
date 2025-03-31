@@ -1,27 +1,22 @@
-//Done.
-package it.polimi.ingsw.model.adventure_cards.utils;
+package it.polimi.ingsw.model.adventure_cards.responses;
 
-public class DaysCardResponse implements iCardResponse{
-    
-    private final int days;
-
-    public DaysCardResponse(int days){
-        this.days = days;
-    }
+public class GameLostResponse implements iCardResponse {
 
     @Override
     public int getDays() {
-        return this.days;
+        return 0;
+
     }
 
     @Override
     public int[] getMerch() {
-        return new int[]{0,0,0,0};
+        return null;
     }
 
     @Override
     public int getStaffChange() {
         return 0;
+
     }
 
     @Override
@@ -33,4 +28,5 @@ public class DaysCardResponse implements iCardResponse{
     public int getRequiredMerch() {
         return 0;
     }
+
 }

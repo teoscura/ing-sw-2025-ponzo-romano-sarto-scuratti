@@ -3,19 +3,19 @@ package it.polimi.ingsw.model.adventure_cards;
 
 import it.polimi.ingsw.model.player.*;
 import it.polimi.ingsw.exceptions.ArgumentTooBigException;
-import it.polimi.ingsw.model.adventure_cards.utils.DaysCardResponse;
+import it.polimi.ingsw.model.adventure_cards.responses.DaysCardResponse;
+import it.polimi.ingsw.model.adventure_cards.responses.PlanetCardResponse;
+import it.polimi.ingsw.model.adventure_cards.responses.iCardResponse;
+import it.polimi.ingsw.model.adventure_cards.responses.iPlayerResponse;
 import it.polimi.ingsw.model.adventure_cards.utils.Planet;
-import it.polimi.ingsw.model.adventure_cards.utils.PlanetCardResponse;
-import it.polimi.ingsw.model.adventure_cards.utils.iCardResponse;
-import it.polimi.ingsw.model.adventure_cards.utils.iPlayerResponse;
 
 public class PlanetCard extends Card {
 		
 	private final Planet[] planets;
 	private int left;
 
-	public PlanetCard(Planet[] planets, int id) { // costruttore
-		super(id, 0);
+	public PlanetCard(int id, int days, Planet[] planets) { // costruttore
+		super(id, days);
 		this.planets = planets;
 		this.left = planets.length;
 	}
@@ -28,7 +28,7 @@ public class PlanetCard extends Card {
 		this.planets[response.getId()].visit();
 		this.left-=1;
 		if(this.left==0) this.exhaust();
-		return new PlanetCardResponse(this.planets[response.getId()]);
+		return new PlanetCardResponse(this.planets[response.getId()], this.days);
 	}
 
 }

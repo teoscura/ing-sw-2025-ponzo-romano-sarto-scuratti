@@ -17,15 +17,17 @@ public class CabinComponent extends BaseComponent{
     private int crew_number = 0;
     private AlienType crew_type = AlienType.HUMAN;
 
-    public CabinComponent(ConnectorType[] connectors, 
+    public CabinComponent(int id, 
+                          ConnectorType[] connectors, 
                           ComponentRotation rotation){
-        super(connectors, rotation);
+        super(id, connectors, rotation);
     }
 
-    public CabinComponent(ConnectorType[] connectors, 
+    public CabinComponent(int id, 
+                          ConnectorType[] connectors, 
                           ComponentRotation rotation,
                           ShipCoords coords){
-        super(connectors, rotation, coords);
+        super(id, connectors, rotation, coords);
     }
 
     @Override
@@ -49,7 +51,9 @@ public class CabinComponent extends BaseComponent{
         for(iBaseComponent c : this.getConnectedComponents(ship)){
             c.check(v);
         }
-        if(!type.compatible(v.getSupportedType())) throw new UnsupportedAlienCabinException("Tried to insert crew type in cabin that doesn't support it."); 
+        if(!v.getSupportedType().compatible(type)) throw new UnsupportedAlienCabinException("Tried to insert crew type in cabin that doesn't support it.");
+        crew_number = new_crew;
+        crew_type = type;
     }
 
     @Override

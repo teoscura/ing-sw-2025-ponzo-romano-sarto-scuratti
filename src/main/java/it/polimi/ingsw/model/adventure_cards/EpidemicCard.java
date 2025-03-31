@@ -3,9 +3,9 @@ package it.polimi.ingsw.model.adventure_cards;
 
 import java.util.ArrayList;
 
-import it.polimi.ingsw.model.adventure_cards.utils.DaysCardResponse;
-import it.polimi.ingsw.model.adventure_cards.utils.iCardResponse;
-import it.polimi.ingsw.model.adventure_cards.utils.iPlayerResponse;
+import it.polimi.ingsw.model.adventure_cards.responses.DaysCardResponse;
+import it.polimi.ingsw.model.adventure_cards.responses.iCardResponse;
+import it.polimi.ingsw.model.adventure_cards.responses.iPlayerResponse;
 import it.polimi.ingsw.model.adventure_cards.visitors.CrewRemoveVisitor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.player.iSpaceShip;

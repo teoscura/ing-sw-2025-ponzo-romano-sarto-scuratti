@@ -1,6 +1,10 @@
 //Done.
 package it.polimi.ingsw.model.adventure_cards;
 
+import it.polimi.ingsw.model.adventure_cards.responses.BrokenCenterCabinResponse;
+import it.polimi.ingsw.model.adventure_cards.responses.DaysCardResponse;
+import it.polimi.ingsw.model.adventure_cards.responses.iCardResponse;
+import it.polimi.ingsw.model.adventure_cards.responses.iPlayerResponse;
 import it.polimi.ingsw.model.adventure_cards.utils.*;
 import it.polimi.ingsw.model.player.iSpaceShip;
 
@@ -9,7 +13,7 @@ public class CombatZoneCard extends Card{
     private final ProjectileArray shots;
     private final iCardResponse[] responses;
 
-    public CombatZoneCard(int id, int days, int crew, iCardResponse[] responses, ProjectileArray shots){
+    public CombatZoneCard(int id, iCardResponse[] responses, ProjectileArray shots){
         super(id, 0);
         if(responses==null || shots == null) throw new NullPointerException();
         if(responses.length!=3) throw new IllegalArgumentException("Lines isn't lenght three.");
@@ -19,7 +23,8 @@ public class CombatZoneCard extends Card{
         this.shots = shots;
         this.responses = responses;
     }
-
+    
+    //FIXME.
     @Override
     public boolean hasMultipleRequirements(){
         return true;

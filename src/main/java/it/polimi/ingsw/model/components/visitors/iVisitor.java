@@ -21,5 +21,7 @@ public interface iVisitor {
     abstract public void visit(EmptyComponent c);
 
     public abstract void visit(StructuralComponent c);
+
+    public abstract void visit(StartingCabinComponent c);
 }
 

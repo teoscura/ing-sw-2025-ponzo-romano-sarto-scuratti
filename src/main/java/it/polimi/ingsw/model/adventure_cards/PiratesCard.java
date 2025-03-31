@@ -2,13 +2,13 @@
 package it.polimi.ingsw.model.adventure_cards;
 
 import it.polimi.ingsw.exceptions.NegativeArgumentException;
-import it.polimi.ingsw.model.adventure_cards.utils.BrokenCenterCabinResponse;
-import it.polimi.ingsw.model.adventure_cards.utils.DaysCardResponse;
-import it.polimi.ingsw.model.adventure_cards.utils.PirateCardReward;
+import it.polimi.ingsw.model.adventure_cards.responses.BrokenCenterCabinResponse;
+import it.polimi.ingsw.model.adventure_cards.responses.DaysCardResponse;
+import it.polimi.ingsw.model.adventure_cards.responses.PirateCardReward;
+import it.polimi.ingsw.model.adventure_cards.responses.iCardResponse;
+import it.polimi.ingsw.model.adventure_cards.responses.iPlayerResponse;
 import it.polimi.ingsw.model.adventure_cards.utils.Projectile;
 import it.polimi.ingsw.model.adventure_cards.utils.ProjectileArray;
-import it.polimi.ingsw.model.adventure_cards.utils.iCardResponse;
-import it.polimi.ingsw.model.adventure_cards.utils.iPlayerResponse;
 import it.polimi.ingsw.model.player.iSpaceShip;
 
 

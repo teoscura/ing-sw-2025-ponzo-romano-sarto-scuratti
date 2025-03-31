@@ -1,6 +1,7 @@
 //Done.
 package it.polimi.ingsw.model.components;
 
+import it.polimi.ingsw.model.components.enums.CannonType;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ConnectorType;
 import it.polimi.ingsw.model.components.exceptions.AlreadyPoweredException;
@@ -16,20 +17,22 @@ public class CannonComponent extends BaseComponent{
     private boolean powered = false;
     private boolean powerable = false;
 
-    public CannonComponent(ConnectorType[] components,
+    public CannonComponent(int id, 
+                           ConnectorType[] components,
                            ComponentRotation rotation,
                            CannonType type){
-        super(components, rotation);
+        super(id, components, rotation);
         if(components[0]!=ConnectorType.EMPTY) throw new ComponentNotEmptyException("Top of cannon must be empty!");
         this.max_power = type.getMaxPower();
         this.powerable = type.getPowerable();
     }
 
-    public CannonComponent(ConnectorType[] components,
+    public CannonComponent(int id, 
+                           ConnectorType[] components,
                            ComponentRotation rotation,
                            CannonType type,
                            ShipCoords coords){
-        super(components, rotation, coords);
+        super(id, components, rotation, coords);
         if(components[0]!=ConnectorType.EMPTY) throw new ComponentNotEmptyException("Top of cannon must be empty!");
         this.max_power = type.getMaxPower();
         this.powerable = type.getPowerable();       
@@ -102,26 +105,4 @@ public class CannonComponent extends BaseComponent{
     public void onDelete(iSpaceShip ship){
         if(powerable) ship.delPowerableCoords(this.coords);
     }
-}
-
-enum CannonType{
-    SINGLE (1, false),
-    DOUBLE (2, false);
-
-    private int max_power;
-    private boolean powerable;
-
-    CannonType(int max_power, boolean powerable){
-        this.max_power = max_power;
-        this.powerable = powerable;
-    }
-
-    public int getMaxPower(){
-        return this.max_power;
-    }
-    
-    public boolean getPowerable(){
-        return this.powerable;
-    }
-
 }
