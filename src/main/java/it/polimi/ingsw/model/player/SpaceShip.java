@@ -52,6 +52,8 @@ public class SpaceShip implements iSpaceShip{
 	private int engine_power = 0;
 	private int battery_power = 0;
 
+	//TODO: add setNewCenter method, handle fragments (ask the cugola before)
+
 	public SpaceShip(GameModeType type, 
 					 PlayerColor color){
 		this.type = type;
@@ -180,10 +182,13 @@ public class SpaceShip implements iSpaceShip{
 
 	@Override
 	public void removeComponent(ShipCoords coords) {
-		if(coords==null) throw new NullPointerException();
+		if (coords == null) throw new NullPointerException();
 		iBaseComponent tmp = this.getComponent(coords);
-		if(this.components[coords.y][coords.x]==this.empty) return;
+		if (this.components[coords.y][coords.x] == this.empty) return;
 		this.components[coords.y][coords.x] = this.empty;
+		/*if coords == this.getCenterCabin{
+			setNewCenterCabin();
+		}*/
 		tmp.onDelete(this);
 		this.verifyAndClean();
 	}
