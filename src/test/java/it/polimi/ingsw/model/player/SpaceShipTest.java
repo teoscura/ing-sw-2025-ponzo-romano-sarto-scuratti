@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.player;
 import it.polimi.ingsw.exceptions.NotPresentException;
 import it.polimi.ingsw.exceptions.NotUniqueException;
 import it.polimi.ingsw.exceptions.OutOfBoundsException;
+import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.adventure_cards.enums.ProjectileDimension;
 import it.polimi.ingsw.model.adventure_cards.enums.ProjectileDirection;
 import it.polimi.ingsw.model.adventure_cards.utils.Projectile;
@@ -12,7 +13,7 @@ import it.polimi.ingsw.model.components.exceptions.AlreadyPoweredException;
 import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
 import it.polimi.ingsw.model.player.exceptions.IllegalComponentAdd;
 import it.polimi.ingsw.model.player.exceptions.NegativeCreditsException;
-import it.polimi.ingsw.model.rulesets.GameModeType;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

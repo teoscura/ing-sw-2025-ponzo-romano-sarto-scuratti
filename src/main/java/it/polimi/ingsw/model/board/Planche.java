@@ -1,9 +1,9 @@
 package it.polimi.ingsw.model.board;
 
-import it.polimi.ingsw.controller.match.MatchSettings;
+import it.polimi.ingsw.model.PlayerCount;
+import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.iSpaceShip;
-import it.polimi.ingsw.model.rulesets.GameModeType;
 
 import java.util.*;
 import java.util.Map.Entry;
@@ -13,12 +13,12 @@ public class Planche implements iPlanche {
 	private final HashMap<PlayerColor, Integer> planche;
 	private final int length;
 
-	public Planche(GameModeType type, MatchSettings settings){
+	public Planche(GameModeType type, PlayerCount count){
 		this.length = type.getLength();
 		this.planche = new HashMap<PlayerColor, Integer>();
 		int i = 0;
 		for(PlayerColor p : PlayerColor.values()){
-			if(i==settings.getPlayerNumber().getNumber()) break;
+			if(i==count.getNumber()) break;
 			planche.put(p, this.length);
 			i++;
 		}

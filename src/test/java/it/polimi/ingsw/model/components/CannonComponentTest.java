@@ -1,10 +1,11 @@
 package it.polimi.ingsw.model.components;
 
+import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.components.enums.CannonType;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.player.SpaceShip;
-import it.polimi.ingsw.model.rulesets.GameModeType;
+
 import org.junit.jupiter.api.Test;
 
 import it.polimi.ingsw.model.components.enums.ComponentRotation;

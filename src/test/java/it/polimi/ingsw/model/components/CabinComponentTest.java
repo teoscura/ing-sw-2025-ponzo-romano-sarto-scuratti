@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.components;
 
 import it.polimi.ingsw.exceptions.ArgumentTooBigException;
 import it.polimi.ingsw.exceptions.NegativeArgumentException;
+import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.components.enums.AlienType;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ConnectorType;
@@ -11,7 +12,6 @@ import it.polimi.ingsw.model.components.visitors.CabinVisitor;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.player.SpaceShip;
-import it.polimi.ingsw.model.rulesets.GameModeType;
 import javafx.scene.control.Alert.AlertType;
 
 import org.junit.jupiter.api.BeforeEach;

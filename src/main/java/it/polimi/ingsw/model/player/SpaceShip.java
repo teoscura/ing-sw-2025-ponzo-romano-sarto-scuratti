@@ -9,6 +9,7 @@ import java.util.Queue;
 import it.polimi.ingsw.exceptions.NotUniqueException;
 import it.polimi.ingsw.exceptions.NotPresentException;
 import it.polimi.ingsw.exceptions.OutOfBoundsException;
+import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.adventure_cards.enums.ProjectileDimension;
 import it.polimi.ingsw.model.adventure_cards.enums.ProjectileDirection;
 import it.polimi.ingsw.model.adventure_cards.utils.Projectile;
@@ -27,7 +28,6 @@ import it.polimi.ingsw.model.components.visitors.EnergyVisitor;
 import it.polimi.ingsw.model.player.exceptions.IllegalComponentAdd;
 import it.polimi.ingsw.model.player.exceptions.NegativeCreditsException;
 import it.polimi.ingsw.model.player.exceptions.NegativeCrewException;
-import it.polimi.ingsw.model.rulesets.GameModeType;
 
 
 public class SpaceShip implements iSpaceShip{
