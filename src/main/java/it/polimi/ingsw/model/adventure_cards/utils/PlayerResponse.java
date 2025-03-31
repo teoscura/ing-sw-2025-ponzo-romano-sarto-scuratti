@@ -1,12 +1,10 @@
 //Done.
-package it.polimi.ingsw.model.adventure_cards.responses;
-    
-import java.io.Serializable;
+package it.polimi.ingsw.model.adventure_cards.utils;
 
 import it.polimi.ingsw.model.adventure_cards.exceptions.ResponseFieldUnsetException;
 import it.polimi.ingsw.model.player.ShipCoords;
 
-public class PlayerResponse implements iPlayerResponse, Serializable{
+public class PlayerResponse{
 
     private ShipCoords[] coords = null;
     private int[] merch_choices = null;

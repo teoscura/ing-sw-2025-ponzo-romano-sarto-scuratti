@@ -19,6 +19,7 @@ public class ModelInstance {
     private final PlayerCount count;
     private final iCommonBoard board;
     private final iSpaceShip[] ships;
+    private final boolean[] lost;
     private final iPlanche planche;
     private final int[] construction_cards;
     private final iCards voyage_deck;
@@ -27,6 +28,8 @@ public class ModelInstance {
         this.count = count;
         this.board = new CommonBoard();
         this.ships = new iSpaceShip[count.getNumber()];
+        this.lost = new boolean[count.getNumber()];
+        Arrays.fill(this.lost, false);
         for(PlayerColor c : PlayerColor.values()){
             if(c.getOrder()>=ships.length) break;
             this.ships[c.getOrder()] = new SpaceShip(type, c);
@@ -73,15 +76,16 @@ public class ModelInstance {
     }
 
     public List<iSpaceShip> getOrder(CardOrder order){
+        //TODO filtrare gli abbandonati.
         List<iSpaceShip> tmp = Arrays.asList(this.ships);
         switch(order){
             case NORMAL: {
                 Collections.sort(tmp, (s1,s2) -> this.planche.getPlayerPosition(s1)>this.planche.getPlayerPosition(s2) ? 1: -1);
-                return tmp;
+                return tmp.stream().filter((s)->!this.lost[s.getColor().getOrder()]).toList();
             }
             case INVERSE: {
                 Collections.sort(tmp, (s1,s2) -> this.planche.getPlayerPosition(s1)>this.planche.getPlayerPosition(s2) ? -1: 1);
-                return tmp;
+                return tmp.stream().filter((s)->!this.lost[s.getColor().getOrder()]).toList();
             }
             case COMBATZONE: {
                 throw new UnsupportedOperationException("Under no case should getOrder be called with CombatZone");
@@ -89,6 +93,14 @@ public class ModelInstance {
             case METEORS: throw new UnsupportedOperationException("Under no case should getOrder be called with Meteors");
         }
         return tmp;
+    }
+
+    //TODO method find each criteria.
+
+    public void loseGame(PlayerColor c) throws PlayerNotFoundException{
+        if(c.getOrder()>=this.count.getNumber()) throw new PlayerNotFoundException("Player is not playing in current game");
+        if(this.lost[c.getOrder()]) throw new PlayerNotFoundException("Player has already lost");
+        this.lost[c.getOrder()] = true;
     }
 
     public int[] getShowed(){
@@ -105,6 +117,7 @@ public class ModelInstance {
 
     public iSpaceShip getPlayer(PlayerColor c) throws PlayerNotFoundException{
         if(c.getOrder()>=ships.length) throw new PlayerNotFoundException("Player color is not present in this match");
+        if(this.lost[c.getOrder()]) throw new PlayerNotFoundException("Player has lost the game");
         return this.ships[c.getOrder()];
     }
 

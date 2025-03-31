@@ -1,72 +1,109 @@
-//Done.
 package it.polimi.ingsw.model.adventure_cards;
 
-import it.polimi.ingsw.model.adventure_cards.responses.BrokenCenterCabinResponse;
-import it.polimi.ingsw.model.adventure_cards.responses.DaysCardResponse;
-import it.polimi.ingsw.model.adventure_cards.responses.iCardResponse;
-import it.polimi.ingsw.model.adventure_cards.responses.iPlayerResponse;
+import it.polimi.ingsw.exceptions.PlayerNotFoundException;
+import it.polimi.ingsw.message.client.AskTurnOnMessage;
+import it.polimi.ingsw.message.client.BrokenCabinMessage;
+import it.polimi.ingsw.message.client.ClientMessage;
+import it.polimi.ingsw.model.ModelInstance;
 import it.polimi.ingsw.model.adventure_cards.utils.*;
 import it.polimi.ingsw.model.player.iSpaceShip;
 
 public class CombatZoneCard extends Card{
 
     private final ProjectileArray shots;
-    private final iCardResponse[] responses;
+    private final CombatZoneLine[] lines;
+    private final ClientMessage[] messages;
+    private final CardResponseType expected_after;
+    private final CombatZoneLine which;
 
-    public CombatZoneCard(int id, iCardResponse[] responses, ProjectileArray shots){
-        super(id, 0);
-        if(responses==null || shots == null) throw new NullPointerException();
-        if(responses.length!=3) throw new IllegalArgumentException("Lines isn't lenght three.");
-        for(iCardResponse r : responses){
-            if(r==null) throw new NullPointerException();
+    public CombatZoneCard(int id, 
+                          ProjectileArray shots, 
+                          CombatZoneLine[] lines_order, 
+                          ClientMessage[] messages, 
+                          CombatZoneLine special, 
+                          CardResponseType response){
+        super(id,0);
+        if(shots==null||lines_order==null||messages==null) throw new NullPointerException();
+        if(lines_order.length!=messages.length||lines_order.length!=3) throw new IllegalArgumentException("Invalid lenght of arguments, must all be three");
+        boolean has_shot = false;
+        for(ClientMessage m : messages){
+            if(m==null&&has_shot) throw new NullPointerException();
+            if(m==null) has_shot=true;
         }
+        if(lines_order[0]==lines_order[1]||lines_order[0]==lines_order[2]||lines_order[2]==lines_order[1]) throw new IllegalArgumentException("Duplicate line in lines");
         this.shots = shots;
-        this.responses = responses;
-    }
-    
-    //FIXME.
-    @Override
-    public boolean hasMultipleRequirements(){
-        return true;
+        this.lines = lines_order;
+        this.messages = messages;
+        this.which = special;
+        this.expected_after = response;
+    } 
+
+    public CombatZoneLine[] getCriteriaOrder(){
+        return this.lines;
     }
 
-    //0: Least Power 1: Least Engine 2: Least Crew 
     @Override
-    public iCardResponse apply(iSpaceShip ship, iPlayerResponse response){
+    public ClientMessage getRequest() {
+        return new AskTurnOnMessage();
+    }
+
+    @Override
+    public CardResponseType getResponse() {
+        return CardResponseType.TURNON_ACCEPT;
+    }
+
+    @Override
+    public CardResponseType getAfterResponse() {
+        return this.expected_after;
+    }
+
+    @Override
+    public CardOrder getOrder() {
+        return CardOrder.COMBATZONE;
+    }
+
+    //0 least cannon, 1 least engine, 2 least crew
+    @Override
+    public ClientMessage apply(ModelInstance model, iSpaceShip ship, PlayerResponse response) throws PlayerNotFoundException {
         if(ship==null || response == null) throw new NullPointerException();
+        this.after_response = CardResponseType.NONE;
         boolean broken_center_cabin = false;
         switch(response.getId()){
             case 0: {
-                if(this.responses[0].hasShot()){
+                if(this.messages[0]==null){
                     for(Projectile p : this.shots.getProjectiles()){
                         broken_center_cabin = ship.handleShot(p);
                     }
-                    if(broken_center_cabin) return new BrokenCenterCabinResponse();
-                    return new DaysCardResponse(0);
+                    if(broken_center_cabin) return new BrokenCabinMessage();
+                    return null;
                 }
-                return this.responses[0];
+                if(this.which.getNumber()==0) this.after_response=this.expected_after;
+                return this.messages[0];
             }
             case 1: {
-                if(this.responses[1].hasShot()){
+                if(this.messages[1]==null){
                     for(Projectile p : this.shots.getProjectiles()){
                         broken_center_cabin = ship.handleShot(p);
                     }
-                    if(broken_center_cabin) return new BrokenCenterCabinResponse();
-                    return new DaysCardResponse(0);
+                    if(broken_center_cabin) return new BrokenCabinMessage();
+                    return null;
                 }
-                return this.responses[1];
+                if(this.which.getNumber()==1) this.after_response=this.expected_after;
+                return this.messages[1];
             }
             case 2: {
-                if(this.responses[2].hasShot()){
+                if(this.messages[2]==null){
                     for(Projectile p : this.shots.getProjectiles()){
                         broken_center_cabin = ship.handleShot(p);
                     }
-                    if(broken_center_cabin) return new BrokenCenterCabinResponse();
-                    return new DaysCardResponse(0);
+                    if(broken_center_cabin) return new BrokenCabinMessage();
+                    return null;
                 }
-                return this.responses[0];
+                if(this.which.getNumber()==2) this.after_response=this.expected_after;
+                return this.messages[2];
             }
             default: throw new IllegalArgumentException("Invalid criteria id.");
         }
     }
+
 }

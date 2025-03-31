@@ -1,17 +1,18 @@
 package it.polimi.ingsw.model.adventure_cards;
 
-import it.polimi.ingsw.exceptions.OutOfBoundsException;
-import it.polimi.ingsw.model.adventure_cards.responses.BrokenCenterCabinResponse;
-import it.polimi.ingsw.model.adventure_cards.responses.DaysCardResponse;
-import it.polimi.ingsw.model.adventure_cards.responses.iCardResponse;
-import it.polimi.ingsw.model.adventure_cards.responses.iPlayerResponse;
+import it.polimi.ingsw.message.client.AskTurnOnMessage;
+import it.polimi.ingsw.message.client.BrokenCabinMessage;
+import it.polimi.ingsw.message.client.ClientMessage;
+import it.polimi.ingsw.model.ModelInstance;
+import it.polimi.ingsw.model.adventure_cards.utils.CardOrder;
+import it.polimi.ingsw.model.adventure_cards.utils.CardResponseType;
+import it.polimi.ingsw.model.adventure_cards.utils.PlayerResponse;
 import it.polimi.ingsw.model.adventure_cards.utils.ProjectileArray;
 import it.polimi.ingsw.model.player.iSpaceShip;
 
 public class MeteorSwarmCard extends Card{
 
     private final ProjectileArray meteorites;
-    private int turn = 0;
 
     public MeteorSwarmCard(int id, ProjectileArray meteorites){
         super(id, 0);
@@ -19,22 +20,32 @@ public class MeteorSwarmCard extends Card{
     }
 
     @Override
-    public boolean multiPhase(){
-        return true;
+    public ClientMessage getRequest() {
+        return new AskTurnOnMessage();
     }
 
     @Override
-    public void nextPhase(){
-        if(this.turn==this.meteorites.getProjectiles().length-1) throw new OutOfBoundsException("Meteorite card is already at its last phase.");
-        this.turn++;
+    public CardResponseType getResponse() {
+        return CardResponseType.TURNON_ACCEPT;
     }
 
     @Override
-    public iCardResponse apply(iSpaceShip ship, iPlayerResponse response){
-        if(ship==null) throw new NullPointerException();
-        boolean broken_center_cabin = ship.handleMeteorite(this.meteorites.getProjectiles()[turn]);
-        if(broken_center_cabin) return new BrokenCenterCabinResponse();
-        return new DaysCardResponse(0);
+    public CardResponseType getAfterResponse() {
+        return this.after_response;
+    }
+
+    @Override
+    public CardOrder getOrder() {
+        return CardOrder.METEORS;
+    }
+
+    @Override
+    public ClientMessage apply(ModelInstance model, iSpaceShip ship, PlayerResponse response){
+        if(model==null||ship==null) throw new NullPointerException();
+        this.after_response=CardResponseType.NONE;
+        boolean broken_center_cabin = ship.handleMeteorite(this.meteorites.getProjectiles()[response.getId()]);
+        if(broken_center_cabin) return new BrokenCabinMessage();
+        return null;
     }
 
 }

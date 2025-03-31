@@ -42,7 +42,7 @@ public class Planche implements iPlanche {
 	public void movePlayer(iSpaceShip ship, int rel_change){
 		if(!this.planche.containsKey(ship.getColor())) throw new IllegalArgumentException("Color is not present in the current game.");
 		int position = this.planche.get(ship.getColor());
-		int count = rel_change;
+		int count = rel_change > 0 ? rel_change : -rel_change;
 		while(count>0){
 			position+= rel_change>=0 ? 1 : -1;
 			if(this.getPlayersAt(position)!=PlayerColor.NONE) continue;
