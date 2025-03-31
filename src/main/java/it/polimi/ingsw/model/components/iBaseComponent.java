@@ -13,6 +13,7 @@ public interface iBaseComponent {
     
     //Connectors are stored in this order: UP, RIGHT, DOWN, LEFT;
     
+    public int getID();
     public boolean verify(iSpaceShip ship);
     public void check(iVisitor v);
     //On delete/Creation

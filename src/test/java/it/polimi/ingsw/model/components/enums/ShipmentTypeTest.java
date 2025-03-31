@@ -7,66 +7,26 @@ import static org.junit.jupiter.api.Assertions.*;
 class ShipmentTypeTest {
 
 	@Test
-	void name() {
-	}
-
-	@Test
-	void ordinal() {
-	}
-
-	@Test
-	void testToString() {
-	}
-
-	@Test
-	void testEquals() {
-	}
-
-	@Test
-	void testHashCode() {
-	}
-
-	@Test
-	void testClone() {
-	}
-
-	@Test
-	void compareTo() {
-	}
-
-	@Test
-	void getDeclaringClass() {
-	}
-
-	@Test
-	void describeConstable() {
-	}
-
-	@Test
-	void valueOf() {
-	}
-
-	@Test
-	void testFinalize() {
-	}
-
-	@Test
 	void getSpecial() {
+		assertTrue(ShipmentType.RED.getSpecial());
+		assertFalse(ShipmentType.YELLOW.getSpecial());
+		assertFalse(ShipmentType.GREEN.getSpecial());
+		assertFalse(ShipmentType.BLUE.getSpecial());
+		assertFalse(ShipmentType.EMPTY.getSpecial());
 	}
 
 	@Test
 	void getValue() {
+		assertEquals(4, ShipmentType.RED.getValue());
+		assertEquals(3, ShipmentType.YELLOW.getValue());
+		assertEquals(2, ShipmentType.GREEN.getValue());
+		assertEquals(1, ShipmentType.BLUE.getValue());
+		assertEquals(0, ShipmentType.EMPTY.getValue());
 	}
 
 	@Test
 	void getTypes() {
-	}
-
-	@Test
-	void values() {
-	}
-
-	@Test
-	void testValueOf() {
+		ShipmentType shipment = ShipmentType.BLUE;
+		assertArrayEquals(new ShipmentType[]{ShipmentType.BLUE, ShipmentType.GREEN, ShipmentType.YELLOW, ShipmentType.RED}, shipment.getTypes());
 	}
 }

@@ -13,21 +13,23 @@ public class AlienLifeSupportComponent extends BaseComponent{
     
     private AlienType type = AlienType.BROWN;
 
-    public AlienLifeSupportComponent(ConnectorType[] connectors, 
+    public AlienLifeSupportComponent(int id, 
+                                ConnectorType[] connectors, 
                                 ComponentRotation rotation, 
                                 AlienType type){
-        super(connectors, rotation);
+        super(id, connectors, rotation);
         if(!type.getLifeSupportExists()){
             throw new IllegalConstructorArgumentException();
         }
         this.type = type;
     }
 
-    public AlienLifeSupportComponent(ConnectorType[] connectors, 
+    public AlienLifeSupportComponent(int id, 
+                                ConnectorType[] connectors, 
                                 ComponentRotation rotation, 
                                 AlienType type,
                                 ShipCoords coords){
-        super(connectors, rotation, coords);
+        super(id, connectors, rotation, coords);
         if(!type.getLifeSupportExists()){
             throw new IllegalConstructorArgumentException();
         }

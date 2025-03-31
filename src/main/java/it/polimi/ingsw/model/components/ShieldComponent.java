@@ -11,24 +11,17 @@ import it.polimi.ingsw.model.player.iSpaceShip;
 
 public class ShieldComponent extends BaseComponent {
     
-    private ShieldType type = ShieldType.NE; //Nord Est
     private boolean powered = false;
 
-    public ShieldComponent(ConnectorType[] connectors, 
-                           ComponentRotation rotation,
-                           ShieldType type){
-        super(connectors, rotation);
-        if(type == ShieldType.NONE) throw new IllegalArgumentException();
-        this.type = type;
+    public ShieldComponent(int id, ConnectorType[] connectors, 
+                           ComponentRotation rotation){
+        super(id, connectors, rotation);
     }
 
-    public ShieldComponent(ConnectorType[] connectors, 
+    public ShieldComponent(int id, ConnectorType[] connectors, 
                            ComponentRotation rotation,
-                           ShieldType type,
                            ShipCoords coords){
-        super(connectors, rotation, coords);
-        if(type == ShieldType.NONE) throw new IllegalArgumentException();
-        this.type = type;
+        super(id, connectors, rotation, coords);
     }
 
     @Override
@@ -65,7 +58,13 @@ public class ShieldComponent extends BaseComponent {
 
     public ShieldType getShield(){
         if(!this.powered) return ShieldType.NONE;
-        return this.type;
+        switch(this.getRotation().getShift()){
+            case 0: return ShieldType.NE;
+            case 1: return ShieldType.SE;
+            case 2: return ShieldType.SW;
+            case 3: return ShieldType.NW;
+        }
+        return ShieldType.NE;
     }
     
 }

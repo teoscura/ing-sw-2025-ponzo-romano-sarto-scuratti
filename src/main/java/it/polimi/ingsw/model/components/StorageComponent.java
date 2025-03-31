@@ -6,6 +6,7 @@ import java.util.Arrays;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ConnectorType;
 import it.polimi.ingsw.model.components.enums.ShipmentType;
+import it.polimi.ingsw.model.components.enums.StorageType;
 import it.polimi.ingsw.model.components.exceptions.ContainerFullException;
 import it.polimi.ingsw.model.components.exceptions.ContainerNotSpecialException;
 import it.polimi.ingsw.model.components.visitors.iVisitor;
@@ -18,20 +19,22 @@ public class StorageComponent extends BaseComponent{
     private int currently_full = 0;
     private boolean special = false;
 
-    public StorageComponent(ConnectorType[] connectors, 
+    public StorageComponent(int id, 
+                            ConnectorType[] connectors, 
                             ComponentRotation rotation,
                             StorageType type){
-        super(connectors, rotation);
+        super(id, connectors, rotation);
         this.special = type.getSpecial();
         this.shipments = new ShipmentType[type.getCapacity()];
         Arrays.fill(shipments, ShipmentType.EMPTY);
     }
 
-    public StorageComponent(ConnectorType[] connectors, 
+    public StorageComponent(int id, 
+                            ConnectorType[] connectors, 
                             ComponentRotation rotation,
                             StorageType type,
                             ShipCoords coords){
-        super(connectors, rotation, coords);
+        super(id, connectors, rotation, coords);
         this.special = type.getSpecial();
         this.shipments = new ShipmentType[type.getCapacity()];
         Arrays.fill(shipments, ShipmentType.EMPTY);
@@ -105,27 +108,4 @@ public class StorageComponent extends BaseComponent{
         ship.delStorageCoords(this.coords);
     }
 
-}
-
-enum StorageType{
-    DOUBLENORMAL (false, 2),
-    TRIPLENORMAL (false, 3),
-    SINGLESPECIAL (true, 1),
-    DOUBLESPECIAL (true, 2);
-
-    private boolean special;
-    private int capacity;
-
-    StorageType(boolean special, int capacity){
-        this.special = special;
-        this.capacity = capacity;
-    }
-
-    public boolean getSpecial(){
-        return this.special;
-    }
-
-    public int getCapacity(){
-        return this.capacity;
-    }
 }

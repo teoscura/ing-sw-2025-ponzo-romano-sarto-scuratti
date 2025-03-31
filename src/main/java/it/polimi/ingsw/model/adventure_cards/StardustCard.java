@@ -1,9 +1,9 @@
 //Done.
 package it.polimi.ingsw.model.adventure_cards;
 
-import it.polimi.ingsw.model.adventure_cards.utils.DaysCardResponse;
-import it.polimi.ingsw.model.adventure_cards.utils.iCardResponse;
-import it.polimi.ingsw.model.adventure_cards.utils.iPlayerResponse;
+import it.polimi.ingsw.model.adventure_cards.responses.DaysCardResponse;
+import it.polimi.ingsw.model.adventure_cards.responses.iCardResponse;
+import it.polimi.ingsw.model.adventure_cards.responses.iPlayerResponse;
 import it.polimi.ingsw.model.player.iSpaceShip;
 
 public class StardustCard extends Card {

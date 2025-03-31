@@ -52,6 +52,7 @@ class ConnectorTypeTest {
 
 	@Test
 	void compatible() {
+
 	}
 
 	@Test

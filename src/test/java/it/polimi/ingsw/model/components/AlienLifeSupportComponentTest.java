@@ -2,7 +2,12 @@ package it.polimi.ingsw.model.components;
 
 import org.junit.jupiter.api.Test;
 
+import it.polimi.ingsw.model.components.enums.AlienType;
+import it.polimi.ingsw.model.components.enums.ComponentRotation;
+import it.polimi.ingsw.model.components.enums.ConnectorType;
+
 import static org.junit.jupiter.api.Assertions.*;
+
 class AlienLifeSupportComponentTest {
 
 	@Test
@@ -11,33 +16,9 @@ class AlienLifeSupportComponentTest {
 
 	@Test
 	void getType() {
-	}
-
-	@Test
-	void getConnectors() {
-	}
-
-	@Test
-	void getRotation() {
-	}
-
-	@Test
-	void verify() {
-	}
-
-	@Test
-	void getConnector() {
-	}
-
-	@Test
-	void getCoords() {
-	}
-
-	@Test
-	void testCheck() {
-	}
-
-	@Test
-	void testGetType() {
+		ConnectorType[] connectors = new ConnectorType[4];
+		AlienLifeSupportComponent test_alien = new AlienLifeSupportComponent(1, connectors, ComponentRotation.U000,
+				AlienType.BROWN);
+		assertEquals(AlienType.BROWN, test_alien.getType());
 	}
 }

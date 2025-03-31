@@ -12,11 +12,11 @@ import it.polimi.ingsw.model.player.iSpaceShip;
 public class EmptyComponent extends BaseComponent {
     
     public EmptyComponent(){
-        super(new ConnectorType[4], ComponentRotation.U000);
+        super(157, new ConnectorType[4], ComponentRotation.U000);
     }
 
     public EmptyComponent(ShipCoords coords){
-        super(new ConnectorType[4], ComponentRotation.U000, coords);
+        super(157, new ConnectorType[4], ComponentRotation.U000, coords);
     }
 
     @Override

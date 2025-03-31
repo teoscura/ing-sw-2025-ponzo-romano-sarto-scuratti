@@ -1,4 +1,4 @@
-package it.polimi.ingsw.model.adventure_cards.utils;
+package it.polimi.ingsw.model.adventure_cards.responses;
 
 public class BrokenCenterCabinResponse implements iCardResponse {
 

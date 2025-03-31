@@ -1,6 +1,5 @@
 package it.polimi.ingsw.model.player;
 
-
 public enum PlayerColor {
     RED (0),
     BLUE (1),

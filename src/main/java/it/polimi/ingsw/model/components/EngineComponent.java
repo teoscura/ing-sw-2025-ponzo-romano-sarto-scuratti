@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.components;
 
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ConnectorType;
+import it.polimi.ingsw.model.components.enums.EngineType;
 import it.polimi.ingsw.model.components.exceptions.AlreadyPoweredException;
 import it.polimi.ingsw.model.components.exceptions.ComponentNotEmptyException;
 import it.polimi.ingsw.model.components.exceptions.UnpowerableException;
@@ -16,20 +17,22 @@ public class EngineComponent extends BaseComponent{
     private boolean powerable;
     private boolean powered = false;
 
-    public EngineComponent(ConnectorType[] components,
+    public EngineComponent(int id, 
+                           ConnectorType[] components,
                            ComponentRotation rotation,
                            EngineType type){
-        super(components, rotation);
+        super(id, components, rotation);
         if(components[2]!=ConnectorType.EMPTY) throw new ComponentNotEmptyException("Bottom of engine must be empty!");
         this.max_power = type.getMaxPower();
         this.powerable = type.getPowerable();        
     }
 
-    public EngineComponent(ConnectorType[] components,
+    public EngineComponent(int id, 
+                           ConnectorType[] components,
                            ComponentRotation rotation,
                            EngineType type,
                            ShipCoords coords){
-        super(components, rotation, coords);
+        super(id, components, rotation, coords);
         if(components[2]!=ConnectorType.EMPTY) throw new ComponentNotEmptyException("Bottom of engine must be empty!");
         this.max_power = type.getMaxPower();
         this.powerable = type.getPowerable();        
@@ -58,7 +61,7 @@ public class EngineComponent extends BaseComponent{
 
     public int getCurrentPower(){
         if(this.getRotation() != ComponentRotation.U000){
-            return 0;  //Divide by two.
+            return 0;
         }
         return this.getPower();
     }
@@ -73,7 +76,7 @@ public class EngineComponent extends BaseComponent{
     @Override
     public boolean powerable(){
         return true;
-    }
+    } //redundant
 
     @Override
     public void onCreation(iSpaceShip ship){
@@ -85,25 +88,4 @@ public class EngineComponent extends BaseComponent{
         if(powerable) ship.delPowerableCoords(this.coords);
     }
 
-}
-
-enum EngineType{
-    SINGLE (1, false),
-    DOUBLE (2, true );
-
-    private int max_power;
-    private boolean powerable;
-
-    EngineType(int max_power, boolean powerable){
-        this.max_power = max_power;
-        this.powerable = powerable;
-    }
-
-    public int getMaxPower(){
-        return this.max_power;
-    }
-
-    public boolean getPowerable(){
-        return this.powerable;
-    }
 }

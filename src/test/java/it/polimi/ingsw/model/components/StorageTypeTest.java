@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.components;
 
+import it.polimi.ingsw.model.components.enums.StorageType;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -7,62 +8,18 @@ import static org.junit.jupiter.api.Assertions.*;
 class StorageTypeTest {
 
 	@Test
-	void name() {
-	}
-
-	@Test
-	void ordinal() {
-	}
-
-	@Test
-	void testToString() {
-	}
-
-	@Test
-	void testEquals() {
-	}
-
-	@Test
-	void testHashCode() {
-	}
-
-	@Test
-	void testClone() {
-	}
-
-	@Test
-	void compareTo() {
-	}
-
-	@Test
-	void getDeclaringClass() {
-	}
-
-	@Test
-	void describeConstable() {
-	}
-
-	@Test
-	void valueOf() {
-	}
-
-	@Test
-	void testFinalize() {
-	}
-
-	@Test
 	void getSpecial() {
+		StorageType special_test_type1 = StorageType.DOUBLESPECIAL;
+		StorageType special_test_type2 = StorageType.DOUBLENORMAL;
+		assertTrue(special_test_type1.getSpecial());
+		assertFalse(special_test_type2.getSpecial());
 	}
 
 	@Test
 	void getCapacity() {
-	}
-
-	@Test
-	void values() {
-	}
-
-	@Test
-	void testValueOf() {
+		StorageType capacity_test_type1 = StorageType.TRIPLENORMAL;
+		StorageType capacity_test_type2 = StorageType.SINGLESPECIAL;
+		assertEquals(3, capacity_test_type1.getCapacity());
+		assertEquals(1, capacity_test_type2.getCapacity());
 	}
 }

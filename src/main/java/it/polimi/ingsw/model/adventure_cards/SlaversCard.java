@@ -2,7 +2,7 @@
 package it.polimi.ingsw.model.adventure_cards;
 
 import it.polimi.ingsw.exceptions.NegativeArgumentException;
-import it.polimi.ingsw.model.adventure_cards.utils.*;
+import it.polimi.ingsw.model.adventure_cards.responses.*;
 import it.polimi.ingsw.model.player.iSpaceShip;
 
 public class SlaversCard extends Card{

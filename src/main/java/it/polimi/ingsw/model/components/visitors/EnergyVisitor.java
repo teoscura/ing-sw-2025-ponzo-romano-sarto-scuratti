@@ -7,6 +7,7 @@ import it.polimi.ingsw.model.components.CannonComponent;
 import it.polimi.ingsw.model.components.EmptyComponent;
 import it.polimi.ingsw.model.components.EngineComponent;
 import it.polimi.ingsw.model.components.ShieldComponent;
+import it.polimi.ingsw.model.components.StartingCabinComponent;
 import it.polimi.ingsw.model.components.StorageComponent;
 import it.polimi.ingsw.model.components.StructuralComponent;
 
@@ -98,6 +99,13 @@ public class EnergyVisitor implements iVisitor {
         return;
     }
 
+    @Override
+    public void visit(StartingCabinComponent c) {
+        this.powerable = false;
+        this.found_battery = false;
+        return;
+    }
+
     public boolean getFoundBatteryComponent(){
         return this.found_battery;
     }
@@ -114,6 +122,5 @@ public class EnergyVisitor implements iVisitor {
         if(this.positive) positive = false;
         else positive = true;
     }
-
     
 }
