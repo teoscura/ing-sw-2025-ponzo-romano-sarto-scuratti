@@ -52,8 +52,6 @@ public class SpaceShip implements iSpaceShip{
 	private int engine_power = 0;
 	private int battery_power = 0;
 
-	//TODO: add setNewCenter method, handle fragments (ask the cugola before)
-
 	public SpaceShip(GameModeType type, 
 					 PlayerColor color){
 		this.type = type;
