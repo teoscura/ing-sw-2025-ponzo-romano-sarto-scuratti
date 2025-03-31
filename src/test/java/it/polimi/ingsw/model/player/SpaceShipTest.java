@@ -483,7 +483,20 @@ class SpaceShipTest {
 
     @Test
     void handleShot(){
+		Projectile missed_shot = new Projectile(ProjectileDirection.U180, ProjectileDimension.SMALL, 2);
+		assertFalse(ship.handleShot(missed_shot));
 
+		ConnectorType[] connectors = {ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.UNIVERSAL, ConnectorType.EMPTY};
+		ShipCoords coords = new ShipCoords(GameModeType.LVL2, 2, 2);
+		CabinComponent cabin = new CabinComponent(1,connectors, ComponentRotation.U000, coords);
+		ship.addComponent(cabin, coords);
+
+		Projectile shot = new Projectile(ProjectileDirection.U090, ProjectileDimension.SMALL, 7);
+		boolean hitCenter = ship.handleShot(shot);
+
+		assertEquals(ship.getEmpty(), ship.getComponent(coords));
+
+		assertEquals(coords.equals(ship.getCenterCabin()), hitCenter);
     }
 
     @Test
