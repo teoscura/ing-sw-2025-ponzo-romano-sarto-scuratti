@@ -1,15 +1,13 @@
-//Done.
 package it.polimi.ingsw.model.adventure_cards;
 
 import it.polimi.ingsw.model.adventure_cards.exceptions.CardAlreadyExhaustedException;
-import it.polimi.ingsw.model.adventure_cards.responses.iCardResponse;
-import it.polimi.ingsw.model.adventure_cards.responses.iPlayerResponse;
-import it.polimi.ingsw.model.player.iSpaceShip;
+import it.polimi.ingsw.model.adventure_cards.utils.CardResponseType;
     
 public abstract class Card implements iCard {
     
     private int id;
     protected int days;
+    protected CardResponseType after_response = CardResponseType.NONE;
     private boolean exhausted;
 
     protected Card(int id, int days){
@@ -24,21 +22,6 @@ public abstract class Card implements iCard {
     }
 
     @Override
-    public boolean multiPhase(){
-        return false;
-    }
-
-    @Override
-    public void nextPhase(){
-        return;
-    }
-
-    @Override
-    public boolean hasMultipleRequirements(){
-        return false;
-    }
-
-    @Override
     public boolean getExhausted(){
         return this.exhausted;
     }
@@ -48,6 +31,4 @@ public abstract class Card implements iCard {
         this.exhausted = true;
     }
 
-    @Override
-    public abstract iCardResponse apply(iSpaceShip ship, iPlayerResponse response);
 }

@@ -2,8 +2,10 @@ package it.polimi.ingsw.model.adventure_cards;
 
 import java.util.HashMap;
 
+import it.polimi.ingsw.message.client.AskRemoveMerchMessage;
+import it.polimi.ingsw.message.client.ClientMessage;
+import it.polimi.ingsw.message.client.MoveOnBoardMessage;
 import it.polimi.ingsw.model.adventure_cards.enums.*;
-import it.polimi.ingsw.model.adventure_cards.responses.*;
 import it.polimi.ingsw.model.adventure_cards.utils.*;
 
 public class LevelTwoCardFactory implements iCardFactory{
@@ -86,17 +88,23 @@ public class LevelTwoCardFactory implements iCardFactory{
                 new Planet(new int[]{0,0,2,0}),
                 new Planet(new int[]{4,0,0,0})})
             );
-            put(116, new CombatZoneCard(116, //FIXME in case of rework to combat zone( sicuramente ).
-                new iCardResponse[]{
-                    new CombatZoneProjectilesResponse(),
-                    new SmugglerCardPenaltyResponse(3),
-                    new DaysCardResponse(-4)},
+            put(116, new CombatZoneCard(116,
                 new ProjectileArray(
                     new Projectile[]{
                     new Projectile(ProjectileDirection.U180, ProjectileDimension.SMALL),
                     new Projectile(ProjectileDirection.U090, ProjectileDimension.SMALL),
                     new Projectile(ProjectileDirection.U270, ProjectileDimension.SMALL),
-                    new Projectile(ProjectileDirection.U000, ProjectileDimension.BIG)}))
+                    new Projectile(ProjectileDirection.U000, ProjectileDimension.BIG)}),
+                new CombatZoneLine[]{
+                    CombatZoneLine.LEAST_CANNON,
+                    CombatZoneLine.LEAST_ENGINE,
+                    CombatZoneLine.LEAST_CREW},
+                new ClientMessage[]{
+                    new MoveOnBoardMessage(-4),
+                    new AskRemoveMerchMessage(3),
+                    null},
+                CombatZoneLine.LEAST_ENGINE,
+                CardResponseType.REMOVE_CARGO)
             );
             put(117, new AbandonedShipCard(117, 1, 4, 6));
             put(118, new AbandonedShipCard(118, 2, 5, 6));

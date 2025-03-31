@@ -2,12 +2,11 @@ package it.polimi.ingsw.model.adventure_cards;
 
 import java.util.HashMap;
 
+import it.polimi.ingsw.message.client.AskRemoveCrewMessage;
+import it.polimi.ingsw.message.client.ClientMessage;
+import it.polimi.ingsw.message.client.MoveOnBoardMessage;
 import it.polimi.ingsw.model.adventure_cards.enums.ProjectileDimension;
 import it.polimi.ingsw.model.adventure_cards.enums.ProjectileDirection;
-import it.polimi.ingsw.model.adventure_cards.responses.CombatZoneProjectilesResponse;
-import it.polimi.ingsw.model.adventure_cards.responses.DaysCardResponse;
-import it.polimi.ingsw.model.adventure_cards.responses.StaffCardResponse;
-import it.polimi.ingsw.model.adventure_cards.responses.iCardResponse;
 import it.polimi.ingsw.model.adventure_cards.utils.*;
 
 public class LevelOneCardFactory implements iCardFactory {
@@ -87,15 +86,21 @@ public class LevelOneCardFactory implements iCardFactory {
                 new Planet(new int[]{0,0,1,0}),
                 new Planet(new int[]{3,0,0,0})})
             );
-            put(16, new CombatZoneCard(16, //FIXME in case of rework to combat zone( sicuramente ).
-                new iCardResponse[]{
-                    new CombatZoneProjectilesResponse(),
-                    new StaffCardResponse(-2),
-                    new DaysCardResponse(3)},
+            put(16, new CombatZoneCard(16,
                 new ProjectileArray(
                     new Projectile[]{
                     new Projectile(ProjectileDirection.U000, ProjectileDimension.SMALL),
-                    new Projectile(ProjectileDirection.U000, ProjectileDimension.BIG)}))
+                    new Projectile(ProjectileDirection.U000, ProjectileDimension.BIG)}),
+                new CombatZoneLine[]{
+                    CombatZoneLine.LEAST_CREW,
+                    CombatZoneLine.LEAST_ENGINE,
+                    CombatZoneLine.LEAST_CANNON},
+                new ClientMessage[]{
+                    new MoveOnBoardMessage(-3),
+                    new AskRemoveCrewMessage(2),
+                    null},
+                CombatZoneLine.LEAST_ENGINE,
+                CardResponseType.REMOVE_CREW)
             );
             put(17, new AbandonedShipCard(17, 1, 2, 3));
             put(18, new AbandonedShipCard(18, 1, 3, 4));

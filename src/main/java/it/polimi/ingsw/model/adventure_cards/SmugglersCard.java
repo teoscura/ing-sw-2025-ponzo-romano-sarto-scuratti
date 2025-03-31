@@ -2,11 +2,11 @@
 package it.polimi.ingsw.model.adventure_cards;
 
 import it.polimi.ingsw.exceptions.NegativeArgumentException;
-import it.polimi.ingsw.model.adventure_cards.responses.DaysCardResponse;
-import it.polimi.ingsw.model.adventure_cards.responses.SmugglerCardPenaltyResponse;
-import it.polimi.ingsw.model.adventure_cards.responses.SmugglerCardRewardResponse;
-import it.polimi.ingsw.model.adventure_cards.responses.iCardResponse;
-import it.polimi.ingsw.model.adventure_cards.responses.iPlayerResponse;
+import it.polimi.ingsw.message.client.AskRemoveMerchMessage;
+import it.polimi.ingsw.message.client.AskTurnOnMessage;
+import it.polimi.ingsw.message.client.ClientMessage;
+import it.polimi.ingsw.message.client.SmugglerRewardMessage;
+import it.polimi.ingsw.model.ModelInstance;
 import it.polimi.ingsw.model.adventure_cards.utils.*;
 import it.polimi.ingsw.model.player.iSpaceShip;
 
@@ -27,16 +27,39 @@ public class SmugglersCard extends Card{
     }
 
     @Override
-    public iCardResponse apply(iSpaceShip ship, iPlayerResponse response){
-        if(ship==null) throw new NullPointerException();
+    public ClientMessage getRequest() {
+        return new AskTurnOnMessage();
+    }
+
+    @Override
+	public CardResponseType getResponse() {
+		return CardResponseType.TURNON_ACCEPT;
+	}
+
+	@Override
+	public CardResponseType getAfterResponse() {
+		return this.after_response;
+	}
+
+	@Override
+	public CardOrder getOrder() {
+		return CardOrder.NORMAL;
+	}
+
+	@Override
+	public ClientMessage apply(ModelInstance model, iSpaceShip ship, PlayerResponse response) {
+		if(ship==null) throw new NullPointerException();
+        this.after_response = CardResponseType.NONE;
         if(ship.getCannonPower()>this.min_power){
+            this.after_response = CardResponseType.FIGHT_REWARD_CARGO;
             this.exhaust();
-            return new SmugglerCardRewardResponse(reward, this.days);
+            return new SmugglerRewardMessage(this.reward.getContains(), this.days);
         }
         else if(ship.getCannonPower()==this.min_power){
-            return new DaysCardResponse(0);
+            return null;
         }
-        return new SmugglerCardPenaltyResponse(this.cargo_taken);
-    }
+        this.after_response = CardResponseType.REMOVE_CREW;
+        return new AskRemoveMerchMessage(this.cargo_taken);
+	}
 
 }

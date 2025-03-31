@@ -343,6 +343,7 @@ public class SpaceShip implements iSpaceShip{
 	public void setCenterCabin(ShipCoords new_center) {
 		if(this.type.isForbidden(new_center) || this.getComponent(new_center)==this.empty) throw new IllegalTargetException("New center is either forbidden or illegal.");
 		this.center = new_center;
+		this.verifyAndClean();
 	}
 
 	@Override

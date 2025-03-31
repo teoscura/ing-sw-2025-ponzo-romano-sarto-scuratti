@@ -41,15 +41,19 @@ package Controller{
             {method} + updateShipValidationResult(boolean, VerifyResult[]) : void 
 
             {method} + updateTurn(int, PlayerColor) : void 
+            {method} + askTurnOn() : void
             {method} + askRemoveCrew(int) : void
             {method} + askRemoveCargo(int) : void
             {method} + askChooseNewCabin() : void
             {method} + giveCargo(int[]) : void
+            {method} + offerReward(int, int) : void
+            {method} + offerReward(int[], int) : void
             {method} + earnCredits(int) : void
-            {method} + askLanding() : void
+            {method} + askLanding(boolean[], int) : void
 
             {method} + setLost();
             {method} + moveOnBoard(PlayerColor, int) : void 
+            {method} + moveOnBoard(int) : void 
             {method} + pauseGame() : void 
             {method} + endGame() : void 
             {method} + ping() : void 
@@ -68,15 +72,19 @@ package Controller{
             {method} + updateShipValidationResult(boolean, VerifyResult[]) : void 
 
             {method} + updateTurn(int, PlayerColor) : void 
+            {method} + askTurnOn() : void
             {method} + askRemoveCrew(int) : void
             {method} + askRemoveCargo(int) : void
             {method} + askChooseNewCabin() : void
             {method} + giveCargo(int[]) : void
+            {method} + offerReward(int, int) : void
+            {method} + offerReward(int[], int) : void
             {method} + earnCredits(int) : void
-            {method} + askLanding() : void
+            {method} + askLanding(boolean[], int) : void
 
             {method} + setLost();
             {method} + moveOnBoard(PlayerColor, int) : void 
+            {method} + moveOnBoard(int) : void 
             {method} + pauseGame() : void 
             {method} + endGame() : void 
             {method} + ping() : void 
@@ -375,13 +383,18 @@ package Controller{
 
             }
 
+            ClientMessage^.... AskTurnOnMessage
+            class AskTurnOnMessage{
+
+            }
+
             ClientMessage^.. AskRemoveCrewMessage
             class AskRemoveCrewMessage{
 
             }
 
-            ClientMessage^.... RemoveMerchMessage
-            class RemoveMerchMessage{
+            ClientMessage^.... AskRemoveMerchMessage
+            class AskRemoveMerchMessage{
 
             }
 
@@ -407,6 +420,21 @@ package Controller{
 
             ClientMessage^.. MoveOnBoardMessage
             class MoveOnBoardMessage{
+
+            }
+
+            ClientMessage^.. FightRewardMessage
+            class FightRewardMessage{
+
+            }
+
+            ClientMessage^.. SmugglersRewardMessage
+            class SmugglersRewardMessage{
+                
+            }
+
+            ClientMessage^.. GameLostMessage
+            class GameLostMessage{
 
             }
 
