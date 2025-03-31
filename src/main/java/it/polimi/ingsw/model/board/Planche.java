@@ -51,8 +51,6 @@ public class Planche implements iPlanche {
 		this.planche.put(ship.getColor(), position);
 	}
 
-
-
 	@Override
 	public List<PlayerColor> getOrder(){
 		return this.planche.entrySet().stream().sorted().map(m -> m.getKey()).toList();

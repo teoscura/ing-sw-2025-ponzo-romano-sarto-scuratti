@@ -16,7 +16,7 @@ public enum GameModeType{
 	private int min_y;
 	private int max_y;	
 
-	GameModeType(int level, boolean lifesupports, int height, int width, int length, int min_x, int max_x, int min_y, int max_y){
+  GameModeType(int level, boolean lifesupports, int height, int width, int length, int min_x, int max_x, int min_y, int max_y){
 		this.level = level;
 		this.lifesupports = lifesupports;
 		this.height = height;
@@ -32,7 +32,7 @@ public enum GameModeType{
 		return this.level;
 	}
 
-	public boolean getLifeSupport(){
+  public boolean getLifeSupport(){
 		return this.lifesupports;
 	}
 
@@ -83,8 +83,7 @@ public enum GameModeType{
     }
 
 	public boolean isForbidden(ShipCoords coords){
-
-		int tmp = coords.y*this.width+coords.x;
+  int tmp = coords.y*this.width+coords.x;
 		for(int i : this.getShape()){
 			if(i==tmp) return true;
 		}
