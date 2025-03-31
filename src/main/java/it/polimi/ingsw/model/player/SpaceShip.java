@@ -186,11 +186,8 @@ public class SpaceShip implements iSpaceShip{
 		iBaseComponent tmp = this.getComponent(coords);
 		if (this.components[coords.y][coords.x] == this.empty) return;
 		this.components[coords.y][coords.x] = this.empty;
-		/*if coords == this.getCenterCabin{
-			setNewCenterCabin();
-		}*/
 		tmp.onDelete(this);
-		this.verifyAndClean();
+		//verify and clean needs to be called outside when component is removed
 	}
 
 	@Override

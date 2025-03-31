@@ -163,7 +163,6 @@ class SpaceShipTest {
         ship.addComponent(component2, coords2);
         ship.removeComponent(coords1);
         assertEquals(ship.getEmpty(), ship.getComponent(coords1));
-        assertEquals(ship.getEmpty(), ship.getComponent(coords2));
     }
 
     @Test
