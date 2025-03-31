@@ -10,6 +10,7 @@ public class Cards implements iCards {
 
 	private Queue<iCard> cards;
 
+	//TODO FIXME.
 	public Cards(Set<iCard> cards){
 		this.cards = new ArrayDeque<iCard>(cards);
 	}

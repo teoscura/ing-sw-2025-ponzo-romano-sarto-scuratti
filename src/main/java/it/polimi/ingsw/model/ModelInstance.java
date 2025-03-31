@@ -35,6 +35,15 @@ public class ModelInstance {
         }
     }
 
+    public void startVoyage(){
+        //TODO
+    }
+
+    public int[] getShowed(){
+        //TODO
+        return null;
+    }
+
     public PlayerCount getCount(){
         return this.count;
     }
@@ -52,7 +61,7 @@ public class ModelInstance {
         return planche;
     }
 
-    public iCard pickCard(int i){
+    public iCard pickCard(){
         //TODO
         return null;
     }
