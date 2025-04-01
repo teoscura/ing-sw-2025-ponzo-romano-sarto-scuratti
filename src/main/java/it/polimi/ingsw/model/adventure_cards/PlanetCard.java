@@ -3,10 +3,11 @@ package it.polimi.ingsw.model.adventure_cards;
 
 import it.polimi.ingsw.model.player.*;
 import it.polimi.ingsw.exceptions.ArgumentTooBigException;
-import it.polimi.ingsw.message.client.AskLandingMessage;
+import it.polimi.ingsw.exceptions.OutOfBoundsException;
 import it.polimi.ingsw.message.client.ClientMessage;
-import it.polimi.ingsw.message.client.PlanetMessage;
 import it.polimi.ingsw.model.ModelInstance;
+import it.polimi.ingsw.model.adventure_cards.state.CardState;
+import it.polimi.ingsw.model.adventure_cards.state.PlanetAnnounceState;
 import it.polimi.ingsw.model.adventure_cards.utils.CardOrder;
 import it.polimi.ingsw.model.adventure_cards.utils.CardResponseType;
 import it.polimi.ingsw.model.adventure_cards.utils.Planet;
@@ -24,35 +25,23 @@ public class PlanetCard extends Card {
 	}
 
 	@Override
-    public ClientMessage getRequest() {
-        return new AskLandingMessage(planets, this.days);
-    }
-
-	@Override
-	public CardResponseType getResponse() {
-		return CardResponseType.LAND_CHOICE;
+	public CardState getState(ModelInstance model) {
+		return new PlanetAnnounceState(ASAS);
 	}
 
-	@Override
-	public CardResponseType getAfterResponse() {
-		return this.after_response;
+	public Planet getPlanet(int id){
+		if(id<0||id>this.planets.length) throw new OutOfBoundsException("Id is not valid");
+		return this.planets[id];
 	}
 
-	@Override
-	public CardOrder getOrder() {
-		return CardOrder.NORMAL;
-	}
-
-	@Override
-	public ClientMessage apply(ModelInstance model, iSpaceShip ship, PlayerResponse response) {
+	public Planet apply(ModelInstance model, iSpaceShip ship, PlayerResponse response) {
 		if(ship==null||response==null) throw new NullPointerException();
 		if(response.getId()>=this.planets.length) throw new ArgumentTooBigException( "Sent a planet id larger than the list.");
-		this.after_response=CardResponseType.NONE;
 		if(response.getId()==-1 || this.planets[response.getId()].getVisited()) return null;
-		this.after_response = CardResponseType.TAKE_CARGO;
 		this.left--;
+		this.planets[response.getId()].visit();
 		if(left==0) this.exhaust();
-		return new PlanetMessage(this.planets[response.getId()].getContains(), this.days);
+		return this.planets[response.getId()];
 	}
 
 }

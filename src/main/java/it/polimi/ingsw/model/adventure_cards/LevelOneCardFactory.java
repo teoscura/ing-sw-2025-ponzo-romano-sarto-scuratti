@@ -2,9 +2,7 @@ package it.polimi.ingsw.model.adventure_cards;
 
 import java.util.HashMap;
 
-import it.polimi.ingsw.message.client.AskRemoveCrewMessage;
 import it.polimi.ingsw.message.client.ClientMessage;
-import it.polimi.ingsw.message.client.MoveOnBoardMessage;
 import it.polimi.ingsw.model.adventure_cards.enums.ProjectileDimension;
 import it.polimi.ingsw.model.adventure_cards.enums.ProjectileDirection;
 import it.polimi.ingsw.model.adventure_cards.utils.*;
@@ -64,27 +62,27 @@ public class LevelOneCardFactory implements iCardFactory {
             );
             put(12, new PlanetCard(12, 3,
                 new Planet[]{
-                new Planet(new int[]{3,1,0,1}),
-                new Planet(new int[]{1,0,1,1}),
-                new Planet(new int[]{3,0,0,1}),
-                new Planet(new int[]{0,1,0,1})})
+                    new Planet(new int[]{3,1,0,1}),
+                    new Planet(new int[]{1,0,1,1}),
+                    new Planet(new int[]{3,0,0,1}),
+                    new Planet(new int[]{0,1,0,1})})
             );
             put(13, new PlanetCard(13, 2, 
                 new Planet[]{
-                new Planet(new int[]{0,0,0,2}),
-                new Planet(new int[]{2,0,0,1}),
-                new Planet(new int[]{0,0,1,0})})
+                    new Planet(new int[]{0,0,0,2}),
+                    new Planet(new int[]{2,0,0,1}),
+                    new Planet(new int[]{0,0,1,0})})
             );
             put(14, new PlanetCard(14, 3,
                 new Planet[]{
-                new Planet(new int[]{2,1,1,0}),
-                new Planet(new int[]{0,0,2,0})})
+                    new Planet(new int[]{2,1,1,0}),
+                    new Planet(new int[]{0,0,2,0})})
             );
             put(15, new PlanetCard(15, 1, 
                 new Planet[]{
-                new Planet(new int[]{0,2,0,0}),
-                new Planet(new int[]{0,0,1,0}),
-                new Planet(new int[]{3,0,0,0})})
+                    new Planet(new int[]{0,2,0,0}),
+                    new Planet(new int[]{0,0,1,0}),
+                    new Planet(new int[]{3,0,0,0})})
             );
             put(16, new CombatZoneCard(16,
                 new ProjectileArray(

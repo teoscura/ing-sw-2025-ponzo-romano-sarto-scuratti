@@ -3,18 +3,13 @@ package it.polimi.ingsw.model.adventure_cards;
 
 import java.util.ArrayList;
 
-import it.polimi.ingsw.controller.server.state.GameState;
 import it.polimi.ingsw.exceptions.PlayerNotFoundException;
-import it.polimi.ingsw.message.client.ClientMessage;
-import it.polimi.ingsw.message.client.GameLostMessage;
-import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.ModelInstance;
-import it.polimi.ingsw.model.adventure_cards.utils.CardOrder;
-import it.polimi.ingsw.model.adventure_cards.utils.CardResponseType;
-import it.polimi.ingsw.model.adventure_cards.utils.PlayerResponse;
+import it.polimi.ingsw.model.adventure_cards.state.CardState;
+import it.polimi.ingsw.model.adventure_cards.state.EpidemicState;
 import it.polimi.ingsw.model.adventure_cards.visitors.CrewRemoveVisitor;
+import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.ShipCoords;
-import it.polimi.ingsw.model.player.iSpaceShip;
 
 public class EpidemicCard extends Card{
     
@@ -23,30 +18,22 @@ public class EpidemicCard extends Card{
     }
 
     @Override
-    public GameState getState() {
-        return new NoResponseState();
+    public CardState getState(ModelInstance model){
+        return new EpidemicState(model, this);
     }
 
-    @Override
-    public void validateResponse(ServerMessage response) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'validateResponse'");
-    }
-    
-    private void apply(ModelInstance model, iSpaceShip ship, PlayerResponse response) throws PlayerNotFoundException{
-        if(ship==null||response==null) throw new NullPointerException();
-        this.after_response = CardResponseType.NONE;
-        ArrayList<ShipCoords> ill_cabins = ship.findConnectedCabins();
-        CrewRemoveVisitor v = new CrewRemoveVisitor(ship);
+
+    public void apply(ModelInstance model, Player p) throws PlayerNotFoundException{
+        if(model==null||p==null) throw new NullPointerException();
+        ArrayList<ShipCoords> ill_cabins = p.getSpaceShip().findConnectedCabins();
+        CrewRemoveVisitor v = new CrewRemoveVisitor(p.getSpaceShip());
         for(ShipCoords s : ill_cabins){
-            ship.getComponent(s).check(v);
+            p.getSpaceShip().getComponent(s).check(v);
         }
-        ship.updateShip();
-        if(ship.getTotalCrew()==0) {
-            model.loseGame(ship.getColor());
-            return new GameLostMessage();
+        p.getSpaceShip().updateShip();
+        if(p.getSpaceShip().getTotalCrew()==0) {
+            model.loseGame(p.getSpaceShip().getColor());
         }
-        return null;
     }
 
 }

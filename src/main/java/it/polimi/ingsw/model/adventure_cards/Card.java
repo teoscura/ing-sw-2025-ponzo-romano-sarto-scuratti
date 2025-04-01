@@ -22,6 +22,11 @@ public abstract class Card implements iCard {
     }
 
     @Override
+    public int getDays(){
+        return this.days;
+    }
+
+    @Override
     public boolean getExhausted(){
         return this.exhausted;
     }

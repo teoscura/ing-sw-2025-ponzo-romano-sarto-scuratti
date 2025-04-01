@@ -1,14 +1,11 @@
 package it.polimi.ingsw.model.adventure_cards;
 
-import it.polimi.ingsw.message.client.AskTurnOnMessage;
-import it.polimi.ingsw.message.client.BrokenCabinMessage;
-import it.polimi.ingsw.message.client.ClientMessage;
 import it.polimi.ingsw.model.ModelInstance;
-import it.polimi.ingsw.model.adventure_cards.utils.CardOrder;
-import it.polimi.ingsw.model.adventure_cards.utils.CardResponseType;
-import it.polimi.ingsw.model.adventure_cards.utils.PlayerResponse;
+import it.polimi.ingsw.model.adventure_cards.state.CardState;
+import it.polimi.ingsw.model.adventure_cards.state.MeteorAnnounceState;
+import it.polimi.ingsw.model.adventure_cards.utils.Projectile;
 import it.polimi.ingsw.model.adventure_cards.utils.ProjectileArray;
-import it.polimi.ingsw.model.player.iSpaceShip;
+import it.polimi.ingsw.model.player.Player;
 
 public class MeteorSwarmCard extends Card{
 
@@ -20,32 +17,17 @@ public class MeteorSwarmCard extends Card{
     }
 
     @Override
-    public ClientMessage getRequest() {
-        return new AskTurnOnMessage();
+    public CardState getState(ModelInstance model) {
+        return new MeteorAnnounceState(model, this, meteorites);
     }
 
-    @Override
-    public CardResponseType getResponse() {
-        return CardResponseType.TURNON_ACCEPT;
+    public Projectile[] getMeteorites(){
+        return this.meteorites.getProjectiles().clone();
     }
 
-    @Override
-    public CardResponseType getAfterResponse() {
-        return this.after_response;
-    }
-
-    @Override
-    public CardOrder getOrder() {
-        return CardOrder.METEORS;
-    }
-
-    @Override
-    public ClientMessage apply(ModelInstance model, iSpaceShip ship, PlayerResponse response){
-        if(model==null||ship==null) throw new NullPointerException();
-        this.after_response=CardResponseType.NONE;
-        boolean broken_center_cabin = ship.handleMeteorite(this.meteorites.getProjectiles()[response.getId()]);
-        if(broken_center_cabin) return new BrokenCabinMessage();
-        return null;
+    public boolean apply(Player p, Projectile meteorite){
+        if(p==null) throw new NullPointerException();
+        return p.getSpaceShip().handleMeteorite(meteorite);
     }
 
 }

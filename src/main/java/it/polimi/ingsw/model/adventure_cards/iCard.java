@@ -1,13 +1,12 @@
 //Done.
 package it.polimi.ingsw.model.adventure_cards;
 
-import it.polimi.ingsw.controller.server.state.GameState;
-import it.polimi.ingsw.message.server.ServerMessage;
+import it.polimi.ingsw.model.ModelInstance;
+import it.polimi.ingsw.model.adventure_cards.state.CardState;
 
 public interface iCard {
     public int getId();
-
-    public GameState getState();
-    public void validateResponse(ServerMessage response);
+    public int getDays();
+    public CardState getState(ModelInstance model);
     public boolean getExhausted();
 }

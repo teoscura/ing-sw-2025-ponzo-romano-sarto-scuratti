@@ -2,11 +2,7 @@ package it.polimi.ingsw.model.adventure_cards;
 
 import it.polimi.ingsw.exceptions.NegativeArgumentException;
 import it.polimi.ingsw.exceptions.PlayerNotFoundException;
-import it.polimi.ingsw.message.client.AskRemoveCrewMessage;
-import it.polimi.ingsw.message.client.AskTurnOnMessage;
 import it.polimi.ingsw.message.client.ClientMessage;
-import it.polimi.ingsw.message.client.FightRewardMessage;
-import it.polimi.ingsw.message.client.GameLostMessage;
 import it.polimi.ingsw.model.ModelInstance;
 import it.polimi.ingsw.model.adventure_cards.utils.CardOrder;
 import it.polimi.ingsw.model.adventure_cards.utils.CardResponseType;

@@ -2,16 +2,14 @@
 package it.polimi.ingsw.model.adventure_cards;
 
 import it.polimi.ingsw.exceptions.NegativeArgumentException;
-import it.polimi.ingsw.message.client.AskLandingMessage;
-import it.polimi.ingsw.message.client.ClientMessage;
-import it.polimi.ingsw.message.client.PlanetMessage;
 import it.polimi.ingsw.model.ModelInstance;
 import it.polimi.ingsw.model.adventure_cards.exceptions.CrewSizeException;
+import it.polimi.ingsw.model.adventure_cards.state.AbandonedStationAnnounceState;
+import it.polimi.ingsw.model.adventure_cards.state.CardState;
 import it.polimi.ingsw.model.adventure_cards.utils.CardOrder;
-import it.polimi.ingsw.model.adventure_cards.utils.CardResponseType;
 import it.polimi.ingsw.model.adventure_cards.utils.Planet;
 import it.polimi.ingsw.model.adventure_cards.utils.PlayerResponse;
-import it.polimi.ingsw.model.player.iSpaceShip;
+import it.polimi.ingsw.model.player.Player;
 
 public class AbandonedStationCard extends Card{
     
@@ -27,37 +25,25 @@ public class AbandonedStationCard extends Card{
     }
 
     @Override
-    public ClientMessage getRequest() {
-        return new AskLandingMessage(this.days);
+    public CardState getState(ModelInstance model){
+        return new AbandonedStationAnnounceState(model, this, model.getOrder(CardOrder.NORMAL));
     }
 
-    @Override
-    public CardResponseType getResponse() {
-        return CardResponseType.LAND_CHOICE;
+    public Planet getPlanet(){
+        return this.planet;
     }
 
-    @Override
-    public CardResponseType getAfterResponse() {
-        return this.after_response;
+    public int getCrewLost(){
+        return this.crew;
     }
 
-    @Override
-    public CardOrder getOrder() {
-        return CardOrder.NORMAL;
-    }
-
-    @Override
-    public ClientMessage apply(ModelInstance model, iSpaceShip ship, PlayerResponse response){
-        if(model==null||ship==null||response==null) throw new NullPointerException();
-        this.after_response = CardResponseType.NONE;
+    public void apply(ModelInstance model, Player p, PlayerResponse response){ //TODO landingresponse.
+        if(model==null||p==null||response==null) throw new NullPointerException();
         if(response.getId()==0){
-            if(ship.getTotalCrew()<this.crew) throw new CrewSizeException("Crew too small to salvage station.");
+            if(p.getSpaceShip().getTotalCrew()<this.crew) throw new CrewSizeException("Crew too small to salvage station.");
             this.exhaust();
-            model.getPlanche().movePlayer(ship, -this.days);
-            this.after_response = CardResponseType.TAKE_CARGO;
-            return new PlanetMessage(this.planet.getContains(), this.days);
+            model.getPlanche().movePlayer(p.getColor(), -this.days);
         }
-        return null;
     }
 
 }

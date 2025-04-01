@@ -31,26 +31,6 @@ public class PiratesCard extends Card{
     }
 
     @Override
-    public ClientMessage getRequest() {
-        return new AskTurnOnMessage();
-    }
-
-    @Override
-    public CardResponseType getResponse() {
-        return CardResponseType.TURNON_ACCEPT;
-    }
-
-    @Override
-    public CardResponseType getAfterResponse() {
-        return this.after_response;
-    }
-
-    @Override
-    public CardOrder getOrder() {
-        return CardOrder.NORMAL;
-    }
-
-    @Override
     public ClientMessage apply(ModelInstance model, iSpaceShip ship, PlayerResponse response) {
         if(model==null||ship==null) throw new NullPointerException();
         this.after_response = CardResponseType.NONE;

@@ -1,14 +1,12 @@
 //Done.
 package it.polimi.ingsw.model.adventure_cards;
 
-import it.polimi.ingsw.message.client.AskLandingMessage;
-import it.polimi.ingsw.message.client.AskRemoveCrewMessage;
-import it.polimi.ingsw.message.client.ClientMessage;
 import it.polimi.ingsw.model.ModelInstance;
+import it.polimi.ingsw.model.adventure_cards.state.AbandonedShipAnnounceState;
+import it.polimi.ingsw.model.adventure_cards.state.CardState;
 import it.polimi.ingsw.model.adventure_cards.utils.CardOrder;
-import it.polimi.ingsw.model.adventure_cards.utils.CardResponseType;
 import it.polimi.ingsw.model.adventure_cards.utils.PlayerResponse;
-import it.polimi.ingsw.model.player.iSpaceShip;
+import it.polimi.ingsw.model.player.Player;
     
 public class AbandonedShipCard extends Card{
 
@@ -23,38 +21,24 @@ public class AbandonedShipCard extends Card{
     }
 
     @Override
-    public ClientMessage getRequest() {
-        return new AskLandingMessage(this.days);
+    public CardState getState(ModelInstance model) {
+        return new AbandonedShipAnnounceState(model, this, model.getOrder(CardOrder.NORMAL));
     }
 
-    @Override
-    public CardResponseType getResponse() {
-        return CardResponseType.LAND_CHOICE;
+    public int getCredits(){
+        return this.credits_gained;
     }
 
-    @Override
-    public CardResponseType getAfterResponse() {
-        return this.after_response;
+    public int getCrewLost(){
+        return this.getCrewLost();
     }
 
-    @Override
-    public CardOrder getOrder() {
-        return CardOrder.NORMAL;
-    }
-
-    @Override
-    public ClientMessage apply(ModelInstance model, iSpaceShip ship, PlayerResponse response){
-        if(model==null||ship==null||response==null) throw new NullPointerException();
-        this.after_response = CardResponseType.NONE;
+    public void apply(ModelInstance model, Player p, PlayerResponse response){ //TODO landingresponse.
+        if(model==null||p==null||response==null) throw new NullPointerException();
         if(response.getId()==0){
-            if(ship.getTotalCrew()<=this.crew_lost) throw new IllegalArgumentException("The crew isn't big enough for this abandoned ship.");
-            ship.giveCredits(this.credits_gained);
-            model.getPlanche().movePlayer(ship, this.days);
+            if(p.getSpaceShip().getTotalCrew()<=this.crew_lost) throw new IllegalArgumentException("The crew isn't big enough for this abandoned ship.");
             this.exhaust();
-            this.after_response = CardResponseType.REMOVE_CREW;
-            return new AskRemoveCrewMessage(this.crew_lost);
         }        
-        return null;
     }
 
 }

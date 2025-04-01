@@ -2,13 +2,11 @@
 package it.polimi.ingsw.model.adventure_cards;
 
 import it.polimi.ingsw.exceptions.NegativeArgumentException;
-import it.polimi.ingsw.message.client.AskRemoveMerchMessage;
-import it.polimi.ingsw.message.client.AskTurnOnMessage;
-import it.polimi.ingsw.message.client.ClientMessage;
-import it.polimi.ingsw.message.client.SmugglerRewardMessage;
 import it.polimi.ingsw.model.ModelInstance;
+import it.polimi.ingsw.model.adventure_cards.state.CardState;
+import it.polimi.ingsw.model.adventure_cards.state.SmugglersAnnounceState;
 import it.polimi.ingsw.model.adventure_cards.utils.*;
-import it.polimi.ingsw.model.player.iSpaceShip;
+import it.polimi.ingsw.model.player.Player;
 
 public class SmugglersCard extends Card{
     
@@ -16,7 +14,6 @@ public class SmugglersCard extends Card{
     private final int cargo_taken;
     private final int min_power;
     
-
     public SmugglersCard(int id, int days, Planet reward, int cargo_taken, int min_power){
         super(id, days);
         if(reward == null) throw new NullPointerException();
@@ -27,39 +24,28 @@ public class SmugglersCard extends Card{
     }
 
     @Override
-    public ClientMessage getRequest() {
-        return new AskTurnOnMessage();
+    public CardState getState(ModelInstance model) {
+        return new SmugglersAnnounceState(model, this);
     }
 
-    @Override
-	public CardResponseType getResponse() {
-		return CardResponseType.TURNON_ACCEPT;
-	}
+    public Planet getReward(){
+        return this.reward;
+    }
 
-	@Override
-	public CardResponseType getAfterResponse() {
-		return this.after_response;
-	}
+    public int getCargoPenalty(){
+        return this.cargo_taken;
+    }
 
-	@Override
-	public CardOrder getOrder() {
-		return CardOrder.NORMAL;
-	}
-
-	@Override
-	public ClientMessage apply(ModelInstance model, iSpaceShip ship, PlayerResponse response) {
-		if(ship==null) throw new NullPointerException();
-        this.after_response = CardResponseType.NONE;
-        if(ship.getCannonPower()>this.min_power){
-            this.after_response = CardResponseType.FIGHT_REWARD_CARGO;
+	public boolean apply(ModelInstance model, Player p) {
+		if(p==null) throw new NullPointerException();
+        if(p.getSpaceShip().getCannonPower()>this.min_power){
             this.exhaust();
-            return new SmugglerRewardMessage(this.reward.getContains(), this.days);
+            return true;
         }
-        else if(ship.getCannonPower()==this.min_power){
-            return null;
+        else if(p.getSpaceShip().getCannonPower()==this.min_power){
+            return true;
         }
-        this.after_response = CardResponseType.REMOVE_CREW;
-        return new AskRemoveMerchMessage(this.cargo_taken);
+        return false;
 	}
 
 }
