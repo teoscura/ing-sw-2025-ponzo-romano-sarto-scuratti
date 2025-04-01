@@ -53,6 +53,6 @@ public class Planche implements iPlanche {
 
 	@Override
 	public List<PlayerColor> getOrder(){
-		return this.planche.entrySet().stream().sorted().map(m -> m.getKey()).toList();
+		return this.planche.entrySet().stream().sorted(Comparator.comparingInt(Entry::getValue)).map(Entry::getKey).toList();
 	}
 }
