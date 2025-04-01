@@ -1,21 +1,13 @@
 //Done.
 package it.polimi.ingsw.model.adventure_cards;
 
-import it.polimi.ingsw.model.adventure_cards.utils.CardOrder;
-import it.polimi.ingsw.model.adventure_cards.utils.CardResponseType;
-import it.polimi.ingsw.model.adventure_cards.utils.PlayerResponse;
-import it.polimi.ingsw.model.player.iSpaceShip;
-import it.polimi.ingsw.exceptions.PlayerNotFoundException;
-import it.polimi.ingsw.message.client.ClientMessage;
-import it.polimi.ingsw.model.ModelInstance;
+import it.polimi.ingsw.controller.server.state.GameState;
+import it.polimi.ingsw.message.server.ServerMessage;
 
 public interface iCard {
     public int getId();
 
-    public ClientMessage getRequest();
-    public CardResponseType getResponse();
-    public CardResponseType getAfterResponse();
-    public CardOrder getOrder();
-    public ClientMessage apply(ModelInstance model, iSpaceShip ship, PlayerResponse response) throws PlayerNotFoundException;
+    public GameState getState();
+    public void validateResponse(ServerMessage response);
     public boolean getExhausted();
 }

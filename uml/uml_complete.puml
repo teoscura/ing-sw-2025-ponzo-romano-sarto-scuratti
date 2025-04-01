@@ -1,0 +1,186 @@
+@startuml controller
+hide circle
+skinparam classFontStyle bold
+skinparam groupInheritance 1
+set separator ::
+skinparam classAttributeIconSize 12
+
+package Model {
+
+    package Cards {
+
+        package Utils{
+
+        }
+
+        package Visitors{
+
+        }
+
+    }
+
+    package Board {
+
+        interface iCards <<interface>> {
+            TODO
+        }
+
+        iCards^--Cards
+        class Cards{
+            TODO
+        }
+
+        interface iCommonBoard <<interface>> {
+            TODO
+        }
+
+        iCommonBoard^..CommonBoard
+        class CommonBoard{
+            TODO
+        }
+
+        interface iPlanche <<interface>>{
+            TODO
+        }
+
+
+        iPlanche^..Planche
+        class Planche{
+            TODO
+        }
+
+    }
+
+    package Components {
+        
+        package Visitors{
+
+            interface iVisitable <<interface>>{
+                {method} + check(iVisitor) : void
+            }
+
+            interface iVisitor <<interface>>{
+                {method} + visit(CabinComponent) : void
+                {method} + visit(EngineComponent) : void
+                {method} + visit(AlienLifeSupportComponent) : void
+                {method} + visit(CannonComponent) : void
+                {method} + visit(StorageComponent) : void
+                {method} + visit(BatteryComponent) : void
+                {method} + visit(ShieldComponent) : void
+                {method} + visit(EmptyComponent) : void
+                {method} + visit(StructuralComponent) : void
+                {method} + visit(StartingCabinComponent) : void
+            }
+
+            iVisitor^..CabinVisitor
+            class CabinVisitor {
+                {field} type : AlienType
+                {method} + getSupportedType() : AlienType
+            }
+
+            iVisitor^..EnergyVisitor
+            class EnergyVisitor {
+                TODO
+            }
+
+            iVisitor^..FreeSpaceVisitor
+            class FreeSpaceVisitor {
+                TODO
+            }
+
+            iVisitor^..SpaceShipUpdateVisitor
+            class SpaceShipUpdateVisitor {
+                TODO
+            }
+        
+        }
+        
+
+        interface iBaseComponent <<interface>> {
+            TODO
+        }
+
+        Visitors::iVisitable ^--BaseComponent
+        iBaseComponent^--BaseComponent
+        abstract BaseComponent <<abstract>> {
+            TODO
+        }
+
+        BaseComponent^..AlienLifeSupportComponent
+        class AlienLifeSupportComponent{
+            TODO
+        }
+
+        BaseComponent^..BatteryComponent
+        class BatteryComponent {
+            TODO
+        }
+
+        BaseComponent^..CabinComponent
+        class CabinComponent{
+            TODO
+        }
+
+        BaseComponent^..StartingCabinComponent
+        class StartingCabinComponent{
+            TODO   
+        }
+
+        BaseComponent^..CannonComponent
+        class CannonComponent{
+            TODO
+        }
+
+        BaseComponent^..EmptyComponent
+        class EmptyComponent{
+            TODO
+        }
+
+        BaseComponent^..EngineComponent
+        class EngineComponent{
+            TODO
+        }
+
+        BaseComponent^..ShieldComponent
+        class ShieldComponent{
+            TODO
+        }
+
+        BaseComponent^..StorageComponent
+        class StorageComponent{
+            TODO
+        }
+
+        BaseComponent^..StructuralComponent
+        class StructuralComponent{
+            TODO
+        }
+
+    }
+
+    package Player {
+        
+        interface iSpaceShip <<interface>> {
+            TODO
+        }
+
+        iSpaceShip^..SpaceShip
+        class SpaceShip{
+            TODO
+        }
+
+        ShipCoords<-- 1 Components::BaseComponent
+        class ShipCoords{
+            TODO
+        }
+
+    }
+
+    class ModelInstance {
+            TODO
+    }
+ 
+}
+
+
+@enduml

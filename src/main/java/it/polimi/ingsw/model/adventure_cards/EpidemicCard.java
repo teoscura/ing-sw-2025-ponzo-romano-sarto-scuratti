@@ -3,9 +3,11 @@ package it.polimi.ingsw.model.adventure_cards;
 
 import java.util.ArrayList;
 
+import it.polimi.ingsw.controller.server.state.GameState;
 import it.polimi.ingsw.exceptions.PlayerNotFoundException;
 import it.polimi.ingsw.message.client.ClientMessage;
 import it.polimi.ingsw.message.client.GameLostMessage;
+import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.ModelInstance;
 import it.polimi.ingsw.model.adventure_cards.utils.CardOrder;
 import it.polimi.ingsw.model.adventure_cards.utils.CardResponseType;
@@ -21,27 +23,17 @@ public class EpidemicCard extends Card{
     }
 
     @Override
-    public ClientMessage getRequest() {
-        return null;
+    public GameState getState() {
+        return new NoResponseState();
     }
 
     @Override
-    public CardResponseType getResponse() {
-        return CardResponseType.NONE;
+    public void validateResponse(ServerMessage response) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'validateResponse'");
     }
-
-    @Override
-    public CardResponseType getAfterResponse() {
-        return this.after_response;
-    }
-
-    @Override
-    public CardOrder getOrder() {
-        return CardOrder.NORMAL;
-    }
-
-    @Override
-    public ClientMessage apply(ModelInstance model, iSpaceShip ship, PlayerResponse response) throws PlayerNotFoundException{
+    
+    private void apply(ModelInstance model, iSpaceShip ship, PlayerResponse response) throws PlayerNotFoundException{
         if(ship==null||response==null) throw new NullPointerException();
         this.after_response = CardResponseType.NONE;
         ArrayList<ShipCoords> ill_cabins = ship.findConnectedCabins();
