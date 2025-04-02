@@ -5,10 +5,11 @@ import it.polimi.ingsw.message.server.ServerMessage;
 
 public class PlanetAnnounceState extends CardState {
 
+    
+
     @Override
     public void init() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'init'");
+        super.init();
     }
 
     @Override

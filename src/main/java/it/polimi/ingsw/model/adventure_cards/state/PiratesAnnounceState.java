@@ -4,16 +4,19 @@ import java.util.List;
 
 import it.polimi.ingsw.message.exceptions.MessageInvalidException;
 import it.polimi.ingsw.message.server.ServerMessage;
-import it.polimi.ingsw.model.adventure_cards.SmugglersCard;
+import it.polimi.ingsw.model.adventure_cards.PiratesCard;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.state.VoyageState;
 
-public class SmugglersAnnounceState extends CardState {
+public class PiratesAnnounceState extends CardState {
 
-    private final SmugglersCard card;
+    private final PiratesCard card;
     private final List<Player> list;
+    private boolean responded = false;
 
-    public SmugglersAnnounceState(VoyageState state, SmugglersCard card, List<Player> list){
+    //XXX implement allowed messages
+
+    public PiratesAnnounceState(VoyageState state, PiratesCard card, List<Player> list){
         super(state);
         if(list.size()>this.state.getCount().getNumber()||list.size()<2||list==null) throw new IllegalArgumentException("Constructed insatisfyable state");
         if(card==null) throw new NullPointerException();
@@ -28,14 +31,18 @@ public class SmugglersAnnounceState extends CardState {
 
     @Override
     public void validate(ServerMessage message) throws MessageInvalidException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'validate'");
+        message.receive(this);
+        if(!responded) return;
+        this.card.apply(this.state, this.list.getFirst());
     }
 
     @Override
     protected CardState getNext() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getNext'");
+        if(this.card.getExhausted()) return new PiratesRewardState(state, card, list);
+        if(this.list.getFirst().getSpaceShip().getBrokeCenter()) return new PiratesNewCabinState(state, card, list);
+        this.list.removeFirst();
+        if(this.list.size()!=0) return new PiratesAnnounceState(state, card, list);
+        return null;
     }
     
 }

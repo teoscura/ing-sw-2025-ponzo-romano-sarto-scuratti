@@ -3,14 +3,13 @@ package it.polimi.ingsw.model.player;
 import java.util.ArrayList;
 
 import it.polimi.ingsw.model.GameModeType;
+import it.polimi.ingsw.model.adventure_cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.adventure_cards.utils.Projectile;
 import it.polimi.ingsw.model.components.iBaseComponent;
 import it.polimi.ingsw.model.components.enums.AlienType;
 
 public interface iSpaceShip {
 
-	public int takeCredits(int amount);
-	public int giveCredits(int amount);
 	public void updateCrew(int new_num, AlienType type);
 	public VerifyResult[][] verify();
 	public void verifyAndClean();
@@ -21,9 +20,7 @@ public interface iSpaceShip {
 	public void turnOn(ShipCoords coords_target, ShipCoords battery_location);
 	public GameModeType getType();
 	public int getCannonPower();
-	public int getCredits();
 	public int[] getCrew();
-	public PlayerColor getColor();
 	public iBaseComponent getComponent(ShipCoords coords);
 	public int getEnginePower();
 	public int getEnergyPower();
@@ -32,6 +29,8 @@ public interface iSpaceShip {
 	public int getWidth();
     public iBaseComponent getEmpty();
 	public int getTotalCrew();
+	public boolean getBrokeCenter();
+	public void setBrokeCenter();
 	public void addStorageCoords(ShipCoords coords);
 	public void delStorageCoords(ShipCoords coords);
 	public void addCabinCoords(ShipCoords coords);
@@ -40,13 +39,10 @@ public interface iSpaceShip {
 	public void delBatteryCoords(ShipCoords coords);
 	public void addPowerableCoords(ShipCoords coords);
 	public void delPowerableCoords(ShipCoords coords);
-	public void setCenterCabin(ShipCoords new_center);
-	public ShipCoords getCenterCabin();
+	public void setCenter(ShipCoords new_center) throws ForbiddenCallException;
+	public ShipCoords getCenter();
     public ArrayList<ShipCoords> findConnectedCabins();
     public int countExposedConnectors();
     public boolean handleMeteorite(Projectile p);
     public boolean handleShot(Projectile p);
-
-	public void retire();
-	public boolean getRetired();
 }

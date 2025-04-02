@@ -12,6 +12,7 @@ import it.polimi.ingsw.exceptions.OutOfBoundsException;
 import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.adventure_cards.enums.ProjectileDimension;
 import it.polimi.ingsw.model.adventure_cards.enums.ProjectileDirection;
+import it.polimi.ingsw.model.adventure_cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.adventure_cards.utils.Projectile;
 import it.polimi.ingsw.model.adventure_cards.visitors.LargeMeteorVisitor;
 import it.polimi.ingsw.model.components.BatteryComponent;
@@ -21,12 +22,10 @@ import it.polimi.ingsw.model.components.iBaseComponent;
 import it.polimi.ingsw.model.components.enums.AlienType;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ConnectorType;
-import it.polimi.ingsw.model.components.exceptions.AlreadyPoweredException;
 import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
 import it.polimi.ingsw.model.components.visitors.SpaceShipUpdateVisitor;
 import it.polimi.ingsw.model.components.visitors.EnergyVisitor;
 import it.polimi.ingsw.model.player.exceptions.IllegalComponentAdd;
-import it.polimi.ingsw.model.player.exceptions.NegativeCreditsException;
 import it.polimi.ingsw.model.player.exceptions.NegativeCrewException;
 
 
@@ -36,18 +35,14 @@ public class SpaceShip implements iSpaceShip{
 	private final ArrayList<ShipCoords> cabin_coords;
 	private final ArrayList<ShipCoords> battery_coords;
 	private final ArrayList<ShipCoords> powerable_coords;
-	//Player fields
-	private final PlayerColor color;
-	private int credits;
-	private int[] crew;
-	private boolean retired = false;
-	//SpaceShip fields
 	private final GameModeType type;
 	private final iBaseComponent[][] components;
 	private final iBaseComponent empty;
+	private int[] crew;
 	private ShipCoords center;
 	private int[] containers;
 	private boolean[] shielded_directions;
+	private boolean broke_center;
 	private int cannon_power = 0;
 	private int engine_power = 0;
 	private int battery_power = 0;
@@ -55,7 +50,6 @@ public class SpaceShip implements iSpaceShip{
 	public SpaceShip(GameModeType type, 
 					 PlayerColor color){
 		this.type = type;
-		this.color = color;
 		this.components = new iBaseComponent[type.getHeight()][type.getWidth()];
 		this.shielded_directions = new boolean[4];
 		this.containers = new int[4];
@@ -89,26 +83,6 @@ public class SpaceShip implements iSpaceShip{
 	}
 
 	@Override
-	public int getCredits(){
-		return this.credits;
-	}
-
-	@Override
-	public int takeCredits(int amount){
-		if(amount<=0) throw new IllegalArgumentException("Cannot take negative credits.");
-		if((this.credits-amount)<0) throw new NegativeCreditsException("Took more credits than available.");
-		this.credits -= amount;
-		return this.credits; 
-	}
-
-	@Override
-	public int giveCredits(int amount){
-		if(amount<=0) throw new IllegalArgumentException("Cannot earn negative credits.");
-		this.credits+=amount;
-		return this.credits;
-	}
-
-	@Override
 	public void updateCrew(int new_num, AlienType type){
 		if(type.getArraypos()==-1) throw new IllegalArgumentException();
 		if(new_num<0) throw new NegativeCrewException("Cannot set a negative crew.");
@@ -121,11 +95,6 @@ public class SpaceShip implements iSpaceShip{
 	}
 
 	@Override
-	public PlayerColor getColor(){
-		return this.color;
-	}
-
-	@Override
 	public VerifyResult[][] verify() {
 		VerifyResult[][] res = new VerifyResult[this.type.getHeight()][];
 		Queue<iBaseComponent> queue = new ArrayDeque<iBaseComponent>();
@@ -133,7 +102,7 @@ public class SpaceShip implements iSpaceShip{
 			res[i] = new VerifyResult[this.type.getWidth()];
 			Arrays.fill(res[i], VerifyResult.UNCHECKED);
 		}
-		queue.add(this.getComponent(this.type.getCenterCabin()));
+		queue.add(this.getComponent(this.getCenter()));
 		iBaseComponent tmp = null;
 		while(!queue.isEmpty()){
 			tmp = queue.poll();
@@ -181,6 +150,7 @@ public class SpaceShip implements iSpaceShip{
 	@Override
 	public void removeComponent(ShipCoords coords) {
 		if (coords == null) throw new NullPointerException();
+		if(coords==this.getCenter()) this.setBrokeCenter();
 		iBaseComponent tmp = this.getComponent(coords);
 		if (this.components[coords.y][coords.x] == this.empty) return;
 		this.components[coords.y][coords.x] = this.empty;
@@ -338,14 +308,15 @@ public class SpaceShip implements iSpaceShip{
 	}
 
 	@Override
-	public void setCenterCabin(ShipCoords new_center) {
+	public void setCenter(ShipCoords new_center) throws ForbiddenCallException {
 		if(this.type.isForbidden(new_center) || this.getComponent(new_center)==this.empty) throw new IllegalTargetException("New center is either forbidden or illegal.");
+		if(!broke_center) throw new ForbiddenCallException("Cabin isn't broken");
 		this.center = new_center;
 		this.verifyAndClean();
 	}
 
 	@Override
-	public ShipCoords getCenterCabin() {
+	public ShipCoords getCenter() {
 		return this.center;
 	}
 
@@ -400,7 +371,7 @@ public class SpaceShip implements iSpaceShip{
 			if(tmp.equals(this.empty.getCoords())) return false;
 			//if (tmp==this.getCenterCabin()) return true -> gestita response nuova nave nuovo centro
 			this.removeComponent(tmp);
-			return tmp.equals(this.getCenterCabin()) ? true : false;
+			return this.broke_center;
 		}
 		boolean shielded = p.getDimension()!=ProjectileDimension.BIG && this.shielded_directions[p.getDirection().getOpposite().getShift()];
 		if(shielded) return false;
@@ -408,7 +379,7 @@ public class SpaceShip implements iSpaceShip{
 		if(tmp.equals(this.empty.getCoords())) return false;
 		if(this.getComponent(tmp).getConnectors()[p.getDirection().getOpposite().getShift()]==ConnectorType.EMPTY) return false;
 		this.removeComponent(tmp);
-		return tmp.equals(this.getCenterCabin()) ? true : false;
+		return this.broke_center;
 	}
 
 	@Override
@@ -423,7 +394,7 @@ public class SpaceShip implements iSpaceShip{
 		ShipCoords tmp = this.getFirst(p.getDirection(), index);
 		if(tmp.equals(this.empty.getCoords())) return false;
 		this.removeComponent(tmp);
-		return tmp.equals(this.getCenterCabin()) ? true : false;	
+		return this.broke_center;	
 	}	
 
 	private int normalizeRoll(ProjectileDirection direction, int roll){
@@ -478,14 +449,13 @@ public class SpaceShip implements iSpaceShip{
 	}
 
 	@Override
-	public void retire() {
-		if(retired) throw new AlreadyPoweredException("Ship is alredy retired.");
-		this.retired = true;
+	public boolean getBrokeCenter() {
+		return this.broke_center;
 	}
 
 	@Override
-	public boolean getRetired() {
-		return this.retired;
+	public void setBrokeCenter(){
+		this.broke_center = true;
 	}
 
 }

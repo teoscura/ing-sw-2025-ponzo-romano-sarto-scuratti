@@ -4,16 +4,18 @@ import java.util.List;
 
 import it.polimi.ingsw.message.exceptions.MessageInvalidException;
 import it.polimi.ingsw.message.server.ServerMessage;
-import it.polimi.ingsw.model.adventure_cards.SmugglersCard;
+import it.polimi.ingsw.model.adventure_cards.PiratesCard;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.state.VoyageState;
 
-public class SmugglersAnnounceState extends CardState {
-
-    private final SmugglersCard card;
+public class PiratesRewardState extends CardState {
+    
+    private final PiratesCard card;
     private final List<Player> list;
+    private boolean responded = false;
+    private boolean took_reward = false;
 
-    public SmugglersAnnounceState(VoyageState state, SmugglersCard card, List<Player> list){
+    public PiratesRewardState(VoyageState state, PiratesCard card, List<Player> list){
         super(state);
         if(list.size()>this.state.getCount().getNumber()||list.size()<2||list==null) throw new IllegalArgumentException("Constructed insatisfyable state");
         if(card==null) throw new NullPointerException();
@@ -28,14 +30,22 @@ public class SmugglersAnnounceState extends CardState {
 
     @Override
     public void validate(ServerMessage message) throws MessageInvalidException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'validate'");
+        message.receive(this);
+        if(!responded) return;
+        if(took_reward){
+            this.list.getFirst().giveCredits(this.card.getCredits());
+            this.state.getPlanche().movePlayer(this.list.getFirst().getColor(), this.card.getDays());
+            this.transition();
+        }
+        else{
+            this.transition();
+        }
     }
 
     @Override
     protected CardState getNext() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getNext'");
+        if(this.list.size()==1) return null;
+        this.list.removeFirst();
+        return new PiratesAnnounceState(state, card, list);
     }
-    
 }

@@ -2,11 +2,11 @@
 package it.polimi.ingsw.model.adventure_cards;
 
 import it.polimi.ingsw.exceptions.NegativeArgumentException;
-import it.polimi.ingsw.model.ModelInstance;
 import it.polimi.ingsw.model.adventure_cards.state.CardState;
 import it.polimi.ingsw.model.adventure_cards.state.SmugglersAnnounceState;
 import it.polimi.ingsw.model.adventure_cards.utils.*;
 import it.polimi.ingsw.model.player.Player;
+import it.polimi.ingsw.model.state.VoyageState;
 
 public class SmugglersCard extends Card{
     
@@ -24,8 +24,8 @@ public class SmugglersCard extends Card{
     }
 
     @Override
-    public CardState getState(ModelInstance model) {
-        return new SmugglersAnnounceState(model, this);
+    public CardState getState(VoyageState state) {
+        return new SmugglersAnnounceState(state, this, state.getOrder(CardOrder.NORMAL));
     }
 
     public Planet getReward(){
@@ -36,7 +36,7 @@ public class SmugglersCard extends Card{
         return this.cargo_taken;
     }
 
-	public boolean apply(ModelInstance model, Player p) {
+	public boolean apply(Player p) {
 		if(p==null) throw new NullPointerException();
         if(p.getSpaceShip().getCannonPower()>this.min_power){
             this.exhaust();

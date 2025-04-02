@@ -1,10 +1,10 @@
 //Done.
 package it.polimi.ingsw.model.adventure_cards;
 
-import it.polimi.ingsw.model.ModelInstance;
 import it.polimi.ingsw.model.adventure_cards.state.CardState;
 import it.polimi.ingsw.model.adventure_cards.state.StardustState;
 import it.polimi.ingsw.model.player.Player;
+import it.polimi.ingsw.model.state.VoyageState;
 
 public class StardustCard extends Card {
 
@@ -13,14 +13,14 @@ public class StardustCard extends Card {
     }
 
 	@Override
-	public CardState getState(ModelInstance model) {
-		return new StardustState(model, this);
+	public CardState getState(VoyageState state) {
+		return new StardustState(state, this);
 	}
 
-	public void apply(ModelInstance model, Player p) {
-        if(model==null||p==null) throw new NullPointerException();
+	public void apply(VoyageState state, Player p) {
+        if(state==null||p==null) throw new NullPointerException();
 		int lost_days = p.getSpaceShip().countExposedConnectors();
-        if(lost_days!=0) model.getPlanche().movePlayer(p.getColor(), -lost_days);
+        if(lost_days!=0) state.getPlanche().movePlayer(p.getColor(), -lost_days);
 	}
 
 }

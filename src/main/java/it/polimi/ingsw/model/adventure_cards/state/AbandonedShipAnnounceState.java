@@ -6,27 +6,30 @@ import it.polimi.ingsw.exceptions.PlayerNotFoundException;
 import it.polimi.ingsw.message.client.CardMessage;
 import it.polimi.ingsw.message.exceptions.MessageInvalidException;
 import it.polimi.ingsw.message.server.ServerMessage;
-import it.polimi.ingsw.model.ModelInstance;
 import it.polimi.ingsw.model.adventure_cards.AbandonedShipCard;
 import it.polimi.ingsw.model.player.Player;
+import it.polimi.ingsw.model.state.VoyageState;
 
 public class AbandonedShipAnnounceState extends CardState {
 
     private final AbandonedShipCard card;
     private final List<Player> list;
+    private boolean responded = false;
+    private int id = -1;
     
-    public AbandonedShipAnnounceState(ModelInstance model, AbandonedShipCard card, List<Player> clist) {
-        super(model);
-        if(clist.size()>this.model.getCount().getNumber()||clist.size()<2||clist==null) throw new IllegalArgumentException("Constructed insatisfyable state");
+    public AbandonedShipAnnounceState(VoyageState state, AbandonedShipCard card, List<Player> list) {
+        super(state);
+        if(list.size()>this.state.getCount().getNumber()||list.size()<2||list==null) throw new IllegalArgumentException("Constructed insatisfyable state");
         if(card==null) throw new NullPointerException();
         this.card = card;
-        this.list = clist;
+        this.list = list;
     }
 
     @Override
     public void init() {
+        super.init();
         try {
-            this.model.getPlayer(list.getFirst().getColor()).getDescriptor().sendMessage(new CardMessage(this.card.getId()));
+            this.state.getPlayer(list.getFirst().getColor()).getDescriptor().sendMessage(new CardMessage(this.card.getId()));
         } catch (PlayerNotFoundException e) {
             e.printStackTrace();
         }
@@ -34,17 +37,17 @@ public class AbandonedShipAnnounceState extends CardState {
 
     @Override
     public void validate(ServerMessage message) throws MessageInvalidException {
-        if(message.getDescriptor().getPlayer().getColor()!=this.list.getFirst().getColor()) throw new MessageInvalidException();
-        ////////////////////////////////// 
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'validate'");
+        message.receive(this);
+        if(!responded) return;
+        this.card.apply(state, this.list.getFirst(), id);
+        this.transition();
     }
 
     @Override
     protected CardState getNext() {
-        if(this.card.getExhausted()) return null;
+        if(this.card.getExhausted()) return new AbandonedShipRewardState(state, card, this.list);
         this.list.removeFirst();
-        return this.list.size() == 0 ? null : new AbandonedShipAnnounceState(model, card, this.list);
+        return this.list.size() == 0 ? null : new AbandonedShipAnnounceState(state, card, this.list);
     }
     
 }

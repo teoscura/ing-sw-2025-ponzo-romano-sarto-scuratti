@@ -2,22 +2,22 @@ package it.polimi.ingsw.model.adventure_cards.state;
 
 import java.util.List;
 
-import it.polimi.ingsw.exceptions.PlayerNotFoundException;
-import it.polimi.ingsw.message.client.CardMessage;
 import it.polimi.ingsw.message.exceptions.MessageInvalidException;
 import it.polimi.ingsw.message.server.ServerMessage;
-import it.polimi.ingsw.model.ModelInstance;
 import it.polimi.ingsw.model.adventure_cards.AbandonedStationCard;
 import it.polimi.ingsw.model.player.Player;
+import it.polimi.ingsw.model.state.VoyageState;
 
 public class AbandonedStationAnnounceState extends CardState {
 
     private final AbandonedStationCard card;
     private final List<Player> list;
+    private boolean responded = false;
+    private int id = -1;
 
-    public AbandonedStationAnnounceState(ModelInstance model, AbandonedStationCard card, List<Player> clist) {
-        super(model);
-        if(clist.size()>this.model.getCount().getNumber()||clist.size()<2||clist==null) throw new IllegalArgumentException("Constructed insatisfyable state");
+    public AbandonedStationAnnounceState(VoyageState state, AbandonedStationCard card, List<Player> clist) {
+        super(state);
+        if(clist.size()>this.state.getCount().getNumber()||clist.size()<2||clist==null) throw new IllegalArgumentException("Constructed insatisfyable state");
         if(card==null) throw new NullPointerException();
         this.card = card;
         this.list = clist;
@@ -25,24 +25,22 @@ public class AbandonedStationAnnounceState extends CardState {
 
     @Override
     public void init() {
-        try {
-            this.model.getPlayer(list.getFirst().getColor()).getDescriptor().sendMessage(new CardMessage(this.card.getId()));
-        } catch (PlayerNotFoundException e) {
-            e.printStackTrace();
-        }
+        super.init();
     }
 
     @Override
     public void validate(ServerMessage message) throws MessageInvalidException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'validate'");
+        message.receive(this);
+        if(!responded) return;
+        this.card.apply(state, this.list.getFirst(), id);
+        this.transition();
     }
 
     @Override
     protected CardState getNext() {
-        if(this.card.getExhausted()) return new AbandonedStationRewardState(model, this.list.getFirst(), this.card.getPlanet());
+        if(this.card.getExhausted()) return new AbandonedStationRewardState(state, this.list.getFirst(), this.card.getPlanet());
         this.list.removeFirst();
-        return this.list.size() == 0 ? null : new AbandonedStationAnnounceState(model, card, this.list);
+        return this.list.size() == 0 ? null : new AbandonedStationAnnounceState(state, card, this.list);
     }
     
 }

@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.adventure_cards.state;
 
 import it.polimi.ingsw.message.exceptions.MessageInvalidException;
 import it.polimi.ingsw.message.server.ServerMessage;
+import it.polimi.ingsw.model.state.VoyageState;
 
 public class CombatZoneAnnounceState extends CardState {
 

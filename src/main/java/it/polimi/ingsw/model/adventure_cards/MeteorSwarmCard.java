@@ -1,11 +1,13 @@
 package it.polimi.ingsw.model.adventure_cards;
 
-import it.polimi.ingsw.model.ModelInstance;
+import java.util.List;
+
 import it.polimi.ingsw.model.adventure_cards.state.CardState;
 import it.polimi.ingsw.model.adventure_cards.state.MeteorAnnounceState;
 import it.polimi.ingsw.model.adventure_cards.utils.Projectile;
 import it.polimi.ingsw.model.adventure_cards.utils.ProjectileArray;
 import it.polimi.ingsw.model.player.Player;
+import it.polimi.ingsw.model.state.VoyageState;
 
 public class MeteorSwarmCard extends Card{
 
@@ -17,12 +19,12 @@ public class MeteorSwarmCard extends Card{
     }
 
     @Override
-    public CardState getState(ModelInstance model) {
-        return new MeteorAnnounceState(model, this, meteorites);
+    public CardState getState(VoyageState state) {
+        return new MeteorAnnounceState(state, meteorites);
     }
 
-    public Projectile[] getMeteorites(){
-        return this.meteorites.getProjectiles().clone();
+    public List<Projectile> getMeteorites(){
+        return this.meteorites.getProjectiles();
     }
 
     public boolean apply(Player p, Projectile meteorite){

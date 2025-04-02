@@ -22,6 +22,12 @@ public class Player {
         return this.color;
     }
 
+	public int giveCredits(int amount){
+		if(amount<=0) throw new IllegalArgumentException("Cannot earn negative credits.");
+		this.credits+=amount;
+		return this.credits;
+	}
+
     public int getCredits(){
         return this.credits;
     }

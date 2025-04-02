@@ -1,41 +1,44 @@
 package it.polimi.ingsw.model.adventure_cards.state;
 
-import java.util.List;
-
 import it.polimi.ingsw.message.server.ServerMessage;
-import it.polimi.ingsw.model.ModelInstance;
-import it.polimi.ingsw.model.adventure_cards.MeteorSwarmCard;
-import it.polimi.ingsw.model.adventure_cards.iCard;
-import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.model.adventure_cards.utils.CardOrder;
+import it.polimi.ingsw.model.adventure_cards.utils.ProjectileArray;
+import it.polimi.ingsw.model.player.Player;
+import it.polimi.ingsw.model.state.VoyageState;
 
 public class MeteorNewCabinState extends CardState {
 
-    private final MeteorSwarmCard card;
-    private final List<PlayerColor> missing_cabin;
+    private final ProjectileArray left;
 
-    public MeteorNewCabinState(ModelInstance model, MeteorSwarmCard card, List<PlayerColor> missing){
-        super(model);
-        if(missing==null || card==null) throw new NullPointerException();
-        this.card = card;
-        this.missing_cabin = missing;
+    //XXX Handle allowed messages
+
+    public MeteorNewCabinState(VoyageState state, ProjectileArray left){
+        super(state);
+        if(left==null) throw new NullPointerException();
+        this.left = left;
     }
 
     @Override
     public void init() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'init'");
+        super.init();
     }
 
     @Override
     public void validate(ServerMessage message) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'validate'");
+        message.receive(this);
+        boolean missing = false;
+        for(Player p : this.state.getOrder(CardOrder.NORMAL)){
+            missing = missing || p.getSpaceShip().getBrokeCenter();
+        }
+        if(missing) return;
+        this.transition();
     }
 
     @Override
     protected CardState getNext() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getNext'");
+        if(left.getProjectiles().size()==1) return null;
+        this.left.getProjectiles().removeFirst();
+        return new MeteorAnnounceState(state, left);
     }
     
 }

@@ -2,17 +2,13 @@
 package it.polimi.ingsw.model.adventure_cards;
 
 import it.polimi.ingsw.exceptions.NegativeArgumentException;
-import it.polimi.ingsw.message.client.AskTurnOnMessage;
-import it.polimi.ingsw.message.client.BrokenCabinMessage;
-import it.polimi.ingsw.message.client.ClientMessage;
-import it.polimi.ingsw.message.client.FightRewardMessage;
-import it.polimi.ingsw.model.ModelInstance;
+import it.polimi.ingsw.model.adventure_cards.state.CardState;
+import it.polimi.ingsw.model.adventure_cards.state.PiratesAnnounceState;
 import it.polimi.ingsw.model.adventure_cards.utils.CardOrder;
-import it.polimi.ingsw.model.adventure_cards.utils.CardResponseType;
-import it.polimi.ingsw.model.adventure_cards.utils.PlayerResponse;
 import it.polimi.ingsw.model.adventure_cards.utils.Projectile;
 import it.polimi.ingsw.model.adventure_cards.utils.ProjectileArray;
-import it.polimi.ingsw.model.player.iSpaceShip;
+import it.polimi.ingsw.model.player.Player;
+import it.polimi.ingsw.model.state.VoyageState;
 
 
 public class PiratesCard extends Card{
@@ -31,23 +27,27 @@ public class PiratesCard extends Card{
     }
 
     @Override
-    public ClientMessage apply(ModelInstance model, iSpaceShip ship, PlayerResponse response) {
-        if(model==null||ship==null) throw new NullPointerException();
-        this.after_response = CardResponseType.NONE;
-        if(ship.getCannonPower()>this.min_power){
+    public CardState getState(VoyageState state) {
+        return new PiratesAnnounceState(state, this, state.getOrder(CardOrder.NORMAL));
+    }
+
+    public int getCredits(){
+        return this.credits;
+    }
+
+    public boolean apply(VoyageState state, Player p) {
+        if(state==null||p==null) throw new NullPointerException();
+        if(p.getSpaceShip().getCannonPower()>this.min_power){
             this.exhaust();
-            this.after_response = CardResponseType.FIGHT_REWARD_CREDITS;
-            return new FightRewardMessage(this.credits, this.days);
+            return true;
         }
-        else if(ship.getCannonPower()==this.min_power){
-            return null;
+        else if(p.getSpaceShip().getCannonPower()==this.min_power){
+            return false;
         }
-        boolean broken_center_cabin = false;
-        for(Projectile p : this.shots.getProjectiles()){
-            broken_center_cabin = ship.handleShot(p);
+        for(Projectile pr : this.shots.getProjectiles()){
+            p.getSpaceShip().handleShot(pr);
         }
-        if(broken_center_cabin) return new BrokenCabinMessage();
-        return null;
+        return false;
     }
     
 }

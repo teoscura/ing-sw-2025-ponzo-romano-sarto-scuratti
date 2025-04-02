@@ -1,8 +1,6 @@
 package it.polimi.ingsw.model.adventure_cards;
 
 import it.polimi.ingsw.exceptions.PlayerNotFoundException;
-import it.polimi.ingsw.message.client.AskTurnOnMessage;
-import it.polimi.ingsw.message.client.BrokenCabinMessage;
 import it.polimi.ingsw.message.client.ClientMessage;
 import it.polimi.ingsw.model.ModelInstance;
 import it.polimi.ingsw.model.adventure_cards.utils.*;
@@ -42,34 +40,13 @@ public class CombatZoneCard extends Card{
         return this.lines;
     }
 
-    @Override
-    public ClientMessage getRequest() {
-        return new AskTurnOnMessage();
-    }
-
-    @Override
-    public CardResponseType getResponse() {
-        return CardResponseType.TURNON_ACCEPT;
-    }
-
-    @Override
-    public CardResponseType getAfterResponse() {
-        return this.expected_after;
-    }
-
-    @Override
-    public CardOrder getOrder() {
-        return CardOrder.COMBATZONE;
-    }
-
     //0 least cannon, 1 least engine, 2 least crew
     @Override
-    public ClientMessage apply(ModelInstance model, iSpaceShip ship, PlayerResponse response) throws PlayerNotFoundException {
+    public ClientMessage apply(ModelInstance model, iSpaceShip ship, CombatZoneLine criteria) throws PlayerNotFoundException {
         if(ship==null || response == null) throw new NullPointerException();
-        this.after_response = CardResponseType.NONE;
         boolean broken_center_cabin = false;
-        switch(response.getId()){
-            case 0: {
+        switch(criteria){
+            case LEAST_ENGINE: {
                 if(this.messages[0]==null){
                     for(Projectile p : this.shots.getProjectiles()){
                         broken_center_cabin = ship.handleShot(p);
@@ -80,7 +57,7 @@ public class CombatZoneCard extends Card{
                 if(this.which.getNumber()==0) this.after_response=this.expected_after;
                 return this.messages[0];
             }
-            case 1: {
+            case LEAST_CREW: {
                 if(this.messages[1]==null){
                     for(Projectile p : this.shots.getProjectiles()){
                         broken_center_cabin = ship.handleShot(p);
@@ -91,7 +68,7 @@ public class CombatZoneCard extends Card{
                 if(this.which.getNumber()==1) this.after_response=this.expected_after;
                 return this.messages[1];
             }
-            case 2: {
+            case LEAST_CANNON: {
                 if(this.messages[2]==null){
                     for(Projectile p : this.shots.getProjectiles()){
                         broken_center_cabin = ship.handleShot(p);
@@ -102,7 +79,7 @@ public class CombatZoneCard extends Card{
                 if(this.which.getNumber()==2) this.after_response=this.expected_after;
                 return this.messages[2];
             }
-            default: throw new IllegalArgumentException("Invalid criteria id.");
+            default: return null;
         }
     }
 

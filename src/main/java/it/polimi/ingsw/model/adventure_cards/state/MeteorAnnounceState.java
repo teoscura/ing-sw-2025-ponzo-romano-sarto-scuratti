@@ -1,50 +1,61 @@
 package it.polimi.ingsw.model.adventure_cards.state;
 
 import java.util.Arrays;
-import java.util.List;
 
+import it.polimi.ingsw.message.client.MeteorMessage;
 import it.polimi.ingsw.message.exceptions.MessageInvalidException;
 import it.polimi.ingsw.message.server.ServerMessage;
-import it.polimi.ingsw.model.ModelInstance;
-import it.polimi.ingsw.model.adventure_cards.MeteorSwarmCard;
-import it.polimi.ingsw.model.adventure_cards.iCard;
 import it.polimi.ingsw.model.adventure_cards.utils.CardOrder;
+import it.polimi.ingsw.model.adventure_cards.utils.Projectile;
 import it.polimi.ingsw.model.adventure_cards.utils.ProjectileArray;
 import it.polimi.ingsw.model.player.Player;
-import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.model.state.VoyageState;
 
 public class MeteorAnnounceState extends CardState {
 
     private final ProjectileArray left;
     private final boolean[] responded;
-    private List<PlayerColor> broken_cabins;
-    private boolean done = false;
+    private boolean broke_cabin;
 
-    public MeteorAnnounceState(ModelInstance model, MeteorSwarmCard card, ProjectileArray array){
-        super(model);
+    //XXX todo: add handling of allowed messages.
+
+    public MeteorAnnounceState(VoyageState state, ProjectileArray array){
+        super(state);
         if(array==null) throw new NullPointerException();
         this.left = array;
-        this.responded = new boolean[model.getCount().getNumber()];
+        this.responded = new boolean[state.getCount().getNumber()];
         Arrays.fill(this.responded, false);
     }
 
     @Override
     public void init() {
-        for(Player p : this.model.getOrder(CardOrder.NORMAL)){
-            p.getDescriptor().sendMessage(new MeteorMessage(this.left.getProjectiles()[0]));
+        super.init();
+        for(Player p : this.state.getOrder(CardOrder.NORMAL)){
+            p.getDescriptor().sendMessage(new MeteorMessage(this.left.getProjectiles().getFirst()));
         }
     }
 
     @Override
     public void validate(ServerMessage message) throws MessageInvalidException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'validate'");
+        message.receive(this);
+        boolean missing = false;
+        for(boolean b : responded){
+            missing = b || missing;
+        }
+        if(missing) return;
+        for(Player p : this.state.getOrder(CardOrder.NORMAL)){
+            this.broke_cabin = p.getSpaceShip().handleMeteorite(this.left.getProjectiles().getFirst());
+        }
+        this.transition();
     }
 
     @Override
     protected CardState getNext(){
-        if(this.left.getProjectiles().length==1) return null;
-        if()
+        if(broke_cabin) return new MeteorNewCabinState(state, left);
+        this.left.getProjectiles().removeFirst();
+        //This is a memory safe workaround on the lackluster generics support that collections have.
+        if(this.left.getProjectiles().size()>0) return new MeteorAnnounceState(state, new ProjectileArray((Projectile[])this.left.getProjectiles().toArray(new Projectile[0])));
+        return null;
     }
     
 }

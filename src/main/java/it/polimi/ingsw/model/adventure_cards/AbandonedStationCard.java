@@ -2,14 +2,13 @@
 package it.polimi.ingsw.model.adventure_cards;
 
 import it.polimi.ingsw.exceptions.NegativeArgumentException;
-import it.polimi.ingsw.model.ModelInstance;
 import it.polimi.ingsw.model.adventure_cards.exceptions.CrewSizeException;
 import it.polimi.ingsw.model.adventure_cards.state.AbandonedStationAnnounceState;
 import it.polimi.ingsw.model.adventure_cards.state.CardState;
 import it.polimi.ingsw.model.adventure_cards.utils.CardOrder;
 import it.polimi.ingsw.model.adventure_cards.utils.Planet;
-import it.polimi.ingsw.model.adventure_cards.utils.PlayerResponse;
 import it.polimi.ingsw.model.player.Player;
+import it.polimi.ingsw.model.state.VoyageState;
 
 public class AbandonedStationCard extends Card{
     
@@ -25,8 +24,8 @@ public class AbandonedStationCard extends Card{
     }
 
     @Override
-    public CardState getState(ModelInstance model){
-        return new AbandonedStationAnnounceState(model, this, model.getOrder(CardOrder.NORMAL));
+    public CardState getState(VoyageState state){
+        return new AbandonedStationAnnounceState(state, this, state.getOrder(CardOrder.NORMAL));
     }
 
     public Planet getPlanet(){
@@ -37,12 +36,12 @@ public class AbandonedStationCard extends Card{
         return this.crew;
     }
 
-    public void apply(ModelInstance model, Player p, PlayerResponse response){ //TODO landingresponse.
-        if(model==null||p==null||response==null) throw new NullPointerException();
-        if(response.getId()==0){
+    public void apply(VoyageState state, Player p, int id){
+        if(state==null||p==null) throw new NullPointerException();
+        if(id==0){
             if(p.getSpaceShip().getTotalCrew()<this.crew) throw new CrewSizeException("Crew too small to salvage station.");
             this.exhaust();
-            model.getPlanche().movePlayer(p.getColor(), -this.days);
+            state.getPlanche().movePlayer(p.getColor(), -this.days);
         }
     }
 

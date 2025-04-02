@@ -1,25 +1,26 @@
 package it.polimi.ingsw.model.adventure_cards.state;
 
 import it.polimi.ingsw.message.server.ServerMessage;
-import it.polimi.ingsw.model.ModelInstance;
 import it.polimi.ingsw.model.adventure_cards.StardustCard;
 import it.polimi.ingsw.model.adventure_cards.utils.CardOrder;
 import it.polimi.ingsw.model.player.Player;
+import it.polimi.ingsw.model.state.VoyageState;
 
 public class StardustState extends CardState {
 
     private final StardustCard card;
 
-    public StardustState(ModelInstance model, StardustCard card){
-        super(model);
+    public StardustState(VoyageState state, StardustCard card){
+        super(state);
         if(card==null) throw new NullPointerException();
         this.card = card;
     }
 
     @Override
     public void init() {
-        for(Player p : this.model.getOrder(CardOrder.INVERSE)){
-            card.apply(this.model, p);
+        super.init();
+        for(Player p : this.state.getOrder(CardOrder.INVERSE)){
+            card.apply(this.state, p);
         }
         this.transition();
     }

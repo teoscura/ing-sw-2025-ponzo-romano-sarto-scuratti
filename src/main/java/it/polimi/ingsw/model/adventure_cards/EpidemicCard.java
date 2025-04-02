@@ -4,12 +4,12 @@ package it.polimi.ingsw.model.adventure_cards;
 import java.util.ArrayList;
 
 import it.polimi.ingsw.exceptions.PlayerNotFoundException;
-import it.polimi.ingsw.model.ModelInstance;
 import it.polimi.ingsw.model.adventure_cards.state.CardState;
 import it.polimi.ingsw.model.adventure_cards.state.EpidemicState;
 import it.polimi.ingsw.model.adventure_cards.visitors.CrewRemoveVisitor;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.ShipCoords;
+import it.polimi.ingsw.model.state.VoyageState;
 
 public class EpidemicCard extends Card{
     
@@ -18,13 +18,13 @@ public class EpidemicCard extends Card{
     }
 
     @Override
-    public CardState getState(ModelInstance model){
-        return new EpidemicState(model, this);
+    public CardState getState(VoyageState state){
+        return new EpidemicState(state, this);
     }
 
 
-    public void apply(ModelInstance model, Player p) throws PlayerNotFoundException{
-        if(model==null||p==null) throw new NullPointerException();
+    public void apply(VoyageState state, Player p) throws PlayerNotFoundException{
+        if(state==null||p==null) throw new NullPointerException();
         ArrayList<ShipCoords> ill_cabins = p.getSpaceShip().findConnectedCabins();
         CrewRemoveVisitor v = new CrewRemoveVisitor(p.getSpaceShip());
         for(ShipCoords s : ill_cabins){
@@ -32,7 +32,7 @@ public class EpidemicCard extends Card{
         }
         p.getSpaceShip().updateShip();
         if(p.getSpaceShip().getTotalCrew()==0) {
-            model.loseGame(p.getSpaceShip().getColor());
+            state.loseGame(p.getColor());
         }
     }
 
