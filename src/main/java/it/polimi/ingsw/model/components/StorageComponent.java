@@ -7,28 +7,27 @@ import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ConnectorType;
 import it.polimi.ingsw.model.components.enums.ShipmentType;
 import it.polimi.ingsw.model.components.enums.StorageType;
+import it.polimi.ingsw.model.components.exceptions.ContainerEmptyException;
 import it.polimi.ingsw.model.components.exceptions.ContainerFullException;
 import it.polimi.ingsw.model.components.exceptions.ContainerNotSpecialException;
 import it.polimi.ingsw.model.components.visitors.iVisitor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.player.iSpaceShip;
 
-
-//FIXME: rewrite this. this is horrible.
 public class StorageComponent extends BaseComponent{
 
-    private ShipmentType[] shipments;
+    private final int [] shipments;
+    private final StorageType type;
     private int currently_full = 0;
-    private boolean special = false;
 
     public StorageComponent(int id, 
                             ConnectorType[] connectors, 
                             ComponentRotation rotation,
                             StorageType type){
         super(id, connectors, rotation);
-        this.special = type.getSpecial();
-        this.shipments = new ShipmentType[type.getCapacity()];
-        Arrays.fill(shipments, ShipmentType.EMPTY);
+        this.type = type;
+        this.shipments = new int[4];
+        Arrays.fill(shipments, 0);
     }
 
     public StorageComponent(int id, 
@@ -37,9 +36,9 @@ public class StorageComponent extends BaseComponent{
                             StorageType type,
                             ShipCoords coords){
         super(id, connectors, rotation, coords);
-        this.special = type.getSpecial();
-        this.shipments = new ShipmentType[type.getCapacity()];
-        Arrays.fill(shipments, ShipmentType.EMPTY);
+        this.type = type;
+        this.shipments = new int[4];
+        Arrays.fill(shipments, 0);
     }
 
     @Override
@@ -48,44 +47,25 @@ public class StorageComponent extends BaseComponent{
     }
 
     public void putIn(ShipmentType shipment){
-        if(shipment==null) throw new NullPointerException();
-        if(currently_full==getCapacity()){
-            throw new ContainerFullException();
-        }
-        if(this.special==false && shipment.getSpecial()==true){
-            throw new ContainerNotSpecialException();
-        }
-        for(int i=0;i<getCapacity();i++){
-            if(shipments[i]!=ShipmentType.EMPTY){
-                continue;
-            }
-            shipments[i]=shipment;
-            currently_full++;
-            return;
-        }
+        if(shipment.getValue()<1) throw new IllegalArgumentException();
+        if(shipment.getSpecial()&&!this.type.getSpecial()) throw new ContainerNotSpecialException();
+        if(this.currently_full==this.type.getCapacity()) throw new ContainerFullException();
+        this.shipments[shipment.getValue()-1]++;
+        this.currently_full++;
     }
 
-    public boolean takeOut(ShipmentType container){
-        if(container==null) throw new NullPointerException();
-        for(int i=0;i<getCapacity();i++){
-            if(shipments[i] == container){
-                shipments[i] = ShipmentType.EMPTY;
-                currently_full--;
-                return true;
-            }
-        }
-        return false;
+    public boolean takeOut(ShipmentType shipment){
+        if(shipment.getValue()<1) throw new IllegalArgumentException();
+        if(shipment.getSpecial()&&!this.type.getSpecial()) return false;
+        if(this.currently_full==0) throw new ContainerEmptyException();
+        if(this.shipments[shipment.getValue()-1]<=0) return false;
+        this.shipments[shipment.getValue()-1]--;
+        this.currently_full--;
+        return true;
     }
 
     public int howMany(ShipmentType container){
-        if(container==null) throw new NullPointerException();
-        int tmp = 0;
-        for(int i=0; i<getCapacity(); i++){
-            if(shipments[i] == container){
-                tmp++;
-            }
-        }
-        return tmp;
+        return this.shipments[container.getValue()-1];
     }
 
     public int getFreeSpaces(){
@@ -93,7 +73,7 @@ public class StorageComponent extends BaseComponent{
     }
 
     public boolean getSpecial(){
-        return this.special;
+        return this.type.getSpecial();
     }
 
     public int getCapacity(){
