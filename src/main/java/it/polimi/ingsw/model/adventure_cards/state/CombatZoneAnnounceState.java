@@ -17,6 +17,8 @@ public class CombatZoneAnnounceState extends CardState {
     private List<Player> awaiting;
     private Player target;
 
+    //XXX implement accepted messages;
+
     public CombatZoneAnnounceState(VoyageState state, List<CombatZoneSection> sections, ProjectileArray shots){
         super(state);
         if(sections==null||shots==null) throw new NullPointerException();

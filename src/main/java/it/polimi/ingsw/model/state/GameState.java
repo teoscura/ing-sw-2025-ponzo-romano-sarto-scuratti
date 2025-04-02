@@ -25,6 +25,10 @@ public abstract class GameState {
         this.players = players;
     }
 
+    public void init(){
+        //TODO send everyone notify to change gamestate;
+    }
+
     public GameModeType getType(){
         return this.type;
     }

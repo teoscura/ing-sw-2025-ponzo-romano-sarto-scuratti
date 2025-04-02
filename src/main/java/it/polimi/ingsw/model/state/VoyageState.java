@@ -5,6 +5,9 @@ import java.util.Collections;
 import java.util.List;
 
 import it.polimi.ingsw.exceptions.PlayerNotFoundException;
+import it.polimi.ingsw.model.GameModeType;
+import it.polimi.ingsw.model.ModelInstance;
+import it.polimi.ingsw.model.PlayerCount;
 import it.polimi.ingsw.model.adventure_cards.iCard;
 import it.polimi.ingsw.model.adventure_cards.state.CardState;
 import it.polimi.ingsw.model.adventure_cards.utils.CardOrder;
@@ -18,8 +21,15 @@ public class VoyageState extends GameState {
     
     private final iPlanche planche;
     private final iCards voyage_deck;
-    private int turn;
     private CardState state;
+
+    public VoyageState(ModelInstance model, GameModeType type, PlayerCount count, Player[] players, iCards deck, iPlanche planche){
+        super(model, type, count, players);
+        if(deck==null||planche==null) throw new NullPointerException();
+        this.planche = planche;
+        this.voyage_deck = deck;
+        this.setCardState(null);
+    }
 
     public List<Player> getOrder(CardOrder order){
         List<Player> tmp = Arrays.asList(this.players);
@@ -70,20 +80,20 @@ public class VoyageState extends GameState {
         return planche;
     }
 
-    public iCard pickCard(){
-        return this.voyage_deck.pullCard();
-    }
-
     @Override
     public void setCardState(CardState next) {
         if(next==null){
             iCard card = this.voyage_deck.pullCard();
             if(card==null) this.transition();
             this.state = card.getState(this);
-            this.state.init(); 
-            this.turn++;
+            this.state.init();
         }
         this.state = next;
         next.init();
+    }
+
+    @Override
+    public GameState getNext(){
+        return new EndscreenState(model, type, count, players);
     }
 }

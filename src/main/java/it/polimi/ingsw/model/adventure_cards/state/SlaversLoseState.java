@@ -17,6 +17,8 @@ public class SlaversLoseState extends CardState {
     private boolean responded = false;
     private List<ShipCoords> coords;
 
+    //XXX implement accepted messages;
+
     protected SlaversLoseState(VoyageState state, SlaversCard card, List<Player> list){
         super(state);
         if(list.size()>this.state.getCount().getNumber()||list.size()<1||list==null) throw new IllegalArgumentException("Constructed insatisfyable state");

@@ -26,6 +26,6 @@ public class CombatZoneSection {
     }
 
     public int getAmount(){
-        return this.getAmount();
+        return this.amount;
     }
 }

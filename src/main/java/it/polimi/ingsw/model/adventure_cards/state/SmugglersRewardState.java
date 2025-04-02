@@ -20,6 +20,10 @@ public class SmugglersRewardState extends CardState {
     private List<ShipCoords> coords = null;
     private List<ShipmentType> merch = null;
 
+
+    //XXX implement accepted messages;
+
+
     public SmugglersRewardState(VoyageState state, SmugglersCard card, List<Player> list){
         super(state);
         if(state==null||card==null||list==null||list.size()>this.state.getCount().getNumber()||list.size()<1) throw new IllegalArgumentException("Created unsatisfyable state");
