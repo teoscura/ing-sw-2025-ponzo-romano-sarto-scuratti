@@ -11,6 +11,8 @@ public class EpidemicState extends CardState{
     
     private final EpidemicCard card;
 
+    //XXX implement accepted messages;
+
     public EpidemicState(VoyageState state, EpidemicCard card){
         super(state);
         if(card==null) throw new NullPointerException();

@@ -21,7 +21,7 @@ public class SlaversAnnounceState extends CardState {
 
     public SlaversAnnounceState(VoyageState state, SlaversCard card, List<Player> list){
         super(state);
-        if(list.size()>this.state.getCount().getNumber()||list.size()<2||list==null) throw new IllegalArgumentException("Constructed insatisfyable state");
+        if(list.size()>this.state.getCount().getNumber()||list.size()<1||list==null) throw new IllegalArgumentException("Constructed insatisfyable state");
         if(card==null) throw new NullPointerException();
         this.card = card;
         this.list = list;
@@ -48,10 +48,10 @@ public class SlaversAnnounceState extends CardState {
 
     @Override
     protected CardState getNext() {
-        if(result && this.card.getExhausted()) return new SlaversRewardState();
-        if(!result) return new SlaversLoseState();
+        if(this.card.getExhausted()) return new SlaversRewardState(state, card, list);
+        if(!result && !this.list.getFirst().getRetired()) return new SlaversLoseState(state, card, list);
         this.list.removeFirst();
-        if(list.size()!=0) return new SlaversAnnounceState(state, card, list);
+        if(!list.isEmpty()) return new SlaversAnnounceState(state, card, list);
         return null;
     }
     

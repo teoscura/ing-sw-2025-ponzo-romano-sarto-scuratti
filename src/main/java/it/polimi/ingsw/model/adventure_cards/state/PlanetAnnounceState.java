@@ -1,11 +1,29 @@
 package it.polimi.ingsw.model.adventure_cards.state;
 
+import java.util.List;
+
 import it.polimi.ingsw.message.exceptions.MessageInvalidException;
 import it.polimi.ingsw.message.server.ServerMessage;
+import it.polimi.ingsw.model.adventure_cards.PlanetCard;
+import it.polimi.ingsw.model.player.Player;
+import it.polimi.ingsw.model.state.VoyageState;
 
 public class PlanetAnnounceState extends CardState {
 
-    
+    private final PlanetCard card;
+    private final List<Player> list;
+    private boolean responded = false;
+    private int id = -1;
+
+    //XXX implement accepted messages;
+
+    public PlanetAnnounceState(VoyageState state, PlanetCard card, List<Player> list){
+        super(state);
+        if(state==null||card==null||list==null) throw new NullPointerException();
+        if(list.size()>state.getCount().getNumber()||list.size()<1) throw new IllegalArgumentException("Created unsatisfyable state");
+        this.card = card;
+        this.list = list;
+    }
 
     @Override
     public void init() {
@@ -14,14 +32,18 @@ public class PlanetAnnounceState extends CardState {
 
     @Override
     public void validate(ServerMessage message) throws MessageInvalidException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'validate'");
+        message.receive(this);
+        if(!responded) return;
+        this.card.apply(this.list.getFirst(), id);
+        this.transition();
     }
 
     @Override
     protected CardState getNext() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getNext'");
+        if(id!=-1) return new PlanetRewardState(state, card, id, list);
+        this.list.removeFirst();
+        if(!this.list.isEmpty()) return new PlanetAnnounceState(state, card, list);
+        return null;
     }
     
 }

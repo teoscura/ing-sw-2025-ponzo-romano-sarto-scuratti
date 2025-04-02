@@ -1,7 +1,5 @@
 package it.polimi.ingsw.model.components;
 
-import it.polimi.ingsw.model.components.enums.ComponentRotation;
-import it.polimi.ingsw.model.components.enums.ConnectorType;
 import it.polimi.ingsw.model.components.enums.EngineType;
 import org.junit.jupiter.api.Test;
 

@@ -13,6 +13,8 @@ import it.polimi.ingsw.model.components.visitors.iVisitor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.player.iSpaceShip;
 
+
+//FIXME: rewrite this. this is horrible.
 public class StorageComponent extends BaseComponent{
 
     private ShipmentType[] shipments;

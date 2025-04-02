@@ -14,6 +14,8 @@ public class PiratesNewCabinState extends CardState {
     private final PiratesCard card;
     private final List<Player> list;
 
+    //XXX implement accepted messages;
+
     public PiratesNewCabinState(VoyageState state, PiratesCard card, List<Player> list) {
         super(state);
         if(card==null||list==null) throw new NullPointerException();
@@ -39,9 +41,9 @@ public class PiratesNewCabinState extends CardState {
 
     @Override
     protected CardState getNext() {
-        if(this.list.size()==1) return null;
         this.list.removeFirst();
-        return new PiratesAnnounceState(state, card, list);
+        if(!this.list.isEmpty()) return new PiratesAnnounceState(state, card, list);
+        return null;
     }
     
 }

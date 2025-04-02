@@ -15,12 +15,14 @@ public class AbandonedStationAnnounceState extends CardState {
     private boolean responded = false;
     private int id = -1;
 
-    public AbandonedStationAnnounceState(VoyageState state, AbandonedStationCard card, List<Player> clist) {
+    //XXX implement accepted messages;
+
+    public AbandonedStationAnnounceState(VoyageState state, AbandonedStationCard card, List<Player> list) {
         super(state);
-        if(clist.size()>this.state.getCount().getNumber()||clist.size()<2||clist==null) throw new IllegalArgumentException("Constructed insatisfyable state");
+        if(list.size()>this.state.getCount().getNumber()||list.size()<1||list==null) throw new IllegalArgumentException("Constructed insatisfyable state");
         if(card==null) throw new NullPointerException();
         this.card = card;
-        this.list = clist;
+        this.list = list;
     }
 
     @Override
@@ -38,9 +40,10 @@ public class AbandonedStationAnnounceState extends CardState {
 
     @Override
     protected CardState getNext() {
-        if(this.card.getExhausted()) return new AbandonedStationRewardState(state, this.list.getFirst(), this.card.getPlanet());
+        if(this.card.getExhausted()) return new AbandonedStationRewardState(state, card, list);
         this.list.removeFirst();
-        return this.list.size() == 0 ? null : new AbandonedStationAnnounceState(state, card, this.list);
+        if(!this.list.isEmpty()) return new AbandonedStationAnnounceState(state, card, list);
+        return null;
     }
     
 }

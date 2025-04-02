@@ -5,7 +5,6 @@ import it.polimi.ingsw.exceptions.NegativeArgumentException;
 import it.polimi.ingsw.model.adventure_cards.state.CardState;
 import it.polimi.ingsw.model.adventure_cards.state.PiratesAnnounceState;
 import it.polimi.ingsw.model.adventure_cards.utils.CardOrder;
-import it.polimi.ingsw.model.adventure_cards.utils.Projectile;
 import it.polimi.ingsw.model.adventure_cards.utils.ProjectileArray;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.state.VoyageState;
@@ -35,6 +34,10 @@ public class PiratesCard extends Card{
         return this.credits;
     }
 
+    public ProjectileArray getShots(){
+        return this.shots;
+    }
+
     public boolean apply(VoyageState state, Player p) {
         if(state==null||p==null) throw new NullPointerException();
         if(p.getSpaceShip().getCannonPower()>this.min_power){
@@ -42,10 +45,7 @@ public class PiratesCard extends Card{
             return true;
         }
         else if(p.getSpaceShip().getCannonPower()==this.min_power){
-            return false;
-        }
-        for(Projectile pr : this.shots.getProjectiles()){
-            p.getSpaceShip().handleShot(pr);
+            return true;
         }
         return false;
     }

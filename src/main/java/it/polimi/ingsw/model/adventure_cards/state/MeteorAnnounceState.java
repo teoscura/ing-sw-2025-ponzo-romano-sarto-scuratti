@@ -6,7 +6,6 @@ import it.polimi.ingsw.message.client.MeteorMessage;
 import it.polimi.ingsw.message.exceptions.MessageInvalidException;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.adventure_cards.utils.CardOrder;
-import it.polimi.ingsw.model.adventure_cards.utils.Projectile;
 import it.polimi.ingsw.model.adventure_cards.utils.ProjectileArray;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.state.VoyageState;
@@ -53,8 +52,7 @@ public class MeteorAnnounceState extends CardState {
     protected CardState getNext(){
         if(broke_cabin) return new MeteorNewCabinState(state, left);
         this.left.getProjectiles().removeFirst();
-        //This is a memory safe workaround on the lackluster generics support that collections have.
-        if(this.left.getProjectiles().size()>0) return new MeteorAnnounceState(state, new ProjectileArray((Projectile[])this.left.getProjectiles().toArray(new Projectile[0])));
+        if(!this.left.getProjectiles().isEmpty()) return new MeteorAnnounceState(state, left);
         return null;
     }
     

@@ -8,7 +8,7 @@ import it.polimi.ingsw.exceptions.PlayerNotFoundException;
 import it.polimi.ingsw.model.adventure_cards.iCard;
 import it.polimi.ingsw.model.adventure_cards.state.CardState;
 import it.polimi.ingsw.model.adventure_cards.utils.CardOrder;
-import it.polimi.ingsw.model.adventure_cards.utils.CombatZoneLine;
+import it.polimi.ingsw.model.adventure_cards.utils.CombatZoneCriteria;
 import it.polimi.ingsw.model.board.iCards;
 import it.polimi.ingsw.model.board.iPlanche;
 import it.polimi.ingsw.model.player.Player;
@@ -36,7 +36,7 @@ public class VoyageState extends GameState {
         return tmp;
     }
 
-    public Player findCriteria(CombatZoneLine criteria){
+    public Player findCriteria(CombatZoneCriteria criteria){
         switch(criteria){
             case LEAST_CANNON:
                 int min_cannon_power = Arrays.stream(this.players).mapToInt(p->p.getSpaceShip().getCannonPower()).min().orElse(0);
@@ -77,8 +77,9 @@ public class VoyageState extends GameState {
     @Override
     public void setCardState(CardState next) {
         if(next==null){
-            if(this.turn==this.type.getAmountOfCards()) endTheGame;
-            this.state = this.voyage_deck.pullCard().getState();
+            iCard card = this.voyage_deck.pullCard();
+            if(card==null) this.transition();
+            this.state = card.getState(this);
             this.state.init(); 
             this.turn++;
         }

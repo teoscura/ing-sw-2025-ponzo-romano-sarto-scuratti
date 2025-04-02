@@ -45,12 +45,12 @@ class BatteryComponentTest {
 		component2.takeOne();
 		assertEquals(1, component2.getContains());
 		component2.takeOne();
-		ContainerEmptyException e = assertThrows(ContainerEmptyException.class, () -> component2.takeOne());
+		assertThrows(ContainerEmptyException.class, () -> component2.takeOne());
 	}
 
 	@Test
 	void putOne(){
-		ContainerFullException e = assertThrows(ContainerFullException.class, () -> component2.putOne());
+		assertThrows(ContainerFullException.class, () -> component2.putOne());
 		component2.takeOne();
 		component2.takeOne();
 		component2.putOne();

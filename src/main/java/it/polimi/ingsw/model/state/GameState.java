@@ -43,10 +43,14 @@ public abstract class GameState {
         throw new ForbiddenCallException("This state doesn't support this function.");
     }
 
-    public abstract ClientState getClientState();
+    public void transition(){
+        this.model.setState(this.getNext());
+    }
 
     public abstract GameState getNext();
 
-    public abstract JsonState serialize();
+    //TODO public abstract ClientState getClientState();
+
+    //TODO public abstract JsonState serialize();
 
 }

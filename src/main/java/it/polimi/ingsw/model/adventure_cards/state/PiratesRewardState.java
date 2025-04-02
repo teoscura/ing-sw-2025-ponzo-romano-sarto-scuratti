@@ -15,9 +15,11 @@ public class PiratesRewardState extends CardState {
     private boolean responded = false;
     private boolean took_reward = false;
 
+    //XXX implement accepted messages;
+
     public PiratesRewardState(VoyageState state, PiratesCard card, List<Player> list){
         super(state);
-        if(list.size()>this.state.getCount().getNumber()||list.size()<2||list==null) throw new IllegalArgumentException("Constructed insatisfyable state");
+        if(list.size()>this.state.getCount().getNumber()||list.size()<1||list==null) throw new IllegalArgumentException("Constructed insatisfyable state");
         if(card==null) throw new NullPointerException();
         this.card = card;
         this.list = list;
@@ -35,17 +37,14 @@ public class PiratesRewardState extends CardState {
         if(took_reward){
             this.list.getFirst().giveCredits(this.card.getCredits());
             this.state.getPlanche().movePlayer(this.list.getFirst().getColor(), this.card.getDays());
-            this.transition();
         }
-        else{
-            this.transition();
-        }
+        this.transition();
     }
 
     @Override
     protected CardState getNext() {
-        if(this.list.size()==1) return null;
         this.list.removeFirst();
-        return new PiratesAnnounceState(state, card, list);
+        if(this.list.isEmpty()) return new PiratesAnnounceState(state, card, list);
+        return null;
     }
 }

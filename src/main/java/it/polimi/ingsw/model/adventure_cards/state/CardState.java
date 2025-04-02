@@ -29,7 +29,6 @@ public abstract class CardState {
     protected abstract CardState getNext();
 
     public void transition(){
-        if(this.getNext()==null) this.state.setCardState(null);
         this.state.setCardState(this.getNext());
     }
 

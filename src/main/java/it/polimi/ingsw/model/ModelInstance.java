@@ -11,7 +11,7 @@ import it.polimi.ingsw.model.adventure_cards.LevelOneCardFactory;
 import it.polimi.ingsw.model.adventure_cards.LevelTwoCardFactory;
 import it.polimi.ingsw.model.adventure_cards.iCard;
 import it.polimi.ingsw.model.adventure_cards.utils.CardOrder;
-import it.polimi.ingsw.model.adventure_cards.utils.CombatZoneLine;
+import it.polimi.ingsw.model.adventure_cards.utils.CombatZoneCriteria;
 import it.polimi.ingsw.model.board.*;
 import it.polimi.ingsw.model.player.*;
 import it.polimi.ingsw.model.state.GameState;
@@ -87,6 +87,10 @@ public class ModelInstance {
 
     public GameState getState() {
         return this.state;
+    }
+
+    public void setState(GameState new_state){
+        this.state = new_state;
     }
 
     //XXX move inside voyagestate

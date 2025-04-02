@@ -6,41 +6,43 @@ import it.polimi.ingsw.message.exceptions.MessageInvalidException;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.adventure_cards.utils.CombatZoneSection;
 import it.polimi.ingsw.model.adventure_cards.utils.ProjectileArray;
-import it.polimi.ingsw.model.adventure_cards.utils.CardOrder;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.state.VoyageState;
 
-public class CombatZoneAnnounceState extends CardState {
-
+public class CombatZoneNewCabinState extends CardState {
+    
     private final List<CombatZoneSection> sections;
     private final ProjectileArray shots;
-    private List<Player> awaiting;
-    private Player target;
+    private final Player target;
 
-    public CombatZoneAnnounceState(VoyageState state, List<CombatZoneSection> sections, ProjectileArray shots){
+    //XXX implement accepted messages;
+
+    public CombatZoneNewCabinState(VoyageState state, List<CombatZoneSection> sections, ProjectileArray shots, Player target){
         super(state);
-        if(sections==null||shots==null) throw new NullPointerException();
+        if(sections==null||shots==null||target==null);
         this.sections = sections;
         this.shots = shots;
-        this.awaiting = this.state.getOrder(CardOrder.NORMAL);
+        this.target = target;
     }
 
     @Override
-    public void init() {
+    public void init(){
         super.init();
     }
 
     @Override
     public void validate(ServerMessage message) throws MessageInvalidException {
         message.receive(this);
-        if(!awaiting.isEmpty()) return;
-        this.target = this.state.findCriteria(this.sections.getFirst().getCriteria());
+        if(target.getSpaceShip().getBrokeCenter()) return;
         this.transition();
     }
 
     @Override
     protected CardState getNext() {
-        return new CombatZonePenaltyState(state, sections, shots, target);
+        if(!this.shots.getProjectiles().isEmpty()) return new CombatZonePenaltyState(state, sections, shots, target);
+        this.sections.removeFirst();
+        if(!this.sections.isEmpty()) return new CombatZoneAnnounceState(state, sections, shots);
+        return null;
     }
-    
+
 }

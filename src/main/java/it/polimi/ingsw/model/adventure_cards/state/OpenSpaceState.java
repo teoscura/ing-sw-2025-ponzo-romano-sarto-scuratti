@@ -11,6 +11,8 @@ public class OpenSpaceState extends CardState {
 
     private final OpenSpaceCard card;
 
+    //XXX implement accepted messages;
+
     public OpenSpaceState(VoyageState state, OpenSpaceCard card){
         super(state);
         if(card==null) throw new NullPointerException();

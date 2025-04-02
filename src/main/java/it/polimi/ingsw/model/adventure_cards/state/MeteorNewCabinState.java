@@ -36,9 +36,9 @@ public class MeteorNewCabinState extends CardState {
 
     @Override
     protected CardState getNext() {
-        if(left.getProjectiles().size()==1) return null;
         this.left.getProjectiles().removeFirst();
-        return new MeteorAnnounceState(state, left);
+        if(!this.left.getProjectiles().isEmpty()) return new MeteorAnnounceState(state, left);
+        return null;
     }
     
 }

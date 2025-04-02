@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class BaseComponentTest {
 
-	private BaseComponent Base;
+	//private BaseComponent Base;
 
 	@Test
 	void getConnectors(){

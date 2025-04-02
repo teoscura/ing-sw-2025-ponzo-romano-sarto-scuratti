@@ -16,10 +16,12 @@ public class AbandonedShipAnnounceState extends CardState {
     private final List<Player> list;
     private boolean responded = false;
     private int id = -1;
+
+    //XXX implement accepted messages;
     
     public AbandonedShipAnnounceState(VoyageState state, AbandonedShipCard card, List<Player> list) {
         super(state);
-        if(list.size()>this.state.getCount().getNumber()||list.size()<2||list==null) throw new IllegalArgumentException("Constructed insatisfyable state");
+        if(list.size()>this.state.getCount().getNumber()||list.size()<1||list==null) throw new IllegalArgumentException("Constructed insatisfyable state");
         if(card==null) throw new NullPointerException();
         this.card = card;
         this.list = list;
@@ -45,9 +47,10 @@ public class AbandonedShipAnnounceState extends CardState {
 
     @Override
     protected CardState getNext() {
-        if(this.card.getExhausted()) return new AbandonedShipRewardState(state, card, this.list);
+        if(this.card.getExhausted()) return new AbandonedShipRewardState(state, card, list);
         this.list.removeFirst();
-        return this.list.size() == 0 ? null : new AbandonedShipAnnounceState(state, card, this.list);
+        if(!this.list.isEmpty()) return new AbandonedShipAnnounceState(state, card, list);
+        return null;
     }
     
 }

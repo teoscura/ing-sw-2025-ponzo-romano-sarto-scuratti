@@ -1,8 +1,8 @@
 package it.polimi.ingsw.model.adventure_cards;
 
+import java.util.Arrays;
 import java.util.HashMap;
 
-import it.polimi.ingsw.message.client.ClientMessage;
 import it.polimi.ingsw.model.adventure_cards.enums.*;
 import it.polimi.ingsw.model.adventure_cards.utils.*;
 
@@ -86,22 +86,23 @@ public class LevelTwoCardFactory implements iCardFactory{
                     new Planet(new int[]{4,0,0,0})})
             );
             put(116, new CombatZoneCard(116,
+                Arrays.asList(new CombatZoneSection[]{
+                    new CombatZoneSection(
+                        CombatZoneCriteria.LEAST_CANNON,
+                        CombatZonePenalty.DAYS, 4),
+                    new CombatZoneSection(
+                        CombatZoneCriteria.LEAST_ENGINE, 
+                        CombatZonePenalty.CARGO, 3),
+                    new CombatZoneSection(
+                        CombatZoneCriteria.LEAST_CREW, 
+                        CombatZonePenalty.SHOTS)
+                }),
                 new ProjectileArray(
                     new Projectile[]{
                     new Projectile(ProjectileDirection.U180, ProjectileDimension.SMALL),
                     new Projectile(ProjectileDirection.U090, ProjectileDimension.SMALL),
                     new Projectile(ProjectileDirection.U270, ProjectileDimension.SMALL),
-                    new Projectile(ProjectileDirection.U000, ProjectileDimension.BIG)}),
-                new CombatZoneLine[]{
-                    CombatZoneLine.LEAST_CANNON,
-                    CombatZoneLine.LEAST_ENGINE,
-                    CombatZoneLine.LEAST_CREW},
-                new ClientMessage[]{
-                    new MoveOnBoardMessage(-4),
-                    new AskRemoveMerchMessage(3),
-                    null},
-                CombatZoneLine.LEAST_ENGINE,
-                CardResponseType.REMOVE_CARGO)
+                    new Projectile(ProjectileDirection.U000, ProjectileDimension.BIG)}))
             );
             put(117, new AbandonedShipCard(117, 1, 4, 6));
             put(118, new AbandonedShipCard(118, 2, 5, 6));
