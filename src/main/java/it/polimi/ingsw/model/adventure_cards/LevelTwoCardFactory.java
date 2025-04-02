@@ -3,7 +3,6 @@ package it.polimi.ingsw.model.adventure_cards;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import it.polimi.ingsw.model.adventure_cards.enums.*;
 import it.polimi.ingsw.model.adventure_cards.utils.*;
 
 public class LevelTwoCardFactory implements iCardFactory{

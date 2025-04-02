@@ -7,15 +7,10 @@ import it.polimi.ingsw.model.state.WaitingState;
 
 public class ModelInstance {
     
-    private final PlayerCount count;
     private final Player[] players;
-
     private GameState state;
-    // private CardState state = null;
-    // private int turn = 1;
     
-    public ModelInstance(){
-        this.count = count;
+    public ModelInstance(GameModeType type, PlayerCount count){
         this.players = new Player[count.getNumber()];
         for(PlayerColor c : PlayerColor.values()){
             if(c.getOrder()>=players.length) break;
@@ -23,10 +18,6 @@ public class ModelInstance {
         }
         this.state = new WaitingState(this, type, count);
         this.state.init();
-    }
-
-    public PlayerCount getCount(){
-        return this.count;
     }
     
     public Player getPlayer(PlayerColor c) throws PlayerNotFoundException{

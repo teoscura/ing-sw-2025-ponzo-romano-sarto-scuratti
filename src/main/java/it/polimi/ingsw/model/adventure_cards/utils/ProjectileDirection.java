@@ -1,5 +1,5 @@
 //Done.
-package it.polimi.ingsw.model.adventure_cards.enums;
+package it.polimi.ingsw.model.adventure_cards.utils;
 
 //Rotazione relativa in gradi, parte da su e va in senso orario
 public enum ProjectileDirection {

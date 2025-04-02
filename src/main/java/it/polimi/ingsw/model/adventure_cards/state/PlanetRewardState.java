@@ -15,7 +15,7 @@ public class PlanetRewardState extends CardState {
 
     private final PlanetCard card; //Used for validation
     private final List<Player> list;
-    private final int id; //Used for validation of 
+    //private final int id; //Used for validation of 
     private boolean responded = false;
     private List<ShipCoords> coords = null;
     private List<ShipmentType> merch = null;
@@ -26,7 +26,7 @@ public class PlanetRewardState extends CardState {
         super(state);
         if(clist.size()>this.state.getCount().getNumber()||clist.size()<1||clist==null) throw new IllegalArgumentException("Constructed insatisfyable state");
         if(card==null) throw new NullPointerException();
-        this.id = id;
+        //this.id = id;
         this.list = clist;
         this.card = card;
     }

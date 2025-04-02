@@ -3,8 +3,6 @@ package it.polimi.ingsw.model.adventure_cards;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import it.polimi.ingsw.model.adventure_cards.enums.ProjectileDimension;
-import it.polimi.ingsw.model.adventure_cards.enums.ProjectileDirection;
 import it.polimi.ingsw.model.adventure_cards.utils.*;
 
 public class LevelOneCardFactory implements iCardFactory {

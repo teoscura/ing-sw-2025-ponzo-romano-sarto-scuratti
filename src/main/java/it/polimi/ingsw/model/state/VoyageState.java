@@ -71,7 +71,7 @@ public class VoyageState extends GameState {
     }
 
     public void loseGame(PlayerColor c) throws PlayerNotFoundException{
-        if(c.getOrder()>=model.getCount().getNumber()) throw new PlayerNotFoundException("Player is not playing in current game");
+        if(c.getOrder()>=this.count.getNumber()) throw new PlayerNotFoundException("Player is not playing in current game");
         if(this.players[c.getOrder()].getRetired()) throw new PlayerNotFoundException("Player has already lost or retired");
         this.players[c.getOrder()].retire();
     }
