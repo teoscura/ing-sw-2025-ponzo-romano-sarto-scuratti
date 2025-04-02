@@ -8,6 +8,7 @@ import it.polimi.ingsw.controller.server.ClientDescriptor;
 public class Player {
     private final PlayerColor color;
     private boolean retired = false;
+    private boolean disconnected = false;
     private int credits;
     private SpaceShip ship;
     private ClientDescriptor descriptor;
@@ -25,8 +26,22 @@ public class Player {
         return this.credits;
     }
 
+    public void reconnect(ClientDescriptor new_descriptor){
+        this.bindDescriptor(new_descriptor);
+        this.disconnected = false;
+    }
+
+    public void disconnect() {
+        if( this.disconnected) throw new AlreadyPoweredException("Player has alredy disconnected.");
+        this.disconnected = true;
+    }
+
+    public boolean getDisconnected() {
+        return  this.disconnected;
+    }
+
     public void retire() {
-        if(retired) throw new AlreadyPoweredException("Player has alredy retired.");
+        if(this.retired) throw new AlreadyPoweredException("Player has alredy retired.");
         this.retired = true;
     }
 
@@ -38,7 +53,7 @@ public class Player {
         return this.ship;
     }
 
-    public void bindDescriptor(ClientDescriptor descriptor) throws Exception {
+    public void bindDescriptor(ClientDescriptor descriptor){
         this.descriptor = descriptor;
     }
 

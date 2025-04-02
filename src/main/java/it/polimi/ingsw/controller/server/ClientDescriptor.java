@@ -7,6 +7,7 @@ public class ClientDescriptor {
     
     private final String username;
     private final Connection connection;
+    //XXX timeout task running every time a ping gets here, pings reset it.
     private Player player = null;
 
     public ClientDescriptor(String username, Connection connection){

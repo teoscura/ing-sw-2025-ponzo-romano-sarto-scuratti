@@ -4,6 +4,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import it.polimi.ingsw.exceptions.PlayerNotFoundException;
@@ -12,6 +13,7 @@ import it.polimi.ingsw.model.adventure_cards.LevelTwoCardFactory;
 import it.polimi.ingsw.model.adventure_cards.iCard;
 import it.polimi.ingsw.model.adventure_cards.state.CardState;
 import it.polimi.ingsw.model.adventure_cards.utils.CardOrder;
+import it.polimi.ingsw.model.adventure_cards.utils.CombatZoneLine;
 import it.polimi.ingsw.model.board.*;
 import it.polimi.ingsw.model.player.*;
 
@@ -36,8 +38,6 @@ public class ModelInstance {
         this.count = count;
         this.board = new CommonBoard();
         this.players = new Player[count.getNumber()];
-        // XXX this.lost = new boolean[count.getNumber()];
-        // Arrays.fill(this.lost, false);
         for(PlayerColor c : PlayerColor.values()){
             if(c.getOrder()>=players.length) break;
             this.players[c.getOrder()] = new Player(type, c);
@@ -84,22 +84,51 @@ public class ModelInstance {
     }
 
     public List<Player> getOrder(CardOrder order){
-        //TODO filtrare gli abbandonati.
         List<Player> tmp = Arrays.asList(this.players);
         switch(order){
             case NORMAL: {
                 Collections.sort(tmp, (p1,p2) -> this.planche.getPlayerPosition(p1.getColor())>this.planche.getPlayerPosition(p2.getColor()) ? 1: -1);
-                return tmp.stream().filter((p)->!p.getRetired()).toList();
+                return tmp.stream().filter((p)->!p.getRetired()&&!p.getDisconnected()).toList();
             }
             case INVERSE: {
                 Collections.sort(tmp, (p1,p2) -> this.planche.getPlayerPosition(p1.getColor())>this.planche.getPlayerPosition(p2.getColor()) ? -1: 1);
-                return tmp.stream().filter((p)->!p.getRetired()).toList();
+                return tmp.stream().filter((p)->!p.getRetired()&&!p.getDisconnected()).toList();
             }
         }
         return tmp;
     }
 
-    //TODO method find each criteria.
+    public Player findCriteria(CombatZoneLine criteria){
+        switch(criteria){
+            case LEAST_CANNON:
+                int min_cannon_power = Arrays.stream(this.players).mapToInt(p->p.getSpaceShip().getCannonPower()).min().orElse(0);
+                for(Player p : this.players){
+                    if(p.getSpaceShip().getCannonPower()<min_cannon_power) min_cannon_power = p.getSpaceShip().getCannonPower();
+                }
+                return Arrays.stream(this.players)
+                .filter((p)->p.getSpaceShip().getCannonPower()==min_cannon_power)
+                .sorted((p1,p2) -> this.planche.getPlayerPosition(p1.getColor())>this.planche.getPlayerPosition(p2.getColor()) ? 1 : -1)
+                .findFirst().orElse(null);
+            case LEAST_CREW:
+                int min_crew= Arrays.stream(this.players).mapToInt(p->p.getSpaceShip().getTotalCrew()).min().orElse(0);
+                for(Player p : this.players){
+                    if(p.getSpaceShip().getTotalCrew()<min_crew) min_crew = p.getSpaceShip().getTotalCrew();
+                }
+                return Arrays.stream(this.players)
+                .filter((p)->p.getSpaceShip().getTotalCrew()==min_crew)
+                .sorted((p1,p2) -> this.planche.getPlayerPosition(p1.getColor())>this.planche.getPlayerPosition(p2.getColor()) ? 1 : -1)
+                .findFirst().orElse(null);
+            case LEAST_ENGINE:
+                int min_engine_power = Arrays.stream(this.players).mapToInt(p->p.getSpaceShip().getEnginePower()).min().orElse(0);
+                for(Player p : this.players){
+                    if(p.getSpaceShip().getEnginePower()<min_engine_power) min_engine_power = p.getSpaceShip().getEnginePower();
+                }
+                return Arrays.stream(this.players)
+                .filter((p)->p.getSpaceShip().getEnginePower()==min_engine_power)
+                .sorted((p1,p2) -> this.planche.getPlayerPosition(p1.getColor())>this.planche.getPlayerPosition(p2.getColor()) ? 1 : -1)
+                .findFirst().orElse(null);
+        }
+    }
 
     public void loseGame(PlayerColor c) throws PlayerNotFoundException{
         if(c.getOrder()>=this.count.getNumber()) throw new PlayerNotFoundException("Player is not playing in current game");
