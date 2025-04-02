@@ -41,7 +41,5 @@ public class ModelInstance {
         this.state = new_state;
         state.init();
     }
-
-    //XXX move inside voyagestate
     
 }
