@@ -41,11 +41,6 @@ public class StorageComponent extends BaseComponent{
         Arrays.fill(shipments, 0);
     }
 
-    @Override
-    public void check(iVisitor v){
-        v.visit(this);
-    }
-
     public void putIn(ShipmentType shipment){
         if(shipment.getValue()<1) throw new IllegalArgumentException();
         if(shipment.getSpecial()&&!this.type.getSpecial()) throw new ContainerNotSpecialException();
@@ -69,7 +64,7 @@ public class StorageComponent extends BaseComponent{
     }
 
     public int getFreeSpaces(){
-        return getCapacity() - this.currently_full;
+        return this.type.getCapacity() - this.currently_full;
     }
 
     public boolean getSpecial(){
@@ -77,7 +72,7 @@ public class StorageComponent extends BaseComponent{
     }
 
     public int getCapacity(){
-        return shipments.length;
+        return this.type.getCapacity();
     }
 
     @Override
@@ -88,6 +83,11 @@ public class StorageComponent extends BaseComponent{
     @Override
     public void onDelete(iSpaceShip ship) {
         ship.delStorageCoords(this.coords);
+    }
+
+    @Override
+    public void check(iVisitor v){
+        v.visit(this);
     }
 
 }
