@@ -2,7 +2,6 @@ package it.polimi.ingsw.model.adventure_cards.state;
 
 import java.util.List;
 
-import it.polimi.ingsw.message.client.MeteorMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.adventure_cards.exceptions.ForbiddenCallException;
@@ -29,9 +28,6 @@ public class MeteorAnnounceState extends CardState {
     @Override
     public void init() {
         super.init();
-        for(Player p : this.state.getOrder(CardOrder.NORMAL)){
-            p.getDescriptor().sendMessage(new MeteorMessage(this.left.getProjectiles().getFirst()));
-        }
     }
 
     @Override

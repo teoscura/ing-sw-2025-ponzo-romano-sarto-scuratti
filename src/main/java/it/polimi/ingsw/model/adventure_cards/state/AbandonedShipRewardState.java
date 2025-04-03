@@ -12,7 +12,7 @@ import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.VoyageState;
 
-public class AbandonedShipRewardState extends CardState {
+class AbandonedShipRewardState extends CardState {
     
     private final AbandonedShipCard card;
     private final List<Player> list;

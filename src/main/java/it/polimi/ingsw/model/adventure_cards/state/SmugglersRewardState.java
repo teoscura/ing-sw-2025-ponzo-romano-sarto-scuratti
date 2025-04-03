@@ -18,7 +18,7 @@ import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.VoyageState;
 
-public class SmugglersRewardState extends CardState {
+class SmugglersRewardState extends CardState {
 
     private final SmugglersCard card;
     private final List<Player> list;

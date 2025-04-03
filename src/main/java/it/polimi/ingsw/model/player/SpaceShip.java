@@ -142,8 +142,11 @@ public class SpaceShip implements iSpaceShip{
 		if(component==null) throw new NullPointerException();
 		if(this.getComponent(coords) != this.getEmpty()) throw new IllegalComponentAdd("Component is already present at these coords.");
 		if(this.type.isForbidden(coords)) throw new IllegalComponentAdd();
-		//if(this.getComponent(coords.up())==this.getEmpty() && this.getComponent(coords.down())==this.getEmpty() && this.getComponent(coords.left())==this.getEmpty() && this.getComponent(coords.right())==this.getEmpty())
-			//throw new IllegalTargetException("Component is not adjacent to others."); temporary, dirty implemetation
+		boolean next = false;
+		for(ShipCoords s : coords.getNextTo()){
+			if(s!=this.getEmpty()) next = true; 
+		}
+		if(!next) throw new IllegalTargetException("Component is not adjacent to others.");
 		component.onCreation(this);
 		this.components[coords.y][coords.x] = component;
 	}

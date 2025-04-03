@@ -3,7 +3,6 @@ package it.polimi.ingsw.model.adventure_cards.state;
 import java.util.ArrayList;
 import java.util.List;
 
-import it.polimi.ingsw.message.client.ShotMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.adventure_cards.exceptions.ForbiddenCallException;
@@ -19,7 +18,7 @@ import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.VoyageState;
 
-public class CombatZonePenaltyState extends CardState {
+class CombatZonePenaltyState extends CardState {
 
     private final List<CombatZoneSection> sections;
     private final ProjectileArray shots;
@@ -62,11 +61,9 @@ public class CombatZonePenaltyState extends CardState {
     @Override
     public void init() {
         super.init();
-        if(sections.getFirst().getPenalty()==CombatZonePenalty.DAYS){
-            this.state.getPlanche().movePlayer(this.target.getColor(), -this.sections.getFirst().getAmount());
-            this.transition();
-        }
-        this.target.getDescriptor().sendMessage(new ShotMessage(this.shots.getProjectiles().get(0)));
+        if(sections.getFirst().getPenalty()!=CombatZonePenalty.DAYS) return;
+        this.state.getPlanche().movePlayer(this.target.getColor(), -this.sections.getFirst().getAmount());
+        this.transition();
     }
 
     @Override

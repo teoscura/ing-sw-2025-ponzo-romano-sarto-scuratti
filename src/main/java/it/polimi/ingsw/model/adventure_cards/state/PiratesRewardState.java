@@ -9,7 +9,7 @@ import it.polimi.ingsw.model.adventure_cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.state.VoyageState;
 
-public class PiratesRewardState extends CardState {
+class PiratesRewardState extends CardState {
     
     private final PiratesCard card;
     private final List<Player> list;

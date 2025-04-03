@@ -12,7 +12,7 @@ import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.VoyageState;
 
-public class CombatZoneNewCabinState extends CardState {
+class CombatZoneNewCabinState extends CardState {
     
     private final List<CombatZoneSection> sections;
     private final ProjectileArray shots;

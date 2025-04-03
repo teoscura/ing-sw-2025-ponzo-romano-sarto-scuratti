@@ -13,7 +13,7 @@ import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.VoyageState;
 
-public class SmugglersLoseState extends CardState {
+class SmugglersLoseState extends CardState {
 
     private final SmugglersCard card;
     private final List<Player> list;
@@ -86,7 +86,7 @@ public class SmugglersLoseState extends CardState {
                 return;
             }
         }
-        if(this.required[4]>0){
+        if(this.required[4]>0 && p.getSpaceShip().getEnergyPower()>0){
             ContainsRemoveVisitor v = new ContainsRemoveVisitor();
             try{
                 p.getSpaceShip().getComponent(coords).check(v);
@@ -98,9 +98,7 @@ public class SmugglersLoseState extends CardState {
                 return;
             }
         }
-        else{
-            this.responded = true;
-        }
+        else this.responded = true;
     }
     
 }

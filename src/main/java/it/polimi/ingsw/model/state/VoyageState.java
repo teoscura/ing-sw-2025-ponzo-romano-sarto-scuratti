@@ -5,13 +5,14 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import it.polimi.ingsw.controller.server.ClientDescriptor;
 import it.polimi.ingsw.exceptions.PlayerNotFoundException;
 import it.polimi.ingsw.message.client.ViewMessage;
+import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.ModelInstance;
 import it.polimi.ingsw.model.PlayerCount;
 import it.polimi.ingsw.model.adventure_cards.iCard;
+import it.polimi.ingsw.model.adventure_cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.adventure_cards.state.CardState;
 import it.polimi.ingsw.model.adventure_cards.utils.CardOrder;
 import it.polimi.ingsw.model.adventure_cards.utils.CombatZoneCriteria;
@@ -27,15 +28,39 @@ public class VoyageState extends GameState {
     private final List<Player> to_give_up;
     private CardState state;
 
-    //XXX finish implementing
-
     public VoyageState(ModelInstance model, GameModeType type, PlayerCount count, Player[] players, iCards deck, iPlanche planche){
         super(model, type, count, players);
         if(deck==null||planche==null) throw new NullPointerException();
         this.to_give_up = new ArrayList<>();
         this.planche = planche;
         this.voyage_deck = deck;
+    }
+
+    @Override
+    public void init(){
+        super.init();
         this.setCardState(null);
+    }
+
+    @Override
+    public void validate(ServerMessage message) throws ForbiddenCallException {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'validate'");
+    }
+
+    @Override
+    public GameState getNext(){
+        return new EndscreenState(model, type, count, players);
+    }
+
+    @Override
+    public void giveUp(Player p) throws ForbiddenCallException {
+        if(p==null) return;
+        if(p.getRetired()==true){
+            p.getDescriptor().sendMessage(new ViewMessage("You have already retired/lost!"));
+            return;
+        }
+        this.to_give_up.add(p);
     }
 
     public List<Player> getOrder(CardOrder order){
@@ -77,15 +102,6 @@ public class VoyageState extends GameState {
         }
     }
 
-    public void giveUp(ClientDescriptor client){
-        if(client.getPlayer()==null) return;
-        if(client.getPlayer().getRetired()==true){
-            client.sendMessage(new ViewMessage("You have already retired/lost!"));
-            return;
-        }
-        this.to_give_up.add(client.getPlayer());
-    }
-
     public void loseGame(PlayerColor c) throws PlayerNotFoundException{
         if(c.getOrder()>=this.count.getNumber()) throw new PlayerNotFoundException("Player is not playing in current game");
         if(this.players[c.getOrder()].getRetired()) throw new PlayerNotFoundException("Player has already lost or retired");
@@ -96,7 +112,6 @@ public class VoyageState extends GameState {
         return planche;
     }
 
-    @Override
     public void setCardState(CardState next) {
         if(next==null){
             for(Player p : this.to_give_up){
@@ -112,8 +127,4 @@ public class VoyageState extends GameState {
         next.init();
     }
 
-    @Override
-    public GameState getNext(){
-        return new EndscreenState(model, type, count, players);
-    }
 }

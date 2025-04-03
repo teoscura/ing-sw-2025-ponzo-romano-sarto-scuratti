@@ -18,7 +18,7 @@ import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.VoyageState;
 
-public class PlanetRewardState extends CardState {
+class PlanetRewardState extends CardState {
 
     private final PlanetCard card; //Used for validation
     private final List<Player> list;

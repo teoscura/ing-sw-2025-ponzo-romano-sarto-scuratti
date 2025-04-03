@@ -34,7 +34,7 @@ public class TurnOnMessage extends ServerMessage {
 
     @Override
     public void receive(GameState state) throws ForbiddenCallException {
-        state.getCardState().validate(this);
+        state.getCardState(this.descriptor.getPlayer()).validate(this);
     }
 
     @Override

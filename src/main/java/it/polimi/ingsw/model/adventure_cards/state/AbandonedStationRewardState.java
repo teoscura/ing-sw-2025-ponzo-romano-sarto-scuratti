@@ -2,8 +2,6 @@ package it.polimi.ingsw.model.adventure_cards.state;
 
 import java.util.List;
 
-import it.polimi.ingsw.exceptions.PlayerNotFoundException;
-import it.polimi.ingsw.message.client.CargoMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.adventure_cards.AbandonedStationCard;
@@ -20,7 +18,7 @@ import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.VoyageState;
 
-public class AbandonedStationRewardState extends CardState {
+class AbandonedStationRewardState extends CardState {
 
     private final AbandonedStationCard card;
     private final List<Player> list;
@@ -40,11 +38,6 @@ public class AbandonedStationRewardState extends CardState {
     @Override
     public void init() {
         super.init();
-        try {
-            this.state.getPlayer(list.getFirst().getColor()).getDescriptor().sendMessage(new CargoMessage(this.card.getPlanet().getContains()));
-        } catch (PlayerNotFoundException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override

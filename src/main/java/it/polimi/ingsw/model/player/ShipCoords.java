@@ -14,6 +14,10 @@ public class ShipCoords {
         this.y = y;
     }
 
+    public ShipCoords[] getNextTo(){
+        return new ShipCoords[]{this.up(), this.right(), this.down(), this.left()};
+    }
+
     public ShipCoords up(){
         if(this.y==0) return new ShipCoords(this.type, 0, 0);
         return new ShipCoords(this.type, this.x, this.y-1);

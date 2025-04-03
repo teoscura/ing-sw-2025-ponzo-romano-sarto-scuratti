@@ -10,7 +10,7 @@ import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.VoyageState;
 
-public class MeteorNewCabinState extends CardState {
+class MeteorNewCabinState extends CardState {
 
     private final ProjectileArray left;
 

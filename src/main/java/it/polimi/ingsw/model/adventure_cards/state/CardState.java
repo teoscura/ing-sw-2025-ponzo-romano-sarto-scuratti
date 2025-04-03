@@ -21,7 +21,8 @@ public abstract class CardState {
 
     public void init(){
         for(Player p : state.getOrder(CardOrder.NORMAL)){
-            p.getDescriptor().sendMessage(new NotifyCardStateUpdateMessage(this.state));
+            p.getSpaceShip().resetPower();
+            p.getDescriptor().sendMessage(new NotifyCardStateUpdateMessage());
         }
     };
 
