@@ -5,6 +5,8 @@ import it.polimi.ingsw.model.ModelInstance;
 import it.polimi.ingsw.model.PlayerCount;
 
 public class WaitingState extends GameState {
+
+    //XXX finish implementing
     
     public WaitingState(ModelInstance model, GameModeType type, PlayerCount count) {
         super(model, type, count, null);

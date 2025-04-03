@@ -9,6 +9,8 @@ public class ModelInstance {
     
     private final Player[] players;
     private GameState state;
+
+    //XXX finish implementing;
     
     public ModelInstance(GameModeType type, PlayerCount count){
         this.players = new Player[count.getNumber()];

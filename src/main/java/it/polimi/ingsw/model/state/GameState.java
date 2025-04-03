@@ -16,6 +16,8 @@ public abstract class GameState {
     protected final PlayerCount count;
     protected final Player[] players;
 
+    //XXX finish implementing
+
     public GameState(ModelInstance model, GameModeType type, PlayerCount count, Player[] players){
         if(model==null) throw new NullPointerException();
         if(players!=null&&players.length!=count.getNumber()) throw new IllegalArgumentException("Illegal GameState created");

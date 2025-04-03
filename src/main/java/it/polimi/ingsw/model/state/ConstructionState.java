@@ -22,6 +22,8 @@ public class ConstructionState extends GameState {
     private final int[] construction_cards;
     private final iCards voyage_deck;
 
+    //XXX finish implementing
+
     public ConstructionState(ModelInstance model, GameModeType type, PlayerCount count, Player[] players) {
         super(model, type, count, players);
         this.board = new CommonBoard();

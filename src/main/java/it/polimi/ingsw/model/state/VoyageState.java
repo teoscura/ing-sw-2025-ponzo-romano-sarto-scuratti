@@ -24,6 +24,8 @@ public class VoyageState extends GameState {
     private PlayerColor target;
     private CardState state;
 
+    //XXX finish implementing
+
     public VoyageState(ModelInstance model, GameModeType type, PlayerCount count, Player[] players, iCards deck, iPlanche planche){
         super(model, type, count, players);
         if(deck==null||planche==null) throw new NullPointerException();

@@ -12,6 +12,8 @@ public class ValidationState extends GameState {
     private final iCards voyage_deck;
     //private List<PlayerColor> start_order;
 
+    //XXX finish implementing
+
     public ValidationState(ModelInstance model, GameModeType type, PlayerCount count, Player[] players, iCards voyage_deck) {
         super(model, type, count, players);
         if(voyage_deck==null) throw new NullPointerException();

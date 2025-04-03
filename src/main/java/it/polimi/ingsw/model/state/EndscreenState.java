@@ -11,6 +11,8 @@ public class EndscreenState extends GameState {
         super(model, type, count, players);
     }
 
+    //XXX finish implementing
+
     // @Override
     // public JsonState serialize(){
     //     return null;
