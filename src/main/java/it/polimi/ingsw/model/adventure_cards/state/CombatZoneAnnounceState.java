@@ -3,11 +3,11 @@ package it.polimi.ingsw.model.adventure_cards.state;
 import java.util.List;
 
 import it.polimi.ingsw.message.client.ViewMessage;
-import it.polimi.ingsw.message.exceptions.MessageInvalidException;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.adventure_cards.utils.CombatZoneSection;
 import it.polimi.ingsw.model.adventure_cards.utils.ProjectileArray;
 import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
+import it.polimi.ingsw.model.adventure_cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.adventure_cards.utils.CardOrder;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.ShipCoords;
@@ -34,7 +34,7 @@ public class CombatZoneAnnounceState extends CardState {
     }
 
     @Override
-    public void validate(ServerMessage message) throws MessageInvalidException {
+    public void validate(ServerMessage message) throws ForbiddenCallException {
         message.receive(this);
         if(!awaiting.isEmpty()) return;
         this.target = this.state.findCriteria(this.sections.getFirst().getCriteria());

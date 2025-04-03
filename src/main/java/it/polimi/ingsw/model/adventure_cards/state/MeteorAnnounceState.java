@@ -4,8 +4,8 @@ import java.util.List;
 
 import it.polimi.ingsw.message.client.MeteorMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
-import it.polimi.ingsw.message.exceptions.MessageInvalidException;
 import it.polimi.ingsw.message.server.ServerMessage;
+import it.polimi.ingsw.model.adventure_cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.adventure_cards.utils.CardOrder;
 import it.polimi.ingsw.model.adventure_cards.utils.ProjectileArray;
 import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
@@ -35,7 +35,7 @@ public class MeteorAnnounceState extends CardState {
     }
 
     @Override
-    public void validate(ServerMessage message) throws MessageInvalidException {
+    public void validate(ServerMessage message) throws ForbiddenCallException {
         message.receive(this);
         if(!awaiting.isEmpty()) return;
         for(Player p : this.state.getOrder(CardOrder.NORMAL)){

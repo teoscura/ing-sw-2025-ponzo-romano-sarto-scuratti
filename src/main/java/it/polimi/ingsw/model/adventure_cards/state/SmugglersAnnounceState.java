@@ -3,9 +3,9 @@ package it.polimi.ingsw.model.adventure_cards.state;
 import java.util.List;
 
 import it.polimi.ingsw.message.client.ViewMessage;
-import it.polimi.ingsw.message.exceptions.MessageInvalidException;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.adventure_cards.SmugglersCard;
+import it.polimi.ingsw.model.adventure_cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.ShipCoords;
@@ -32,7 +32,7 @@ public class SmugglersAnnounceState extends CardState {
     }
 
     @Override
-    public void validate(ServerMessage message) throws MessageInvalidException {
+    public void validate(ServerMessage message) throws ForbiddenCallException {
         message.receive(this);
         if(!responded) return;
         result = this.card.apply(list.getFirst());

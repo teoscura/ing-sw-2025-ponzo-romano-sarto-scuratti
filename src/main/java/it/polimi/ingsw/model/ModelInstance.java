@@ -1,6 +1,8 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.exceptions.PlayerNotFoundException;
+import it.polimi.ingsw.message.server.ServerMessage;
+import it.polimi.ingsw.model.adventure_cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.player.*;
 import it.polimi.ingsw.model.state.GameState;
 import it.polimi.ingsw.model.state.WaitingState;
@@ -8,6 +10,7 @@ import it.polimi.ingsw.model.state.WaitingState;
 public class ModelInstance {
     
     private final Player[] players;
+    
     private GameState state;
 
     //XXX finish implementing;
@@ -20,6 +23,10 @@ public class ModelInstance {
         }
         this.state = new WaitingState(this, type, count);
         this.state.init();
+    }
+
+    public void validate(ServerMessage message) throws ForbiddenCallException{
+        message.receive(this);
     }
     
     public Player getPlayer(PlayerColor c) throws PlayerNotFoundException{

@@ -3,7 +3,6 @@ package it.polimi.ingsw.model.adventure_cards.state;
 import java.util.List;
 
 import it.polimi.ingsw.message.client.ViewMessage;
-import it.polimi.ingsw.message.exceptions.MessageInvalidException;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.adventure_cards.PiratesCard;
 import it.polimi.ingsw.model.adventure_cards.exceptions.ForbiddenCallException;
@@ -30,7 +29,7 @@ public class PiratesNewCabinState extends CardState {
     }
 
     @Override
-    public void validate(ServerMessage message) throws MessageInvalidException {
+    public void validate(ServerMessage message) throws ForbiddenCallException {
         message.receive(this);
         if(this.list.getFirst().getSpaceShip().getBrokeCenter()) return;
         this.transition();

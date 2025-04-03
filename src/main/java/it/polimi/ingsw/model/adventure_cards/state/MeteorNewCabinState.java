@@ -26,7 +26,7 @@ public class MeteorNewCabinState extends CardState {
     }
 
     @Override
-    public void validate(ServerMessage message) {
+    public void validate(ServerMessage message) throws ForbiddenCallException {
         message.receive(this);
         boolean missing = false;
         for(Player p : this.state.getOrder(CardOrder.NORMAL)){

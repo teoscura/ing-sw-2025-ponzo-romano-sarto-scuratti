@@ -1,10 +1,13 @@
 package it.polimi.ingsw.model.state;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import it.polimi.ingsw.controller.server.ClientDescriptor;
 import it.polimi.ingsw.exceptions.PlayerNotFoundException;
+import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.ModelInstance;
 import it.polimi.ingsw.model.PlayerCount;
@@ -21,7 +24,7 @@ public class VoyageState extends GameState {
     
     private final iPlanche planche;
     private final iCards voyage_deck;
-    private PlayerColor target;
+    private final List<Player> to_give_up;
     private CardState state;
 
     //XXX finish implementing
@@ -29,6 +32,7 @@ public class VoyageState extends GameState {
     public VoyageState(ModelInstance model, GameModeType type, PlayerCount count, Player[] players, iCards deck, iPlanche planche){
         super(model, type, count, players);
         if(deck==null||planche==null) throw new NullPointerException();
+        this.to_give_up = new ArrayList<>();
         this.planche = planche;
         this.voyage_deck = deck;
         this.setCardState(null);
@@ -73,6 +77,15 @@ public class VoyageState extends GameState {
         }
     }
 
+    public void giveUp(ClientDescriptor client){
+        if(client.getPlayer()==null) return;
+        if(client.getPlayer().getRetired()==true){
+            client.sendMessage(new ViewMessage("You have already retired/lost!"));
+            return;
+        }
+        this.to_give_up.add(client.getPlayer());
+    }
+
     public void loseGame(PlayerColor c) throws PlayerNotFoundException{
         if(c.getOrder()>=this.count.getNumber()) throw new PlayerNotFoundException("Player is not playing in current game");
         if(this.players[c.getOrder()].getRetired()) throw new PlayerNotFoundException("Player has already lost or retired");
@@ -86,6 +99,10 @@ public class VoyageState extends GameState {
     @Override
     public void setCardState(CardState next) {
         if(next==null){
+            for(Player p : this.to_give_up){
+                p.retire();
+            }
+            this.to_give_up.clear();
             iCard card = this.voyage_deck.pullCard();
             if(card==null) this.transition();
             this.state = card.getState(this);

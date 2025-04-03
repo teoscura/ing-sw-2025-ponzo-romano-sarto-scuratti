@@ -3,9 +3,9 @@ package it.polimi.ingsw.model.adventure_cards.state;
 import java.util.List;
 
 import it.polimi.ingsw.message.client.ViewMessage;
-import it.polimi.ingsw.message.exceptions.MessageInvalidException;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.adventure_cards.PlanetCard;
+import it.polimi.ingsw.model.adventure_cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.adventure_cards.visitors.ContainsLoaderVisitor;
 import it.polimi.ingsw.model.adventure_cards.visitors.ContainsRemoveVisitor;
 import it.polimi.ingsw.model.components.StorageComponent;
@@ -41,7 +41,7 @@ public class PlanetRewardState extends CardState {
     }
 
     @Override
-    public void validate(ServerMessage message) throws MessageInvalidException {
+    public void validate(ServerMessage message) throws ForbiddenCallException {
         message.receive(this);
         if(!responded && !this.list.getFirst().getDisconnected()) return;
         for(int i=0;i<this.coords.size();i++){

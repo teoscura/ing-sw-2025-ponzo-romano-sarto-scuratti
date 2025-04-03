@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.state;
 
 import it.polimi.ingsw.exceptions.PlayerNotFoundException;
+import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.ModelInstance;
 import it.polimi.ingsw.model.PlayerCount;
@@ -45,8 +46,8 @@ public abstract class GameState {
         return this.players[c.getOrder()];
     }
 
-    protected void setCardState(CardState state) throws ForbiddenCallException{
-        throw new ForbiddenCallException("This state doesn't support this function.");
+    public void validate(ServerMessage message) throws ForbiddenCallException {
+        message.receive(this);
     }
 
     public void transition(){
@@ -54,6 +55,15 @@ public abstract class GameState {
     }
 
     public abstract GameState getNext();
+
+    public CardState getCardState() throws ForbiddenCallException{
+        throw new ForbiddenCallException("This state doesn't support this function.");
+    }
+
+    protected void setCardState(CardState state) throws ForbiddenCallException{
+        throw new ForbiddenCallException("This state doesn't support this function.");
+    }
+
 
     //TODO public abstract ClientState getClientState();
 

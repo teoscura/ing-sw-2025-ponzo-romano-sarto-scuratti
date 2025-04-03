@@ -1,8 +1,7 @@
 package it.polimi.ingsw.model.adventure_cards.state;
 
-import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
+import it.polimi.ingsw.message.client.NotifyCardStateUpdateMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
-import it.polimi.ingsw.message.exceptions.MessageInvalidException;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.adventure_cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.adventure_cards.utils.CardOrder;
@@ -22,11 +21,11 @@ public abstract class CardState {
 
     public void init(){
         for(Player p : state.getOrder(CardOrder.NORMAL)){
-            p.getDescriptor().sendMessage(new NotifyStateUpdateMessage(this.state));
+            p.getDescriptor().sendMessage(new NotifyCardStateUpdateMessage(this.state));
         }
     };
 
-    public abstract void validate(ServerMessage message) throws MessageInvalidException;
+    public abstract void validate(ServerMessage message) throws ForbiddenCallException;
 
     protected abstract CardState getNext();
 
