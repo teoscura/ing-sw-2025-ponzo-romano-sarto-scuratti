@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.adventure_cards.state;
 
 import java.util.List;
 
+import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.exceptions.MessageInvalidException;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.adventure_cards.PiratesCard;
@@ -14,8 +15,6 @@ public class PiratesRewardState extends CardState {
     private final List<Player> list;
     private boolean responded = false;
     private boolean took_reward = false;
-
-    //XXX implement accepted messages;
 
     public PiratesRewardState(VoyageState state, PiratesCard card, List<Player> list){
         super(state);
@@ -43,8 +42,17 @@ public class PiratesRewardState extends CardState {
 
     @Override
     protected CardState getNext() {
-        this.list.removeFirst();
-        if(this.list.isEmpty()) return new PiratesAnnounceState(state, card, list);
         return null;
     }
+
+    @Override
+    public void setTakeReward(Player p, boolean take){
+        if(p!=this.list.getFirst()){
+            p.getDescriptor().sendMessage(new ViewMessage("It's not your turn!"));
+            return;
+        }
+        this.took_reward = take;
+        this.responded = true;
+    }
+
 }

@@ -181,7 +181,6 @@ package Controller{
             {method} + selectLanding(ClientDescriptor, int) : void
             {method} + askUpdateState(ClientDescriptor) : void
             {method} + progressTurn(ClientDescriptor) : void
-            {method} + removeCrew(ClientDescriptor, ShipCoords) : void
         }
 
         GameState^.. LeaderboardState

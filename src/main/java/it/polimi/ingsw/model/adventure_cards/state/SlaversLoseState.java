@@ -2,10 +2,12 @@ package it.polimi.ingsw.model.adventure_cards.state;
 
 import java.util.List;
 
+import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.exceptions.MessageInvalidException;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.adventure_cards.SlaversCard;
 import it.polimi.ingsw.model.adventure_cards.visitors.CrewRemoveVisitor;
+import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.VoyageState;
@@ -16,8 +18,6 @@ public class SlaversLoseState extends CardState {
     private final List<Player> list;
     private boolean responded = false;
     private List<ShipCoords> coords;
-
-    //XXX implement accepted messages;
 
     protected SlaversLoseState(VoyageState state, SlaversCard card, List<Player> list){
         super(state);
@@ -46,6 +46,25 @@ public class SlaversLoseState extends CardState {
         this.list.removeFirst();
         if(!list.isEmpty()) return new SlaversAnnounceState(state, card, list);
         return null;
+    }
+
+    @Override
+    public void removeCrew(Player p, ShipCoords cabin_coords){
+        if(p!=this.list.getFirst()){
+            p.getDescriptor().sendMessage(new ViewMessage("It's not your turn!"));
+            return;
+        }
+        CrewRemoveVisitor v = new CrewRemoveVisitor(p.getSpaceShip());
+        try {
+            p.getSpaceShip().getComponent(cabin_coords).check(v);
+        } catch(IllegalTargetException e){
+            p.getDescriptor().sendMessage(new ViewMessage("Sent coords of an empty cabin or not a cabin"));
+            return;
+        }
+        this.coords.add(cabin_coords);
+        if(coords.size()==this.card.getCrewLost()){
+            this.responded = true;
+        }
     }
     
 }

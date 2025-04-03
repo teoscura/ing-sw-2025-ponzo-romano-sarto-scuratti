@@ -31,6 +31,10 @@ public class SlaversCard extends Card{
         return credits;
     }
 
+    public int getCrewLost(){
+        return this.crew_penalty;
+    }
+
 	public boolean apply(VoyageState state, Player p){
         if(state==null||p==null) throw new NullPointerException();
         if(p.getSpaceShip().getCannonPower()>this.min_power){

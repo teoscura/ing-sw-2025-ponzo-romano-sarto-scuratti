@@ -4,6 +4,7 @@ import java.util.List;
 
 import it.polimi.ingsw.exceptions.PlayerNotFoundException;
 import it.polimi.ingsw.message.client.CardMessage;
+import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.exceptions.MessageInvalidException;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.adventure_cards.AbandonedShipCard;
@@ -16,8 +17,6 @@ public class AbandonedShipAnnounceState extends CardState {
     private final List<Player> list;
     private boolean responded = false;
     private int id = -1;
-
-    //XXX implement accepted messages;
     
     public AbandonedShipAnnounceState(VoyageState state, AbandonedShipCard card, List<Player> list) {
         super(state);
@@ -51,6 +50,20 @@ public class AbandonedShipAnnounceState extends CardState {
         this.list.removeFirst();
         if(!this.list.isEmpty()) return new AbandonedShipAnnounceState(state, card, list);
         return null;
+    }
+
+    @Override
+    public void selectLanding(Player p, int planet){
+        if(p!=this.list.getFirst()){
+            p.getDescriptor().sendMessage(new ViewMessage("It's not your turn!"));
+            return;
+        }
+        else if(planet!=-1 && planet!=0){ 
+            p.getDescriptor().sendMessage(new ViewMessage("Wrong landing id sent!"));
+            return;
+        }
+        this.id = planet;
+        this.responded = true;
     }
     
 }

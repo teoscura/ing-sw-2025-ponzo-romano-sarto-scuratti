@@ -21,6 +21,7 @@ public interface iSpaceShip {
 	public GameModeType getType();
 	public int getCannonPower();
 	public int[] getCrew();
+	public int[] getContains();
 	public iBaseComponent getComponent(ShipCoords coords);
 	public int getEnginePower();
 	public int getEnergyPower();

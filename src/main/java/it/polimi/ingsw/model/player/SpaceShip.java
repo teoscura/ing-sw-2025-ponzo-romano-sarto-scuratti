@@ -22,6 +22,7 @@ import it.polimi.ingsw.model.components.iBaseComponent;
 import it.polimi.ingsw.model.components.enums.AlienType;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ConnectorType;
+import it.polimi.ingsw.model.components.enums.ShipmentType;
 import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
 import it.polimi.ingsw.model.components.visitors.SpaceShipUpdateVisitor;
 import it.polimi.ingsw.model.components.visitors.EnergyVisitor;
@@ -200,7 +201,7 @@ public class SpaceShip implements iSpaceShip{
 		EnergyVisitor v = new EnergyVisitor(true);
 		if(c.getContains()==0) throw new IllegalTargetException("No batteries found at location");
 		c.takeOne();
-		c.check(v);
+		this.getComponent(coords_target).check(v);
 	}
 
 	@Override
@@ -312,6 +313,7 @@ public class SpaceShip implements iSpaceShip{
 		if(this.type.isForbidden(new_center) || this.getComponent(new_center)==this.empty) throw new IllegalTargetException("New center is either forbidden or illegal.");
 		if(!broke_center) throw new ForbiddenCallException("Cabin isn't broken");
 		this.center = new_center;
+		this.broke_center = false;
 		this.verifyAndClean();
 	}
 
@@ -456,6 +458,17 @@ public class SpaceShip implements iSpaceShip{
 	@Override
 	public void setBrokeCenter(){
 		this.broke_center = true;
+	}
+
+	@Override
+	public int[] getContains() {
+		int[] tmp = new int[5];
+		tmp[4] = this.battery_power;
+		for(ShipmentType t : ShipmentType.values()){
+			if(t.getValue()==0) break;
+			tmp[t.getValue()-1] = this.containers[t.getValue()-1];
+		}	
+		return tmp;
 	}
 
 }

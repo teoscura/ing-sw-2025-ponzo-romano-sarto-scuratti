@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.adventure_cards.state;
 
 import java.util.List;
 
+import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.exceptions.MessageInvalidException;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.adventure_cards.AbandonedStationCard;
@@ -14,8 +15,6 @@ public class AbandonedStationAnnounceState extends CardState {
     private final List<Player> list;
     private boolean responded = false;
     private int id = -1;
-
-    //XXX implement accepted messages;
 
     public AbandonedStationAnnounceState(VoyageState state, AbandonedStationCard card, List<Player> list) {
         super(state);
@@ -44,6 +43,20 @@ public class AbandonedStationAnnounceState extends CardState {
         this.list.removeFirst();
         if(!this.list.isEmpty()) return new AbandonedStationAnnounceState(state, card, list);
         return null;
+    }
+
+    @Override
+    public void selectLanding(Player p, int planet){
+        if(p!=this.list.getFirst()){
+            p.getDescriptor().sendMessage(new ViewMessage("It's not your turn!"));
+            return;
+        }
+        else if(planet!=-1 && planet!=0){ 
+            p.getDescriptor().sendMessage(new ViewMessage("Wrong landing id sent!"));
+            return;
+        }
+        this.id = planet;
+        this.responded = true;
     }
     
 }

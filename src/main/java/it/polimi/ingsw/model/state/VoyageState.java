@@ -21,6 +21,7 @@ public class VoyageState extends GameState {
     
     private final iPlanche planche;
     private final iCards voyage_deck;
+    private PlayerColor target;
     private CardState state;
 
     public VoyageState(ModelInstance model, GameModeType type, PlayerCount count, Player[] players, iCards deck, iPlanche planche){

@@ -2,19 +2,20 @@ package it.polimi.ingsw.model.adventure_cards.state;
 
 import java.util.List;
 
+import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.exceptions.MessageInvalidException;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.adventure_cards.PiratesCard;
-import it.polimi.ingsw.model.adventure_cards.utils.CardOrder;
+import it.polimi.ingsw.model.adventure_cards.exceptions.ForbiddenCallException;
+import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
 import it.polimi.ingsw.model.player.Player;
+import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.VoyageState;
 
 public class PiratesNewCabinState extends CardState {
 
     private final PiratesCard card;
     private final List<Player> list;
-
-    //XXX implement accepted messages;
 
     public PiratesNewCabinState(VoyageState state, PiratesCard card, List<Player> list) {
         super(state);
@@ -31,11 +32,7 @@ public class PiratesNewCabinState extends CardState {
     @Override
     public void validate(ServerMessage message) throws MessageInvalidException {
         message.receive(this);
-        boolean missing = false;
-        for(Player p : this.state.getOrder(CardOrder.NORMAL)){
-            missing = missing || p.getSpaceShip().getBrokeCenter();
-        }
-        if(missing) return;
+        if(this.list.getFirst().getSpaceShip().getBrokeCenter()) return;
         this.transition();
     }
 
@@ -46,4 +43,20 @@ public class PiratesNewCabinState extends CardState {
         return null;
     }
     
+    @Override
+    public void setNewShipCenter(Player p, ShipCoords new_center){
+        if(p!=this.list.getFirst()){
+            p.getDescriptor().sendMessage(new ViewMessage("It's not your turn!"));
+            return;
+        }
+        try{
+            p.getSpaceShip().setCenter(new_center);
+        } catch (IllegalTargetException e){
+            p.getDescriptor().sendMessage(new ViewMessage("Target is an empty space!"));
+        } catch (ForbiddenCallException e){
+            //Should never get here.
+            p.getDescriptor().sendMessage(new ViewMessage("Cabin isn't broken!"));
+        }
+    }
+
 }
