@@ -30,7 +30,7 @@ public class PlanetRewardState extends CardState {
         super(state);
         if(clist.size()>this.state.getCount().getNumber()||clist.size()<1||clist==null) throw new IllegalArgumentException("Constructed insatisfyable state");
         if(card==null) throw new NullPointerException();
-        //this.id = id;
+        this.id = id;
         this.list = clist;
         this.card = card;
     }
