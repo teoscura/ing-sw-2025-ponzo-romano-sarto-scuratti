@@ -20,9 +20,10 @@ public class OpenSpaceCard extends Card {
     public void apply(VoyageState state, Player p) throws PlayerNotFoundException {
         if(state==null||p==null) throw new NullPointerException();
         if(p.getSpaceShip().getEnginePower()>0){
-            state.getPlanche().movePlayer(p.getColor(), p.getSpaceShip().getEnginePower());
+            state.getPlanche().movePlayer(p, p.getSpaceShip().getEnginePower());
+            return;
         }
-        state.loseGame(p.getColor());
+        p.retire();
     }
 
 }

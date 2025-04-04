@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import it.polimi.ingsw.message.client.ViewMessage;
+import it.polimi.ingsw.message.server.EmptyMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.adventure_cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.adventure_cards.utils.CombatZonePenalty;
@@ -62,14 +63,14 @@ class CombatZonePenaltyState extends CardState {
     public void init() {
         super.init();
         if(sections.getFirst().getPenalty()!=CombatZonePenalty.DAYS) return;
-        this.state.getPlanche().movePlayer(this.target.getColor(), -this.sections.getFirst().getAmount());
+        this.state.getPlanche().movePlayer(this.target, -this.sections.getFirst().getAmount());
         this.transition();
     }
 
     @Override
     public void validate(ServerMessage message) throws ForbiddenCallException {
         message.receive(this);
-        if(!responded) return;
+        if(!responded&&!this.target.getRetired()) return;
         if(this.sections.getFirst().getPenalty()==CombatZonePenalty.SHOTS){
             this.target.getSpaceShip().handleShot(this.shots.getProjectiles().get(0));
         }
@@ -124,7 +125,7 @@ class CombatZonePenaltyState extends CardState {
     }
     
     @Override 
-    public void removeCrew(Player p, ShipCoords cabin_coords){
+    public void removeCrew(Player p, ShipCoords cabin_coords) throws ForbiddenCallException{
         if(p!=this.target){
             p.getDescriptor().sendMessage(new ViewMessage("It's not your turn!"));
             return;
@@ -138,6 +139,11 @@ class CombatZonePenaltyState extends CardState {
             p.getSpaceShip().getComponent(cabin_coords).check(v);
         } catch(IllegalTargetException e){
             p.getDescriptor().sendMessage(new ViewMessage("Sent coords of an empty cabin or not a cabin"));
+            return;
+        }
+        if(p.getSpaceShip().getCrew()[0]==0){
+            p.retire();
+            this.validate(new EmptyMessage(p.getDescriptor()));
             return;
         }
         this.coords.add(cabin_coords);

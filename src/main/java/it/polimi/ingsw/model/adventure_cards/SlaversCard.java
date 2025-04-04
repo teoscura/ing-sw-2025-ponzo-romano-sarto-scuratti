@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model.adventure_cards;
 
 import it.polimi.ingsw.exceptions.NegativeArgumentException;
-import it.polimi.ingsw.exceptions.PlayerNotFoundException;
 import it.polimi.ingsw.model.adventure_cards.state.CardState;
 import it.polimi.ingsw.model.adventure_cards.state.SlaversAnnounceState;
 import it.polimi.ingsw.model.adventure_cards.utils.CardOrder;
@@ -45,12 +44,7 @@ public class SlaversCard extends Card{
             return true;
         }
         if(p.getSpaceShip().getTotalCrew()<=this.crew_penalty){
-            try {
-                state.loseGame(p.getColor());
-            } catch (PlayerNotFoundException e) {
-                // Unreachable.
-                e.printStackTrace();
-            } return false;
+            p.retire();
         }
         return false;
 	}

@@ -36,8 +36,8 @@ public class EpidemicCard extends Card{
             }
         }
         p.getSpaceShip().updateShip();
-        if(p.getSpaceShip().getTotalCrew()==0) {
-            state.loseGame(p.getColor());
+        if(p.getSpaceShip().getCrew()[0]==0) {
+            p.retire();
         }
     }
 

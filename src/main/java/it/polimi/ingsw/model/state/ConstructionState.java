@@ -38,8 +38,7 @@ public class ConstructionState extends GameState {
     private final iCards voyage_deck;
 
     private final List<Player> building;
-    private final HashMap<PlayerColor, List<iBaseComponent>> reserved_components;
-    private final List<iBaseComponent> discarded;
+    private final List<Player> finished;
 
     public ConstructionState(ModelInstance model, GameModeType type, PlayerCount count, Player[] players) {
         super(model, type, count, players);
@@ -86,8 +85,7 @@ public class ConstructionState extends GameState {
             this.construction_cards = tmp.stream().mapToInt((c)->c.getId()).toArray();
             this.voyage_deck = new Cards(tmp);
         }
-        this.reserved_components = new HashMap<>();
-        this.discarded = new ArrayList<>();
+        this.finished = new ArrayList<>();
         this.building = new ArrayList<>();
         this.building.addAll(Arrays.asList(this.players));
         for(PlayerColor c : PlayerColor.values()){
@@ -103,13 +101,13 @@ public class ConstructionState extends GameState {
 
     @Override
     public void validate(ServerMessage message) throws ForbiddenCallException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'validate'");
+        message.receive(this);
+        //XXX add that timer finished, and that everyone who was ready beforehand did choose to continue and not flip it.
     }
 
     @Override
     public GameState getNext() {
-        return new ValidationState(model, type, count, players, voyage_deck);
+        return new ValidationState(model, type, count, players, voyage_deck, finished);
     }
 
     @Override
@@ -119,6 +117,7 @@ public class ConstructionState extends GameState {
             return;
         }
         this.building.remove(p);
+        this.finished.addLast(p);
         /*XXX timer logic. */
     }
 

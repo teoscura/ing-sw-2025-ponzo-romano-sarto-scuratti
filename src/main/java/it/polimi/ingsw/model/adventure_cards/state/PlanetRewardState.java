@@ -47,7 +47,7 @@ class PlanetRewardState extends CardState {
         for(int i=0;i<this.coords.size();i++){
             ((StorageComponent) this.list.getFirst().getSpaceShip().getComponent(this.coords.get(i))).putIn(this.merch.get(i));
         }
-        this.state.getPlanche().movePlayer(this.list.getFirst().getColor(), -this.card.getDays());
+        this.state.getPlanche().movePlayer(this.list.getFirst(), -this.card.getDays());
         this.transition();
     }
 

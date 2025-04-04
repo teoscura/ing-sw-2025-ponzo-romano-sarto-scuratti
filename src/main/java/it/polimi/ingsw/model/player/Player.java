@@ -13,6 +13,8 @@ public class Player {
     private SpaceShip ship;
     private ClientDescriptor descriptor;
 
+    ASDASDASD add score methods for adding and removing, and put giving up calculation of score in retire();
+
     public Player(GameModeType gamemode, PlayerColor color){
         this.color = color;
         ship = new SpaceShip(gamemode, color);

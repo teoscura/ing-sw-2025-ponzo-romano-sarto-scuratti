@@ -1,16 +1,12 @@
 package it.polimi.ingsw.model.board;
 
-import java.util.List;
-
-import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.model.player.Player;
 
 public interface iPlanche {
 
-	public int getPlayerPosition(PlayerColor c);
+	public int getPlayerPosition(Player c);
 
-	public PlayerColor getPlayersAt(int Position);
+	public Player getPlayerAt(int Position);
 
-	public void movePlayer(PlayerColor c, int rel_change);
-
-	public List<PlayerColor> getOrder();
+	public void movePlayer(Player c, int rel_change);
 }

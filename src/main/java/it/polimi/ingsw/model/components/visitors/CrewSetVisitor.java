@@ -12,7 +12,7 @@ public class CrewSetVisitor implements iVisitor {
 
     public CrewSetVisitor(iSpaceShip ship, AlienType type){
         if(ship==null) throw new NullPointerException();
-        if(type.getArraypos()<0) throw new IllegalArgumentException();
+        if(type.getArraypos()<0&&type.getMaxCapacity()>0) throw new IllegalArgumentException();
         this.ship = ship;
         this.type = type;
     }

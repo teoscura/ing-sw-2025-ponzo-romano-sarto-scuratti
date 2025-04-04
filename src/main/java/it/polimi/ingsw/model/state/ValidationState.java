@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import it.polimi.ingsw.message.client.NotifyPlayerUpdateMessage;
-import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.GameModeType;
@@ -14,6 +13,7 @@ import it.polimi.ingsw.model.adventure_cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.board.Planche;
 import it.polimi.ingsw.model.board.iCards;
 import it.polimi.ingsw.model.components.enums.AlienType;
+import it.polimi.ingsw.model.components.exceptions.AlienTypeAlreadyPresentException;
 import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
 import it.polimi.ingsw.model.components.exceptions.UnsupportedAlienCabinException;
 import it.polimi.ingsw.model.components.visitors.CrewSetVisitor;
@@ -38,20 +38,6 @@ public class ValidationState extends GameState {
     @Override
     public void init(){
         super.init();
-        for(Player p : this.players){
-            VerifyResult[][] res = p.getSpaceShip().verify();
-            boolean broken = false;
-            for(VerifyResult[] col : res){
-                for(VerifyResult r : col){
-                    if(r==VerifyResult.BROKEN) broken = true;
-                }
-            }
-            if(!broken){
-                this.to_validate.remove(p);
-                continue;
-            }
-            p.getDescriptor().sendMessage(new NotifyStateUpdateMessage());
-        }
     }
 
     @Override
@@ -65,6 +51,24 @@ public class ValidationState extends GameState {
     public GameState getNext() {
         Planche planche = new Planche(type, count, finish_order);
         return new VoyageState(model, type, count, players, voyage_deck, planche);
+    }
+
+    @Override
+    public void sendContinue(Player p) throws ForbiddenCallException {
+        if(!this.to_validate.contains(p)){
+            p.getDescriptor().sendMessage(new ViewMessage("You already finished validating your ship!"));
+            return;
+        }
+        VerifyResult[][] tmp = p.getSpaceShip().verify();
+        for(VerifyResult[] row : tmp){
+            for(VerifyResult r : row){
+                if(r==VerifyResult.BROKEN){
+                    p.getDescriptor().sendMessage(new ViewMessage("You need to fix your ship!"));
+                    return;
+                }
+            }
+        }
+        this.to_validate.remove(p);
     }
     
     @Override
@@ -99,8 +103,13 @@ public class ValidationState extends GameState {
         } catch (UnsupportedAlienCabinException e){
             p.getDescriptor().sendMessage(new ViewMessage("Selected cabin doesn't support the intended alien type!"));
             return;
+        } catch (AlienTypeAlreadyPresentException e) {
+            p.getDescriptor().sendMessage(new ViewMessage("This ship already contains this alien type!"));
+            return;
         }
-        p.getDescriptor().sendMessage(new NotifyPlayerUpdateMessage(p.getColor()));
+        for(Player tmp : this.players){
+            tmp.getDescriptor().sendMessage(new NotifyPlayerUpdateMessage(p.getColor()));
+        }
     }
     
 }
