@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import it.polimi.ingsw.controller.server.ClientDescriptor;
 import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.GameModeType;
@@ -48,6 +49,12 @@ public class VoyageState extends GameState {
     @Override
     public GameState getNext(){
         return new EndscreenState(model, type, count, players);
+    }
+
+    @Override
+    public void disconnect(ClientDescriptor client) throws ForbiddenCallException {
+        //XXX Add that if 3 people disconnected game ends.
+        throw new ForbiddenCallException("This state doesn't support this function.");
     }
 
     @Override
@@ -98,7 +105,6 @@ public class VoyageState extends GameState {
             default: return null;
         }
     }
-
 
     public iPlanche getPlanche(){
         return planche;

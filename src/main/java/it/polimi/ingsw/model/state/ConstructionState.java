@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+import it.polimi.ingsw.controller.server.ClientDescriptor;
 import it.polimi.ingsw.exceptions.OutOfBoundsException;
 import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
 import it.polimi.ingsw.message.client.ViewMessage;

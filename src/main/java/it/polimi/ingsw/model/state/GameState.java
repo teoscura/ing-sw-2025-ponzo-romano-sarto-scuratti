@@ -68,6 +68,7 @@ public abstract class GameState {
     }
 
     public void disconnect(ClientDescriptor client) throws ForbiddenCallException {
+        p.getDescriptor().sendMessage(new ViewMessage("This operation isn't allowed in the current state!"));
         throw new ForbiddenCallException("This state doesn't support this function.");
     }
 
