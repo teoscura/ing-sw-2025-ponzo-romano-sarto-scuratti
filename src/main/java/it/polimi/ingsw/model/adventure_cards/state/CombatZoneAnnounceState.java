@@ -31,6 +31,7 @@ public class CombatZoneAnnounceState extends CardState {
     @Override
     public void init() {
         super.init();
+        if(this.state.getOrder(CardOrder.NORMAL).size()<=1) this.transition();
     }
 
     @Override
@@ -43,6 +44,7 @@ public class CombatZoneAnnounceState extends CardState {
 
     @Override
     protected CardState getNext() {
+        if(this.state.getOrder(CardOrder.NORMAL).size()<=1) return null;
         return new CombatZonePenaltyState(state, sections, shots, target);
     }
 
