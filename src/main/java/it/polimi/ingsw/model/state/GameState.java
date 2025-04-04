@@ -10,6 +10,7 @@ import it.polimi.ingsw.model.ModelInstance;
 import it.polimi.ingsw.model.PlayerCount;
 import it.polimi.ingsw.model.adventure_cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.adventure_cards.state.CardState;
+import it.polimi.ingsw.model.components.enums.AlienType;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.ShipCoords;
@@ -75,7 +76,7 @@ public abstract class GameState {
         throw new ForbiddenCallException("This state doesn't support this function.");
     }
 
-    public void putComponent(Player p, ShipCoords coords, int id) throws ForbiddenCallException {
+    public void putComponent(Player p, ShipCoords coords) throws ForbiddenCallException {
         p.getDescriptor().sendMessage(new ViewMessage("This operation isn't allowed in the current state!"));
         throw new ForbiddenCallException("This state doesn't support this function.");
     }
@@ -105,7 +106,7 @@ public abstract class GameState {
         throw new ForbiddenCallException("This state doesn't support this function.");
     }
 
-    public void setCrewType(Player p, ShipCoords coords, AlientType type) throws ForbiddenCallException {
+    public void setCrewType(Player p, ShipCoords coords, AlienType type) throws ForbiddenCallException {
         p.getDescriptor().sendMessage(new ViewMessage("This operation isn't allowed in the current state!"));
         throw new ForbiddenCallException("This state doesn't support this function.");
     }

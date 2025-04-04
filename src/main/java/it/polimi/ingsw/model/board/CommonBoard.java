@@ -9,6 +9,7 @@ import java.util.Queue;
 import it.polimi.ingsw.exceptions.OutOfBoundsException;
 import it.polimi.ingsw.model.components.ComponentFactory;
 import it.polimi.ingsw.model.components.iBaseComponent;
+import it.polimi.ingsw.model.components.exceptions.ContainerEmptyException;
 
 public class CommonBoard implements iCommonBoard {
 
@@ -43,7 +44,7 @@ public class CommonBoard implements iCommonBoard {
 
 	@Override
 	public iBaseComponent pullDiscarded(int i) {
-		if(this.uncovered_components.isEmpty()) return null;
+		if(this.uncovered_components.isEmpty()) throw new ContainerEmptyException();
 		if(i<0) throw new OutOfBoundsException();
 		if(i>=this.uncovered_components.size()) throw new OutOfBoundsException();
 		iBaseComponent tmp = this.uncovered_components.get(i);

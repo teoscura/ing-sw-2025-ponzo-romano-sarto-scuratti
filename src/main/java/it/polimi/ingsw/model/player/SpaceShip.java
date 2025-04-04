@@ -156,7 +156,7 @@ public class SpaceShip implements iSpaceShip{
 		if (coords == null) throw new NullPointerException();
 		if(coords==this.getCenter()) this.setBrokeCenter();
 		iBaseComponent tmp = this.getComponent(coords);
-		if (this.components[coords.y][coords.x] == this.empty) return;
+		if (this.components[coords.y][coords.x] == this.empty) throw new IllegalTargetException();
 		this.components[coords.y][coords.x] = this.empty;
 		tmp.onDelete(this);
 		//verify and clean needs to be called outside when component is removed
