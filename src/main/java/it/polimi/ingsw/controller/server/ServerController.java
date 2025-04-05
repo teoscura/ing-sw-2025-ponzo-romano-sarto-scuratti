@@ -3,20 +3,24 @@ package it.polimi.ingsw.controller.server;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 
+import it.polimi.ingsw.controller.client.RMIServerStub;
 import it.polimi.ingsw.message.client.PingMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.ModelInstance;
 import it.polimi.ingsw.model.PlayerCount;
 import it.polimi.ingsw.model.adventure_cards.exceptions.ForbiddenCallException;
-public class ServerController implements iServerController {
+
+public class ServerController implements RMIServerStub {
     
     private ModelInstance model = null;
-    private Server server = Server.getInstance();
+    private final Server server;
     private ClientDescriptor setupper;
     private Lock model_lock;
     
     public ServerController(){
+        this.server = Server.getInstance();
+        this.server.setController(this);
         /*Load all jsons in list that are valid.*/;
         //run server, set as daemon;
         //Do everything.
@@ -27,6 +31,11 @@ public class ServerController implements iServerController {
             if(this.model==null) throw new ForbiddenCallException();
             return this.model;
         }
+    }
+
+    public RMIServerStub getStub(RMIClientStub client){
+        //XXX aggiungi a utenti connessi, se qualcuno connesso e setup non finito butta via.
+        //se Username duplicato rifiuta.
     }
 
     @Override
@@ -92,5 +101,13 @@ public class ServerController implements iServerController {
         if(this.model!=null||client!=setupper) throw new ForbiddenCallException();
         client.resetTimer(); 
     }
+
+    // public void connect(ClientDescriptor client) throws ForbiddenCallException;
+    // public void disconnect(ClientDescriptor client) throws ForbiddenCallException;
+    // public void openRoom(ClientDescriptor client, GameModeType type, PlayerCount count) throws ForbiddenCallException ;
+    // public void getUnfinishedList(ClientDescriptor client) throws ForbiddenCallException; 
+    // public void getMyUnfinishedList(ClientDescriptor client) throws ForbiddenCallException;
+    // public void openUnfinished(ClientDescriptor client, int id) throws ForbiddenCallException;
+    // public void ping(ClientDescriptor client) throws ForbiddenCallException ;
 
 }

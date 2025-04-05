@@ -16,8 +16,6 @@ public class ModelInstance {
     private final HashMap<ClientDescriptor, PlayerColor> connected;
     
     private GameState state;
-
-    //XXX finish implementing;
     
     public ModelInstance(GameModeType type, PlayerCount count){
         this.state = new WaitingState(this, type, count);
@@ -41,7 +39,7 @@ public class ModelInstance {
     public void setState(GameState new_state){
         if(new_state==null){
             
-        } //XXX shutdown the program and exit, game is done, dont serialize.
+        }
         this.state = new_state;
         state.init();
     }
