@@ -82,6 +82,7 @@ public class ValidationState extends GameState {
         }
         try{
             p.getSpaceShip().removeComponent(coords);
+            p.getSpaceShip().verifyAndClean();
         } catch (IllegalTargetException e){
             p.getDescriptor().sendMessage(new ViewMessage("Coords correspond to a empty component!"));
             return;

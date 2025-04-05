@@ -34,7 +34,7 @@ public abstract class GameState {
     public abstract void validate(ServerMessage message) throws ForbiddenCallException;
     public abstract GameState getNext();
     //TODO public abstract JsonState serialize();
-    public abstract ClientState getClientState();
+    //public abstract ClientState getClientState();
 
     public void init(){
         for(Player p : this.players){

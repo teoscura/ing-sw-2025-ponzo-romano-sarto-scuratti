@@ -2,7 +2,6 @@ package it.polimi.ingsw.model.player;
 
 
 import it.polimi.ingsw.model.GameModeType;
-import it.polimi.ingsw.model.components.enums.ShipmentType;
 import it.polimi.ingsw.model.components.exceptions.AlreadyPoweredException;
 import it.polimi.ingsw.controller.server.ClientDescriptor;
 
@@ -17,7 +16,7 @@ public class Player {
 
     public Player(GameModeType gamemode, PlayerColor color){
         this.color = color;
-        ship = new SpaceShip(gamemode, color);
+        ship = new SpaceShip(gamemode, this);
     }
 
     public PlayerColor getColor(){
@@ -52,12 +51,17 @@ public class Player {
         return this.credits;
     }
 
+    public void addScore(int rel_change){
+        this.score += rel_change;
+    }
+
     public int getScore(){
         return this.score;
     }
 
     public void finalScore() {
         xxx
+        XXX ricorda: implementa questo, e ricorda di implementare calcolo punteggi quando qualcuno si ritira.
     }
 
     public void reconnect(ClientDescriptor new_descriptor){

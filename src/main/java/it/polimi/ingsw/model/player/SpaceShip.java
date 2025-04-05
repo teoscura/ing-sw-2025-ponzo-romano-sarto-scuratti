@@ -32,6 +32,8 @@ import it.polimi.ingsw.model.player.exceptions.NegativeCrewException;
 
 public class SpaceShip implements iSpaceShip{
 	
+	private final Player player;
+
 	private final ArrayList<ShipCoords> storage_coords;
 	private final ArrayList<ShipCoords> cabin_coords;
 	private final ArrayList<ShipCoords> battery_coords;
@@ -49,7 +51,8 @@ public class SpaceShip implements iSpaceShip{
 	private int battery_power = 0;
 
 	public SpaceShip(GameModeType type, 
-					 PlayerColor color){
+					 Player player){
+		this.player = player;
 		this.type = type;
 		this.components = new iBaseComponent[type.getHeight()][type.getWidth()];
 		this.shielded_directions = new boolean[4];
@@ -70,7 +73,7 @@ public class SpaceShip implements iSpaceShip{
 														 ConnectorType.UNIVERSAL,
 														 ConnectorType.UNIVERSAL}, 
 											ComponentRotation.U000,
-											color,
+											player.getColor(),
 											center),
 											center);
 		Arrays.fill(shielded_directions, false);
@@ -158,8 +161,8 @@ public class SpaceShip implements iSpaceShip{
 		iBaseComponent tmp = this.getComponent(coords);
 		if (this.components[coords.y][coords.x] == this.empty) throw new IllegalTargetException();
 		this.components[coords.y][coords.x] = this.empty;
+		this.player.addScore(-1);
 		tmp.onDelete(this);
-		//verify and clean needs to be called outside when component is removed
 	}
 
 	@Override

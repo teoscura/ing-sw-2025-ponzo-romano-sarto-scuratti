@@ -16,6 +16,7 @@ public class PiratesAnnounceState extends CardState {
     private final PiratesCard card;
     private final List<Player> list;
     private boolean responded = false;
+    private boolean result = true;
 
     public PiratesAnnounceState(VoyageState state, PiratesCard card, List<Player> list){
         super(state);
@@ -35,14 +36,14 @@ public class PiratesAnnounceState extends CardState {
     public void validate(ServerMessage message) throws ForbiddenCallException {
         message.receive(this);
         if(!responded) return;
-        this.card.apply(this.state, this.list.getFirst());
+        result = this.card.apply(this.state, this.list.getFirst());
         this.transition();
     }
 
     @Override
     protected CardState getNext() {
+        if(!result) return new PiratesPenaltyState(state, card, list, card.getShots());
         if(this.card.getExhausted()) return new PiratesRewardState(state, card, list);
-        if(this.list.getFirst().getSpaceShip().getBrokeCenter()) return new PiratesNewCabinState(state, card, list);
         this.list.removeFirst();
         if(!this.list.isEmpty()) return new PiratesAnnounceState(state, card, list);
         return null;

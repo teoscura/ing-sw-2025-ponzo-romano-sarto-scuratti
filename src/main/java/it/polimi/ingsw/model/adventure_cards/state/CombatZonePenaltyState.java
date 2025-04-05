@@ -7,6 +7,7 @@ import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.EmptyMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.adventure_cards.exceptions.ForbiddenCallException;
+import it.polimi.ingsw.model.adventure_cards.utils.CardOrder;
 import it.polimi.ingsw.model.adventure_cards.utils.CombatZonePenalty;
 import it.polimi.ingsw.model.adventure_cards.utils.CombatZoneSection;
 import it.polimi.ingsw.model.adventure_cards.utils.ProjectileArray;
@@ -83,6 +84,9 @@ class CombatZonePenaltyState extends CardState {
 
     @Override
     protected CardState getNext() {
+        for(Player p : this.state.getOrder(CardOrder.NORMAL)){
+            if(!p.getSpaceShip().getBrokeCenter()) p.getSpaceShip().verifyAndClean();
+        }
         this.shots.getProjectiles().removeFirst();
         if(this.target.getSpaceShip().getBrokeCenter()) return new CombatZoneNewCabinState(state, sections, shots, target);
         if(this.sections.getFirst().getPenalty()==CombatZonePenalty.SHOTS && !this.shots.getProjectiles().isEmpty()){
