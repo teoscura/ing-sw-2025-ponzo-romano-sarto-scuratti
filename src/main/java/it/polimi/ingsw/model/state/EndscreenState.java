@@ -22,6 +22,10 @@ public class EndscreenState extends GameState {
 
     @Override
     public void init(){
+        for(Player p : this.players){
+            if(p.getRetired()) continue;
+            p.finalScore();
+        }
         super.init();
     }
 
@@ -41,10 +45,12 @@ public class EndscreenState extends GameState {
     public void sendContinue(Player p) throws ForbiddenCallException {
         if(!this.awaiting.contains(p)){
             p.getDescriptor().sendMessage(new DisconnectMessage());
+            this.model.kick(p.getDescriptor());
             return;
         }
         this.awaiting.remove(p);
         p.getDescriptor().sendMessage(new DisconnectMessage());
+        this.model.kick(p.getDescriptor());
         return;
     }
 
