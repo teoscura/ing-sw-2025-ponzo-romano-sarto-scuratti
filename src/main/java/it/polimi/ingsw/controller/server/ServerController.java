@@ -38,7 +38,6 @@ public class ServerController implements RMIServerStub {
         //se Username duplicato rifiuta.
     }
 
-    @Override
     public void connect(ClientDescriptor client) throws ForbiddenCallException {   
         if(this.model==null && setupper!=null ){
             client.sendMessage(new ViewMessage("Server currently is in setup process!"));
@@ -50,7 +49,6 @@ public class ServerController implements RMIServerStub {
         this.model.connect(client);
     }
 
-    @Override
     public void disconnect(ClientDescriptor client) {
         XXX
         if(this.model==null && client!=setupper){
@@ -58,7 +56,6 @@ public class ServerController implements RMIServerStub {
         }
     }
 
-    @Override
     public void openRoom(ClientDescriptor client, GameModeType type, PlayerCount count) {
         if(this.model!=null||client!=setupper){
             client.sendMessage(new ViewMessage("Server currently is in setup process!"));
@@ -69,13 +66,11 @@ public class ServerController implements RMIServerStub {
         this.model.connect(client);
     }
 
-    @Override
     public void getUnfinishedList(ClientDescriptor client) throws ForbiddenCallException {
         if(this.model!=null||client!=setupper) throw new ForbiddenCallException();
         //XXX Show list
     }
 
-    @Override
     public void getMyUnfinishedList(ClientDescriptor client) throws ForbiddenCallException {
         if(this.model!=null||client!=setupper) throw new ForbiddenCallException();
         //XXX
@@ -86,7 +81,6 @@ public class ServerController implements RMIServerStub {
     //     //XXX
     // }
 
-    @Override
     public void openUnfinished(ClientDescriptor client, int id) {
         if(this.model!=null||client!=setupper){
             client.sendMessage(new ViewMessage("Server currently is in setup process!"));
@@ -96,7 +90,6 @@ public class ServerController implements RMIServerStub {
         this.model.connect(client);
     };
 
-    @Override
     public void ping(ClientDescriptor client) {
         if(this.model!=null||client!=setupper) throw new ForbiddenCallException();
         client.resetTimer(); 
