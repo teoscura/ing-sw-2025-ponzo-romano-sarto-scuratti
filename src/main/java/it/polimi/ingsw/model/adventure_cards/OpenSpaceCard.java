@@ -1,6 +1,5 @@
 package it.polimi.ingsw.model.adventure_cards;
 
-import it.polimi.ingsw.exceptions.PlayerNotFoundException;
 import it.polimi.ingsw.model.adventure_cards.state.CardState;
 import it.polimi.ingsw.model.adventure_cards.state.OpenSpaceState;
 import it.polimi.ingsw.model.player.Player;
@@ -17,7 +16,7 @@ public class OpenSpaceCard extends Card {
         return new OpenSpaceState(state, this);
     }
 
-    public void apply(VoyageState state, Player p) throws PlayerNotFoundException {
+    public void apply(VoyageState state, Player p){
         if(state==null||p==null) throw new NullPointerException();
         if(p.getSpaceShip().getEnginePower()>0){
             state.getPlanche().movePlayer(p, p.getSpaceShip().getEnginePower());

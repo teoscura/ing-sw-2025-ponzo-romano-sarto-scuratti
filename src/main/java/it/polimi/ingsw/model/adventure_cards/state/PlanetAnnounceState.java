@@ -27,6 +27,7 @@ public class PlanetAnnounceState extends CardState {
     @Override
     public void init() {
         super.init();
+        if(list.getFirst().getRetired()||list.getFirst().getDisconnected()) this.transition();
     }
 
     @Override

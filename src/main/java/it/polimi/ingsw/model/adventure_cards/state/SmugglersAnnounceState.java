@@ -16,7 +16,7 @@ public class SmugglersAnnounceState extends CardState {
     private final SmugglersCard card;
     private final List<Player> list;
     private boolean responded = false;
-    private boolean result = false;
+    private boolean result = true;
 
     public SmugglersAnnounceState(VoyageState state, SmugglersCard card, List<Player> list){
         super(state);
@@ -29,6 +29,7 @@ public class SmugglersAnnounceState extends CardState {
     @Override
     public void init() {
         super.init();
+        if(list.getFirst().getRetired()||list.getFirst().getDisconnected()) this.transition();
     }
 
     @Override

@@ -1,6 +1,5 @@
 package it.polimi.ingsw.model.board;
 
-import it.polimi.ingsw.model.PlayerCount;
 import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.player.Player;
 
@@ -12,7 +11,7 @@ public class Planche implements iPlanche {
 	private final HashMap<Player, Integer> planche;
 	private final int length;
 
-	public Planche(GameModeType type, PlayerCount count, List<Player> order){
+	public Planche(GameModeType type, List<Player> order){
 		this.length = type.getLength();
 		this.planche = new HashMap<Player, Integer>();
 		int i = 0;

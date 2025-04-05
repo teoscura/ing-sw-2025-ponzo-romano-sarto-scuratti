@@ -29,6 +29,7 @@ public class SlaversAnnounceState extends CardState {
     @Override
     public void init() {
         super.init();
+        if(list.getFirst().getRetired()||list.getFirst().getDisconnected()) this.transition();
     }
 
     @Override
@@ -41,6 +42,10 @@ public class SlaversAnnounceState extends CardState {
 
     @Override
     protected CardState getNext() {
+        if(list.getFirst().getRetired()||list.getFirst().getDisconnected()){
+            this.list.removeFirst();
+            if(!list.isEmpty()) return new SlaversAnnounceState(state, card, list);
+        };
         if(this.card.getExhausted()) return new SlaversRewardState(state, card, list);
         if(!result && !this.list.getFirst().getRetired()) return new SlaversLoseState(state, card, list);
         this.list.removeFirst();

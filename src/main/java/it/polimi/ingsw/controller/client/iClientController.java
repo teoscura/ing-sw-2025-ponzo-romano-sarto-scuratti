@@ -9,5 +9,6 @@ public interface iClientController {
     public void ping();
     public void notifyCard();
     public void notifyState();
+    public void disconnect();
     
 }

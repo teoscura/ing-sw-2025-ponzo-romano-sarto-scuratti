@@ -31,17 +31,16 @@ public abstract class GameState {
         this.players = players;
     }
 
+    public abstract void validate(ServerMessage message) throws ForbiddenCallException;
+    public abstract GameState getNext();
+    //TODO public abstract JsonState serialize();
+    //TODO public abstract ClientState getClientState();
+
     public void init(){
         for(Player p : this.players){
             p.getDescriptor().sendMessage(new NotifyStateUpdateMessage());
         }
     }
-
-    public abstract void validate(ServerMessage message) throws ForbiddenCallException;
-    public abstract GameState getNext();
-    //TODO public abstract JsonState serialize();
-
-    //TODO public abstract ClientState getClientState();
 
     public void transition(){
         this.model.setState(this.getNext());
@@ -52,8 +51,7 @@ public abstract class GameState {
     }
 
     public Player getPlayer(PlayerColor c) throws PlayerNotFoundException {
-        if(c.getOrder()>=players.length) throw new PlayerNotFoundException("Player color is not present in this match");
-        if(this.players[c.getOrder()].getRetired()) throw new PlayerNotFoundException("Player has lost or retired from the game");
+        if(this.players==null||c.getOrder()>=players.length) throw new PlayerNotFoundException("Player color is not present in this match");
         return this.players[c.getOrder()];
     }
 
@@ -66,57 +64,46 @@ public abstract class GameState {
         client.sendMessage(new ViewMessage("This operation isn't allowed in the current state!"));
         throw new ForbiddenCallException("This state doesn't support this function.");
     }
-
     public void disconnect(ClientDescriptor client) throws ForbiddenCallException {
-        p.getDescriptor().sendMessage(new ViewMessage("This operation isn't allowed in the current state!"));
+        client.sendMessage(new ViewMessage("This operation isn't allowed in the current state!"));
         throw new ForbiddenCallException("This state doesn't support this function.");
     }
-
     public void sendContinue(Player p) throws ForbiddenCallException {
         p.getDescriptor().sendMessage(new ViewMessage("This operation isn't allowed in the current state!"));
         throw new ForbiddenCallException("This state doesn't support this function.");
     }
-
     public void putComponent(Player p, ShipCoords coords) throws ForbiddenCallException {
         p.getDescriptor().sendMessage(new ViewMessage("This operation isn't allowed in the current state!"));
         throw new ForbiddenCallException("This state doesn't support this function.");
     }
-
     public void takeComponent(Player p) throws ForbiddenCallException {
         p.getDescriptor().sendMessage(new ViewMessage("This operation isn't allowed in the current state!"));
         throw new ForbiddenCallException("This state doesn't support this function.");
     }
-
     public void takeDiscarded(Player p, int id) throws ForbiddenCallException {
         p.getDescriptor().sendMessage(new ViewMessage("This operation isn't allowed in the current state!"));
         throw new ForbiddenCallException("This state doesn't support this function.");
     }
-
     public void discardComponent(Player p, int id) throws ForbiddenCallException {
         p.getDescriptor().sendMessage(new ViewMessage("This operation isn't allowed in the current state!"));
         throw new ForbiddenCallException("This state doesn't support this function.");
     }
-
     public void toggleHourglass(Player p) throws ForbiddenCallException {
         p.getDescriptor().sendMessage(new ViewMessage("This operation isn't allowed in the current state!"));
         throw new ForbiddenCallException("This state doesn't support this function.");
     }
-
     public void removeComponent(Player p, ShipCoords coords) throws ForbiddenCallException {
         p.getDescriptor().sendMessage(new ViewMessage("This operation isn't allowed in the current state!"));
         throw new ForbiddenCallException("This state doesn't support this function.");
     }
-
     public void setCrewType(Player p, ShipCoords coords, AlienType type) throws ForbiddenCallException {
         p.getDescriptor().sendMessage(new ViewMessage("This operation isn't allowed in the current state!"));
         throw new ForbiddenCallException("This state doesn't support this function.");
     }
-
     public void giveUp(Player p) throws ForbiddenCallException {
         p.getDescriptor().sendMessage(new ViewMessage("This operation isn't allowed in the current state!"));
         throw new ForbiddenCallException("This state doesn't support this function.");
     }
-
     public CardState getCardState(Player p) throws ForbiddenCallException {
         p.getDescriptor().sendMessage(new ViewMessage("Current state isn't Voyage!"));
         throw new ForbiddenCallException("This state doesn't support this function.");

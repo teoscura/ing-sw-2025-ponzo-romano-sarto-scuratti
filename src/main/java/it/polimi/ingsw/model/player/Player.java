@@ -10,10 +10,9 @@ public class Player {
     private boolean retired = false;
     private boolean disconnected = false;
     private int credits;
-    private SpaceShip ship;
+    private int score; 
+    private iSpaceShip ship;
     private ClientDescriptor descriptor;
-
-    ASDASDASD add score methods for adding and removing, and put giving up calculation of score in retire();
 
     public Player(GameModeType gamemode, PlayerColor color){
         this.color = color;
@@ -22,6 +21,24 @@ public class Player {
 
     public PlayerColor getColor(){
         return this.color;
+    }
+
+    public void retire() {
+        if(this.retired) throw new AlreadyPoweredException("Player has alredy retired.");
+        this.retired = true;
+    }
+
+    public boolean getRetired() {
+        return this.retired;
+    }
+
+    public void disconnect() {
+        if( this.disconnected) throw new AlreadyPoweredException("Player has alredy disconnected.");
+        this.disconnected = true;
+    }
+
+    public boolean getDisconnected() {
+        return  this.disconnected;
     }
 
 	public int giveCredits(int amount){
@@ -34,30 +51,20 @@ public class Player {
         return this.credits;
     }
 
+    public void addScore(int rel_change){
+        this.score += rel_change;
+    }
+
+    public int getScore(){
+        return this.score;
+    }
+
     public void reconnect(ClientDescriptor new_descriptor){
         this.bindDescriptor(new_descriptor);
         this.disconnected = false;
     }
 
-    public void disconnect() {
-        if( this.disconnected) throw new AlreadyPoweredException("Player has alredy disconnected.");
-        this.disconnected = true;
-    }
-
-    public boolean getDisconnected() {
-        return  this.disconnected;
-    }
-
-    public void retire() {
-        if(this.retired) throw new AlreadyPoweredException("Player has alredy retired.");
-        this.retired = true;
-    }
-
-    public boolean getRetired() {
-        return this.retired;
-    }
-
-    public SpaceShip getSpaceShip(){
+    public iSpaceShip getSpaceShip(){
         return this.ship;
     }
 

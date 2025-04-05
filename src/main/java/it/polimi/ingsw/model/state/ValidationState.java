@@ -38,6 +38,9 @@ public class ValidationState extends GameState {
     @Override
     public void init(){
         super.init();
+        for(Player p : this.players){
+            p.getSpaceShip().verifyAndClean();
+        }
     }
 
     @Override
@@ -49,7 +52,7 @@ public class ValidationState extends GameState {
 
     @Override
     public GameState getNext() {
-        Planche planche = new Planche(type, count, finish_order);
+        Planche planche = new Planche(type, finish_order);
         return new VoyageState(model, type, count, players, voyage_deck, planche);
     }
 
