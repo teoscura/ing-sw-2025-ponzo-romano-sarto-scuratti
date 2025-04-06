@@ -59,5 +59,11 @@ public class AbandonedStationAnnounceState extends CardState {
         this.id = planet;
         this.responded = true;
     }
+
+    public void disconnect(Player p) throws ForbiddenCallException {
+        p.getDescriptor().sendMessage(new ViewMessage("This state doesn't support this function!"));
+        throw new ForbiddenCallException("This state doesn't support this function.");
+        XXX
+    }
     
 }

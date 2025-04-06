@@ -63,4 +63,10 @@ class PiratesNewCabinState extends CardState {
         }
     }
 
+    public void disconnect(Player p) throws ForbiddenCallException {
+        p.getDescriptor().sendMessage(new ViewMessage("This state doesn't support this function!"));
+        throw new ForbiddenCallException("This state doesn't support this function.");
+        XXX
+    }
+
 }

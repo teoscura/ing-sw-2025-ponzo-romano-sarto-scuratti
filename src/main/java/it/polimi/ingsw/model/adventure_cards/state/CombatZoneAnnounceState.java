@@ -4,11 +4,11 @@ import java.util.List;
 
 import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
+import it.polimi.ingsw.model.adventure_cards.exceptions.ForbiddenCallException;
+import it.polimi.ingsw.model.adventure_cards.utils.CardOrder;
 import it.polimi.ingsw.model.adventure_cards.utils.CombatZoneSection;
 import it.polimi.ingsw.model.adventure_cards.utils.ProjectileArray;
 import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
-import it.polimi.ingsw.model.adventure_cards.exceptions.ForbiddenCallException;
-import it.polimi.ingsw.model.adventure_cards.utils.CardOrder;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.VoyageState;
@@ -69,6 +69,12 @@ public class CombatZoneAnnounceState extends CardState {
             return;
         }
         this.awaiting.remove(p);
+    }
+
+    public void disconnect(Player p) throws ForbiddenCallException {
+        p.getDescriptor().sendMessage(new ViewMessage("This state doesn't support this function!"));
+        throw new ForbiddenCallException("This state doesn't support this function.");
+        XXX
     }
     
 }
