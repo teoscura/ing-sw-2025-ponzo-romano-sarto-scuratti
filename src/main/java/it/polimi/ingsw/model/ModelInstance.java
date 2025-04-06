@@ -29,14 +29,13 @@ public class ModelInstance {
         this.connected = new HashMap<>();
         this.state = new WaitingState(this, type, count);
         this.state.init();
-        
     }
 
     public void validate(ServerMessage message) throws ForbiddenCallException{
         message.receive(this);
     }
     
-    public Player getPlayer(PlayerColor c) throws PlayerNotFoundException{
+    private Player getPlayer(PlayerColor c) throws PlayerNotFoundException{
         synchronized(state_lock){
             return state.getPlayer(c);
         }
@@ -59,27 +58,11 @@ public class ModelInstance {
     }
 
     public void connect(ClientDescriptor client){
-        if(this.connected.containsKey(client)){
-            client.sendMessage(new ViewMessage("You are already connected!"));
-            return;
-        }
-        //aa
+        xxx
     }
 
     public void disconnect(ClientDescriptor client){
-        if(!this.connected.containsKey(client)){
-            client.sendMessage(new ViewMessage("You aren't connected!"));
-            return;
-        }
-        this.connected.remove(client);
-        synchronized(this.state_lock){
-            try {
-                this.state.disconnect(client);
-                this.disconnected.put(client.getUsername(), client.getPlayer().getColor());
-            } catch (ForbiddenCallException e) {
-                //No concrete state has this, no action needed;
-            }
-        }
+        xxx
     }
 
     public void kick(ClientDescriptor client){

@@ -1,11 +1,11 @@
 package it.polimi.ingsw.model.state;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
 import it.polimi.ingsw.exceptions.OutOfBoundsException;
+import it.polimi.ingsw.message.client.DisconnectMessage;
 import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
@@ -37,7 +37,7 @@ public class ConstructionState extends GameState {
     private HashMap<Player, iBaseComponent> current_tile;
     private HashMap<Player, List<iBaseComponent>> hoarded_tile;
 
-    public ConstructionState(ModelInstance model, GameModeType type, PlayerCount count, Player[] players) {
+    public ConstructionState(ModelInstance model, GameModeType type, PlayerCount count, List<Player> players) {
         super(model, type, count, players);
         this.board = new CommonBoard();
         this.voyage_deck = type.getLevel()==-1 ? new TestFlightCards() : new LevelTwoCards(); 
@@ -45,7 +45,7 @@ public class ConstructionState extends GameState {
         this.construction_cards = this.voyage_deck.getConstructionCards();
         this.finished = new ArrayList<>();
         this.building = new ArrayList<>();
-        this.building.addAll(Arrays.asList(this.players));
+        this.building.addAll(this.players);
         this.current_tile = new HashMap<>();
         this.hoarded_tile = new HashMap<>();
         for(Player p : this.players){
@@ -62,7 +62,7 @@ public class ConstructionState extends GameState {
     @Override
     public void validate(ServerMessage message) throws ForbiddenCallException {
         message.receive(this);
-        if(this.finished.size()!=this.players.length) return;
+        if(this.finished.size()!=this.players.size()) return;
         this.transition();
     }
 
@@ -79,10 +79,15 @@ public class ConstructionState extends GameState {
         }
         this.building.remove(p);
         this.finished.addLast(p);
+        boolean only_disconnected_left = true;
+        for(Player other : this.players){
+            if(!other.getDisconnected()&&this.building.contains(other)) only_disconnected_left = false;
+        }
         if(!this.hourglass.started()){
             this.hourglass.enable();
             this.hourglass.toggle();
         }
+        if(only_disconnected_left) this.transition();
     }
 
     @Override
@@ -233,4 +238,21 @@ public class ConstructionState extends GameState {
             return;
         }
     }
+
+    @Override
+    public void connect(Player p) throws ForbiddenCallException {
+        if(p==null) throw new NullPointerException();
+        if(!p.getDisconnected()) throw new ForbiddenCallException();
+        p.reconnect();
+        p.getDescriptor().sendMessage(new NotifyStateUpdateMessage());
+    }
+
+    @Override
+    public void disconnect(Player p) throws ForbiddenCallException {
+        if(p==null) throw new NullPointerException();
+        if(p.getDisconnected()) throw new ForbiddenCallException();
+        p.disconnect();
+        p.getDescriptor().sendMessage(new DisconnectMessage()); 
+    }
+
 }

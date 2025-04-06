@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.state;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 import it.polimi.ingsw.message.client.DisconnectMessage;
@@ -16,11 +16,12 @@ public class EndscreenState extends GameState {
     private final List<Player> awaiting;
     private final List<Player> order_arrival;
 
-    public EndscreenState(ModelInstance model, GameModeType type, PlayerCount count, Player[] players, List<Player> order_arrival) {
+    public EndscreenState(ModelInstance model, GameModeType type, PlayerCount count, List<Player> players, List<Player> order_arrival) {
         super(model, type, count, players);
         if(order_arrival==null) throw new NullPointerException();
         this.order_arrival = order_arrival;
-        this.awaiting = Arrays.asList(this.players);
+        this.awaiting = new ArrayList<>();
+        this.awaiting.addAll(this.players);
     }
 
     @Override

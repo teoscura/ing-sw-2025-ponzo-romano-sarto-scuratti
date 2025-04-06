@@ -33,13 +33,18 @@ public class Player {
         return this.retired;
     }
 
+    public void reconnect(){
+        if(!this.disconnected) throw new AlreadyPoweredException("Player is alread y connected.");
+        this.disconnected = false;
+    }
+
     public void disconnect() {
-        if( this.disconnected) throw new AlreadyPoweredException("Player has alredy disconnected.");
+        if(this.disconnected) throw new AlreadyPoweredException("Player has already disconnected.");
         this.disconnected = true;
     }
 
     public boolean getDisconnected() {
-        return  this.disconnected;
+        return this.disconnected;
     }
 
 	public int giveCredits(int amount){

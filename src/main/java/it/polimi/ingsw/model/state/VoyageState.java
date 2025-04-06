@@ -1,11 +1,11 @@
 package it.polimi.ingsw.model.state;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import it.polimi.ingsw.controller.server.ClientDescriptor;
+import it.polimi.ingsw.message.client.DisconnectMessage;
+import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.GameModeType;
@@ -28,7 +28,7 @@ public class VoyageState extends GameState {
     private final List<Player> to_give_up;
     private CardState state;
 
-    public VoyageState(ModelInstance model, GameModeType type, PlayerCount count, Player[] players, iCards deck, iPlanche planche){
+    public VoyageState(ModelInstance model, GameModeType type, PlayerCount count, List<Player> players, iCards deck, iPlanche planche){
         super(model, type, count, players);
         if(deck==null||planche==null) throw new NullPointerException();
         this.to_give_up = new ArrayList<>();
@@ -51,7 +51,8 @@ public class VoyageState extends GameState {
 
     @Override
     public GameState getNext(){
-        List<Player> tmp = Arrays.asList(this.players);
+        List<Player> tmp = new ArrayList<>();
+        tmp.addAll(this.players);
         //Retired players dont count in the distance scoring.
         tmp = tmp.stream().filter(p->!p.getRetired()).toList();
         //Sort in descending order, so the farthest one gets the first index, second farthest gets second index and so on.
@@ -60,15 +61,20 @@ public class VoyageState extends GameState {
     }
 
     @Override
-    public void connect(ClientDescriptor client) throws ForbiddenCallException {
-        //XXX Add that if 3 people disconnected game ends.
-        throw new ForbiddenCallException("This state doesn't support this function.");
+    public void connect(Player p) throws ForbiddenCallException {
+        if(p==null) throw new NullPointerException();
+        if(!p.getDisconnected()) throw new ForbiddenCallException();
+        p.reconnect();
+        p.getDescriptor().sendMessage(new NotifyStateUpdateMessage());
     }
 
     @Override
-    public void disconnect(ClientDescriptor client) throws ForbiddenCallException {
-        //XXX Add that if 3 people disconnected game ends.
-        throw new ForbiddenCallException("This state doesn't support this function.");
+    public void disconnect(Player p) throws ForbiddenCallException {
+        if(p==null) throw new NullPointerException();
+        if(p.getDisconnected()) throw new ForbiddenCallException();
+        p.disconnect();
+        this.state.disconnect(p);
+        p.getDescriptor().sendMessage(new DisconnectMessage()); 
     }
 
     @Override
@@ -93,7 +99,8 @@ public class VoyageState extends GameState {
     }
 
     public List<Player> getOrder(CardOrder order){
-        List<Player> tmp = Arrays.asList(this.players);
+        List<Player> tmp = new ArrayList<>();
+        tmp.addAll(this.players);
         switch(order){
             case NORMAL: {
                 Collections.sort(tmp, (p1,p2) -> this.planche.getPlayerPosition(p1)>this.planche.getPlayerPosition(p2) ? 1: -1);
@@ -108,22 +115,24 @@ public class VoyageState extends GameState {
     }
 
     public Player findCriteria(CombatZoneCriteria criteria){
+        List<Player> tmp = new ArrayList<>();
+        tmp.addAll(this.players);
         switch(criteria){
             case LEAST_CANNON:
-                int min_cannon_power = Arrays.stream(this.players).mapToInt(p->p.getSpaceShip().getCannonPower()).min().orElse(0);
-                return Arrays.stream(this.players)
+                int min_cannon_power = tmp.stream().mapToInt(p->p.getSpaceShip().getCannonPower()).min().orElse(0);
+                return tmp.stream()
                 .filter((p)->p.getSpaceShip().getCannonPower()==min_cannon_power&&!p.getRetired()&&!p.getDisconnected())
                 .sorted((p1,p2) -> this.planche.getPlayerPosition(p1)>this.planche.getPlayerPosition(p2) ? 1 : -1)
                 .findFirst().orElse(null);
             case LEAST_CREW:
-                int min_crew= Arrays.stream(this.players).mapToInt(p->p.getSpaceShip().getTotalCrew()).min().orElse(0);
-                return Arrays.stream(this.players)
+                int min_crew= tmp.stream().mapToInt(p->p.getSpaceShip().getTotalCrew()).min().orElse(0);
+                return tmp.stream()
                 .filter((p)->p.getSpaceShip().getTotalCrew()==min_crew&&!p.getRetired()&&!p.getDisconnected())
                 .sorted((p1,p2) -> this.planche.getPlayerPosition(p1)>this.planche.getPlayerPosition(p2) ? 1 : -1)
                 .findFirst().orElse(null);
             case LEAST_ENGINE:
-                int min_engine_power = Arrays.stream(this.players).mapToInt(p->p.getSpaceShip().getEnginePower()).min().orElse(0);
-                return Arrays.stream(this.players)
+                int min_engine_power = tmp.stream().mapToInt(p->p.getSpaceShip().getEnginePower()).min().orElse(0);
+                return tmp.stream()
                 .filter((p)->p.getSpaceShip().getEnginePower()==min_engine_power&&!p.getRetired()&&!p.getDisconnected())
                 .sorted((p1,p2) -> this.planche.getPlayerPosition(p1)>this.planche.getPlayerPosition(p2) ? 1 : -1)
                 .findFirst().orElse(null);

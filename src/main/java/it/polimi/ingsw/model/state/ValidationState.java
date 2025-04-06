@@ -1,9 +1,11 @@
 package it.polimi.ingsw.model.state;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
+import it.polimi.ingsw.message.client.DisconnectMessage;
 import it.polimi.ingsw.message.client.NotifyPlayerUpdateMessage;
+import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.GameModeType;
@@ -27,11 +29,12 @@ public class ValidationState extends GameState {
     private final List<Player> to_validate;
     private final List<Player> finish_order;
 
-    public ValidationState(ModelInstance model, GameModeType type, PlayerCount count, Player[] players, iCards voyage_deck, List<Player> finish_order) {
+    public ValidationState(ModelInstance model, GameModeType type, PlayerCount count, List<Player> players, iCards voyage_deck, List<Player> finish_order) {
         super(model, type, count, players);
         if(voyage_deck==null||finish_order==null||players==null) throw new NullPointerException();
         this.voyage_deck = voyage_deck;
-        this.to_validate = Arrays.asList(this.players);
+        this.to_validate = new ArrayList<>();
+        this.to_validate.addAll(this.players);
         this.finish_order = finish_order;
     }
 
@@ -72,6 +75,16 @@ public class ValidationState extends GameState {
             }
         }
         this.to_validate.remove(p);
+        boolean only_disconnected_left = true;
+        for(Player other : this.players){
+            if(!other.getDisconnected()&&this.to_validate.contains(other)) only_disconnected_left = false;
+        }
+        if(only_disconnected_left) {
+            for(Player left : this.to_validate){
+                left.getSpaceShip().verifyAndClean();
+            }
+            this.transition();
+        }
     }
     
     @Override
@@ -116,4 +129,20 @@ public class ValidationState extends GameState {
         }
     }
     
+    @Override
+    public void connect(Player p) throws ForbiddenCallException {
+        if(p==null) throw new NullPointerException();
+        if(!p.getDisconnected()) throw new ForbiddenCallException();
+        p.reconnect();
+        p.getDescriptor().sendMessage(new NotifyStateUpdateMessage());
+    }
+
+    @Override
+    public void disconnect(Player p) throws ForbiddenCallException {
+        if(p==null) throw new NullPointerException();
+        if(p.getDisconnected()) throw new ForbiddenCallException();
+        p.disconnect();
+        p.getDescriptor().sendMessage(new DisconnectMessage()); 
+    }
+
 }
