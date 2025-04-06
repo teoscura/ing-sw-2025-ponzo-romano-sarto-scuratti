@@ -118,6 +118,7 @@ class PlanetRewardState extends CardState {
         this.responded = true;
     }
 
+    @Override
     public void disconnect(Player p) throws ForbiddenCallException {
         if(this.list.getFirst()==p){
             this.responded = true;

@@ -74,6 +74,7 @@ public class MeteorAnnounceState extends CardState {
         this.awaiting.remove(p);
     }
     
+    @Override
     public void disconnect(Player p) throws ForbiddenCallException {
         if(this.awaiting.contains(p)){
             this.awaiting.remove(p);

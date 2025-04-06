@@ -67,6 +67,7 @@ class CombatZoneNewCabinState extends CardState {
         }
     }
 
+    @Override
     public void disconnect(Player p) throws ForbiddenCallException {
         if(target==p){
             this.state.loseGame(p);

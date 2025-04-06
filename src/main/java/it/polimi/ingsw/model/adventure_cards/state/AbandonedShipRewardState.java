@@ -70,6 +70,7 @@ class AbandonedShipRewardState extends CardState {
         }
     }
 
+    @Override
     public void disconnect(Player p) throws ForbiddenCallException {
         if(this.list.getFirst()==p) this.transition();
     }

@@ -55,12 +55,12 @@ class MeteorNewCabinState extends CardState {
         }
     }
 
+    @Override
     public void disconnect(Player p) throws ForbiddenCallException {
         if(p.getSpaceShip().getBrokeCenter()){
             this.state.loseGame(p);
         }
         //XXX URGENT CHECK IF POSSIBLE
-        
     }
 
 }

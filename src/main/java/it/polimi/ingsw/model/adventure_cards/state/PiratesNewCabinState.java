@@ -68,6 +68,7 @@ class PiratesNewCabinState extends CardState {
         }
     }
 
+    @Override
     public void disconnect(Player p) throws ForbiddenCallException {
         if(this.list.getFirst()==p){
             this.state.loseGame(p);
