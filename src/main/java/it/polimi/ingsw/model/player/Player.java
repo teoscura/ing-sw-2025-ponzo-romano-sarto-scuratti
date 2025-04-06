@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.player;
 
 
 import it.polimi.ingsw.model.GameModeType;
+import it.polimi.ingsw.model.components.enums.ShipmentType;
 import it.polimi.ingsw.model.components.exceptions.AlreadyPoweredException;
 import it.polimi.ingsw.controller.server.ClientDescriptor;
 
@@ -60,8 +61,10 @@ public class Player {
     }
 
     public void finalScore() {
-        xxx
-        XXX ricorda: implementa questo, e ricorda di implementare calcolo punteggi quando qualcuno si ritira.
+        for(ShipmentType t : ShipmentType.values()){
+            if(t.getValue()<=0) continue;
+            this.score += this.getSpaceShip().getContains()[t.getValue()-1] * t.getValue();
+        }
     }
 
     public void reconnect(ClientDescriptor new_descriptor){

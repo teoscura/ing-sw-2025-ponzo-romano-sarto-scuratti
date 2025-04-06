@@ -44,7 +44,7 @@ public class SlaversCard extends Card{
             return true;
         }
         if(p.getSpaceShip().getTotalCrew()<=this.crew_penalty){
-            p.retire();
+            state.loseGame(p);
         }
         return false;
 	}

@@ -34,8 +34,8 @@ class PiratesRewardState extends CardState {
         message.receive(this);
         if(!responded) return;
         if(took_reward){
-            this.list.getFirst().giveCredits(this.card.getCredits());
-            this.state.getPlanche().movePlayer(this.list.getFirst(), this.card.getDays());
+            this.list.getFirst().giveCredits(card.getCredits());
+            this.state.getPlanche().movePlayer(state, list.getFirst(), card.getDays());
         }
         this.transition();
     }

@@ -18,6 +18,7 @@ import it.polimi.ingsw.model.adventure_cards.utils.CardOrder;
 import it.polimi.ingsw.model.adventure_cards.utils.CombatZoneCriteria;
 import it.polimi.ingsw.model.board.iCards;
 import it.polimi.ingsw.model.board.iPlanche;
+import it.polimi.ingsw.model.components.enums.ShipmentType;
 import it.polimi.ingsw.model.player.Player;
 
 public class VoyageState extends GameState {
@@ -48,7 +49,18 @@ public class VoyageState extends GameState {
 
     @Override
     public GameState getNext(){
-        return new EndscreenState(model, type, count, players);
+        List<Player> tmp = Arrays.asList(this.players);
+        //Retired players dont count in the distance scoring.
+        tmp = tmp.stream().filter(p->!p.getRetired()).toList();
+        //Sort in descending order, so the farthest one gets the first index, second farthest gets second index and so on.
+        tmp.sort((p1,p2)-> this.planche.getPlayerPosition(p1)<this.planche.getPlayerPosition(p2) ? 1 : -1);
+        return new EndscreenState(model, type, count, players, tmp);
+    }
+
+    @Override
+    public void connect(ClientDescriptor client) throws ForbiddenCallException {
+        //XXX Add that if 3 people disconnected game ends.
+        throw new ForbiddenCallException("This state doesn't support this function.");
     }
 
     @Override
@@ -65,6 +77,17 @@ public class VoyageState extends GameState {
             return;
         }
         this.to_give_up.add(p);
+    }
+
+    public void loseGame(Player p){
+        int sum = 0;
+        for(ShipmentType t : ShipmentType.values()){
+            if(t.getValue()<=0) continue;
+            sum += p.getSpaceShip().getContains()[t.getValue()-1]*t.getValue();
+        }
+        p.addScore(sum/2+sum%2);
+        this.planche.loseGame(p);
+        p.retire();
     }
 
     public List<Player> getOrder(CardOrder order){
@@ -113,7 +136,7 @@ public class VoyageState extends GameState {
     public void setCardState(CardState next) {
         if(next==null){
             for(Player p : this.to_give_up){
-                if(!p.getRetired()) p.retire();
+                if(!p.getRetired()) this.loseGame(p);
             }
             this.to_give_up.clear();
             iCard card = this.voyage_deck.pullCard();

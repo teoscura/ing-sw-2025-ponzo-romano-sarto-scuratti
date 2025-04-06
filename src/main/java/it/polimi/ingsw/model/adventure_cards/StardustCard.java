@@ -20,7 +20,7 @@ public class StardustCard extends Card {
 	public void apply(VoyageState state, Player p) {
         if(state==null||p==null) throw new NullPointerException();
 		int lost_days = p.getSpaceShip().countExposedConnectors();
-        if(lost_days!=0) state.getPlanche().movePlayer(p, -lost_days);
+        if(lost_days!=0) state.getPlanche().movePlayer(state, p, -lost_days);
 	}
 
 }

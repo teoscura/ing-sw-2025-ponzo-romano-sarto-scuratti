@@ -37,7 +37,7 @@ class AbandonedShipRewardState extends CardState {
         message.receive(this);
         if(!responded&&!this.list.getFirst().getRetired()) return;
         this.list.getFirst().giveCredits(this.card.getCredits());
-        this.state.getPlanche().movePlayer(this.list.getFirst(), -this.card.getDays());
+        this.state.getPlanche().movePlayer(state, list.getFirst(), -card.getDays());
         this.transition();
     }
 
@@ -60,7 +60,7 @@ class AbandonedShipRewardState extends CardState {
             return;
         }
         if(p.getSpaceShip().getCrew()[0]==0){
-            p.retire();
+            this.state.loseGame(p);
             this.validate(new EmptyMessage(p.getDescriptor()));
             return;
         }

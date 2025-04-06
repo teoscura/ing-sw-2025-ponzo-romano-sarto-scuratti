@@ -63,7 +63,7 @@ class SlaversLoseState extends CardState {
             return;
         }
         if(p.getSpaceShip().getCrew()[0]==0){
-            p.retire();
+            this.state.loseGame(p);
             this.validate(new EmptyMessage(p.getDescriptor()));
             return;
         }

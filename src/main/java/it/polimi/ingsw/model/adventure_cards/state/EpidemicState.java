@@ -23,7 +23,7 @@ public class EpidemicState extends CardState{
         for(Player p : this.state.getOrder(CardOrder.INVERSE)){
             try {
                 card.apply(this.state, p);
-                if(p.getSpaceShip().getCrew()[0]==0) p.retire();
+                if(p.getSpaceShip().getCrew()[0]==0) this.state.loseGame(p);
             } catch (PlayerNotFoundException e) {
                 e.printStackTrace();
             }

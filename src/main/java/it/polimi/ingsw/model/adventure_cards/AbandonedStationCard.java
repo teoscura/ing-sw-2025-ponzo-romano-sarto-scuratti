@@ -41,7 +41,7 @@ public class AbandonedStationCard extends Card{
         if(id==0){
             if(p.getSpaceShip().getTotalCrew()<this.crew) throw new CrewSizeException("Crew too small to salvage station.");
             this.exhaust();
-            state.getPlanche().movePlayer(p, -this.days);
+            state.getPlanche().movePlayer(state, p, -this.days);
         }
     }
 

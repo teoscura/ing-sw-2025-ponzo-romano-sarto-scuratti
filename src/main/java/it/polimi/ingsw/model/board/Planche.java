@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.board;
 
 import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.player.Player;
+import it.polimi.ingsw.model.state.VoyageState;
 
 import java.util.*;
 import java.util.Map.Entry;
@@ -36,7 +37,7 @@ public class Planche implements iPlanche {
 	}
 
 	@Override
-	public void movePlayer(Player p, int rel_change){
+	public void movePlayer(VoyageState state, Player p, int rel_change){
 		if(!this.planche.containsKey(p)) throw new IllegalArgumentException("Color is not present in the current game.");
 		int position = this.planche.get(p);
 		int count = rel_change > 0 ? rel_change : -rel_change;
@@ -49,7 +50,7 @@ public class Planche implements iPlanche {
 			for(Player other : this.planche.keySet()){
 				if(p.equals(other)) continue;
 				if(this.planche.get(p)-this.planche.get(other)>=this.length){
-					other.retire();
+					state.loseGame(other);
 				}
 			}
 		}
@@ -57,11 +58,16 @@ public class Planche implements iPlanche {
 			for(Player other : this.planche.keySet()){
 				if(p.equals(other)) continue;
 				if(this.planche.get(other)-this.planche.get(p)>=this.length){
-					p.retire();
+					state.loseGame(p);
 					return;
 				}
 			}
 		}
+	}
+
+	@Override
+	public void loseGame(Player p) {
+		this.planche.remove(p);
 	}
 
 }

@@ -50,6 +50,14 @@ public class ModelInstance {
         state.init();
     }
 
+    public void connect(ClientDescriptor client){
+
+    }
+
+    public void disconnect(ClientDescriptor client){
+        
+    }
+
     public void kick(ClientDescriptor client){
         this.connected.remove(client);
         this.controller.kick(client);
