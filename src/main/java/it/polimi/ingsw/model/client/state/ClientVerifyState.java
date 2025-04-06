@@ -5,7 +5,7 @@ import java.util.List;
 import it.polimi.ingsw.model.client.ClientPlayer;
 import it.polimi.ingsw.view.ClientView;
 
-public class ClientVerifyState extends ClientState {
+public class ClientVerifyState extends ClientModelState {
 
     protected ClientVerifyState(List<ClientPlayer> playerlist) {
         super(playerlist);

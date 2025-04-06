@@ -5,7 +5,7 @@ import java.util.List;
 import it.polimi.ingsw.model.client.ClientPlayer;
 import it.polimi.ingsw.view.ClientView;
 
-public class ClientWaitingRoomState extends ClientState {
+public class ClientWaitingRoomState extends ClientModelState {
 
     protected ClientWaitingRoomState(List<ClientPlayer> playerlist) {
         super(playerlist);

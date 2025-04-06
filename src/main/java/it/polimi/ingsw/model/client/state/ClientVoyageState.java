@@ -5,7 +5,7 @@ import java.util.List;
 import it.polimi.ingsw.model.client.ClientPlayer;
 import it.polimi.ingsw.view.ClientView;
 
-public class ClientVoyageState extends ClientState {
+public class ClientVoyageState extends ClientModelState {
 
     protected ClientVoyageState(List<ClientPlayer> playerlist) {
         super(playerlist);

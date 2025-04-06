@@ -12,7 +12,7 @@ import it.polimi.ingsw.model.ModelInstance;
 import it.polimi.ingsw.model.PlayerCount;
 import it.polimi.ingsw.model.adventure_cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.adventure_cards.state.CardState;
-import it.polimi.ingsw.model.client.state.ClientState;
+import it.polimi.ingsw.model.client.state.ClientModelState;
 import it.polimi.ingsw.model.components.enums.AlienType;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
@@ -36,7 +36,7 @@ public abstract class GameState {
 
     public abstract void validate(ServerMessage message) throws ForbiddenCallException;
     public abstract GameState getNext();
-    public abstract ClientState getClientState();
+    public abstract ClientModelState getClientState();
     //TODO public abstract JsonState serialize();
 
     public void init(){
