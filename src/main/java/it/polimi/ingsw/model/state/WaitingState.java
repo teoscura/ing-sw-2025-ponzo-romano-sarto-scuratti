@@ -9,12 +9,11 @@ import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.ModelInstance;
 import it.polimi.ingsw.model.PlayerCount;
 import it.polimi.ingsw.model.adventure_cards.exceptions.ForbiddenCallException;
-import it.polimi.ingsw.model.player.Player;
 
 public class WaitingState extends GameState {
 
     //XXX finish implementing
-    private final List<Player> connected;
+    private final List<ClientDescriptor> connected;
     private final PlayerCount count;
 
     public WaitingState(ModelInstance model, GameModeType type, PlayerCount count) {
@@ -32,6 +31,7 @@ public class WaitingState extends GameState {
     public void validate(ServerMessage message) throws ForbiddenCallException {
         message.receive(this);
         if(this.connected.size()<count.getNumber()) return;
+        
         this.transition();
     }
 

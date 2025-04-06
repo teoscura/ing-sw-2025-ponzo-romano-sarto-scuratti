@@ -45,6 +45,8 @@ public class VoyageState extends GameState {
     @Override
     public void validate(ServerMessage message) throws ForbiddenCallException {
         message.receive(this);
+        if(this.state != null) return;
+        this.transition();
     }
 
     @Override
@@ -140,7 +142,7 @@ public class VoyageState extends GameState {
             }
             this.to_give_up.clear();
             iCard card = this.voyage_deck.pullCard();
-            if(card==null) this.transition();
+            if(card==null) return;
             this.state = card.getState(this);
             this.state.init();
         }
