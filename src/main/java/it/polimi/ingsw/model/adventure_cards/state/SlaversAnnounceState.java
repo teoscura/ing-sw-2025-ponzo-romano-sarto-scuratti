@@ -29,27 +29,27 @@ public class SlaversAnnounceState extends CardState {
     @Override
     public void init() {
         super.init();
-        if(list.getFirst().getRetired()||list.getFirst().getDisconnected()) this.transition();
     }
 
     @Override
     public void validate(ServerMessage message) throws ForbiddenCallException {
         message.receive(this);
         if(!responded) return;
-        this.result = this.card.apply(state, this.list.getFirst());
+        if(!this.list.getFirst().getDisconnected()) result = this.card.apply(this.state, this.list.getFirst());
         this.transition();
     }
 
     @Override
     protected CardState getNext() {
-        if(list.getFirst().getRetired()||list.getFirst().getDisconnected()){
+        if(this.list.getFirst().getDisconnected() || this.list.getFirst().getRetired()){
             this.list.removeFirst();
-            if(!list.isEmpty()) return new SlaversAnnounceState(state, card, list);
-        };
+            if(!this.list.isEmpty()) return new SlaversAnnounceState(state, card, list);
+            return null;
+        }
+        if(!result) return new SlaversLoseState(state, card, list);
         if(this.card.getExhausted()) return new SlaversRewardState(state, card, list);
-        if(!result && !this.list.getFirst().getRetired()) return new SlaversLoseState(state, card, list);
         this.list.removeFirst();
-        if(!list.isEmpty()) return new SlaversAnnounceState(state, card, list);
+        if(!this.list.isEmpty()) return new SlaversAnnounceState(state, card, list);
         return null;
     }
 
@@ -77,9 +77,12 @@ public class SlaversAnnounceState extends CardState {
     }
 
     public void disconnect(Player p) throws ForbiddenCallException {
-        p.getDescriptor().sendMessage(new ViewMessage("This state doesn't support this function!"));
-        throw new ForbiddenCallException("This state doesn't support this function.");
-        XXX
+        if(this.list.getFirst()==p){
+            this.responded = true;
+        }
+        if(this.list.contains(p)){
+            this.list.remove(p);
+        }
     }
 
     

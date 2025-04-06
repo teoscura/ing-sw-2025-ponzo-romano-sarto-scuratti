@@ -40,6 +40,11 @@ class CombatZoneNewCabinState extends CardState {
 
     @Override
     protected CardState getNext() {
+        if(this.target.getRetired()){
+            this.sections.removeFirst();
+            if(!this.sections.isEmpty()) return new CombatZoneAnnounceState(state, sections, shots);
+            return null;
+        }
         if(!this.shots.getProjectiles().isEmpty()) return new CombatZonePenaltyState(state, sections, shots, target);
         this.sections.removeFirst();
         if(!this.sections.isEmpty()) return new CombatZoneAnnounceState(state, sections, shots);
@@ -63,9 +68,11 @@ class CombatZoneNewCabinState extends CardState {
     }
 
     public void disconnect(Player p) throws ForbiddenCallException {
-        p.getDescriptor().sendMessage(new ViewMessage("This state doesn't support this function!"));
-        throw new ForbiddenCallException("This state doesn't support this function.");
-        XXX
+        if(target==p){
+            this.state.loseGame(p);
+            this.transition();
+        }
+        //XXX controllare se va bene.
     }
 
 }

@@ -8,7 +8,6 @@ import it.polimi.ingsw.model.adventure_cards.AbandonedStationCard;
 import it.polimi.ingsw.model.adventure_cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.adventure_cards.visitors.ContainsLoaderVisitor;
 import it.polimi.ingsw.model.adventure_cards.visitors.ContainsRemoveVisitor;
-import it.polimi.ingsw.model.components.StorageComponent;
 import it.polimi.ingsw.model.components.enums.ShipmentType;
 import it.polimi.ingsw.model.components.exceptions.ContainerEmptyException;
 import it.polimi.ingsw.model.components.exceptions.ContainerFullException;
@@ -23,9 +22,6 @@ class AbandonedStationRewardState extends CardState {
     private final AbandonedStationCard card;
     private final List<Player> list;
     private boolean responded = false;
-    private boolean took_reward = false;
-    private List<ShipCoords> coords = null;
-    private List<ShipmentType> merch = null;
 
     public AbandonedStationRewardState(VoyageState state, AbandonedStationCard card, List<Player> list) {
         super(state);
@@ -44,11 +40,6 @@ class AbandonedStationRewardState extends CardState {
     public void validate(ServerMessage message) throws ForbiddenCallException {
         message.receive(this);
         if(!responded) return;
-        if(took_reward){
-            for(int i=0;i<this.coords.size();i++){
-                ((StorageComponent) this.list.getFirst().getSpaceShip().getComponent(this.coords.get(i))).putIn(this.merch.get(i));
-            }
-        }
         this.transition();
     }
 
@@ -124,9 +115,7 @@ class AbandonedStationRewardState extends CardState {
     }
 
     public void disconnect(Player p) throws ForbiddenCallException {
-        p.getDescriptor().sendMessage(new ViewMessage("This state doesn't support this function!"));
-        throw new ForbiddenCallException("This state doesn't support this function.");
-        XXX
+        if(this.list.getFirst()==p) this.transition();
     }
 
 }

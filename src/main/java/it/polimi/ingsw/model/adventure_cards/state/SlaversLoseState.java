@@ -44,6 +44,11 @@ class SlaversLoseState extends CardState {
 
     @Override
     protected CardState getNext(){
+        if(this.list.getFirst().getRetired() || this.list.getFirst().getDisconnected()){
+            this.list.removeFirst();
+            if(!this.list.isEmpty()) return new SlaversAnnounceState(state, card, list);
+            return null;
+        }
         this.list.removeFirst();
         if(!list.isEmpty()) return new SlaversAnnounceState(state, card, list);
         return null;
@@ -74,9 +79,12 @@ class SlaversLoseState extends CardState {
     }
 
     public void disconnect(Player p) throws ForbiddenCallException {
-        p.getDescriptor().sendMessage(new ViewMessage("This state doesn't support this function!"));
-        throw new ForbiddenCallException("This state doesn't support this function.");
-        XXX
+        if(this.list.getFirst()==p){
+            this.responded = true;
+        }
+        if(this.list.contains(p)){
+            this.list.remove(p);
+        }
     }
     
 }

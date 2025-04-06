@@ -40,6 +40,11 @@ class PiratesNewCabinState extends CardState {
 
     @Override
     protected CardState getNext() {
+        if(this.list.getFirst().getRetired()){
+            this.list.removeFirst();
+            if(!this.list.isEmpty()) return new PiratesAnnounceState(state, card, list);
+            return null;
+        }
         this.shots.getProjectiles().removeFirst();
         if(!this.shots.getProjectiles().isEmpty()) return new PiratesPenaltyState(state, card, list, shots);
         this.list.removeFirst();
@@ -64,9 +69,14 @@ class PiratesNewCabinState extends CardState {
     }
 
     public void disconnect(Player p) throws ForbiddenCallException {
-        p.getDescriptor().sendMessage(new ViewMessage("This state doesn't support this function!"));
-        throw new ForbiddenCallException("This state doesn't support this function.");
-        XXX
+        if(this.list.getFirst()==p){
+            this.state.loseGame(p);
+            this.transition();
+        }
+        if(this.list.contains(p)){
+            this.list.remove(p);
+        }
+        //XXX controllare se va bene.
     }
 
 }

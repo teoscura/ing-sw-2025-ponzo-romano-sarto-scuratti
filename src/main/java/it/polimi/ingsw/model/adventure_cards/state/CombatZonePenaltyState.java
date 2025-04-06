@@ -7,7 +7,6 @@ import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.EmptyMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.adventure_cards.exceptions.ForbiddenCallException;
-import it.polimi.ingsw.model.adventure_cards.utils.CardOrder;
 import it.polimi.ingsw.model.adventure_cards.utils.CombatZonePenalty;
 import it.polimi.ingsw.model.adventure_cards.utils.CombatZoneSection;
 import it.polimi.ingsw.model.adventure_cards.utils.ProjectileArray;
@@ -84,9 +83,12 @@ class CombatZonePenaltyState extends CardState {
 
     @Override
     protected CardState getNext() {
-        for(Player p : this.state.getOrder(CardOrder.NORMAL)){
-            if(!p.getSpaceShip().getBrokeCenter()) p.getSpaceShip().verifyAndClean();
+        if(this.target.getRetired() || this.target.getDisconnected()){
+            this.sections.removeFirst();
+            if(!this.sections.isEmpty()) return new CombatZoneAnnounceState(state, sections, shots);
+            return null;
         }
+        if(!target.getSpaceShip().getBrokeCenter()) target.getSpaceShip().verifyAndClean();
         this.shots.getProjectiles().removeFirst();
         if(this.target.getSpaceShip().getBrokeCenter()) return new CombatZoneNewCabinState(state, sections, shots, target);
         if(this.sections.getFirst().getPenalty()==CombatZonePenalty.SHOTS && !this.shots.getProjectiles().isEmpty()){
@@ -200,9 +202,9 @@ class CombatZonePenaltyState extends CardState {
     }
 
     public void disconnect(Player p) throws ForbiddenCallException {
-        p.getDescriptor().sendMessage(new ViewMessage("This state doesn't support this function!"));
-        throw new ForbiddenCallException("This state doesn't support this function.");
-        XXX
+        if(this.target==p){
+            this.responded = true;
+        }
     }
     
 }

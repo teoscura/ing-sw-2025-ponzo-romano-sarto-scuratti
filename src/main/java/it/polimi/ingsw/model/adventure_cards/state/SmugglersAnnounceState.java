@@ -29,26 +29,30 @@ public class SmugglersAnnounceState extends CardState {
     @Override
     public void init() {
         super.init();
-        if(list.getFirst().getRetired()||list.getFirst().getDisconnected()) this.transition();
     }
 
     @Override
     public void validate(ServerMessage message) throws ForbiddenCallException {
         message.receive(this);
         if(!responded) return;
-        result = this.card.apply(list.getFirst());
+        if(!this.list.getFirst().getDisconnected()) result = this.card.apply(this.list.getFirst());
         this.transition();
     }
 
     @Override
     protected CardState getNext() {
-        if(this.card.getExhausted()) return new SmugglersRewardState(state, card, list);
+        if(this.list.getFirst().getDisconnected()){
+            this.list.removeFirst();
+            if(!this.list.isEmpty()) return new SmugglersAnnounceState(state, card, list);
+            return null;
+        }
         if(!result) return new SmugglersLoseState(state, card, list);
+        if(this.card.getExhausted()) return new SmugglersRewardState(state, card, list);
         this.list.removeFirst();
-        if(!list.isEmpty()) return new SmugglersAnnounceState(state, card, list);
+        if(!this.list.isEmpty()) return new SmugglersAnnounceState(state, card, list);
         return null;
     }
-    
+
     @Override
     public void turnOn(Player p, ShipCoords target_coords, ShipCoords battery_coords){
         if(p!=this.list.getFirst()){
@@ -73,9 +77,12 @@ public class SmugglersAnnounceState extends CardState {
     }
 
     public void disconnect(Player p) throws ForbiddenCallException {
-        p.getDescriptor().sendMessage(new ViewMessage("This state doesn't support this function!"));
-        throw new ForbiddenCallException("This state doesn't support this function.");
-        XXX
+        if(this.list.getFirst()==p){
+            this.responded = true;
+        }
+        if(this.list.contains(p)){
+            this.list.remove(p);
+        }
     }
 
 }

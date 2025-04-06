@@ -8,7 +8,6 @@ import it.polimi.ingsw.model.adventure_cards.PlanetCard;
 import it.polimi.ingsw.model.adventure_cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.adventure_cards.visitors.ContainsLoaderVisitor;
 import it.polimi.ingsw.model.adventure_cards.visitors.ContainsRemoveVisitor;
-import it.polimi.ingsw.model.components.StorageComponent;
 import it.polimi.ingsw.model.components.enums.ShipmentType;
 import it.polimi.ingsw.model.components.exceptions.ContainerEmptyException;
 import it.polimi.ingsw.model.components.exceptions.ContainerFullException;
@@ -24,8 +23,6 @@ class PlanetRewardState extends CardState {
     private final List<Player> list;
     private final int id;
     private boolean responded = false;
-    private List<ShipCoords> coords = null;
-    private List<ShipmentType> merch = null;
     public PlanetRewardState(VoyageState state, PlanetCard card, int id, List<Player> clist) {
         super(state);
         if(clist.size()>this.state.getCount().getNumber()||clist.size()<1||clist==null) throw new IllegalArgumentException("Constructed insatisfyable state");
@@ -43,10 +40,7 @@ class PlanetRewardState extends CardState {
     @Override
     public void validate(ServerMessage message) throws ForbiddenCallException {
         message.receive(this);
-        if(!responded && !this.list.getFirst().getDisconnected()) return;
-        for(int i=0;i<this.coords.size();i++){
-            ((StorageComponent) this.list.getFirst().getSpaceShip().getComponent(this.coords.get(i))).putIn(this.merch.get(i));
-        }
+        if(!responded) return;
         this.state.getPlanche().movePlayer(state, list.getFirst(), card.getDays());
         this.transition();
     }
@@ -125,9 +119,13 @@ class PlanetRewardState extends CardState {
     }
 
     public void disconnect(Player p) throws ForbiddenCallException {
-        p.getDescriptor().sendMessage(new ViewMessage("This state doesn't support this function!"));
-        throw new ForbiddenCallException("This state doesn't support this function.");
-        XXX
+        if(this.list.getFirst()==p){
+            this.responded = true;
+            return;
+        }
+        if(this.list.contains(p)){
+            this.list.remove(p);
+        }
     }
     
 }

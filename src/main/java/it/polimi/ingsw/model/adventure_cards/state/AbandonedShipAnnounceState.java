@@ -27,7 +27,6 @@ public class AbandonedShipAnnounceState extends CardState {
     @Override
     public void init() {
         super.init();
-        if(list.getFirst().getRetired()||list.getFirst().getDisconnected()) this.transition();
     }
 
     @Override
@@ -61,9 +60,15 @@ public class AbandonedShipAnnounceState extends CardState {
     }
 
     public void disconnect(Player p) throws ForbiddenCallException {
-        p.getDescriptor().sendMessage(new ViewMessage("This state doesn't support this function!"));
-        throw new ForbiddenCallException("This state doesn't support this function.");
-        XXX
+        if(this.list.getFirst()==p){
+            this.responded = true;
+            this.id = -1;
+            return;
+        }
+        if(this.list.contains(p)){
+            this.list.remove(p);
+            return;
+        }
     }
     
 }
