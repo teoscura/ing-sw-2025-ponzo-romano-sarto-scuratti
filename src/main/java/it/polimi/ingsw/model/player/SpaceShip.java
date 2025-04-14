@@ -15,6 +15,8 @@ import it.polimi.ingsw.model.adventure_cards.utils.Projectile;
 import it.polimi.ingsw.model.adventure_cards.utils.ProjectileDimension;
 import it.polimi.ingsw.model.adventure_cards.utils.ProjectileDirection;
 import it.polimi.ingsw.model.adventure_cards.visitors.LargeMeteorVisitor;
+import it.polimi.ingsw.model.client.ClientSpaceShip;
+import it.polimi.ingsw.model.client.components.ClientComponent;
 import it.polimi.ingsw.model.components.BatteryComponent;
 import it.polimi.ingsw.model.components.EmptyComponent;
 import it.polimi.ingsw.model.components.StartingCabinComponent;
@@ -127,14 +129,17 @@ public class SpaceShip implements iSpaceShip{
 	}
 
 	@Override
-	public void verifyAndClean() {
+	public boolean verifyAndClean() {
 		VerifyResult[][] ver = this.verify();
+		boolean had_to_clean = false;
 		for(int i=0;i<this.type.getHeight();i++){
 			for(int j=0;j<this.type.getWidth();j++){
 				if(ver[i][j]!=VerifyResult.NOT_LINKED) continue;
+				had_to_clean = true;
 				this.removeComponent(new ShipCoords(this.type,j,i));
 			}
 		}
+		return had_to_clean;
 	}
 
 	@Override
@@ -481,6 +486,17 @@ public class SpaceShip implements iSpaceShip{
 	public boolean isCabin(ShipCoords coords) {
 		if(coords==null) throw new NullPointerException();
 		return this.cabin_coords.contains(coords);
+	}
+
+	@Override
+	public ClientSpaceShip getClientSpaceShip() {
+		ClientComponent[][] res = new ClientComponent[this.type.getHeight()][this.type.getWidth()];
+		for(int x = 0; x < this.type.getWidth(); x++){
+			for(int y = 0; y < this.type.getHeight(); y++){
+				res[y][x] = this.components[y][x].getClientComponent();
+			}
+		}
+		return new ClientSpaceShip(type, res, shielded_directions, cannon_power, engine_power, battery_power, crew);
 	}
 
 }

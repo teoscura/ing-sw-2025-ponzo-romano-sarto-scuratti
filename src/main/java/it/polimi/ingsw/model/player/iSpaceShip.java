@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.adventure_cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.adventure_cards.utils.Projectile;
+import it.polimi.ingsw.model.client.ClientSpaceShip;
 import it.polimi.ingsw.model.components.iBaseComponent;
 import it.polimi.ingsw.model.components.enums.AlienType;
 
@@ -12,7 +13,7 @@ public interface iSpaceShip {
 
 	public void updateCrew(int new_num, AlienType type);
 	public VerifyResult[][] verify();
-	public void verifyAndClean();
+	public boolean verifyAndClean();
 	public void addComponent(iBaseComponent component, ShipCoords coords);
 	public void removeComponent(ShipCoords coords);
 	public void updateShip();
@@ -47,4 +48,5 @@ public interface iSpaceShip {
     public boolean handleMeteorite(Projectile p);
     public boolean handleShot(Projectile p);
 	public boolean isCabin(ShipCoords coords);
+    public ClientSpaceShip getClientSpaceShip();
 }

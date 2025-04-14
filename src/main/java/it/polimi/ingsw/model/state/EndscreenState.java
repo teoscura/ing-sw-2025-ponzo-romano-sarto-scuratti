@@ -9,6 +9,10 @@ import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.ModelInstance;
 import it.polimi.ingsw.model.PlayerCount;
 import it.polimi.ingsw.model.adventure_cards.exceptions.ForbiddenCallException;
+import it.polimi.ingsw.model.client.player.ClientEndgamePlayer;
+import it.polimi.ingsw.model.client.player.ClientVoyagePlayer;
+import it.polimi.ingsw.model.client.state.ClientEndgameState;
+import it.polimi.ingsw.model.client.state.ClientModelState;
 import it.polimi.ingsw.model.player.Player;
 
 public class EndscreenState extends GameState {
@@ -51,12 +55,25 @@ public class EndscreenState extends GameState {
     public GameState getNext() {
         return null;
     }
+    
+    @Override
+    public ClientModelState getClientState(){
+        List<ClientEndgamePlayer> tmp = new ArrayList<>();
+        for(Player p : this.players){
+            tmp.add(new ClientEndgamePlayer(p.getUsername(), 
+                                            p.getColor(), 
+                                            this.order_arrival.indexOf(p), 
+                                            p.getCredits(), 
+                                            p.getSpaceShip().getContains(), 
+                                            p.getScore()));
+        }
+        return new ClientEndgameState(tmp);
+    }
 
     @Override
     public void sendContinue(Player p) throws ForbiddenCallException {
         if(!this.awaiting.contains(p)){
             p.getDescriptor().sendMessage(new DisconnectMessage());
-            this.model.kick(p.getDescriptor());
             return;
         }
         this.awaiting.remove(p);

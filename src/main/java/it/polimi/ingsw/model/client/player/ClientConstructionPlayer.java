@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model.client.player;
 
+import java.util.List;
+
 import it.polimi.ingsw.model.client.ClientSpaceShip;
 import it.polimi.ingsw.model.player.PlayerColor;
 
@@ -8,13 +10,13 @@ public class ClientConstructionPlayer {
     private final String username;
     private final PlayerColor color;
     private final ClientSpaceShip ship;
-    private final int[] reserved_components;
+    private final List<Integer> reserved_components;
     private final boolean finished;
 
     public ClientConstructionPlayer(String username, PlayerColor color, ClientSpaceShip ship, 
-                                    int[] reserved_components, boolean finished){
+                                    List<Integer> reserved_components, boolean finished){
         if(username == null || ship==null || reserved_components==null || color == PlayerColor.NONE) throw new NullPointerException();
-        if(reserved_components.length > 3) throw new IllegalArgumentException();
+        if(reserved_components.size() > 3) throw new IllegalArgumentException();
         this.username = username;
         this.color = color;
         this.ship = ship;
@@ -34,7 +36,7 @@ public class ClientConstructionPlayer {
         return this.ship;
     }
 
-    public int[] getReserved(){
+    public List<Integer> getReserved(){
         return this.reserved_components;
     }
 

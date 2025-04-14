@@ -19,6 +19,9 @@ import it.polimi.ingsw.model.adventure_cards.utils.CardOrder;
 import it.polimi.ingsw.model.adventure_cards.utils.CombatZoneCriteria;
 import it.polimi.ingsw.model.board.iCards;
 import it.polimi.ingsw.model.board.iPlanche;
+import it.polimi.ingsw.model.client.player.ClientVoyagePlayer;
+import it.polimi.ingsw.model.client.state.ClientModelState;
+import it.polimi.ingsw.model.client.state.ClientVoyageState;
 import it.polimi.ingsw.model.components.enums.ShipmentType;
 import it.polimi.ingsw.model.player.Player;
 
@@ -27,6 +30,7 @@ public class VoyageState extends GameState {
     private final iPlanche planche;
     private final iCards voyage_deck;
     private final List<Player> to_give_up;
+    private iCard card;
     private CardState state;
 
     public VoyageState(ModelInstance model, GameModeType type, PlayerCount count, List<Player> players, iCards deck, iPlanche planche){
@@ -59,6 +63,21 @@ public class VoyageState extends GameState {
         //Sort in descending order, so the farthest one gets the first index, second farthest gets second index and so on.
         tmp.sort((p1,p2)-> this.planche.getPlayerPosition(p1)<this.planche.getPlayerPosition(p2) ? 1 : -1);
         return new EndscreenState(model, type, count, players, tmp);
+    }
+
+    @Override
+    public ClientModelState getClientState(){
+        List<ClientVoyagePlayer> tmp = new ArrayList<>();
+        for(Player p : this.players){
+            tmp.add(new ClientVoyagePlayer(p.getUsername(), 
+                                           p.getColor(), 
+                                           p.getSpaceShip().getClientSpaceShip(), 
+                                           this.planche.getPlayerPosition(p), 
+                                           p.getCredits(), 
+                                           p.getDisconnected(), 
+                                           p.getRetired()));
+        }
+        return new ClientVoyageState(type, tmp, this.card.getId(), this.state.getClientCardState());
     }
 
     @Override
@@ -157,8 +176,8 @@ public class VoyageState extends GameState {
                 if(!p.getRetired()) this.loseGame(p);
             }
             this.to_give_up.clear();
-            iCard card = this.voyage_deck.pullCard();
-            if(card==null) return;
+            this.card = this.voyage_deck.pullCard();
+            if(this.card==null) return;
             this.state = card.getState(this);
             this.state.init();
             for(Player p : this.getAllConnectedPlayers()){

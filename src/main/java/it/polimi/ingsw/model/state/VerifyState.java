@@ -14,6 +14,9 @@ import it.polimi.ingsw.model.PlayerCount;
 import it.polimi.ingsw.model.adventure_cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.board.Planche;
 import it.polimi.ingsw.model.board.iCards;
+import it.polimi.ingsw.model.client.player.ClientVerifyPlayer;
+import it.polimi.ingsw.model.client.state.ClientModelState;
+import it.polimi.ingsw.model.client.state.ClientVerifyState;
 import it.polimi.ingsw.model.components.enums.AlienType;
 import it.polimi.ingsw.model.components.exceptions.AlienTypeAlreadyPresentException;
 import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
@@ -23,13 +26,13 @@ import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.player.VerifyResult;
 
-public class ValidationState extends GameState {
+public class VerifyState extends GameState {
 
     private final iCards voyage_deck;
     private final List<Player> to_validate;
     private final List<Player> finish_order;
 
-    public ValidationState(ModelInstance model, GameModeType type, PlayerCount count, List<Player> players, iCards voyage_deck, List<Player> finish_order) {
+    public VerifyState(ModelInstance model, GameModeType type, PlayerCount count, List<Player> players, iCards voyage_deck, List<Player> finish_order) {
         super(model, type, count, players);
         if(voyage_deck==null||finish_order==null||players==null) throw new NullPointerException();
         this.voyage_deck = voyage_deck;
@@ -42,9 +45,9 @@ public class ValidationState extends GameState {
     public void init(){
         super.init();
         for(Player p : this.players){
-            p.getSpaceShip().verifyAndClean();
+            boolean tmp = p.getSpaceShip().verifyAndClean();
+            if(tmp) finish_order.remove(p);
         }
-        aaaaaa //tenere l'ordine, ma se uno deve verificare toglilo e mettilo appena finisce di sistemare.
     }
 
     @Override
@@ -58,6 +61,20 @@ public class ValidationState extends GameState {
     public GameState getNext() {
         Planche planche = new Planche(type, finish_order);
         return new VoyageState(model, type, count, players, voyage_deck, planche);
+    }
+
+    @Override 
+    public ClientModelState getClientState(){
+        List<ClientVerifyPlayer> tmp = new ArrayList<>();
+        for(Player p : this.players){
+            tmp.add(new ClientVerifyPlayer(p.getUsername(), 
+                                           p.getColor(), 
+                                           p.getSpaceShip().getClientSpaceShip(),
+                                           p.getSpaceShip().verify(),
+                                           this.finish_order.contains(p),
+                                           this.finish_order.indexOf(p)));
+        }
+        return new ClientVerifyState(tmp);
     }
 
     @Override
@@ -76,6 +93,7 @@ public class ValidationState extends GameState {
             }
         }
         this.to_validate.remove(p);
+        this.finish_order.addLast(p);
         boolean only_disconnected_left = true;
         for(Player other : this.players){
             if(!other.getDisconnected()&&this.to_validate.contains(other)) only_disconnected_left = false;

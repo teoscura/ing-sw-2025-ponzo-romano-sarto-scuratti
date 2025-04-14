@@ -1,5 +1,6 @@
 package it.polimi.ingsw.controller.server;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 
@@ -10,11 +11,18 @@ import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.ModelInstance;
 import it.polimi.ingsw.model.PlayerCount;
 import it.polimi.ingsw.model.adventure_cards.exceptions.ForbiddenCallException;
+import it.polimi.ingsw.model.player.Player;
+import it.polimi.ingsw.model.player.PlayerColor;
 
 public class ServerController implements RMIServerStub {
     
     private ModelInstance model = null;
     private final Server server;
+
+    private final HashMap<ClientDescriptor, PlayerColor> connected;
+    private final HashMap<String, PlayerColor> disconnected;
+    private boolean started = false;
+    
     private ClientDescriptor setupper;
     private Lock model_lock;
     
@@ -95,12 +103,14 @@ public class ServerController implements RMIServerStub {
         client.resetTimer(); 
     }
 
-    // public void connect(ClientDescriptor client) throws ForbiddenCallException;
-    // public void disconnect(ClientDescriptor client) throws ForbiddenCallException;
-    // public void openRoom(ClientDescriptor client, GameModeType type, PlayerCount count) throws ForbiddenCallException ;
-    // public void getUnfinishedList(ClientDescriptor client) throws ForbiddenCallException; 
-    // public void getMyUnfinishedList(ClientDescriptor client) throws ForbiddenCallException;
-    // public void openUnfinished(ClientDescriptor client, int id) throws ForbiddenCallException;
-    // public void ping(ClientDescriptor client) throws ForbiddenCallException ;
+    public void startGame(List<Player> players) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'startGame'");
+    }
+
+    public void kick(ClientDescriptor client) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'kick'");
+    }
 
 }

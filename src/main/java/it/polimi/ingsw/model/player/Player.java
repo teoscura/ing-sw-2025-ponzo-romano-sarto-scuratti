@@ -7,6 +7,7 @@ import it.polimi.ingsw.model.components.exceptions.AlreadyPoweredException;
 import it.polimi.ingsw.controller.server.ClientDescriptor;
 
 public class Player {
+    private final String username;
     private final PlayerColor color;
     private boolean retired = false;
     private boolean disconnected = false;
@@ -15,9 +16,15 @@ public class Player {
     private iSpaceShip ship;
     private ClientDescriptor descriptor;
 
-    public Player(GameModeType gamemode, PlayerColor color){
+    public Player(GameModeType gamemode, String username, PlayerColor color){
+        if(username == null || color == PlayerColor.NONE) throw new NullPointerException();
+        this.username = username;
         this.color = color;
         ship = new SpaceShip(gamemode, this);
+    }
+
+    public String getUsername() {
+        return this.username;
     }
 
     public PlayerColor getColor(){

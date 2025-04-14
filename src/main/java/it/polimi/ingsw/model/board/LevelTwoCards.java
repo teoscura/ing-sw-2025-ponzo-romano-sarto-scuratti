@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.board;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Queue;
 
 import it.polimi.ingsw.model.adventure_cards.LevelOneCardFactory;
@@ -12,7 +13,7 @@ import it.polimi.ingsw.model.adventure_cards.iCard;
 public class LevelTwoCards implements iCards {
     
     private final Queue<iCard> cards;
-    private final int[] construction_cards;
+    private final List<Integer> construction_cards;
 
 	public LevelTwoCards(){
         LevelOneCardFactory l1 = new LevelOneCardFactory();
@@ -38,11 +39,11 @@ public class LevelTwoCards implements iCards {
             tmp.addLast(shuffled);
         }
 		this.cards = new ArrayDeque<iCard>(tmp);
-        this.construction_cards = tmp.stream().mapToInt((c)->c.getId()).toArray();
+        this.construction_cards = tmp.stream().map((c)->c.getId()).toList();
 	}
 
     @Override
-    public int[] getConstructionCards(){
+    public List<Integer> getConstructionCards(){
         return this.construction_cards;
     }
 

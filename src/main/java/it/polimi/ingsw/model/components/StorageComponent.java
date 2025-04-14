@@ -3,6 +3,10 @@ package it.polimi.ingsw.model.components;
 
 import java.util.Arrays;
 
+import it.polimi.ingsw.model.client.components.ClientBaseComponent;
+import it.polimi.ingsw.model.client.components.ClientComponent;
+import it.polimi.ingsw.model.client.components.ClientCrewComponentDecorator;
+import it.polimi.ingsw.model.client.components.ClientShipmentsComponentDecorator;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ConnectorType;
 import it.polimi.ingsw.model.components.enums.ShipmentType;
@@ -88,6 +92,11 @@ public class StorageComponent extends BaseComponent{
     @Override
     public void check(iVisitor v){
         v.visit(this);
+    }
+
+    @Override
+    public ClientComponent getClientComponent() {
+        return new ClientShipmentsComponentDecorator(new ClientBaseComponent(getID(), getRotation()), shipments);
     }
 
 }

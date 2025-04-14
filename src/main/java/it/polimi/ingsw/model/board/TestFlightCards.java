@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.board;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Queue;
 
 import it.polimi.ingsw.model.adventure_cards.LevelOneCardFactory;
@@ -34,7 +35,7 @@ public class TestFlightCards implements iCards {
     }
 
     @Override
-    public int[] getConstructionCards(){
+    public List<Integer> getConstructionCards(){
         return null;
     }
 

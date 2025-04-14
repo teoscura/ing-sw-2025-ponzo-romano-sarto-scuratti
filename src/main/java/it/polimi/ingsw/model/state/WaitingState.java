@@ -11,6 +11,9 @@ import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.ModelInstance;
 import it.polimi.ingsw.model.PlayerCount;
 import it.polimi.ingsw.model.adventure_cards.exceptions.ForbiddenCallException;
+import it.polimi.ingsw.model.client.player.ClientWaitingPlayer;
+import it.polimi.ingsw.model.client.state.ClientModelState;
+import it.polimi.ingsw.model.client.state.ClientWaitingRoomState;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
 
@@ -43,7 +46,8 @@ public class WaitingState extends GameState {
         List<Player> playerlist = new ArrayList<>();
         for(PlayerColor c : PlayerColor.values()){
             if(c.getOrder()<0) continue;
-            playerlist.addLast(new Player(this.type, c));
+            String username = this.connected.get(c.getOrder()).getUsername();
+            playerlist.addLast(new Player(this.type, username, c));
             try {
                 this.connected.get(c.getOrder()).bindPlayer(playerlist.get(c.getOrder()));
             } catch (Exception e) {
@@ -52,6 +56,17 @@ public class WaitingState extends GameState {
             }
         }
         return new ConstructionState(model, type, count, playerlist);
+    }
+
+    @Override
+    public ClientModelState getClientState(){
+        List<ClientWaitingPlayer> tmp = new ArrayList<>();
+        for(PlayerColor c : PlayerColor.values()){
+            if(c.getOrder() + 1 > this.count.getNumber()) break;
+            if(c.getOrder()<0) continue;
+            tmp.add(new ClientWaitingPlayer(this.connected.get(c.getOrder()).getUsername(), c));
+        }
+        return new ClientWaitingRoomState(type, tmp);
     }
 
     public void connect(ClientDescriptor client) throws ForbiddenCallException {

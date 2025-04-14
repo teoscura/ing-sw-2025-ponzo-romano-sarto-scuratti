@@ -11,7 +11,7 @@ public class ClientVerifyState implements ClientModelState {
 
     private final List<ClientVerifyPlayer> players;
 
-    public ClientVerifyState(ClientSpaceShip ship, VerifyResult[][] results, List<ClientVerifyPlayer> playerlist) {
+    public ClientVerifyState(List<ClientVerifyPlayer> playerlist) {
         if(playerlist==null) throw new NullPointerException();
         if(playerlist.size()>4) throw new IllegalArgumentException();
         this.players = playerlist;

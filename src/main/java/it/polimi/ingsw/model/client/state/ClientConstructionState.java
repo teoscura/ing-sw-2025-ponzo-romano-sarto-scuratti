@@ -12,13 +12,13 @@ public class ClientConstructionState implements ClientModelState {
 
     private final GameModeType type;
     private final List<ClientConstructionPlayer> playerlist;
-    private final int[] construction_cards;
-    private final int[] discarded_tiles;
+    private final List<Integer> construction_cards;
+    private final List<Integer> discarded_tiles;
     private final int tiles_left;
     private final Instant last_hourglass_toggle;
 
-    public ClientConstructionState(GameModeType type, List<ClientConstructionPlayer> playerlist, ClientSpaceShip[] ships, int[] construction, int[] discarded, int tiles, Instant last_hourglass_toggle) {
-        if(ships==null||discarded==null||playerlist==null) throw new NullPointerException();
+    public ClientConstructionState(GameModeType type, List<ClientConstructionPlayer> playerlist, List<Integer> construction, List<Integer> discarded, int tiles, Instant last_hourglass_toggle) {
+        if(discarded==null||playerlist==null) throw new NullPointerException();
         if(construction==null && type.getLevel()>0) throw new IllegalArgumentException();
         if(type.getLevel()>0){
             for(int i : construction){
@@ -45,11 +45,11 @@ public class ClientConstructionState implements ClientModelState {
         return this.playerlist;
     }
 
-    public int[] getConstructionCards(){
+    public List<Integer> getConstructionCards(){
         return this.construction_cards;
     }
     
-    public int[] getDiscardedTiles(){
+    public List<Integer> getDiscardedTiles(){
         return this.discarded_tiles;
     }
 

@@ -3,8 +3,10 @@ package it.polimi.ingsw.model.board;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Queue;
 
 import it.polimi.ingsw.model.components.ComponentFactory;
@@ -48,6 +50,16 @@ public class CommonBoard implements iCommonBoard {
 		iBaseComponent tmp = this.uncovered_components.get(id);
 		this.uncovered_components.remove(id);
 		return tmp;
+	}
+
+	@Override
+	public int getCoveredSize() {
+		return this.covered_components.size();
+	}
+
+	@Override
+	public List<Integer> getDiscarded() {
+		return new ArrayList<Integer>(this.uncovered_components.keySet());
 	}
 
 }

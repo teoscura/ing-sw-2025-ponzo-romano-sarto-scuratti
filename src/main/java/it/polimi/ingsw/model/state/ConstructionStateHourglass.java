@@ -36,4 +36,8 @@ public class ConstructionStateHourglass {
         return Duration.between(Instant.now(), toggled).compareTo(period) < 0;
     }
 
+    public Instant getInstant(){
+        return this.toggled;
+    }
+
 }

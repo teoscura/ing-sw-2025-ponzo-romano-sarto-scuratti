@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.state;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -18,6 +19,9 @@ import it.polimi.ingsw.model.board.LevelTwoCards;
 import it.polimi.ingsw.model.board.TestFlightCards;
 import it.polimi.ingsw.model.board.iCards;
 import it.polimi.ingsw.model.board.iCommonBoard;
+import it.polimi.ingsw.model.client.player.ClientConstructionPlayer;
+import it.polimi.ingsw.model.client.state.ClientConstructionState;
+import it.polimi.ingsw.model.client.state.ClientModelState;
 import it.polimi.ingsw.model.components.iBaseComponent;
 import it.polimi.ingsw.model.components.exceptions.ContainerEmptyException;
 import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
@@ -29,7 +33,7 @@ public class ConstructionState extends GameState {
 
     private final iCommonBoard board;
 
-    private final int[] construction_cards;
+    private final List<Integer> construction_cards;
     private final iCards voyage_deck;
     private final List<Player> building;
     private final List<Player> finished;
@@ -68,7 +72,23 @@ public class ConstructionState extends GameState {
 
     @Override
     public GameState getNext() {
-        return new ValidationState(model, type, count, players, voyage_deck, finished);
+        return new VerifyState(model, type, count, players, voyage_deck, finished);
+    }
+
+    @Override
+    public ClientModelState getClientState(){
+        List<ClientConstructionPlayer> tmp = new ArrayList<>();
+        for(Player p : this.players){
+            List<Integer> stash = new ArrayList<>();
+            if(this.current_tile.get(p)!=null) stash.add(this.current_tile.get(p).getID());
+            stash.addAll(this.hoarded_tile.get(p).stream().filter(t->t!=null).map(t->t.getID()).toList());
+            tmp.add(new ClientConstructionPlayer(p.getUsername(),
+                                                 p.getColor(),
+                                                 p.getSpaceShip().getClientSpaceShip(),
+                                                 stash,
+                                                 this.finished.contains(p)));
+        }
+        return new ClientConstructionState(this.type, tmp, this.construction_cards, this.board.getDiscarded(), this.board.getCoveredSize(), this.hourglass.getInstant());
     }
 
     @Override
