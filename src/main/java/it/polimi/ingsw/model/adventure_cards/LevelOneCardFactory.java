@@ -1,12 +1,8 @@
 package it.polimi.ingsw.model.adventure_cards;
 
+import java.util.Arrays;
 import java.util.HashMap;
 
-import it.polimi.ingsw.message.client.AskRemoveCrewMessage;
-import it.polimi.ingsw.message.client.ClientMessage;
-import it.polimi.ingsw.message.client.MoveOnBoardMessage;
-import it.polimi.ingsw.model.adventure_cards.enums.ProjectileDimension;
-import it.polimi.ingsw.model.adventure_cards.enums.ProjectileDirection;
 import it.polimi.ingsw.model.adventure_cards.utils.*;
 
 public class LevelOneCardFactory implements iCardFactory {
@@ -64,43 +60,44 @@ public class LevelOneCardFactory implements iCardFactory {
             );
             put(12, new PlanetCard(12, 3,
                 new Planet[]{
-                new Planet(new int[]{3,1,0,1}),
-                new Planet(new int[]{1,0,1,1}),
-                new Planet(new int[]{3,0,0,1}),
-                new Planet(new int[]{0,1,0,1})})
+                    new Planet(new int[]{3,1,0,1}),
+                    new Planet(new int[]{1,0,1,1}),
+                    new Planet(new int[]{3,0,0,1}),
+                    new Planet(new int[]{0,1,0,1})})
             );
             put(13, new PlanetCard(13, 2, 
                 new Planet[]{
-                new Planet(new int[]{0,0,0,2}),
-                new Planet(new int[]{2,0,0,1}),
-                new Planet(new int[]{0,0,1,0})})
+                    new Planet(new int[]{0,0,0,2}),
+                    new Planet(new int[]{2,0,0,1}),
+                    new Planet(new int[]{0,0,1,0})})
             );
             put(14, new PlanetCard(14, 3,
                 new Planet[]{
-                new Planet(new int[]{2,1,1,0}),
-                new Planet(new int[]{0,0,2,0})})
+                    new Planet(new int[]{2,1,1,0}),
+                    new Planet(new int[]{0,0,2,0})})
             );
             put(15, new PlanetCard(15, 1, 
                 new Planet[]{
-                new Planet(new int[]{0,2,0,0}),
-                new Planet(new int[]{0,0,1,0}),
-                new Planet(new int[]{3,0,0,0})})
+                    new Planet(new int[]{0,2,0,0}),
+                    new Planet(new int[]{0,0,1,0}),
+                    new Planet(new int[]{3,0,0,0})})
             );
             put(16, new CombatZoneCard(16,
+                Arrays.asList(new CombatZoneSection[]{
+                    new CombatZoneSection(
+                        CombatZoneCriteria.LEAST_CREW,
+                        CombatZonePenalty.DAYS, 3),
+                    new CombatZoneSection(
+                        CombatZoneCriteria.LEAST_ENGINE, 
+                        CombatZonePenalty.CREW, 2),
+                    new CombatZoneSection(
+                        CombatZoneCriteria.LEAST_CANNON, 
+                        CombatZonePenalty.SHOTS)
+                }),
                 new ProjectileArray(
                     new Projectile[]{
                     new Projectile(ProjectileDirection.U000, ProjectileDimension.SMALL),
-                    new Projectile(ProjectileDirection.U000, ProjectileDimension.BIG)}),
-                new CombatZoneLine[]{
-                    CombatZoneLine.LEAST_CREW,
-                    CombatZoneLine.LEAST_ENGINE,
-                    CombatZoneLine.LEAST_CANNON},
-                new ClientMessage[]{
-                    new MoveOnBoardMessage(-3),
-                    new AskRemoveCrewMessage(2),
-                    null},
-                CombatZoneLine.LEAST_ENGINE,
-                CardResponseType.REMOVE_CREW)
+                    new Projectile(ProjectileDirection.U000, ProjectileDimension.BIG)}))
             );
             put(17, new AbandonedShipCard(17, 1, 2, 3));
             put(18, new AbandonedShipCard(18, 1, 3, 4));

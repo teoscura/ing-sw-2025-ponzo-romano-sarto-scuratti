@@ -1,17 +1,11 @@
 package it.polimi.ingsw.model.adventure_cards;
 
 import it.polimi.ingsw.exceptions.NegativeArgumentException;
-import it.polimi.ingsw.exceptions.PlayerNotFoundException;
-import it.polimi.ingsw.message.client.AskRemoveCrewMessage;
-import it.polimi.ingsw.message.client.AskTurnOnMessage;
-import it.polimi.ingsw.message.client.ClientMessage;
-import it.polimi.ingsw.message.client.FightRewardMessage;
-import it.polimi.ingsw.message.client.GameLostMessage;
-import it.polimi.ingsw.model.ModelInstance;
+import it.polimi.ingsw.model.adventure_cards.state.CardState;
+import it.polimi.ingsw.model.adventure_cards.state.SlaversAnnounceState;
 import it.polimi.ingsw.model.adventure_cards.utils.CardOrder;
-import it.polimi.ingsw.model.adventure_cards.utils.CardResponseType;
-import it.polimi.ingsw.model.adventure_cards.utils.PlayerResponse;
-import it.polimi.ingsw.model.player.iSpaceShip;
+import it.polimi.ingsw.model.player.Player;
+import it.polimi.ingsw.model.state.VoyageState;
 
 public class SlaversCard extends Card{
 
@@ -28,42 +22,31 @@ public class SlaversCard extends Card{
     }
 
     @Override
-    public ClientMessage getRequest() {
-        return new AskTurnOnMessage();
+    public CardState getState(VoyageState state){
+        return new SlaversAnnounceState(state, this, state.getOrder(CardOrder.NORMAL));
     }
 
-    @Override
-	public CardResponseType getResponse() {
-		return CardResponseType.TURNON_ACCEPT;
-	}
+    public int getCredits(){
+        return credits;
+    }
 
-	@Override
-	public CardResponseType getAfterResponse() {
-		return this.after_response;
-	}
+    public int getCrewLost(){
+        return this.crew_penalty;
+    }
 
-	@Override
-	public CardOrder getOrder() {
-		return CardOrder.NORMAL;
-	}
-
-	@Override
-	public ClientMessage apply(ModelInstance model, iSpaceShip ship, PlayerResponse response) throws PlayerNotFoundException {
-        if(model==null||ship==null) throw new NullPointerException();
-		this.after_response = CardResponseType.NONE;
-        if(ship.getCannonPower()>this.min_power){
+	public boolean apply(VoyageState state, Player p){
+        if(state==null||p==null) throw new NullPointerException();
+        if(p.getSpaceShip().getCannonPower()>this.min_power){
             this.exhaust();
-            this.after_response = CardResponseType.FIGHT_REWARD_CREDITS;
-            return new FightRewardMessage(credits, days);
+            return true;
         }
-        else if(ship.getCannonPower()==this.min_power){
-            return null;
+        else if(p.getSpaceShip().getCannonPower()==this.min_power){
+            return true;
         }
-        if(ship.getTotalCrew()<=this.crew_penalty){
-            model.loseGame(ship.getColor());
-            return new GameLostMessage();
+        if(p.getSpaceShip().getTotalCrew()<=this.crew_penalty){
+            state.loseGame(p);
         }
-        return new AskRemoveCrewMessage(this.crew_penalty);
+        return false;
 	}
 
 }

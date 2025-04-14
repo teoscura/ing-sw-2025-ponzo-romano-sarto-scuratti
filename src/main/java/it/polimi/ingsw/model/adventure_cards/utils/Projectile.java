@@ -2,8 +2,6 @@
 package it.polimi.ingsw.model.adventure_cards.utils;
 
 import it.polimi.ingsw.exceptions.OutOfBoundsException;
-import it.polimi.ingsw.model.adventure_cards.enums.ProjectileDimension;
-import it.polimi.ingsw.model.adventure_cards.enums.ProjectileDirection;
 
 public class Projectile {
 

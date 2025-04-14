@@ -50,7 +50,7 @@ class StorageComponentTest {
 		StorageComponent takeout_storage_component1 = new StorageComponent(1, connectors, ComponentRotation.U000, StorageType.DOUBLENORMAL);
 		ShipmentType shipment1 = ShipmentType.BLUE;
 		ShipmentType shipment2 = ShipmentType.GREEN;
-		NullPointerException e = assertThrows(NullPointerException.class, () -> takeout_storage_component1.takeOut(null));
+		assertThrows(NullPointerException.class, () -> takeout_storage_component1.takeOut(null));
 		takeout_storage_component1.putIn(shipment1);
 		assertTrue(takeout_storage_component1.takeOut(shipment1));
 		assertFalse(takeout_storage_component1.takeOut(shipment2));

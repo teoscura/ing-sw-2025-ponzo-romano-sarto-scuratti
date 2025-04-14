@@ -3,9 +3,14 @@ package it.polimi.ingsw.model.components;
 
 import it.polimi.ingsw.exceptions.ArgumentTooBigException;
 import it.polimi.ingsw.exceptions.NegativeArgumentException;
+import it.polimi.ingsw.model.client.components.ClientBaseComponent;
+import it.polimi.ingsw.model.client.components.ClientComponent;
+import it.polimi.ingsw.model.client.components.ClientCrewComponentDecorator;
+import it.polimi.ingsw.model.client.components.ClientPoweredComponentDecorator;
 import it.polimi.ingsw.model.components.enums.AlienType;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ConnectorType;
+import it.polimi.ingsw.model.components.exceptions.AlienTypeAlreadyPresentException;
 import it.polimi.ingsw.model.components.exceptions.UnsupportedAlienCabinException;
 import it.polimi.ingsw.model.components.visitors.CabinVisitor;
 import it.polimi.ingsw.model.components.visitors.iVisitor;
@@ -14,7 +19,7 @@ import it.polimi.ingsw.model.player.iSpaceShip;
 
 public class CabinComponent extends BaseComponent{
     
-    private int crew_number = 0;
+    private int crew_number = 2;
     private AlienType crew_type = AlienType.HUMAN;
 
     public CabinComponent(int id, 
@@ -44,9 +49,10 @@ public class CabinComponent extends BaseComponent{
     }
 
     public void setCrew(iSpaceShip ship, int new_crew, AlienType type){
-        if(new_crew<=0) throw new NegativeArgumentException("Crew size can't be zero or negative");
+        if(new_crew<=0) throw new NegativeArgumentException("Crew size can't be negative");
         if(type.getArraypos()<0) throw new IllegalArgumentException("Type must be a single alien type, not a collector");
         if(new_crew>type.getMaxCapacity()) throw new ArgumentTooBigException("Crew size exceeds type's max capacity");
+        if(type.getLifeSupportExists()&&ship.getCrew()[type.getArraypos()]>0) throw new AlienTypeAlreadyPresentException("Spaceship already has one alien of this type.");
         CabinVisitor v = new CabinVisitor();
         for(iBaseComponent c : this.getConnectedComponents(ship)){
             c.check(v);
@@ -64,6 +70,11 @@ public class CabinComponent extends BaseComponent{
     @Override
     public void onDelete(iSpaceShip ship) {
         ship.delCabinCoords(this.coords);
+    }
+
+    @Override
+    public ClientComponent getClientComponent() {
+        return new ClientCrewComponentDecorator(new ClientBaseComponent(getID(), getRotation()), crew_type, crew_number);
     }
 }
 

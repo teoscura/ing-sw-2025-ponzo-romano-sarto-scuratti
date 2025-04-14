@@ -10,10 +10,13 @@ import it.polimi.ingsw.exceptions.NotUniqueException;
 import it.polimi.ingsw.exceptions.NotPresentException;
 import it.polimi.ingsw.exceptions.OutOfBoundsException;
 import it.polimi.ingsw.model.GameModeType;
-import it.polimi.ingsw.model.adventure_cards.enums.ProjectileDimension;
-import it.polimi.ingsw.model.adventure_cards.enums.ProjectileDirection;
+import it.polimi.ingsw.model.adventure_cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.adventure_cards.utils.Projectile;
+import it.polimi.ingsw.model.adventure_cards.utils.ProjectileDimension;
+import it.polimi.ingsw.model.adventure_cards.utils.ProjectileDirection;
 import it.polimi.ingsw.model.adventure_cards.visitors.LargeMeteorVisitor;
+import it.polimi.ingsw.model.client.ClientSpaceShip;
+import it.polimi.ingsw.model.client.components.ClientComponent;
 import it.polimi.ingsw.model.components.BatteryComponent;
 import it.polimi.ingsw.model.components.EmptyComponent;
 import it.polimi.ingsw.model.components.StartingCabinComponent;
@@ -21,41 +24,38 @@ import it.polimi.ingsw.model.components.iBaseComponent;
 import it.polimi.ingsw.model.components.enums.AlienType;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ConnectorType;
-import it.polimi.ingsw.model.components.exceptions.AlreadyPoweredException;
+import it.polimi.ingsw.model.components.enums.ShipmentType;
 import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
 import it.polimi.ingsw.model.components.visitors.SpaceShipUpdateVisitor;
 import it.polimi.ingsw.model.components.visitors.EnergyVisitor;
 import it.polimi.ingsw.model.player.exceptions.IllegalComponentAdd;
-import it.polimi.ingsw.model.player.exceptions.NegativeCreditsException;
 import it.polimi.ingsw.model.player.exceptions.NegativeCrewException;
 
 
 public class SpaceShip implements iSpaceShip{
 	
+	private final Player player;
+
 	private final ArrayList<ShipCoords> storage_coords;
 	private final ArrayList<ShipCoords> cabin_coords;
 	private final ArrayList<ShipCoords> battery_coords;
 	private final ArrayList<ShipCoords> powerable_coords;
-	//Player fields
-	private final PlayerColor color;
-	private int credits;
-	private int[] crew;
-	private boolean retired = false;
-	//SpaceShip fields
 	private final GameModeType type;
 	private final iBaseComponent[][] components;
 	private final iBaseComponent empty;
+	private int[] crew;
 	private ShipCoords center;
 	private int[] containers;
 	private boolean[] shielded_directions;
+	private boolean broke_center;
 	private int cannon_power = 0;
 	private int engine_power = 0;
 	private int battery_power = 0;
 
 	public SpaceShip(GameModeType type, 
-					 PlayerColor color){
+					 Player player){
+		this.player = player;
 		this.type = type;
-		this.color = color;
 		this.components = new iBaseComponent[type.getHeight()][type.getWidth()];
 		this.shielded_directions = new boolean[4];
 		this.containers = new int[4];
@@ -75,7 +75,7 @@ public class SpaceShip implements iSpaceShip{
 														 ConnectorType.UNIVERSAL,
 														 ConnectorType.UNIVERSAL}, 
 											ComponentRotation.U000,
-											color,
+											player.getColor(),
 											center),
 											center);
 		Arrays.fill(shielded_directions, false);
@@ -86,26 +86,6 @@ public class SpaceShip implements iSpaceShip{
 	@Override 
 	public GameModeType getType(){
 		return this.type;
-	}
-
-	@Override
-	public int getCredits(){
-		return this.credits;
-	}
-
-	@Override
-	public int takeCredits(int amount){
-		if(amount<=0) throw new IllegalArgumentException("Cannot take negative credits.");
-		if((this.credits-amount)<0) throw new NegativeCreditsException("Took more credits than available.");
-		this.credits -= amount;
-		return this.credits; 
-	}
-
-	@Override
-	public int giveCredits(int amount){
-		if(amount<=0) throw new IllegalArgumentException("Cannot earn negative credits.");
-		this.credits+=amount;
-		return this.credits;
 	}
 
 	@Override
@@ -121,11 +101,6 @@ public class SpaceShip implements iSpaceShip{
 	}
 
 	@Override
-	public PlayerColor getColor(){
-		return this.color;
-	}
-
-	@Override
 	public VerifyResult[][] verify() {
 		VerifyResult[][] res = new VerifyResult[this.type.getHeight()][];
 		Queue<iBaseComponent> queue = new ArrayDeque<iBaseComponent>();
@@ -133,7 +108,7 @@ public class SpaceShip implements iSpaceShip{
 			res[i] = new VerifyResult[this.type.getWidth()];
 			Arrays.fill(res[i], VerifyResult.UNCHECKED);
 		}
-		queue.add(this.getComponent(this.type.getCenterCabin()));
+		queue.add(this.getComponent(this.getCenter()));
 		iBaseComponent tmp = null;
 		while(!queue.isEmpty()){
 			tmp = queue.poll();
@@ -154,14 +129,17 @@ public class SpaceShip implements iSpaceShip{
 	}
 
 	@Override
-	public void verifyAndClean() {
+	public boolean verifyAndClean() {
 		VerifyResult[][] ver = this.verify();
+		boolean had_to_clean = false;
 		for(int i=0;i<this.type.getHeight();i++){
 			for(int j=0;j<this.type.getWidth();j++){
 				if(ver[i][j]!=VerifyResult.NOT_LINKED) continue;
+				had_to_clean = true;
 				this.removeComponent(new ShipCoords(this.type,j,i));
 			}
 		}
+		return had_to_clean;
 	}
 
 	@Override
@@ -172,8 +150,11 @@ public class SpaceShip implements iSpaceShip{
 		if(component==null) throw new NullPointerException();
 		if(this.getComponent(coords) != this.getEmpty()) throw new IllegalComponentAdd("Component is already present at these coords.");
 		if(this.type.isForbidden(coords)) throw new IllegalComponentAdd();
-		//if(this.getComponent(coords.up())==this.getEmpty() && this.getComponent(coords.down())==this.getEmpty() && this.getComponent(coords.left())==this.getEmpty() && this.getComponent(coords.right())==this.getEmpty())
-			//throw new IllegalTargetException("Component is not adjacent to others."); temporary, dirty implemetation
+		boolean next = false;
+		for(ShipCoords s : coords.getNextTo()){
+			if(s!=this.getEmpty()) next = true; 
+		}
+		if(!next) throw new IllegalTargetException("Component is not adjacent to others.");
 		component.onCreation(this);
 		this.components[coords.y][coords.x] = component;
 	}
@@ -181,11 +162,12 @@ public class SpaceShip implements iSpaceShip{
 	@Override
 	public void removeComponent(ShipCoords coords) {
 		if (coords == null) throw new NullPointerException();
+		if(coords==this.getCenter()) this.setBrokeCenter();
 		iBaseComponent tmp = this.getComponent(coords);
-		if (this.components[coords.y][coords.x] == this.empty) return;
+		if (this.components[coords.y][coords.x] == this.empty) throw new IllegalTargetException();
 		this.components[coords.y][coords.x] = this.empty;
+		this.player.addScore(-1);
 		tmp.onDelete(this);
-		//verify and clean needs to be called outside when component is removed
 	}
 
 	@Override
@@ -230,7 +212,7 @@ public class SpaceShip implements iSpaceShip{
 		EnergyVisitor v = new EnergyVisitor(true);
 		if(c.getContains()==0) throw new IllegalTargetException("No batteries found at location");
 		c.takeOne();
-		c.check(v);
+		this.getComponent(coords_target).check(v);
 	}
 
 	@Override
@@ -338,14 +320,16 @@ public class SpaceShip implements iSpaceShip{
 	}
 
 	@Override
-	public void setCenterCabin(ShipCoords new_center) {
+	public void setCenter(ShipCoords new_center) throws ForbiddenCallException {
 		if(this.type.isForbidden(new_center) || this.getComponent(new_center)==this.empty) throw new IllegalTargetException("New center is either forbidden or illegal.");
+		if(!broke_center) throw new ForbiddenCallException("Cabin isn't broken");
 		this.center = new_center;
+		this.broke_center = false;
 		this.verifyAndClean();
 	}
 
 	@Override
-	public ShipCoords getCenterCabin() {
+	public ShipCoords getCenter() {
 		return this.center;
 	}
 
@@ -400,7 +384,7 @@ public class SpaceShip implements iSpaceShip{
 			if(tmp.equals(this.empty.getCoords())) return false;
 			//if (tmp==this.getCenterCabin()) return true -> gestita response nuova nave nuovo centro
 			this.removeComponent(tmp);
-			return tmp.equals(this.getCenterCabin()) ? true : false;
+			return this.broke_center;
 		}
 		boolean shielded = p.getDimension()!=ProjectileDimension.BIG && this.shielded_directions[p.getDirection().getOpposite().getShift()];
 		if(shielded) return false;
@@ -408,7 +392,7 @@ public class SpaceShip implements iSpaceShip{
 		if(tmp.equals(this.empty.getCoords())) return false;
 		if(this.getComponent(tmp).getConnectors()[p.getDirection().getOpposite().getShift()]==ConnectorType.EMPTY) return false;
 		this.removeComponent(tmp);
-		return tmp.equals(this.getCenterCabin()) ? true : false;
+		return this.broke_center;
 	}
 
 	@Override
@@ -423,7 +407,7 @@ public class SpaceShip implements iSpaceShip{
 		ShipCoords tmp = this.getFirst(p.getDirection(), index);
 		if(tmp.equals(this.empty.getCoords())) return false;
 		this.removeComponent(tmp);
-		return tmp.equals(this.getCenterCabin()) ? true : false;	
+		return this.broke_center;	
 	}	
 
 	private int normalizeRoll(ProjectileDirection direction, int roll){
@@ -478,14 +462,41 @@ public class SpaceShip implements iSpaceShip{
 	}
 
 	@Override
-	public void retire() {
-		if(retired) throw new AlreadyPoweredException("Ship is alredy retired.");
-		this.retired = true;
+	public boolean getBrokeCenter() {
+		return this.broke_center;
 	}
 
 	@Override
-	public boolean getRetired() {
-		return this.retired;
+	public void setBrokeCenter(){
+		this.broke_center = true;
+	}
+
+	@Override
+	public int[] getContains() {
+		int[] tmp = new int[5];
+		tmp[4] = this.battery_power;
+		for(ShipmentType t : ShipmentType.values()){
+			if(t.getValue()==0) break;
+			tmp[t.getValue()-1] = this.containers[t.getValue()-1];
+		}	
+		return tmp;
+	}
+
+	@Override
+	public boolean isCabin(ShipCoords coords) {
+		if(coords==null) throw new NullPointerException();
+		return this.cabin_coords.contains(coords);
+	}
+
+	@Override
+	public ClientSpaceShip getClientSpaceShip() {
+		ClientComponent[][] res = new ClientComponent[this.type.getHeight()][this.type.getWidth()];
+		for(int x = 0; x < this.type.getWidth(); x++){
+			for(int y = 0; y < this.type.getHeight(); y++){
+				res[y][x] = this.components[y][x].getClientComponent();
+			}
+		}
+		return new ClientSpaceShip(type, res, shielded_directions, cannon_power, engine_power, battery_power, crew);
 	}
 
 }

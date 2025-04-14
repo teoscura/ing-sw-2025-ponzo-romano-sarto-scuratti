@@ -5,7 +5,7 @@ skinparam groupInheritance 1
 set separator ::
 skinparam classAttributeIconSize 12
 
-' TODO sistemare tipi
+TODO
 
 ' format unfinished games: list form
 ' 1 - game_id - num_players - player_name_0, .. , player_name_num_players-1.
@@ -33,60 +33,13 @@ package Controller{
             {method} + close() : void
         }
 
-        interface iClientGameController <<interface>> {
-            {method} + throwException(Exception) : void 
-            {method} + showCard(int) : void 
-            {method} + updateState(GameState) : void 
-            {method} + updateShip(PlayerColor, iSpaceShip) : void 
-            {method} + updateShipValidationResult(boolean, VerifyResult[]) : void 
-
-            {method} + updateTurn(int, PlayerColor) : void 
-            {method} + askTurnOn() : void
-            {method} + askRemoveCrew(int) : void
-            {method} + askRemoveCargo(int) : void
-            {method} + askChooseNewCabin() : void
-            {method} + giveCargo(int[]) : void
-            {method} + offerReward(int, int) : void
-            {method} + offerReward(int[], int) : void
-            {method} + earnCredits(int) : void
-            {method} + askLanding(boolean[], int) : void
-
-            {method} + setLost();
-            {method} + moveOnBoard(PlayerColor, int) : void 
-            {method} + moveOnBoard(int) : void 
-            {method} + pauseGame() : void 
-            {method} + endGame() : void 
-            {method} + ping() : void 
-        }
-
         iClientGameController^--ClientGameController
         ClientConnection<--ClientGameController:Server
         class ClientGameController{
             {field} - model : ModelView
             {field} - state : GameState
             {field} - listener : ViewListener
-            {method} + throwException(Exception) : void
-            {method} + showCard(int) : void 
-            {method} + updateState(GameState) : void 
-            {method} + updateShip(PlayerColor, iSpaceShip) : void 
-            {method} + updateShipValidationResult(boolean, VerifyResult[]) : void 
-
-            {method} + updateTurn(int, PlayerColor) : void 
-            {method} + askTurnOn() : void
-            {method} + askRemoveCrew(int) : void
-            {method} + askRemoveCargo(int) : void
-            {method} + askChooseNewCabin() : void
-            {method} + giveCargo(int[]) : void
-            {method} + offerReward(int, int) : void
-            {method} + offerReward(int[], int) : void
-            {method} + earnCredits(int) : void
-            {method} + askLanding(boolean[], int) : void
-
-            {method} + setLost();
-            {method} + moveOnBoard(PlayerColor, int) : void 
-            {method} + moveOnBoard(int) : void 
-            {method} + pauseGame() : void 
-            {method} + endGame() : void 
+            {method} + 
             {method} + ping() : void 
         }
 
@@ -228,7 +181,6 @@ package Controller{
             {method} + selectLanding(ClientDescriptor, int) : void
             {method} + askUpdateState(ClientDescriptor) : void
             {method} + progressTurn(ClientDescriptor) : void
-            {method} + removeCrew(ClientDescriptor, ShipCoords) : void
         }
 
         GameState^.. LeaderboardState
@@ -347,112 +299,112 @@ package Controller{
 
         }
 
-        Message^-- ClientMessage::ClientMessage
-        package ClientMessage {
-            abstract ClientMessage <<abstract>> {
+        ' Message^-- ClientMessage::ClientMessage
+        ' package ClientMessage {
+        '     abstract ClientMessage <<abstract>> {
+        
+        '     }
 
-            }
+        '     ClientMessage^.. ExceptionMessage 
+        '     class ExceptionMessage{
 
-            ClientMessage^.. ExceptionMessage 
-            class ExceptionMessage{
+        '     }
 
-            }
+        '     ClientMessage^.... TurnMessage
+        '     class TurnMessage{
 
-            ClientMessage^.... TurnMessage
-            class TurnMessage{
+        '     }
 
-            }
+        '     ClientMessage^.. ShowCardMessage
+        '     class ShowCardMessage{
 
-            ClientMessage^.. ShowCardMessage
-            class ShowCardMessage{
+        '     }
 
-            }
+        '     ClientMessage^.... UpdateStateMessage
+        '     class UpdateStateMessage{
 
-            ClientMessage^.... UpdateStateMessage
-            class UpdateStateMessage{
+        '     }
 
-            }
+        '     ClientMessage^.. UpdateShipMessage
+        '     class UpdateShipMessage{
 
-            ClientMessage^.. UpdateShipMessage
-            class UpdateShipMessage{
+        '     }
 
-            }
+        '     ClientMessage^.... ValidateResultMessage
+        '     class ValidateResultMessage{
 
-            ClientMessage^.... ValidateResultMessage
-            class ValidateResultMessage{
+        '     }
 
-            }
+        '     ClientMessage^.... AskTurnOnMessage
+        '     class AskTurnOnMessage{
 
-            ClientMessage^.... AskTurnOnMessage
-            class AskTurnOnMessage{
+        '     }
 
-            }
+        '     ClientMessage^.. AskRemoveCrewMessage
+        '     class AskRemoveCrewMessage{
 
-            ClientMessage^.. AskRemoveCrewMessage
-            class AskRemoveCrewMessage{
+        '     }
 
-            }
+        '     ClientMessage^.... AskRemoveMerchMessage
+        '     class AskRemoveMerchMessage{
 
-            ClientMessage^.... AskRemoveMerchMessage
-            class AskRemoveMerchMessage{
+        '     }
 
-            }
+        '     ClientMessage^.. BrokenCabinMessage
+        '     class BrokenCabinMessage{
 
-            ClientMessage^.. BrokenCabinMessage
-            class BrokenCabinMessage{
+        '     }
 
-            }
+        '     ClientMessage^.... GainCargoMessage
+        '     class GainCargoMessage{
 
-            ClientMessage^.... GainCargoMessage
-            class GainCargoMessage{
+        '     }
 
-            }
+        '     ClientMessage^.. CreditsMessage
+        '     class CreditsMessage{
 
-            ClientMessage^.. CreditsMessage
-            class CreditsMessage{
+        '     }
 
-            }
+        '     ClientMessage^.... AskLandingMessage
+        '     class AskLandingMessage{
 
-            ClientMessage^.... AskLandingMessage
-            class AskLandingMessage{
+        '     }
 
-            }
+        '     ClientMessage^.. MoveOnBoardMessage
+        '     class MoveOnBoardMessage{
 
-            ClientMessage^.. MoveOnBoardMessage
-            class MoveOnBoardMessage{
+        '     }
 
-            }
+        '     ClientMessage^.. FightRewardMessage
+        '     class FightRewardMessage{
 
-            ClientMessage^.. FightRewardMessage
-            class FightRewardMessage{
+        '     }
 
-            }
-
-            ClientMessage^.. SmugglersRewardMessage
-            class SmugglersRewardMessage{
+        '     ClientMessage^.. SmugglersRewardMessage
+        '     class SmugglersRewardMessage{
                 
-            }
+        '     }
 
-            ClientMessage^.. GameLostMessage
-            class GameLostMessage{
+        '     ClientMessage^.. GameLostMessage
+        '     class GameLostMessage{
 
-            }
+        '     }
 
-            ClientMessage^.... GamePauseMessage
-            class GamePauseMessage{
+        '     ClientMessage^.... GamePauseMessage
+        '     class GamePauseMessage{
 
-            }
+        '     }
 
-            ClientMessage^.. GameEndMessage
-            class GameEndMessage{
+        '     ClientMessage^.. GameEndMessage
+        '     class GameEndMessage{
 
-            }
+        '     }
 
-            ClientMessage^.... ClientPingMessage
-            class ClientPingMessage{
+        '     ClientMessage^.... ClientPingMessage
+        '     class ClientPingMessage{
 
-            }
-        }
+        '     }
+        ' }
         
     }
 

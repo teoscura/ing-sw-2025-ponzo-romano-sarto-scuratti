@@ -6,13 +6,10 @@ import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.components.enums.AlienType;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ConnectorType;
-import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
 import it.polimi.ingsw.model.components.exceptions.UnsupportedAlienCabinException;
-import it.polimi.ingsw.model.components.visitors.CabinVisitor;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.player.SpaceShip;
-import javafx.scene.control.Alert.AlertType;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -72,12 +69,12 @@ class CabinComponentTest {
 	@Test
 	void setCrew() {
 		ship.addComponent(component_human, coords);
-		NegativeArgumentException e1 = assertThrows(NegativeArgumentException.class, () -> component_both.setCrew(ship, 0, AlienType.HUMAN));
-		IllegalArgumentException e2 = assertThrows(IllegalArgumentException.class, () -> component_both.setCrew(ship, 1, AlienType.BOTH));
-		ArgumentTooBigException e3 = assertThrows(ArgumentTooBigException.class, () -> component_both.setCrew(ship, 3, AlienType.HUMAN));
+		assertThrows(NegativeArgumentException.class, () -> component_both.setCrew(ship, 0, AlienType.HUMAN));
+		assertThrows(IllegalArgumentException.class, () -> component_both.setCrew(ship, 1, AlienType.BOTH));
+		assertThrows(ArgumentTooBigException.class, () -> component_both.setCrew(ship, 3, AlienType.HUMAN));
 		assertEquals(0, component_both.getCrew());
 
-		UnsupportedAlienCabinException e4 = assertThrows(UnsupportedAlienCabinException.class, () -> component_human.setCrew(ship, 1, AlienType.BROWN));
+		assertThrows(UnsupportedAlienCabinException.class, () -> component_human.setCrew(ship, 1, AlienType.BROWN));
 		component_both.setCrew(ship, 2, AlienType.HUMAN);
 		assertEquals(2, component_both.getCrew());
 	}

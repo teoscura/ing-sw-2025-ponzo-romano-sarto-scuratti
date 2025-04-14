@@ -1,6 +1,10 @@
 //Done.
 package it.polimi.ingsw.model.components;
 
+import it.polimi.ingsw.model.client.components.ClientBaseComponent;
+import it.polimi.ingsw.model.client.components.ClientBatteryComponentDecorator;
+import it.polimi.ingsw.model.client.components.ClientComponent;
+import it.polimi.ingsw.model.client.components.ClientPoweredComponentDecorator;
 import it.polimi.ingsw.model.components.enums.BatteryType;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ConnectorType;
@@ -69,6 +73,11 @@ public class BatteryComponent extends BaseComponent{
     @Override
     public void onDelete(iSpaceShip ship){
         ship.delBatteryCoords(this.coords);
+    }
+
+    @Override
+    public ClientComponent getClientComponent() {
+        return new ClientBatteryComponentDecorator(new ClientBaseComponent(this.getID(), getRotation()), this.contains);
     }
 }
 

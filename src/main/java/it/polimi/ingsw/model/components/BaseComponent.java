@@ -1,6 +1,7 @@
 //Done.
 package it.polimi.ingsw.model.components;
 
+import it.polimi.ingsw.model.client.components.ClientComponent;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ConnectorType;
 import it.polimi.ingsw.model.components.exceptions.ConnectorsSizeException;
@@ -98,10 +99,13 @@ public abstract class BaseComponent implements iBaseComponent, iVisitable{
     public abstract void onCreation(iSpaceShip ship);
 
     @Override
-    public  abstract void onDelete(iSpaceShip ship);
+    public abstract void onDelete(iSpaceShip ship);
+
+    @Override
+    public abstract ClientComponent getClientComponent();
     
     @Override
-    abstract public void check(iVisitor v);
+    public abstract void check(iVisitor v);
 
     public iBaseComponent[] getConnectedComponents(iSpaceShip ship){
         iBaseComponent[] res = new iBaseComponent[]{ship.getEmpty(), ship.getEmpty(), ship.getEmpty(), ship.getEmpty()};

@@ -1,58 +1,74 @@
 package it.polimi.ingsw.model.board;
 
-import it.polimi.ingsw.model.PlayerCount;
 import it.polimi.ingsw.model.GameModeType;
-import it.polimi.ingsw.model.player.PlayerColor;
-import it.polimi.ingsw.model.player.iSpaceShip;
+import it.polimi.ingsw.model.player.Player;
+import it.polimi.ingsw.model.state.VoyageState;
 
 import java.util.*;
 import java.util.Map.Entry;
 
 public class Planche implements iPlanche {
 
-	private final HashMap<PlayerColor, Integer> planche;
+	private final HashMap<Player, Integer> planche;
 	private final int length;
 
-	public Planche(GameModeType type, PlayerCount count){
+	public Planche(GameModeType type, List<Player> order){
 		this.length = type.getLength();
-		this.planche = new HashMap<PlayerColor, Integer>();
+		this.planche = new HashMap<Player, Integer>();
 		int i = 0;
-		for(PlayerColor p : PlayerColor.values()){
-			if(i==count.getNumber()) break;
-			planche.put(p, this.length);
+		for(Player p : order){
+			planche.put(p, this.length + type.getStartingPos()[i]);
 			i++;
 		}
 	}
 
 	@Override
-	public int getPlayerPosition(iSpaceShip ship) {
-		return this.planche.get(ship.getColor()) - this.length;
+	public int getPlayerPosition(Player p) {
+		return this.planche.get(p) - this.length;
 	}
 
 	@Override
-	public PlayerColor getPlayersAt(int position) {
+	public Player getPlayerAt(int position) {
 		int cell = position % this.length;
-		for(Entry<PlayerColor, Integer> p : planche.entrySet()){
+		for(Entry<Player, Integer> p : planche.entrySet()){
 			if(p.getValue()%this.length==cell) return p.getKey();
 		}
-		return PlayerColor.NONE;
+		return null;
 	}
 
 	@Override
-	public void movePlayer(iSpaceShip ship, int rel_change){
-		if(!this.planche.containsKey(ship.getColor())) throw new IllegalArgumentException("Color is not present in the current game.");
-		int position = this.planche.get(ship.getColor());
+	public void movePlayer(VoyageState state, Player p, int rel_change){
+		if(!this.planche.containsKey(p)) throw new IllegalArgumentException("Color is not present in the current game.");
+		int position = this.planche.get(p);
 		int count = rel_change > 0 ? rel_change : -rel_change;
 		while(count>0){
-			position+= rel_change>=0 ? 1 : -1;
-			if(this.getPlayersAt(position)!=PlayerColor.NONE) continue;
+			position += rel_change>=0 ? 1 : -1;
+			if(this.getPlayerAt(position)!=null) continue;
 			count--;
 		}
-		this.planche.put(ship.getColor(), position);
+		if(rel_change>0){
+			for(Player other : this.planche.keySet()){
+				if(p.equals(other)) continue;
+				if(this.planche.get(p)-this.planche.get(other)>=this.length){
+					state.loseGame(other);
+				}
+			}
+		}
+		else{
+			for(Player other : this.planche.keySet()){
+				if(p.equals(other)) continue;
+				if(this.planche.get(other)-this.planche.get(p)>=this.length){
+					state.loseGame(p);
+					return;
+				}
+			}
+		}
 	}
 
 	@Override
-	public List<PlayerColor> getOrder(){
-		return this.planche.entrySet().stream().sorted(Comparator.comparingInt(Entry::getValue)).map(Entry::getKey).toList();
+	public void loseGame(Player p) {
+		this.planche.remove(p);
 	}
+
 }
+

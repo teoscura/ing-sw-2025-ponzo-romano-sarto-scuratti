@@ -1,0 +1,29 @@
+package it.polimi.ingsw.model.client.components;
+
+import it.polimi.ingsw.model.components.enums.ComponentRotation;
+import it.polimi.ingsw.view.ClientView;
+
+public class ClientBaseComponent implements ClientComponent {
+    private final int id;
+    private final ComponentRotation rotation;
+
+    public ClientBaseComponent(int id, ComponentRotation rotation){
+        if(id<1||id>157) throw new IllegalArgumentException();
+        this.id = id;
+        this.rotation = rotation;
+    }
+
+    public int getId(){
+        return this.id;
+    }
+
+    public ComponentRotation getRotation(){
+        return this.rotation;
+    }
+
+    @Override
+    public void showComponent(ClientView view) {
+        view.show(this);
+    }
+
+}

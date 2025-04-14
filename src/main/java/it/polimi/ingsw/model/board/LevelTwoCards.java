@@ -1,0 +1,56 @@
+package it.polimi.ingsw.model.board;
+
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Queue;
+
+import it.polimi.ingsw.model.adventure_cards.LevelOneCardFactory;
+import it.polimi.ingsw.model.adventure_cards.LevelTwoCardFactory;
+import it.polimi.ingsw.model.adventure_cards.iCard;
+
+public class LevelTwoCards implements iCards {
+    
+    private final Queue<iCard> cards;
+    private final List<Integer> construction_cards;
+
+	public LevelTwoCards(){
+        LevelOneCardFactory l1 = new LevelOneCardFactory();
+        LevelTwoCardFactory l2 = new LevelTwoCardFactory();
+        ArrayList<iCard> lv1_cards = new ArrayList<>();
+        for(int i=1;i<=20;i++) {
+            lv1_cards.add(l1.getCard(i));
+        }
+        ArrayList<iCard> lv2_cards = new ArrayList<>();
+        for(int i=101;i<=120;i++){
+            lv2_cards.add(l2.getCard(i));
+        }
+        Collections.shuffle(lv1_cards);
+        Collections.shuffle(lv2_cards);
+        ArrayList<iCard> tmp = new ArrayList<>();
+        for(int i=0;i<4;i++){
+            tmp.add(lv2_cards.removeFirst());
+            tmp.add(lv2_cards.removeFirst());
+            tmp.add(lv1_cards.removeFirst());
+        }
+        while(tmp.getFirst().getId()<100){
+            iCard shuffled = tmp.removeFirst();
+            tmp.addLast(shuffled);
+        }
+		this.cards = new ArrayDeque<iCard>(tmp);
+        this.construction_cards = tmp.stream().map((c)->c.getId()).toList();
+	}
+
+    @Override
+    public List<Integer> getConstructionCards(){
+        return this.construction_cards;
+    }
+
+	@Override
+	public iCard pullCard() {
+		if(this.cards == null) return null;
+		return this.cards.poll();
+	}
+
+}

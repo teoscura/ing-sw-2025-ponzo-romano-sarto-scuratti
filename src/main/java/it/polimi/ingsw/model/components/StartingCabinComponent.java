@@ -3,6 +3,9 @@ package it.polimi.ingsw.model.components;
 
 import it.polimi.ingsw.exceptions.ArgumentTooBigException;
 import it.polimi.ingsw.exceptions.NegativeArgumentException;
+import it.polimi.ingsw.model.client.components.ClientBaseComponent;
+import it.polimi.ingsw.model.client.components.ClientComponent;
+import it.polimi.ingsw.model.client.components.ClientCrewComponentDecorator;
 import it.polimi.ingsw.model.components.enums.AlienType;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ConnectorType;
@@ -67,5 +70,10 @@ public class StartingCabinComponent extends BaseComponent {
     @Override
     public void onDelete(iSpaceShip ship) {
         ship.delCabinCoords(this.coords);
+    }
+
+    @Override
+    public ClientComponent getClientComponent() {
+        return new ClientCrewComponentDecorator(new ClientBaseComponent(getID(), getRotation()), AlienType.HUMAN, crew_number);
     }
 }

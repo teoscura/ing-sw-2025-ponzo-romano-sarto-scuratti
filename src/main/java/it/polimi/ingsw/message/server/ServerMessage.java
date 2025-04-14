@@ -1,5 +1,27 @@
 package it.polimi.ingsw.message.server;
 
+import it.polimi.ingsw.controller.server.ClientDescriptor;
+import it.polimi.ingsw.controller.server.ServerController;
+import it.polimi.ingsw.model.ModelInstance;
+import it.polimi.ingsw.model.adventure_cards.exceptions.ForbiddenCallException;
+import it.polimi.ingsw.model.adventure_cards.state.CardState;
+import it.polimi.ingsw.model.state.GameState;
+
 public abstract class ServerMessage {
-    public abstract void recieve(ClientDescriptor client, iServerController server);
+
+    protected final ClientDescriptor descriptor;
+
+    protected ServerMessage(ClientDescriptor descriptor){
+        if(descriptor==null) throw new NullPointerException();
+        this.descriptor = descriptor;
+    }
+
+    public ClientDescriptor getDescriptor(){
+        return this.descriptor;
+    }
+
+    public abstract void receive(ServerController server) throws ForbiddenCallException;
+    public abstract void receive(ModelInstance instance) throws ForbiddenCallException;
+    public abstract void receive(GameState state) throws ForbiddenCallException;
+    public abstract void receive(CardState state) throws ForbiddenCallException;
 }

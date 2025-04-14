@@ -5,8 +5,6 @@ import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ConnectorType;
 import it.polimi.ingsw.model.components.enums.ShieldType;
-import it.polimi.ingsw.model.components.exceptions.AlreadyPoweredException;
-import it.polimi.ingsw.model.components.visitors.iVisitor;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.player.SpaceShip;
@@ -15,7 +13,6 @@ import it.polimi.ingsw.model.player.iSpaceShip;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -23,13 +20,13 @@ class ShieldComponentTest {
 
 
 	private ShieldComponent shield;
-	private StructuralComponent ship;
+	//private StructuralComponent ship;
 
 	@BeforeEach
 	void setUp() {
 		ConnectorType[] connectors = new ConnectorType[]{ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY};
 		shield = new ShieldComponent(1, connectors, ComponentRotation.U000);
-		ship = new StructuralComponent(1, connectors, ComponentRotation.U000);
+		//ship = new StructuralComponent(1, connectors, ComponentRotation.U000);
 	}
 
 	@Test

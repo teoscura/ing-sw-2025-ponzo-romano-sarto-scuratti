@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.adventure_cards.visitors;
 
-import it.polimi.ingsw.model.adventure_cards.enums.ProjectileDirection;
+import it.polimi.ingsw.model.adventure_cards.utils.ProjectileDirection;
 import it.polimi.ingsw.model.components.*;
 import it.polimi.ingsw.model.components.visitors.iVisitor;
 

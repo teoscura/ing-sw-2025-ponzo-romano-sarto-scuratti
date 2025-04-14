@@ -1,6 +1,9 @@
 //Done.
 package it.polimi.ingsw.model.components;
 
+import it.polimi.ingsw.model.client.components.ClientBaseComponent;
+import it.polimi.ingsw.model.client.components.ClientComponent;
+import it.polimi.ingsw.model.client.components.ClientPoweredComponentDecorator;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ConnectorType;
 import it.polimi.ingsw.model.components.enums.EngineType;
@@ -86,6 +89,11 @@ public class EngineComponent extends BaseComponent{
     @Override
     public void onDelete(iSpaceShip ship){
         if(powerable) ship.delPowerableCoords(this.coords);
+    }
+
+    @Override
+    public ClientComponent getClientComponent() {
+        return new ClientPoweredComponentDecorator(new ClientBaseComponent(getID(), getRotation()), powered);
     }
 
 }
