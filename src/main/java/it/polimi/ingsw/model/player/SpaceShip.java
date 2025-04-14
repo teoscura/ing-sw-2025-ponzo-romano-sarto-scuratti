@@ -477,5 +477,11 @@ public class SpaceShip implements iSpaceShip{
 		return tmp;
 	}
 
+	@Override
+	public boolean isCabin(ShipCoords coords) {
+		if(coords==null) throw new NullPointerException();
+		return this.cabin_coords.contains(coords);
+	}
+
 }
 

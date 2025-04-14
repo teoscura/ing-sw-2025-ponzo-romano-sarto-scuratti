@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import it.polimi.ingsw.message.client.DisconnectMessage;
+import it.polimi.ingsw.message.client.NotifyCardStateUpdateMessage;
 import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
@@ -98,6 +99,12 @@ public class VoyageState extends GameState {
         p.retire();
     }
 
+    public List<Player> getAllConnectedPlayers() {
+        List<Player> tmp = new ArrayList<>();
+        tmp.addAll(this.players);
+        return tmp.stream().filter((p)->!p.getDisconnected()).toList();
+    }
+
     public List<Player> getOrder(CardOrder order){
         List<Player> tmp = new ArrayList<>();
         tmp.addAll(this.players);
@@ -154,9 +161,14 @@ public class VoyageState extends GameState {
             if(card==null) return;
             this.state = card.getState(this);
             this.state.init();
+            for(Player p : this.getAllConnectedPlayers()){
+                p.getDescriptor().sendMessage(new NotifyStateUpdateMessage());
+            }
         }
         this.state = next;
         next.init();
     }
+
+    
 
 }

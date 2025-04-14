@@ -1,13 +1,18 @@
 package it.polimi.ingsw.model.adventure_cards.state;
 
+import java.util.Arrays;
 import java.util.List;
 
 import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.adventure_cards.SmugglersCard;
 import it.polimi.ingsw.model.adventure_cards.exceptions.ForbiddenCallException;
+import it.polimi.ingsw.model.client.card.ClientAwaitConfirmCardStateDecorator;
+import it.polimi.ingsw.model.client.card.ClientBaseCardState;
+import it.polimi.ingsw.model.client.card.ClientCardState;
 import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
 import it.polimi.ingsw.model.player.Player;
+import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.VoyageState;
 
@@ -34,9 +39,18 @@ public class SmugglersAnnounceState extends CardState {
     @Override
     public void validate(ServerMessage message) throws ForbiddenCallException {
         message.receive(this);
-        if(!responded) return;
+        if(!responded){
+            this.sendNotify();
+            return;
+        }
         if(!this.list.getFirst().getDisconnected()) result = this.card.apply(this.list.getFirst());
         this.transition();
+    }
+
+    @Override
+    public ClientCardState getClientCardState(){
+        List<PlayerColor> awaiting = Arrays.asList(new PlayerColor[]{this.list.getFirst().getColor()});
+        return new ClientAwaitConfirmCardStateDecorator(new ClientBaseCardState(this.card.getId()), awaiting);
     }
 
     @Override

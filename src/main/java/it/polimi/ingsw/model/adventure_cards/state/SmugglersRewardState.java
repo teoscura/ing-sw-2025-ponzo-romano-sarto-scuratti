@@ -8,6 +8,9 @@ import it.polimi.ingsw.model.adventure_cards.SmugglersCard;
 import it.polimi.ingsw.model.adventure_cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.adventure_cards.visitors.ContainsLoaderVisitor;
 import it.polimi.ingsw.model.adventure_cards.visitors.ContainsRemoveVisitor;
+import it.polimi.ingsw.model.client.card.ClientBaseCardState;
+import it.polimi.ingsw.model.client.card.ClientCardState;
+import it.polimi.ingsw.model.client.card.ClientCargoRewardCardStateDecorator;
 import it.polimi.ingsw.model.components.StorageComponent;
 import it.polimi.ingsw.model.components.enums.ShipmentType;
 import it.polimi.ingsw.model.components.exceptions.ContainerEmptyException;
@@ -42,14 +45,23 @@ class SmugglersRewardState extends CardState {
     @Override
     public void validate(ServerMessage message) throws ForbiddenCallException {
         message.receive(this);
-        if(!responded) return;
+        if(!responded){
+            this.sendNotify();
+            return;
+        }
         if(took_reward){
-            for(int i=0;i<this.coords.size();i++){
-                ((StorageComponent) this.list.getFirst().getSpaceShip().getComponent(this.coords.get(i))).putIn(this.merch.get(i));
-            }
             this.state.getPlanche().movePlayer(this.state, this.list.getFirst(), -this.card.getDays());
         }
         this.transition();
+    }
+
+    @Override
+    public ClientCardState getClientCardState(){
+        return new ClientCargoRewardCardStateDecorator(
+            new ClientBaseCardState(this.card.getId()), 
+            this.list.getFirst().getColor(), 
+            this.card.getDays(), 
+            this.card.getReward().getContains());
     }
 
     @Override

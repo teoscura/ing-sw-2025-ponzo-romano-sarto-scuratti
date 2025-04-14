@@ -3,15 +3,19 @@ package it.polimi.ingsw.model.player;
 import it.polimi.ingsw.model.GameModeType;
 
 public class ShipCoords {
-    private GameModeType type = GameModeType.LVL2;
-    public int x;
-    public int y;
+    private final GameModeType type;
+    public final int x;
+    public final int y;
 
     public ShipCoords(GameModeType type, int x, int y){
         if(x<0 || y<0 || x>=type.getWidth() || y>=type.getWidth());
         this.type = type;
         this.x = x; 
         this.y = y;
+    }
+
+    public GameModeType getType(){
+        return this.type;
     }
 
     public ShipCoords[] getNextTo(){

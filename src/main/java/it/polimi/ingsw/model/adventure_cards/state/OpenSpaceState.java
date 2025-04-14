@@ -7,8 +7,12 @@ import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.adventure_cards.OpenSpaceCard;
 import it.polimi.ingsw.model.adventure_cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.adventure_cards.utils.CardOrder;
+import it.polimi.ingsw.model.client.card.ClientAwaitConfirmCardStateDecorator;
+import it.polimi.ingsw.model.client.card.ClientBaseCardState;
+import it.polimi.ingsw.model.client.card.ClientCardState;
 import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
 import it.polimi.ingsw.model.player.Player;
+import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.VoyageState;
 
@@ -32,11 +36,20 @@ public class OpenSpaceState extends CardState {
     @Override
     public void validate(ServerMessage message) throws ForbiddenCallException {
         message.receive(this);
-        if(!awaiting.isEmpty()) return;
+        if(!awaiting.isEmpty()){
+            this.sendNotify();
+            return;
+        }
         for(Player p : this.state.getOrder(CardOrder.NORMAL)){
             this.card.apply(state, p); 
         }
         this.transition();
+    }
+
+    @Override
+    public ClientCardState getClientCardState(){
+        List<PlayerColor> tmp = this.awaiting.stream().map(p->p.getColor()).toList();
+        return new ClientAwaitConfirmCardStateDecorator(new ClientBaseCardState(card.getId()), tmp);
     }
 
     @Override

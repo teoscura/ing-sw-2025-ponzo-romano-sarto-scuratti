@@ -7,6 +7,9 @@ import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.adventure_cards.SmugglersCard;
 import it.polimi.ingsw.model.adventure_cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.adventure_cards.visitors.ContainsRemoveVisitor;
+import it.polimi.ingsw.model.client.card.ClientCardState;
+import it.polimi.ingsw.model.client.card.ClientCargoPenaltyCardStateDecorator;
+import it.polimi.ingsw.model.client.card.ClientBaseCardState;
 import it.polimi.ingsw.model.components.enums.ShipmentType;
 import it.polimi.ingsw.model.components.exceptions.ContainerEmptyException;
 import it.polimi.ingsw.model.player.Player;
@@ -53,8 +56,20 @@ class SmugglersLoseState extends CardState {
     @Override
     public void validate(ServerMessage message) throws ForbiddenCallException {
         message.receive(this);
-        if(!responded) return;
+        if(!responded){
+            this.sendNotify();
+            return;
+        }
         this.transition();
+    }
+
+    @Override
+    public ClientCardState getClientCardState(){
+        return new ClientCargoPenaltyCardStateDecorator(
+            new ClientBaseCardState(card.getId()),
+            this.list.getFirst().getColor(),
+            required
+        );
     }
 
     @Override

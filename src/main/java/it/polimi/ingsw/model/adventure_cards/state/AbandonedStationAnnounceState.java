@@ -1,11 +1,15 @@
 package it.polimi.ingsw.model.adventure_cards.state;
 
+import java.util.Arrays;
 import java.util.List;
 
 import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.adventure_cards.AbandonedStationCard;
 import it.polimi.ingsw.model.adventure_cards.exceptions.ForbiddenCallException;
+import it.polimi.ingsw.model.client.card.ClientBaseCardState;
+import it.polimi.ingsw.model.client.card.ClientCardState;
+import it.polimi.ingsw.model.client.card.ClientLandingCardStateDecorator;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.state.VoyageState;
 
@@ -33,9 +37,22 @@ public class AbandonedStationAnnounceState extends CardState {
     @Override
     public void validate(ServerMessage message) throws ForbiddenCallException {
         message.receive(this);
-        if(!responded) return;
+        if(!responded){
+            this.sendNotify();
+            return;
+        }
         this.card.apply(state, this.list.getFirst(), id);
         this.transition();
+    }
+
+    @Override
+    public ClientCardState getClientCardState(){
+        List<Boolean> tmp = Arrays.asList(new Boolean[]{true});
+        return new ClientLandingCardStateDecorator(new ClientBaseCardState(this.id), 
+                                                   this.list.getFirst().getColor(), 
+                                                   this.card.getDays(), 
+                                                   this.card.getCrewLost(), 
+                                                   tmp);
     }
 
     @Override

@@ -6,6 +6,9 @@ import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.adventure_cards.PlanetCard;
 import it.polimi.ingsw.model.adventure_cards.exceptions.ForbiddenCallException;
+import it.polimi.ingsw.model.client.card.ClientBaseCardState;
+import it.polimi.ingsw.model.client.card.ClientCardState;
+import it.polimi.ingsw.model.client.card.ClientLandingCardStateDecorator;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.state.VoyageState;
 
@@ -32,9 +35,22 @@ public class PlanetAnnounceState extends CardState {
     @Override
     public void validate(ServerMessage message)throws ForbiddenCallException {
         message.receive(this);
-        if(!responded) return;
+        if(!responded){
+            this.sendNotify();
+            return;
+        }
         this.card.apply(this.list.getFirst(), id);
         this.transition();
+    }
+
+    @Override
+    public ClientCardState getClientCardState(){
+        return new ClientLandingCardStateDecorator(
+            new ClientBaseCardState(this.card.getId()), 
+            this.list.getFirst().getColor(), 
+            this.card.getDays(), 
+            0,
+            this.card.getVisited());
     }
 
     @Override

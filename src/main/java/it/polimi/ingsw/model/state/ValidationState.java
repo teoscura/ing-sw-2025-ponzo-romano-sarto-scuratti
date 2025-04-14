@@ -44,6 +44,7 @@ public class ValidationState extends GameState {
         for(Player p : this.players){
             p.getSpaceShip().verifyAndClean();
         }
+        aaaaaa //tenere l'ordine, ma se uno deve verificare toglilo e mettilo appena finisce di sistemare.
     }
 
     @Override

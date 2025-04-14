@@ -8,6 +8,9 @@ import it.polimi.ingsw.model.adventure_cards.PlanetCard;
 import it.polimi.ingsw.model.adventure_cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.adventure_cards.visitors.ContainsLoaderVisitor;
 import it.polimi.ingsw.model.adventure_cards.visitors.ContainsRemoveVisitor;
+import it.polimi.ingsw.model.client.card.ClientBaseCardState;
+import it.polimi.ingsw.model.client.card.ClientCardState;
+import it.polimi.ingsw.model.client.card.ClientCargoRewardCardStateDecorator;
 import it.polimi.ingsw.model.components.enums.ShipmentType;
 import it.polimi.ingsw.model.components.exceptions.ContainerEmptyException;
 import it.polimi.ingsw.model.components.exceptions.ContainerFullException;
@@ -40,9 +43,21 @@ class PlanetRewardState extends CardState {
     @Override
     public void validate(ServerMessage message) throws ForbiddenCallException {
         message.receive(this);
-        if(!responded) return;
+        if(!responded){
+            this.sendNotify();
+            return;
+        }
         this.state.getPlanche().movePlayer(state, list.getFirst(), card.getDays());
         this.transition();
+    }
+
+    @Override
+    public ClientCardState getClientCardState(){
+        return new ClientCargoRewardCardStateDecorator(
+            new ClientBaseCardState(this.card.getId()), 
+            this.list.getFirst().getColor(), 
+            0,
+            this.card.getPlanet(id).getContains());
     }
 
     @Override

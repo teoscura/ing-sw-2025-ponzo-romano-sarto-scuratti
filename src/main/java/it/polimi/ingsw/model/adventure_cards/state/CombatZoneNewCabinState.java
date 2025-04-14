@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.adventure_cards.state;
 
+import java.util.Arrays;
 import java.util.List;
 
 import it.polimi.ingsw.message.client.ViewMessage;
@@ -7,20 +8,28 @@ import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.adventure_cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.adventure_cards.utils.CombatZoneSection;
 import it.polimi.ingsw.model.adventure_cards.utils.ProjectileArray;
+import it.polimi.ingsw.model.client.card.ClientBaseCardState;
+import it.polimi.ingsw.model.client.card.ClientCardState;
+import it.polimi.ingsw.model.client.card.ClientCombatZoneIndexCardStateDecorator;
+import it.polimi.ingsw.model.client.card.ClientNewCenterCardStateDecorator;
 import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
 import it.polimi.ingsw.model.player.Player;
+import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.VoyageState;
 
 class CombatZoneNewCabinState extends CardState {
     
+    private final int card_id;
     private final List<CombatZoneSection> sections;
     private final ProjectileArray shots;
     private final Player target;
 
-    public CombatZoneNewCabinState(VoyageState state, List<CombatZoneSection> sections, ProjectileArray shots, Player target){
+    public CombatZoneNewCabinState(VoyageState state, int card_id, List<CombatZoneSection> sections, ProjectileArray shots, Player target){
         super(state);
         if(sections==null||shots==null||target==null);
+        if(card_id<1||card_id>120||(card_id<100&&1>20)) throw new IllegalArgumentException();
+        this.card_id = card_id;
         this.sections = sections;
         this.shots = shots;
         this.target = target;
@@ -34,20 +43,32 @@ class CombatZoneNewCabinState extends CardState {
     @Override
     public void validate(ServerMessage message)throws ForbiddenCallException{
         message.receive(this);
-        if(target.getSpaceShip().getBrokeCenter()) return;
+        if(target.getSpaceShip().getBrokeCenter()){
+            this.sendNotify();
+            return;
+        }
         this.transition();
+    }
+
+    @Override
+    public ClientCardState getClientCardState(){
+        List<PlayerColor> awaiting = Arrays.asList(new PlayerColor[]{target.getColor()});
+        return new ClientNewCenterCardStateDecorator(
+            new ClientCombatZoneIndexCardStateDecorator(
+                new ClientBaseCardState(this.card_id), 3 - this.sections.size()), 
+                awaiting);
     }
 
     @Override
     protected CardState getNext() {
         if(this.target.getRetired()){
             this.sections.removeFirst();
-            if(!this.sections.isEmpty()) return new CombatZoneAnnounceState(state, sections, shots);
+            if(!this.sections.isEmpty()) return new CombatZoneAnnounceState(state, card_id, sections, shots);
             return null;
         }
-        if(!this.shots.getProjectiles().isEmpty()) return new CombatZonePenaltyState(state, sections, shots, target);
+        if(!this.shots.getProjectiles().isEmpty()) return new CombatZonePenaltyState(state, card_id, sections, shots, target);
         this.sections.removeFirst();
-        if(!this.sections.isEmpty()) return new CombatZoneAnnounceState(state, sections, shots);
+        if(!this.sections.isEmpty()) return new CombatZoneAnnounceState(state, card_id, sections, shots);
         return null;
     }
 

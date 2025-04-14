@@ -21,6 +21,7 @@ import it.polimi.ingsw.model.state.VoyageState;
 
 class CombatZonePenaltyState extends CardState {
 
+    private final int card_id;
     private final List<CombatZoneSection> sections;
     private final ProjectileArray shots;
     private final Player target;
@@ -28,9 +29,11 @@ class CombatZonePenaltyState extends CardState {
     private boolean responded = false;
     private List<ShipCoords> coords;
 
-    public CombatZonePenaltyState(VoyageState state, List<CombatZoneSection> sections, ProjectileArray shots, Player target){
+    public CombatZonePenaltyState(VoyageState state, int card_id, List<CombatZoneSection> sections, ProjectileArray shots, Player target){
         super(state);
         if(sections==null||shots==null||target==null);
+        if(card_id<1||card_id>120||(card_id<100&&1>20)) throw new IllegalArgumentException();
+        this.card_id = card_id;
         this.sections = sections;
         this.shots = shots;
         this.target = target;
@@ -70,7 +73,10 @@ class CombatZonePenaltyState extends CardState {
     @Override
     public void validate(ServerMessage message) throws ForbiddenCallException {
         message.receive(this);
-        if(!responded&&!this.target.getRetired()) return;
+        if(!responded&&!this.target.getRetired()){
+            this.sendNotify();
+            return;
+        }
         if(this.sections.getFirst().getPenalty()==CombatZonePenalty.SHOTS){
             this.target.getSpaceShip().handleShot(this.shots.getProjectiles().get(0));
         }
@@ -82,20 +88,25 @@ class CombatZonePenaltyState extends CardState {
     }
 
     @Override
+    public ClientCardState getClientCardState(){
+        //TODO;
+    }
+
+    @Override
     protected CardState getNext() {
         if(this.target.getRetired() || this.target.getDisconnected()){
             this.sections.removeFirst();
-            if(!this.sections.isEmpty()) return new CombatZoneAnnounceState(state, sections, shots);
+            if(!this.sections.isEmpty()) return new CombatZoneAnnounceState(state, card_id, sections, shots);
             return null;
         }
         if(!target.getSpaceShip().getBrokeCenter()) target.getSpaceShip().verifyAndClean();
         this.shots.getProjectiles().removeFirst();
-        if(this.target.getSpaceShip().getBrokeCenter()) return new CombatZoneNewCabinState(state, sections, shots, target);
+        if(this.target.getSpaceShip().getBrokeCenter()) return new CombatZoneNewCabinState(state, card_id, sections, shots, target);
         if(this.sections.getFirst().getPenalty()==CombatZonePenalty.SHOTS && !this.shots.getProjectiles().isEmpty()){
-            return new CombatZonePenaltyState(state, sections, shots, target);
+            return new CombatZonePenaltyState(state, card_id, sections, shots, target);
         }
         this.sections.removeFirst();
-        if(!this.sections.isEmpty()) return new CombatZoneAnnounceState(state, sections, shots);
+        if(!this.sections.isEmpty()) return new CombatZoneAnnounceState(state, card_id, sections, shots);
         return null;
     }
 

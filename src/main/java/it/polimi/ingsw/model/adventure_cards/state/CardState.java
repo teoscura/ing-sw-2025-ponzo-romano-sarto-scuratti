@@ -5,6 +5,7 @@ import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.adventure_cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.adventure_cards.utils.CardOrder;
+import it.polimi.ingsw.model.client.card.ClientCardState;
 import it.polimi.ingsw.model.components.enums.ShipmentType;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.ShipCoords;
@@ -24,9 +25,17 @@ public abstract class CardState {
             p.getSpaceShip().resetPower();
             p.getDescriptor().sendMessage(new NotifyCardStateUpdateMessage());
         }
-    };
+    }
+
+    public void sendNotify(){
+        for(Player p : this.state.getAllConnectedPlayers()){
+            p.getDescriptor().sendMessage(new NotifyCardStateUpdateMessage());
+        }
+    }
 
     public abstract void validate(ServerMessage message) throws ForbiddenCallException;
+
+    public abstract ClientCardState getClientCardState();
 
     protected abstract CardState getNext();
 
@@ -54,6 +63,7 @@ public abstract class CardState {
         throw new ForbiddenCallException("This state doesn't support this function.");
     }
 
+    aaaa puoi spostare merci ricordaaaa;
     public void takeCargo(Player p, ShipmentType type, ShipCoords storage_coords) throws ForbiddenCallException{
         p.getDescriptor().sendMessage(new ViewMessage("This state doesn't support this function!"));
         throw new ForbiddenCallException("This state doesn't support this function.");

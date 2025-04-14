@@ -8,6 +8,9 @@ import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.adventure_cards.AbandonedShipCard;
 import it.polimi.ingsw.model.adventure_cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.adventure_cards.visitors.CrewRemoveVisitor;
+import it.polimi.ingsw.model.client.card.ClientBaseCardState;
+import it.polimi.ingsw.model.client.card.ClientCardState;
+import it.polimi.ingsw.model.client.card.ClientCrewPenaltyCardStateDecorator;
 import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.ShipCoords;
@@ -35,10 +38,20 @@ class AbandonedShipRewardState extends CardState {
     @Override
     public void validate(ServerMessage message) throws ForbiddenCallException {
         message.receive(this);
-        if(!responded&&!this.list.getFirst().getRetired()) return;
+        if(!responded&&!this.list.getFirst().getRetired()){
+            this.sendNotify();
+            return;
+        }
         this.list.getFirst().giveCredits(this.card.getCredits());
         this.state.getPlanche().movePlayer(state, list.getFirst(), -card.getDays());
         this.transition();
+    }
+
+    @Override
+    public ClientCardState getClientCardState(){
+        return new ClientCrewPenaltyCardStateDecorator(new ClientBaseCardState(this.card.getId()), 
+                                                       this.list.getFirst().getColor(), 
+                                                       this.card.getCrewLost() - this.coords.size());
     }
 
     @Override

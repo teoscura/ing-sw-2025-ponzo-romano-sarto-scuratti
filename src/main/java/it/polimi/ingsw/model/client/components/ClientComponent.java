@@ -1,4 +1,4 @@
-package it.polimi.ingsw.model.client;
+package it.polimi.ingsw.model.client.components;
 
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 
@@ -19,4 +19,5 @@ public class ClientComponent {
     public ComponentRotation getRotation(){
         return this.rotation;
     }
+
 }

@@ -36,25 +36,15 @@ public class ModelInstance {
     }
     
     private Player getPlayer(PlayerColor c) throws PlayerNotFoundException{
-        synchronized(state_lock){
-            return state.getPlayer(c);
-        }
+
     }
 
     public GameState getState() {
-        synchronized(state_lock){
-            return this.state;
-        }
+
     }
 
     public void setState(GameState new_state){
-        synchronized(state_lock){
-            if(new_state==null){
-                
-            }
-            this.state = new_state;
-            state.init();
-        }
+        x
     }
 
     public void connect(ClientDescriptor client){

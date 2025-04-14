@@ -20,7 +20,7 @@ public class MeteorSwarmCard extends Card{
 
     @Override
     public CardState getState(VoyageState state) {
-        return new MeteorAnnounceState(state, meteorites);
+        return new MeteorAnnounceState(state, this.getId(), meteorites);
     }
 
     public List<Projectile> getMeteorites(){

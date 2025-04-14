@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.adventure_cards.state;
 
+import java.util.Arrays;
 import java.util.List;
 
 import it.polimi.ingsw.message.client.ViewMessage;
@@ -7,8 +8,13 @@ import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.adventure_cards.PiratesCard;
 import it.polimi.ingsw.model.adventure_cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.adventure_cards.utils.ProjectileArray;
+import it.polimi.ingsw.model.client.card.ClientAwaitConfirmCardStateDecorator;
+import it.polimi.ingsw.model.client.card.ClientBaseCardState;
+import it.polimi.ingsw.model.client.card.ClientCardState;
+import it.polimi.ingsw.model.client.card.ClientProjectileCardStateDecorator;
 import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
 import it.polimi.ingsw.model.player.Player;
+import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.VoyageState;
 
@@ -36,9 +42,22 @@ public class PiratesPenaltyState extends CardState {
     @Override
     public void validate(ServerMessage message) throws ForbiddenCallException {
         message.receive(this);
-        if(!responded) return;
+        if(!responded){
+            this.sendNotify();
+            return;
+        }
         this.list.getFirst().getSpaceShip().handleShot(this.shots.getProjectiles().getFirst());
         this.transition();
+    }
+
+    @Override
+    public ClientCardState getClientCardState(){
+        List<PlayerColor> awaiting = Arrays.asList(new PlayerColor[]{this.list.getFirst().getColor()});
+        return new ClientProjectileCardStateDecorator(
+            new ClientAwaitConfirmCardStateDecorator(
+                new ClientBaseCardState(this.card.getId()), 
+                awaiting),
+            this.shots.getProjectiles().getFirst());
     }
 
     @Override

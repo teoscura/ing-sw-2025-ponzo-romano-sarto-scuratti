@@ -1,31 +1,27 @@
-package it.polimi.ingsw.model.client;
+package it.polimi.ingsw.model.client.player;
 
+import it.polimi.ingsw.model.client.ClientSpaceShip;
 import it.polimi.ingsw.model.player.PlayerColor;
 
-public class ClientPlayer {
+public class ClientVoyagePlayer {
+
     private final String username;
     private final PlayerColor color;
+    private final ClientSpaceShip ship;
     private final int planche_slot;
     private final int credits;
-    private final int crew;
-    private final int[] power;
     private final boolean disconnected;
     private final boolean retired_lost;
 
-    public ClientPlayer(String username, PlayerColor color, int planche_slot, int credits,
-                        int crew, int[] power, boolean disconnected, boolean retired_lost){
-        if(username==null||power==null) throw new NullPointerException();
-        if(power.length!=3) throw new IllegalArgumentException();
-        for(int i: power){
-            if(i<0) throw new IllegalArgumentException();
-        }
-        if(planche_slot<0||crew<0||credits<0) throw new IllegalArgumentException();
+    public ClientVoyagePlayer(String username, PlayerColor color, ClientSpaceShip ship, int planche_slot, 
+                              int credits, boolean disconnected, boolean retired_lost){
+        if(username==null || ship == null) throw new NullPointerException();
+        if(planche_slot<0||credits<0) throw new IllegalArgumentException();
         this.username = username;
         this.color = color;
+        this.ship = ship;
         this.planche_slot = planche_slot;
         this.credits = credits;
-        this.crew = crew;
-        this.power = power;
         this.disconnected = disconnected;
         this.retired_lost = retired_lost;
     }
@@ -38,20 +34,16 @@ public class ClientPlayer {
         return this.color;
     }
 
+    public ClientSpaceShip getShip(){
+        return this.ship;
+    }
+
     public int getPlancheSlot(){
         return this.planche_slot;
     }
 
     public int getCredits(){
         return this.credits;
-    }
-
-    public int getCrew(){
-        return this.crew;
-    }
-
-    public int[] getPower(){
-        return this.power;
     }
 
     public boolean getDisconnected(){
