@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.adventure_cards.state;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import it.polimi.ingsw.message.client.ViewMessage;
@@ -12,10 +13,18 @@ import it.polimi.ingsw.model.adventure_cards.utils.CombatZoneSection;
 import it.polimi.ingsw.model.adventure_cards.utils.ProjectileArray;
 import it.polimi.ingsw.model.adventure_cards.visitors.ContainsRemoveVisitor;
 import it.polimi.ingsw.model.adventure_cards.visitors.CrewRemoveVisitor;
+import it.polimi.ingsw.model.client.card.ClientAwaitConfirmCardStateDecorator;
+import it.polimi.ingsw.model.client.card.ClientBaseCardState;
+import it.polimi.ingsw.model.client.card.ClientCardState;
+import it.polimi.ingsw.model.client.card.ClientCargoPenaltyCardStateDecorator;
+import it.polimi.ingsw.model.client.card.ClientCombatZoneIndexCardStateDecorator;
+import it.polimi.ingsw.model.client.card.ClientCrewPenaltyCardStateDecorator;
+import it.polimi.ingsw.model.client.card.ClientProjectileCardStateDecorator;
 import it.polimi.ingsw.model.components.enums.ShipmentType;
 import it.polimi.ingsw.model.components.exceptions.ContainerEmptyException;
 import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
 import it.polimi.ingsw.model.player.Player;
+import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.VoyageState;
 
@@ -89,7 +98,32 @@ class CombatZonePenaltyState extends CardState {
 
     @Override
     public ClientCardState getClientCardState(){
-        //TODO;
+        switch(this.sections.getFirst().getPenalty()){
+            case CombatZonePenalty.CARGO:
+                return new ClientCargoPenaltyCardStateDecorator(
+                    new ClientCombatZoneIndexCardStateDecorator(
+                        new ClientBaseCardState(card_id), 
+                        3 - this.sections.size()), 
+                    target.getColor(), 
+                    this.required);
+            case CombatZonePenalty.CREW:
+                return new ClientCrewPenaltyCardStateDecorator(
+                    new ClientCombatZoneIndexCardStateDecorator(
+                        new ClientBaseCardState(card_id), 
+                        3 - this.sections.size()), 
+                        target.getColor(),
+                        this.sections.getFirst().getAmount());
+            case CombatZonePenalty.SHOTS:
+                return new ClientProjectileCardStateDecorator(
+                    new ClientAwaitConfirmCardStateDecorator(
+                        new ClientCombatZoneIndexCardStateDecorator(
+                            new ClientBaseCardState(card_id),
+                            3 - this.sections.size()), 
+                            Arrays.asList(new PlayerColor[]{this.target.getColor()})), 
+                    this.shots.getProjectiles().getFirst());
+            default:
+                throw new UnsupportedOperationException("Should be unreachable");
+        }
     }
 
     @Override

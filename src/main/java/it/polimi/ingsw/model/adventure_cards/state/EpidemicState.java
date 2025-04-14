@@ -3,8 +3,10 @@ package it.polimi.ingsw.model.adventure_cards.state;
 import java.util.List;
 
 import it.polimi.ingsw.exceptions.PlayerNotFoundException;
+import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.adventure_cards.EpidemicCard;
+import it.polimi.ingsw.model.adventure_cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.adventure_cards.utils.CardOrder;
 import it.polimi.ingsw.model.client.card.ClientAwaitConfirmCardStateDecorator;
 import it.polimi.ingsw.model.client.card.ClientBaseCardState;
@@ -39,8 +41,13 @@ public class EpidemicState extends CardState{
     }
 
     @Override
-    public void validate(ServerMessage message) {
-        AsDASDASD
+    public void validate(ServerMessage message) throws ForbiddenCallException {
+        message.receive(this);
+        if(!awaiting.isEmpty()){
+            this.sendNotify();
+            return;
+        }
+        this.transition();
     }
 
     @Override
@@ -51,8 +58,14 @@ public class EpidemicState extends CardState{
             tmp);
     }
 
-    aaaaa aggiungi continue mannaggia a sorrt;
-    
+    @Override
+    public void progressTurn(Player p){
+        if(!this.awaiting.contains(p)){
+            p.getDescriptor().sendMessage(new ViewMessage("You already confirmed your actions, can't do anything else"));
+            return;
+        }
+        this.awaiting.remove(p);
+    }
 
     @Override
     protected CardState getNext() {

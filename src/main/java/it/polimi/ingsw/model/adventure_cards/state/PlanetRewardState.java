@@ -6,6 +6,7 @@ import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.adventure_cards.PlanetCard;
 import it.polimi.ingsw.model.adventure_cards.exceptions.ForbiddenCallException;
+import it.polimi.ingsw.model.adventure_cards.visitors.ContainerMoveValidationVisitor;
 import it.polimi.ingsw.model.adventure_cards.visitors.ContainsLoaderVisitor;
 import it.polimi.ingsw.model.adventure_cards.visitors.ContainsRemoveVisitor;
 import it.polimi.ingsw.model.client.card.ClientBaseCardState;
@@ -100,6 +101,35 @@ class PlanetRewardState extends CardState {
             if(i>0) return;
         }
         this.responded = true;
+    }
+
+    @Override
+    public void moveCargo(Player p, ShipmentType type, ShipCoords target_coords, ShipCoords source_coords){
+        if(p!=this.list.getFirst()){
+            p.getDescriptor().sendMessage(new ViewMessage("This isn't your turn!"));
+            return;
+        }
+        if(type.getValue()<=0){
+            p.getDescriptor().sendMessage(new ViewMessage("Illegal shipment type!"));
+            return;
+        }
+        ContainerMoveValidationVisitor v = new ContainerMoveValidationVisitor(type);
+        try {
+            p.getSpaceShip().getComponent(source_coords).check(v);
+        } catch (IllegalTargetException e){
+            p.getDescriptor().sendMessage(new ViewMessage("Source coords dont contain the moved shipment!"));
+            return;
+        }
+        try {
+            p.getSpaceShip().getComponent(target_coords).check(v);
+        } catch (IllegalTargetException e){
+            p.getDescriptor().sendMessage(new ViewMessage("Target coords can't contain the shipment!"));
+            return;
+        }
+        ContainsRemoveVisitor vr = new ContainsRemoveVisitor(type);
+        ContainsLoaderVisitor vl = new ContainsLoaderVisitor(type);
+        p.getSpaceShip().getComponent(source_coords).check(vr);
+        p.getSpaceShip().getComponent(target_coords).check(vl);
     }
 
     @Override
