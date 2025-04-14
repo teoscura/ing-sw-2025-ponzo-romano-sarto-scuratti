@@ -38,15 +38,15 @@ public class ModelInstance {
         this.controller.startGame(players);
     }
     
-    private synchronized Player getPlayer(PlayerColor c){
-        Player p = null;
-        try {
-            p = this.state.getPlayer(c);
-        } catch (PlayerNotFoundException e) {
-            System.out.println("Player with the color "+ c.toString() + " is not playing!");
-        }
-        return p;
-    }
+    // private synchronized Player getPlayer(PlayerColor c){
+    //     Player p = null;
+    //     try {
+    //         p = this.state.getPlayer(c);
+    //     } catch (PlayerNotFoundException e) {
+    //         System.out.println("Player with the color "+ c.toString() + " is not playing!");
+    //     }
+    //     return p;
+    // }
 
     public synchronized GameState getState() {
         return this.state;

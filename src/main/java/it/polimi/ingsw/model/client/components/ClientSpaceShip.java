@@ -1,7 +1,6 @@
-package it.polimi.ingsw.model.client;
+package it.polimi.ingsw.model.client.components;
 
 import it.polimi.ingsw.model.GameModeType;
-import it.polimi.ingsw.model.client.components.ClientComponent;
 import it.polimi.ingsw.model.player.ShipCoords;
 
 public class ClientSpaceShip {
@@ -44,12 +43,20 @@ public class ClientSpaceShip {
         return this.ship[coords.y][coords.x];
     }
 
-    public int getCannon_power() {
+    public boolean[] getShielded(){
+        return this.shielded;
+    }
+
+    public int getCannonPower() {
         return this.cannon_power;
     }
 
-    public int getEngine_power() {
+    public int getEnginePower() {
         return this.engine_power;
+    }
+
+    public int getEnergyPower() {
+        return this.energy_power;
     }
 
     public int[] getCrew() {

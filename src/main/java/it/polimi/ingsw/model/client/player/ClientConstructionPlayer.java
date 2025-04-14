@@ -2,7 +2,7 @@ package it.polimi.ingsw.model.client.player;
 
 import java.util.List;
 
-import it.polimi.ingsw.model.client.ClientSpaceShip;
+import it.polimi.ingsw.model.client.components.ClientSpaceShip;
 import it.polimi.ingsw.model.player.PlayerColor;
 
 public class ClientConstructionPlayer {

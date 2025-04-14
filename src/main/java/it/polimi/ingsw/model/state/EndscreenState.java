@@ -82,4 +82,15 @@ public class EndscreenState extends GameState {
         return;
     }
 
+    @Override
+    public void disconnect(Player p){
+        if(!this.awaiting.contains(p)){
+            p.getDescriptor().sendMessage(new DisconnectMessage());
+            return;
+        }
+        this.awaiting.remove(p);
+        this.model.kick(p.getDescriptor());
+        return;
+    }
+
 }

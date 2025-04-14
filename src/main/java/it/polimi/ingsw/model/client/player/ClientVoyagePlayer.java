@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.client.player;
 
-import it.polimi.ingsw.model.client.ClientSpaceShip;
+import it.polimi.ingsw.model.client.components.ClientSpaceShip;
 import it.polimi.ingsw.model.player.PlayerColor;
 
 public class ClientVoyagePlayer {

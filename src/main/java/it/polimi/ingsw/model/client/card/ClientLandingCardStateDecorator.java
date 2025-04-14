@@ -32,6 +32,10 @@ public class ClientLandingCardStateDecorator implements ClientCardState {
         return this.days_taken;
     }
 
+    public int getCrewNeeded(){
+        return this.crew_needed;
+    }
+
     public List<Boolean> getAvailable(){
         return this.available;
     }

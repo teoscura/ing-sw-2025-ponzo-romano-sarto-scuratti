@@ -5,7 +5,7 @@ skinparam groupInheritance 1
 set separator ::
 skinparam classAttributeIconSize 12
 
-TODO
+
 
 ' format unfinished games: list form
 ' 1 - game_id - num_players - player_name_0, .. , player_name_num_players-1.
@@ -212,7 +212,6 @@ package Controller{
 
             }
 
-            ServerMessage^... DisconnectMessage
             class DisconnectMessage{
 
             }
@@ -299,112 +298,47 @@ package Controller{
 
         }
 
-        ' Message^-- ClientMessage::ClientMessage
-        ' package ClientMessage {
-        '     abstract ClientMessage <<abstract>> {
+        Message^-- ClientMessage::ClientMessage
+        package ClientMessage {
+
+            abstract ClientMessage <<abstract>> {
         
-        '     }
+            }
 
-        '     ClientMessage^.. ExceptionMessage 
-        '     class ExceptionMessage{
+            class DisconnectMessage {
 
-        '     }
+            }
 
-        '     ClientMessage^.... TurnMessage
-        '     class TurnMessage{
+            ClientMessage^..... NotifyCardStateUpdateMessage
+            class NotifyCardStateUpdateMessage{
 
-        '     }
+            }
 
-        '     ClientMessage^.. ShowCardMessage
-        '     class ShowCardMessage{
+            ClientMessage^..... NotifyPlayerUpdateMessage
+            class NotifyPlayerUpdateMessage{
 
-        '     }
+            }
 
-        '     ClientMessage^.... UpdateStateMessage
-        '     class UpdateStateMessage{
-
-        '     }
-
-        '     ClientMessage^.. UpdateShipMessage
-        '     class UpdateShipMessage{
-
-        '     }
-
-        '     ClientMessage^.... ValidateResultMessage
-        '     class ValidateResultMessage{
-
-        '     }
-
-        '     ClientMessage^.... AskTurnOnMessage
-        '     class AskTurnOnMessage{
-
-        '     }
-
-        '     ClientMessage^.. AskRemoveCrewMessage
-        '     class AskRemoveCrewMessage{
-
-        '     }
-
-        '     ClientMessage^.... AskRemoveMerchMessage
-        '     class AskRemoveMerchMessage{
-
-        '     }
-
-        '     ClientMessage^.. BrokenCabinMessage
-        '     class BrokenCabinMessage{
-
-        '     }
-
-        '     ClientMessage^.... GainCargoMessage
-        '     class GainCargoMessage{
-
-        '     }
-
-        '     ClientMessage^.. CreditsMessage
-        '     class CreditsMessage{
-
-        '     }
-
-        '     ClientMessage^.... AskLandingMessage
-        '     class AskLandingMessage{
-
-        '     }
-
-        '     ClientMessage^.. MoveOnBoardMessage
-        '     class MoveOnBoardMessage{
-
-        '     }
-
-        '     ClientMessage^.. FightRewardMessage
-        '     class FightRewardMessage{
-
-        '     }
-
-        '     ClientMessage^.. SmugglersRewardMessage
-        '     class SmugglersRewardMessage{
+            ClientMessage^..... NotifyCardStateUpdateMessage
+            class NotifyCardStateUpdateMessage{
                 
-        '     }
+            }
 
-        '     ClientMessage^.. GameLostMessage
-        '     class GameLostMessage{
+            ClientMessage^..... PingMessage
+            class PingMessage{
 
-        '     }
+            }
 
-        '     ClientMessage^.... GamePauseMessage
-        '     class GamePauseMessage{
+            ClientMessage^..... ViewMessage
+            class ViewMessage{
 
-        '     }
+            }
 
-        '     ClientMessage^.. GameEndMessage
-        '     class GameEndMessage{
+        }
 
-        '     }
-
-        '     ClientMessage^.... ClientPingMessage
-        '     class ClientPingMessage{
-
-        '     }
-        ' }
+        ServerMessage::ClientMessage^... ServerMessage::DisconnectMessage
+        
+        ClientMessage::ClientMessage^... ClientMessage::DisconnectMessage
         
     }
 
