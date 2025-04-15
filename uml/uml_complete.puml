@@ -763,6 +763,38 @@ package Model {
 
         package State {
             
+            ModelInstance <-- ClientState:model
+            abstract ClientState <<abstract>> {
+                {field} # [final] type : GameModeType
+                {field} # [final] count : PlayerCount
+                {field} # [final] players : List<Player>
+            }
+
+            ClientState ^.. WaitingState
+            class WaitingState {
+
+            }
+
+            ClientState ^.. ConstructionState
+            class ConstructionState {
+
+            }
+
+            ClientState ^.. VerifyState
+            class VerifyState {
+
+            }
+
+            ClientState ^.. VoyageState
+            class VoyageState {
+
+            }
+
+            ClientState ^.. EndscreenState
+            class EndscreenState {
+
+            }
+
         }
 
     }
