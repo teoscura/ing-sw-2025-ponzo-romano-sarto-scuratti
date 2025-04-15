@@ -104,6 +104,7 @@ package Model {
             {method} [protected] exhaust() : void
         }
 
+        AbandonedShipCard^--Card
         class AbandonedShipCard {
             {field} credits_gained : int
             {field} crew_lost : int
@@ -113,7 +114,8 @@ package Model {
             {method} + getCrewLost() : int
             {method} + apply(VoyageState, Player, int) : void
         }
-        
+
+        AbandonedStationCard^--Card
         class AbandonedStationCard {
             {field} planet : Planet
             {field} crew : int
@@ -124,6 +126,7 @@ package Model {
             {method} + apply(VoyageState, Player, int) : void
         }
 
+        CombatZoneCard^--Card
         class CombatZoneCard {
             {field} sections : List<CombatZoneSection>
             {field} shots : ProjectileArray
@@ -131,19 +134,27 @@ package Model {
             {method} + getState(VoyageState) : C
         }
 
+        EpidemicCard^--Card
         class EpidemicCard {
-            {method} getState(VoyageState) : CardState
-            {method} apply(VoyageState, Player) : void
+            {method} + getState(VoyageState) : CardState
+            {method} + apply(VoyageState, Player) : void
         }
 
+        MeteorSwarmCard^--Card
         class MeteorSwarmCard {
             {field} meteorites : ProjectileArray
-            {method} getState(VoyageState) : CardState
-            {method} getMeteorites() : ProjectileArray
-            {method} apply(VoyageState, Projectile)
+            {method} + getState(VoyageState) : CardState
+            {method} + getMeteorites() : ProjectileArray
+            {method} + apply(VoyageState, Projectile) : void
         }
 
-        
+        OpenSpaceCard^--Card
+        class OpenSpaceCard {
+            {method} + getState(VoyageState) : CardState
+            {method} + apply(VoyageState, Player) : void
+        }
+
+
 
     }
 
