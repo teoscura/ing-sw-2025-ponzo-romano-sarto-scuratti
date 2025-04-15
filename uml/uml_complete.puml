@@ -390,18 +390,18 @@ package Model {
             {method} + getType() : void : GameModeType
             {method} + connect(ClientDescriptor client) : void
             {method} + disconnect(ClientDescriptor client) : void
-            {method} + connect(Player p) : void
-            {method} + disconnect(Player p) : void
-            {method} + sendContinue(Player p) : void
-            {method} + putComponent(Player p, ShipCoords coords) : void
-            {method} + takeComponent(Player p) : void
-            {method} + takeDiscarded(Player p, int id) : void
-            {method} + discardComponent(Player p, int id) : void
-            {method} + toggleHourglass(Player p) : void
-            {method} + removeComponent(Player p, ShipCoords coords) : void
-            {method} + setCrewType(Player p, ShipCoords coords, AlienType type) : void
-            {method} + giveUp(Player p) : void
-            {method} + CardState getCardState(Player p) : void
+            {method} + connect(Player) : void
+            {method} + disconnect(Player) : void
+            {method} + sendContinue(Player) : void
+            {method} + putComponent(Player, ShipCoords coords) : void
+            {method} + takeComponent(Player) : void
+            {method} + takeDiscarded(Player, int id) : void
+            {method} + discardComponent(Player, int id) : void
+            {method} + toggleHourglass(Player) : void
+            {method} + removeComponent(Player, ShipCoords coords) : void
+            {method} + setCrewType(Player, ShipCoords coords, AlienType type) : void
+            {method} + giveUp(Player) : void
+            {method} + CardState getCardState(Player) : void
         }
 
         GameState ^... WaitingState
@@ -429,14 +429,14 @@ package Model {
             {method} + getNext() : GameState 
             {method} + getClientState() : ClientModelState 
             {method} + init() : void : void
-            {method} + connect(Player p) : void
-            {method} + disconnect(Player p) : void
-            {method} + sendContinue(Player p) : void
-            {method} + putComponent(Player p, ShipCoords coords) : void
-            {method} + takeComponent(Player p) : void
-            {method} + takeDiscarded(Player p, int id) : void
-            {method} + discardComponent(Player p, int id) : void
-            {method} + toggleHourglass(Player p) : void
+            {method} + connect(Player) : void
+            {method} + disconnect(Player) : void
+            {method} + sendContinue(Player) : void
+            {method} + putComponent(Player, ShipCoords coords) : void
+            {method} + takeComponent(Player) : void
+            {method} + takeDiscarded(Player, int id) : void
+            {method} + discardComponent(Player, int id) : void
+            {method} + toggleHourglass(Player) : void
         }
 
         GameState ^... VerifyState
@@ -448,11 +448,11 @@ package Model {
             {method} + getNext() : GameState 
             {method} + getClientState() : ClientModelState 
             {method} + init() : void : void
-            {method} + connect(Player p) : void
-            {method} + disconnect(Player p) : void
-            {method} + sendContinue(Player p) : void
-            {method} + removeComponent(Player p, ShipCoords coords) : void
-            {method} + setCrewType(Player p, ShipCoords coords, AlienType type) : void
+            {method} + connect(Player) : void
+            {method} + disconnect(Player) : void
+            {method} + sendContinue(Player) : void
+            {method} + removeComponent(Player, ShipCoords coords) : void
+            {method} + setCrewType(Player, ShipCoords coords, AlienType type) : void
         }
 
         GameState ^... VoyageState
@@ -466,9 +466,9 @@ package Model {
             {method} + getNext() : GameState 
             {method} + getClientState() : ClientModelState 
             {method} + init() : void : void
-            {method} + connect(Player p) : void
-            {method} + disconnect(Player p) : void
-            {method} + giveUp(Player p) : void
+            {method} + connect(Player) : void
+            {method} + disconnect(Player) : void
+            {method} + giveUp(Player) : void
             {method} + getCardState(Player) : CardState
             {method} + loseGame(Player) : void
             {method} + getAllConnectedPlayers() : List<Player> 
@@ -486,8 +486,8 @@ package Model {
             {method} + getNext() : GameState 
             {method} + getClientState() : ClientModelState 
             {method} + init() : void : void
-            {method} + sendContinue(Player p) : void
-            {method} + disconnect(Player p) : void
+            {method} + sendContinue(Player) : void
+            {method} + disconnect(Player) : void
         }
         
     }
@@ -702,7 +702,7 @@ package Model {
                 {field} - [final] color : PlayerColor
                 {field} - [final] ship : ClientSpaceShip
                 {field} - [final] reserved_components : List<Integer> 
-                {field} - [final] boolean finished;
+                {field} - [final] boolean : finished
                 {method} + getUsername() : String
                 {method} + getColor() : PlayerColor
                 {method} + getShip() : ClientSpaceShip
@@ -731,10 +731,10 @@ package Model {
                 {field} - [final] username : String
                 {field} - [final] color : PlayerColor
                 {field} - [final] ship : ClientSpaceShip
-                {field} - [final] int planche_slot : int
-                {field} - [final] int credits : int
-                {field} - [final] boolean disconnected;
-                {field} - [final] boolean retired_lost;
+                {field} - [final] planche_slot : int
+                {field} - [final] credits : int
+                {field} - [final] disconnected : boolean
+                {field} - [final] retired_lost : boolean
                 {method} + getUsername() : String
                 {method} + getColor() : PlayerColor
                 {method} + getShip() : ClientSpaceShip
@@ -747,10 +747,10 @@ package Model {
             class ClientEndgamePlayer {
                 {field} - [final] username : String
                 {field} - [final] color : PlayerColor
-                {field} - [final] int planche_slot : int
-                {field} - [final] int credits : int
-                {field} - [final] int[] shipments : int[]
-                {field} - [final] int score : int
+                {field} - [final] planche_slot : int
+                {field} - [final] credits : int
+                {field} - [final] shipments : int[]
+                {field} - [final] score : int
                 {method} + getUsername() : String
                 {method} + getColor() : PlayerColor
                 {method} + getPlanche_slot() : int
@@ -763,36 +763,61 @@ package Model {
 
         package State {
             
-            ModelInstance <-- ClientState:model
-            abstract ClientState <<abstract>> {
-                {field} # [final] type : GameModeType
-                {field} # [final] count : PlayerCount
-                {field} # [final] players : List<Player>
+            interface ClientModelState <<interface>> {
+                {method} + sendToView(ClientView) : void
             }
 
-            ClientState ^.. WaitingState
-            class WaitingState {
-
+            ClientModelState ^.. ClientWaitingRoomState
+            class ClientWaitingRoomState {
+                {field} - [final] GameModeType type;
+                {field} - [final] List<ClientWaitingPlayer> playerlist;
+                {method} + GameModeType getType()
+                {method} + List<ClientWaitingPlayer> getPlayerList()
+                {method} + void sendToView(ClientView)
             }
 
-            ClientState ^.. ConstructionState
-            class ConstructionState {
-
+            ClientModelState ^.. ClientConstructionState
+            class ClientConstructionState {
+                {field} - [final] GameModeType type;
+                {field} - [final] List<ClientConstructionPlayer> playerlist;
+                {field} - [final] List<Integer> construction_cards;
+                {field} - [final] List<Integer> discarded_tiles;
+                {field} - [final] int tiles_left;
+                {field} - [final] Instant last_hourglass_toggle;
+                {method} + GameModeType getType()
+                {method} + List<ClientConstructionPlayer> getPlayerList()
+                {method} + List<Integer> getConstructionCards()
+                {method} + List<Integer> getDiscardedTiles()
+                {method} + int getTilesLeft()
+                {method} + Instant getLastToggle()
+                {method} + void sendToView(ClientView)
             }
 
-            ClientState ^.. VerifyState
-            class VerifyState {
-
+            ClientModelState ^.. ClientVerifyState
+            class ClientVerifyState {
+                {field} - [final] List<ClientVerifyPlayer> players;
+                {method} + List<ClientVerifyPlayer> getPlayers()
+                {method} + void sendToView(ClientView) 
             }
 
-            ClientState ^.. VoyageState
-            class VoyageState {
-
+            ClientModelState ^.. ClientVoyageState
+            class ClientVoyageState {
+                {field} - [final] GameModeType type;
+                {field} - [final] List<ClientVoyagePlayer> playerlist;
+                {field} - [final] int card_id;
+                {field} - [final] ClientCardState card_state;
+                {method} + GameModeType getType()
+                {method} + List<ClientVoyagePlayer> getPlayerList()
+                {method} + int getCardId()
+                {method} + ClientCardState getCardState()
+                {method} + void sendToView(ClientView)
             }
 
-            ClientState ^.. EndscreenState
-            class EndscreenState {
-
+            ClientModelState ^.. ClientEndgameState
+            class ClientEndgameState {
+                {field} - [final] List<ClientEndgamePlayer> playerlist;
+                {method} + List<ClientEndgamePlayer> getPlayerList()
+                {method} + void sendToView(ClientView)
             }
 
         }
