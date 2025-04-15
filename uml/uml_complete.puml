@@ -265,10 +265,6 @@ package Model {
                 {method} + visit(StartingCabinComponent) : void
             }
 
-
-
-
-
             iVisitor^..CabinVisitor
             class CabinVisitor {
                 {field} type : AlienType
@@ -855,55 +851,55 @@ package Model {
 
             ClientModelState ^.. ClientWaitingRoomState
             class ClientWaitingRoomState {
-                {field} - [final] GameModeType type;
-                {field} - [final] List<ClientWaitingPlayer> playerlist;
-                {method} + GameModeType getType()
-                {method} + List<ClientWaitingPlayer> getPlayerList()
-                {method} + void sendToView(ClientView)
+                {field} - [final] type : GameModeType
+                {field} - [final] playerlist : List<ClientWaitingPlayer>
+                {method} + getType() : GameModeType
+                {method} + getPlayerList() : List<ClientWaitingPlayer>
+                {method} + sendToView(ClientView) : void 
             }
 
             ClientModelState ^.. ClientConstructionState
             class ClientConstructionState {
-                {field} - [final] GameModeType type;
-                {field} - [final] List<ClientConstructionPlayer> playerlist;
-                {field} - [final] List<Integer> construction_cards;
-                {field} - [final] List<Integer> discarded_tiles;
-                {field} - [final] int tiles_left;
-                {field} - [final] Instant last_hourglass_toggle;
-                {method} + GameModeType getType()
-                {method} + List<ClientConstructionPlayer> getPlayerList()
-                {method} + List<Integer> getConstructionCards()
-                {method} + List<Integer> getDiscardedTiles()
-                {method} + int getTilesLeft()
-                {method} + Instant getLastToggle()
-                {method} + void sendToView(ClientView)
+                {field} - [final] type : GameModeType
+                {field} - [final] playerlist : List<ClientConstructionPlayer> 
+                {field} - [final] construction_cards : List<Integer> 
+                {field} - [final] discarded_tiles : List<Integer> 
+                {field} - [final] tiles_left : int
+                {field} - [final] last_hourglass_toggle : Instant 
+                {method} + getType() : GameModeType
+                {method} + getPlayerList() : List<ClientConstructionPlayer> 
+                {method} + getConstructionCards() : List<Integer> 
+                {method} + getDiscardedTiles() : List<Integer> 
+                {method} + getTilesLeft() : int
+                {method} + getLastToggle() : Instant
+                {method} + sendToView(ClientView) : void 
             }
 
             ClientModelState ^.. ClientVerifyState
             class ClientVerifyState {
-                {field} - [final] List<ClientVerifyPlayer> players;
-                {method} + List<ClientVerifyPlayer> getPlayers()
-                {method} + void sendToView(ClientView) 
+                {field} - [final] players : List<ClientVerifyPlayer> 
+                {method} + getPlayers() : List<ClientVerifyPlayer> 
+                {method} + sendToView(ClientView) : void  
             }
 
             ClientModelState ^.. ClientVoyageState
             class ClientVoyageState {
-                {field} - [final] GameModeType type;
-                {field} - [final] List<ClientVoyagePlayer> playerlist;
-                {field} - [final] int card_id;
-                {field} - [final] ClientCardState card_state;
-                {method} + GameModeType getType()
-                {method} + List<ClientVoyagePlayer> getPlayerList()
-                {method} + int getCardId()
-                {method} + ClientCardState getCardState()
-                {method} + void sendToView(ClientView)
+                {field} - [final] type : GameModeType
+                {field} - [final] playerlist : List<ClientVoyagePlayer> 
+                {field} - [final] card_id : int
+                {field} - [final] card_state : ClientCardState 
+                {method} + getType() : GameModeType
+                {method} + getPlayerList() : List<ClientVoyagePlayer> 
+                {method} + getCardId() : int
+                {method} + getCardState() : ClientCardState 
+                {method} + sendToView(ClientView) : void 
             }
 
             ClientModelState ^.. ClientEndgameState
             class ClientEndgameState {
-                {field} - [final] List<ClientEndgamePlayer> playerlist;
-                {method} + List<ClientEndgamePlayer> getPlayerList()
-                {method} + void sendToView(ClientView)
+                {field} - [final] playerlist : List<ClientEndgamePlayer>
+                {method} + getPlayerList() : List<ClientEndgamePlayer>
+                {method} + sendToView(ClientView) : void 
             }
 
         }
