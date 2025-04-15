@@ -343,14 +343,30 @@ package Model {
 			{method} + onDelete(iSpaceShip ship) : void
 			{method} + getShield() : ShieldType
 		}
+        
 		BaseComponent^..StorageComponent
         class StorageComponent{
-            TODO
-        }
+            {field} - [final] shipment : int []
+            {field} - [final] type : StorageType
+            {field} - currently_full : int
+            {method} + putIn(ShipmentType) : void
+            {method} + takeOut(ShipmentType) : boolean
+            {method} + howMany(ShipmentType) : int
+            {method} + getFreeSpaces() : int
+            {method} + getSpecial() : boolean
+            {method} + getCapacity() : int
+            {method} + onCreation(iSpaceShip) : void
+			{method} + onDelete(iSpaceShip) : void
+            {method} + check(iVisitor) : void
+            {method} + getClientComponent() : ClientComponent
 
+        }
         BaseComponent^..StructuralComponent
         class StructuralComponent{
-            TODO
+            {method} + onCreation(iSpaceShip) : void
+			{method} + onDelete(iSpaceShip) : void
+            {method} + check(iVisitor) : void
+            {method} + getClientComponent() : ClientComponent
         }
 
     }
