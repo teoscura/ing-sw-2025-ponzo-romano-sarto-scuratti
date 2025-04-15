@@ -4,7 +4,6 @@ package it.polimi.ingsw.model.components;
 import it.polimi.ingsw.model.client.components.ClientBaseComponent;
 import it.polimi.ingsw.model.client.components.ClientBatteryComponentDecorator;
 import it.polimi.ingsw.model.client.components.ClientComponent;
-import it.polimi.ingsw.model.client.components.ClientPoweredComponentDecorator;
 import it.polimi.ingsw.model.components.enums.BatteryType;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ConnectorType;

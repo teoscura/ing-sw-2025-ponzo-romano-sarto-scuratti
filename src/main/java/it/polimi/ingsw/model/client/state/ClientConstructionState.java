@@ -5,7 +5,6 @@ import java.util.List;
 
 import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.view.ClientView;
-import it.polimi.ingsw.model.client.components.ClientSpaceShip;
 import it.polimi.ingsw.model.client.player.ClientConstructionPlayer;
 
 public class ClientConstructionState implements ClientModelState {

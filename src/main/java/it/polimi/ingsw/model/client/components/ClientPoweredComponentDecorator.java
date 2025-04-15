@@ -1,6 +1,5 @@
 package it.polimi.ingsw.model.client.components;
 
-import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.view.ClientView;
 
 public class ClientPoweredComponentDecorator implements ClientComponent {

@@ -10,7 +10,6 @@ import it.polimi.ingsw.model.ModelInstance;
 import it.polimi.ingsw.model.PlayerCount;
 import it.polimi.ingsw.model.adventure_cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.client.player.ClientEndgamePlayer;
-import it.polimi.ingsw.model.client.player.ClientVoyagePlayer;
 import it.polimi.ingsw.model.client.state.ClientEndgameState;
 import it.polimi.ingsw.model.client.state.ClientModelState;
 import it.polimi.ingsw.model.player.Player;

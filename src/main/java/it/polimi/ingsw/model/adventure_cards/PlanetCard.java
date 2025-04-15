@@ -8,7 +8,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import it.polimi.ingsw.exceptions.ArgumentTooBigException;
-import it.polimi.ingsw.exceptions.OutOfBoundsException;
 import it.polimi.ingsw.model.adventure_cards.state.CardState;
 import it.polimi.ingsw.model.adventure_cards.state.PlanetAnnounceState;
 import it.polimi.ingsw.model.adventure_cards.utils.CardOrder;

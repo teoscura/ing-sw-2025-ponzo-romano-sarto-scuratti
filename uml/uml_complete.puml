@@ -689,6 +689,76 @@ package Model {
 
         package Player {
 
+            class ClientWaitingPlayer {
+                {field} - [final] username : String
+                {field} - [final] color : PlayerColor
+                {method} + getUsername() : String
+                {method} + getColor() : PlayerColor
+            }
+            
+            ClientSpaceShip <-- ClientConstructionPlayer:ship
+            class ClientConstructionPlayer {
+                {field} - [final] username : String
+                {field} - [final] color : PlayerColor
+                {field} - [final] ship : ClientSpaceShip
+                {field} - [final] reserved_components : List<Integer> 
+                {field} - [final] boolean finished;
+                {method} + getUsername() : String
+                {method} + getColor() : PlayerColor
+                {method} + getShip() : ClientSpaceShip
+                {method} + getReserved() : List<Integer> 
+                {method} + isFinished() : boolean
+            }
+
+            ClientSpaceShip <-- ClientVerifyPlayer:ship
+            class ClientVerifyPlayer {
+                {field} - [final] username : String
+                {field} - [final] color : PlayerColor
+                {field} - [final] ship : ClientSpaceShip
+                {field} - [final] results : VerifyResult[][]
+                {field} - [final] finished : boolean
+                {field} - [final] order : int
+                {method} + getUsername() : String
+                {method} + getColor() : PlayerColor
+                {method} + getShip() : ClientSpaceShip
+                {method} + getResults() : VerifyResult[][] 
+                {method} + isFinished() : boolean
+                {method} + getOrder() : int
+            }
+
+            ClientSpaceShip <-- ClientVoyagePlayer:ship
+            class ClientVoyagePlayer {
+                {field} - [final] username : String
+                {field} - [final] color : PlayerColor
+                {field} - [final] ship : ClientSpaceShip
+                {field} - [final] int planche_slot : int
+                {field} - [final] int credits : int
+                {field} - [final] boolean disconnected;
+                {field} - [final] boolean retired_lost;
+                {method} + getUsername() : String
+                {method} + getColor() : PlayerColor
+                {method} + getShip() : ClientSpaceShip
+                {method} + getPlancheSlot() : int
+                {method} + getCredits() : int
+                {method} + getDisconnected() : boolean
+                {method} + getRetired() : boolean
+            }
+
+            class ClientEndgamePlayer {
+                {field} - [final] username : String
+                {field} - [final] color : PlayerColor
+                {field} - [final] int planche_slot : int
+                {field} - [final] int credits : int
+                {field} - [final] int[] shipments : int[]
+                {field} - [final] int score : int
+                {method} + getUsername() : String
+                {method} + getColor() : PlayerColor
+                {method} + getPlanche_slot() : int
+                {method} + getCredits() : int
+                {method} + getShipments() : int[]
+                {method} + getScore() : int
+            }
+
         }
 
         package State {

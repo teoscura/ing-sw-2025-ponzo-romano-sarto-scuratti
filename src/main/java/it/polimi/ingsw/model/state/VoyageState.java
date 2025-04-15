@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.List;
 
 import it.polimi.ingsw.message.client.DisconnectMessage;
-import it.polimi.ingsw.message.client.NotifyCardStateUpdateMessage;
 import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;

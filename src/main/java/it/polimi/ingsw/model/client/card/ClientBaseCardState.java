@@ -11,6 +11,10 @@ public class ClientBaseCardState implements ClientCardState {
         this.id = id;
     }
 
+    public int getID(){
+        return this.id;
+    }
+
     @Override
     public void showCardState(ClientView view){
         view.show(this);

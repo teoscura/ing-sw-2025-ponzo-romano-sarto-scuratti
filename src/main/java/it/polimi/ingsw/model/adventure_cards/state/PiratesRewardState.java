@@ -1,6 +1,5 @@
 package it.polimi.ingsw.model.adventure_cards.state;
 
-import java.util.Arrays;
 import java.util.List;
 
 import it.polimi.ingsw.message.client.ViewMessage;
@@ -11,7 +10,6 @@ import it.polimi.ingsw.model.client.card.ClientBaseCardState;
 import it.polimi.ingsw.model.client.card.ClientCardState;
 import it.polimi.ingsw.model.client.card.ClientCreditsRewardCardStateDecorator;
 import it.polimi.ingsw.model.player.Player;
-import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.state.VoyageState;
 
 class PiratesRewardState extends CardState {

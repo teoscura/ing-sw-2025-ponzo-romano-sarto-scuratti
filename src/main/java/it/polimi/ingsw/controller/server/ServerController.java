@@ -69,7 +69,7 @@ public class ServerController implements RMIServerStub {
             client.sendMessage(new ViewMessage("Server currently is in setup process!"));
             throw new ForbiddenCallException();
         }
-        this.model = new ModelInstance(type, count);
+        this.model = new ModelInstance(this, type, count);
         this.setupper = null;
         this.model.connect(client);
     }
@@ -94,13 +94,21 @@ public class ServerController implements RMIServerStub {
             client.sendMessage(new ViewMessage("Server currently is in setup process!"));
             throw new ForbiddenCallException();
         }
+        if(this.connected.containsKey(client)){
+            client.sendMessage(new ViewMessage("Cannot connect twice from the same connection!"));
+            throw new ForbiddenCallException();
+        }
+        if(this.disconnected.containsKey(client)){
+            reconnected logic
+            return;
+        }
         this.model = /*Load from json with id provided, error if not avail.*/
         this.model.connect(client);
     };
 
     public void ping(ClientDescriptor client) {
         if(this.model!=null||client!=setupper) throw new ForbiddenCallException();
-        client.resetTimer(); 
+        client.ping(); 
     }
 
     public void startGame(List<Player> players) {

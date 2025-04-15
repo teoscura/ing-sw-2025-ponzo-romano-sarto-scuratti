@@ -17,6 +17,10 @@ public class ClientWaitingRoomState implements ClientModelState {
         this.type = type;
     }
 
+    public GameModeType getType(){
+        return this.type;
+    }
+
     public List<ClientWaitingPlayer> getPlayerList(){
         return this.playerlist;
     }

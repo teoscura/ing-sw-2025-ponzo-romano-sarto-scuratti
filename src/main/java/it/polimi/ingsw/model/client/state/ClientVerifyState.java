@@ -2,9 +2,7 @@ package it.polimi.ingsw.model.client.state;
 
 import java.util.List;
 
-import it.polimi.ingsw.model.client.components.ClientSpaceShip;
 import it.polimi.ingsw.model.client.player.ClientVerifyPlayer;
-import it.polimi.ingsw.model.player.VerifyResult;
 import it.polimi.ingsw.view.ClientView;
 
 public class ClientVerifyState implements ClientModelState {

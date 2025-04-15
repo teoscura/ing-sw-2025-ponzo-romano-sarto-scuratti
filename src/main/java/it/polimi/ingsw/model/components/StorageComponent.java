@@ -5,7 +5,6 @@ import java.util.Arrays;
 
 import it.polimi.ingsw.model.client.components.ClientBaseComponent;
 import it.polimi.ingsw.model.client.components.ClientComponent;
-import it.polimi.ingsw.model.client.components.ClientCrewComponentDecorator;
 import it.polimi.ingsw.model.client.components.ClientShipmentsComponentDecorator;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ConnectorType;

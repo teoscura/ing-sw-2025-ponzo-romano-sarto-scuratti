@@ -34,4 +34,8 @@ public class ClientDescriptor {
         return this.player;
     }
 
+    public void ping(){
+        this.timer.ping();
+    }
+
 }

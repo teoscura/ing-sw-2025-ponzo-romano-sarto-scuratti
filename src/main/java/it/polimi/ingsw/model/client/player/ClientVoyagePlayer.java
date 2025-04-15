@@ -53,4 +53,5 @@ public class ClientVoyagePlayer {
     public boolean getRetired(){
         return this.retired_lost;
     }
+    
 }

@@ -26,6 +26,10 @@ public class ClientCargoRewardCardStateDecorator implements ClientCardState {
         return this.turn;
     }
 
+    public int getDaysTaken(){
+        return this.days_taken;
+    }
+
     public int[] getShipments(){
         return this.shipments;
     }

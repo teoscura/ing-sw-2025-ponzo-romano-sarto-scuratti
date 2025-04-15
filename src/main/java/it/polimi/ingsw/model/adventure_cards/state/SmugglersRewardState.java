@@ -12,7 +12,6 @@ import it.polimi.ingsw.model.adventure_cards.visitors.ContainsRemoveVisitor;
 import it.polimi.ingsw.model.client.card.ClientBaseCardState;
 import it.polimi.ingsw.model.client.card.ClientCardState;
 import it.polimi.ingsw.model.client.card.ClientCargoRewardCardStateDecorator;
-import it.polimi.ingsw.model.components.StorageComponent;
 import it.polimi.ingsw.model.components.enums.ShipmentType;
 import it.polimi.ingsw.model.components.exceptions.ContainerEmptyException;
 import it.polimi.ingsw.model.components.exceptions.ContainerFullException;
@@ -28,8 +27,6 @@ class SmugglersRewardState extends CardState {
     private final List<Player> list;
     private boolean responded = false;
     private boolean took_reward = false;
-    private List<ShipCoords> coords = null;
-    private List<ShipmentType> merch = null;
 
     public SmugglersRewardState(VoyageState state, SmugglersCard card, List<Player> list){
         super(state);
