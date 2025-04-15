@@ -11,6 +11,22 @@ package Model {
 
         package State {
 
+            abstract CardState {
+                {field} [protected] state : VoyageState
+                {method} + init() : void
+                {method} + sendNotify() : void
+                {method} + [abstract] validate() : void
+                {method} +
+                {method} + getNext()
+            }
+
+            class AbandonedShipAnnounceState {
+                {field} [final] card : AbandonedShipCard
+                {field} [final] list : List<Player>
+                {field} responded : boolean
+                {field} id : int
+                {method} +
+            }
         }
 
         package Utils {
@@ -19,7 +35,6 @@ package Model {
                 {field} [final] criteria : CombatZoneCriteria
                 {field} [final] penalty : CombatZonePenalty
                 {field} [final] amount : int
-
                 {method} + getCriteria)() : CombatZoneCriteria
                 {method} + getPenalty() : CombatZonePenalty
                 {method} + getAmount() : int
@@ -28,7 +43,6 @@ package Model {
             class Planet {
                 {field} [final] contains : int[]
                 {field} [final] visited : boolean
-                
                 {method} + getContains() : int[]
                 {method} + visit() : void
                 {method} + getVisited() : boolean
@@ -38,7 +52,6 @@ package Model {
                 {field} [final] direction : ProjectileDirection
                 {field} [final] dimension : ProjectileDimension
                 {field} [final] offset : int
-
                 {method} + getDirection() : ProjectileDirection
                 {method} + getDimension() : PrjectileDimension
                 {method} + getOffset() : int
@@ -46,7 +59,6 @@ package Model {
 
             class ProjectileArray {
                 {field} [field] projectiles : List<Projectile>
-
                 {method} + getProjectiles : List<Projectile>
             }
                 
@@ -55,22 +67,19 @@ package Model {
         package Visitors {
             
             class ContainsLoaderVisitor {
-                {field} [final] cargo : ShipmentType 
-
+                {field} [final] cargo : ShipmentType
                 {method} + visit(StorageComponent) : void
                 
             }
             
             class ContainsRemoveVisitor {
                 {field} [final] searching : shipmentType
-
                 {method} + visit(StorageComponent) : void
                 {method} + visit(BatteryCompoent) : void
             }
 
             class CrewRemoveVisitor {
                 {field} [final] ship : iSpaceShip
-
                 {method} + visit(CabinComponent) : void
                 {method} + visit(AlienLifeSupportComponent) : void
                 {method} + visit(StartingCabinComponent) : void
@@ -79,7 +88,6 @@ package Model {
             class LargeMeteorVisitor {
                 {field} d : ProjectileDirection
                 {field} found_cannon : boolean
-
                 {method} + visit(CannonComponent) : void
             }
 
@@ -92,55 +100,51 @@ package Model {
             {method} getExhausted() : boolean
         }
 
-        Card^--iCard
+        iCard^--Card
         abstract Card <<abstract>> {
             {field} id : int
             {field} days : int
             {field} exhausted : boolean
-
             {method} + getId() : int
             {method} + getDays() : int
             {method} + getExhausted() : boolean
             {method} [protected] exhaust() : void
         }
 
-        AbandonedShipCard^--Card
+        Card^--AbandonedShipCard
         class AbandonedShipCard {
             {field} credits_gained : int
             {field} crew_lost : int
-
             {method} + getState(VoyageState) : CardState
             {method} + getCredits() : int
             {method} + getCrewLost() : int
             {method} + apply(VoyageState, Player, int) : void
         }
 
-        AbandonedStationCard^--Card
+        Card^--AbandonedStationCard
         class AbandonedStationCard {
             {field} planet : Planet
             {field} crew : int
-            
             {method} + getState(VoyageState) : CardState
             {method} + getPlanet() : Planet
             {method} + getCrewLost() : int
             {method} + apply(VoyageState, Player, int) : void
         }
 
-        CombatZoneCard^--Card
+        Card^--CombatZoneCard
         class CombatZoneCard {
             {field} sections : List<CombatZoneSection>
             {field} shots : ProjectileArray
-
             {method} + getState(VoyageState) : C
         }
 
-        EpidemicCard^--Card
+        Card^--EpidemicCard
         class EpidemicCard {
             {method} + getState(VoyageState) : CardState
             {method} + apply(VoyageState, Player) : void
         }
 
-        MeteorSwarmCard^--Card
+        Card^--MeteorSwarmCard
         class MeteorSwarmCard {
             {field} meteorites : ProjectileArray
             {method} + getState(VoyageState) : CardState
@@ -148,17 +152,65 @@ package Model {
             {method} + apply(VoyageState, Projectile) : void
         }
 
-        OpenSpaceCard^--Card
+        Card^--OpenSpaceCard
         class OpenSpaceCard {
             {method} + getState(VoyageState) : CardState
             {method} + apply(VoyageState, Player) : void
         }
 
+        Card^--PiratesCard
+        class PiratesCard {
+            {field} [final] shots : ProjectileArray
+            {field} [field] credits : int
+            {field} [final] min_power : int
+            {method} + getState(VoyageState) : CardState
+            {method} + getCredits() : int
+            {method} + getShots() : ProjectileArray
+            {method} + apply(VoyageState, Player) : void
+        }
 
+        Card^--PlanetCard
+        class PlanetCard {
+            {field} [final] planets : List<Planet>
+            {field} [final] left : int
+            {method} + getState(VoyageState) : CardState
+            {method} + getVisited() : List<boolean>
+            {method} + getPlanet() : Planet
+            {method} + getSize() : int
+            {method} + apply(Player, int) : void
+        }
 
+        Card^--SlaversCard
+        class SlaversCard {
+            {field} [final] min_power : int
+            {field} [final] crew_penalty : int
+            {field} [final] credits : int
+            {method} + getState(VoyageState) : CardState
+            {method} + getCrewLost() : int
+            {method} + getCredits() : int
+            {method} + apply(VoyageState, Player) : void
+        }
+
+        class SmugglersCard {
+            {field} [final] reward : planet
+            {field} [final] cargo_taken : int
+            {field} [field] min_power : int
+            {method} + getState(VoyageState) : CardState
+            {method} + getReward() : Planet
+            {method} + getCargoPenalty() : int
+            {method} + apply(player) : void
+        }
+
+        class StardustCard {
+            {method} + getState(VoyageState) : CardState
+            {method} + apply(VoyageState, Player) : void
+        }
     }
 
-    
+    Components::Visitors::iVisitor .. ContainsLoaderVisitor
+    Components::Visitors::iVisitor .. ContainsRemoveVisitor
+    Components::Visitors::iVisitor .. CrewRemoveVisitor
+    Components::Visitors::iVisitor .. LargeMeteorVisitor
 
     package Board {
 
