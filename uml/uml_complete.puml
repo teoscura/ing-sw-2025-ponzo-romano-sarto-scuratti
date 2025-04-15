@@ -578,7 +578,6 @@ package Model {
     State::GameState "1" <-- ModelInstance:state 
     class ModelInstance {
         {field} - [final] controller : ServerController 
-        
         {method} + validate(ServerMessage message) : void
         {method} + startGame(List<Player> players) : void
         {method} + getState() : GameState
