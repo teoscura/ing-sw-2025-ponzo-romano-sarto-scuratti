@@ -31,7 +31,6 @@ import it.polimi.ingsw.model.player.exceptions.IllegalComponentAdd;
 public class ConstructionState extends GameState {
 
     private final iCommonBoard board;
-
     private final List<Integer> construction_cards;
     private final iCards voyage_deck;
     private final List<Player> building;
