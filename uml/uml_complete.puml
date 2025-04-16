@@ -1102,6 +1102,12 @@ package Model {
                 {method} + showComponent(ClientView) : void
             }
 
+            ClientComponent ^.. ClientBrokenVerifyComponentDecorator
+            ClientBaseComponent <-- ClientBrokenVerifyComponentDecorator:base
+            class ClientBrokenVerifyComponentDecorator {
+                {method} + showComponent(ClientView) : void
+            }
+
             class ClientSpaceShip {
                 {field} - [final] type : GameModeType 
                 {field} - [final] ship : ClientComponent[][] 
@@ -1169,6 +1175,7 @@ package Model {
                 {field} - [final] credits : int
                 {field} - [final] disconnected : boolean
                 {field} - [final] retired_lost : boolean
+                {method} + getVerifyShip(VerifyResult[][]) : ClientSpaceShip
                 {method} + getUsername() : String
                 {method} + getColor() : PlayerColor
                 {method} + getShip() : ClientSpaceShip
