@@ -17,6 +17,7 @@ import it.polimi.ingsw.model.state.WaitingState;
 public class ModelInstance {
     
     private final ServerController controller;
+    private boolean started;
     private GameState state;
     
     public ModelInstance(ServerController server, GameModeType type, PlayerCount count){
@@ -25,19 +26,17 @@ public class ModelInstance {
         this.state.init();
     }
 
-    public void validate(ServerMessage message){
-        try {
-            message.receive(this);
-        } catch (ForbiddenCallException e) {
-            System.out.println("Player " + message.getDescriptor().getUsername() + " attempted a forbidden command in the current state of the game!");
-        }
+    public void validate(ServerMessage message) throws ForbiddenCallException{
+        message.receive(this);
     }
 
-    public void startGame(List<Player> players){
-        this.controller.startGame(players);
+    public void startGame(List<Player> players) throws ForbiddenCallException{
+        if(this.started) throw new ForbiddenCallException();
+        this.started = true;
     }
 
-    public void endGame(){
+    public void endGame() {
+        if(!this.started) throw new RuntimeException();
         this.controller.endGame();
     }
 

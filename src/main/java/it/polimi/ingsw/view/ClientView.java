@@ -30,4 +30,6 @@ public interface ClientView {
     public void show(ClientMeteoriteCardStateDecorator state);
     public void show(ClientNewCenterCardStateDecorator state);
     public void show(ClientProjectileCardStateDecorator state);
+    //Misc and debug
+    public void showTextMessage(String message);
 }

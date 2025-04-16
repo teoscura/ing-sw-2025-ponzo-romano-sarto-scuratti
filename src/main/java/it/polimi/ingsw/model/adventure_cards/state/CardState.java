@@ -1,6 +1,5 @@
 package it.polimi.ingsw.model.adventure_cards.state;
 
-import it.polimi.ingsw.message.client.NotifyCardStateUpdateMessage;
 import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;

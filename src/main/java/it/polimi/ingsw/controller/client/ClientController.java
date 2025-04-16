@@ -1,29 +1,51 @@
 package it.polimi.ingsw.controller.client;
 
+import it.polimi.ingsw.message.client.ClientMessage;
+import it.polimi.ingsw.message.server.PingMessage;
 import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.view.ClientView;
 
 public class ClientController implements iClientController {
 
+    private final ClientView view;
+    private ServerConnection connection;
 
-    @Override
-    public void showMessage(String message) {
-        this.view.showMessage(message);
+    public ClientController(ViewType type, ConnectionType type, String ip, String username){
+        //TODO
     }
 
     @Override
-    public void notifyPlayer(PlayerColor c) {
-        this.server.requestPlayer(c);
+    public void showTextMessage(String message) {
+        this.view.showTextMessage(message);
     }
 
     @Override
     public void ping() {
-        this.server.ping();
+        this.connection.sendMessage(new PingMessage());
     }
 
     @Override
-    public void notifyCard() {
-        this.server.askNewState();
-        this.view.updateState();
+    public ClientView getView() {
+        x;
+    }
+
+    @Override
+    public void connect(String ip) {
+        x;
+    }
+
+    @Override
+    public void disconnect() {
+        this.connection.sendMessage(new DisconnectMessage());
+        this.connection.close();
+    }
+
+    public void recieveMessage(ClientMessage message) {
+        x;
+    }
+
+    public void setServerConnection(ServerConnection connection) {
+        x;
     }
     
 }

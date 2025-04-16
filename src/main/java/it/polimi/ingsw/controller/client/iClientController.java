@@ -1,14 +1,14 @@
 package it.polimi.ingsw.controller.client;
 
 import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.view.ClientView;
 
 public interface iClientController {
 
-    public void showMessage(String message);
-    public void notifyPlayer(PlayerColor c);
+    public void showTextMessage(String message);
+    public ClientView getView();
     public void ping();
-    public void notifyCard();
-    public void notifyState();
+    public void connect(String ip);
     public void disconnect();
     
 }

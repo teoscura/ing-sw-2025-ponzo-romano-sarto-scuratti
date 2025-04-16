@@ -13,7 +13,7 @@ public class ViewMessage extends ClientMessage {
 
     @Override
     public void receive(iClientController client) {
-        client.showMessage(message);
+        client.showTextMessage(message);
     }
 
 }

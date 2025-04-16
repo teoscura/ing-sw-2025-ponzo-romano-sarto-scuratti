@@ -15,7 +15,6 @@ public class TurnOnMessage extends ServerMessage {
     private final ShipCoords battery;
 
     public TurnOnMessage(ClientDescriptor descriptor, ShipCoords target, ShipCoords battery){
-        super(descriptor);
         if(descriptor.getPlayer()==null) throw new PlayerUnsetException("Descriptor associated to message isn't bound to player");
         if(descriptor==null||target==null||battery==null) throw new NullPointerException();
         this.target = target;

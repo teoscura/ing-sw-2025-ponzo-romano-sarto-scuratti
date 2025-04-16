@@ -6,27 +6,13 @@ import it.polimi.ingsw.model.ModelInstance;
 import it.polimi.ingsw.model.adventure_cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.adventure_cards.state.CardState;
 import it.polimi.ingsw.model.state.GameState;
+import it.polimi.ingsw.model.state.VoyageState;
 
-public class EmptyMessage extends ServerMessage {
+public class ServerDisconnectMessage extends ServerMessage {
 
     @Override
     public void receive(ServerController server) throws ForbiddenCallException {
-        server.getModel().validate(this);
-    }
-
-    @Override
-    public void receive(ModelInstance instance) throws ForbiddenCallException {
-        instance.validate(this);
-    }
-
-    @Override
-    public void receive(GameState state) throws ForbiddenCallException {
-        state.validate(this);
-    }
-
-    @Override
-    public void receive(CardState state) throws ForbiddenCallException {
-        return;
+        server.disconnect(descriptor);
     }
     
 }

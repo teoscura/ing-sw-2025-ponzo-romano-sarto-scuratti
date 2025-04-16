@@ -3,8 +3,7 @@ package it.polimi.ingsw.model.state;
 import java.util.ArrayList;
 import java.util.List;
 
-import it.polimi.ingsw.message.client.DisconnectMessage;
-import it.polimi.ingsw.message.client.NotifyPlayerUpdateMessage;
+import it.polimi.ingsw.message.client.ClientDisconnectMessage;
 import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
@@ -171,7 +170,7 @@ public class VerifyState extends GameState {
         if(p==null) throw new NullPointerException();
         if(p.getDisconnected()) throw new ForbiddenCallException();
         p.disconnect();
-        p.getDescriptor().sendMessage(new DisconnectMessage()); 
+        p.getDescriptor().sendMessage(new ClientDisconnectMessage()); 
     }
 
 }
