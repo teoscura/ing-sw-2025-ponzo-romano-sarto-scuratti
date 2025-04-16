@@ -13,19 +13,371 @@ package Model {
 
             abstract CardState {
                 {field} [protected] state : VoyageState
-                {method} + init() : void
-                {method} + sendNotify() : void
+                {method} + init(ClientModelState) : void
                 {method} + [abstract] validate() : void
-                {method} +
-                {method} + getNext()
+                {method} + [abstract] getClientCardState() : ClientCardState
+                {method} + [abstract] getNext() : CardState
+                {method} + transition() : void
+                {method} + setNewShipCentre(Player, ShipCoords) : void
+                {method} + turnOn(Player, ShipCoords, ShipCoords) : void
+                {method} + removeCrew(Player, ShipCoords): void
+                {method} + moveCargo(Player, ShipmentType, ShipCoords, ShipCoords) : void
+                {method} + takeCargo(Player, ShipmentType, ShipCoords) : void
+                {method} + discardCargo(Player, ShipmentType, ShipCoords) : void
+                {method} + selectLanding(Player, int) : void
+                {method} + progressTurn(Player) : void
+                {method} + setTakeReward(Player, boolean) : void
+                {method} + connect(Player) : void
+                {method} + disconnect(Player) : void
             }
 
+            CardState^--AbandonedShipAnnounceState
             class AbandonedShipAnnounceState {
                 {field} [final] card : AbandonedShipCard
                 {field} [final] list : List<Player>
                 {field} responded : boolean
                 {field} id : int
-                {method} +
+                {method} + init(ClientModelState) : void
+                {method} + validate(ServerMessage) : void
+                {method} + getClientCardState() : ClientCardState
+                {method} [protected] getNext() : CardState
+                {method} + selectLanding(Player, int) : void
+                {method} + disconnect(Player) : void
+            }
+
+            CardState^--AbandonedShipRewardState
+            class AbandonedShipRewardState {
+                {field} [final] card : AbandonedShipCard
+                {field} [final] list : List<Player>
+                {field} coords : List<ShipCoords>
+                {field} responded : boolean
+                {method} + init(ClientModelState) : void
+                {method} + validate(ServerMessage) : void
+                {method} + getClientCardState() : ClientCardState
+                {method} [protected] getNext() : CardState
+                {method} + removeCrew(Player, ShipCoords) : void
+                {method} + disconnect(Player) : void
+            }
+
+            CardState^--AbandonedStationAnnounceState
+            class AbandonedStationAnnounceState {
+                {field} [final] card : AbandonedStationCard
+                {field} [final] list : List<Player>
+                {field} responded : boolean
+                {field} id : int
+                {method} + init(ClientModelState) : void
+                {method} + validate(ServerMessage) : void
+                {method} + getClientCardState() : ClientCardState
+                {method} [protected] getNext() : CardState
+                {method} + selectLanding(Player, int) : void
+                {method} + disconnect(Player) : void
+            }
+
+            CardState^--AbandonedStationRewardState
+            class AbandonedStationRewardState {
+                {field} [final] card : AbandonedStationCard
+                {field} [final] list : List<Player>
+                {field} responded : boolean
+                {method} + init(ClientModelState) : void
+                {method} + validate(ServerMessage) : void
+                {method} + getClientCardState() : ClientCardState
+                {method} [protected] getNext() : CardState
+                {method} + takeCargo(Player, ShipmentType, ShipCoords) : void
+                {method} + moveCargo(Player, ShipmentType, ShipCoords, ShipCoords) : void
+                {method} + discardCargo(Player, ShipmentType, ShipCoords) : void
+                {method} + progressTurn(Player) : void
+                {method} + disconnect(Player) : void
+
+            }
+
+            CardState^--CombatZoneAnnounceState
+            class CombatZoneAnnounceState {
+                {field} [final] card_id : int
+                {field} [final] sections : List<CombatZoneSection>
+                {field} [final] shots : ProjectileArray
+                {field} awaiting : List<Player>
+                {field} target : Player
+                {method} + init(ClientModelState) : void
+                {method} + validate(ServerMessage) : void
+                {method} + getClientCardState() : ClientCardState
+                {method} [protected] getNext() : CardState
+                {method} + turnOn(Player, ShipCoords, ShipCoords) : void
+                {method} + progressTurn(Player) : void
+                {method} + disconnect(Player) : void
+            }
+
+            CardState^--CombatZoneNewCabinState
+            class CombatZoneNewCabinState {
+                {field} [final] card_id : int
+                {field} [final] sections : List<CombatZoneSection>
+                {field} [final] shots : ProjectileArray
+                {field} target : Player
+                {method} + init(ClientModelState) : void
+                {method} + validate(ServerMessage) : void
+                {method} + getClientCardState() : ClientCardState
+                {method} [protected] getNext() : CardState
+                {method} + setNewShipCentre(Player, ShipCoords) : void
+                {method} + disconnect(Player) : void
+            }
+
+            CardState^--CombatZonePenaltyState
+            class CombatZonePenaltyState {
+                {field} [final] card_id : int
+                {field} [final] sections : List<CombatZoneSection>
+                {field} [final] shots : ProjectileArray
+                {field} target : Player
+                {field} [final] required : int[]
+                {field} responded : boolean
+                {field} coords : List<ShipCoords>
+                {method} + init(ClientModelState) : void
+                {method} + validate(ServerMessage) : void
+                {method} + getClientCardState() : ClientCardState
+                {method} [protected] getNext() : CardState
+                {method} + turnOn(Player, ShipCoords, ShipCoords) : void
+                {method} + progressTurn(Player) : void
+                {method} + removeCrew(Player, ShipCoords) : void
+                {method} + discardCargo(Player, ShipmentType, ShipCoords) : void
+                {method} + disconnect(Player) : void
+            }
+
+            CardState^--EpidemicState
+            class EpidemicState {
+                {field} [final] card : EpidemicCard
+                {field} [final] awaiting : List<Player>
+                {method} + init(ClientModelState) : void
+                {method} + validate(ServerMessage) : void
+                {method} + getClientCardState() : ClientCardState
+                {method} [protected] getNext() : CardState
+                {method} + progressTurn(Player) : void
+                'ask why disconnect isn't here
+            }
+
+            CardState^--MeteorAnnounceState
+            class MeteorAnnounceState {
+                {field} [final] card_id : int
+                {field} [final] left : ProjectileArray
+                {field} [final] awaiting : List<Player>
+                {field} broke_cabin : boolean
+                {method} + init(ClientModelState) : void
+                {method} + validate(ServerMessage) : void
+                {method} + getClientCardState() : ClientCardState
+                {method} [protected] getNext() : CardState
+                {method} + turnOn(Player, ShipCoords, ShipCoords) : void
+                {method} + progressTurn(Player) : void
+                {method} + disconnect(Player) : void
+            }
+
+            CardState^--MeteorNewCabinState
+            class MeteorNewCabinState {
+                {field} [final] card_id : int
+                {field} [final] left : ProjectileArray
+                {method} + init(ClientModelState) : void
+                {method} + validate(ServerMessage) : void
+                {method} + getClientCardState() : ClientCardState
+                {method} [protected] getNext() : CardState
+                {method} + setNewShipCentre(Player, ShipCoords) : void
+                {method} + disconnect(Player) : void
+            }
+
+            CardState^--OpenSpaceState
+            class OpenSpaceState {
+                {field} [final] card : OpenSpaceCard
+                {field} [final] awaiting : List<Player>
+                {method} + init(ClientModelState) : void
+                {method} + validate(ServerMessage) : void
+                {method} + getClientCardState() : ClientCardState
+                {method} [protected] getNext() : CardState
+                {method} + turnOn(Player, ShipCoords, ShipCoords) : void
+                {method} + progressTurn(Player) : void
+                {method} + disconnect(Player) : void
+            }
+
+            CardState^--PiratesAnnounceState
+            class PiratesAnnounceState {
+                {field} [final] card : PiratesCard
+                {field} [final] list : List<Player>
+                {field} responded : boolean
+                {field} result : boolean
+                {method} + init(ClientModelState) : void
+                {method} + validate(ServerMessage) : void
+                {method} + getClientCardState() : ClientCardState
+                {method} [protected] getNext() : CardState
+                {method} + turnOn(Player, ShipCoords, ShipCoords) : void
+                {method} + progressTurn(Player) : void
+                {method} + disconnect(Player) : void
+            }
+
+            CardState^--PiratesNewCabinState
+            class PiratesNewCabinState {
+                {field} [final] card : PiratesCard
+                {field} [final] list : List<Player>
+                {field} [final] shots : ProjectileArray
+                {method} + init(ClientModelState) : void
+                {method} + validate(ServerMessage) : void
+                {method} + getClientCardState() : ClientCardState
+                {method} [protected] getNext() : CardState
+                {method} + setNewShipCentre(Player, ShipCoords) : void
+                {metohd} + disconnect(Player) : void
+            }
+
+            CardState^--PiratesPenaltyState
+            class PiratesPenaltyState {
+                {field} [final] card : PiratesCard
+                {field} [final] list : List<Player>
+                {field} [final] shots : ProjectileArray
+                {field} responded : boolean
+                {method} + init(ClientModelState) : void
+                {method} + validate(ServerMessage) : void
+                {method} + getClientCardState() : ClientCardState
+                {method} [protected] getNext() : CardState
+                {method} + turnOn(Player, ShipCoords, ShipCoords) : void
+                {method} + progressTurn(Player) : void
+                {method} + disconnect(Player) : void
+            }
+
+            CardState^--PiratesRewardState
+            class PiratesRewardState {
+                {field} [final] card : PiratesCard
+                {field} [final] list : List<Player>
+                {field} responded : boolean
+                {field} took_reward : boolean
+                {method} + init(ClientModelState) : void
+                {method} + validate(ServerMessage) : void
+                {method} + getClientCardState() : ClientCardState
+                {method} [protected] getNext() : CardState
+                {method} + setTakeReward(Player, boolean) : void
+                {method} + disconnect(Player) : void
+            }
+
+            CardState^--PlanetAnnounceState
+            class PlanetAnnounceState {
+                {field} [final] card : PlanetCard
+                {field} [final] list : List<Player>
+                {field} responded : boolean
+                {field} id : int
+                {method} + init(ClientModelState) : void
+                {method} + validate(ServerMessage) : void
+                {method} + getClientCardState() : ClientCardState
+                {method} [protected] getNext() : CardState
+                {method} + selectLanding(Player, int) : void
+                {method} + disconnect(Player) : void
+            }
+
+            CardState^--PlanetRewardState
+            class PlanetRewardState {
+                {field} [final] card : PlanetCard
+                {field} [final] list : List<Player>
+                {field} [final] id : int
+                {field} responded : boolean
+                {method} + init(ClientModelState) : void
+                {method} + validate(ServerMessage) : void
+                {method} + getClientCardState() : ClientCardState
+                {method} [protected] getNext() : CardState
+                {method} + takeCargo(Player, ShipmentType, ShipCoords) : void
+                {method} + moveCargo(Player, ShipmentType, ShipCoords, ShipCoords) : void
+                {method} + discardCargo(Player, ShipmentType, ShipCoords) : void
+                {method} + progressTurn(Player) : void
+                {method} + disconnect(Player) : void
+            }
+
+            CardState^--SlaversAnnounceState
+            class SlaversAnnounceState {
+                {field} [final] card : SlaversCard
+                {field} [final] list : List<Player>
+                {field} responded : boolean
+                {field} result : boolean
+                {method} + init(ClientModelState) : void
+                {method} + validate(ServerMessage) : void
+                {method} + getClientCardState() : ClientCardState
+                {method} [protected] getNext() : CardState
+                {method} + turnOn(Player, ShipCoords, ShipCoords) : void
+                {method} + progressTurn(Player) : void
+                {method} + disconnect(Player) : void
+            }
+
+            CardState^--SlaversLoseState
+            class SlaversLoseState {
+                {field} [final] card : SlaversCard
+                {field} [final] list : List<Player>
+                {field} responded : boolean
+                {field} coords : List<ShipCoords>
+                {method} + init(ClientModelState) : void
+                {method} + validate(ServerMessage) : void
+                {method} + getClientCardState() : ClientCardState
+                {method} [protected] getNext() : CardState
+                {method} + removeCrew(Player, ShipCoords) : void
+                {method} + disconnect(Player) : void
+            }
+
+            CardState^--SlaversRewardState
+            class SlaversRewardState {
+                {field} [final] card : SlaversCard
+                {field} [final] list : List<Player>
+                {field} responded : boolean
+                {field} took_reward : boolean
+                {method} + init(ClientModelState) : void
+                {method} + validate(ServerMessage) : void
+                {method} + getClientCardState() : ClientCardState
+                {method} [protected] getNext() : CardState
+                {method} + setTakeReward(Player, boolean) : void
+                {method} + disconnect(Player) : void
+            }
+
+            CardState^--SmugglersAnnounceState
+            class SmugglersAnnounceState {
+                {field} [final] card : SmugglersCard
+                {field} [final] list : List<Player>
+                {field} responded : boolean
+                {field} result : boolean
+                {method} + init(ClientModelState) : void
+                {method} + validate(ServerMessage) : void
+                {method} + getClientCardState() : ClientCardState
+                {method} [protected] getNext() : CardState
+                {method} + turnOn(Player, ShipCoords, ShipCoords) : void
+                {method} + progressTurn(Player) : void
+                {method} + disconnect(player) : void
+            }
+
+            CardState^--SmugglersLoseState
+            class SmugglersLoseState {
+                {field} [final] card : SmugglersCard
+                {field} [final] list : List<Player>
+                {field} [final] required : int[]
+                {field} responded : boolean
+                {method} + init(ClientModelState) : void
+                {method} + validate(ServerMessage) : void
+                {method} + getClientCardState() : ClientCardState
+                {method} [protected] getNext() : CardState
+                {method} + discardCargo(Player, ShipmentType, ShipCoords) : void
+                {method} + disconnect(Player) : void
+            }
+
+            CardState^--SmugglersRewardState
+            class SmugglersRewardState {
+                {field} [final] card : SmugglersCard
+                {field} [final] list : List<Player>
+                {field} responded : boolean
+                {field} took_reward : boolean
+                {method} + init(ClientModelState) : void
+                {method} + validate(ServerMessage) : void
+                {method} + getClientCardState() : ClientCardState
+                {method} [protected] getNext() : CardState
+                {method} + takeCargo(Player, ShipmentType, ShipCoords) : void
+                {method} + moveCargo(Player, ShipmentType, ShipCoords, ShipCoords) : void
+                {method} + discardCargo(Player, ShipmentType, ShipCoords) : void
+                {method} + progressTurn(Player) : void
+                {method} + disconnect(Player) : void
+            }
+
+            CardState^--StardustState
+            class StardustState {
+                {field} [final] card : StardustCard
+                {field} awaiting : List<Player>
+                {method} + init(ClientModelState) : void
+                {method} + validate(ServerMessage) : void
+                {method} + getClientCardState() : ClientCardState
+                {method} [protected] getNext() : CardState
+                {method} + progressTurn(Player) : void
             }
         }
 
@@ -69,7 +421,6 @@ package Model {
             class ContainsLoaderVisitor {
                 {field} [final] cargo : ShipmentType
                 {method} + visit(StorageComponent) : void
-                
             }
             
             class ContainsRemoveVisitor {
@@ -191,6 +542,7 @@ package Model {
             {method} + apply(VoyageState, Player) : void
         }
 
+        Card^--SmugglersCard
         class SmugglersCard {
             {field} [final] reward : planet
             {field} [final] cargo_taken : int
@@ -201,6 +553,7 @@ package Model {
             {method} + apply(player) : void
         }
 
+        Card^--StardustCard
         class StardustCard {
             {method} + getState(VoyageState) : CardState
             {method} + apply(VoyageState, Player) : void
