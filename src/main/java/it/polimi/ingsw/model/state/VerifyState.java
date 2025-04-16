@@ -14,6 +14,7 @@ import it.polimi.ingsw.model.PlayerCount;
 import it.polimi.ingsw.model.adventure_cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.board.Planche;
 import it.polimi.ingsw.model.board.iCards;
+import it.polimi.ingsw.model.client.components.ClientSpaceShip;
 import it.polimi.ingsw.model.client.player.ClientVerifyPlayer;
 import it.polimi.ingsw.model.client.state.ClientModelState;
 import it.polimi.ingsw.model.client.state.ClientVerifyState;
@@ -73,7 +74,7 @@ public class VerifyState extends GameState {
         for(Player p : this.players){
             tmp.add(new ClientVerifyPlayer(p.getUsername(), 
                                            p.getColor(), 
-                                           p.getSpaceShip().getClientSpaceShip(),
+                                           p.getSpaceShip().getClientSpaceShip().getVerifyShip(p.getSpaceShip().verify()),
                                            p.getSpaceShip().verify(),
                                            this.finish_order.contains(p),
                                            this.finish_order.indexOf(p)));

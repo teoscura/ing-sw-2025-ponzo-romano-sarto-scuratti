@@ -68,5 +68,13 @@ public class StardustState extends CardState {
     protected CardState getNext() {
         return null;
     }
+
+    @Override
+    public void disconnect(Player p) throws ForbiddenCallException {
+        if(this.awaiting.contains(p)){
+            this.awaiting.remove(p);
+            return;
+        }
+    }
     
 }

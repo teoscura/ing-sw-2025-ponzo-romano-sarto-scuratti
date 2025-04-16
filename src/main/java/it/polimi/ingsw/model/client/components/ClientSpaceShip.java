@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.client.components;
 
 import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.player.ShipCoords;
+import it.polimi.ingsw.model.player.VerifyResult;
 
 public class ClientSpaceShip {
     
@@ -32,6 +33,20 @@ public class ClientSpaceShip {
         this.engine_power = engine_power;
         this.energy_power = energy_power;
         this.crew = crew;
+    }
+
+    public ClientSpaceShip getVerifyShip(VerifyResult[][] results){
+        if(results == null) throw new NullPointerException();
+        if(results.length != this.type.getHeight()) throw new IllegalArgumentException();
+        if(results[0].length != this.type.getWidth()) throw new IllegalArgumentException();
+        ClientComponent[][] tmp = new ClientComponent[this.type.getHeight()][this.type.getWidth()];
+        for(int i = 0; i < this.type.getHeight(); i++){
+            for(int j=0;j < this.type.getWidth(); j++){
+                if(results[i][j]==VerifyResult.BROKEN) tmp[i][j] = new ClientBrokenVerifyComponentDecorator(this.ship[i][j]);
+                else tmp[i][j] = this.ship[i][j];
+            }
+        }
+        return new ClientSpaceShip(type, tmp, shielded, cannon_power, engine_power, energy_power, crew);
     }
 
     public GameModeType getType() {

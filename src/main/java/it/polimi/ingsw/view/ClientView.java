@@ -17,6 +17,7 @@ public interface ClientView {
     public void show(ClientShipmentsComponentDecorator component);
     public void show(ClientBatteryComponentDecorator component);
     public void show(ClientCrewComponentDecorator component);
+    public void show(ClientBrokenVerifyComponentDecorator component);
     //Card states
     public void show(ClientAwaitConfirmCardStateDecorator state);
     public void show(ClientBaseCardState state);
