@@ -72,10 +72,13 @@ class MeteorNewCabinState extends CardState {
         try{
             p.getSpaceShip().setCenter(new_center);
         } catch (IllegalTargetException e){
-            p.getDescriptor().sendMessage(new ViewMessage("Target is an empty space!"));
+            System.out.println("Player '"+p.getUsername()+"' attempted to set his new center on an empty space!");
+            this.state.broadcastMessage(new ViewMessage("Player'"+p.getUsername()+"' attempted to set his new center on an empty space!"));
+            return;
         } catch (ForbiddenCallException e){
-            //Should never get here.
-            p.getDescriptor().sendMessage(new ViewMessage("Cabin isn't broken!"));
+            System.out.println("Player '"+p.getUsername()+"' attempted to set his new center while having a unbroken ship!");
+            this.state.broadcastMessage(new ViewMessage("Player'"+p.getUsername()+"' attempted to set his new center while having a unbroken ship!"));
+            return;
         }
     }
 
@@ -84,7 +87,6 @@ class MeteorNewCabinState extends CardState {
         if(p.getSpaceShip().getBrokeCenter()){
             this.state.loseGame(p);
         }
-        //XXX URGENT CHECK IF POSSIBLE
     }
 
 }

@@ -72,28 +72,34 @@ class SmugglersRewardState extends CardState {
     @Override
     public void takeCargo(Player p, ShipmentType type, ShipCoords target_coords){
         if(p!=this.list.getFirst()){
-            p.getDescriptor().sendMessage(new ViewMessage("This isn't your turn!"));
+            System.out.println("Player '"+p.getUsername()+"' attempted to take cargo during another player's turn!");
+            this.state.broadcastMessage(new ViewMessage("Player'"+p.getUsername()+"' attempted to take cargo during another player's turn!"));
             return;
         }
         if(type.getValue()<=0){
-            p.getDescriptor().sendMessage(new ViewMessage("Illegal shipment type!"));
+            System.out.println("Player '"+p.getUsername()+"' attempted to take cargo with an illegal shipment type!");
+            this.state.broadcastMessage(new ViewMessage("Player'"+p.getUsername()+"'  attempted to take cargo with an illegal shipment type!"));
             return;
         }
         if(this.card.getReward().getContains()[type.getValue()-1]<=0){
-            p.getDescriptor().sendMessage(new ViewMessage("Taking unavailable merch!"));
+            System.out.println("Player '"+p.getUsername()+"' attempted to take cargo the card doesn't have!");
+            this.state.broadcastMessage(new ViewMessage("Player'"+p.getUsername()+"'  attempted to take cargo the card doesn't have!"));
             return;
         }
         ContainsLoaderVisitor v = new ContainsLoaderVisitor(type);
         try{
             p.getSpaceShip().getComponent(target_coords).check(v);
         } catch (IllegalTargetException e){
-            p.getDescriptor().sendMessage(new ViewMessage("Coords are not a storage component!"));
+            System.out.println("Player '"+p.getUsername()+"' attempted to position cargo in illegal coordinates!");
+            this.state.broadcastMessage(new ViewMessage("Player'"+p.getUsername()+"' attempted to position cargo in illegal coordinates!"));
             return;
         } catch (ContainerFullException e){
-            p.getDescriptor().sendMessage(new ViewMessage("Target StorageComponent is full!"));
+            System.out.println("Player '"+p.getUsername()+"' attempted to position cargo in a storage that's full!");
+            this.state.broadcastMessage(new ViewMessage("Player'"+p.getUsername()+"' attempted to position cargo in a storage that's full!"));
             return;
         } catch (ContainerNotSpecialException e){
-            p.getDescriptor().sendMessage(new ViewMessage("Target StorageComponent does not support the type provided!"));
+            System.out.println("Player '"+p.getUsername()+"' attempted to position cargo in a storage that doesn't support it!");
+            this.state.broadcastMessage(new ViewMessage("Player'"+p.getUsername()+"' attempted to position cargo in a storage that doesn't support it!"));
             return;
         }
         this.card.getReward().getContains()[type.getValue()-1]--;
@@ -106,24 +112,28 @@ class SmugglersRewardState extends CardState {
     @Override
     public void moveCargo(Player p, ShipmentType type, ShipCoords target_coords, ShipCoords source_coords){
         if(p!=this.list.getFirst()){
-            p.getDescriptor().sendMessage(new ViewMessage("This isn't your turn!"));
+            System.out.println("Player '"+p.getUsername()+"' attempted to load cargo during another player's turn!");
+            this.state.broadcastMessage(new ViewMessage("Player'"+p.getUsername()+"' attempted to load cargo during another player's turn!"));
             return;
         }
         if(type.getValue()<=0){
-            p.getDescriptor().sendMessage(new ViewMessage("Illegal shipment type!"));
+            System.out.println("Player '"+p.getUsername()+"' attempted to load an invalid shipment type!");
+            this.state.broadcastMessage(new ViewMessage("Player'"+p.getUsername()+"' attempted to load an invalid shipment type!"));
             return;
         }
         ContainerMoveValidationVisitor v = new ContainerMoveValidationVisitor(type);
         try {
             p.getSpaceShip().getComponent(source_coords).check(v);
         } catch (IllegalTargetException e){
-            p.getDescriptor().sendMessage(new ViewMessage("Source coords dont contain the moved shipment!"));
+            System.out.println("Player '"+p.getUsername()+"' attempted to load cargo from an invalid source!");
+            this.state.broadcastMessage(new ViewMessage("Player'"+p.getUsername()+"' attempted to load cargo from an invalid source!"));
             return;
         }
         try {
             p.getSpaceShip().getComponent(target_coords).check(v);
         } catch (IllegalTargetException e){
-            p.getDescriptor().sendMessage(new ViewMessage("Target coords can't contain the shipment!"));
+            System.out.println("Player '"+p.getUsername()+"' attempted to load cargo from coords that dont contain the shipment!");
+            this.state.broadcastMessage(new ViewMessage("Player'"+p.getUsername()+"' attempted to load cargo from coords that dont contain the shipment!"));
             return;
         }
         ContainsRemoveVisitor vr = new ContainsRemoveVisitor(type);
@@ -135,21 +145,25 @@ class SmugglersRewardState extends CardState {
     @Override
     public void discardCargo(Player p, ShipmentType type, ShipCoords target_coords){
         if(p!=this.list.getFirst()){
-            p.getDescriptor().sendMessage(new ViewMessage("This isn't your turn!"));
+            System.out.println("Player '"+p.getUsername()+"' attempted to discard cargo during another player's turn!");
+            this.state.broadcastMessage(new ViewMessage("Player'"+p.getUsername()+"' attempted to discard cargo during another player's turn!"));
             return;
         }
         if(type.getValue()<=0){
-            p.getDescriptor().sendMessage(new ViewMessage("Illegal shipment type!"));
+            System.out.println("Player '"+p.getUsername()+"' attempted to discard cargo with an invalid type!");
+            this.state.broadcastMessage(new ViewMessage("Player'"+p.getUsername()+"' attempted to discard cargo with an invalid type!"));
             return;
         }
         ContainsRemoveVisitor v = new ContainsRemoveVisitor(type);
         try{
             p.getSpaceShip().getComponent(target_coords).check(v);
         } catch (IllegalTargetException e){
-            p.getDescriptor().sendMessage(new ViewMessage("Coords are not a storage component!"));
+            System.out.println("Player '"+p.getUsername()+"' attempted to discard cargo from illegal coordinates!");
+            this.state.broadcastMessage(new ViewMessage("Player'"+p.getUsername()+"' attempted to discard cargo from illegal coordinates!"));
             return;
         } catch (ContainerEmptyException e){
-            p.getDescriptor().sendMessage(new ViewMessage("Target StorageComponent is empty!"));
+            System.out.println("Player '"+p.getUsername()+"' attempted to discard cargo from an empty storage component!");
+            this.state.broadcastMessage(new ViewMessage("Player'"+p.getUsername()+"' attempted to discard cargo from an empty storage component!"));
             return;
         }
     }
@@ -157,7 +171,8 @@ class SmugglersRewardState extends CardState {
     @Override
     public void progressTurn(Player p){
         if(p!=this.list.getFirst()){
-            p.getDescriptor().sendMessage(new ViewMessage("You already confirmed your actions, can't do anything else"));
+            System.out.println("Player '"+p.getUsername()+"' attempted to progress during another player's turn!");
+            this.state.broadcastMessage(new ViewMessage("Player'"+p.getUsername()+"' attempted to progress during another player's turn!"));
             return;
         }
         this.responded = true;

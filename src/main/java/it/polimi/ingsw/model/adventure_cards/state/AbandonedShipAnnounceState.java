@@ -67,11 +67,13 @@ public class AbandonedShipAnnounceState extends CardState {
     @Override
     public void selectLanding(Player p, int planet){
         if(p!=this.list.getFirst()){
-            p.getDescriptor().sendMessage(new ViewMessage("It's not your turn!"));
+            System.out.println("Player '"+p.getUsername()+"' attempted to land during another player's turn!");
+            this.state.broadcastMessage(new ViewMessage("Player'"+p.getUsername()+"' attempted to land during another player's turn!"));
             return;
         }
-        else if(planet!=-1 && planet!=0){ 
-            p.getDescriptor().sendMessage(new ViewMessage("Wrong landing id sent!"));
+        else if(planet!=-1 && planet!=0){
+            System.out.println("Player '"+p.getUsername()+"' attempted to land on an invalid id!");
+            this.state.broadcastMessage(new ViewMessage("Player'"+p.getUsername()+"' attempted to land on an invalid id!"));
             return;
         }
         this.id = planet;

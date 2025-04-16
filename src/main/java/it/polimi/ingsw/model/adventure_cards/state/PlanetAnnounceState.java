@@ -66,15 +66,18 @@ public class PlanetAnnounceState extends CardState {
     @Override
     public void selectLanding(Player p, int planet){
         if(p!=this.list.getFirst()){
-            p.getDescriptor().sendMessage(new ViewMessage("It's not your turn!"));
+            System.out.println("Player '"+p.getUsername()+"' attempted to land during another player's turn!");
+            this.state.broadcastMessage(new ViewMessage("Player'"+p.getUsername()+"' attempted to land during another player's turn!"));
             return;
         }
         else if(planet<-1||planet>=this.card.getSize()){ 
-            p.getDescriptor().sendMessage(new ViewMessage("Wrong landing id sent!"));
+            System.out.println("Player '"+p.getUsername()+"' attempted to land on an invalid id!");
+            this.state.broadcastMessage(new ViewMessage("Player'"+p.getUsername()+"' attempted to land on an invalid id!"));
             return;
         }
         if(this.card.getPlanet(planet).getVisited()){
-            p.getDescriptor().sendMessage(new ViewMessage("Planet already visited!"));
+            System.out.println("Player '"+p.getUsername()+"' attempted to land on a planet that was already visited!");
+            this.state.broadcastMessage(new ViewMessage("Player'"+p.getUsername()+"' attempted to land on a planet that was already visited!"));
             return;
         }
         this.id = planet;

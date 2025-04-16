@@ -54,11 +54,6 @@ public abstract class CardState {
         throw new ForbiddenCallException("This state doesn't support this function.");
     }
 
-    public void removeCargo(Player p, ShipmentType shipment, ShipCoords target_coords) throws ForbiddenCallException{
-        p.getDescriptor().sendMessage(new ViewMessage("This state doesn't support this function!"));
-        throw new ForbiddenCallException("This state doesn't support this function.");
-    }
-
     public void moveCargo(Player p, ShipmentType shipment, ShipCoords target_coords, ShipCoords source_coords) throws ForbiddenCallException{
         p.getDescriptor().sendMessage(new ViewMessage("This state doesn't support this function!"));
         throw new ForbiddenCallException("This state doesn't support this function.");

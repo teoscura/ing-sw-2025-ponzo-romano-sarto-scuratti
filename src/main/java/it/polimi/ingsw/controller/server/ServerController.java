@@ -61,9 +61,6 @@ public class ServerController implements RMIServerStub {
 
     public void disconnect(ClientDescriptor client) {
         XXX
-        if(this.model==null && client!=setupper){
-            return;
-        }
     }
 
     public void openRoom(ClientDescriptor client, GameModeType type, PlayerCount count) {

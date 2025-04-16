@@ -77,13 +77,15 @@ public class MeteorAnnounceState extends CardState {
     @Override
     public void turnOn(Player p, ShipCoords target_coords, ShipCoords battery_coords){
         if(!this.awaiting.contains(p)){
-            p.getDescriptor().sendMessage(new ViewMessage("You already confirmed your actions, can't do anything else"));
+            System.out.println("Player '"+p.getUsername()+"' attempted to turn on a component after motioning to progress!");
+            this.state.broadcastMessage(new ViewMessage("Player'"+p.getUsername()+"' attempted to turn on a component after motioning to progress!"));
             return;
         }
         try{
             p.getSpaceShip().turnOn(target_coords, battery_coords);
         } catch (IllegalTargetException e){
-            p.getDescriptor().sendMessage(new ViewMessage("Coords are not valid for the turnOn operation!"));
+            System.out.println("Player '"+p.getUsername()+"' attempted to turn on a component with invalid coordinates!");
+            this.state.broadcastMessage(new ViewMessage("Player'"+p.getUsername()+"' attempted to turn on a component with invalid coordinates!"));
             return;
         }
     } 
@@ -91,7 +93,8 @@ public class MeteorAnnounceState extends CardState {
     @Override
     public void progressTurn(Player p){
         if(!this.awaiting.contains(p)){
-            p.getDescriptor().sendMessage(new ViewMessage("You already confirmed your actions, can't do anything else"));
+            System.out.println("Player '"+p.getUsername()+"' attempted to progress the turn while already having done so!");
+            this.state.broadcastMessage(new ViewMessage("Player'"+p.getUsername()+"' attempted to progress the turn while already having done so!"));
             return;
         }
         this.awaiting.remove(p);

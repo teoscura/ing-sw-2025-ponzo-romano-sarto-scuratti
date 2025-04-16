@@ -65,7 +65,8 @@ class SlaversRewardState extends CardState {
     @Override
     public void setTakeReward(Player p, boolean take){
         if(p!=this.list.getFirst()){
-            p.getDescriptor().sendMessage(new ViewMessage("It's not your turn!"));
+            System.out.println("Player '"+p.getUsername()+"' attempted to accept a reward during another player's turn!");
+            this.state.broadcastMessage(new ViewMessage("Player'"+p.getUsername()+"' attempted to accept a reward during another player's turn!"));
             return;
         }
         this.took_reward = take;

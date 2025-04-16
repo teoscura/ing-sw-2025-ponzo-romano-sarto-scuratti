@@ -57,7 +57,8 @@ public class StardustState extends CardState {
     @Override
     public void progressTurn(Player p){
         if(!this.awaiting.contains(p)){
-            p.getDescriptor().sendMessage(new ViewMessage("You already confirmed your actions, can't do anything else"));
+            System.out.println("Player '"+p.getUsername()+"' attempted to progress the turn while already having done so!");
+            this.state.broadcastMessage(new ViewMessage("Player'"+p.getUsername()+"' attempted to progress the turn while already having done so!"));
             return;
         }
         this.awaiting.remove(p);

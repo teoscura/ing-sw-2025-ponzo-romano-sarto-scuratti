@@ -83,21 +83,24 @@ public class PiratesPenaltyState extends CardState {
     @Override
     public void turnOn(Player p, ShipCoords target_coords, ShipCoords battery_coords){
         if(this.list.getFirst()!=p){
-            p.getDescriptor().sendMessage(new ViewMessage("This isn't your turn!"));
+            System.out.println("Player '"+p.getUsername()+"' attempted to turn on a component during another player's turn!");
+            this.state.broadcastMessage(new ViewMessage("Player'"+p.getUsername()+"' attempted to turn on a component during another player's turn!"));
             return;
         }
         try{
             p.getSpaceShip().turnOn(target_coords, battery_coords);
         } catch (IllegalTargetException e){
-            p.getDescriptor().sendMessage(new ViewMessage("Coords are not valid for the turnOn operation!"));
+            System.out.println("Player '"+p.getUsername()+"' attempted to turn on a component with invalid coordinates!");
+            this.state.broadcastMessage(new ViewMessage("Player'"+p.getUsername()+"' attempted to turn on a component with invalid coordinates!"));
             return;
         }
     } 
 
     @Override
     public void progressTurn(Player p){
-        if(this.list.getFirst()!=p){
-            p.getDescriptor().sendMessage(new ViewMessage("This isn't your turn!"));
+        if(p!=this.list.getFirst()){
+            System.out.println("Player '"+p.getUsername()+"' attempted to progress during another player's turn!");
+            this.state.broadcastMessage(new ViewMessage("Player'"+p.getUsername()+"' attempted to progress during another player's turn!"));
             return;
         }
         this.responded = true;

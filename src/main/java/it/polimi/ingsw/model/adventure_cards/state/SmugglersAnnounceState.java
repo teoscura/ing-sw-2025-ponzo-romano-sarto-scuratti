@@ -72,13 +72,15 @@ public class SmugglersAnnounceState extends CardState {
     @Override
     public void turnOn(Player p, ShipCoords target_coords, ShipCoords battery_coords){
         if(p!=this.list.getFirst()){
-            p.getDescriptor().sendMessage(new ViewMessage("It's not your turn!"));
+            System.out.println("Player '"+p.getUsername()+"' attempted to turn on a component during another player's turn!");
+            this.state.broadcastMessage(new ViewMessage("Player'"+p.getUsername()+"' attempted to turn on a component during another player's turn!"));
             return;
         }
         try{
             p.getSpaceShip().turnOn(target_coords, battery_coords);
         } catch (IllegalTargetException e){
-            p.getDescriptor().sendMessage(new ViewMessage("Coords are not valid for the turnOn operation!"));
+            System.out.println("Player '"+p.getUsername()+"' attempted to turn on a component with invalid coordinates!");
+            this.state.broadcastMessage(new ViewMessage("Player'"+p.getUsername()+"' attempted to turn on a component with invalid coordinates!"));
             return;
         }
     } 
@@ -86,7 +88,8 @@ public class SmugglersAnnounceState extends CardState {
     @Override
     public void progressTurn(Player p){
         if(p!=this.list.getFirst()){
-            p.getDescriptor().sendMessage(new ViewMessage("You already confirmed your actions, can't do anything else"));
+            System.out.println("Player '"+p.getUsername()+"' attempted to progress during another player's turn!");
+            this.state.broadcastMessage(new ViewMessage("Player'"+p.getUsername()+"' attempted to progress during another player's turn!"));
             return;
         }
         this.responded = true;

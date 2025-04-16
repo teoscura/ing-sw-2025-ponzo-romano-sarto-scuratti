@@ -91,10 +91,6 @@ class CombatZonePenaltyState extends CardState {
         if(this.sections.getFirst().getPenalty()==CombatZonePenalty.SHOTS){
             this.target.getSpaceShip().handleShot(this.shots.getProjectiles().get(0));
         }
-        else if(this.sections.getFirst().getPenalty()==CombatZonePenalty.CREW){
-            CrewRemoveVisitor v = new CrewRemoveVisitor(target.getSpaceShip());
-            for(ShipCoords s : this.coords) this.target.getSpaceShip().getComponent(s).check(v);
-        }
         this.transition();
     }
 
@@ -146,32 +142,37 @@ class CombatZonePenaltyState extends CardState {
         return null;
     }
 
-    @Override 
+    @Override
     public void turnOn(Player p, ShipCoords target_coords, ShipCoords battery_coords){
         if(p!=this.target){
-            p.getDescriptor().sendMessage(new ViewMessage("It's not your turn!"));
+            System.out.println("Player '"+p.getUsername()+"' attempted to turn on a component during another player's turn!");
+            this.state.broadcastMessage(new ViewMessage("Player'"+p.getUsername()+"' attempted to turn on a component during another player's turn!"));
             return;
         }
         if(this.sections.getFirst().getPenalty()!=CombatZonePenalty.SHOTS){
-            p.getDescriptor().sendMessage(new ViewMessage("This penalty doesn't allow this action!"));
+            System.out.println("Player '"+p.getUsername()+"' attempted to turn on a component when the penalty doesn't allow it!");
+            this.state.broadcastMessage(new ViewMessage("Player'"+p.getUsername()+"' attempted to turn on a component when the penalty doesn't allow it!"));
             return;
         }
         try{
             p.getSpaceShip().turnOn(target_coords, battery_coords);
         } catch (IllegalTargetException e){
-            p.getDescriptor().sendMessage(new ViewMessage("Coords are not valid for the turnOn operation!"));
+            System.out.println("Player '"+p.getUsername()+"' attempted to turn on a component with invalid coordinates!");
+            this.state.broadcastMessage(new ViewMessage("Player'"+p.getUsername()+"' attempted to turn on a component with invalid coordinates!"));
             return;
         }
-    }
+    } 
 
     @Override 
     public void progressTurn(Player p){
         if(p!=this.target){
-            p.getDescriptor().sendMessage(new ViewMessage("It's not your turn!"));
+            System.out.println("Player '"+p.getUsername()+"' attempted to progress during another player's turn!");
+            this.state.broadcastMessage(new ViewMessage("Player'"+p.getUsername()+"' attempted to progress during another player's turn!"));
             return;
         }
         if(this.sections.getFirst().getPenalty()!=CombatZonePenalty.SHOTS){
-            p.getDescriptor().sendMessage(new ViewMessage("This penalty doesn't allow this action!"));
+            System.out.println("Player '"+p.getUsername()+"' attempted to progress when the penalty doesn't allow it!");
+            this.state.broadcastMessage(new ViewMessage("Player'"+p.getUsername()+"' attempted to progress when the penalty doesn't allow it!"));
             return;
         }
         this.responded = true;
@@ -180,23 +181,25 @@ class CombatZonePenaltyState extends CardState {
     @Override 
     public void removeCrew(Player p, ShipCoords cabin_coords) throws ForbiddenCallException{
         if(p!=this.target){
-            p.getDescriptor().sendMessage(new ViewMessage("It's not your turn!"));
+            System.out.println("Player '"+p.getUsername()+"' attempted to remove a crew member during another player's turn!");
+            this.state.broadcastMessage(new ViewMessage("Player'"+p.getUsername()+"' attempted to remove a crew member during another player's turn!"));
             return;
         }
         if(this.sections.getFirst().getPenalty()!=CombatZonePenalty.CREW){
-            p.getDescriptor().sendMessage(new ViewMessage("This penalty doesn't allow this action!"));
+            System.out.println("Player '"+p.getUsername()+"' attempted to remove a crew member when the penalty doesn't allow it!");
+            this.state.broadcastMessage(new ViewMessage("Player'"+p.getUsername()+"' attempted to remove a crew member when the penalty doesn't allow it!"));
             return;
         }
         CrewRemoveVisitor v = new CrewRemoveVisitor(p.getSpaceShip());
         try {
             p.getSpaceShip().getComponent(cabin_coords).check(v);
         } catch(IllegalTargetException e){
-            p.getDescriptor().sendMessage(new ViewMessage("Sent coords of an empty cabin or not a cabin"));
+            System.out.println("Player '"+p.getUsername()+"' attempted to remove a crew member from invalid coordinates!");
+            this.state.broadcastMessage(new ViewMessage("Player'"+p.getUsername()+"' attempted to remove a crew member from invalid coordinates!"));
             return;
         }
         if(p.getSpaceShip().getCrew()[0]==0){
             this.state.loseGame(p);
-            this.validate(new EmptyMessage(p.getDescriptor()));
             return;
         }
         this.coords.add(cabin_coords);
@@ -205,48 +208,57 @@ class CombatZonePenaltyState extends CardState {
         }
     }
     
-    @Override 
-    public void removeCargo(Player p, ShipmentType shipment, ShipCoords storage_coords){
+    @Override
+    public void discardCargo(Player p, ShipmentType type, ShipCoords coords){
         if(p!=this.target){
-            p.getDescriptor().sendMessage(new ViewMessage("It's not your turn!"));
+            System.out.println("Player '"+p.getUsername()+"' attempted to discard cargo during another player's turn!");
+            this.state.broadcastMessage(new ViewMessage("Player'"+p.getUsername()+"' attempted to discard cargo during another player's turn!"));
             return;
         }
         if(this.sections.getFirst().getPenalty()!=CombatZonePenalty.CARGO){
-            p.getDescriptor().sendMessage(new ViewMessage("This penalty doesn't allow this action!"));
+            System.out.println("Player '"+p.getUsername()+"' attempted to discard cargo when the penalty doesn't allow it!");
+            this.state.broadcastMessage(new ViewMessage("Player'"+p.getUsername()+"' attempted to discard cargo when the penalty doesn't allow it!"));
             return;
         }
         for(ShipmentType t : ShipmentType.values()){
             if(t.getValue()==0) break;
             if(this.required[t.getValue()-1] <=0 ) continue;
+            if(t!=type){
+                System.out.println("Player '"+p.getUsername()+"' attempted to discard cargo that's not his most valuable!");
+                this.state.broadcastMessage(new ViewMessage("Player'"+p.getUsername()+"' attempted to discard cargo that's not his most valuable!"));
+                return;
+            }
             ContainsRemoveVisitor v = new ContainsRemoveVisitor(t);
             try {
-                p.getSpaceShip().getComponent(storage_coords).check(v);
+                p.getSpaceShip().getComponent(coords).check(v);
                 this.required[t.getValue()-1]--;
                 break;
             } catch (ContainerEmptyException e) {
-                p.getDescriptor().sendMessage(new ViewMessage("Give merch up in order of value!"));
+                System.out.println("Player '"+p.getUsername()+"' attempted to discard cargo from a storage that doesn't contain it!");
+                this.state.broadcastMessage(new ViewMessage("Player'"+p.getUsername()+"' attempted to discard cargo from a storage that doesn't contain it!"));
                 return;
             } catch (IllegalArgumentException e){
-                p.getDescriptor().sendMessage(new ViewMessage("Sent invalid coords!"));
+                System.out.println("Player '"+p.getUsername()+"' attempted to discard cargo from illegal coordinates!");
+                this.state.broadcastMessage(new ViewMessage("Player'"+p.getUsername()+"' attempted to discard cargo from illegal coordinates!"));
                 return;
             }
         }
-        if(this.required[4]>0){
+        if(this.required[4]>0 && p.getSpaceShip().getEnergyPower()>0){
             ContainsRemoveVisitor v = new ContainsRemoveVisitor();
             try{
-                p.getSpaceShip().getComponent(storage_coords).check(v);
+                p.getSpaceShip().getComponent(coords).check(v);
             } catch (ContainerEmptyException e){
-                p.getDescriptor().sendMessage(new ViewMessage("There are no batteries in the coords!"));
+                System.out.println("Player '"+p.getUsername()+"' attempted to discard batteries from a container that doesn't contain any!");
+                this.state.broadcastMessage(new ViewMessage("Player'"+p.getUsername()+"' attempted to discard batteries from a container that doesn't contain any!"));
                 return;
             } catch (IllegalArgumentException e){
-                p.getDescriptor().sendMessage(new ViewMessage("Sent invalid coords!"));
+                System.out.println("Player '"+p.getUsername()+"' attempted to discard batteries from illegal coordinates!");
+                this.state.broadcastMessage(new ViewMessage("Player'"+p.getUsername()+"' attempted to discard batteries from illegal coordinates!"));
                 return;
             }
         }
-        else{
-            this.responded = true;
-        }
-    }
+        else this.responded = true;
+    }   
 
     @Override
     public void disconnect(Player p) throws ForbiddenCallException {

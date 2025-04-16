@@ -77,16 +77,21 @@ class CombatZoneNewCabinState extends CardState {
     @Override
     public void setNewShipCenter(Player p, ShipCoords new_center){
         if(p!=this.target){
-            p.getDescriptor().sendMessage(new ViewMessage("It's not your turn!"));
+            System.out.println("Player '"+p.getUsername()+"' attempted to set a new center during another player's turn!");
+            this.state.broadcastMessage(new ViewMessage("Player'"+p.getUsername()+"' attempted to set a new center during another player's turn!"));
             return;
         }
         try{
             p.getSpaceShip().setCenter(new_center);
         } catch (IllegalTargetException e){
-            p.getDescriptor().sendMessage(new ViewMessage("Target is an empty space!"));
+            System.out.println("Player '"+p.getUsername()+"' attempted to set his new center on an empty space!");
+            this.state.broadcastMessage(new ViewMessage("Player'"+p.getUsername()+"' attempted to set his new center on an empty space!"));
+            return;
         } catch (ForbiddenCallException e){
-            //Should never get here.
-            p.getDescriptor().sendMessage(new ViewMessage("Cabin isn't broken!"));
+            //Should be unreachable.
+            System.out.println("Player '"+p.getUsername()+"' attempted to set his new center while having a unbroken ship!");
+            this.state.broadcastMessage(new ViewMessage("Player'"+p.getUsername()+"' attempted to set his new center while having a unbroken ship!"));
+            return;
         }
     }
 
@@ -96,7 +101,6 @@ class CombatZoneNewCabinState extends CardState {
             this.state.loseGame(p);
             this.transition();
         }
-        //XXX controllare se va bene.
     }
 
 }

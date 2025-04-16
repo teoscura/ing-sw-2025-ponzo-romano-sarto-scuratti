@@ -73,19 +73,20 @@ class SlaversLoseState extends CardState {
     @Override
     public void removeCrew(Player p, ShipCoords cabin_coords) throws ForbiddenCallException{
         if(p!=this.list.getFirst()){
-            p.getDescriptor().sendMessage(new ViewMessage("It's not your turn!"));
+            System.out.println("Player '"+p.getUsername()+"' attempted to remove a crew member during another player's turn!");
+            this.state.broadcastMessage(new ViewMessage("Player'"+p.getUsername()+"' attempted to remove a crew member during another player's turn!"));
             return;
         }
         CrewRemoveVisitor v = new CrewRemoveVisitor(p.getSpaceShip());
         try {
             p.getSpaceShip().getComponent(cabin_coords).check(v);
         } catch(IllegalTargetException e){
-            p.getDescriptor().sendMessage(new ViewMessage("Sent coords of an empty cabin or not a cabin"));
+            System.out.println("Player '"+p.getUsername()+"' attempted to remove a crew member from invalid coordinates!");
+            this.state.broadcastMessage(new ViewMessage("Player'"+p.getUsername()+"' attempted to remove a crew member from invalid coordinates!"));
             return;
         }
         if(p.getSpaceShip().getCrew()[0]==0){
             this.state.loseGame(p);
-            this.validate(new EmptyMessage(p.getDescriptor()));
             return;
         }
         this.coords.add(cabin_coords);

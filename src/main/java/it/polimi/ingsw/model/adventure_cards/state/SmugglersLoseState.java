@@ -87,24 +87,32 @@ class SmugglersLoseState extends CardState {
     }
 
     @Override
-    public void removeCargo(Player p, ShipmentType type, ShipCoords coords){
+    public void discardCargo(Player p, ShipmentType type, ShipCoords coords){
         if(p!=this.list.getFirst()){
-            p.getDescriptor().sendMessage(new ViewMessage("It's not your turn!"));
+            System.out.println("Player '"+p.getUsername()+"' attempted to discard cargo during another player's turn!");
+            this.state.broadcastMessage(new ViewMessage("Player'"+p.getUsername()+"' attempted to discard cargo during another player's turn!"));
             return;
         }
         for(ShipmentType t : ShipmentType.values()){
             if(t.getValue()==0) break;
             if(this.required[t.getValue()-1] <=0 ) continue;
+            if(t!=type){
+                System.out.println("Player '"+p.getUsername()+"' attempted to discard cargo that's not his most valuable!");
+                this.state.broadcastMessage(new ViewMessage("Player'"+p.getUsername()+"' attempted to discard cargo that's not his most valuable!"));
+                return;
+            }
             ContainsRemoveVisitor v = new ContainsRemoveVisitor(t);
             try {
                 p.getSpaceShip().getComponent(coords).check(v);
                 this.required[t.getValue()-1]--;
                 break;
             } catch (ContainerEmptyException e) {
-                p.getDescriptor().sendMessage(new ViewMessage("Give merch up in order of value!"));
+                System.out.println("Player '"+p.getUsername()+"' attempted to discard cargo from a storage that doesn't contain it!");
+                this.state.broadcastMessage(new ViewMessage("Player'"+p.getUsername()+"' attempted to discard cargo from a storage that doesn't contain it!"));
                 return;
             } catch (IllegalArgumentException e){
-                p.getDescriptor().sendMessage(new ViewMessage("Sent invalid coords!"));
+                System.out.println("Player '"+p.getUsername()+"' attempted to discard cargo from illegal coordinates!");
+                this.state.broadcastMessage(new ViewMessage("Player'"+p.getUsername()+"' attempted to discard cargo from illegal coordinates!"));
                 return;
             }
         }
@@ -113,10 +121,12 @@ class SmugglersLoseState extends CardState {
             try{
                 p.getSpaceShip().getComponent(coords).check(v);
             } catch (ContainerEmptyException e){
-                p.getDescriptor().sendMessage(new ViewMessage("There are no batteries in the coords!"));
+                System.out.println("Player '"+p.getUsername()+"' attempted to discard batteries from a container that doesn't contain any!");
+                this.state.broadcastMessage(new ViewMessage("Player'"+p.getUsername()+"' attempted to discard batteries from a container that doesn't contain any!"));
                 return;
             } catch (IllegalArgumentException e){
-                p.getDescriptor().sendMessage(new ViewMessage("Sent invalid coords!"));
+                System.out.println("Player '"+p.getUsername()+"' attempted to discard batteries from illegal coordinates!");
+                this.state.broadcastMessage(new ViewMessage("Player'"+p.getUsername()+"' attempted to discard batteries from illegal coordinates!"));
                 return;
             }
         }
