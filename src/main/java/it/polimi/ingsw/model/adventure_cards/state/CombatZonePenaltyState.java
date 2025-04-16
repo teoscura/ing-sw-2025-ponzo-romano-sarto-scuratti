@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.EmptyMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
@@ -20,6 +21,7 @@ import it.polimi.ingsw.model.client.card.ClientCargoPenaltyCardStateDecorator;
 import it.polimi.ingsw.model.client.card.ClientCombatZoneIndexCardStateDecorator;
 import it.polimi.ingsw.model.client.card.ClientCrewPenaltyCardStateDecorator;
 import it.polimi.ingsw.model.client.card.ClientProjectileCardStateDecorator;
+import it.polimi.ingsw.model.client.state.ClientModelState;
 import it.polimi.ingsw.model.components.enums.ShipmentType;
 import it.polimi.ingsw.model.components.exceptions.ContainerEmptyException;
 import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
@@ -72,8 +74,8 @@ class CombatZonePenaltyState extends CardState {
     }
 
     @Override
-    public void init() {
-        super.init();
+    public void init(ClientModelState new_state) {
+        super.init(new_state);
         if(sections.getFirst().getPenalty()!=CombatZonePenalty.DAYS) return;
         this.state.getPlanche().movePlayer(state, target, -sections.getFirst().getAmount());
         this.transition();
@@ -83,7 +85,7 @@ class CombatZonePenaltyState extends CardState {
     public void validate(ServerMessage message) throws ForbiddenCallException {
         message.receive(this);
         if(!responded&&!this.target.getRetired()){
-            this.sendNotify();
+            this.state.broadcastMessage(new NotifyStateUpdateMessage(this.state.getClientState()));
             return;
         }
         if(this.sections.getFirst().getPenalty()==CombatZonePenalty.SHOTS){

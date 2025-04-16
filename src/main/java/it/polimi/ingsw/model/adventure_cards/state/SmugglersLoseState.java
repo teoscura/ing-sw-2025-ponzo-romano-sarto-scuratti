@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.adventure_cards.state;
 
 import java.util.List;
 
+import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.adventure_cards.SmugglersCard;
@@ -9,6 +10,7 @@ import it.polimi.ingsw.model.adventure_cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.adventure_cards.visitors.ContainsRemoveVisitor;
 import it.polimi.ingsw.model.client.card.ClientCardState;
 import it.polimi.ingsw.model.client.card.ClientCargoPenaltyCardStateDecorator;
+import it.polimi.ingsw.model.client.state.ClientModelState;
 import it.polimi.ingsw.model.client.card.ClientBaseCardState;
 import it.polimi.ingsw.model.components.enums.ShipmentType;
 import it.polimi.ingsw.model.components.exceptions.ContainerEmptyException;
@@ -49,15 +51,15 @@ class SmugglersLoseState extends CardState {
     }
 
     @Override
-    public void init() {
-        super.init();
+    public void init(ClientModelState new_state) {
+        super.init(new_state);
     }
 
     @Override
     public void validate(ServerMessage message) throws ForbiddenCallException {
         message.receive(this);
         if(!responded){
-            this.sendNotify();
+            this.state.broadcastMessage(new NotifyStateUpdateMessage(this.state.getClientState()));
             return;
         }
         this.transition();

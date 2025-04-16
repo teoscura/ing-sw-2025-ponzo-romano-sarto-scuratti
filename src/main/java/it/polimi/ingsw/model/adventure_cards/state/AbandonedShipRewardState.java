@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.adventure_cards.state;
 
 import java.util.List;
 
+import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.EmptyMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
@@ -11,6 +12,7 @@ import it.polimi.ingsw.model.adventure_cards.visitors.CrewRemoveVisitor;
 import it.polimi.ingsw.model.client.card.ClientBaseCardState;
 import it.polimi.ingsw.model.client.card.ClientCardState;
 import it.polimi.ingsw.model.client.card.ClientCrewPenaltyCardStateDecorator;
+import it.polimi.ingsw.model.client.state.ClientModelState;
 import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.ShipCoords;
@@ -31,15 +33,15 @@ class AbandonedShipRewardState extends CardState {
     }
 
     @Override
-    public void init() {
-        super.init();
+    public void init(ClientModelState new_state) {
+        super.init(new_state);
     }
 
     @Override
     public void validate(ServerMessage message) throws ForbiddenCallException {
         message.receive(this);
         if(!responded&&!this.list.getFirst().getRetired()){
-            this.sendNotify();
+            this.state.broadcastMessage(new NotifyStateUpdateMessage(this.state.getClientState()));
             return;
         }
         this.list.getFirst().giveCredits(this.card.getCredits());

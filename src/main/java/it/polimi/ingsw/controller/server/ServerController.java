@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.concurrent.locks.Lock;
 
 import it.polimi.ingsw.controller.client.RMIServerStub;
+import it.polimi.ingsw.message.client.ClientMessage;
+import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
 import it.polimi.ingsw.message.client.PingMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.model.GameModeType;
@@ -98,10 +100,6 @@ public class ServerController implements RMIServerStub {
             client.sendMessage(new ViewMessage("Cannot connect twice from the same connection!"));
             throw new ForbiddenCallException();
         }
-        if(this.disconnected.containsKey(client)){
-            reconnected logic
-            return;
-        }
         this.model = /*Load from json with id provided, error if not avail.*/
         this.model.connect(client);
     };
@@ -119,6 +117,16 @@ public class ServerController implements RMIServerStub {
     public void kick(ClientDescriptor client) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'kick'");
+    }
+
+    public void endGame() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'endGame'");
+    }
+
+    public void broadcast(ClientMessage message) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'broadcast'");
     }
 
 }

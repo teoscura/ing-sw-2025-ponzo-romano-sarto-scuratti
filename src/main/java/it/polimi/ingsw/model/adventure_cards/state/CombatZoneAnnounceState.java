@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.adventure_cards.state;
 
 import java.util.List;
 
+import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.adventure_cards.exceptions.ForbiddenCallException;
@@ -12,6 +13,7 @@ import it.polimi.ingsw.model.client.card.ClientAwaitConfirmCardStateDecorator;
 import it.polimi.ingsw.model.client.card.ClientBaseCardState;
 import it.polimi.ingsw.model.client.card.ClientCardState;
 import it.polimi.ingsw.model.client.card.ClientCombatZoneIndexCardStateDecorator;
+import it.polimi.ingsw.model.client.state.ClientModelState;
 import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.ShipCoords;
@@ -36,8 +38,8 @@ public class CombatZoneAnnounceState extends CardState {
     }
 
     @Override
-    public void init() {
-        super.init();
+    public void init(ClientModelState new_state) {
+        super.init(new_state);
         if(this.state.getOrder(CardOrder.NORMAL).size()<=1) this.transition();
     }
 
@@ -45,7 +47,7 @@ public class CombatZoneAnnounceState extends CardState {
     public void validate(ServerMessage message) throws ForbiddenCallException {
         message.receive(this);
         if(!awaiting.isEmpty()){
-            this.sendNotify();
+            this.state.broadcastMessage(new NotifyStateUpdateMessage(this.state.getClientState()));
             return;
         }
         this.target = this.state.findCriteria(this.sections.getFirst().getCriteria());

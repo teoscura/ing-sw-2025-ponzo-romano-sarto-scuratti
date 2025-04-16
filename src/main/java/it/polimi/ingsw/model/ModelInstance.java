@@ -17,7 +17,6 @@ import it.polimi.ingsw.model.state.WaitingState;
 public class ModelInstance {
     
     private final ServerController controller;
-
     private GameState state;
     
     public ModelInstance(ServerController server, GameModeType type, PlayerCount count){
@@ -26,7 +25,7 @@ public class ModelInstance {
         this.state.init();
     }
 
-    public synchronized void validate(ServerMessage message){
+    public void validate(ServerMessage message){
         try {
             message.receive(this);
         } catch (ForbiddenCallException e) {
@@ -34,43 +33,75 @@ public class ModelInstance {
         }
     }
 
-    public synchronized void startGame(List<Player> players){
+    public void startGame(List<Player> players){
         this.controller.startGame(players);
     }
-    
-    // private synchronized Player getPlayer(PlayerColor c){
-    //     Player p = null;
-    //     try {
-    //         p = this.state.getPlayer(c);
-    //     } catch (PlayerNotFoundException e) {
-    //         System.out.println("Player with the color "+ c.toString() + " is not playing!");
-    //     }
-    //     return p;
-    // }
 
-    public synchronized GameState getState() {
+    public void endGame(){
+        this.controller.endGame();
+    }
+
+    public GameState getState() {
         return this.state;
     }
 
-    public synchronized void setState(GameState new_state){
-        xxx    
+    public void setState(GameState next){
+        if(next==null){
+            this.endGame();
+        }
+        this.state = next;
+        next.init();
     }
 
-    public synchronized void connect(ClientDescriptor client){
-        xxx
+    public void connect(ClientDescriptor client){
+        try{
+            this.state.connect(client);
+        }
+        catch (ForbiddenCallException e) { 
+            System.out.println("Client: '" + client.getUsername() + "' tried connecting when the current state doesn't support it anymore!");
+        }
     }
 
-    public synchronized void disconnect(ClientDescriptor client){
-        xxx
+    public void disconnect(ClientDescriptor client){
+        try{
+            this.state.disconnect(client);
+        }
+        catch (ForbiddenCallException e) { 
+            System.out.println("Client: '" + client.getUsername() + "' tried disconnecting when the current state doesn't support it anymore!");
+        }
     }
 
-    public synchronized void kick(ClientDescriptor client){
+    public void connect(Player p){
+        try{
+            this.state.disconnect(p);
+            System.out.println("Client: '" + p.getUsername() + "' reconnected to the game!");
+        }
+        catch (ForbiddenCallException e) { 
+            System.out.println("Client: '" + p.getUsername() + "' tried reconnecting when the current state doesn't support it anymore!");
+        }
+    }
+
+    public void disconnect(Player p){
+        try{
+            this.state.disconnect(p);
+            System.out.println("Client: '" + p.getUsername() + "' disconnected from the game!");
+        }
+        catch (ForbiddenCallException e) { 
+            System.out.println("Client: '" + p.getUsername() + "' tried disconnecting when the current state doesn't support it anymore!");
+        }
+    }
+
+    public void kick(ClientDescriptor client){
         try {
             this.state.disconnect(client);
         } catch (ForbiddenCallException e) {
             System.out.println("Player " + client.getUsername() + " is not connected, cannot kick!");
         }
         this.controller.kick(client);
+    }
+
+    public ServerController getController() {
+        return this.controller;
     }
     
 }

@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.adventure_cards.state;
 import java.util.List;
 
 import it.polimi.ingsw.exceptions.PlayerNotFoundException;
+import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.adventure_cards.EpidemicCard;
@@ -11,6 +12,7 @@ import it.polimi.ingsw.model.adventure_cards.utils.CardOrder;
 import it.polimi.ingsw.model.client.card.ClientAwaitConfirmCardStateDecorator;
 import it.polimi.ingsw.model.client.card.ClientBaseCardState;
 import it.polimi.ingsw.model.client.card.ClientCardState;
+import it.polimi.ingsw.model.client.state.ClientModelState;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.state.VoyageState;
@@ -27,8 +29,8 @@ public class EpidemicState extends CardState{
     }
 
     @Override
-    public void init() {
-        super.init();
+    public void init(ClientModelState new_state) {
+        super.init(new_state);
         for(Player p : this.state.getOrder(CardOrder.INVERSE)){
             try {
                 card.apply(this.state, p);
@@ -44,7 +46,7 @@ public class EpidemicState extends CardState{
     public void validate(ServerMessage message) throws ForbiddenCallException {
         message.receive(this);
         if(!awaiting.isEmpty()){
-            this.sendNotify();
+            this.state.broadcastMessage(new NotifyStateUpdateMessage(this.state.getClientState()));
             return;
         }
         this.transition();
