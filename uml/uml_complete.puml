@@ -1,4 +1,4 @@
-@startuml controller
+@startuml uml_complete
 hide circle
 skinparam classFontStyle bold
 skinparam groupInheritance 1
