@@ -9,6 +9,7 @@ import it.polimi.ingsw.controller.client.ClientController;
 import it.polimi.ingsw.message.client.ClientMessage;
 
 public class RMIClientStub implements Remote, Connection {
+    
     private final ClientController controller;
     private final String username;
 
