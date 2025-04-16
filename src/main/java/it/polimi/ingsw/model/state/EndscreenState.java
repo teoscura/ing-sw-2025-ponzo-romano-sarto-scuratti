@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import it.polimi.ingsw.message.client.DisconnectMessage;
+import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.ModelInstance;
@@ -46,7 +47,10 @@ public class EndscreenState extends GameState {
     @Override
     public void validate(ServerMessage message) throws ForbiddenCallException {
         message.receive(this);
-        if(!awaiting.isEmpty()) return;
+        if(!awaiting.isEmpty()){
+            this.broadcastMessage(new NotifyStateUpdateMessage(this.getClientState()));
+            return;
+        }
         this.transition();
     }
 
@@ -84,11 +88,9 @@ public class EndscreenState extends GameState {
     @Override
     public void disconnect(Player p){
         if(!this.awaiting.contains(p)){
-            p.getDescriptor().sendMessage(new DisconnectMessage());
             return;
         }
         this.awaiting.remove(p);
-        this.model.kick(p.getDescriptor());
         return;
     }
 

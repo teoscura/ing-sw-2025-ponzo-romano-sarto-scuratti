@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import it.polimi.ingsw.controller.server.ClientDescriptor;
+import it.polimi.ingsw.message.client.DisconnectMessage;
 import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
@@ -36,8 +37,10 @@ public class WaitingState extends GameState {
     @Override
     public void validate(ServerMessage message) throws ForbiddenCallException {
         message.receive(this);
-        if(this.connected.size()<count.getNumber()) return;
-
+        if(this.connected.size()<count.getNumber()){
+            this.broadcastMessage(new NotifyStateUpdateMessage(this.getClientState()));
+            return;
+        }
         this.transition();
     }
 
@@ -71,24 +74,20 @@ public class WaitingState extends GameState {
 
     public void connect(ClientDescriptor client) throws ForbiddenCallException {
         if(this.connected.contains(client)){
-            client.sendMessage(new ViewMessage("You cannot connect twice!"));
+            System.out.println("Client '"+client.getUsername()+"' attempted to connect from an already connected connection!");
+            this.broadcastMessage(new ViewMessage("Client '"+client.getUsername()+"' attempted to connect from an already connected connection!"));
             return;
         }
         this.connected.add(client);
-        for(ClientDescriptor broadcast : this.connected){
-            broadcast.sendMessage(new NotifyStateUpdateMessage());
-        }
     }
 
     public void disconnect(ClientDescriptor client) throws ForbiddenCallException {
         if(!this.connected.contains(client)){
-            client.sendMessage(new ViewMessage("You cannot disconnect twice!"));
+            System.out.println("Client '"+client.getUsername()+"' attempted to disconnect from a connection that isn't connected!");
+            this.broadcastMessage(new ViewMessage("Client '"+client.getUsername()+"' attempted to disconnect from a connection that isn't connected!"));
             return;
         }
         this.connected.remove(client);
-        for(ClientDescriptor broadcast : this.connected){
-            broadcast.sendMessage(new NotifyStateUpdateMessage());
-        }
     }
     
 

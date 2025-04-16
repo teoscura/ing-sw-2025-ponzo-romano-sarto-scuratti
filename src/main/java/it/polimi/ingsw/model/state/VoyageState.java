@@ -84,7 +84,6 @@ public class VoyageState extends GameState {
         if(p==null) throw new NullPointerException();
         if(!p.getDisconnected()) throw new ForbiddenCallException();
         p.reconnect();
-        p.getDescriptor().sendMessage(new NotifyStateUpdateMessage());
     }
 
     @Override
@@ -93,14 +92,14 @@ public class VoyageState extends GameState {
         if(p.getDisconnected()) throw new ForbiddenCallException();
         p.disconnect();
         this.state.disconnect(p);
-        p.getDescriptor().sendMessage(new DisconnectMessage()); 
     }
 
     @Override
     public void giveUp(Player p) throws ForbiddenCallException {
         if(p==null) return;
         if(p.getRetired()==true){
-            p.getDescriptor().sendMessage(new ViewMessage("You have already retired/lost!"));
+            System.out.println("Player '"+p.getUsername()+"' attempted to give up, but they already aren't playing!");
+            this.broadcastMessage(new ViewMessage("Player '"+p.getUsername()+"' attempted to give up, but they already aren't playing!"));
             return;
         }
         this.to_give_up.add(p);
@@ -178,15 +177,10 @@ public class VoyageState extends GameState {
             this.card = this.voyage_deck.pullCard();
             if(this.card==null) return;
             this.state = card.getState(this);
-            this.state.init();
-            for(Player p : this.getAllConnectedPlayers()){
-                p.getDescriptor().sendMessage(new NotifyStateUpdateMessage());
-            }
+            this.state.init(this.getClientState());
         }
         this.state = next;
-        next.init();
+        next.init(this.getClientState());
     }
-
-    
 
 }

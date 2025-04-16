@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.state;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 import it.polimi.ingsw.exceptions.OutOfBoundsException;
 import it.polimi.ingsw.message.client.DisconnectMessage;
@@ -64,7 +65,10 @@ public class ConstructionState extends GameState {
     @Override
     public void validate(ServerMessage message) throws ForbiddenCallException {
         message.receive(this);
-        if(this.finished.size()!=this.players.size()) return;
+        if(this.finished.size()!=this.players.size()){
+            this.broadcastMessage(new NotifyStateUpdateMessage(this.getClientState()));
+            return;
+        }
         this.transition();
     }
 
@@ -92,7 +96,8 @@ public class ConstructionState extends GameState {
     @Override
     public void sendContinue(Player p) throws ForbiddenCallException {
         if(!this.building.contains(p)){
-            p.getDescriptor().sendMessage(new ViewMessage("You already confirmed your actions, can't do anything else!"));
+            System.out.println("Player '"+p.getUsername()+"' attempted to confirm his ship again, but it's already confirmed!");
+            this.broadcastMessage(new ViewMessage("Player '"+p.getUsername()+"' attempted to confirm his ship again, but it's already confirmed!"));
             return;
         }
         this.building.remove(p);
@@ -111,28 +116,34 @@ public class ConstructionState extends GameState {
     @Override
     public void putComponent(Player p, ShipCoords coords) throws ForbiddenCallException {
         if(!this.building.contains(p)){
-            p.getDescriptor().sendMessage(new ViewMessage("You already confirmed your actions, can't do anything else!"));
+            System.out.println("Player '"+p.getUsername()+"' attempted to place a component, but their ship is already confirmed!");
+            this.broadcastMessage(new ViewMessage("Player '"+p.getUsername()+"' attempted to place a component, but their ship is already confirmed!"));
             return;
         }
         if(!this.hourglass.running()){
-            p.getDescriptor().sendMessage(new ViewMessage("Hourglass has run out!"));
+            System.out.println("Player '"+p.getUsername()+"' attempted to place a component, but the hourglass has run out!");
+            this.broadcastMessage(new ViewMessage("Player '"+p.getUsername()+"' attempted to place a component, but the hourglass has run out!"));
             return;
         }
         if(this.current_tile.get(p)==null){
-            p.getDescriptor().sendMessage(new ViewMessage("You need to pick up a component!"));
+            System.out.println("Player '"+p.getUsername()+"' attempted to place a component, but they dont have a current one!");
+            this.broadcastMessage(new ViewMessage("Player '"+p.getUsername()+"' attempted to place a component, but they dont have a current one!"));
             return;
         }
         try{
             p.getSpaceShip().addComponent(this.current_tile.get(p), coords);
             this.current_tile = null;
         } catch (OutOfBoundsException e) {
-            p.getDescriptor().sendMessage(new ViewMessage("Invalid placement coordinates!"));
+            System.out.println("Player '"+p.getUsername()+"' attempted to place a component, but the coordinates are illegal!");
+            this.broadcastMessage(new ViewMessage("Player '"+p.getUsername()+"' attempted to place a component, but the coordinates are illegal!"));
             return;
         } catch (IllegalComponentAdd e) {
-            p.getDescriptor().sendMessage(new ViewMessage("Space is already occupied by a component!"));
+            System.out.println("Player '"+p.getUsername()+"' attempted to place a component, but the coordinates are already occupied!");
+            this.broadcastMessage(new ViewMessage("Player '"+p.getUsername()+"' attempted to place a component, but the coordinates are already occupied!"));
             return;
         } catch (IllegalTargetException e) {
-            p.getDescriptor().sendMessage(new ViewMessage("Components need to be next to the rest of the ship!"));
+            System.out.println("Player '"+p.getUsername()+"' attempted to place a component, but the coordinates are not connected to the rest of the ship!");
+            this.broadcastMessage(new ViewMessage("Player '"+p.getUsername()+"' attempted to place a component, but the coordinates are not connected to the rest of the ship!"));
             return;
         }
     }
@@ -140,24 +151,23 @@ public class ConstructionState extends GameState {
     @Override
     public void takeComponent(Player p) throws ForbiddenCallException {
         if(!this.building.contains(p)){
-            p.getDescriptor().sendMessage(new ViewMessage("You already confirmed your actions, can't do anything else!"));
+            System.out.println("Player '"+p.getUsername()+"' attempted to take a component, but their ship is already confirmed!");
+            this.broadcastMessage(new ViewMessage("Player '"+p.getUsername()+"' attempted to take a component, but their ship is already confirmed!"));
             return;
         }
         if(!this.hourglass.running()){
-            p.getDescriptor().sendMessage(new ViewMessage("Hourglass has run out!"));
+            System.out.println("Player '"+p.getUsername()+"' attempted to take a component, but the hourglass has run out!");
+            this.broadcastMessage(new ViewMessage("Player '"+p.getUsername()+"' attempted to take a component, but the hourglass has run out!"));
             return;
         }
         iBaseComponent tmp = this.board.pullComponent();
         if(tmp==null){
-            p.getDescriptor().sendMessage(new ViewMessage("Board is now empty!"));
+            System.out.println("Player '"+p.getUsername()+"' attempted to take a component, but there are no more to take!");
+            this.broadcastMessage(new ViewMessage("Player '"+p.getUsername()+"' attempted to take a component, but there are no more to take!"));
             return;
-        }
-        for(Player broadcast : this.building){
-            broadcast.getDescriptor().sendMessage(new NotifyStateUpdateMessage());
         }
         if(this.current_tile.get(p)==null){
             this.current_tile.put(p,tmp);
-            p.getDescriptor().sendMessage(new NotifyStateUpdateMessage());
         }
         else {
             iBaseComponent old_current = this.current_tile.get(p);
@@ -166,93 +176,83 @@ public class ConstructionState extends GameState {
             while (this.hoarded_tile.get(p).size()>=3){
                 this.board.discardComponent(this.hoarded_tile.get(p).removeLast());
             }
-            for(Player broadcast : this.building){
-                broadcast.getDescriptor().sendMessage(new NotifyStateUpdateMessage());
-            }
         }
     }
 
     @Override
     public void takeDiscarded(Player p, int id) throws ForbiddenCallException {
         if(!this.building.contains(p)){
-            p.getDescriptor().sendMessage(new ViewMessage("You already confirmed your actions, can't do anything else!"));
+            System.out.println("Player '"+p.getUsername()+"' attempted to take a discarded component, but their ship is already confirmed!");
+            this.broadcastMessage(new ViewMessage("Player '"+p.getUsername()+"' attempted to take a discarded component, but their ship is already confirmed!"));
             return;
         }
         if(!this.hourglass.running()){
-            p.getDescriptor().sendMessage(new ViewMessage("Hourglass has run out!"));
+            System.out.println("Player '"+p.getUsername()+"' attempted to take a discarded component, but the hourglass has run out!");
+            this.broadcastMessage(new ViewMessage("Player '"+p.getUsername()+"' attempted to take a discarded component, but the hourglass has run out!"));
             return;
         }
         iBaseComponent tmp = null;
         try{
             tmp = this.board.pullDiscarded(id);
         } catch (ContainerEmptyException e){
-            p.getDescriptor().sendMessage(new ViewMessage("There is no tile with that id in the discarded ones!"));
+            System.out.println("Player '"+p.getUsername()+"' attempted to take a discarded component, but there aren't any with that ID!");
+            this.broadcastMessage(new ViewMessage("Player '"+p.getUsername()+"' attempted to take a discarded component, but there aren't any with that ID!"));
             return;
-        }
-        for(Player broadcast : this.building){
-            broadcast.getDescriptor().sendMessage(new NotifyStateUpdateMessage());
         }
         this.hoarded_tile.get(p).addFirst(tmp);
         while (this.hoarded_tile.get(p).size()>=3){
             this.board.discardComponent(this.hoarded_tile.get(p).removeLast());
-        }
-        for(Player broadcast : this.building){
-            broadcast.getDescriptor().sendMessage(new NotifyStateUpdateMessage());
         }
     }
 
     @Override
     public void discardComponent(Player p, int id) throws ForbiddenCallException {
         if(!this.building.contains(p)){
-            p.getDescriptor().sendMessage(new ViewMessage("You already confirmed your actions, can't do anything else!"));
+            System.out.println("Player '"+p.getUsername()+"' attempted to discard a component, but their ship is already confirmed!");
+            this.broadcastMessage(new ViewMessage("Player '"+p.getUsername()+"' attempted to discard a component, but their ship is already confirmed!"));
             return;
         }
         if(!this.hourglass.running()){
-            p.getDescriptor().sendMessage(new ViewMessage("Hourglass has run out!"));
+            System.out.println("Player '"+p.getUsername()+"' attempted to discard a component, but the hourglass has run out!");
+            this.broadcastMessage(new ViewMessage("Player '"+p.getUsername()+"' attempted to discard a component, but the hourglass has run out!"));
             return;
         }
         if(this.current_tile.get(p).getID()==id){
             iBaseComponent tmp = this.current_tile.get(p);
             this.current_tile.put(p, null);
             this.board.discardComponent(tmp);
-            for(Player broadcast : this.building){
-                broadcast.getDescriptor().sendMessage(new NotifyStateUpdateMessage());
-            }
             return;
         }
-        boolean found = false;
-        int index = -1;
-        int i = 0;
-        for(iBaseComponent c : this.hoarded_tile.get(p)){
-            if(c.getID()==id) {
-                found = true;
-                index = i;
-            }
-            i++;
-        }
-        if(found && index>=0 ){
-            this.board.discardComponent(this.hoarded_tile.get(p).remove(index));
-            for(Player broadcast : this.building){
-                broadcast.getDescriptor().sendMessage(new NotifyStateUpdateMessage());
-            }
+        Optional<iBaseComponent> c = this.hoarded_tile.get(p).stream().filter(a->a.getID()==id).findFirst();
+        if(c.isPresent()){
+            this.hoarded_tile.get(p).remove(c.get());
+            this.board.discardComponent(c.get());
             return;
         }
         else{
-            p.getDescriptor().sendMessage(new ViewMessage("Tried to discard a component that you dont own!"));
+            System.out.println("Player '"+p.getUsername()+"' attempted to discard a component, but they don't own the one with the id provided!");
+            this.broadcastMessage(new ViewMessage("Player '"+p.getUsername()+"' attempted to discard a component, but they don't own the one with the id provided!"));
             return;
         }
     }
 
     @Override
     public void toggleHourglass(Player p) throws ForbiddenCallException {
+        if(this.hourglass.running()){
+            System.out.println("Player '"+p.getUsername()+"' attempted to toggle the hourglass, but it's still running!");
+            this.broadcastMessage(new ViewMessage("Player '"+p.getUsername()+"' attempted to toggle the hourglass, but it's still running!"));
+            return;
+        }
         if(this.building.contains(p)){
-            p.getDescriptor().sendMessage(new ViewMessage("You haven't finished building your ship, you can't toggle the hourglass!"));
+            System.out.println("Player '"+p.getUsername()+"' attempted to toggle the hourglass, but they haven't finished building their ship!");
+            this.broadcastMessage(new ViewMessage("Player '"+p.getUsername()+"' attempted to toggle the hourglass, but they haven't finished building their ship!"));
             return;
         }
         try{
             this.hourglass.toggle();
         } catch (ForbiddenCallException e){
-            p.getDescriptor().sendMessage(new ViewMessage("Hourglass wasn't started, or has run out, can't toggle it!"));
+            System.out.println("Player '"+p.getUsername()+"' attempted to toggle the hourglass, but either nobody finished or it has run out!");
+            this.broadcastMessage(new ViewMessage("Player '"+p.getUsername()+"' attempted to toggle the hourglass, but either nobody finished or it has run out!"));
             return;
         }
     }
@@ -262,7 +262,6 @@ public class ConstructionState extends GameState {
         if(p==null) throw new NullPointerException();
         if(!p.getDisconnected()) throw new ForbiddenCallException();
         p.reconnect();
-        p.getDescriptor().sendMessage(new NotifyStateUpdateMessage());
     }
 
     @Override

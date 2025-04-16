@@ -35,7 +35,7 @@ public class ClientDescriptor {
     }
 
     public void ping(){
-        this.timer.ping();
+        this.timer.reset();
     }
 
 }

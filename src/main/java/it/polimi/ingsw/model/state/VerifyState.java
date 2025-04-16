@@ -48,12 +48,16 @@ public class VerifyState extends GameState {
             boolean tmp = p.getSpaceShip().verifyAndClean();
             if(tmp) finish_order.remove(p);
         }
+        this.broadcastMessage(new NotifyStateUpdateMessage(this.getClientState()));
     }
 
     @Override
     public void validate(ServerMessage message) throws ForbiddenCallException {
         message.receive(this);
-        if(!to_validate.isEmpty()) return;
+        if(!to_validate.isEmpty()){
+            this.broadcastMessage(new NotifyStateUpdateMessage(this.getClientState()));
+            return;
+        }
         this.transition();
     }
 
@@ -80,14 +84,16 @@ public class VerifyState extends GameState {
     @Override
     public void sendContinue(Player p) throws ForbiddenCallException {
         if(!this.to_validate.contains(p)){
-            p.getDescriptor().sendMessage(new ViewMessage("You already finished validating your ship!"));
+            System.out.println("Player '"+p.getUsername()+"' already finished validating!");
+            this.broadcastMessage(new ViewMessage("Player '"+p.getUsername()+"' already finished validating!"));
             return;
         }
         VerifyResult[][] tmp = p.getSpaceShip().verify();
         for(VerifyResult[] row : tmp){
             for(VerifyResult r : row){
                 if(r==VerifyResult.BROKEN){
-                    p.getDescriptor().sendMessage(new ViewMessage("You need to fix your ship!"));
+                    System.out.println("Player '"+p.getUsername()+"' attempted to continue when their ship is still broken!");
+                    this.broadcastMessage(new ViewMessage("Player '"+p.getUsername()+"' attempted to continue when their ship is still broken!"));
                     return;
                 }
             }
@@ -109,14 +115,16 @@ public class VerifyState extends GameState {
     @Override
     public void removeComponent(Player p, ShipCoords coords) throws ForbiddenCallException {
         if(!this.to_validate.contains(p)){
-            p.getDescriptor().sendMessage(new ViewMessage("You already finished validating your ship!"));
+            System.out.println("Player '"+p.getUsername()+"' attempted to act on the ship after validating!");
+            this.broadcastMessage(new ViewMessage("Player '"+p.getUsername()+"' attempted to act on the ship after validating!"));
             return;
         }
         try{
             p.getSpaceShip().removeComponent(coords);
             p.getSpaceShip().verifyAndClean();
         } catch (IllegalTargetException e){
-            p.getDescriptor().sendMessage(new ViewMessage("Coords correspond to a empty component!"));
+            System.out.println("Player '"+p.getUsername()+"' tried to remove an empty component!");
+            this.broadcastMessage(new ViewMessage("Player '"+p.getUsername()+"' tried to remove an empty component!"));
             return;
         }
     }
@@ -124,27 +132,29 @@ public class VerifyState extends GameState {
     @Override
     public void setCrewType(Player p, ShipCoords coords, AlienType type) throws ForbiddenCallException {
         if(!this.to_validate.contains(p)){
-            p.getDescriptor().sendMessage(new ViewMessage("You already finished validating your ship!"));
+            System.out.println("Player '"+p.getUsername()+"' tried to set crew type after finishing!");
+            this.broadcastMessage(new ViewMessage("Player '"+p.getUsername()+"' tried to set crew type after finishing!"));
             return;
         }
         try {
             CrewSetVisitor v = new CrewSetVisitor(p.getSpaceShip(), type);
             p.getSpaceShip().getComponent(coords).check(v);
         } catch (IllegalTargetException e){
-            p.getDescriptor().sendMessage(new ViewMessage("Coords aren't a cabin component!"));
+            System.out.println("Player '"+p.getUsername()+"' attempted to set crew on a invalid coordinate!");
+            this.broadcastMessage(new ViewMessage("Player '"+p.getUsername()+"' attempted to set crew on a invalid coordinate!"));
             return;
         } catch (IllegalArgumentException e){
-            p.getDescriptor().sendMessage(new ViewMessage("AlienType is not a valid type!"));
+            System.out.println("Player '"+p.getUsername()+"' attempted to set crew with an invalid alien type!");
+            this.broadcastMessage(new ViewMessage("Player '"+p.getUsername()+"' attempted to set crew with an invalid alien type!"));
             return;
         } catch (UnsupportedAlienCabinException e){
-            p.getDescriptor().sendMessage(new ViewMessage("Selected cabin doesn't support the intended alien type!"));
+            System.out.println("Player '"+p.getUsername()+"' attempted to set crew on a cabin that doesn't support the type: '"+type.toString()+"'!");
+            this.broadcastMessage(new ViewMessage("Player '"+p.getUsername()+"' attempted to set crew on a cabin that doesn't support the type: '"+type.toString()+"'!"));
             return;
         } catch (AlienTypeAlreadyPresentException e) {
-            p.getDescriptor().sendMessage(new ViewMessage("This ship already contains this alien type!"));
+            System.out.println("Player '"+p.getUsername()+"' attempted to set the type: '"+type.toString()+"' but it's already present, you can only have one!");
+            this.broadcastMessage(new ViewMessage("Player '"+p.getUsername()+"' attempted to set the type: '"+type.toString()+"' but it's already present, you can only have one!"));
             return;
-        }
-        for(Player tmp : this.players){
-            tmp.getDescriptor().sendMessage(new NotifyPlayerUpdateMessage(p.getColor()));
         }
     }
     
@@ -153,7 +163,6 @@ public class VerifyState extends GameState {
         if(p==null) throw new NullPointerException();
         if(!p.getDisconnected()) throw new ForbiddenCallException();
         p.reconnect();
-        p.getDescriptor().sendMessage(new NotifyStateUpdateMessage());
     }
 
     @Override
