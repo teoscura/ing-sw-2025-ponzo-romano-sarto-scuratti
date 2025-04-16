@@ -35,6 +35,8 @@ public abstract class CardState {
 
     protected abstract CardState getNext();
 
+    //TODO public abstract JsonCardState serialize();
+
     public void transition(){
         this.state.setCardState(this.getNext());
     }
