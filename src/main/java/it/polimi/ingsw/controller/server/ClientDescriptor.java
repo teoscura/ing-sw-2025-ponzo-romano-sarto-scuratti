@@ -21,8 +21,7 @@ public class ClientDescriptor {
         this.connection = connection;
     }
 
-    public void bindPlayer(Player p) throws Exception{
-        if(player!=null) throw new Exception("This descriptor already has a player");
+    public void bindPlayer(Player p){
         p.bindDescriptor(this);
         this.player = p;
     }

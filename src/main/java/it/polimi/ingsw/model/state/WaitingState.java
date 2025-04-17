@@ -31,7 +31,6 @@ public class WaitingState extends GameState {
 
     @Override
     public void init(){
-        super.init();
     }
 
     @Override

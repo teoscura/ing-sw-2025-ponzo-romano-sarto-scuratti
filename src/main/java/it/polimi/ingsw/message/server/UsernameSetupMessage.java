@@ -14,8 +14,7 @@ public class UsernameSetupMessage extends ServerMessage{
 
     @Override
     public void receive(ServerController server) throws ForbiddenCallException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'receive'");
+        x;
     }
     
 }

@@ -35,6 +35,10 @@ public class ModelInstance {
         this.started = true;
     }
 
+    public boolean getStarted(){
+        return this.started;
+    }
+
     public void endGame() {
         if(!this.started) throw new RuntimeException();
         this.controller.endGame();

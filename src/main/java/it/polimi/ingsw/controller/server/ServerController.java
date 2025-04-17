@@ -1,6 +1,7 @@
 package it.polimi.ingsw.controller.server;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Queue;
@@ -29,6 +30,7 @@ public class ServerController extends Thread implements RemoteServer {
     private final Server server;
     private final HashMap<String, ClientDescriptor> listeners;
     private final HashMap<String, Player> disconnected;
+    private final List<TCPDescriptor> to_setup_tcp;
     private final Queue<ServerMessage> queue;
 
     private ClientDescriptor setupper;
@@ -46,6 +48,7 @@ public class ServerController extends Thread implements RemoteServer {
         this.queue = new ArrayDeque<>();
         this.server.setDaemon(true);
         this.server.start();
+        this.to_setup_tcp = new ArrayList<>();
         /*Load all jsons in list that are valid.*/;
     }
 
@@ -74,7 +77,9 @@ public class ServerController extends Thread implements RemoteServer {
     }
 
     public void validate(ServerMessage message) throws ForbiddenCallException{
-        message.receive(this);
+        synchronized(queue_lock){
+            message.receive(this);
+        }
     }
 
     public ModelInstance getModel() throws ForbiddenCallException {
@@ -86,12 +91,39 @@ public class ServerController extends Thread implements RemoteServer {
     }
 
     public void connect(ClientDescriptor client) throws ForbiddenCallException {   
-        if(this.setupper!=null&&!this.setup_complete){
-            System.out.println("Client '"+client.getUsername()+"' attempted to connect while server is in setup mode!");
-            this.broadcast(new ViewMessage("Client '"+client.getUsername()+"' attempted to connect while server is in setup mode!"));
-            return;
+        synchronized(queue_lock){ 
+            if(this.setupper==null){
+                this.setupper = client;
+                this.listeners.put(client.getUsername(), client);
+                System.out.println("Client '"+client.getUsername()+"' is now setupping the server!");
+                this.broadcast(new ViewMessage("Client '"+client.getUsername()+"' is now setupping the server!"));
+                return;
+            }
+            if(this.setupper!=null&&!this.setup_complete){
+                System.out.println("Client '"+client.getUsername()+"' attempted to connect while server is in setup mode!");
+                this.broadcast(new ViewMessage("Client '"+client.getUsername()+"' attempted to connect while server is in setup mode!"));
+                return;
+            }
+            if(this.setup_complete&&!model.getStarted()){
+                System.out.println("Client '"+client.getUsername()+"' connected to waiting room!");
+                this.broadcast(new ViewMessage("Client '"+client.getUsername()+"' connected to waiting room!"));
+                this.model.connect(client);
+            }
+            if(this.setup_complete&&model.getStarted()){
+                if(this.listeners.containsKey(client.getUsername())){
+                    System.out.println("Client '"+client.getUsername()+"' attempted to connect twice!");
+                    this.broadcast(new ViewMessage("Client '"+client.getUsername()+"' attempted to connect twice!"));
+                    this.disconnect(client);
+                    return;
+                }
+                if(!this.disconnected.containsKey(client.getUsername())){
+                    this.listeners.put(client.getUsername(), client);
+                    client.bindPlayer(this.disconnected.get(client.getUsername()));
+                    this.model.connect(client.getPlayer());
+                    return;
+                }
+            }
         }
-        x;
     }
 
     public void disconnect(ClientDescriptor client) {
@@ -99,31 +131,37 @@ public class ServerController extends Thread implements RemoteServer {
             if(!listeners.containsValue(client)){
                 return;
             }
-            this.listeners.remove(client.getUsername());
-            if(client.getPlayer()!=null){
+            client.getConnection().close();
+            if(this.setupper==client&&!this.setup_complete){
+                this.setupper = null;
+            }
+            else if(client.getPlayer()!=null){
                 this.model.disconnect(client.getPlayer());
                 this.disconnected.put(client.getUsername(), client.getPlayer());
             }
-            client.getConnection().close();
+            this.listeners.remove(client.getUsername());
+            System.out.println("Client '"+client.getUsername()+"' disconnected.");
+            this.broadcast(new ViewMessage("Client '"+client.getUsername()+"' disconnected."));
         }
     }
 
     public void openRoom(ClientDescriptor client, GameModeType type, PlayerCount count) throws ForbiddenCallException {
-        if(this.setup_complete){
-            System.out.println("Client '"+client.getUsername()+"' attempted to open a room while game is already ongoing!");
-            this.broadcast(new ViewMessage("Client '"+client.getUsername()+"' attempted to open a room while game is already ongoing!"));
-            return;
+        synchronized(queue_lock){    
+            if(this.setup_complete){
+                System.out.println("Client '"+client.getUsername()+"' attempted to open a room while game is already ongoing!");
+                this.broadcast(new ViewMessage("Client '"+client.getUsername()+"' attempted to open a room while game is already ongoing!"));
+                return;
+            }
+            if(this.setupper!=null && client != this.setupper){
+                System.out.println("Client '"+client.getUsername()+"' attempted to open a room while server is in setup mode!");
+                this.broadcast(new ViewMessage("Client '"+client.getUsername()+"' attempted to open a room while server is in setup mode!"));
+                return;
+            }
+            this.setup_complete = true;
+            this.model = new ModelInstance(this, type, count);
+            this.model.connect(client);
+            this.broadcast(new NotifyStateUpdateMessage(this.model.getState().getClientState()));
         }
-        if(this.setupper!=null){
-            System.out.println("Client '"+client.getUsername()+"' attempted to open a room while server is in setup mode!");
-            this.broadcast(new ViewMessage("Client '"+client.getUsername()+"' attempted to open a room while server is in setup mode!"));
-            return;
-        }
-        this.setup_complete = true;
-        this.setupper = client;
-        this.model = new ModelInstance(this, type, count);
-        this.model.validate(new ServerConnectMessage(client));
-        this.broadcast(new NotifyStateUpdateMessage(this.model.getState().getClientState()));
     }
 
     // public void getUnfinishedList(ClientDescriptor client) throws ForbiddenCallException {
@@ -141,17 +179,23 @@ public class ServerController extends Thread implements RemoteServer {
     }
 
     public void endGame(){
-        if(ended) throw new RuntimeException();
-        this.ended = true;
+        synchronized(queue_lock){
+            if(ended) throw new RuntimeException();
+            this.ended = true;
+        }
     }
 
     public boolean getEnded(){
-        return this.ended;
+        synchronized(queue_lock){
+            return this.ended;
+        }
     }
 
     public void broadcast(ClientMessage message) {
-        for(ClientDescriptor listener : this.listeners.values()){
-            listener.sendMessage(message);
+        synchronized(listeners_lock){
+            for(ClientDescriptor listener : this.listeners.values()){
+                listener.sendMessage(message);
+            }
         }
     }
 
@@ -163,18 +207,26 @@ public class ServerController extends Thread implements RemoteServer {
     }
 
     public void connectListener(SocketClient client) throws ForbiddenCallException {
-        if(client.getUsername()==null) throw new ForbiddenCallException("Attempted to connect from address '"+client.getSocket().getInetAddress()+"' while not having finished correct TCP client setup!");
-        ClientDescriptor new_listener = new ClientDescriptor(client.getUsername(), client);
-        try {
-            this.connect(new_listener);
-        } catch (ForbiddenCallException e) {
-            System.out.println("Client '"+client.getUsername()+"' failed to connect properly!");
+        synchronized(listeners_lock){
+            TCPDescriptor new_tcp = new TCPDescriptor(client);
+            this.to_setup_tcp.add(new_tcp);
+        }
+    }
+
+    public void setupSocketListener(TCPDescriptor unfinished, String username){
+        if(!this.to_setup_tcp.contains(unfinished)){
+            System.out.println("A client attempted to change his username after connecting!");
+            this.broadcast(new ViewMessage("A client attempted to change his username after connecting!"));
             return;
         }
+        //XXX validate username with regex
+        this.to_setup_tcp.remove(unfinished);
+        this.connect(new ClientDescriptor(username, unfinished.getSocket()));
     }
 
     public ClientDescriptor connectListener(RMIClientStub client) {
         synchronized(listeners_lock){
+            //XXX validate username with regex
             ClientDescriptor new_listener = new ClientDescriptor(client.getUsername(), client);
             if(this.listeners.containsKey(client.getUsername())) return null;
             try {
@@ -188,7 +240,9 @@ public class ServerController extends Thread implements RemoteServer {
     }
 
     public void ping(ClientDescriptor client) {
-        client.setPingTimerTask(this.getTimeoutTask(this, client)); 
+        synchronized(queue_lock){
+            client.setPingTimerTask(this.getTimeoutTask(this, client)); 
+        }
     }
 
     protected TimerTask getTimeoutTask(ServerController controller, ClientDescriptor client){

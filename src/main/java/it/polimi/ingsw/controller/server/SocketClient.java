@@ -13,22 +13,13 @@ public class SocketClient implements Connection {
     private final Socket socket;
     private ObjectOutputStream out;
     private ObjectInputStream in;
-    private String username = null;
+    private boolean is_setup = false;
 
     public SocketClient(Socket socket) throws IOException{
         if(socket == null) throw new NullPointerException();
         this.socket = socket;
         this.out = new ObjectOutputStream(socket.getOutputStream());
         this.in = new ObjectInputStream(socket.getInputStream());
-    }
-
-    public void setUsername(String username){
-        if(username != null) throw new RuntimeException("Username was already set for this connection!");
-        this.username = username;
-    }
-
-    public String getUsername(){
-        return this.username;
     }
 
     public Socket getSocket(){
