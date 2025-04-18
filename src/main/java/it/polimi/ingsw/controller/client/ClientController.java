@@ -1,6 +1,9 @@
 package it.polimi.ingsw.controller.client;
 
+import java.io.IOException;
 import java.net.Socket;
+import java.net.UnknownHostException;
+import java.rmi.NotBoundException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.ArrayDeque;
@@ -23,7 +26,7 @@ public class ClientController {
 
     private final Object queue_lock;
 
-    public ClientController(ClientView view, ConnectionType ctype, String local_ip, String server_ip, String username){
+    public ClientController(ClientView view, ConnectionType ctype, String local_ip, String server_ip, String username) throws UnknownHostException, IOException, NotBoundException{
         if(view == null || username == null || local_ip == null || server_ip == null) throw new NullPointerException();
         this.view = view;
         this.username = username;

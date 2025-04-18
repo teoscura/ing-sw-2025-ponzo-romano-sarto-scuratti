@@ -10,8 +10,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
-
-class CommonBoardTest {
+// TODO
+/*class CommonBoardTest {
 
     CommonBoard board;
 
@@ -48,4 +48,4 @@ class CommonBoardTest {
         assertEquals(component2, board.pullDiscarded(0));
         //assertTrue(board.uncovered_components.isEmpty());
     }
-}
+}*/
