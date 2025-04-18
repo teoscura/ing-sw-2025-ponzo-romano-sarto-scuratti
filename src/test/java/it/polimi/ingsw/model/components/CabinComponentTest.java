@@ -7,6 +7,7 @@ import it.polimi.ingsw.model.components.enums.AlienType;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ConnectorType;
 import it.polimi.ingsw.model.components.exceptions.UnsupportedAlienCabinException;
+import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.player.SpaceShip;
@@ -37,7 +38,7 @@ class CabinComponentTest {
 		component_brown = new CabinComponent(1, connectors, ComponentRotation.U000,coords);
 		component_purple = new CabinComponent(1, connectors, ComponentRotation.U000, coords2);
 		component_human = new CabinComponent(1, connectors, ComponentRotation.U000, coords);
-		ship = new SpaceShip(GameModeType.LVL2, PlayerColor.RED);
+		ship = new SpaceShip(GameModeType.LVL2, new Player(GameModeType.LVL2, "tizio", PlayerColor.RED));
 	}
 
 	@Test

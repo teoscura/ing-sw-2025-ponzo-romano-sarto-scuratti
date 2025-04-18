@@ -13,7 +13,9 @@ import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import it.polimi.ingsw.controller.client.RMIServerSkeleton;
+import it.polimi.ingsw.controller.client.RMIClientStub;
+import it.polimi.ingsw.controller.server.rmi.RMIServerSkeleton;
+import it.polimi.ingsw.controller.server.rmi.RMISkeletonProvider;
 import it.polimi.ingsw.model.adventure_cards.exceptions.ForbiddenCallException;
 
 public class Server extends Thread implements RMISkeletonProvider {

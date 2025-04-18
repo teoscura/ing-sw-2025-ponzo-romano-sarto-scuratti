@@ -30,6 +30,10 @@ public class ModelInstance {
         message.receive(this);
     }
 
+    public void serialize(){
+        //XXX figure out how to give a pathname to it, write to that file using json.
+    }
+
     public void startGame(List<Player> players) throws ForbiddenCallException{
         if(this.started) throw new ForbiddenCallException();
         this.started = true;
@@ -53,6 +57,7 @@ public class ModelInstance {
             this.endGame();
         }
         this.state = next;
+        this.serialize();
         next.init();
     }
 

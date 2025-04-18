@@ -177,6 +177,7 @@ public class VoyageState extends GameState {
             this.card = this.voyage_deck.pullCard();
             if(this.card==null) return;
             this.state = card.getState(this);
+            this.model.serialize();
             this.state.init(this.getClientState());
         }
         this.state = next;

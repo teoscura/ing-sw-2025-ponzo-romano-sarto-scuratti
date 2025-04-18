@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.components;
 import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ConnectorType;
+import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.player.SpaceShip;
@@ -44,7 +45,7 @@ class BaseComponentTest {
 		BaseComponent verify_component_empty = new StructuralComponent(1, connectors, ComponentRotation.U000);
 		BaseComponent verify_test_component = new StructuralComponent(1, connectors, ComponentRotation.U000,coords);
 		BaseComponent verify_test_component2 = new StructuralComponent(1, connectors, ComponentRotation.U000, coords_up);
-		SpaceShip test_ship = new SpaceShip(GameModeType.LVL2, PlayerColor.RED);
+		SpaceShip test_ship = new SpaceShip(GameModeType.LVL2, new Player(GameModeType.LVL2, "tizio", PlayerColor.RED));
 		test_ship.addComponent(verify_test_component, coords);
 		test_ship.addComponent(verify_test_component2, coords_up);
 		NullPointerException e = assertThrows(NullPointerException.class, () -> {verify_component_empty.verify(test_ship);});
@@ -106,7 +107,7 @@ class BaseComponentTest {
 
 	@Test
 	void getConnectedComponents(){
-		SpaceShip ship = new SpaceShip(GameModeType.LVL2, PlayerColor.RED);
+		SpaceShip ship = new SpaceShip(GameModeType.LVL2, new Player(GameModeType.LVL2, "tizio", PlayerColor.RED));
 		ShipCoords coords = new ShipCoords(GameModeType.LVL2, 2, 1);
 		ShipCoords up_coords = new ShipCoords(GameModeType.LVL2, 2, 0);
 		ShipCoords right_coords = new ShipCoords(GameModeType.LVL2, 3, 1);

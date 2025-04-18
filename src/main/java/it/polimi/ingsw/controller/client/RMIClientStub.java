@@ -1,4 +1,4 @@
-package it.polimi.ingsw.controller.server;
+package it.polimi.ingsw.controller.client;
 
 import java.rmi.NotBoundException;
 import java.rmi.Remote;
@@ -7,7 +7,8 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
-import it.polimi.ingsw.controller.client.ClientController;
+import it.polimi.ingsw.controller.server.Connection;
+import it.polimi.ingsw.controller.server.rmi.RMISkeletonProvider;
 import it.polimi.ingsw.message.client.ClientMessage;
 
 public class RMIClientStub implements Remote, Connection {
@@ -19,14 +20,12 @@ public class RMIClientStub implements Remote, Connection {
         if(controller == null || username==null) throw new NullPointerException();
         this.controller = controller;
         this.username = username;
-        Registry registry = LocateRegistry.getRegistry("localhost", 9999);
         UnicastRemoteObject.exportObject(this, 9999);
-        controller.setServerConnection((((RMISkeletonProvider) registry.lookup("galaxy_truckers"))).accept(this));
     }
 
     @Override
     public void sendMessage(ClientMessage message){
-        controller.recieveMessage(message);
+        controller.receiveMessage(message);
     }
 
     public String getUsername() {

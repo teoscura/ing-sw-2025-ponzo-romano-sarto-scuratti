@@ -27,12 +27,12 @@ class SpaceShipTest {
 
     @BeforeEach
     void setUp() {
-        ship = new SpaceShip(GameModeType.LVL2, PlayerColor.RED);
+        ship = new SpaceShip(GameModeType.LVL2, new Player(GameModeType.LVL2, "tizio", PlayerColor.RED));
     }
 
     @Test
     void getType() {
-        SpaceShip ship_lv1 = new SpaceShip(GameModeType.TEST, PlayerColor.RED);
+        SpaceShip ship_lv1 = new SpaceShip(GameModeType.LVL2, new Player(GameModeType.LVL2, "tizio", PlayerColor.RED));
         assertEquals(GameModeType.TEST, ship_lv1.getType());
         assertEquals(GameModeType.LVL2, ship.getType());
     }
@@ -336,14 +336,14 @@ class SpaceShipTest {
     @Test
     void getHeight() {
         assertEquals(5, ship.getHeight());
-        SpaceShip test_ship = new SpaceShip(GameModeType.TEST, PlayerColor.RED);
+        SpaceShip test_ship = new SpaceShip(GameModeType.LVL2, new Player(GameModeType.LVL2, "tizio", PlayerColor.RED));
         assertEquals(5, test_ship.getHeight());
     }
 
     @Test
     void getWidth() {
         assertEquals(7, ship.getWidth());
-        SpaceShip test_ship = new SpaceShip(GameModeType.TEST, PlayerColor.RED);
+        SpaceShip test_ship = new SpaceShip(GameModeType.LVL2, new Player(GameModeType.LVL2, "tizio", PlayerColor.RED));
         assertEquals(7, test_ship.getWidth());
     }
 

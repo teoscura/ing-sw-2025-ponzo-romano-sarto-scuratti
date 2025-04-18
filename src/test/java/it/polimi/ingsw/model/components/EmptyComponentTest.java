@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.components;
 import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ConnectorType;
+import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.player.SpaceShip;
@@ -43,7 +44,7 @@ class EmptyComponentTest {
 
 	@Test
 	void OnCreation() {
-		iSpaceShip ship = new SpaceShip(GameModeType.LVL2, PlayerColor.RED);
+		iSpaceShip ship = new SpaceShip(GameModeType.LVL2, new Player(GameModeType.LVL2, "tizio", PlayerColor.RED));
 		ShipCoords coords = new ShipCoords(GameModeType.LVL2, 4, 4);
 		EmptyComponent emptyWithCoords = new EmptyComponent(coords);
 
@@ -53,7 +54,7 @@ class EmptyComponentTest {
 
 	@Test
 	void OnDelete() {
-		iSpaceShip ship = new SpaceShip(GameModeType.LVL2, PlayerColor.RED);
+		iSpaceShip ship = new SpaceShip(GameModeType.LVL2, new Player(GameModeType.LVL2, "tizio", PlayerColor.RED));
 		ShipCoords coords = new ShipCoords(GameModeType.LVL2, 4, 4);
 		EmptyComponent emptyWithCoords = new EmptyComponent(coords);
 

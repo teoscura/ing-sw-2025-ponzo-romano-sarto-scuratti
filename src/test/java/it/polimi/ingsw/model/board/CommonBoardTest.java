@@ -42,8 +42,8 @@ class CommonBoardTest {
         iBaseComponent component2 = new StructuralComponent(2, new ConnectorType[]{ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY}, ComponentRotation.U000);
         board.discardComponent(component1);
         board.discardComponent(component2);
-        OutOfBoundsException e1 = assertThrows(OutOfBoundsException.class, () -> board.pullDiscarded(-1));
-        OutOfBoundsException e2 = assertThrows(OutOfBoundsException.class, () -> board.pullDiscarded(2));
+        assertThrows(OutOfBoundsException.class, () -> board.pullDiscarded(-1));
+        assertThrows(OutOfBoundsException.class, () -> board.pullDiscarded(2));
         assertEquals(component1, board.pullDiscarded(0));
         assertEquals(component2, board.pullDiscarded(0));
         //assertTrue(board.uncovered_components.isEmpty());

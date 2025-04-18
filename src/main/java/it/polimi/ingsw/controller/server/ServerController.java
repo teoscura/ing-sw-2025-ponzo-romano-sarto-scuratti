@@ -6,11 +6,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Queue;
+import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.locks.Lock;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import it.polimi.ingsw.controller.client.RMIServerSkeleton;
-import it.polimi.ingsw.controller.client.RemoteServer;
+import it.polimi.ingsw.controller.client.RMIClientStub;
+import it.polimi.ingsw.controller.server.rmi.RMIServerSkeleton;
+import it.polimi.ingsw.controller.server.rmi.RemoteServer;
 import it.polimi.ingsw.message.client.ClientMessage;
 import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
@@ -41,6 +45,8 @@ public class ServerController extends Thread implements RemoteServer {
     private Object listeners_lock;
     private Object queue_lock;
 
+    private Timer dsctimer = null;
+
     public ServerController(){
         this.server = new Server(this);
         this.listeners = new HashMap<>();
@@ -48,6 +54,7 @@ public class ServerController extends Thread implements RemoteServer {
         this.queue = new ArrayDeque<>();
         this.server.setDaemon(true);
         this.to_setup_tcp = new ArrayList<>();
+        this.dsctimer = new Timer(true);
         /*Load all jsons in list that are valid.*/;
         this.server.start();
     }
@@ -103,7 +110,7 @@ public class ServerController extends Thread implements RemoteServer {
                 this.broadcast(new ViewMessage("Client '"+client.getUsername()+"' is now setupping the server!"));
                 return;
             }
-            if(this.setupper!=null&&!this.setup_complete){
+            else if(this.setupper!=null&&!this.setup_complete){
                 System.out.println("Client '"+client.getUsername()+"' attempted to connect while server is in setup mode!");
                 this.broadcast(new ViewMessage("Client '"+client.getUsername()+"' attempted to connect while server is in setup mode!"));
                 return;
@@ -113,18 +120,19 @@ public class ServerController extends Thread implements RemoteServer {
                 this.broadcast(new ViewMessage("Client '"+client.getUsername()+"' connected to waiting room!"));
                 this.model.connect(client);
             }
-            if(this.setup_complete&&model.getStarted()){
+            else if(this.setup_complete&&model.getStarted()){
                 if(this.listeners.containsKey(client.getUsername())){
                     System.out.println("Client '"+client.getUsername()+"' attempted to connect twice!");
                     this.broadcast(new ViewMessage("Client '"+client.getUsername()+"' attempted to connect twice!"));
                     this.disconnect(client);
-                    return;
                 }
-                if(!this.disconnected.containsKey(client.getUsername())){
+                else if(!this.disconnected.containsKey(client.getUsername())){
                     this.listeners.put(client.getUsername(), client);
+                    this.disconnected.remove(client.getUsername());
                     client.bindPlayer(this.disconnected.get(client.getUsername()));
                     this.model.connect(client.getPlayer());
-                    return;
+                    this.dsctimer.cancel(); 
+                    this.dsctimer = null;
                 }
             }
         }
@@ -146,6 +154,14 @@ public class ServerController extends Thread implements RemoteServer {
             this.listeners.remove(client.getUsername());
             System.out.println("Client '"+client.getUsername()+"' disconnected.");
             this.broadcast(new ViewMessage("Client '"+client.getUsername()+"' disconnected."));
+            if(this.disconnected.size()>=this.model.getState().getCount().getNumber()-1){
+                this.dsctimer = new Timer(true);
+                this.dsctimer.schedule(this.getEndMatchTask(this), 60000L);
+            }
+            else if(this.disconnected.size()==this.model.getState().getCount().getNumber()){
+                this.dsctimer.cancel();
+                this.endGame();
+            }
         }
     }
 
@@ -189,6 +205,7 @@ public class ServerController extends Thread implements RemoteServer {
     public void endGame(){
         synchronized(queue_lock){
             if(ended) throw new RuntimeException();
+            //XXX this.model.serialize();
             this.ended = true;
         }
     }
@@ -224,6 +241,26 @@ public class ServerController extends Thread implements RemoteServer {
         }
     }
 
+    public void setupSocketListener(SocketClient client, String username){
+        if(!this.to_setup_tcp.contains(client)){
+            System.out.println("A client attempted to change his username after connecting!");
+            this.broadcast(new ViewMessage("A client attempted to change his username after connecting!"));
+            return;
+        }
+        this.to_setup_tcp.remove(client);
+        if(!this.validateNewUsername(username)){
+            System.out.println("A client attempted to connect with an invalid name!");
+            return;
+        }
+        try {
+            this.connect(new ClientDescriptor(username, client));
+        } catch (ForbiddenCallException e) {
+            System.out.println("Client: '"+username+"' failed to connect!");
+            this.broadcast(new ViewMessage("Client: '"+username+"' failed to connect!"));
+            return;
+        }
+    }
+
     public void connectListener(SocketClient client){
         synchronized(listeners_lock){
             if(this.to_setup_tcp.contains(client)){
@@ -235,28 +272,10 @@ public class ServerController extends Thread implements RemoteServer {
         }
     }
 
-    public void setupSocketListener(SocketClient client, String username){
-        if(!this.to_setup_tcp.contains(client)){
-            System.out.println("A client attempted to change his username after connecting!");
-            this.broadcast(new ViewMessage("A client attempted to change his username after connecting!"));
-            return;
-        }
-        //XXX validate username with regex, kick if invalid.
-        this.to_setup_tcp.remove(client);
-        try {
-            this.connect(new ClientDescriptor(username, client));
-        } catch (ForbiddenCallException e) {
-            System.out.println("Client: '"+username+"' failed to connect!");
-            this.broadcast(new ViewMessage("Client: '"+username+"' failed to connect!"));
-            return;
-        }
-    }
-
     public ClientDescriptor connectListener(RMIClientStub client) {
         synchronized(listeners_lock){
-            //XXX validate username with regex
             ClientDescriptor new_listener = new ClientDescriptor(client.getUsername(), client);
-            if(this.listeners.containsKey(client.getUsername())) return null;
+            if(this.listeners.containsKey(client.getUsername()) || !validateNewUsername(client.getUsername())) return null;
             try {
                 this.connect(new_listener);
             } catch (ForbiddenCallException e) {
@@ -267,17 +286,34 @@ public class ServerController extends Thread implements RemoteServer {
         }
     }
 
+    private boolean validateNewUsername(String username){
+        Pattern allowed = Pattern.compile("^[a-zA-Z0-9_.-]*$");
+        Matcher matcher = allowed.matcher(username);
+        return matcher.find();
+    }
+
     public void ping(ClientDescriptor client) {
         synchronized(queue_lock){
             client.setPingTimerTask(this.getTimeoutTask(this, client)); 
         }
     }
 
-    protected TimerTask getTimeoutTask(ServerController controller, ClientDescriptor client){
+    private TimerTask getEndMatchTask(ServerController controller){
         return new TimerTask(){
             public void run(){
-                System.out.println("Client '"+client.getUsername()+"' failed to ping in between timeout!");
-                controller.disconnect(client);
+                System.out.println("Only one player was left for too long, closing the match!");
+                controller.endGame();
+            }
+        };
+    }
+
+    private TimerTask getTimeoutTask(ServerController controller, ClientDescriptor client){
+        return new TimerTask(){
+            public void run(){
+                synchronized(queue_lock){
+                    System.out.println("Client '"+client.getUsername()+"' failed to ping in between timeout!");
+                    controller.disconnect(client);
+                }
             }
         };
     }

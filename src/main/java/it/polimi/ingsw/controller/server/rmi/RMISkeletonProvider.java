@@ -1,9 +1,9 @@
-package it.polimi.ingsw.controller.server;
+package it.polimi.ingsw.controller.server.rmi;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
-import it.polimi.ingsw.controller.client.RMIServerSkeleton;
+import it.polimi.ingsw.controller.client.RMIClientStub;
 
 public interface RMISkeletonProvider extends Remote {
 

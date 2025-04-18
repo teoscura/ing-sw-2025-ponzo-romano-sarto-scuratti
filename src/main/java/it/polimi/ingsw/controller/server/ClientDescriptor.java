@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import it.polimi.ingsw.controller.client.RMIServerSkeleton;
 import it.polimi.ingsw.message.client.ClientMessage;
 import it.polimi.ingsw.model.player.Player;
 

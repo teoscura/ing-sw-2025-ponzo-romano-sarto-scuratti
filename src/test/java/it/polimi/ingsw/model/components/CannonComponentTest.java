@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.components;
 
 import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.components.enums.CannonType;
+import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.player.SpaceShip;
@@ -54,7 +55,7 @@ class CannonComponentTest {
 		ShipCoords coords2 = new ShipCoords(GameModeType.LVL2, 2, 4);
 		ShipCoords coords_up = new ShipCoords(GameModeType.LVL2, 2, 2);
 		StructuralComponent component = new StructuralComponent(1, connectors2, ComponentRotation.U000, coords_up);
-		SpaceShip ship = new SpaceShip(GameModeType.LVL2, PlayerColor.RED);
+		SpaceShip ship = new SpaceShip(GameModeType.LVL2, new Player(GameModeType.LVL2, "tizio", PlayerColor.RED));
 		ship.addComponent(cannon1, coords);
 		ship.addComponent(component, coords_up);
 		assertFalse(cannon1.verify(ship));
