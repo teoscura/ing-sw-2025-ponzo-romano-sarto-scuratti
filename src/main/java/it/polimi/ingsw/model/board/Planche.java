@@ -48,7 +48,7 @@ public class Planche implements iPlanche {
 		}
 		if(rel_change>0){
 			for(Player other : this.planche.keySet()){
-				if(p.equals(other)) continue;
+				if(p.equals(other)||p.getRetired()) continue;				
 				if(this.planche.get(p)-this.planche.get(other)>=this.length){
 					state.loseGame(other);
 				}
@@ -56,7 +56,7 @@ public class Planche implements iPlanche {
 		}
 		else{
 			for(Player other : this.planche.keySet()){
-				if(p.equals(other)) continue;
+				if(p.equals(other)||p.getRetired()) continue;
 				if(this.planche.get(other)-this.planche.get(p)>=this.length){
 					state.loseGame(p);
 					return;
