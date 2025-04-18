@@ -34,4 +34,9 @@ public class RMIServerSkeleton implements Remote, ServerConnection {
     @Override
     public void close() {}
 
+
+    //Needed to match interface, should never be called since RMI works in a different way.
+    @Override
+    public void read() {}
+
 }

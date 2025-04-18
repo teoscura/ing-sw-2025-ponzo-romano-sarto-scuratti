@@ -1,5 +1,6 @@
 package it.polimi.ingsw.controller.server;
 
+import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,7 +31,7 @@ public class ServerController extends Thread implements RemoteServer {
     private final Server server;
     private final HashMap<String, ClientDescriptor> listeners;
     private final HashMap<String, Player> disconnected;
-    private final List<TCPDescriptor> to_setup_tcp;
+    private final List<SocketClient> to_setup_tcp;
     private final Queue<ServerMessage> queue;
 
     private ClientDescriptor setupper;
@@ -41,20 +42,19 @@ public class ServerController extends Thread implements RemoteServer {
     private Object queue_lock;
 
     public ServerController(){
-        this.server = Server.getInstance();
-        this.server.setController(this);
+        this.server = new Server(this);
         this.listeners = new HashMap<>();
         this.disconnected = new HashMap<>();
         this.queue = new ArrayDeque<>();
         this.server.setDaemon(true);
-        this.server.start();
         this.to_setup_tcp = new ArrayList<>();
         /*Load all jsons in list that are valid.*/;
+        this.server.start();
     }
 
     @Override
     public void run(){
-        while(true){
+        while(!this.ended){
             synchronized(queue_lock){
                 if(this.queue.isEmpty())
                     try {
@@ -88,6 +88,10 @@ public class ServerController extends Thread implements RemoteServer {
 
     public RMIServerSkeleton getStub(ClientDescriptor new_client){
         return new RMIServerSkeleton(this, new_client);
+    }
+
+    public ClientDescriptor getDescriptor(String username) {
+        return this.listeners.get(username);
     }
 
     public void connect(ClientDescriptor client) throws ForbiddenCallException {   
@@ -173,9 +177,13 @@ public class ServerController extends Thread implements RemoteServer {
     // };
 
     public void kick(ClientDescriptor client) {
-        client.sendMessage(new ClientDisconnectMessage());
-        this.listeners.remove(client.getUsername());
-        client.getConnection().close();
+        try {
+            client.sendMessage(new ClientDisconnectMessage());
+        } catch (IOException e){
+            //None
+        } finally{
+            this.disconnect(client);
+        }
     }
 
     public void endGame(){
@@ -194,34 +202,54 @@ public class ServerController extends Thread implements RemoteServer {
     public void broadcast(ClientMessage message) {
         synchronized(listeners_lock){
             for(ClientDescriptor listener : this.listeners.values()){
-                listener.sendMessage(message);
+                try {
+                    listener.sendMessage(message);
+                }  catch (IOException e){
+                    listener.getConnection().close();
+                    this.disconnect(listener);
+                }
             }
         }
     }
 
     public void receiveMessage(ServerMessage message) {
+        if(message.getDescriptor()==null||this.listeners.containsKey(message.getDescriptor().getUsername())){
+            System.out.println("Recieved a message from a client not properly connected!");
+            this.broadcast(new ViewMessage("Recieved a message from a client not properly connected!"));
+            return;
+        }
         synchronized(queue_lock){
             this.queue.add(message);
             queue_lock.notifyAll();
         }
     }
 
-    public void connectListener(SocketClient client) throws ForbiddenCallException {
+    public void connectListener(SocketClient client){
         synchronized(listeners_lock){
-            TCPDescriptor new_tcp = new TCPDescriptor(client);
-            this.to_setup_tcp.add(new_tcp);
+            if(this.to_setup_tcp.contains(client)){
+                System.out.println("A client attempted to connect while already connecting!");
+                this.broadcast(new ViewMessage("A client attempted to connect while already connecting!"));
+                return;
+            }
+            this.to_setup_tcp.add(client);
         }
     }
 
-    public void setupSocketListener(TCPDescriptor unfinished, String username){
-        if(!this.to_setup_tcp.contains(unfinished)){
+    public void setupSocketListener(SocketClient client, String username){
+        if(!this.to_setup_tcp.contains(client)){
             System.out.println("A client attempted to change his username after connecting!");
             this.broadcast(new ViewMessage("A client attempted to change his username after connecting!"));
             return;
         }
-        //XXX validate username with regex
-        this.to_setup_tcp.remove(unfinished);
-        this.connect(new ClientDescriptor(username, unfinished.getSocket()));
+        //XXX validate username with regex, kick if invalid.
+        this.to_setup_tcp.remove(client);
+        try {
+            this.connect(new ClientDescriptor(username, client));
+        } catch (ForbiddenCallException e) {
+            System.out.println("Client: '"+username+"' failed to connect!");
+            this.broadcast(new ViewMessage("Client: '"+username+"' failed to connect!"));
+            return;
+        }
     }
 
     public ClientDescriptor connectListener(RMIClientStub client) {

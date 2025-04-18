@@ -75,12 +75,9 @@ public class EndscreenState extends GameState {
 
     @Override
     public void sendContinue(Player p) throws ForbiddenCallException {
-        if(!this.awaiting.contains(p)){
-            p.getDescriptor().sendMessage(new ClientDisconnectMessage());
-            return;
+        if(this.awaiting.contains(p)){
+            this.awaiting.remove(p);
         }
-        this.awaiting.remove(p);
-        p.getDescriptor().sendMessage(new ClientDisconnectMessage());
         this.model.kick(p.getDescriptor());
         return;
     }

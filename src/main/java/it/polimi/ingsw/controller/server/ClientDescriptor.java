@@ -1,5 +1,6 @@
 package it.polimi.ingsw.controller.server;
 
+import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -26,7 +27,7 @@ public class ClientDescriptor {
         this.player = p;
     }
 
-    public void sendMessage(ClientMessage m){
+    public void sendMessage(ClientMessage m) throws IOException {
         this.connection.sendMessage(m);
     }
 

@@ -12,9 +12,13 @@ public class UsernameSetupMessage extends ServerMessage{
         this.username = username;
     }
 
+    public String getUsername(){
+        return this.username;
+    }
+
     @Override
     public void receive(ServerController server) throws ForbiddenCallException {
-        x;
+        throw new ForbiddenCallException("Cannot setup username after finishing to connect!");
     }
     
 }

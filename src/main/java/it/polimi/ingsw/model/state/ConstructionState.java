@@ -269,7 +269,7 @@ public class ConstructionState extends GameState {
         if(p==null) throw new NullPointerException();
         if(p.getDisconnected()) throw new ForbiddenCallException();
         p.disconnect();
-        p.getDescriptor().sendMessage(new ClientDisconnectMessage()); 
+        this.model.kick(p.getDescriptor()); 
     }
 
 }
