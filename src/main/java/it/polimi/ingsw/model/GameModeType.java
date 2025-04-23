@@ -32,7 +32,7 @@ public enum GameModeType{
 		return this.level;
 	}
 
-  public boolean getLifeSupport(){
+    public boolean getLifeSupport(){
 		return this.lifesupports;
 	}
 

@@ -1,8 +1,10 @@
 package it.polimi.ingsw.model.client.player;
 
+import java.io.Serializable;
+
 import it.polimi.ingsw.model.player.PlayerColor;
 
-public class ClientEndgamePlayer {
+public class ClientEndgamePlayer implements Serializable {
     
     private final String username;
     private final PlayerColor color;

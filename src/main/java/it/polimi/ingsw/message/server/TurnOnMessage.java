@@ -14,15 +14,15 @@ public class TurnOnMessage extends ServerMessage {
     private final ShipCoords target;
     private final ShipCoords battery;
 
-    public TurnOnMessage(ClientDescriptor descriptor, ShipCoords target, ShipCoords battery){
-        if(descriptor.getPlayer()==null) throw new PlayerUnsetException("Descriptor associated to message isn't bound to player");
-        if(descriptor==null||target==null||battery==null) throw new NullPointerException();
+    public TurnOnMessage(ShipCoords target, ShipCoords battery){
+        if(target==null||battery==null) throw new NullPointerException();
         this.target = target;
         this.battery = battery;
     }
 
     @Override
     public void receive(ServerController server) throws ForbiddenCallException {
+        if(descriptor.getPlayer()==null) throw new ForbiddenCallException("Descriptor associated to message isn't bound to player");
         server.getModel().validate(this);
     }
 

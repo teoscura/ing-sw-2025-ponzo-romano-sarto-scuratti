@@ -1,12 +1,13 @@
 package it.polimi.ingsw.model.client.player;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import it.polimi.ingsw.model.client.components.ClientSpaceShip;
 import it.polimi.ingsw.model.player.PlayerColor;
 
-public class ClientConstructionPlayer {
+public class ClientConstructionPlayer implements Serializable {
     
     private final String username;
     private final PlayerColor color;
