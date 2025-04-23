@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.adventure_cards.state;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
@@ -52,7 +53,7 @@ public class PlanetAnnounceState extends CardState {
             this.list.getFirst().getColor(), 
             this.card.getDays(), 
             0,
-            this.card.getVisited());
+            new ArrayList<>(this.card.getVisited()));
     }
 
     @Override

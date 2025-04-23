@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.adventure_cards.state;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -58,7 +59,7 @@ class CombatZoneNewCabinState extends CardState {
         return new ClientNewCenterCardStateDecorator(
             new ClientCombatZoneIndexCardStateDecorator(
                 new ClientBaseCardState(this.card_id), 3 - this.sections.size()), 
-                awaiting);
+                new ArrayList<>(awaiting));
     }
 
     @Override

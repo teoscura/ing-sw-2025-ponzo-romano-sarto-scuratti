@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.adventure_cards.state;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
@@ -59,7 +60,7 @@ public class MeteorAnnounceState extends CardState {
         return new ClientMeteoriteCardStateDecorator(
             new ClientAwaitConfirmCardStateDecorator(
                 new ClientBaseCardState(this.card_id), 
-                tmp),
+                new ArrayList<>(tmp)),
             this.left.getProjectiles().getFirst());
     }
 

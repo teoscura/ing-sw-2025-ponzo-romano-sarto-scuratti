@@ -79,9 +79,11 @@ public class ConstructionState extends GameState {
 
     @Override
     public ClientModelState getClientState(){
-        List<ClientConstructionPlayer> tmp = new ArrayList<>();
+        ArrayList<ClientConstructionPlayer> tmp = new ArrayList<>();
+        ArrayList<Integer> construction_cards = new ArrayList<>(this.construction_cards);
+        ArrayList<Integer> discarded = new ArrayList<>(this.board.getDiscarded());
         for(Player p : this.players){
-            List<Integer> stash = new ArrayList<>();
+            ArrayList<Integer> stash = new ArrayList<>();
             if(this.current_tile.get(p)!=null) stash.add(this.current_tile.get(p).getID());
             stash.addAll(this.hoarded_tile.get(p).stream().filter(t->t!=null).map(t->t.getID()).toList());
             tmp.add(new ClientConstructionPlayer(p.getUsername(),
@@ -90,7 +92,7 @@ public class ConstructionState extends GameState {
                                                  stash,
                                                  this.finished.contains(p)));
         }
-        return new ClientConstructionState(this.type, tmp, this.construction_cards, this.board.getDiscarded(), this.board.getCoveredSize(), this.hourglass.getInstant());
+        return new ClientConstructionState(this.type, tmp, construction_cards, discarded, this.board.getCoveredSize(), this.hourglass.getInstant());
     }
 
     @Override

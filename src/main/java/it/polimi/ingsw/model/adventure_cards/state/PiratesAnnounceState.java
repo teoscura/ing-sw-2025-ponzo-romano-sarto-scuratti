@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.adventure_cards.state;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -52,7 +53,7 @@ public class PiratesAnnounceState extends CardState {
     @Override
     public ClientCardState getClientCardState(){
         List<PlayerColor> awaiting = Arrays.asList(new PlayerColor[]{this.list.getFirst().getColor()});
-        return new ClientAwaitConfirmCardStateDecorator(new ClientBaseCardState(this.card.getId()), awaiting);
+        return new ClientAwaitConfirmCardStateDecorator(new ClientBaseCardState(this.card.getId()), new ArrayList<>(awaiting));
     }
 
     @Override

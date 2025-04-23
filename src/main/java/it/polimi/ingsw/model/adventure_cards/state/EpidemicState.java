@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.adventure_cards.state;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import it.polimi.ingsw.exceptions.PlayerNotFoundException;
@@ -57,7 +58,7 @@ public class EpidemicState extends CardState{
         List<PlayerColor> tmp = this.awaiting.stream().map(p -> p.getColor()).toList();
         return new ClientAwaitConfirmCardStateDecorator(
             new ClientBaseCardState(card.getId()),
-            tmp);
+            new ArrayList<>(tmp));
     }
 
     @Override

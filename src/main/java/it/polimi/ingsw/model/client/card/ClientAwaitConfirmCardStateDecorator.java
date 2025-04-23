@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.client.card;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import it.polimi.ingsw.model.player.PlayerColor;
@@ -9,15 +10,15 @@ public class ClientAwaitConfirmCardStateDecorator implements ClientCardState {
     
     private final ClientCardState base;
     
-    private final List<PlayerColor> awaiting;
+    private final ArrayList<PlayerColor> awaiting;
 
-    public ClientAwaitConfirmCardStateDecorator(ClientCardState base, List<PlayerColor> awaiting){
+    public ClientAwaitConfirmCardStateDecorator(ClientCardState base, ArrayList<PlayerColor> awaiting){
         if (base == null || awaiting == null) throw new NullPointerException();
         this.base = base;
         this.awaiting = awaiting;
     }
     
-    public List<PlayerColor> getAwaiting(){
+    public ArrayList<PlayerColor> getAwaiting(){
         return this.awaiting;
     }
 

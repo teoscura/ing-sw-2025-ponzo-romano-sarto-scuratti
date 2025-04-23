@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.adventure_cards.state;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -58,7 +59,7 @@ public class PiratesPenaltyState extends CardState {
         return new ClientProjectileCardStateDecorator(
             new ClientAwaitConfirmCardStateDecorator(
                 new ClientBaseCardState(this.card.getId()), 
-                awaiting),
+                new ArrayList<>(awaiting)),
             this.shots.getProjectiles().getFirst());
     }
 

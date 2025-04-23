@@ -62,7 +62,7 @@ public class WaitingState extends GameState {
 
     @Override
     public ClientModelState getClientState(){
-        List<ClientWaitingPlayer> tmp = new ArrayList<>();
+        ArrayList<ClientWaitingPlayer> tmp = new ArrayList<>();
         for(PlayerColor c : PlayerColor.values()){
             if(c.getOrder() + 1 > this.count.getNumber()) break;
             if(c.getOrder()<0) continue;

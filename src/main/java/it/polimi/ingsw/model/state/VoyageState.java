@@ -66,7 +66,7 @@ public class VoyageState extends GameState {
 
     @Override
     public ClientModelState getClientState(){
-        List<ClientVoyagePlayer> tmp = new ArrayList<>();
+        ArrayList<ClientVoyagePlayer> tmp = new ArrayList<>();
         for(Player p : this.players){
             tmp.add(new ClientVoyagePlayer(p.getUsername(), 
                                            p.getColor(), 

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.adventure_cards.state;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
@@ -59,7 +60,7 @@ public class CombatZoneAnnounceState extends CardState {
         return new ClientCombatZoneIndexCardStateDecorator(
                     new ClientAwaitConfirmCardStateDecorator(
                         new ClientBaseCardState(card_id),
-                        this.awaiting.stream().map(p -> p.getColor()).toList()),
+                        new ArrayList<>(this.awaiting.stream().map(p -> p.getColor()).toList())),
                         3 - this.sections.size());
     }
 

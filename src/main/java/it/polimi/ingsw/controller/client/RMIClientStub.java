@@ -13,7 +13,7 @@ import it.polimi.ingsw.message.client.ClientMessage;
 
 public class RMIClientStub implements Remote, Connection {
     
-    private final ClientController controller;
+    private transient final ClientController controller;
     private final String username;
 
     public RMIClientStub(ClientController controller, String username) throws RemoteException, NotBoundException{

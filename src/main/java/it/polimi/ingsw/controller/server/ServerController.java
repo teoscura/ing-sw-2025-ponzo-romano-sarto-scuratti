@@ -1,6 +1,7 @@
 package it.polimi.ingsw.controller.server;
 
 import java.io.IOException;
+import java.rmi.RemoteException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,20 +9,14 @@ import java.util.List;
 import java.util.Queue;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.locks.Lock;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import it.polimi.ingsw.controller.client.RMIClientStub;
-import it.polimi.ingsw.controller.server.rmi.RMIServerSkeleton;
+import it.polimi.ingsw.controller.server.rmi.RMIServerStubImpl;
 import it.polimi.ingsw.controller.server.rmi.RemoteServer;
-import it.polimi.ingsw.message.client.ClientMessage;
-import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
-import it.polimi.ingsw.message.client.ViewMessage;
-import it.polimi.ingsw.message.client.ClientDisconnectMessage;
-import it.polimi.ingsw.message.server.ServerConnectMessage;
-import it.polimi.ingsw.message.server.ServerDisconnectMessage;
-import it.polimi.ingsw.message.server.ServerMessage;
+import it.polimi.ingsw.message.client.*;
+import it.polimi.ingsw.message.server.*;
 import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.ModelInstance;
 import it.polimi.ingsw.model.PlayerCount;
@@ -49,6 +44,7 @@ public class ServerController extends Thread implements RemoteServer {
 
     public ServerController(){
         this.server = new Server(this);
+        
         this.listeners = new HashMap<>();
         this.disconnected = new HashMap<>();
         this.queue = new ArrayDeque<>();
@@ -93,8 +89,9 @@ public class ServerController extends Thread implements RemoteServer {
         return this.model;
     }
 
-    public RMIServerSkeleton getStub(ClientDescriptor new_client){
-        return new RMIServerSkeleton(this, new_client);
+    public RemoteServer getStub(ClientDescriptor new_client) throws RemoteException{
+        return (RemoteServer) new RMIServerStubImpl(this, new_client);
+
     }
 
     public ClientDescriptor getDescriptor(String username) {

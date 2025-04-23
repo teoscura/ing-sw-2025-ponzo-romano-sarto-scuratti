@@ -61,7 +61,7 @@ public class EndscreenState extends GameState {
     
     @Override
     public ClientModelState getClientState(){
-        List<ClientEndgamePlayer> tmp = new ArrayList<>();
+        ArrayList<ClientEndgamePlayer> tmp = new ArrayList<>();
         for(Player p : this.players){
             tmp.add(new ClientEndgamePlayer(p.getUsername(), 
                                             p.getColor(), 

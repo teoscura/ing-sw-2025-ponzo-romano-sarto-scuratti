@@ -117,7 +117,7 @@ class CombatZonePenaltyState extends CardState {
                         new ClientCombatZoneIndexCardStateDecorator(
                             new ClientBaseCardState(card_id),
                             3 - this.sections.size()), 
-                            Arrays.asList(new PlayerColor[]{this.target.getColor()})), 
+                            new ArrayList<>(Arrays.asList(new PlayerColor[]{this.target.getColor()}))), 
                     this.shots.getProjectiles().getFirst());
             default:
                 throw new UnsupportedOperationException("Should be unreachable");

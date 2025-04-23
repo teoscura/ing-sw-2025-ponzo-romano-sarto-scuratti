@@ -1,9 +1,11 @@
 //Done.
 package it.polimi.ingsw.model.adventure_cards.utils;
 
+import java.io.Serializable;
+
 import it.polimi.ingsw.exceptions.OutOfBoundsException;
 
-public class Projectile {
+public class Projectile implements Serializable {
 
     private final ProjectileDirection direction;
     private final ProjectileDimension dimension;

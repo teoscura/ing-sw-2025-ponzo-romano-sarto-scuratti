@@ -11,22 +11,18 @@ import it.polimi.ingsw.controller.server.ClientDescriptor;
 import it.polimi.ingsw.controller.server.ServerController;
 import it.polimi.ingsw.message.server.ServerMessage;
 
-public class RMIServerSkeleton implements Remote {
+public class RMIServerStubImpl extends UnicastRemoteObject implements RemoteServer {
     
-    private final ServerController controller;
-    private final ClientDescriptor client;
+    private transient final ServerController controller;
+    private transient final ClientDescriptor client;
 
-    public RMIServerSkeleton(ServerController controller, ClientDescriptor client){
+    public RMIServerStubImpl(ServerController controller, ClientDescriptor client) throws RemoteException{
         this.controller = controller;
         this.client = client;
-        try{
-            UnicastRemoteObject.exportObject(this, 0);
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
-        }
+        UnicastRemoteObject.exportObject(this, 0);
     }
 
-    public void sendMessage(ServerMessage message){
+    public void receiveMessage(ServerMessage message) throws RemoteException {
         message.setDescriptor(this.client);
         this.controller.receiveMessage(message);
     }

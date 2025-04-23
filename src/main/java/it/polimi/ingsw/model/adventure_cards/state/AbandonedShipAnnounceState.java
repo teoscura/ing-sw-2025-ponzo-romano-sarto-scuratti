@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.adventure_cards.state;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -48,7 +49,7 @@ public class AbandonedShipAnnounceState extends CardState {
 
     @Override
     public ClientCardState getClientCardState(){
-        List<Boolean> tmp = Arrays.asList(new Boolean[]{true});
+        ArrayList<Boolean> tmp = new ArrayList<>(Arrays.asList(new Boolean[]{true}));
         return new ClientLandingCardStateDecorator(new ClientBaseCardState(this.card.getId()), 
                                                    this.list.getFirst().getColor(), 
                                                    this.card.getDays(), 

@@ -6,38 +6,28 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
-import it.polimi.ingsw.controller.server.rmi.RMIServerSkeleton;
 import it.polimi.ingsw.controller.server.rmi.RMISkeletonProvider;
+import it.polimi.ingsw.controller.server.rmi.RemoteServer;
+import it.polimi.ingsw.message.server.ServerDisconnectMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
 
 public class RMIConnection implements ServerConnection {
 
     private final RMIClientStub stub;
-    private RMIServerSkeleton skeleton = null;
+    private RemoteServer server = null;
 
     public RMIConnection(ClientController controller, String server_ip, String username) throws RemoteException, NotBoundException {
         this.stub = new RMIClientStub(controller, username);
-    }
-
-    @Override
-    public void connect(String server_ip) throws AccessException, RemoteException, NotBoundException {
         Registry registry = LocateRegistry.getRegistry("localhost", 9999);
-        this.skeleton =  ((RMISkeletonProvider)registry.lookup("galaxy_truckers")).accept(stub); 
-   
+        this.server =  ((RMISkeletonProvider)registry.lookup("galaxy_truckers")).accept(stub);
     }
 
     @Override
-    public void sendMessage(ServerMessage message) {
-        this.skeleton.sendMessage(message);
+    public void sendMessage(ServerMessage message) throws RemoteException {
+        this.server.receiveMessage(message);
     }
 
     @Override
-    public void read() {}
-
-    @Override
-    public void close() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'close'");
-    }
+    public void close() {}
     
 }

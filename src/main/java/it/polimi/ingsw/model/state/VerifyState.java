@@ -69,7 +69,7 @@ public class VerifyState extends GameState {
 
     @Override 
     public ClientModelState getClientState(){
-        List<ClientVerifyPlayer> tmp = new ArrayList<>();
+        ArrayList<ClientVerifyPlayer> tmp = new ArrayList<>();
         for(Player p : this.players){
             tmp.add(new ClientVerifyPlayer(p.getUsername(), 
                                            p.getColor(), 

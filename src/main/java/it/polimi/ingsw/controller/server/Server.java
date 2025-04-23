@@ -14,8 +14,8 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import it.polimi.ingsw.controller.client.RMIClientStub;
-import it.polimi.ingsw.controller.server.rmi.RMIServerSkeleton;
 import it.polimi.ingsw.controller.server.rmi.RMISkeletonProvider;
+import it.polimi.ingsw.controller.server.rmi.RemoteServer;
 import it.polimi.ingsw.model.adventure_cards.exceptions.ForbiddenCallException;
 
 public class Server extends Thread implements RMISkeletonProvider {
@@ -73,9 +73,14 @@ public class Server extends Thread implements RMISkeletonProvider {
         }
     }
 
-    public RMIServerSkeleton accept(RMIClientStub client){
+    public RemoteServer accept(RMIClientStub client) throws RemoteException{
         ClientDescriptor new_client = this.controller.connectListener(client);
-        return this.controller.getStub(new_client);
+        try {
+            return this.controller.getStub(new_client);
+        } catch (RemoteException e) {
+            this.controller.disconnect(new_client);
+            throw e;
+        }
     }
 
 }
