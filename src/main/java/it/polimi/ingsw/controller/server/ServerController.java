@@ -44,8 +44,8 @@ public class ServerController extends Thread implements RemoteServer {
 	private boolean setup_complete = false;
 	private boolean ended = false;
 
-	private Object listeners_lock;
-	private Object queue_lock;
+	private final Object listeners_lock;
+	private final Object queue_lock;
 
 	private Timer dsctimer = null;
 
@@ -60,6 +60,8 @@ public class ServerController extends Thread implements RemoteServer {
 		this.unfinished = new ArrayList<>();
 		Pattern saved_game_pattern = Pattern.compile("^gtunfinished-[0-9]+\\.gtuf$");
 		String current_filepath = Paths.get("").toAbsolutePath().toString();
+		listeners_lock = new Object();
+		queue_lock = new Object();
 		File current_directory = new File(current_filepath);
 		File[] files = current_directory.listFiles();
 		assert files != null;

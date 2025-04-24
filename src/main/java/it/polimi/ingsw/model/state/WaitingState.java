@@ -63,9 +63,11 @@ public class WaitingState extends GameState {
 	public ClientModelState getClientState() {
 		ArrayList<ClientWaitingPlayer> tmp = new ArrayList<>();
 		for (PlayerColor c : PlayerColor.values()) {
-			if (c.getOrder() + 1 > this.count.getNumber()) break;
-			if (c.getOrder() < 0) continue;
-			tmp.add(new ClientWaitingPlayer(this.connected.get(c.getOrder()).getUsername(), c));
+			if (c.getOrder() < tmp.size()) {
+				if (c.getOrder() + 1 > this.count.getNumber()) break;
+				if (c.getOrder() < 0) continue;
+				tmp.add(new ClientWaitingPlayer(this.connected.get(c.getOrder()).getUsername(), c));
+			}
 		}
 		return new ClientWaitingRoomState(type, tmp);
 	}
