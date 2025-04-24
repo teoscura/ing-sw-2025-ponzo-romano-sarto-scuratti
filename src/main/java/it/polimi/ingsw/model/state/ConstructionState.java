@@ -32,20 +32,20 @@ import it.polimi.ingsw.model.player.exceptions.IllegalComponentAdd;
 public class ConstructionState extends GameState {
 
     private final iCommonBoard board;
-    private final List<Integer> construction_cards;
+    private final ArrayList<Integer> construction_cards;
     private final iCards voyage_deck;
-    private final List<Player> building;
-    private final List<Player> finished;
+    private final ArrayList<Player> building;
+    private final ArrayList<Player> finished;
     private final ConstructionStateHourglass hourglass;
     private HashMap<Player, iBaseComponent> current_tile;
     private HashMap<Player, List<iBaseComponent>> hoarded_tile;
 
-    public ConstructionState(ModelInstance model, GameModeType type, PlayerCount count, List<Player> players) {
+    public ConstructionState(ModelInstance model, GameModeType type, PlayerCount count, ArrayList<Player> players) {
         super(model, type, count, players);
         this.board = new CommonBoard();
         this.voyage_deck = type.getLevel()==-1 ? new TestFlightCards() : new LevelTwoCards(); 
         this.hourglass = type.getLevel()==-1 ? new ConstructionStateHourglass(60, 0) : new ConstructionStateHourglass(60, 4);
-        this.construction_cards = this.voyage_deck.getConstructionCards();
+        this.construction_cards = new ArrayList<>(this.voyage_deck.getConstructionCards());
         this.finished = new ArrayList<>();
         this.building = new ArrayList<>();
         this.building.addAll(this.players);
@@ -93,6 +93,11 @@ public class ConstructionState extends GameState {
                                                  this.finished.contains(p)));
         }
         return new ClientConstructionState(this.type, tmp, construction_cards, discarded, this.board.getCoveredSize(), this.hourglass.getInstant());
+    }
+
+    @Override
+    public boolean toSerialize() {
+        return true;
     }
 
     @Override

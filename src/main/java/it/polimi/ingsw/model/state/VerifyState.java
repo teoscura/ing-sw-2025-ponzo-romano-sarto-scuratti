@@ -29,10 +29,10 @@ import it.polimi.ingsw.model.player.VerifyResult;
 public class VerifyState extends GameState {
 
     private final iCards voyage_deck;
-    private final List<Player> to_validate;
-    private final List<Player> finish_order;
+    private final ArrayList<Player> to_validate;
+    private final ArrayList<Player> finish_order;
 
-    public VerifyState(ModelInstance model, GameModeType type, PlayerCount count, List<Player> players, iCards voyage_deck, List<Player> finish_order) {
+    public VerifyState(ModelInstance model, GameModeType type, PlayerCount count, ArrayList<Player> players, iCards voyage_deck, ArrayList<Player> finish_order) {
         super(model, type, count, players);
         if(voyage_deck==null||finish_order==null||players==null) throw new NullPointerException();
         this.voyage_deck = voyage_deck;
@@ -79,6 +79,11 @@ public class VerifyState extends GameState {
                                            this.finish_order.indexOf(p)));
         }
         return new ClientVerifyState(tmp);
+    }
+
+    @Override
+    public boolean toSerialize() {
+        return true;
     }
 
     @Override

@@ -1,9 +1,11 @@
 package it.polimi.ingsw.model.board;
 
+import java.io.Serializable;
+
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.state.VoyageState;
 
-public interface iPlanche {
+public interface iPlanche extends Serializable {
 
 	public int getPlayerPosition(Player c);
 	public Player getPlayerAt(int Position);

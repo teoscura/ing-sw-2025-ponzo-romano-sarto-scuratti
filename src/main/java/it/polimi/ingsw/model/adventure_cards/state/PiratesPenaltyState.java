@@ -24,11 +24,11 @@ import it.polimi.ingsw.model.state.VoyageState;
 public class PiratesPenaltyState extends CardState {
 
     private final PiratesCard card;
-    private final List<Player> list;
+    private final ArrayList<Player> list;
     private final ProjectileArray shots;
     private boolean responded = false;
 
-    protected PiratesPenaltyState(VoyageState state, PiratesCard card, List<Player> list, ProjectileArray shots) {
+    protected PiratesPenaltyState(VoyageState state, PiratesCard card, ArrayList<Player> list, ProjectileArray shots) {
         super(state);
         if(list.size()>this.state.getCount().getNumber()||list.size()<1||list==null) throw new IllegalArgumentException("Constructed insatisfyable state");
         if(card==null||shots==null) throw new NullPointerException();

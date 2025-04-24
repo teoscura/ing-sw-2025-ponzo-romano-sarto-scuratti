@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.state;
 
-import java.util.List;
+import java.io.Serializable;
+import java.util.ArrayList;
 
 import it.polimi.ingsw.controller.server.ClientDescriptor;
 import it.polimi.ingsw.exceptions.PlayerNotFoundException;
@@ -19,14 +20,14 @@ import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.ShipCoords;
 
-public abstract class GameState {
+public abstract class GameState implements Serializable {
     
     protected final ModelInstance model;
     protected final GameModeType type;
     protected final PlayerCount count;
-    protected final List<Player> players;
+    protected final ArrayList<Player> players;
 
-    public GameState(ModelInstance model, GameModeType type, PlayerCount count, List<Player> players){
+    public GameState(ModelInstance model, GameModeType type, PlayerCount count, ArrayList<Player> players){
         if(model==null) throw new NullPointerException();
         if(players!=null&&players.size()!=count.getNumber()) throw new IllegalArgumentException("Illegal GameState created");
         this.model = model;
@@ -38,7 +39,7 @@ public abstract class GameState {
     public abstract void validate(ServerMessage message) throws ForbiddenCallException;
     public abstract GameState getNext();
     public abstract ClientModelState getClientState();
-    //TODO public abstract JsonState serialize();
+    public abstract boolean toSerialize();
 
     public void init(){
         return;

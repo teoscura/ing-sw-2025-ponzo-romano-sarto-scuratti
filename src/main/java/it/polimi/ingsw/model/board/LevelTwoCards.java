@@ -12,8 +12,8 @@ import it.polimi.ingsw.model.adventure_cards.iCard;
 
 public class LevelTwoCards implements iCards {
     
-    private final Queue<iCard> cards;
-    private final List<Integer> construction_cards;
+    private final ArrayDeque<iCard> cards;
+    private final ArrayList<Integer> construction_cards;
 
 	public LevelTwoCards(){
         LevelOneCardFactory l1 = new LevelOneCardFactory();
@@ -39,7 +39,7 @@ public class LevelTwoCards implements iCards {
             tmp.addLast(shuffled);
         }
 		this.cards = new ArrayDeque<iCard>(tmp);
-        this.construction_cards = tmp.stream().map((c)->c.getId()).toList();
+        this.construction_cards = new ArrayList<>(tmp.stream().map((c)->c.getId()).toList());
 	}
 
     @Override

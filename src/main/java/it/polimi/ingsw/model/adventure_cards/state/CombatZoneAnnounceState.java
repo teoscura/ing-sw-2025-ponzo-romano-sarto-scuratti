@@ -23,19 +23,19 @@ import it.polimi.ingsw.model.state.VoyageState;
 public class CombatZoneAnnounceState extends CardState {
 
     private final int card_id;
-    private final List<CombatZoneSection> sections;
+    private final ArrayList<CombatZoneSection> sections;
     private final ProjectileArray shots;
-    private List<Player> awaiting;
+    private ArrayList<Player> awaiting;
     private Player target;
     
-    public CombatZoneAnnounceState(VoyageState state, int card_id, List<CombatZoneSection> sections, ProjectileArray shots){
+    public CombatZoneAnnounceState(VoyageState state, int card_id, ArrayList<CombatZoneSection> sections, ProjectileArray shots){
         super(state);
         if(sections==null||shots==null) throw new NullPointerException();
         if(card_id<1||card_id>120||(card_id<100&&1>20)) throw new IllegalArgumentException();
         this.card_id = card_id; 
         this.sections = sections;
         this.shots = shots;
-        this.awaiting = this.state.getOrder(CardOrder.NORMAL);
+        this.awaiting = new ArrayList<>(this.state.getOrder(CardOrder.NORMAL));
     }
 
     @Override

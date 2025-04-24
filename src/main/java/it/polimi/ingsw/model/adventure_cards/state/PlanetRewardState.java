@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.adventure_cards.state;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
@@ -25,11 +26,12 @@ import it.polimi.ingsw.model.state.VoyageState;
 
 class PlanetRewardState extends CardState {
 
-    private final PlanetCard card; //Used for validation
-    private final List<Player> list;
+    private final PlanetCard card;
+    private final ArrayList<Player> list;
     private final int id;
     private boolean responded = false;
-    public PlanetRewardState(VoyageState state, PlanetCard card, int id, List<Player> clist) {
+    
+    public PlanetRewardState(VoyageState state, PlanetCard card, int id, ArrayList<Player> clist) {
         super(state);
         if(clist.size()>this.state.getCount().getNumber()||clist.size()<1||clist==null) throw new IllegalArgumentException("Constructed insatisfyable state");
         if(card==null) throw new NullPointerException();

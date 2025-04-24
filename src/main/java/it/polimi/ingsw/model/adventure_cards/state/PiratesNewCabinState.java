@@ -23,10 +23,10 @@ import it.polimi.ingsw.model.state.VoyageState;
 class PiratesNewCabinState extends CardState {
 
     private final PiratesCard card;
-    private final List<Player> list;
+    private final ArrayList<Player> list;
     private final ProjectileArray shots;
 
-    public PiratesNewCabinState(VoyageState state, PiratesCard card, List<Player> list, ProjectileArray shots) {
+    public PiratesNewCabinState(VoyageState state, PiratesCard card, ArrayList<Player> list, ProjectileArray shots) {
         super(state);
         if(card==null||list==null||shots==null) throw new NullPointerException();
         this.card = card;

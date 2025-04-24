@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.adventure_cards.state;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
@@ -26,7 +27,7 @@ import it.polimi.ingsw.model.state.VoyageState;
 class AbandonedStationRewardState extends CardState {
 
     private final AbandonedStationCard card;
-    private final List<Player> list;
+    private final ArrayList<Player> list;
     private boolean responded = false;
 
     public AbandonedStationRewardState(VoyageState state, AbandonedStationCard card, List<Player> list) {
@@ -34,7 +35,7 @@ class AbandonedStationRewardState extends CardState {
         if(list.size()>this.state.getCount().getNumber()||list.size()<1||list==null) throw new IllegalArgumentException("Constructed insatisfyable state");
         if(card==null) throw new NullPointerException();
         this.card = card;
-        this.list = list;
+        this.list = new ArrayList<>(list);
     }
 
     @Override

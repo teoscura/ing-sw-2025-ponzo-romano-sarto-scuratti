@@ -17,7 +17,7 @@ import it.polimi.ingsw.model.components.visitors.iVisitor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.player.iSpaceShip;
 
-public class AlienLifeSupportComponent extends BaseComponent{
+public class AlienLifeSupportComponent extends BaseComponent {
     
     private AlienType type = AlienType.BROWN;
 

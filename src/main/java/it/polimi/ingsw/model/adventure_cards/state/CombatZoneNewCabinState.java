@@ -24,11 +24,11 @@ import it.polimi.ingsw.model.state.VoyageState;
 class CombatZoneNewCabinState extends CardState {
     
     private final int card_id;
-    private final List<CombatZoneSection> sections;
+    private final ArrayList<CombatZoneSection> sections;
     private final ProjectileArray shots;
     private final Player target;
 
-    public CombatZoneNewCabinState(VoyageState state, int card_id, List<CombatZoneSection> sections, ProjectileArray shots, Player target){
+    public CombatZoneNewCabinState(VoyageState state, int card_id, ArrayList<CombatZoneSection> sections, ProjectileArray shots, Player target){
         super(state);
         if(sections==null||shots==null||target==null);
         if(card_id<1||card_id>120||(card_id<100&&1>20)) throw new IllegalArgumentException();

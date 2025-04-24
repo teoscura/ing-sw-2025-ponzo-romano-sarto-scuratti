@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.adventure_cards.state;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
@@ -21,11 +22,11 @@ import it.polimi.ingsw.model.state.VoyageState;
 class SmugglersLoseState extends CardState {
 
     private final SmugglersCard card;
-    private final List<Player> list;
+    private final ArrayList<Player> list;
     private final int[] required;
     private boolean responded = false;
 
-    public SmugglersLoseState(VoyageState state, SmugglersCard card, List<Player> list){
+    public SmugglersLoseState(VoyageState state, SmugglersCard card, ArrayList<Player> list){
         super(state);
         if(state==null||card==null||list==null||list.size()>this.state.getCount().getNumber()||list.size()<1) throw new IllegalArgumentException("Created unsatisfyable state");
         this.card = card;

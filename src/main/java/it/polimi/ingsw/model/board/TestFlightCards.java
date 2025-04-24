@@ -11,7 +11,7 @@ import it.polimi.ingsw.model.adventure_cards.iCard;
 
 public class TestFlightCards implements iCards {
     
-    private final Queue<iCard> cards;
+    private final ArrayDeque<iCard> cards;
 
     public TestFlightCards(){
         LevelOneCardFactory l1 = new LevelOneCardFactory();

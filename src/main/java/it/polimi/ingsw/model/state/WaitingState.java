@@ -20,7 +20,7 @@ import it.polimi.ingsw.model.player.PlayerColor;
 
 public class WaitingState extends GameState {
 
-    private final List<ClientDescriptor> connected;
+    private final ArrayList<ClientDescriptor> connected;
     private final PlayerCount count;
 
     public WaitingState(ModelInstance model, GameModeType type, PlayerCount count) {
@@ -45,7 +45,7 @@ public class WaitingState extends GameState {
 
     @Override
     public GameState getNext() {
-        List<Player> playerlist = new ArrayList<>();
+        ArrayList<Player> playerlist = new ArrayList<>();
         for(PlayerColor c : PlayerColor.values()){
             if(c.getOrder()<0) continue;
             String username = this.connected.get(c.getOrder()).getUsername();
@@ -71,6 +71,11 @@ public class WaitingState extends GameState {
         return new ClientWaitingRoomState(type, tmp);
     }
 
+    @Override
+    public boolean toSerialize() {
+        return false;
+    }
+
     public void connect(ClientDescriptor client) throws ForbiddenCallException {
         if(this.connected.contains(client)){
             System.out.println("Client '"+client.getUsername()+"' attempted to connect from an already connected connection!");
@@ -88,6 +93,5 @@ public class WaitingState extends GameState {
         }
         this.connected.remove(client);
     }
-    
 
 }

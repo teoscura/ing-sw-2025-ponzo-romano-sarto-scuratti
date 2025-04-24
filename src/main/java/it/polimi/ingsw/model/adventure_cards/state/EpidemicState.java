@@ -21,7 +21,7 @@ import it.polimi.ingsw.model.state.VoyageState;
 public class EpidemicState extends CardState{
     
     private final EpidemicCard card;
-    private List<Player> awaiting;
+    private ArrayList<Player> awaiting;
 
     public EpidemicState(VoyageState state, EpidemicCard card){
         super(state);
@@ -40,7 +40,7 @@ public class EpidemicState extends CardState{
                 e.printStackTrace();
             }
         }
-        this.awaiting = state.getOrder(CardOrder.NORMAL);
+        this.awaiting = new ArrayList<>(state.getOrder(CardOrder.NORMAL));
     }
 
     @Override

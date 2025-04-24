@@ -10,7 +10,7 @@ import it.polimi.ingsw.model.adventure_cards.utils.Planet;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.state.VoyageState;
 
-public class AbandonedStationCard extends Card{
+public class AbandonedStationCard extends Card {
     
     private Planet planet;
     private int crew;

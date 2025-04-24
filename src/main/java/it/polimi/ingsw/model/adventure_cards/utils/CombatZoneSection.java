@@ -1,6 +1,9 @@
 package it.polimi.ingsw.model.adventure_cards.utils;
 
-public class CombatZoneSection {
+import java.io.Serializable;
+
+public class CombatZoneSection implements Serializable {
+
     private final CombatZoneCriteria criteria;
     private final CombatZonePenalty penalty;
     private final int amount;

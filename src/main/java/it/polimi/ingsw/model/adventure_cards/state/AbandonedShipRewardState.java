@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.adventure_cards.state;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
@@ -21,14 +22,14 @@ import it.polimi.ingsw.model.state.VoyageState;
 class AbandonedShipRewardState extends CardState {
     
     private final AbandonedShipCard card;
-    private final List<Player> list;
-    private List<ShipCoords> coords;
+    private final ArrayList<Player> list;
+    private int done = 0;
     private boolean responded;
 
     public AbandonedShipRewardState(VoyageState state, AbandonedShipCard card, List<Player> list) {
         super(state);
         if(state==null||list==null||card==null) throw new IllegalArgumentException("Constructed insatisfyable state");
-        this.list = list;
+        this.list = new ArrayList<>(list);
         this.card = card;
     }
 
@@ -53,7 +54,7 @@ class AbandonedShipRewardState extends CardState {
     public ClientCardState getClientCardState(){
         return new ClientCrewPenaltyCardStateDecorator(new ClientBaseCardState(this.card.getId()), 
                                                        this.list.getFirst().getColor(), 
-                                                       this.card.getCrewLost() - this.coords.size());
+                                                       this.card.getCrewLost() - this.done);
     }
 
     @Override
@@ -80,8 +81,8 @@ class AbandonedShipRewardState extends CardState {
             this.state.loseGame(p);
             return;
         }
-        this.coords.add(cabin_coords);
-        if(coords.size()==this.card.getCrewLost()){
+        this.done++;
+        if(this.done>=this.card.getCrewLost()){
             this.responded = true;
         }
     }

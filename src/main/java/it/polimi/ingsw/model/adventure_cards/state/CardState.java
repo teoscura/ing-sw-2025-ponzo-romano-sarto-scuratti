@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model.adventure_cards.state;
 
+import java.io.Serializable;
+
 import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
@@ -12,7 +14,7 @@ import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.VoyageState;
 
-public abstract class CardState {
+public abstract class CardState implements Serializable {
 
     protected final VoyageState state;
 

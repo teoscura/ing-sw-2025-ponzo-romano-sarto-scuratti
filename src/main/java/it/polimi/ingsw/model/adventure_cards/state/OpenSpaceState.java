@@ -22,13 +22,13 @@ import it.polimi.ingsw.model.state.VoyageState;
 public class OpenSpaceState extends CardState {
 
     private final OpenSpaceCard card;
-    private final List<Player> awaiting;
+    private final ArrayList<Player> awaiting;
 
     public OpenSpaceState(VoyageState state, OpenSpaceCard card){
         super(state);
         if(card==null) throw new NullPointerException();
         this.card = card;
-        this.awaiting = this.state.getOrder(CardOrder.NORMAL);
+        this.awaiting = new ArrayList<>(this.state.getOrder(CardOrder.NORMAL));
     }
 
     @Override

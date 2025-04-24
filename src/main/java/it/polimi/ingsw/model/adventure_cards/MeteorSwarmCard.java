@@ -9,7 +9,7 @@ import it.polimi.ingsw.model.adventure_cards.utils.ProjectileArray;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.state.VoyageState;
 
-public class MeteorSwarmCard extends Card{
+public class MeteorSwarmCard extends Card {
 
     private final ProjectileArray meteorites;
 

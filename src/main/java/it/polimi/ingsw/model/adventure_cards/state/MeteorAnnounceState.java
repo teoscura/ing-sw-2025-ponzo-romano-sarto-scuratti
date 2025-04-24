@@ -24,7 +24,7 @@ public class MeteorAnnounceState extends CardState {
 
     private final int card_id;
     private final ProjectileArray left;
-    private final List<Player> awaiting;
+    private final ArrayList<Player> awaiting;
     private boolean broke_cabin;
 
     public MeteorAnnounceState(VoyageState state, int card_id, ProjectileArray array){
@@ -33,7 +33,7 @@ public class MeteorAnnounceState extends CardState {
         if(card_id<1||card_id>120||(card_id<100&&1>20)) throw new IllegalArgumentException();
         this.card_id = card_id; 
         this.left = array;
-        this.awaiting = this.state.getOrder(CardOrder.NORMAL);
+        this.awaiting = new ArrayList<>(this.state.getOrder(CardOrder.NORMAL));
     }
 
     @Override

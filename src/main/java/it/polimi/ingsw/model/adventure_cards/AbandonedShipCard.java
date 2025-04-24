@@ -7,7 +7,7 @@ import it.polimi.ingsw.model.adventure_cards.utils.CardOrder;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.state.VoyageState;
     
-public class AbandonedShipCard extends Card{
+public class AbandonedShipCard extends Card {
 
     private int credits_gained;
     private int crew_lost;

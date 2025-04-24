@@ -15,8 +15,8 @@ import it.polimi.ingsw.model.player.iSpaceShip;
 
 public class BatteryComponent extends BaseComponent{
     
-    private int contains = 0;
-    private int max = 2;
+    private final int max;
+    private int contains;
 
     public BatteryComponent(int id, 
                             ConnectorType[] connectors, 

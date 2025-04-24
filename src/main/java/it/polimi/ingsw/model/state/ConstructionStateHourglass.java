@@ -1,11 +1,12 @@
 package it.polimi.ingsw.model.state;
 
+import java.io.Serializable;
 import java.time.Duration;
 import java.time.Instant;
 
 import it.polimi.ingsw.model.adventure_cards.exceptions.ForbiddenCallException;
 
-public class ConstructionStateHourglass {
+public class ConstructionStateHourglass implements Serializable {
     
     private final Duration period;
     private Instant toggled = null;

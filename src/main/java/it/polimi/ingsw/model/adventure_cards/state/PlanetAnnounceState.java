@@ -18,11 +18,11 @@ import it.polimi.ingsw.model.state.VoyageState;
 public class PlanetAnnounceState extends CardState {
 
     private final PlanetCard card;
-    private final List<Player> list;
+    private final ArrayList<Player> list;
     private boolean responded = false;
     private int id = -1;
 
-    public PlanetAnnounceState(VoyageState state, PlanetCard card, List<Player> list){
+    public PlanetAnnounceState(VoyageState state, PlanetCard card, ArrayList<Player> list){
         super(state);
         if(state==null||card==null||list==null) throw new NullPointerException();
         if(list.size()>state.getCount().getNumber()||list.size()<1) throw new IllegalArgumentException("Created unsatisfyable state");

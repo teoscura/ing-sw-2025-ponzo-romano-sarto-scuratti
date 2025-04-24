@@ -14,7 +14,7 @@ import it.polimi.ingsw.model.components.visitors.iVisitor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.player.iSpaceShip;
 
-public class CannonComponent extends BaseComponent{
+public class CannonComponent extends BaseComponent {
     
     private int max_power;
     private boolean powered = false;

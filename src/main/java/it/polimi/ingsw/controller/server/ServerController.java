@@ -199,6 +199,10 @@ public class ServerController extends Thread implements RemoteServer {
         }
     }
 
+    public void serializeCurrentGame(){
+        //XXX figure out path, create a fileobjectwriter, an output stream, and write to it.
+    }
+
     public void endGame(){
         synchronized(queue_lock){
             if(ended) throw new RuntimeException();

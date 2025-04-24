@@ -22,11 +22,11 @@ import it.polimi.ingsw.model.state.VoyageState;
 public class SlaversAnnounceState extends CardState {
 
     private final SlaversCard card;
-    private final List<Player> list;
+    private final ArrayList<Player> list;
     private boolean responded = false;
     private boolean result = false;
 
-    public SlaversAnnounceState(VoyageState state, SlaversCard card, List<Player> list){
+    public SlaversAnnounceState(VoyageState state, SlaversCard card, ArrayList<Player> list){
         super(state);
         if(list.size()>this.state.getCount().getNumber()||list.size()<1||list==null) throw new IllegalArgumentException("Constructed insatisfyable state");
         if(card==null) throw new NullPointerException();

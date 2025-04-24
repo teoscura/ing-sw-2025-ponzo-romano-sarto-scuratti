@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.player;
 
 public enum VerifyResult {
+	
 	GOOD (1),
 	UNCHECKED (false),
 	NOT_LINKED (-1),

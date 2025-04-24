@@ -1,10 +1,12 @@
 //Done.
 package it.polimi.ingsw.model.adventure_cards.utils;
 
+import java.io.Serializable;
+
 import it.polimi.ingsw.exceptions.NegativeArgumentException;
 import it.polimi.ingsw.model.adventure_cards.exceptions.AlreadyVisitedException;
 
-public class Planet {
+public class Planet implements Serializable {
     
     private int[] contains;
     private boolean visited = false;

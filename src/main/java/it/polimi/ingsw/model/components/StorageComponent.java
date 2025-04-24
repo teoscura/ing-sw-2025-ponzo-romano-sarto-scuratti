@@ -17,9 +17,9 @@ import it.polimi.ingsw.model.components.visitors.iVisitor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.player.iSpaceShip;
 
-public class StorageComponent extends BaseComponent{
+public class StorageComponent extends BaseComponent {
 
-    private final int [] shipments;
+    private final int[] shipments;
     private final StorageType type;
     private int currently_full = 0;
 

@@ -14,10 +14,10 @@ import it.polimi.ingsw.model.components.visitors.iVisitor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.player.iSpaceShip;
 
-public class EngineComponent extends BaseComponent{
+public class EngineComponent extends BaseComponent {
     
-    private int max_power;
-    private boolean powerable;
+    private final int max_power;
+    private final boolean powerable;
     private boolean powered = false;
 
     public EngineComponent(int id, 

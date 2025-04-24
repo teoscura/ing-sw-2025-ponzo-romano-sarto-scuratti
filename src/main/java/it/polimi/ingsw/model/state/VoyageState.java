@@ -28,11 +28,11 @@ public class VoyageState extends GameState {
     
     private final iPlanche planche;
     private final iCards voyage_deck;
-    private final List<Player> to_give_up;
+    private final ArrayList<Player> to_give_up;
     private iCard card;
     private CardState state;
 
-    public VoyageState(ModelInstance model, GameModeType type, PlayerCount count, List<Player> players, iCards deck, iPlanche planche){
+    public VoyageState(ModelInstance model, GameModeType type, PlayerCount count, ArrayList<Player> players, iCards deck, iPlanche planche){
         super(model, type, count, players);
         if(deck==null||planche==null) throw new NullPointerException();
         this.to_give_up = new ArrayList<>();
@@ -55,10 +55,10 @@ public class VoyageState extends GameState {
 
     @Override
     public GameState getNext(){
-        List<Player> tmp = new ArrayList<>();
+        ArrayList<Player> tmp = new ArrayList<>();
         tmp.addAll(this.players);
         //Retired players dont count in the distance scoring.
-        tmp = tmp.stream().filter(p->!p.getRetired()).toList();
+        tmp = new ArrayList<>(tmp.stream().filter(p->!p.getRetired()).toList());
         //Sort in descending order, so the farthest one gets the first index, second farthest gets second index and so on.
         tmp.sort((p1,p2)-> this.planche.getPlayerPosition(p1)<this.planche.getPlayerPosition(p2) ? 1 : -1);
         return new EndscreenState(model, type, count, players, tmp);
@@ -77,6 +77,11 @@ public class VoyageState extends GameState {
                                            p.getRetired()));
         }
         return new ClientVoyageState(type, tmp, this.card.getId(), this.state.getClientCardState());
+    }
+
+    @Override
+    public boolean toSerialize() {
+        return true;
     }
 
     @Override

@@ -22,7 +22,7 @@ import it.polimi.ingsw.model.state.VoyageState;
 public class PiratesAnnounceState extends CardState {
 
     private final PiratesCard card;
-    private final List<Player> list;
+    private final ArrayList<Player> list;
     private boolean responded = false;
     private boolean result = true;
 
@@ -31,7 +31,7 @@ public class PiratesAnnounceState extends CardState {
         if(list.size()>this.state.getCount().getNumber()||list.size()<1||list==null) throw new IllegalArgumentException("Constructed insatisfyable state");
         if(card==null) throw new NullPointerException();
         this.card = card;
-        this.list = list;
+        this.list = new ArrayList<>(list);
     }
 
     @Override

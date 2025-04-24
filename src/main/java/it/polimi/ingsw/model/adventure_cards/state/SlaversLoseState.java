@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.adventure_cards.state;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
@@ -21,11 +22,11 @@ import it.polimi.ingsw.model.state.VoyageState;
 class SlaversLoseState extends CardState {
 
     private final SlaversCard card;
-    private final List<Player> list;
+    private final ArrayList<Player> list;
     private boolean responded = false;
-    private List<ShipCoords> coords;
+    private int done = 0;
 
-    protected SlaversLoseState(VoyageState state, SlaversCard card, List<Player> list){
+    protected SlaversLoseState(VoyageState state, SlaversCard card, ArrayList<Player> list){
         super(state);
         if(list.size()>this.state.getCount().getNumber()||list.size()<1||list==null) throw new IllegalArgumentException("Constructed insatisfyable state");
         if(card==null) throw new NullPointerException();
@@ -45,8 +46,6 @@ class SlaversLoseState extends CardState {
             this.state.broadcastMessage(new NotifyStateUpdateMessage(this.state.getClientState()));
             return;
         }
-        CrewRemoveVisitor v = new CrewRemoveVisitor(this.list.getFirst().getSpaceShip());
-        for(ShipCoords s : this.coords) this.list.getFirst().getSpaceShip().getComponent(s).check(v);
         this.transition();
     }
 
@@ -55,7 +54,7 @@ class SlaversLoseState extends CardState {
         return new ClientCrewPenaltyCardStateDecorator(
             new ClientBaseCardState(this.card.getId()), 
             this.list.getFirst().getColor(), 
-            this.card.getCrewLost() - this.coords.size());
+            this.card.getCrewLost() - this.done);
     }
 
     @Override
@@ -89,8 +88,8 @@ class SlaversLoseState extends CardState {
             this.state.loseGame(p);
             return;
         }
-        this.coords.add(cabin_coords);
-        if(coords.size()==this.card.getCrewLost()){
+        this.done++;
+        if(this.done>=this.card.getCrewLost()){
             this.responded = true;
         }
     }

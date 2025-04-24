@@ -17,10 +17,10 @@ import it.polimi.ingsw.model.player.Player;
 
 public class EndscreenState extends GameState {
 
-    private final List<Player> awaiting;
-    private final List<Player> order_arrival;
+    private final ArrayList<Player> awaiting;
+    private final ArrayList<Player> order_arrival;
 
-    public EndscreenState(ModelInstance model, GameModeType type, PlayerCount count, List<Player> players, List<Player> order_arrival) {
+    public EndscreenState(ModelInstance model, GameModeType type, PlayerCount count, ArrayList<Player> players, ArrayList<Player> order_arrival) {
         super(model, type, count, players);
         if(order_arrival==null) throw new NullPointerException();
         this.order_arrival = order_arrival;
@@ -58,7 +58,7 @@ public class EndscreenState extends GameState {
     public GameState getNext() {
         return null;
     }
-    
+
     @Override
     public ClientModelState getClientState(){
         ArrayList<ClientEndgamePlayer> tmp = new ArrayList<>();
@@ -72,6 +72,12 @@ public class EndscreenState extends GameState {
         }
         return new ClientEndgameState(tmp);
     }
+    
+    @Override
+    public boolean toSerialize() {
+        return false;
+    }
+    
 
     @Override
     public void sendContinue(Player p) throws ForbiddenCallException {
@@ -90,5 +96,7 @@ public class EndscreenState extends GameState {
         this.awaiting.remove(p);
         return;
     }
+
+    
 
 }

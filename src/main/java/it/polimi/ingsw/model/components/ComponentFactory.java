@@ -5,7 +5,7 @@ import java.util.HashMap;
 import it.polimi.ingsw.model.components.enums.*;
 import it.polimi.ingsw.model.player.PlayerColor;
 
-public class ComponentFactory{
+public class ComponentFactory {
 
     private HashMap<Integer, iBaseComponent> components;
 

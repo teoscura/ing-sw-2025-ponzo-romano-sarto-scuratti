@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model.adventure_cards;
 
+import java.util.ArrayList;
+
 import it.polimi.ingsw.exceptions.NegativeArgumentException;
 import it.polimi.ingsw.model.adventure_cards.state.CardState;
 import it.polimi.ingsw.model.adventure_cards.state.SlaversAnnounceState;
@@ -7,7 +9,7 @@ import it.polimi.ingsw.model.adventure_cards.utils.CardOrder;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.state.VoyageState;
 
-public class SlaversCard extends Card{
+public class SlaversCard extends Card {
 
     private final int min_power;
     private final int crew_penalty;
@@ -23,7 +25,7 @@ public class SlaversCard extends Card{
 
     @Override
     public CardState getState(VoyageState state){
-        return new SlaversAnnounceState(state, this, state.getOrder(CardOrder.NORMAL));
+        return new SlaversAnnounceState(state, this, new ArrayList<>(state.getOrder(CardOrder.NORMAL)));
     }
 
     public int getCredits(){

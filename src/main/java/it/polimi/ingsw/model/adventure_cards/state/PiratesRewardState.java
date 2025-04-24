@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.adventure_cards.state;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
@@ -17,11 +18,11 @@ import it.polimi.ingsw.model.state.VoyageState;
 class PiratesRewardState extends CardState {
     
     private final PiratesCard card;
-    private final List<Player> list;
+    private final ArrayList<Player> list;
     private boolean responded = false;
     private boolean took_reward = false;
 
-    public PiratesRewardState(VoyageState state, PiratesCard card, List<Player> list){
+    public PiratesRewardState(VoyageState state, PiratesCard card, ArrayList<Player> list){
         super(state);
         if(list.size()>this.state.getCount().getNumber()||list.size()<1||list==null) throw new IllegalArgumentException("Constructed insatisfyable state");
         if(card==null) throw new NullPointerException();

@@ -9,7 +9,7 @@ import it.polimi.ingsw.model.components.visitors.*;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.player.iSpaceShip;
 
-public abstract class BaseComponent implements iBaseComponent, iVisitable{
+public abstract class BaseComponent implements iBaseComponent, iVisitable {
 
     private final int id;
     private final ConnectorType[] connectors;

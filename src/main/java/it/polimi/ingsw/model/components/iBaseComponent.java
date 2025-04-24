@@ -1,6 +1,8 @@
 //Done.
 package it.polimi.ingsw.model.components;
 
+import java.io.Serializable;
+
 import it.polimi.ingsw.model.client.components.ClientComponent;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ConnectorType;
@@ -10,7 +12,7 @@ import it.polimi.ingsw.model.player.iSpaceShip;
 
 
 
-public interface iBaseComponent {
+public interface iBaseComponent extends Serializable {
     
     //Connectors are stored in this order: UP, RIGHT, DOWN, LEFT;
     

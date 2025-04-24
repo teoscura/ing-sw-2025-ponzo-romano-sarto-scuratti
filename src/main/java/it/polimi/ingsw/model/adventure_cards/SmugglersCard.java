@@ -1,6 +1,8 @@
 //Done.
 package it.polimi.ingsw.model.adventure_cards;
 
+import java.util.ArrayList;
+
 import it.polimi.ingsw.exceptions.NegativeArgumentException;
 import it.polimi.ingsw.model.adventure_cards.state.CardState;
 import it.polimi.ingsw.model.adventure_cards.state.SmugglersAnnounceState;
@@ -8,7 +10,7 @@ import it.polimi.ingsw.model.adventure_cards.utils.*;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.state.VoyageState;
 
-public class SmugglersCard extends Card{
+public class SmugglersCard extends Card {
     
     private final Planet reward;
     private final int cargo_taken;
@@ -25,7 +27,7 @@ public class SmugglersCard extends Card{
 
     @Override
     public CardState getState(VoyageState state) {
-        return new SmugglersAnnounceState(state, this, state.getOrder(CardOrder.NORMAL));
+        return new SmugglersAnnounceState(state, this, new ArrayList<>(state.getOrder(CardOrder.NORMAL)));
     }
 
     public Planet getReward(){

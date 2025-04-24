@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.adventure_cards;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
@@ -83,7 +84,7 @@ public class LevelOneCardFactory implements iCardFactory {
                     new Planet(new int[]{3,0,0,0})})
             );
             put(16, new CombatZoneCard(16,
-                Arrays.asList(new CombatZoneSection[]{
+                new ArrayList<>(Arrays.asList(new CombatZoneSection[]{
                     new CombatZoneSection(
                         CombatZoneCriteria.LEAST_CREW,
                         CombatZonePenalty.DAYS, 3),
@@ -93,7 +94,7 @@ public class LevelOneCardFactory implements iCardFactory {
                     new CombatZoneSection(
                         CombatZoneCriteria.LEAST_CANNON, 
                         CombatZonePenalty.SHOTS)
-                }),
+                })),
                 new ProjectileArray(
                     new Projectile[]{
                     new Projectile(ProjectileDirection.U000, ProjectileDimension.SMALL),

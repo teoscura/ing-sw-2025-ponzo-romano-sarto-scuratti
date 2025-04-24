@@ -4,17 +4,20 @@ package it.polimi.ingsw.model.player;
 import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.components.enums.ShipmentType;
 import it.polimi.ingsw.model.components.exceptions.AlreadyPoweredException;
+
+import java.io.Serializable;
+
 import it.polimi.ingsw.controller.server.ClientDescriptor;
 
-public class Player {
+public class Player implements Serializable {
     private final String username;
     private final PlayerColor color;
+    private transient ClientDescriptor descriptor;
     private boolean retired = false;
     private boolean disconnected = false;
     private int credits;
     private int score; 
     private iSpaceShip ship;
-    private ClientDescriptor descriptor;
 
     public Player(GameModeType gamemode, String username, PlayerColor color){
         if(username == null || color == PlayerColor.NONE) throw new NullPointerException();

@@ -10,7 +10,7 @@ import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.state.VoyageState;
 
 
-public class PiratesCard extends Card{
+public class PiratesCard extends Card {
 
     private final ProjectileArray shots;
     private final int credits;

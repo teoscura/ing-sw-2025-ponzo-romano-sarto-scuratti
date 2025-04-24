@@ -33,14 +33,14 @@ import it.polimi.ingsw.model.state.VoyageState;
 class CombatZonePenaltyState extends CardState {
 
     private final int card_id;
-    private final List<CombatZoneSection> sections;
+    private final ArrayList<CombatZoneSection> sections;
     private final ProjectileArray shots;
     private final Player target;
     private final int[] required;
     private boolean responded = false;
-    private List<ShipCoords> coords;
+    private int amount = 0;
 
-    public CombatZonePenaltyState(VoyageState state, int card_id, List<CombatZoneSection> sections, ProjectileArray shots, Player target){
+    public CombatZonePenaltyState(VoyageState state, int card_id, ArrayList<CombatZoneSection> sections, ProjectileArray shots, Player target){
         super(state);
         if(sections==null||shots==null||target==null);
         if(card_id<1||card_id>120||(card_id<100&&1>20)) throw new IllegalArgumentException();
@@ -48,7 +48,6 @@ class CombatZonePenaltyState extends CardState {
         this.sections = sections;
         this.shots = shots;
         this.target = target;
-        this.coords = new ArrayList<>();
         if(this.sections.getFirst().getPenalty()!=CombatZonePenalty.CARGO){
             this.required = null;
             return;
@@ -202,8 +201,8 @@ class CombatZonePenaltyState extends CardState {
             this.state.loseGame(p);
             return;
         }
-        this.coords.add(cabin_coords);
-        if(coords.size()==this.sections.getFirst().getAmount()){
+        this.amount++;
+        if(this.amount==this.sections.getFirst().getAmount()){
             this.responded = true;
         }
     }

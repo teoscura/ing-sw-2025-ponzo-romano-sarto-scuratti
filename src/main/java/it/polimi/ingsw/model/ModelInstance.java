@@ -16,7 +16,7 @@ import it.polimi.ingsw.model.state.WaitingState;
 
 public class ModelInstance {
     
-    private final ServerController controller;
+    private transient final ServerController controller;
     private boolean started;
     private GameState state;
     
@@ -31,7 +31,7 @@ public class ModelInstance {
     }
 
     public void serialize(){
-        //XXX figure out how to give a pathname to it, write to that file using json.
+        
     }
 
     public void startGame(List<Player> players) throws ForbiddenCallException{

@@ -14,7 +14,7 @@ import it.polimi.ingsw.model.components.exceptions.ContainerEmptyException;
 
 public class CommonBoard implements iCommonBoard {
 
-	private Queue<iBaseComponent> covered_components;
+	private ArrayDeque<iBaseComponent> covered_components;
 	private HashMap<Integer, iBaseComponent> uncovered_components;
 
 	public CommonBoard(){
