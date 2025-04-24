@@ -53,4 +53,9 @@ public class LevelTwoCards implements iCards {
 		return this.cards.poll();
 	}
 
+    @Override
+    public int getLeft() {
+        return this.cards.size();
+    }
+
 }

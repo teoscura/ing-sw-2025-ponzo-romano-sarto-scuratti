@@ -97,6 +97,9 @@ public class EndscreenState extends GameState {
         return;
     }
 
-    
+    @Override
+    public String toString() {
+        return "should never be called";
+    }
 
 }

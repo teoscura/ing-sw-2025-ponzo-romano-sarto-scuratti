@@ -10,7 +10,7 @@ public class ClientWaitingPlayer implements Serializable {
     private final PlayerColor color;
 
     public ClientWaitingPlayer(String username, PlayerColor color){
-        if(username == null || color == PlayerColor.NONE) throw new NullPointerException();
+        if(username == null) throw new NullPointerException();
         this.username = username;
         this.color = color;
     }

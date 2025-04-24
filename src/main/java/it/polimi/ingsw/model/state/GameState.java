@@ -16,6 +16,7 @@ import it.polimi.ingsw.model.adventure_cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.adventure_cards.state.CardState;
 import it.polimi.ingsw.model.client.state.ClientModelState;
 import it.polimi.ingsw.model.components.enums.AlienType;
+import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.ShipCoords;
@@ -40,6 +41,7 @@ public abstract class GameState implements Serializable {
     public abstract GameState getNext();
     public abstract ClientModelState getClientState();
     public abstract boolean toSerialize();
+    public abstract String toString();
 
     public void init(){
         return;
@@ -92,7 +94,7 @@ public abstract class GameState implements Serializable {
         System.out.println("Player: '" +p.getUsername()+"' tried to send a continue in a state that doesn't allow it!");
         throw new ForbiddenCallException("This state doesn't support this function.");
     }
-    public void putComponent(Player p, ShipCoords coords) throws ForbiddenCallException {
+    public void putComponent(Player p, ShipCoords coords, ComponentRotation rotation) throws ForbiddenCallException {
         this.broadcastMessage(new ViewMessage("Player: '" +p.getUsername()+"' tried to put a component in a state that doesn't allow it!"));
         System.out.println("Player: '" +p.getUsername()+"' tried to put a component in a state that doesn't allow it!");
         throw new ForbiddenCallException("This state doesn't support this function.");

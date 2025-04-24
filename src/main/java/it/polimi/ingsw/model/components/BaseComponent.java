@@ -13,7 +13,7 @@ public abstract class BaseComponent implements iBaseComponent, iVisitable {
 
     private final int id;
     private final ConnectorType[] connectors;
-    private final ComponentRotation rotation;
+    private ComponentRotation rotation;
     protected ShipCoords coords;
 
     protected BaseComponent(int id, ConnectorType[] connectors, 
@@ -53,6 +53,11 @@ public abstract class BaseComponent implements iBaseComponent, iVisitable {
     @Override
     public ComponentRotation getRotation(){
         return rotation;
+    }
+
+    @Override
+    public void rotate(ComponentRotation rotation){
+        this.rotation = rotation;
     }
 
     @Override

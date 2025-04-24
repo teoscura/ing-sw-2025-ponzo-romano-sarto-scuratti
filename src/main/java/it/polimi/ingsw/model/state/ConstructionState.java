@@ -23,6 +23,7 @@ import it.polimi.ingsw.model.client.player.ClientConstructionPlayer;
 import it.polimi.ingsw.model.client.state.ClientConstructionState;
 import it.polimi.ingsw.model.client.state.ClientModelState;
 import it.polimi.ingsw.model.components.iBaseComponent;
+import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.exceptions.ContainerEmptyException;
 import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
 import it.polimi.ingsw.model.player.Player;
@@ -59,7 +60,7 @@ public class ConstructionState extends GameState {
 
     @Override
     public void init(){
-        super.init();
+        this.broadcastMessage(new NotifyStateUpdateMessage(this.getClientState()));
     }
 
     @Override
@@ -121,7 +122,7 @@ public class ConstructionState extends GameState {
     }
 
     @Override
-    public void putComponent(Player p, ShipCoords coords) throws ForbiddenCallException {
+    public void putComponent(Player p, ShipCoords coords, ComponentRotation rotation) throws ForbiddenCallException {
         if(!this.building.contains(p)){
             System.out.println("Player '"+p.getUsername()+"' attempted to place a component, but their ship is already confirmed!");
             this.broadcastMessage(new ViewMessage("Player '"+p.getUsername()+"' attempted to place a component, but their ship is already confirmed!"));
@@ -138,6 +139,7 @@ public class ConstructionState extends GameState {
             return;
         }
         try{
+            this.current_tile.get(p).rotate(rotation);
             p.getSpaceShip().addComponent(this.current_tile.get(p), coords);
             this.current_tile = null;
         } catch (OutOfBoundsException e) {
@@ -277,6 +279,16 @@ public class ConstructionState extends GameState {
         if(p.getDisconnected()) throw new ForbiddenCallException();
         p.disconnect();
         this.model.kick(p.getDescriptor()); 
+    }
+
+    @Override
+    public String toString() {
+        String res = new String();
+        res.concat("Construction State - ");
+        for(Player p : this.players){
+            res.concat(p.getUsername()+": "+p.getColor().toString()+", ");
+        }
+        return res;
     }
 
 }

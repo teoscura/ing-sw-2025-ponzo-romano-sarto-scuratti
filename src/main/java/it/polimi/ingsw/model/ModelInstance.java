@@ -12,18 +12,30 @@ import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.adventure_cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.player.*;
 import it.polimi.ingsw.model.state.GameState;
+import it.polimi.ingsw.model.state.ResumeWaitingState;
 import it.polimi.ingsw.model.state.WaitingState;
 
 public class ModelInstance {
     
-    private transient final ServerController controller;
+    private final int id;
+    private transient ServerController controller;
     private boolean started;
     private GameState state;
     
-    public ModelInstance(ServerController server, GameModeType type, PlayerCount count){
+    public ModelInstance(int id, ServerController server, GameModeType type, PlayerCount count){
+        if(id<0) throw new IllegalArgumentException();
+        this.id = id;
         this.controller = server;
         this.state = new WaitingState(this, type, count);
         this.state.init();
+    }
+
+    public String toString(){
+        return id+" - "+this.state.toString();
+    }
+
+    public int getID() {
+        return this.id;
     }
 
     public void validate(ServerMessage message) throws ForbiddenCallException{
@@ -31,7 +43,7 @@ public class ModelInstance {
     }
 
     public void serialize(){
-        
+        this.controller.serializeCurrentGame();
     }
 
     public void startGame(List<Player> players) throws ForbiddenCallException{
@@ -57,7 +69,9 @@ public class ModelInstance {
             this.endGame();
         }
         this.state = next;
-        this.serialize();
+        if(this.state.toSerialize()){
+            this.serialize();
+        }
         next.init();
     }
 
@@ -108,8 +122,17 @@ public class ModelInstance {
         this.controller.kick(client);
     }
 
+    public void setController(ServerController controller){
+        this.controller = controller;
+    }
+
     public ServerController getController() {
         return this.controller;
     }
-    
+
+    public void afterSerialRestart() {
+        ResumeWaitingState next = new ResumeWaitingState(this, this.state.getType(), this.state.getCount(), this.state);
+        this.setState(next);
+    }
+
 }

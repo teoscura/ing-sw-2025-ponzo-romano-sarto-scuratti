@@ -44,6 +44,7 @@ public class VoyageState extends GameState {
     public void init(){
         super.init();
         this.setCardState(null);
+        this.broadcastMessage(new NotifyStateUpdateMessage(this.getClientState()));
     }
 
     @Override
@@ -180,13 +181,26 @@ public class VoyageState extends GameState {
             }
             this.to_give_up.clear();
             this.card = this.voyage_deck.pullCard();
-            if(this.card==null) return;
+            if(this.card==null){
+                this.transition();
+            };
             this.state = card.getState(this);
             this.model.serialize();
             this.state.init(this.getClientState());
         }
         this.state = next;
         next.init(this.getClientState());
+    }
+
+    @Override
+    public String toString(){
+        String res = new String();
+        res.concat("Voyage State - ");
+        for(Player p : this.players){
+            res.concat(p.getUsername()+": "+p.getColor().toString()+", ");
+        }
+        res.concat("Cards left: "+this.voyage_deck.getLeft()+", Current card state: "+this.state.getClass().getSimpleName());
+        return res;
     }
 
 }

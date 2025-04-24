@@ -23,6 +23,7 @@ public interface iBaseComponent extends Serializable {
     public void onCreation(iSpaceShip ship);
     public void onDelete(iSpaceShip ship);
     //Return the connector pointing up.
+    public void rotate(ComponentRotation rotation);
     public ShipCoords getCoords();
     public ConnectorType getConnector(ComponentRotation direction);
     public ConnectorType[] getConnectors();

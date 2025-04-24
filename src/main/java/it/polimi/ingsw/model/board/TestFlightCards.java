@@ -39,4 +39,9 @@ public class TestFlightCards implements iCards {
         return null;
     }
 
+    @Override
+    public int getLeft() {
+        return this.cards.size();
+    }
+
 }

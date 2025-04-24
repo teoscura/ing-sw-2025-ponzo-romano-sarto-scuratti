@@ -31,9 +31,7 @@ public abstract class CardState implements Serializable {
     }
 
     public abstract void validate(ServerMessage message) throws ForbiddenCallException;
-
     public abstract ClientCardState getClientCardState();
-
     protected abstract CardState getNext();
 
     //TODO public abstract JsonCardState serialize();

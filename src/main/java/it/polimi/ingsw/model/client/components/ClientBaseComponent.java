@@ -4,6 +4,7 @@ import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.view.ClientView;
 
 public class ClientBaseComponent implements ClientComponent {
+    
     private final int id;
     private final ComponentRotation rotation;
 

@@ -178,4 +178,14 @@ public class VerifyState extends GameState {
         this.model.kick(p.getDescriptor()); 
     }
 
+    @Override
+    public String toString(){
+        String res = new String();
+        res.concat("Verify State - ");
+        for(Player p : this.players){
+            res.concat(p.getUsername()+": "+p.getColor().toString()+", ");
+        }
+        return res;
+    }
+
 }

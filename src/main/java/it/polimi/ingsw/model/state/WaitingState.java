@@ -31,6 +31,7 @@ public class WaitingState extends GameState {
 
     @Override
     public void init(){
+        this.broadcastMessage(new NotifyStateUpdateMessage(this.getClientState()));
     }
 
     @Override
@@ -92,6 +93,11 @@ public class WaitingState extends GameState {
             return;
         }
         this.connected.remove(client);
+    }
+
+    @Override
+    public String toString() {
+        return "should never be called";
     }
 
 }

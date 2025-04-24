@@ -7,5 +7,6 @@ import it.polimi.ingsw.model.adventure_cards.iCard;
 
 public interface iCards extends Serializable {
 	public iCard pullCard();
+	public int getLeft();
 	public List<Integer> getConstructionCards();
 }
