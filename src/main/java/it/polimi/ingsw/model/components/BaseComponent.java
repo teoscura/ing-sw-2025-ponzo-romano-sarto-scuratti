@@ -11,137 +11,139 @@ import it.polimi.ingsw.model.player.iSpaceShip;
 
 public abstract class BaseComponent implements iBaseComponent, iVisitable {
 
-    private final int id;
-    private final ConnectorType[] connectors;
-    private ComponentRotation rotation;
-    protected ShipCoords coords;
+	private final int id;
+	private final ConnectorType[] connectors;
+	private ComponentRotation rotation;
+	protected ShipCoords coords;
 
-    protected BaseComponent(int id, ConnectorType[] connectors, 
-                            ComponentRotation rotation){
-        if(connectors.length!=4){
-            throw new ConnectorsSizeException();
-        }
-        if(id<1 || id > 157) throw new IllegalArgumentException("Id is not valid.");
-        this.id = id;
-        this.connectors = connectors;
-        this.rotation = rotation;
-    }
+	protected BaseComponent(int id, ConnectorType[] connectors,
+							ComponentRotation rotation) {
+		if (connectors.length != 4) {
+			throw new ConnectorsSizeException();
+		}
+		if (id < 1 || id > 157) throw new IllegalArgumentException("Id is not valid.");
+		this.id = id;
+		this.connectors = connectors;
+		this.rotation = rotation;
+	}
 
-    protected BaseComponent(int id, ConnectorType[] connectors, 
-                            ComponentRotation rotation,
-                            ShipCoords coords){
-        if(connectors.length!=4){
-            throw new ConnectorsSizeException();
-        }
-        if(id<1 || id > 157) throw new IllegalArgumentException("Id is not valid.");
-        this.id = id;
-        this.connectors = connectors;
-        this.rotation = rotation;
-        this.coords = coords;
-    }
+	protected BaseComponent(int id, ConnectorType[] connectors,
+							ComponentRotation rotation,
+							ShipCoords coords) {
+		if (connectors.length != 4) {
+			throw new ConnectorsSizeException();
+		}
+		if (id < 1 || id > 157) throw new IllegalArgumentException("Id is not valid.");
+		this.id = id;
+		this.connectors = connectors;
+		this.rotation = rotation;
+		this.coords = coords;
+	}
 
-    @Override
-    public int getID(){
-        return this.id;
-    }
+	@Override
+	public int getID() {
+		return this.id;
+	}
 
-    @Override
-    public ConnectorType[] getConnectors(){
-        return connectors;
-    }
+	@Override
+	public ConnectorType[] getConnectors() {
+		return connectors;
+	}
 
-    @Override
-    public ComponentRotation getRotation(){
-        return rotation;
-    }
+	@Override
+	public ComponentRotation getRotation() {
+		return rotation;
+	}
 
-    @Override
-    public void rotate(ComponentRotation rotation){
-        this.rotation = rotation;
-    }
+	@Override
+	public void rotate(ComponentRotation rotation) {
+		this.rotation = rotation;
+	}
 
-    @Override
-    public boolean verify(iSpaceShip ship){
-        if (this.coords == null) throw new NullPointerException("Coords are not set");
-        iBaseComponent up = ship.getComponent(this.coords.up());
-        iBaseComponent right = ship.getComponent(this.coords.right());
-        iBaseComponent down = ship.getComponent(this.coords.down());
-        iBaseComponent left = ship.getComponent(this.coords.left());
+	@Override
+	public boolean verify(iSpaceShip ship) {
+		if (this.coords == null) throw new NullPointerException("Coords are not set");
+		iBaseComponent up = ship.getComponent(this.coords.up());
+		iBaseComponent right = ship.getComponent(this.coords.right());
+		iBaseComponent down = ship.getComponent(this.coords.down());
+		iBaseComponent left = ship.getComponent(this.coords.left());
 
-        if(up!= ship.getEmpty()){
-            if(!up.getConnector(ComponentRotation.U180).compatible(getConnector(ComponentRotation.U000))) return false;
-        }
-        if(right!= ship.getEmpty()){
-            if(!right.getConnector(ComponentRotation.U270).compatible(getConnector(ComponentRotation.U090))) return false;
-        }
-        if(down!=ship.getEmpty()){
-            if(!down.getConnector(ComponentRotation.U000).compatible(getConnector(ComponentRotation.U180))) return false;
-        }
-        if(left!= ship.getEmpty()){
-            if(!left.getConnector(ComponentRotation.U090).compatible(getConnector(ComponentRotation.U270))) return false;
-        }
-        return true;
-    }
+		if (up != ship.getEmpty()) {
+			if (!up.getConnector(ComponentRotation.U180).compatible(getConnector(ComponentRotation.U000))) return false;
+		}
+		if (right != ship.getEmpty()) {
+			if (!right.getConnector(ComponentRotation.U270).compatible(getConnector(ComponentRotation.U090)))
+				return false;
+		}
+		if (down != ship.getEmpty()) {
+			if (!down.getConnector(ComponentRotation.U000).compatible(getConnector(ComponentRotation.U180)))
+				return false;
+		}
+		if (left != ship.getEmpty()) {
+			return left.getConnector(ComponentRotation.U090).compatible(getConnector(ComponentRotation.U270));
+		}
+		return true;
+	}
 
-    @Override
-    public ConnectorType getConnector(ComponentRotation direction){
-        int shift = direction.getShift() + (4-this.rotation.getShift());
-        shift = shift % 4;
-        return connectors[shift];
-    }
+	@Override
+	public ConnectorType getConnector(ComponentRotation direction) {
+		int shift = direction.getShift() + (4 - this.rotation.getShift());
+		shift = shift % 4;
+		return connectors[shift];
+	}
 
-    @Override
-    public ShipCoords getCoords(){
-        return this.coords;
-    }
-    
-    @Override
-    public boolean powerable(){
-        return false;
-    }
+	@Override
+	public ShipCoords getCoords() {
+		return this.coords;
+	}
 
-    @Override
-    public abstract void onCreation(iSpaceShip ship);
+	@Override
+	public boolean powerable() {
+		return false;
+	}
 
-    @Override
-    public abstract void onDelete(iSpaceShip ship);
+	@Override
+	public abstract void onCreation(iSpaceShip ship);
 
-    @Override
-    public abstract ClientComponent getClientComponent();
-    
-    @Override
-    public abstract void check(iVisitor v);
+	@Override
+	public abstract void onDelete(iSpaceShip ship);
 
-    public iBaseComponent[] getConnectedComponents(iSpaceShip ship){
-        iBaseComponent[] res = new iBaseComponent[]{ship.getEmpty(), ship.getEmpty(), ship.getEmpty(), ship.getEmpty()};
-        if(ship.getComponent(this.getCoords().up()) != ship.getEmpty()){
-            if(this.getConnector(ComponentRotation.U000)
-                    .connected(ship.getComponent(this.getCoords().up())
-                            .getConnector(ComponentRotation.U180))){
-                res[0] = ship.getComponent(this.getCoords().up());
-            }
-        }
-        if(ship.getComponent(this.getCoords().right()) != ship.getEmpty()) {
-            if (this.getConnector(ComponentRotation.U090)
-                    .connected(ship.getComponent(this.getCoords().right())
-                            .getConnector(ComponentRotation.U270))) {
-                res[1] = ship.getComponent(this.getCoords().right());
-            }
-        }
-        if(ship.getComponent(this.getCoords().down()) != ship.getEmpty()){
-            if(this.getConnector(ComponentRotation.U180)
-                    .connected(ship.getComponent(this.getCoords().down())
-                            .getConnector(ComponentRotation.U000))){
-                res[2] = ship.getComponent(this.getCoords().down());
-            }
-        }
-        if(ship.getComponent(this.getCoords().left()) != ship.getEmpty()){
-            if(this.getConnector(ComponentRotation.U270)
-                    .connected(ship.getComponent(this.getCoords().left())
-                            .getConnector(ComponentRotation.U090))){
-                res[3] = ship.getComponent(this.getCoords().left());
-            }
-        }
-        return res;
-    }
+	@Override
+	public abstract ClientComponent getClientComponent();
+
+	@Override
+	public abstract void check(iVisitor v);
+
+	public iBaseComponent[] getConnectedComponents(iSpaceShip ship) {
+		iBaseComponent[] res = new iBaseComponent[]{ship.getEmpty(), ship.getEmpty(), ship.getEmpty(), ship.getEmpty()};
+		if (ship.getComponent(this.getCoords().up()) != ship.getEmpty()) {
+			if (this.getConnector(ComponentRotation.U000)
+					.connected(ship.getComponent(this.getCoords().up())
+							.getConnector(ComponentRotation.U180))) {
+				res[0] = ship.getComponent(this.getCoords().up());
+			}
+		}
+		if (ship.getComponent(this.getCoords().right()) != ship.getEmpty()) {
+			if (this.getConnector(ComponentRotation.U090)
+					.connected(ship.getComponent(this.getCoords().right())
+							.getConnector(ComponentRotation.U270))) {
+				res[1] = ship.getComponent(this.getCoords().right());
+			}
+		}
+		if (ship.getComponent(this.getCoords().down()) != ship.getEmpty()) {
+			if (this.getConnector(ComponentRotation.U180)
+					.connected(ship.getComponent(this.getCoords().down())
+							.getConnector(ComponentRotation.U000))) {
+				res[2] = ship.getComponent(this.getCoords().down());
+			}
+		}
+		if (ship.getComponent(this.getCoords().left()) != ship.getEmpty()) {
+			if (this.getConnector(ComponentRotation.U270)
+					.connected(ship.getComponent(this.getCoords().left())
+							.getConnector(ComponentRotation.U090))) {
+				res[3] = ship.getComponent(this.getCoords().left());
+			}
+		}
+		return res;
+	}
 }

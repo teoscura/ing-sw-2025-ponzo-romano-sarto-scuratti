@@ -5,31 +5,53 @@ import it.polimi.ingsw.model.client.card.*;
 import it.polimi.ingsw.model.client.components.*;
 
 public interface ClientView {
-    //Game states
-    public void show(ClientWaitingRoomState state);
-    public void show(ClientConstructionState state);
-    public void show(ClientVerifyState state);
-    public void show(ClientVoyageState state);
-    public void show(ClientEndgameState state);
-    //Components
-    public void show(ClientBaseComponent component);
-    public void show(ClientPoweredComponentDecorator component);
-    public void show(ClientShipmentsComponentDecorator component);
-    public void show(ClientBatteryComponentDecorator component);
-    public void show(ClientCrewComponentDecorator component);
-    public void show(ClientBrokenVerifyComponentDecorator component);
-    //Card states
-    public void show(ClientAwaitConfirmCardStateDecorator state);
-    public void show(ClientBaseCardState state);
-    public void show(ClientCargoPenaltyCardStateDecorator state);
-    public void show(ClientCargoRewardCardStateDecorator state);
-    public void show(ClientCombatZoneIndexCardStateDecorator state);
-    public void show(ClientCreditsRewardCardStateDecorator state);
-    public void show(ClientCrewPenaltyCardStateDecorator state);
-    public void show(ClientLandingCardStateDecorator state);
-    public void show(ClientMeteoriteCardStateDecorator state);
-    public void show(ClientNewCenterCardStateDecorator state);
-    public void show(ClientProjectileCardStateDecorator state);
-    //Misc and debug
-    public void showTextMessage(String message);
+	//Game states
+	void show(ClientWaitingRoomState state);
+
+	void show(ClientConstructionState state);
+
+	void show(ClientVerifyState state);
+
+	void show(ClientVoyageState state);
+
+	void show(ClientEndgameState state);
+
+	//Components
+	void show(ClientBaseComponent component);
+
+	void show(ClientPoweredComponentDecorator component);
+
+	void show(ClientShipmentsComponentDecorator component);
+
+	void show(ClientBatteryComponentDecorator component);
+
+	void show(ClientCrewComponentDecorator component);
+
+	void show(ClientBrokenVerifyComponentDecorator component);
+
+	//Card states
+	void show(ClientAwaitConfirmCardStateDecorator state);
+
+	void show(ClientBaseCardState state);
+
+	void show(ClientCargoPenaltyCardStateDecorator state);
+
+	void show(ClientCargoRewardCardStateDecorator state);
+
+	void show(ClientCombatZoneIndexCardStateDecorator state);
+
+	void show(ClientCreditsRewardCardStateDecorator state);
+
+	void show(ClientCrewPenaltyCardStateDecorator state);
+
+	void show(ClientLandingCardStateDecorator state);
+
+	void show(ClientMeteoriteCardStateDecorator state);
+
+	void show(ClientNewCenterCardStateDecorator state);
+
+	void show(ClientProjectileCardStateDecorator state);
+
+	//Misc and debug
+	void showTextMessage(String message);
 }

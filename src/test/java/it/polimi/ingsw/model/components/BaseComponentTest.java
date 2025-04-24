@@ -17,7 +17,7 @@ class BaseComponentTest {
 	//private BaseComponent Base;
 
 	@Test
-	void getConnectors(){
+	void getConnectors() {
 		ConnectorType[] connectors = new ConnectorType[4];
 		BaseComponent test_component = new StructuralComponent(1, connectors, ComponentRotation.U000);
 		assertNotNull(test_component.getConnectors());
@@ -25,16 +25,16 @@ class BaseComponentTest {
 
 	@Test
 	void getRotation() {
-			ConnectorType[] connectors = new ConnectorType[4];
-			BaseComponent test_component_up = new StructuralComponent(1, connectors, ComponentRotation.U000);
-			assertNotNull(test_component_up.getRotation());
-			assertEquals(0, test_component_up.getRotation().getShift());
-			BaseComponent test_component_right = new StructuralComponent(1, connectors, ComponentRotation.U090);
-			assertEquals(1, test_component_right.getRotation().getShift());
-			BaseComponent test_component_down = new StructuralComponent(1, connectors, ComponentRotation.U180);
-			assertEquals(2, test_component_down.getRotation().getShift());
-			BaseComponent test_component_left = new StructuralComponent(1, connectors, ComponentRotation.U270);
-			assertEquals(3, test_component_left.getRotation().getShift());
+		ConnectorType[] connectors = new ConnectorType[4];
+		BaseComponent test_component_up = new StructuralComponent(1, connectors, ComponentRotation.U000);
+		assertNotNull(test_component_up.getRotation());
+		assertEquals(0, test_component_up.getRotation().getShift());
+		BaseComponent test_component_right = new StructuralComponent(1, connectors, ComponentRotation.U090);
+		assertEquals(1, test_component_right.getRotation().getShift());
+		BaseComponent test_component_down = new StructuralComponent(1, connectors, ComponentRotation.U180);
+		assertEquals(2, test_component_down.getRotation().getShift());
+		BaseComponent test_component_left = new StructuralComponent(1, connectors, ComponentRotation.U270);
+		assertEquals(3, test_component_left.getRotation().getShift());
 	}
 
 	@Test
@@ -43,12 +43,14 @@ class BaseComponentTest {
 		ShipCoords coords_up = new ShipCoords(GameModeType.LVL2, 4, 2);
 		ConnectorType[] connectors = {ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL};
 		BaseComponent verify_component_empty = new StructuralComponent(1, connectors, ComponentRotation.U000);
-		BaseComponent verify_test_component = new StructuralComponent(1, connectors, ComponentRotation.U000,coords);
+		BaseComponent verify_test_component = new StructuralComponent(1, connectors, ComponentRotation.U000, coords);
 		BaseComponent verify_test_component2 = new StructuralComponent(1, connectors, ComponentRotation.U000, coords_up);
 		SpaceShip test_ship = new SpaceShip(GameModeType.LVL2, new Player(GameModeType.LVL2, "tizio", PlayerColor.RED));
 		test_ship.addComponent(verify_test_component, coords);
 		test_ship.addComponent(verify_test_component2, coords_up);
-		NullPointerException e = assertThrows(NullPointerException.class, () -> {verify_component_empty.verify(test_ship);});
+		NullPointerException e = assertThrows(NullPointerException.class, () -> {
+			verify_component_empty.verify(test_ship);
+		});
 		assertEquals("Coords are not set", e.getMessage());
 		assertTrue(verify_test_component.verify(test_ship));
 	}
@@ -95,7 +97,7 @@ class BaseComponentTest {
 	}
 
 	@Test
-	void powerable(){
+	void powerable() {
 		ConnectorType[] connectors = {ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL};
 		BaseComponent test_component = new StructuralComponent(1, connectors, ComponentRotation.U000);
 		assertFalse(test_component.powerable());
@@ -106,7 +108,7 @@ class BaseComponentTest {
 	}
 
 	@Test
-	void getConnectedComponents(){
+	void getConnectedComponents() {
 		SpaceShip ship = new SpaceShip(GameModeType.LVL2, new Player(GameModeType.LVL2, "tizio", PlayerColor.RED));
 		ShipCoords coords = new ShipCoords(GameModeType.LVL2, 2, 1);
 		ShipCoords up_coords = new ShipCoords(GameModeType.LVL2, 2, 0);
@@ -123,7 +125,7 @@ class BaseComponentTest {
 		ship.addComponent(right_component, right_coords);
 		ship.addComponent(down_component, down_coords);
 		ship.addComponent(left_component, left_coords);
-		iBaseComponent results[] = central_component.getConnectedComponents(ship);
+		iBaseComponent[] results = central_component.getConnectedComponents(ship);
 		assertEquals(up_component, results[0]);
 		assertEquals(ship.getEmpty(), results[1]);
 		assertEquals(down_component, results[2]);
@@ -132,7 +134,7 @@ class BaseComponentTest {
 		StructuralComponent empty = new StructuralComponent(1, new ConnectorType[]{ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY}, ComponentRotation.U000, new ShipCoords(GameModeType.LVL2, 5, 4));
 		ship.addComponent(non_empty, new ShipCoords(GameModeType.LVL2, 4, 4));
 		ship.addComponent(empty, new ShipCoords(GameModeType.LVL2, 5, 4));
-		iBaseComponent result[] = non_empty.getConnectedComponents(ship);
+		iBaseComponent[] result = non_empty.getConnectedComponents(ship);
 		assertEquals(ship.getEmpty(), result[1]);
 	}
 }

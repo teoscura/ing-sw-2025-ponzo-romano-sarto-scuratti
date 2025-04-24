@@ -1,17 +1,17 @@
 package it.polimi.ingsw.model.adventure_cards.utils;
 
-public enum ProjectileDimension{
-    
-    BIG(false),
-    SMALL(true);
+public enum ProjectileDimension {
 
-    private boolean blockable;
+	BIG(false),
+	SMALL(true);
 
-    ProjectileDimension(boolean blockable){
-        this.blockable = blockable;
-    }
+	private final boolean blockable;
 
-    public boolean getBlockable(){
-        return this.blockable;
-    }
+	ProjectileDimension(boolean blockable) {
+		this.blockable = blockable;
+	}
+
+	public boolean getBlockable() {
+		return this.blockable;
+	}
 }

@@ -35,7 +35,6 @@ class StorageComponentTest {
 			fail("ContainerNotSpecialException did not occur");
 		} catch (ContainerNotSpecialException e) {
 		}
-		;
 		ShipmentType shipment1 = ShipmentType.BLUE;
 		ShipmentType shipment2 = ShipmentType.BLUE;
 		ShipmentType shipment3 = ShipmentType.BLUE;

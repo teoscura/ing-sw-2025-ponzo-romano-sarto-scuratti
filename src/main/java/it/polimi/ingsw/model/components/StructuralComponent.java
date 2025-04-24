@@ -11,37 +11,35 @@ import it.polimi.ingsw.model.player.iSpaceShip;
 
 public class StructuralComponent extends BaseComponent {
 
-    public StructuralComponent(int id, 
-                               ConnectorType[] connectors, 
-                               ComponentRotation rotation) {
-        super(id, connectors, rotation);
-    }
-    
-    public StructuralComponent(int id, 
-                               ConnectorType[] connectors, 
-                               ComponentRotation rotation, 
-                               ShipCoords coords) {
-        super(id, connectors, rotation, coords);
-    }
+	public StructuralComponent(int id,
+							   ConnectorType[] connectors,
+							   ComponentRotation rotation) {
+		super(id, connectors, rotation);
+	}
 
-        @Override
-    public void check(iVisitor v) {
-        v.visit(this);
-    }
+	public StructuralComponent(int id,
+							   ConnectorType[] connectors,
+							   ComponentRotation rotation,
+							   ShipCoords coords) {
+		super(id, connectors, rotation, coords);
+	}
 
-    @Override
-    public void onCreation(iSpaceShip ship) {
-        return;
-    }
+	@Override
+	public void check(iVisitor v) {
+		v.visit(this);
+	}
 
-    @Override
-    public void onDelete(iSpaceShip ship) {
-        return;
-    }
+	@Override
+	public void onCreation(iSpaceShip ship) {
+	}
 
-    @Override
-    public ClientComponent getClientComponent() {
-        return new ClientBaseComponent(this.getID(), this.getRotation());
-    }
-    
+	@Override
+	public void onDelete(iSpaceShip ship) {
+	}
+
+	@Override
+	public ClientComponent getClientComponent() {
+		return new ClientBaseComponent(this.getID(), this.getRotation());
+	}
+
 }

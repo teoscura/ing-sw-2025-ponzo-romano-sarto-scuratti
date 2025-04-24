@@ -6,9 +6,13 @@ import java.util.List;
 import it.polimi.ingsw.model.components.iBaseComponent;
 
 public interface iCommonBoard extends Serializable {
-	public int getCoveredSize();
-	public iBaseComponent pullComponent();
-	public void discardComponent(iBaseComponent c);
-	public iBaseComponent pullDiscarded(int id);
-	public List<Integer> getDiscarded();
+	int getCoveredSize();
+
+	iBaseComponent pullComponent();
+
+	void discardComponent(iBaseComponent c);
+
+	iBaseComponent pullDiscarded(int id);
+
+	List<Integer> getDiscarded();
 }

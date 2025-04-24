@@ -6,5 +6,5 @@ import java.rmi.RemoteException;
 import it.polimi.ingsw.controller.client.RMIClientStub;
 
 public interface RMISkeletonProvider extends Remote {
-    public RemoteServer accept(RMIClientStub client) throws RemoteException;
+	RemoteServer accept(RMIClientStub client) throws RemoteException;
 }

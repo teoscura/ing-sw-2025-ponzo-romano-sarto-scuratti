@@ -5,5 +5,5 @@ import java.io.Serializable;
 import it.polimi.ingsw.view.ClientView;
 
 public interface ClientComponent extends Serializable {
-    public void showComponent(ClientView view);
+	void showComponent(ClientView view);
 }

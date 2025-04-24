@@ -18,80 +18,79 @@ import it.polimi.ingsw.model.state.VoyageState;
 
 public class AbandonedShipAnnounceState extends CardState {
 
-    private final AbandonedShipCard card;
-    private final ArrayList<Player> list;
-    private boolean responded = false;
-    private int id = -1;
-    
-    public AbandonedShipAnnounceState(VoyageState state, AbandonedShipCard card, List<Player> list) {
-        super(state);
-        if(list.size()>this.state.getCount().getNumber()||list.size()<1||list==null) throw new IllegalArgumentException("Constructed insatisfyable state");
-        if(card==null) throw new NullPointerException();
-        this.card = card;
-        this.list = new ArrayList<>(list);
-    }
+	private final AbandonedShipCard card;
+	private final ArrayList<Player> list;
+	private boolean responded = false;
+	private int id = -1;
 
-    @Override
-    public void init(ClientModelState new_state) {
-        super.init(new_state);
-    }
+	public AbandonedShipAnnounceState(VoyageState state, AbandonedShipCard card, List<Player> list) {
+		super(state);
+		if (list.size() > this.state.getCount().getNumber() || list.size() < 1 || list == null)
+			throw new IllegalArgumentException("Constructed insatisfyable state");
+		if (card == null) throw new NullPointerException();
+		this.card = card;
+		this.list = new ArrayList<>(list);
+	}
 
-    @Override
-    public void validate(ServerMessage message) throws ForbiddenCallException {
-        message.receive(this);
-        if(!responded){
-            this.state.broadcastMessage(new NotifyStateUpdateMessage(this.state.getClientState()));
-            return;
-        }
-        this.card.apply(state, this.list.getFirst(), id);
-        this.transition();
-    }
+	@Override
+	public void init(ClientModelState new_state) {
+		super.init(new_state);
+	}
 
-    @Override
-    public ClientCardState getClientCardState(){
-        ArrayList<Boolean> tmp = new ArrayList<>(Arrays.asList(new Boolean[]{true}));
-        return new ClientLandingCardStateDecorator(new ClientBaseCardState(this.card.getId()), 
-                                                   this.list.getFirst().getColor(), 
-                                                   this.card.getDays(), 
-                                                   this.card.getCrewLost(), 
-                                                   tmp);
-    }
+	@Override
+	public void validate(ServerMessage message) throws ForbiddenCallException {
+		message.receive(this);
+		if (!responded) {
+			this.state.broadcastMessage(new NotifyStateUpdateMessage(this.state.getClientState()));
+			return;
+		}
+		this.card.apply(state, this.list.getFirst(), id);
+		this.transition();
+	}
 
-    @Override
-    protected CardState getNext() {
-        if(this.card.getExhausted()) return new AbandonedShipRewardState(state, card, list);
-        this.list.removeFirst();
-        if(!this.list.isEmpty()) return new AbandonedShipAnnounceState(state, card, list);
-        return null;
-    }
+	@Override
+	public ClientCardState getClientCardState() {
+		ArrayList<Boolean> tmp = new ArrayList<>(Arrays.asList(true));
+		return new ClientLandingCardStateDecorator(new ClientBaseCardState(this.card.getId()),
+				this.list.getFirst().getColor(),
+				this.card.getDays(),
+				this.card.getCrewLost(),
+				tmp);
+	}
 
-    @Override
-    public void selectLanding(Player p, int planet){
-        if(p!=this.list.getFirst()){
-            System.out.println("Player '"+p.getUsername()+"' attempted to land during another player's turn!");
-            this.state.broadcastMessage(new ViewMessage("Player'"+p.getUsername()+"' attempted to land during another player's turn!"));
-            return;
-        }
-        else if(planet!=-1 && planet!=0){
-            System.out.println("Player '"+p.getUsername()+"' attempted to land on an invalid id!");
-            this.state.broadcastMessage(new ViewMessage("Player'"+p.getUsername()+"' attempted to land on an invalid id!"));
-            return;
-        }
-        this.id = planet;
-        this.responded = true;
-    }
+	@Override
+	protected CardState getNext() {
+		if (this.card.getExhausted()) return new AbandonedShipRewardState(state, card, list);
+		this.list.removeFirst();
+		if (!this.list.isEmpty()) return new AbandonedShipAnnounceState(state, card, list);
+		return null;
+	}
 
-    @Override
-    public void disconnect(Player p) throws ForbiddenCallException {
-        if(this.list.getFirst()==p){
-            this.responded = true;
-            this.id = -1;
-            return;
-        }
-        if(this.list.contains(p)){
-            this.list.remove(p);
-            return;
-        }
-    }
-    
+	@Override
+	public void selectLanding(Player p, int planet) {
+		if (p != this.list.getFirst()) {
+			System.out.println("Player '" + p.getUsername() + "' attempted to land during another player's turn!");
+			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to land during another player's turn!"));
+			return;
+		} else if (planet != -1 && planet != 0) {
+			System.out.println("Player '" + p.getUsername() + "' attempted to land on an invalid id!");
+			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to land on an invalid id!"));
+			return;
+		}
+		this.id = planet;
+		this.responded = true;
+	}
+
+	@Override
+	public void disconnect(Player p) throws ForbiddenCallException {
+		if (this.list.getFirst() == p) {
+			this.responded = true;
+			this.id = -1;
+			return;
+		}
+		if (this.list.contains(p)) {
+			this.list.remove(p);
+		}
+	}
+
 }

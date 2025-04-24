@@ -5,5 +5,5 @@ import java.rmi.RemoteException;
 import it.polimi.ingsw.message.server.ServerMessage;
 
 public interface RemoteServer {
-    public void receiveMessage(ServerMessage message) throws RemoteException;
+	void receiveMessage(ServerMessage message) throws RemoteException;
 }

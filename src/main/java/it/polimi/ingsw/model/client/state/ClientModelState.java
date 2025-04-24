@@ -5,5 +5,5 @@ import java.io.Serializable;
 import it.polimi.ingsw.view.ClientView;
 
 public interface ClientModelState extends Serializable {
-    public void sendToView(ClientView view);
+	void sendToView(ClientView view);
 }

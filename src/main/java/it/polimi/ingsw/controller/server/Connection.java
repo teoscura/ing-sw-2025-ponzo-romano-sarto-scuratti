@@ -5,6 +5,7 @@ import java.io.IOException;
 import it.polimi.ingsw.message.client.ClientMessage;
 
 public interface Connection {
-    public void sendMessage(ClientMessage m) throws IOException;
-    public void close();
+	void sendMessage(ClientMessage m) throws IOException;
+
+	void close();
 }

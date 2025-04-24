@@ -1,15 +1,5 @@
 package it.polimi.ingsw.model.board;
 
-import it.polimi.ingsw.exceptions.OutOfBoundsException;
-import it.polimi.ingsw.model.components.BaseComponent;
-import it.polimi.ingsw.model.components.StructuralComponent;
-import it.polimi.ingsw.model.components.enums.ComponentRotation;
-import it.polimi.ingsw.model.components.enums.ConnectorType;
-import it.polimi.ingsw.model.components.iBaseComponent;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 // TODO
 /*class CommonBoardTest {
 

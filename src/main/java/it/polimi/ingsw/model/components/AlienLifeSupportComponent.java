@@ -18,74 +18,73 @@ import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.player.iSpaceShip;
 
 public class AlienLifeSupportComponent extends BaseComponent {
-    
-    private AlienType type = AlienType.BROWN;
 
-    public AlienLifeSupportComponent(int id, 
-                                ConnectorType[] connectors, 
-                                ComponentRotation rotation, 
-                                AlienType type){
-        super(id, connectors, rotation);
-        if(!type.getLifeSupportExists()){
-            throw new IllegalConstructorArgumentException();
-        }
-        this.type = type;
-    }
+	private AlienType type = AlienType.BROWN;
 
-    public AlienLifeSupportComponent(int id, 
-                                ConnectorType[] connectors, 
-                                ComponentRotation rotation, 
-                                AlienType type,
-                                ShipCoords coords){
-        super(id, connectors, rotation, coords);
-        if(!type.getLifeSupportExists()){
-            throw new IllegalConstructorArgumentException();
-        }
-        this.type = type;
-    }
+	public AlienLifeSupportComponent(int id,
+									 ConnectorType[] connectors,
+									 ComponentRotation rotation,
+									 AlienType type) {
+		super(id, connectors, rotation);
+		if (!type.getLifeSupportExists()) {
+			throw new IllegalConstructorArgumentException();
+		}
+		this.type = type;
+	}
 
-    @Override
-    public void check(iVisitor v){
-        v.visit(this);
-    }
+	public AlienLifeSupportComponent(int id,
+									 ConnectorType[] connectors,
+									 ComponentRotation rotation,
+									 AlienType type,
+									 ShipCoords coords) {
+		super(id, connectors, rotation, coords);
+		if (!type.getLifeSupportExists()) {
+			throw new IllegalConstructorArgumentException();
+		}
+		this.type = type;
+	}
 
-    public AlienType getType(){
-        return type;
-    }
+	@Override
+	public void check(iVisitor v) {
+		v.visit(this);
+	}
 
-    @Override
-    public void onCreation(iSpaceShip ship) {
-        return;
-    }
+	public AlienType getType() {
+		return type;
+	}
 
-    @Override
-    public void onDelete(iSpaceShip ship) {
-        iBaseComponent[] tmp = this.getConnectedComponents(ship);
-        for(iBaseComponent c : tmp){
-            if(!ship.isCabin(c.getCoords())) continue;
-            LifeSupportUpdateVisitor v = new LifeSupportUpdateVisitor(this.type);
-            c.check(v);
-            if(v.getStillAlive()) continue;
-            List<iBaseComponent> to_check = Arrays.asList(c.getConnectedComponents(ship));
-            to_check.remove(this);
-            for(iBaseComponent s : to_check){
-                s.check(v);
-            }
-            if(v.getStillAlive()) continue;
-            CrewRemoveVisitor cr = new CrewRemoveVisitor(ship);
-            try {
-                c.check(cr);
-            } catch (IllegalTargetException e){
-                //crew was already empty, so we ignore this exception;
-            }
-        }
-    }
+	@Override
+	public void onCreation(iSpaceShip ship) {
+	}
 
-    @Override
-    public ClientComponent getClientComponent() {
-        return new ClientBaseComponent(this.getID(), this.getRotation());
-    }
-    
+	@Override
+	public void onDelete(iSpaceShip ship) {
+		iBaseComponent[] tmp = this.getConnectedComponents(ship);
+		for (iBaseComponent c : tmp) {
+			if (!ship.isCabin(c.getCoords())) continue;
+			LifeSupportUpdateVisitor v = new LifeSupportUpdateVisitor(this.type);
+			c.check(v);
+			if (v.getStillAlive()) continue;
+			List<iBaseComponent> to_check = Arrays.asList(c.getConnectedComponents(ship));
+			to_check.remove(this);
+			for (iBaseComponent s : to_check) {
+				s.check(v);
+			}
+			if (v.getStillAlive()) continue;
+			CrewRemoveVisitor cr = new CrewRemoveVisitor(ship);
+			try {
+				c.check(cr);
+			} catch (IllegalTargetException e) {
+				//crew was already empty, so we ignore this exception;
+			}
+		}
+	}
+
+	@Override
+	public ClientComponent getClientComponent() {
+		return new ClientBaseComponent(this.getID(), this.getRotation());
+	}
+
 }
 
 

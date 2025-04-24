@@ -7,8 +7,11 @@ import it.polimi.ingsw.model.adventure_cards.state.CardState;
 import it.polimi.ingsw.model.state.VoyageState;
 
 public interface iCard extends Serializable {
-    public int getId();
-    public int getDays();
-    public CardState getState(VoyageState state);
-    public boolean getExhausted();
+	int getId();
+
+	int getDays();
+
+	CardState getState(VoyageState state);
+
+	boolean getExhausted();
 }
