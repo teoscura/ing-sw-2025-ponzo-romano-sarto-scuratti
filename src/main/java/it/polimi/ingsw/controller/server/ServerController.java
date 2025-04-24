@@ -62,6 +62,7 @@ public class ServerController extends Thread implements RemoteServer {
 		String current_filepath = Paths.get("").toAbsolutePath().toString();
 		File current_directory = new File(current_filepath);
 		File[] files = current_directory.listFiles();
+		assert files != null;
 		for (File f : files) {
 			Matcher matcher = saved_game_pattern.matcher(f.getName());
 			if (matcher.matches()) {
