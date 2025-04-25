@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model.state;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;

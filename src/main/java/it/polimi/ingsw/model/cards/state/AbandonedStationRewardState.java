@@ -42,6 +42,10 @@ class AbandonedStationRewardState extends CardState {
 	@Override
 	public void init(ClientModelState new_state) {
 		super.init(new_state);
+		System.out.println("    CardState -> Abandoned Station Announce State!");
+		for(Player p : this.list){
+			System.out.println("	 - "+p.getUsername());
+		}
 	}
 
 	@Override

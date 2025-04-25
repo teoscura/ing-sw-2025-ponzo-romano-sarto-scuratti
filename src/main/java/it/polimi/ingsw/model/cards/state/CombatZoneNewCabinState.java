@@ -41,6 +41,8 @@ class CombatZoneNewCabinState extends CardState {
 	@Override
 	public void init(ClientModelState new_state) {
 		super.init(new_state);
+		System.out.println("    CardState -> Combat Zone New Cabin State!: ["+(3-sections.size())+" - "+this.sections.getFirst().getPenalty()+"].");
+		System.out.println("    Awaiting: '"+this.target.getUsername()+"'.");
 	}
 
 	@Override
@@ -94,7 +96,9 @@ class CombatZoneNewCabinState extends CardState {
 			//Should be unreachable.
 			System.out.println("Player '" + p.getUsername() + "' attempted to set his new center while having a unbroken ship!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to set his new center while having a unbroken ship!"));
+			System.out.println("Player '" + p.getUsername() + "' set a new ship center.");
 		}
+		System.out.println("Player '"+p.getUsername()+"' set a new ship center at "+new_center+".");
 	}
 
 	@Override

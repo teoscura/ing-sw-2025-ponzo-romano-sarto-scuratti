@@ -35,6 +35,7 @@ class MeteorNewCabinState extends CardState {
 	@Override
 	public void init(ClientModelState new_state) {
 		super.init(new_state);
+		System.out.println("    CardState -> Combat Zone New Cabin State!");
 	}
 
 	@Override

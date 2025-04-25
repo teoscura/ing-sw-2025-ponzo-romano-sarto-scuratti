@@ -41,6 +41,10 @@ public class EpidemicState extends CardState {
 				e.printStackTrace();
 			}
 		}
+		System.out.println("New CardState -> Epidemic State!");
+		for(Player p : this.state.getOrder(CardOrder.NORMAL)){
+			System.out.println("	 - "+p.getUsername());
+		}
 	}
 
 	@Override
@@ -69,6 +73,7 @@ public class EpidemicState extends CardState {
 			return;
 		}
 		this.awaiting.remove(p);
+		System.out.println("Player '" + p.getUsername() + "' motioned to progress! ("+(this.state.getCount().getNumber()-this.awaiting.size())+").");
 	}
 
 	@Override

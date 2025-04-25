@@ -35,9 +35,9 @@ public class AbandonedShipAnnounceState extends CardState {
 	@Override
 	public void init(ClientModelState new_state) {
 		super.init(new_state);
-		System.out.println("Starting abandoned ship card!");
+		System.out.println("New CardState -> Abandoned Ship Announce State!");
 		for(Player p : this.list){
-			System.out.println(" - "+p.getUsername());
+			System.out.println("	 - "+p.getUsername());
 		}
 	}
 
@@ -46,7 +46,6 @@ public class AbandonedShipAnnounceState extends CardState {
 		message.receive(this);
 		if (!responded) {
 			this.state.broadcastMessage(new NotifyStateUpdateMessage(this.state.getClientState()));
-			System.out.println("No transition.");
 			return;
 		}
 		try{
@@ -79,7 +78,7 @@ public class AbandonedShipAnnounceState extends CardState {
 		if (this.card.getExhausted()) return new AbandonedShipRewardState(state, card, list);
 		this.list.removeFirst();
 		if (!this.list.isEmpty()) return new AbandonedShipAnnounceState(state, card, list);
-		System.out.println("Card exhausted, moving to a new one!");
+		System.out.println("...Card exhausted, moving to a new one!");
 		return null;
 	}
 
@@ -96,6 +95,7 @@ public class AbandonedShipAnnounceState extends CardState {
 		}
 		this.id = planet;
 		this.responded = true;
+		System.out.println("Player '" + p.getUsername() + "' landed on id: "+this.id+".");
 	}
 
 	@Override

@@ -40,7 +40,16 @@ public class CombatZoneAnnounceState extends CardState {
 	@Override
 	public void init(ClientModelState new_state) {
 		super.init(new_state);
-		if (this.state.getOrder(CardOrder.NORMAL).size() <= 1) this.transition();
+		if (this.state.getOrder(CardOrder.NORMAL).size() <= 1){
+			System.out.println("    Only one player left playing, skipping state!");
+			this.transition();
+			return;
+		} 
+		if (sections.size()==3) System.out.println("New CardState -> Combat Zone Announce State! [Section "+(3-sections.size())+" - "+this.sections.getFirst().getPenalty()+"].");
+		else System.out.println("    CardState -> Combat Zone Announce State! [Section "+(3-sections.size())+" - "+this.sections.getFirst().getPenalty()+"].");
+		for(Player p : this.state.getOrder(CardOrder.NORMAL)){
+			System.out.println("	 - "+p.getUsername());
+		}
 	}
 
 	@Override
@@ -52,7 +61,7 @@ public class CombatZoneAnnounceState extends CardState {
 		}
 		for(Player p : this.state.getOrder(CardOrder.NORMAL)){
 			p.getSpaceShip().updateShip();
-			System.out.println(" - "+p.getUsername()+": "+p.getSpaceShip().getCannonPower()+"/"+p.getSpaceShip().getEnginePower()+"/"+p.getSpaceShip().getTotalCrew());
+			System.out.println("     - "+p.getUsername()+": "+p.getSpaceShip().getCannonPower()+"/"+p.getSpaceShip().getEnginePower()+"/"+p.getSpaceShip().getTotalCrew());
 		}
 		this.target = this.state.findCriteria(this.sections.getFirst().getCriteria());
 		System.out.println("Applying penalty to player: '"+target.getUsername()+"'");
@@ -84,6 +93,7 @@ public class CombatZoneAnnounceState extends CardState {
 		}
 		try {
 			p.getSpaceShip().turnOn(target_coords, battery_coords);
+			System.out.println("Player '" + p.getUsername() + "' turned on component at"+target_coords+" using battery from "+battery_coords+"!");
 		} catch (IllegalTargetException e) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to turn on a component with invalid coordinates!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to turn on a component with invalid coordinates!"));
@@ -98,6 +108,7 @@ public class CombatZoneAnnounceState extends CardState {
 			return;
 		}
 		this.awaiting.remove(p);
+		System.out.println("Player '" + p.getUsername() + "' motioned to progress! ("+(this.state.getCount().getNumber()-this.awaiting.size())+").");
 	}
 
 	@Override

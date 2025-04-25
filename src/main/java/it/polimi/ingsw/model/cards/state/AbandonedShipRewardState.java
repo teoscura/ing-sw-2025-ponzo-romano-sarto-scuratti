@@ -36,8 +36,9 @@ public class AbandonedShipRewardState extends CardState {
 	@Override
 	public void init(ClientModelState new_state) {
 		super.init(new_state);
+		System.out.println("    CardState -> Abandoned Ship Announce State!");
 		for(Player p : this.list){
-			System.out.println(" - "+p.getUsername());
+			System.out.println("	 - "+p.getUsername());
 		}
 	}
 

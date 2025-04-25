@@ -71,6 +71,8 @@ class CombatZonePenaltyState extends CardState {
 	@Override
 	public void init(ClientModelState new_state) {
 		super.init(new_state);
+		System.out.println("    CardState -> Combat Zone New Cabin State!: ["+(3-sections.size())+" - "+this.sections.getFirst().getPenalty()+"].");
+		System.out.println("    Targeting: '"+this.target.getUsername()+"'.");
 		if (sections.getFirst().getPenalty() != CombatZonePenalty.DAYS) return;
 		this.state.getPlanche().movePlayer(state, target, -sections.getFirst().getAmount());
 		this.transition();
@@ -156,6 +158,7 @@ class CombatZonePenaltyState extends CardState {
 		}
 		try {
 			p.getSpaceShip().turnOn(target_coords, battery_coords);
+			System.out.println("Player '" + p.getUsername() + "' turned on component at"+target_coords+" using battery from "+battery_coords+"!");
 		} catch (IllegalTargetException e) {
 			System.out.println(e.getMessage());
 			System.out.println("Player '" + p.getUsername() + "' attempted to turn on a component with invalid coordinates!");
@@ -203,6 +206,7 @@ class CombatZonePenaltyState extends CardState {
 			this.state.loseGame(p);
 			return;
 		}
+		System.out.println("Player '" + p.getUsername() + "' removed a crewmate from "+cabin_coords+"!");
 		this.amount++;
 		if (this.amount == this.sections.getFirst().getAmount()) {
 			this.responded = true;
@@ -232,6 +236,7 @@ class CombatZonePenaltyState extends CardState {
 			ContainsRemoveVisitor v = new ContainsRemoveVisitor(t);
 			try {
 				p.getSpaceShip().getComponent(coords).check(v);
+				System.out.println("Player '" + p.getUsername() + "' discarded cargo type: "+type+" from "+coords+"!");
 				this.required[t.getValue() - 1]--;
 				break;
 			} catch (ContainerEmptyException e) {
