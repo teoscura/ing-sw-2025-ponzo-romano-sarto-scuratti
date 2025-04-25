@@ -48,7 +48,7 @@ public class CabinComponent extends BaseComponent {
     }
 
     public void setCrew(iSpaceShip ship, int new_crew, AlienType type){
-        if(new_crew<=0) throw new NegativeArgumentException("Crew size can't be negative");
+        if(new_crew<0) throw new NegativeArgumentException("Crew size can't be negative");
         if(type.getArraypos()<0) throw new IllegalArgumentException("Type must be a single alien type, not a collector");
         if(new_crew>type.getMaxCapacity()) throw new ArgumentTooBigException("Crew size exceeds type's max capacity");
         if(type.getLifeSupportExists()&&ship.getCrew()[type.getArraypos()]>0) throw new AlienTypeAlreadyPresentException("Spaceship already has one alien of this type.");

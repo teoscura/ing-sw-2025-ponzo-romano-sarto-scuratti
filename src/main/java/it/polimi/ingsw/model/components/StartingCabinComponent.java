@@ -56,7 +56,7 @@ public class StartingCabinComponent extends BaseComponent {
     }
 
     public void setCrew(iSpaceShip ship, int new_crew, AlienType type){
-        if(new_crew<=0) throw new NegativeArgumentException("Crew size can't be zero or negative");
+        if(new_crew<0) throw new NegativeArgumentException("Crew size can't be zero or negative");
         if(type!=AlienType.HUMAN) throw new IllegalArgumentException("Central cabin can only contain humans");
         if(new_crew>AlienType.HUMAN.getMaxCapacity()) throw new ArgumentTooBigException("Crew size exceeds type's max capacity");
         crew_number = new_crew;
