@@ -25,6 +25,7 @@ public class Planche implements iPlanche {
 
 	@Override
 	public int getPlayerPosition(Player p) {
+		if(!this.planche.containsKey(p)) return -1;
 		return this.planche.get(p);
 	}
 

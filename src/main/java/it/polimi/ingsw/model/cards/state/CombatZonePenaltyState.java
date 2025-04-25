@@ -115,7 +115,9 @@ class CombatZonePenaltyState extends CardState {
 								new ArrayList<>(Arrays.asList(this.target.getColor()))),
 						this.shots.getProjectiles().getFirst());
 			default:
-				throw new UnsupportedOperationException("Should be unreachable");
+				return new ClientCombatZoneIndexCardStateDecorator(
+						new ClientBaseCardState(card_id),
+						3 - this.sections.size());
 		}
 	}
 
@@ -127,7 +129,7 @@ class CombatZonePenaltyState extends CardState {
 			System.out.println("Card exhausted, moving to a new one!");
 			return null;
 		}
-		if (!target.getSpaceShip().getBrokeCenter()) target.getSpaceShip().verifyAndClean();
+		if (!target.getSpaceShip().getBrokeCenter()&&this.sections.getFirst().getPenalty()==CombatZonePenalty.SHOTS) target.getSpaceShip().verifyAndClean();
 		this.shots.getProjectiles().removeFirst();
 		if (this.target.getSpaceShip().getBrokeCenter())
 			return new CombatZoneNewCabinState(state, card_id, sections, shots, target);
@@ -155,6 +157,7 @@ class CombatZonePenaltyState extends CardState {
 		try {
 			p.getSpaceShip().turnOn(target_coords, battery_coords);
 		} catch (IllegalTargetException e) {
+			System.out.println(e.getMessage());
 			System.out.println("Player '" + p.getUsername() + "' attempted to turn on a component with invalid coordinates!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to turn on a component with invalid coordinates!"));
 		}
@@ -195,6 +198,7 @@ class CombatZonePenaltyState extends CardState {
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to remove a crew member from invalid coordinates!"));
 			return;
 		}
+		p.getSpaceShip().updateShip();
 		if (p.getSpaceShip().getCrew()[0] == 0) {
 			this.state.loseGame(p);
 			return;

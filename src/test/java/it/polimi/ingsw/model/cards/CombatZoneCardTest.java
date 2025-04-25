@@ -1,5 +1,8 @@
 package it.polimi.ingsw.model.cards;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -7,9 +10,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import it.polimi.ingsw.controller.server.ClientDescriptor;
+import it.polimi.ingsw.message.server.RemoveCrewMessage;
 import it.polimi.ingsw.message.server.SelectLandingMessage;
 import it.polimi.ingsw.message.server.SendContinueMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
+import it.polimi.ingsw.message.server.TakeRewardMessage;
 import it.polimi.ingsw.message.server.TurnOnMessage;
 import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.ModelInstance;
@@ -18,7 +23,10 @@ import it.polimi.ingsw.model.board.Planche;
 import it.polimi.ingsw.model.board.TestFlightCards;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.cards.state.CardState;
+import it.polimi.ingsw.model.cards.utils.CardOrder;
+import it.polimi.ingsw.model.components.CabinComponent;
 import it.polimi.ingsw.model.components.ComponentFactory;
+import it.polimi.ingsw.model.components.StartingCabinComponent;
 import it.polimi.ingsw.model.components.iBaseComponent;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.player.Player;
@@ -149,34 +157,72 @@ public class CombatZoneCardTest {
         state.validate(mess);
         cstate = this.state.getCardState(player1);
         System.out.println(cstate.getClass().getSimpleName());
-        //Attempt sbagliato
-        // mess = new SelectLandingMessage(0);
-        // mess.setDescriptor(p2desc);
-        // state.validate(mess);
-        // //Attempt sbagliato
-        // mess = new SelectLandingMessage(0);
-        // mess.setDescriptor(p2desc);
-        // state.validate(mess);
-        // //Attempt sbagliato
-        // mess = new SelectLandingMessage(0);
-        // mess.setDescriptor(p2desc);
-        // state.validate(mess);
-        // //Attempt sbagliato
-        // mess = new SelectLandingMessage(0);
-        // mess.setDescriptor(p2desc);
-        // state.validate(mess);
-        // //Attempt sbagliato
-        // mess = new SelectLandingMessage(0);
-        // mess.setDescriptor(p2desc);
-        // state.validate(mess);
-        // //Attempt sbagliato
-        // mess = new SelectLandingMessage(0);
-        // mess.setDescriptor(p2desc);
-        // state.validate(mess);
-        // //Attempt sbagliato
-        // mess = new SelectLandingMessage(0);
-        // mess.setDescriptor(p2desc);
-        // state.validate(mess);
+        //2 si arrende, sa che ha perso praticamente.
+        mess = new SendContinueMessage();
+        mess.setDescriptor(p2desc);
+        state.validate(mess);
+        //3 accende due motori
+        mess = new TurnOnMessage(new ShipCoords(GameModeType.TEST, 1, 3), new ShipCoords(GameModeType.TEST, 3, 3));
+        mess.setDescriptor(p3desc);
+        state.validate(mess);
+        mess = new TurnOnMessage(new ShipCoords(GameModeType.TEST, 2, 3), new ShipCoords(GameModeType.TEST, 4, 2));
+        mess.setDescriptor(p3desc);
+        state.validate(mess);
+        //1 ne accende uno per non essere ultimo
+        mess = new TurnOnMessage(new ShipCoords(GameModeType.TEST, 0, 3), new ShipCoords(GameModeType.TEST, 1, 2));
+        mess.setDescriptor(p1desc);
+        state.validate(mess);
+        //2 si pente, viene gabbato dal fatto che ormai ha gia fatto
+        mess = new TurnOnMessage(new ShipCoords(GameModeType.TEST, 2, 3), new ShipCoords(GameModeType.TEST, 4, 2));
+        mess.setDescriptor(p2desc);
+        state.validate(mess);
+        //3 sa che si salva
+        mess = new SendContinueMessage();
+        mess.setDescriptor(p3desc);
+        state.validate(mess);
+        //1 si accontenta di essere 2o
+        mess = new SendContinueMessage();
+        mess.setDescriptor(p1desc);
+        state.validate(mess);
+        //Giusto per testare;
+        ServerMessage smess = new TakeRewardMessage(false);
+        smess.setDescriptor(p1desc);
+        assertThrows(ForbiddenCallException.class, () ->cstate.validate(smess));
+        //dove siamo?
+        cstate = this.state.getCardState(player1);
+        System.out.println(cstate.getClass().getSimpleName());
+        //player 2 deve cedere tutta la sua crew
+        mess = new RemoveCrewMessage(new ShipCoords(GameModeType.TEST, 1, 1));
+        mess.setDescriptor(p2desc);
+        state.validate(mess);
+        mess = new RemoveCrewMessage(new ShipCoords(GameModeType.TEST, 1, 1));
+        mess.setDescriptor(p2desc);
+        state.validate(mess);
+        for(Player p : this.state.getOrder(CardOrder.NORMAL)){
+			p.getSpaceShip().updateShip();
+			System.out.println(" - "+p.getUsername()+": "+p.getSpaceShip().getCannonPower()+"/"+p.getSpaceShip().getEnginePower()+"/"+p.getSpaceShip().getTotalCrew());
+		}
+        //Ha perso (da sistemare quando sistemiamo gli aggiornamenti del model);
+        System.out.println(((CabinComponent)player2.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 1, 1))).getCrew());
+        player2.getSpaceShip().updateShip();
+        assertTrue(player2.getRetired());
+        //player 3 ha poche batterie, la rischia;
+        mess = new SendContinueMessage();
+        mess.setDescriptor(p3desc);
+        state.validate(mess);
+        System.out.println(player1.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 2, 0)).getClass().getSimpleName());
+        //player 1 cerca la patta cosi vince lui per ordine di campo.
+        mess = new TurnOnMessage(new ShipCoords(GameModeType.TEST, 2, 0), new ShipCoords(GameModeType.TEST, 1, 2));
+        mess.setDescriptor(p1desc);
+        state.validate(mess);
+        
+        //clutch
+        mess = new SendContinueMessage();
+        mess.setDescriptor(p1desc);
+        state.validate(mess);
+        //Dove siamo?
+        cstate = this.state.getCardState(player1);
+        System.out.println(cstate.getClass().getSimpleName());
 
     }
 

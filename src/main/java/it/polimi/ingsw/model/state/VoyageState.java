@@ -131,7 +131,7 @@ public class VoyageState extends GameState {
 	}
 
 	public List<Player> getOrder(CardOrder order) {
-		List<Player> tmp = this.players.stream().sorted((Player player1, Player player2) -> Integer.compare(planche.getPlayerPosition(player1), planche.getPlayerPosition(player2))).toList();
+		List<Player> tmp = this.players.stream().filter(p->!p.getRetired()).sorted((Player player1, Player player2) -> Integer.compare(planche.getPlayerPosition(player1), planche.getPlayerPosition(player2))).toList();
 		return order!=CardOrder.NORMAL ? tmp : tmp.reversed();
 	}
 

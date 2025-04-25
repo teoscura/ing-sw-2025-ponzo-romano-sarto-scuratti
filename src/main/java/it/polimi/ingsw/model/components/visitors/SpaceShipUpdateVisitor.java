@@ -67,7 +67,7 @@ public class SpaceShipUpdateVisitor implements iVisitor {
 
 	@Override
 	public void visit(StartingCabinComponent c) {
-		this.crew_members[c.getCrewType().getArraypos()] += c.getCrew();
+		this.crew_members[0] += c.getCrew();
 	}
 
 	public int getBatteryPower() {

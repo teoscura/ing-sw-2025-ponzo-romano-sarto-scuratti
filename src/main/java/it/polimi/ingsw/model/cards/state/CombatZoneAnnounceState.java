@@ -55,6 +55,7 @@ public class CombatZoneAnnounceState extends CardState {
 			System.out.println(" - "+p.getUsername()+": "+p.getSpaceShip().getCannonPower()+"/"+p.getSpaceShip().getEnginePower()+"/"+p.getSpaceShip().getTotalCrew());
 		}
 		this.target = this.state.findCriteria(this.sections.getFirst().getCriteria());
+		System.out.println("Applying penalty to player: '"+target.getUsername()+"'");
 		this.transition();
 	}
 
