@@ -10,7 +10,7 @@ public class ComponentFactory {
 	private final HashMap<Integer, iBaseComponent> components;
 
 	public iBaseComponent getComponent(int id) {
-		if (this.components.containsKey(id)) throw new IllegalArgumentException("Asked for a non-existant component.");
+		if (!this.components.containsKey(id)) throw new IllegalArgumentException("Asked for a non-existant component.");
 		return this.components.get(id);
 	}
 
