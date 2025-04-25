@@ -19,12 +19,13 @@ import it.polimi.ingsw.model.state.VoyageState;
 public class StardustState extends CardState {
 
 	private final StardustCard card;
-	private ArrayList<Player> awaiting = null;
+	private final ArrayList<Player> awaiting;
 
 	public StardustState(VoyageState state, StardustCard card) {
 		super(state);
 		if (card == null) throw new NullPointerException();
 		this.card = card;
+		this.awaiting = new ArrayList<>(state.getOrder(CardOrder.NORMAL));
 	}
 
 	@Override
@@ -33,7 +34,6 @@ public class StardustState extends CardState {
 		for (Player p : this.state.getOrder(CardOrder.INVERSE)) {
 			card.apply(this.state, p);
 		}
-		this.awaiting = new ArrayList<>(state.getOrder(CardOrder.NORMAL));
 	}
 
 	@Override
