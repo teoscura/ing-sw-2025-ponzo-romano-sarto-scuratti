@@ -50,6 +50,10 @@ public class CombatZoneAnnounceState extends CardState {
 			this.state.broadcastMessage(new NotifyStateUpdateMessage(this.state.getClientState()));
 			return;
 		}
+		for(Player p : this.state.getOrder(CardOrder.NORMAL)){
+			p.getSpaceShip().updateShip();
+			System.out.println(" - "+p.getUsername()+": "+p.getSpaceShip().getCannonPower()+"/"+p.getSpaceShip().getEnginePower()+"/"+p.getSpaceShip().getTotalCrew());
+		}
 		this.target = this.state.findCriteria(this.sections.getFirst().getCriteria());
 		this.transition();
 	}

@@ -161,7 +161,7 @@ public class SpaceShip implements iSpaceShip {
 			}
 		}
 		if (!next) throw new IllegalTargetException("Component is not adjacent to others.");
-		component.onCreation(this);
+		component.onCreation(this, coords);
 		this.components[coords.y][coords.x] = component;
 	}
 

@@ -79,10 +79,11 @@ public class StorageComponent extends BaseComponent {
 		return this.type.getCapacity();
 	}
 
-	@Override
-	public void onCreation(iSpaceShip ship) {
-		ship.addStorageCoords(this.coords);
-	}
+    @Override
+    public void onCreation(iSpaceShip ship, ShipCoords coords) {
+        this.coords = coords;
+        ship.addStorageCoords(this.coords);
+    }
 
 	@Override
 	public void onDelete(iSpaceShip ship) {

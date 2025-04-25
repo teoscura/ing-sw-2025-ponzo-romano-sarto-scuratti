@@ -39,8 +39,9 @@ public class EmptyComponent extends BaseComponent {
 	}
 
 	@Override
-	public void onCreation(iSpaceShip ship) {
-	}
+	public void onCreation(iSpaceShip ship, ShipCoords coords) {
+		this.coords = coords;
+	}	
 
 	@Override
 	public void onDelete(iSpaceShip ship) {

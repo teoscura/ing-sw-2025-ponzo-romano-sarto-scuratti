@@ -63,7 +63,8 @@ public class StartingCabinComponent extends BaseComponent {
     }
 
     @Override
-    public void onCreation(iSpaceShip ship) {
+    public void onCreation(iSpaceShip ship, ShipCoords coords) {
+        this.coords = coords;
         ship.addCabinCoords(this.coords);
     }
 

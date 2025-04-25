@@ -34,6 +34,7 @@ public class PlanetAnnounceState extends CardState {
 	public void init(ClientModelState new_state) {
 		super.init(new_state);
 		for(Player p : this.list){
+			p.getSpaceShip().updateShip();
 			System.out.println(" - "+p.getUsername());
 		}
 	}

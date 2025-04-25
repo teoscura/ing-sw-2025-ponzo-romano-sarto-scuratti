@@ -3,7 +3,7 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.model.player.ShipCoords;
 
 public enum GameModeType {
-	TEST(1, false, 5, 7, 18, 4, 10, 5, 9),
+	TEST(1, false, 5, 5, 18, 5, 9, 5, 9),
 	LVL2(2, true, 5, 7, 24, 4, 10, 5, 9);
 
 	private final boolean lifesupports;
@@ -65,22 +65,23 @@ public enum GameModeType {
 	}
 
 	private int[] getShape() {
-		if (this.level == 1) {
+		if (this.level == 2) {
 			return new int[]{0, 1, 2, 4, 5, 6, 7, 8, 12, 13, 14, 20, 21, 27, 28, 31, 34};
 		} else {
-			return new int[]{0, 1, 3, 5, 6, 7, 13, 31};
+			return new int[]{0, 1, 3, 5, 9, 31};
 		}
 	}
 
 	public ShipCoords getCenterCabin() {
-		if (this.level == 1 || this.level == 2) {
+		if (this.level == 2) {
 			return new ShipCoords(this, 3, 2);
 		} else {
-			return new ShipCoords(this, 3, 2);
+			return new ShipCoords(this, 2, 2);
 		}
 	}
 
 	public boolean isForbidden(ShipCoords coords) {
+		if(!coords.getType().equals(this)) throw new IllegalArgumentException();
 		int tmp = coords.y * this.width + coords.x;
 		for (int i : this.getShape()) {
 			if (i == tmp) return true;

@@ -61,7 +61,7 @@ class ShieldComponentTest {
 
 		assertDoesNotThrow(() -> ship.addComponent(shieldWithCoords, coords));
 		assertEquals(shieldWithCoords, ship.getComponent(coords));
-		assertThrows(NotUniqueException.class, () -> shieldWithCoords.onCreation(ship));
+		assertThrows(NotUniqueException.class, () -> shieldWithCoords.onCreation(ship, coords));
 
 	}
 	@Test

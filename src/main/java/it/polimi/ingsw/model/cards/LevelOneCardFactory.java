@@ -83,7 +83,7 @@ public class LevelOneCardFactory implements iCardFactory {
 							new Planet(new int[]{0, 0, 1, 0}),
 							new Planet(new int[]{3, 0, 0, 0})})
 			);
-			put(16, new CombatZoneCard(16,
+			put(16, new CombatZoneCard(1,
 					new ArrayList<>(Arrays.asList(new CombatZoneSection(
 									CombatZoneCriteria.LEAST_CREW,
 									CombatZonePenalty.DAYS, 3),

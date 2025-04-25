@@ -65,7 +65,8 @@ public class BatteryComponent extends BaseComponent{
     }
 
     @Override
-    public void onCreation(iSpaceShip ship){
+    public void onCreation(iSpaceShip ship, ShipCoords coords){
+        this.coords = coords;
         ship.addBatteryCoords(this.coords);
     }
 

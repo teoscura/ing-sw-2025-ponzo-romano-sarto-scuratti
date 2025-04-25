@@ -103,7 +103,7 @@ public abstract class BaseComponent implements iBaseComponent, iVisitable {
 	}
 
 	@Override
-	public abstract void onCreation(iSpaceShip ship);
+	public abstract void onCreation(iSpaceShip ship, ShipCoords coords);
 
 	@Override
 	public abstract void onDelete(iSpaceShip ship);

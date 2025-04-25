@@ -22,7 +22,7 @@ public interface iBaseComponent extends Serializable {
 	void check(iVisitor v);
 
 	//On delete/Creation
-	void onCreation(iSpaceShip ship);
+	void onCreation(iSpaceShip ship, ShipCoords coords);
 
 	void onDelete(iSpaceShip ship);
 
