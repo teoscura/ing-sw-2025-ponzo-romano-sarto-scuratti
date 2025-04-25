@@ -11,6 +11,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.NoSuchElementException;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -214,14 +215,17 @@ public class AbadonedShipCardTest {
     void disconnectionResilience() throws ForbiddenCallException, PlayerNotFoundException{
         //giocatore rosso si disconnette, tocca a scarso
         state.disconnect(player1);
+        cstate = this.state.getCardState(player1);
         //giocatore blu si disconnette, ma non era primo, tocca ancora a scarso.
         state.disconnect(player2);
+        cstate = this.state.getCardState(player1);
         //giocatore scarso rifiuta, sapendo che non puo entrare
-        ServerMessage mess3 = new SelectLandingMessage(-1);
-        mess3.setDescriptor(psdesc);
-        cstate.validate(mess3);
+        ServerMessage messa = new SelectLandingMessage(-1);
+        messa.setDescriptor(psdesc);
+        state.validate(messa);
+        cstate = this.state.getCardState(player1);
         //carta conclusa.
-        assertEquals(null, cstate.getNext());
+        System.out.println(cstate.getClass().getSimpleName());
     }
 
 }

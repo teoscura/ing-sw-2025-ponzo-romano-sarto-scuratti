@@ -45,6 +45,7 @@ public class AbandonedShipAnnounceState extends CardState {
 		message.receive(this);
 		if (!responded) {
 			this.state.broadcastMessage(new NotifyStateUpdateMessage(this.state.getClientState()));
+			System.out.println("No transition.");
 			return;
 		}
 		try{
@@ -70,6 +71,10 @@ public class AbandonedShipAnnounceState extends CardState {
 
 	@Override
     public CardState getNext() {
+		if (this.list.getFirst().getDisconnected()){
+			this.list.removeFirst();
+			return new AbandonedShipAnnounceState(state, card, list);
+		}
 		if (this.card.getExhausted()) return new AbandonedShipRewardState(state, card, list);
 		this.list.removeFirst();
 		if (!this.list.isEmpty()) return new AbandonedShipAnnounceState(state, card, list);
@@ -78,7 +83,7 @@ public class AbandonedShipAnnounceState extends CardState {
 
 	@Override
 	public void selectLanding(Player p, int planet) {
-		if (p != this.list.getFirst()) {
+		if (!p.equals(this.list.getFirst())) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to land during another player's turn!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to land during another player's turn!"));
 			return;
@@ -93,14 +98,14 @@ public class AbandonedShipAnnounceState extends CardState {
 
 	@Override
 	public void disconnect(Player p) throws ForbiddenCallException {
-		if (this.list.getFirst() == p) {
+		if (this.list.getFirst().equals(p)) {
 			this.responded = true;
 			this.id = -1;
-			return;
 		}
-		if (this.list.contains(p)) {
+		else if (this.list.contains(p)) {
 			this.list.remove(p);
 		}
+		System.out.println("Player '" + p.getUsername() + "' disconnected!");
 	}
 
 }

@@ -36,15 +36,15 @@ public class VerifyState extends GameState {
 		this.to_validate = new ArrayList<>();
 		this.to_validate.addAll(this.players);
 		this.finish_order = finish_order;
+		for (Player p : this.players) {
+			boolean tmp = p.getSpaceShip().verifyAndClean();
+			if (tmp) finish_order.remove(p);
+		}
 	}
 
 	@Override
 	public void init() {
 		super.init();
-		for (Player p : this.players) {
-			boolean tmp = p.getSpaceShip().verifyAndClean();
-			if (tmp) finish_order.remove(p);
-		}
 		this.broadcastMessage(new NotifyStateUpdateMessage(this.getClientState()));
 	}
 

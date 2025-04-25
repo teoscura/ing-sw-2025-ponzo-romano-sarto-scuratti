@@ -6,6 +6,7 @@ import java.util.List;
 
 import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
+import it.polimi.ingsw.message.server.ServerDisconnectMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.ModelInstance;
@@ -96,7 +97,9 @@ public class VoyageState extends GameState {
 		if (p == null) throw new NullPointerException();
 		if (p.getDisconnected()) throw new ForbiddenCallException();
 		p.disconnect();
-		this.state.disconnect(p);
+		ServerMessage disc = new ServerDisconnectMessage();
+		disc.setDescriptor(p.getDescriptor());
+		this.state.validate(disc);
 	}
 
 	@Override
@@ -133,7 +136,7 @@ public class VoyageState extends GameState {
 				return this.players.stream().sorted((p1, p2) -> this.planche.getPlayerPosition(p1) > this.planche.getPlayerPosition(p2) ? 1 : -1).toList();
 			}
 			case INVERSE: {
-				return this.players.stream().sorted((p1, p2) -> this.planche.getPlayerPosition(p1) > this.planche.getPlayerPosition(p2) ? -1 : 1).toList();
+				return this.players.stream().sorted((p1, p2) -> this.planche.getPlayerPosition(p1) > this.planche.getPlayerPosition(p2) ? 1 : -1).toList();
 			}
 		}
 		return this.players.stream().sorted((p1, p2) -> this.planche.getPlayerPosition(p1) > this.planche.getPlayerPosition(p2) ? 1 : -1).toList();

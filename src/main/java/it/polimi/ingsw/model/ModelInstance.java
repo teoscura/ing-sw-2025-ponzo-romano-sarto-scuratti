@@ -77,6 +77,7 @@ public class ModelInstance {
 
 	public void connect(ClientDescriptor client) {
 		try {
+			//XXX validate message dont do this
 			this.state.connect(client);
 		} catch (ForbiddenCallException e) {
 			System.out.println("Client: '" + client.getUsername() + "' tried connecting when the current state doesn't support it anymore!");
@@ -85,6 +86,7 @@ public class ModelInstance {
 
 	public void disconnect(ClientDescriptor client) {
 		try {
+			//XXX validate message dont do this
 			this.state.disconnect(client);
 		} catch (ForbiddenCallException e) {
 			System.out.println("Client: '" + client.getUsername() + "' tried disconnecting when the current state doesn't support it anymore!");
@@ -93,7 +95,8 @@ public class ModelInstance {
 
 	public void connect(Player p) {
 		try {
-			this.state.disconnect(p);
+			//XXX validate message dont do this
+			this.state.connect(p);
 			System.out.println("Client: '" + p.getUsername() + "' reconnected to the game!");
 		} catch (ForbiddenCallException e) {
 			System.out.println("Client: '" + p.getUsername() + "' tried reconnecting when the current state doesn't support it anymore!");
@@ -102,6 +105,7 @@ public class ModelInstance {
 
 	public void disconnect(Player p) {
 		try {
+			//XXX validate message dont do this
 			this.state.disconnect(p);
 			System.out.println("Client: '" + p.getUsername() + "' disconnected from the game!");
 		} catch (ForbiddenCallException e) {
@@ -111,6 +115,7 @@ public class ModelInstance {
 
 	public void kick(ClientDescriptor client) {
 		try {
+			//XXX validate message dont do this
 			this.state.disconnect(client);
 		} catch (ForbiddenCallException e) {
 			System.out.println("Player " + client.getUsername() + " is not connected, cannot kick!");
