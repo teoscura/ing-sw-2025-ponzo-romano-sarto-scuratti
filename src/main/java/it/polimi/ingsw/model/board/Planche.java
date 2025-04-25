@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.board;
 
 import it.polimi.ingsw.model.GameModeType;
+import it.polimi.ingsw.model.PlayerCount;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.state.VoyageState;
 
@@ -17,7 +18,7 @@ public class Planche implements iPlanche {
 		this.planche = new HashMap<Player, Integer>();
 		int i = 0;
 		for(Player p : order){
-			planche.put(p, this.length + type.getStartingPos()[i]);
+			planche.put(p, this.length + type.getStartingPos()[order.size()-i]);
 			i++;
 		}
 	}
@@ -69,6 +70,13 @@ public class Planche implements iPlanche {
 	public void loseGame(Player p) {
 		this.planche.remove(p);
 	}
+
+    public void printOrder() {
+        List<Player> tmp = this.planche.keySet().stream().sorted((p1, p2) -> this.planche.get(p1) > this.planche.get(p2) ? 1 : -1).toList();
+		for(Player p : tmp){
+			System.out.println(p.getUsername());
+		}
+    }
 
 }
 

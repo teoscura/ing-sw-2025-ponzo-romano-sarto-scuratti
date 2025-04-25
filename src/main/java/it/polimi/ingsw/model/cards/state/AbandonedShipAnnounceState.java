@@ -35,6 +35,9 @@ public class AbandonedShipAnnounceState extends CardState {
 	@Override
 	public void init(ClientModelState new_state) {
 		super.init(new_state);
+		for(Player p : this.list){
+			System.out.println(p.getUsername());
+		}
 	}
 
 	@Override
@@ -44,7 +47,14 @@ public class AbandonedShipAnnounceState extends CardState {
 			this.state.broadcastMessage(new NotifyStateUpdateMessage(this.state.getClientState()));
 			return;
 		}
-		this.card.apply(state, this.list.getFirst(), id);
+		try{
+			this.card.apply(state, this.list.getFirst(), id);
+		} catch (IllegalArgumentException e){
+			System.out.println("Player '" + this.list.getFirst().getUsername() + "' attempted to land without enough crew!");
+			this.state.broadcastMessage(new ViewMessage("Player'" + this.list.getFirst().getUsername() + "' attempted to land without enough crew!"));
+			this.responded = false;
+			return;
+		}
 		this.transition();
 	}
 
