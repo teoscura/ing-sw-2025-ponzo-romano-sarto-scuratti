@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import it.polimi.ingsw.exceptions.IllegalConstructorArgumentException;
-import it.polimi.ingsw.model.adventure_cards.visitors.CrewRemoveVisitor;
+import it.polimi.ingsw.model.cards.visitors.CrewRemoveVisitor;
 import it.polimi.ingsw.model.client.components.ClientBaseComponent;
 import it.polimi.ingsw.model.client.components.ClientComponent;
 import it.polimi.ingsw.model.components.enums.AlienType;

@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.time.Duration;
 import java.time.Instant;
 
-import it.polimi.ingsw.model.adventure_cards.exceptions.ForbiddenCallException;
+import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 
 public class ConstructionStateHourglass implements Serializable {
 

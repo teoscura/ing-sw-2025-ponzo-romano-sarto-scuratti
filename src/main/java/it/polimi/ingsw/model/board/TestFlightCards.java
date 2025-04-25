@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import it.polimi.ingsw.model.adventure_cards.LevelOneCardFactory;
-import it.polimi.ingsw.model.adventure_cards.iCard;
+import it.polimi.ingsw.model.cards.LevelOneCardFactory;
+import it.polimi.ingsw.model.cards.iCard;
 
 public class TestFlightCards implements iCards {
 

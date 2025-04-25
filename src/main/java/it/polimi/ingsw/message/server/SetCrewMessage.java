@@ -2,7 +2,7 @@ package it.polimi.ingsw.message.server;
 
 import it.polimi.ingsw.controller.server.ServerController;
 import it.polimi.ingsw.model.ModelInstance;
-import it.polimi.ingsw.model.adventure_cards.exceptions.ForbiddenCallException;
+import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.components.enums.AlienType;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.GameState;

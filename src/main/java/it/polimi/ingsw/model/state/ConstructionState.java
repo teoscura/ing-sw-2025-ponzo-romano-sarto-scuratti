@@ -12,7 +12,7 @@ import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.ModelInstance;
 import it.polimi.ingsw.model.PlayerCount;
-import it.polimi.ingsw.model.adventure_cards.exceptions.ForbiddenCallException;
+import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.board.CommonBoard;
 import it.polimi.ingsw.model.board.LevelTwoCards;
 import it.polimi.ingsw.model.board.TestFlightCards;

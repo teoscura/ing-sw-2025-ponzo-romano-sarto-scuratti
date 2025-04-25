@@ -5,7 +5,7 @@ import java.util.List;
 import it.polimi.ingsw.controller.server.ClientDescriptor;
 import it.polimi.ingsw.controller.server.ServerController;
 import it.polimi.ingsw.message.server.ServerMessage;
-import it.polimi.ingsw.model.adventure_cards.exceptions.ForbiddenCallException;
+import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.player.*;
 import it.polimi.ingsw.model.state.GameState;
 import it.polimi.ingsw.model.state.ResumeWaitingState;

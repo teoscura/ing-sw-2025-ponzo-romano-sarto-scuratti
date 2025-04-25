@@ -8,7 +8,7 @@ import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.ModelInstance;
 import it.polimi.ingsw.model.PlayerCount;
-import it.polimi.ingsw.model.adventure_cards.exceptions.ForbiddenCallException;
+import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.board.Planche;
 import it.polimi.ingsw.model.board.iCards;
 import it.polimi.ingsw.model.client.player.ClientVerifyPlayer;

@@ -3,8 +3,8 @@ package it.polimi.ingsw.model.player;
 import java.util.ArrayList;
 
 import it.polimi.ingsw.model.GameModeType;
-import it.polimi.ingsw.model.adventure_cards.exceptions.ForbiddenCallException;
-import it.polimi.ingsw.model.adventure_cards.utils.Projectile;
+import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
+import it.polimi.ingsw.model.cards.utils.Projectile;
 import it.polimi.ingsw.model.client.components.ClientSpaceShip;
 import it.polimi.ingsw.model.components.iBaseComponent;
 import it.polimi.ingsw.model.components.enums.AlienType;

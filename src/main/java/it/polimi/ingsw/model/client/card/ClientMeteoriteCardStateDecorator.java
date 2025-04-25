@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.client.card;
 
-import it.polimi.ingsw.model.adventure_cards.utils.Projectile;
+import it.polimi.ingsw.model.cards.utils.Projectile;
 import it.polimi.ingsw.view.ClientView;
 
 public class ClientMeteoriteCardStateDecorator implements ClientCardState {
