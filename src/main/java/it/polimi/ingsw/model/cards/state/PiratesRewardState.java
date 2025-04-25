@@ -59,7 +59,7 @@ class PiratesRewardState extends CardState {
 	}
 
 	@Override
-	protected CardState getNext() {
+    public CardState getNext() {
 		return null;
 	}
 

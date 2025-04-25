@@ -57,7 +57,7 @@ public class PlanetAnnounceState extends CardState {
 	}
 
 	@Override
-	protected CardState getNext() {
+    public CardState getNext() {
 		if (id != -1) return new PlanetRewardState(state, card, id, list);
 		this.list.removeFirst();
 		if (!this.list.isEmpty()) return new PlanetAnnounceState(state, card, list);

@@ -65,7 +65,7 @@ public class MeteorAnnounceState extends CardState {
 	}
 
 	@Override
-	protected CardState getNext() {
+    public CardState getNext() {
 		for (Player p : this.state.getOrder(CardOrder.NORMAL)) {
 			if (!p.getSpaceShip().getBrokeCenter()) p.getSpaceShip().verifyAndClean();
 		}

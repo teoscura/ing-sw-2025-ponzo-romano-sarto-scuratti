@@ -60,7 +60,7 @@ public class AbandonedStationAnnounceState extends CardState {
 	}
 
 	@Override
-	protected CardState getNext() {
+    public CardState getNext() {
 		if (this.card.getExhausted()) return new AbandonedStationRewardState(state, card, list);
 		this.list.removeFirst();
 		if (!this.list.isEmpty()) return new AbandonedStationAnnounceState(state, card, list);

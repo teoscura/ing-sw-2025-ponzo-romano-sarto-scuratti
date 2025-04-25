@@ -66,7 +66,7 @@ class SmugglersRewardState extends CardState {
 	}
 
 	@Override
-	protected CardState getNext() {
+    public CardState getNext() {
 		return null;
 	}
 

@@ -18,7 +18,7 @@ import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.VoyageState;
 
-class AbandonedShipRewardState extends CardState {
+public class AbandonedShipRewardState extends CardState {
 
 	private final AbandonedShipCard card;
 	private final ArrayList<Player> list;
@@ -58,7 +58,7 @@ class AbandonedShipRewardState extends CardState {
 	}
 
 	@Override
-	protected CardState getNext() {
+    public CardState getNext() {
 		return null;
 	}
 

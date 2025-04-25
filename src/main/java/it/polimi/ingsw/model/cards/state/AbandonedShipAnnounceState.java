@@ -59,7 +59,7 @@ public class AbandonedShipAnnounceState extends CardState {
 	}
 
 	@Override
-	protected CardState getNext() {
+    public CardState getNext() {
 		if (this.card.getExhausted()) return new AbandonedShipRewardState(state, card, list);
 		this.list.removeFirst();
 		if (!this.list.isEmpty()) return new AbandonedShipAnnounceState(state, card, list);

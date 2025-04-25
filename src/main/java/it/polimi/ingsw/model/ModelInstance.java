@@ -39,7 +39,9 @@ public class ModelInstance {
 	}
 
 	public void serialize() {
-		this.controller.serializeCurrentGame();
+		return;
+		//XXX;
+		//this.controller.serializeCurrentGame();
 	}
 
 	public void startGame(List<Player> players) throws ForbiddenCallException {
@@ -53,7 +55,9 @@ public class ModelInstance {
 
 	public void endGame() {
 		if (!this.started) throw new RuntimeException();
-		this.controller.endGame();
+		return;
+		//XXX;
+		//this.controller.endGame();
 	}
 
 	public GameState getState() {
@@ -111,7 +115,9 @@ public class ModelInstance {
 		} catch (ForbiddenCallException e) {
 			System.out.println("Player " + client.getUsername() + " is not connected, cannot kick!");
 		}
-		this.controller.kick(client);
+		return;
+		//XXX;
+		//this.controller.kick(client);
 	}
 
 	public void setController(ServerController controller) {
