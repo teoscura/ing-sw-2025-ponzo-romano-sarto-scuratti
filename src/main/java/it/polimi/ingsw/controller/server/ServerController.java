@@ -172,7 +172,7 @@ public class ServerController extends Thread implements RemoteServer {
 				return;
 			}
 			client.getConnection().close();
-			if (this.setupper == client && !this.setup_complete) {
+			if (client.equals(this.setupper) && !this.setup_complete) {
 				this.setupper = null;
 			} else if (client.getPlayer() != null) {
 				this.model.disconnect(client.getPlayer());
@@ -198,7 +198,7 @@ public class ServerController extends Thread implements RemoteServer {
 				this.broadcast(new ViewMessage("Client '" + client.getUsername() + "' attempted to open a room while game is already ongoing!"));
 				return;
 			}
-			if (this.setupper != null && client != this.setupper) {
+			if (this.setupper != null && !client.equals(this.setupper)) {
 				System.out.println("Client '" + client.getUsername() + "' attempted to open a room while server is in setup mode!");
 				this.broadcast(new ViewMessage("Client '" + client.getUsername() + "' attempted to open a room while server is in setup mode!"));
 				return;
@@ -243,7 +243,7 @@ public class ServerController extends Thread implements RemoteServer {
 				this.broadcast(new ViewMessage("Client '" + client.getUsername() + "' attempted to open a unfinished game while a game is already ongoing!"));
 				return;
 			}
-			if (this.setupper != null && client != this.setupper) {
+			if (this.setupper != null && !client.equals(this.setupper)) {
 				System.out.println("Client '" + client.getUsername() + "' attempted to open a unfinished game while server is in setup mode!");
 				this.broadcast(new ViewMessage("Client '" + client.getUsername() + "' attempted to open a unfinished game while server is in setup mode!"));
 				return;
