@@ -128,19 +128,15 @@ public class VoyageState extends GameState {
 	}
 
 	public List<Player> getOrder(CardOrder order) {
-		List<Player> tmp = new ArrayList<>();
-		tmp.addAll(this.players);
 		switch (order) {
 			case NORMAL: {
-				Collections.sort(tmp, (p1, p2) -> this.planche.getPlayerPosition(p1) > this.planche.getPlayerPosition(p2) ? 1 : -1);
-				return tmp.stream().filter((p) -> !p.getRetired() && !p.getDisconnected()).toList();
+				return this.players.stream().sorted((p1, p2) -> this.planche.getPlayerPosition(p1) > this.planche.getPlayerPosition(p2) ? 1 : -1).toList();
 			}
 			case INVERSE: {
-				Collections.sort(tmp, (p1, p2) -> this.planche.getPlayerPosition(p1) > this.planche.getPlayerPosition(p2) ? -1 : 1);
-				return tmp.stream().filter((p) -> !p.getRetired() && !p.getDisconnected()).toList();
+				return this.players.stream().sorted((p1, p2) -> this.planche.getPlayerPosition(p1) > this.planche.getPlayerPosition(p2) ? -1 : 1).toList();
 			}
 		}
-		return tmp;
+		return this.players.stream().sorted((p1, p2) -> this.planche.getPlayerPosition(p1) > this.planche.getPlayerPosition(p2) ? 1 : -1).toList();
 	}
 
 	public Player findCriteria(CombatZoneCriteria criteria) {
@@ -187,6 +183,7 @@ public class VoyageState extends GameState {
 			this.state = card.getState(this);
 			this.model.serialize();
 			this.state.init(this.getClientState());
+			return;
 		}
 		this.state = next;
 		next.init(this.getClientState());
@@ -201,6 +198,11 @@ public class VoyageState extends GameState {
 		}
 		res.concat("Cards left: " + this.voyage_deck.getLeft() + ", Current card state: " + this.state.getClass().getSimpleName());
 		return res;
+	}
+
+	@Override
+	public CardState getCardState(Player p){
+		return this.state;
 	}
 
 }
