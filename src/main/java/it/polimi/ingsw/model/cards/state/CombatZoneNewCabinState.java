@@ -67,12 +67,14 @@ class CombatZoneNewCabinState extends CardState {
 		if (this.target.getRetired()) {
 			this.sections.removeFirst();
 			if (!this.sections.isEmpty()) return new CombatZoneAnnounceState(state, card_id, sections, shots);
+			System.out.println("Card exhausted, moving to a new one!");
 			return null;
 		}
 		if (!this.shots.getProjectiles().isEmpty())
 			return new CombatZonePenaltyState(state, card_id, sections, shots, target);
 		this.sections.removeFirst();
 		if (!this.sections.isEmpty()) return new CombatZoneAnnounceState(state, card_id, sections, shots);
+		System.out.println("Card exhausted, moving to a new one!");
 		return null;
 	}
 

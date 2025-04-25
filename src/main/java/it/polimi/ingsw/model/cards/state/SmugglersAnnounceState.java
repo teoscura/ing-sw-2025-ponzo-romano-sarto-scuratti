@@ -61,12 +61,14 @@ public class SmugglersAnnounceState extends CardState {
 		if (this.list.getFirst().getDisconnected()) {
 			this.list.removeFirst();
 			if (!this.list.isEmpty()) return new SmugglersAnnounceState(state, card, list);
+			System.out.println("Card exhausted, moving to a new one!");
 			return null;
 		}
 		if (!result) return new SmugglersLoseState(state, card, list);
 		if (this.card.getExhausted()) return new SmugglersRewardState(state, card, list);
 		this.list.removeFirst();
 		if (!this.list.isEmpty()) return new SmugglersAnnounceState(state, card, list);
+		System.out.println("Card exhausted, moving to a new one!");
 		return null;
 	}
 

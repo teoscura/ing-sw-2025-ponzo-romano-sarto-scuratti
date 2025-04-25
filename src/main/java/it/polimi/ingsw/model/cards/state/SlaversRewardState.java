@@ -60,6 +60,7 @@ class SlaversRewardState extends CardState {
 
 	@Override
     public CardState getNext() {
+		System.out.println("Card exhausted, moving to a new one!");
 		return null;
 	}
 

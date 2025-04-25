@@ -35,7 +35,6 @@ public class AbandonedStationAnnounceState extends CardState {
 	@Override
 	public void init(ClientModelState new_state) {
 		super.init(new_state);
-		if (list.getFirst().getRetired() || list.getFirst().getDisconnected()) this.transition();
 	}
 
 	@Override
@@ -52,7 +51,7 @@ public class AbandonedStationAnnounceState extends CardState {
 	@Override
 	public ClientCardState getClientCardState() {
 		ArrayList<Boolean> tmp = new ArrayList<>(Arrays.asList(true));
-		return new ClientLandingCardStateDecorator(new ClientBaseCardState(this.id),
+		return new ClientLandingCardStateDecorator(new ClientBaseCardState(this.card.getId()),
 				this.list.getFirst().getColor(),
 				this.card.getDays(),
 				this.card.getCrewLost(),
@@ -64,6 +63,7 @@ public class AbandonedStationAnnounceState extends CardState {
 		if (this.card.getExhausted()) return new AbandonedStationRewardState(state, card, list);
 		this.list.removeFirst();
 		if (!this.list.isEmpty()) return new AbandonedStationAnnounceState(state, card, list);
+		System.out.println("Card exhausted, moving to a new one!");
 		return null;
 	}
 

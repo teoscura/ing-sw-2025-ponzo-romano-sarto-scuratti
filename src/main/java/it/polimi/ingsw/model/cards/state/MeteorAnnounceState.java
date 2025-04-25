@@ -72,6 +72,7 @@ public class MeteorAnnounceState extends CardState {
 		if (broke_cabin) return new MeteorNewCabinState(state, card_id, left);
 		this.left.getProjectiles().removeFirst();
 		if (!this.left.getProjectiles().isEmpty()) return new MeteorAnnounceState(state, card_id, left);
+		System.out.println("Card exhausted, moving to a new one!");
 		return null;
 	}
 

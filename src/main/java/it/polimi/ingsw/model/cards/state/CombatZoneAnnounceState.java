@@ -65,8 +65,9 @@ public class CombatZoneAnnounceState extends CardState {
 
 	@Override
     public CardState getNext() {
-		if (this.state.getOrder(CardOrder.NORMAL).size() <= 1) return null;
-		return new CombatZonePenaltyState(state, card_id, sections, shots, target);
+		if (this.state.getOrder(CardOrder.NORMAL).size() > 1) return new CombatZonePenaltyState(state, card_id, sections, shots, target);
+		System.out.println("Card exhausted, moving to a new one!");
+		return null;
 	}
 
 	@Override

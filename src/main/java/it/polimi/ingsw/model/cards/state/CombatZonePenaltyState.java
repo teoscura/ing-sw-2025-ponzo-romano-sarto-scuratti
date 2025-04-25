@@ -124,6 +124,7 @@ class CombatZonePenaltyState extends CardState {
 		if (this.target.getRetired() || this.target.getDisconnected()) {
 			this.sections.removeFirst();
 			if (!this.sections.isEmpty()) return new CombatZoneAnnounceState(state, card_id, sections, shots);
+			System.out.println("Card exhausted, moving to a new one!");
 			return null;
 		}
 		if (!target.getSpaceShip().getBrokeCenter()) target.getSpaceShip().verifyAndClean();
@@ -135,6 +136,7 @@ class CombatZonePenaltyState extends CardState {
 		}
 		this.sections.removeFirst();
 		if (!this.sections.isEmpty()) return new CombatZoneAnnounceState(state, card_id, sections, shots);
+		System.out.println("Card exhausted, moving to a new one!");
 		return null;
 	}
 

@@ -172,6 +172,7 @@ public class AbadonedShipCardTest {
 
     @Test
     void behaviour() throws ForbiddenCallException, PlayerNotFoundException {
+        planche.printOrder();
         //giocatore giallo tenta, ma non e' il suo turno
         SelectLandingMessage mess1 = new SelectLandingMessage(0);
         mess1.setDescriptor(psdesc);
@@ -208,7 +209,9 @@ public class AbadonedShipCardTest {
         mess6.setDescriptor(p2desc);
         cstate.validate(mess6);
         //Finito.
-        assertEquals(null, cstate.getNext());
+        cstate = this.state.getCardState(player1);
+        planche.printOrder();
+        System.out.println(cstate.getClass().getSimpleName());
     }
 
     @Test

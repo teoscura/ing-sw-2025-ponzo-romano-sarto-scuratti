@@ -60,12 +60,14 @@ class PiratesNewCabinState extends CardState {
 		if (this.list.getFirst().getRetired()) {
 			this.list.removeFirst();
 			if (!this.list.isEmpty()) return new PiratesAnnounceState(state, card, list);
+			System.out.println("Card exhausted, moving to a new one!");
 			return null;
 		}
 		this.shots.getProjectiles().removeFirst();
 		if (!this.shots.getProjectiles().isEmpty()) return new PiratesPenaltyState(state, card, list, shots);
 		this.list.removeFirst();
 		if (!this.list.isEmpty()) return new PiratesAnnounceState(state, card, list);
+		System.out.println("Card exhausted, moving to a new one!");
 		return null;
 	}
 

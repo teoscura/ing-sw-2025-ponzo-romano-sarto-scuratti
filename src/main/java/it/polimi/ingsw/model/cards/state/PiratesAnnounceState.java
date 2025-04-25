@@ -62,12 +62,14 @@ public class PiratesAnnounceState extends CardState {
 		if (this.list.getFirst().getDisconnected()) {
 			this.list.removeFirst();
 			if (!this.list.isEmpty()) return new PiratesAnnounceState(state, card, list);
+			System.out.println("Card exhausted, moving to a new one!");
 			return null;
 		}
 		if (!result) return new PiratesPenaltyState(state, card, list, card.getShots());
 		if (this.card.getExhausted()) return new PiratesRewardState(state, card, list);
 		this.list.removeFirst();
 		if (!this.list.isEmpty()) return new PiratesAnnounceState(state, card, list);
+		System.out.println("Card exhausted, moving to a new one!");
 		return null;
 	}
 

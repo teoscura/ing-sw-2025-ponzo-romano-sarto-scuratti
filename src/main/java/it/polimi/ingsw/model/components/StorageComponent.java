@@ -50,6 +50,7 @@ public class StorageComponent extends BaseComponent {
         if(this.currently_full==this.type.getCapacity()) throw new ContainerFullException();
         this.shipments[shipment.getValue()-1]++;
         this.currently_full++;
+        System.out.println("Added a shipment "+shipment.toString()+" to container at "+this.getCoords().toString()+"!");
     }
 
     public boolean takeOut(ShipmentType shipment){

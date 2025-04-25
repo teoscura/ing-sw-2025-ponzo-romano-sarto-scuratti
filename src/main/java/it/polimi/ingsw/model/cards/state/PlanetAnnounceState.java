@@ -33,6 +33,9 @@ public class PlanetAnnounceState extends CardState {
 	@Override
 	public void init(ClientModelState new_state) {
 		super.init(new_state);
+		for(Player p : this.list){
+			System.out.println(p.getUsername());
+		}
 	}
 
 	@Override
@@ -42,7 +45,11 @@ public class PlanetAnnounceState extends CardState {
 			this.state.broadcastMessage(new NotifyStateUpdateMessage(this.state.getClientState()));
 			return;
 		}
-		this.card.apply(this.list.getFirst(), id);
+		if(this.id>=0){
+			this.card.apply(this.list.getFirst(), id);
+			System.out.println("Player '" + this.list.getFirst().getUsername() + "'' moved back "+card.getDays());
+			this.state.getPlanche().movePlayer(state, list.getFirst(), -card.getDays());
+		}
 		this.transition();
 	}
 
@@ -61,12 +68,13 @@ public class PlanetAnnounceState extends CardState {
 		if (id != -1) return new PlanetRewardState(state, card, id, list);
 		this.list.removeFirst();
 		if (!this.list.isEmpty()) return new PlanetAnnounceState(state, card, list);
+		System.out.println("Moving to a new state!");
 		return null;
 	}
 
 	@Override
 	public void selectLanding(Player p, int planet) {
-		if (p != this.list.getFirst()) {
+		if (!p.equals(this.list.getFirst())) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to land during another player's turn!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to land during another player's turn!"));
 			return;
@@ -75,11 +83,18 @@ public class PlanetAnnounceState extends CardState {
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to land on an invalid id!"));
 			return;
 		}
-		if (this.card.getPlanet(planet).getVisited()) {
+		if (planet==-1){
+			System.out.println("Player '" + p.getUsername() + "' chose to not land!");
+			this.id = planet;
+			this.responded = true;
+			return;
+		}
+		else if (this.card.getPlanet(planet).getVisited()) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to land on a planet that was already visited!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to land on a planet that was already visited!"));
 			return;
 		}
+		System.out.println("Player '" + p.getUsername() + "' landed on: "+planet);
 		this.id = planet;
 		this.responded = true;
 	}

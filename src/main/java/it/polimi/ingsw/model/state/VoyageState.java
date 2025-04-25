@@ -131,15 +131,8 @@ public class VoyageState extends GameState {
 	}
 
 	public List<Player> getOrder(CardOrder order) {
-		switch (order) {
-			case NORMAL: {
-				return this.players.stream().sorted((p1, p2) -> this.planche.getPlayerPosition(p1) > this.planche.getPlayerPosition(p2) ? 1 : -1).toList();
-			}
-			case INVERSE: {
-				return this.players.stream().sorted((p1, p2) -> this.planche.getPlayerPosition(p1) > this.planche.getPlayerPosition(p2) ? 1 : -1).toList();
-			}
-		}
-		return this.players.stream().sorted((p1, p2) -> this.planche.getPlayerPosition(p1) > this.planche.getPlayerPosition(p2) ? 1 : -1).toList();
+		List<Player> tmp = this.players.stream().sorted((Player player1, Player player2) -> Integer.compare(planche.getPlayerPosition(player1), planche.getPlayerPosition(player2))).toList();
+		return order!=CardOrder.NORMAL ? tmp : tmp.reversed();
 	}
 
 	public Player findCriteria(CombatZoneCriteria criteria) {

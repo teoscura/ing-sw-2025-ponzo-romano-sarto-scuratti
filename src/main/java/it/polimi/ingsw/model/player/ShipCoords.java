@@ -43,4 +43,9 @@ public class ShipCoords implements Serializable {
         if(this.x==0) return new ShipCoords(this.type, 0, 0);
         return new ShipCoords(this.type, this.x-1, this.y);
     }
+
+    public String toString(){
+        return "("+this.x+","+this.y+")";
+    }
+
 }

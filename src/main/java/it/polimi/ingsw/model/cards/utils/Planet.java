@@ -33,4 +33,12 @@ public class Planet implements Serializable {
 		return this.visited;
 	}
 
+    public int getTotalContains() {
+        int sum = 0;
+		for(int i : this.contains){
+			sum+=i;
+		}
+		return sum;
+    }
+
 }

@@ -64,6 +64,7 @@ class MeteorNewCabinState extends CardState {
     public CardState getNext() {
 		this.left.getProjectiles().removeFirst();
 		if (!this.left.getProjectiles().isEmpty()) return new MeteorAnnounceState(state, card_id, left);
+		System.out.println("Card exhausted, moving to a new one!");
 		return null;
 	}
 

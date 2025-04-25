@@ -63,6 +63,7 @@ class AbandonedStationRewardState extends CardState {
 
 	@Override
     public CardState getNext() {
+		System.out.println("Card exhausted, moving to a new one!");
 		return null;
 	}
 
@@ -84,7 +85,7 @@ class AbandonedStationRewardState extends CardState {
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "'  attempted to take cargo the card doesn't have!"));
 			return;
 		}
-		ContainsLoaderVisitor v = new ContainsLoaderVisitor(type);
+		ContainsLoaderVisitor v = new ContainsLoaderVisitor(p.getSpaceShip(),type);
 		try {
 			p.getSpaceShip().getComponent(target_coords).check(v);
 		} catch (IllegalTargetException e) {
@@ -135,7 +136,7 @@ class AbandonedStationRewardState extends CardState {
 			return;
 		}
 		ContainsRemoveVisitor vr = new ContainsRemoveVisitor(type);
-		ContainsLoaderVisitor vl = new ContainsLoaderVisitor(type);
+		ContainsLoaderVisitor vl = new ContainsLoaderVisitor(p.getSpaceShip(),type);
 		p.getSpaceShip().getComponent(source_coords).check(vr);
 		p.getSpaceShip().getComponent(target_coords).check(vl);
 	}

@@ -87,7 +87,7 @@ class SmugglersRewardState extends CardState {
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "'  attempted to take cargo the card doesn't have!"));
 			return;
 		}
-		ContainsLoaderVisitor v = new ContainsLoaderVisitor(type);
+		ContainsLoaderVisitor v = new ContainsLoaderVisitor(p.getSpaceShip(),type);
 		try {
 			p.getSpaceShip().getComponent(target_coords).check(v);
 		} catch (IllegalTargetException e) {
@@ -138,7 +138,7 @@ class SmugglersRewardState extends CardState {
 			return;
 		}
 		ContainsRemoveVisitor vr = new ContainsRemoveVisitor(type);
-		ContainsLoaderVisitor vl = new ContainsLoaderVisitor(type);
+		ContainsLoaderVisitor vl = new ContainsLoaderVisitor(p.getSpaceShip(),type);
 		p.getSpaceShip().getComponent(source_coords).check(vr);
 		p.getSpaceShip().getComponent(target_coords).check(vl);
 	}

@@ -14,4 +14,6 @@ public interface iPlanche extends Serializable {
 	void movePlayer(VoyageState state, Player c, int rel_change);
 
 	void loseGame(Player p);
+
+	void printOrder();
 }

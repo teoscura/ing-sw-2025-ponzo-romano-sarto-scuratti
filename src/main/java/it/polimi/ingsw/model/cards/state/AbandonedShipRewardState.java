@@ -36,6 +36,9 @@ public class AbandonedShipRewardState extends CardState {
 	@Override
 	public void init(ClientModelState new_state) {
 		super.init(new_state);
+		for(Player p : this.list){
+			System.out.println(p.getUsername());
+		}
 	}
 
 	@Override
@@ -59,6 +62,7 @@ public class AbandonedShipRewardState extends CardState {
 
 	@Override
     public CardState getNext() {
+		System.out.println("Card exhausted, moving to a new one!");
 		return null;
 	}
 

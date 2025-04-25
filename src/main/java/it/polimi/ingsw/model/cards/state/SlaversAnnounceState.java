@@ -61,12 +61,14 @@ public class SlaversAnnounceState extends CardState {
 		if (this.list.getFirst().getDisconnected() || this.list.getFirst().getRetired()) {
 			this.list.removeFirst();
 			if (!this.list.isEmpty()) return new SlaversAnnounceState(state, card, list);
+			System.out.println("Card exhausted, moving to a new one!");
 			return null;
 		}
 		if (!result) return new SlaversLoseState(state, card, list);
 		if (this.card.getExhausted()) return new SlaversRewardState(state, card, list);
 		this.list.removeFirst();
 		if (!this.list.isEmpty()) return new SlaversAnnounceState(state, card, list);
+		System.out.println("Card exhausted, moving to a new one!");
 		return null;
 	}
 

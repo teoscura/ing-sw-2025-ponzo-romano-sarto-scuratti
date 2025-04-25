@@ -28,6 +28,7 @@ class PlanetRewardState extends CardState {
 	private final PlanetCard card;
 	private final ArrayList<Player> list;
 	private final int id;
+	private int left;
 	private boolean responded = false;
 
 	public PlanetRewardState(VoyageState state, PlanetCard card, int id, ArrayList<Player> clist) {
@@ -36,6 +37,7 @@ class PlanetRewardState extends CardState {
 			throw new IllegalArgumentException("Constructed insatisfyable state");
 		if (card == null) throw new NullPointerException();
 		this.id = id;
+		this.left = card.getPlanet(id).getTotalContains();
 		this.list = clist;
 		this.card = card;
 	}
@@ -43,6 +45,9 @@ class PlanetRewardState extends CardState {
 	@Override
 	public void init(ClientModelState new_state) {
 		super.init(new_state);
+		for(Player p : this.list){
+			System.out.println(p.getUsername());
+		}
 	}
 
 	@Override
@@ -52,7 +57,10 @@ class PlanetRewardState extends CardState {
 			this.state.broadcastMessage(new NotifyStateUpdateMessage(this.state.getClientState()));
 			return;
 		}
-		this.state.getPlanche().movePlayer(state, list.getFirst(), card.getDays());
+		for(int i=0; i<this.card.getVisited().size();i++){
+			System.out.println(i+": "+this.card.getVisited().get(i));
+		}
+		System.out.println(this.card.getExhausted());
 		this.transition();
 	}
 
@@ -61,15 +69,19 @@ class PlanetRewardState extends CardState {
 		return new ClientCargoRewardCardStateDecorator(
 				new ClientBaseCardState(this.card.getId()),
 				this.list.getFirst().getColor(),
-				0,
-				this.card.getPlanet(id).getContains());
+				this.card.getDays(),
+				this.card.getPlanet(this.id).getContains());
 	}
 
 	@Override
     public CardState getNext() {
-		if (this.card.getExhausted()) return null;
+		if (this.card.getExhausted()){
+			System.out.println("Card exhausted, moving to a new one!");
+			return null;
+		};
 		this.list.removeFirst();
-		if (this.list.isEmpty()) return new PlanetAnnounceState(state, card, list);
+		if (!this.list.isEmpty()) return new PlanetAnnounceState(state, card, list);
+		System.out.println("Card exhausted, moving to a new one!");
 		return null;
 	}
 
@@ -90,7 +102,7 @@ class PlanetRewardState extends CardState {
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "'  attempted to take cargo the card doesn't have!"));
 			return;
 		}
-		ContainsLoaderVisitor v = new ContainsLoaderVisitor(type);
+		ContainsLoaderVisitor v = new ContainsLoaderVisitor(p.getSpaceShip(),type);
 		try {
 			p.getSpaceShip().getComponent(target_coords).check(v);
 		} catch (IllegalTargetException e) {
@@ -107,10 +119,8 @@ class PlanetRewardState extends CardState {
 			return;
 		}
 		this.card.getPlanet(this.id).getContains()[type.getValue() - 1]--;
-		for (int i : this.card.getPlanet(this.id).getContains()) {
-			if (i > 0) return;
-		}
-		this.responded = true;
+		this.left--;
+		if (left==0) this.responded = true;
 	}
 
 	@Override
@@ -141,7 +151,7 @@ class PlanetRewardState extends CardState {
 			return;
 		}
 		ContainsRemoveVisitor vr = new ContainsRemoveVisitor(type);
-		ContainsLoaderVisitor vl = new ContainsLoaderVisitor(type);
+		ContainsLoaderVisitor vl = new ContainsLoaderVisitor(p.getSpaceShip(),type);
 		p.getSpaceShip().getComponent(source_coords).check(vr);
 		p.getSpaceShip().getComponent(target_coords).check(vl);
 	}
