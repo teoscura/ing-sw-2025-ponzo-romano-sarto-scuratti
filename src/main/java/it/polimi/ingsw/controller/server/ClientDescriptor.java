@@ -16,7 +16,7 @@ public class ClientDescriptor {
     private transient Player player = null;
 
     public ClientDescriptor(String username, Connection connection){
-        if(username==null||connection==null) throw new NullPointerException();
+        if(username==null/*XXX rimetti connection == null*/) throw new NullPointerException();
         this.username = username;
         this.connection = connection;
     }
