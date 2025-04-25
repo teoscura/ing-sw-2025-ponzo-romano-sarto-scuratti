@@ -84,8 +84,7 @@ public class AbadonedShipCardTest {
         EngineComponent left_single_engine = new EngineComponent(1, new ConnectorType[]{ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.EMPTY, ConnectorType.EMPTY}, ComponentRotation.U000, EngineType.SINGLE, new ShipCoords(GameModeType.LVL2, 1, 4));
         ShieldComponent top_shield = new ShieldComponent(1, new ConnectorType[]{ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL}, ComponentRotation.U270, new ShipCoords(GameModeType.LVL2, 1, 3));
         CannonComponent left_cannon = new CannonComponent(1, new ConnectorType[]{ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL}, ComponentRotation.U270, CannonType.SINGLE, new ShipCoords(GameModeType.LVL2, 1, 2));
-        CannonComponent front_double_cannon = new CannonComponent(1, new ConnectorType[]{ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.UNIVERSAL, ConnectorType.EMPTY}, ComponentRotation.U000, CannonType.DOUBLE, new ShipCoords(GameModeType.LVL2, 1, 1));
-
+        
         player1 = new Player(GameModeType.LVL2, "Player1", PlayerColor.RED);
         player1.getSpaceShip().addComponent(triple_storage, new ShipCoords(GameModeType.LVL2, 4, 2));
         player1.getSpaceShip().addComponent(alien_support, new ShipCoords(GameModeType.LVL2, 3, 3));
@@ -104,7 +103,6 @@ public class AbadonedShipCardTest {
         player1.getSpaceShip().addComponent(left_single_engine, new ShipCoords(GameModeType.LVL2, 1, 4));
         player1.getSpaceShip().addComponent(top_shield, new ShipCoords(GameModeType.LVL2, 1, 3));
         player1.getSpaceShip().addComponent(left_cannon, new ShipCoords(GameModeType.LVL2, 1, 2));
-        player1.getSpaceShip().addComponent(front_double_cannon, new ShipCoords(GameModeType.LVL2, 1, 1));
         p1desc = new ClientDescriptor(player1.getUsername(), null);
         p1desc.bindPlayer(player1);
 
@@ -126,7 +124,6 @@ public class AbadonedShipCardTest {
         player2.getSpaceShip().addComponent(left_single_engine, new ShipCoords(GameModeType.LVL2, 1, 4));
         player2.getSpaceShip().addComponent(top_shield, new ShipCoords(GameModeType.LVL2, 1, 3));
         player2.getSpaceShip().addComponent(left_cannon, new ShipCoords(GameModeType.LVL2, 1, 2));
-        player2.getSpaceShip().addComponent(front_double_cannon, new ShipCoords(GameModeType.LVL2, 1, 1));
         p2desc = new ClientDescriptor(player2.getUsername(), null);
         p2desc.bindPlayer(player2);
 
@@ -147,7 +144,6 @@ public class AbadonedShipCardTest {
         player_scarso.getSpaceShip().addComponent(left_single_engine, new ShipCoords(GameModeType.LVL2, 1, 4));
         player_scarso.getSpaceShip().addComponent(top_shield, new ShipCoords(GameModeType.LVL2, 1, 3));
         player_scarso.getSpaceShip().addComponent(left_cannon, new ShipCoords(GameModeType.LVL2, 1, 2));
-        player_scarso.getSpaceShip().addComponent(front_double_cannon, new ShipCoords(GameModeType.LVL2, 1, 1));
         psdesc = new ClientDescriptor(player_scarso.getUsername(), null);
         psdesc.bindPlayer(player_scarso);
 
@@ -210,7 +206,6 @@ public class AbadonedShipCardTest {
         cstate.validate(mess6);
         //Finito.
         cstate = this.state.getCardState(player1);
-        planche.printOrder();
         System.out.println(cstate.getClass().getSimpleName());
     }
 

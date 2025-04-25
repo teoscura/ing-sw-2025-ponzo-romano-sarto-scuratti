@@ -202,7 +202,7 @@ public class CombatZoneCardTest {
 			p.getSpaceShip().updateShip();
 			System.out.println(" - "+p.getUsername()+": "+p.getSpaceShip().getCannonPower()+"/"+p.getSpaceShip().getEnginePower()+"/"+p.getSpaceShip().getTotalCrew());
 		}
-        //Ha perso (da sistemare quando sistemiamo gli aggiornamenti del model);
+        //TODO Ha perso ( da sistemare quando sistemiamo gli aggiornamenti del model);
         System.out.println(((CabinComponent)player2.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 1, 1))).getCrew());
         player2.getSpaceShip().updateShip();
         assertTrue(player2.getRetired());
@@ -215,7 +215,7 @@ public class CombatZoneCardTest {
         mess = new TurnOnMessage(new ShipCoords(GameModeType.TEST, 2, 0), new ShipCoords(GameModeType.TEST, 1, 2));
         mess.setDescriptor(p1desc);
         state.validate(mess);
-        
+
         //clutch
         mess = new SendContinueMessage();
         mess.setDescriptor(p1desc);

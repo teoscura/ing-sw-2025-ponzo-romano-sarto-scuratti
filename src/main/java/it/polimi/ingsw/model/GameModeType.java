@@ -66,7 +66,7 @@ public enum GameModeType {
 
 	private int[] getShape() {
 		if (this.level == 2) {
-			return new int[]{0, 1, 2, 4, 5, 6, 7, 8, 12, 13, 14, 20, 21, 27, 28, 31, 34};
+			return new int[]{0, 1, 2, 3, 5, 6, 7, 8, 12, 13, 14, 20, 21, 27, 28, 31, 34};
 		} else {
 			return new int[]{0, 1, 3, 5, 9, 31};
 		}
