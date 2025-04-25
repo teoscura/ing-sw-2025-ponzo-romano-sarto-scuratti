@@ -86,6 +86,7 @@ class MeteorNewCabinState extends CardState {
 		if (p.getSpaceShip().getBrokeCenter()) {
 			this.state.loseGame(p);
 		}
+		System.out.println("Player '" + p.getUsername() + "' disconnected!");
 	}
 
 }

@@ -106,6 +106,7 @@ public class MeteorAnnounceState extends CardState {
 		if (this.awaiting.contains(p)) {
 			this.awaiting.remove(p);
 		}
+		System.out.println("Player '" + p.getUsername() + "' disconnected!");
 	}
 
 }

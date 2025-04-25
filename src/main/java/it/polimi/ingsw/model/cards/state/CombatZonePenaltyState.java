@@ -256,9 +256,10 @@ class CombatZonePenaltyState extends CardState {
 
 	@Override
 	public void disconnect(Player p) throws ForbiddenCallException {
-		if (this.target == p) {
+		if (this.target.equals(p)) {
 			this.responded = true;
 		}
+		System.out.println("Player '" + p.getUsername() + "' disconnected!");
 	}
 
 }

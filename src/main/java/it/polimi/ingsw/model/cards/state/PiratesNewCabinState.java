@@ -97,6 +97,7 @@ class PiratesNewCabinState extends CardState {
 			this.transition();
 		}
 		this.list.remove(p);
+		System.out.println("Player '" + p.getUsername() + "' disconnected!");
 	}
 
 }

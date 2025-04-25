@@ -37,7 +37,7 @@ public class AbandonedShipAnnounceState extends CardState {
 		super.init(new_state);
 		System.out.println("Starting abandoned ship card!");
 		for(Player p : this.list){
-			System.out.println(p.getUsername());
+			System.out.println(" - "+p.getUsername());
 		}
 	}
 

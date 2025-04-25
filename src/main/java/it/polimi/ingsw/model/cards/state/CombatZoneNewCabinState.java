@@ -103,6 +103,7 @@ class CombatZoneNewCabinState extends CardState {
 			this.state.loseGame(p);
 			this.transition();
 		}
+		System.out.println("Player '" + p.getUsername() + "' disconnected!");
 	}
 
 }

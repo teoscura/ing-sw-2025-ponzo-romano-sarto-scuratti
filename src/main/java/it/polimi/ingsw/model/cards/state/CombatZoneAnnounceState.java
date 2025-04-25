@@ -98,6 +98,7 @@ public class CombatZoneAnnounceState extends CardState {
 	@Override
 	public void disconnect(Player p) throws ForbiddenCallException {
 		this.awaiting.remove(p);
+		System.out.println("Player '" + p.getUsername() + "' disconnected!");
 	}
 
 }

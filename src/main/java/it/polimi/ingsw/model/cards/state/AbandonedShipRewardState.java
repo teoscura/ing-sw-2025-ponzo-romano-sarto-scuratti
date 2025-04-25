@@ -37,7 +37,7 @@ public class AbandonedShipRewardState extends CardState {
 	public void init(ClientModelState new_state) {
 		super.init(new_state);
 		for(Player p : this.list){
-			System.out.println(p.getUsername());
+			System.out.println(" - "+p.getUsername());
 		}
 	}
 
@@ -94,6 +94,7 @@ public class AbandonedShipRewardState extends CardState {
 	@Override
 	public void disconnect(Player p) throws ForbiddenCallException {
 		if (this.list.getFirst() == p) this.transition();
+		System.out.println("Player '" + p.getUsername() + "' disconnected!");
 	}
 
 }

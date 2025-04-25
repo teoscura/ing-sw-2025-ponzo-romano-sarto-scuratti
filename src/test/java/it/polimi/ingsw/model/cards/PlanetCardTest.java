@@ -222,8 +222,17 @@ public class PlanetCardTest {
     }
 
     @Test
-    void disconnectionResilience() {
-
+    void disconnectionResilience() throws ForbiddenCallException {
+        ServerMessage mess = null;
+        //Player 1 disconnects, player 2 disconnects right after, leaving player_scarso.
+        state.disconnect(player1);
+        cstate = this.state.getCardState(player1);
+        state.disconnect(player2);
+        cstate = this.state.getCardState(player1);
+        //Scarso dodges.
+        mess = new SelectLandingMessage(-1);
+        mess.setDescriptor(psdesc);
+        state.validate(mess);
     }
 
 }

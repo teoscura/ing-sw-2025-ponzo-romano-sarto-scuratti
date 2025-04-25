@@ -80,6 +80,7 @@ class PiratesRewardState extends CardState {
 		if (this.list.getFirst() == p) {
 			this.responded = true;
 			this.took_reward = false;
+			System.out.println("Player '" + p.getUsername() + "' disconnected!");
 		}
 	}
 

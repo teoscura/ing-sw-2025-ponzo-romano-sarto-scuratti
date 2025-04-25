@@ -34,7 +34,7 @@ public class PlanetAnnounceState extends CardState {
 	public void init(ClientModelState new_state) {
 		super.init(new_state);
 		for(Player p : this.list){
-			System.out.println(p.getUsername());
+			System.out.println(" - "+p.getUsername());
 		}
 	}
 
@@ -109,6 +109,7 @@ public class PlanetAnnounceState extends CardState {
 		if (this.list.contains(p)) {
 			this.list.remove(p);
 		}
+		System.out.println("Player '" + p.getUsername() + "' disconnected!");
 	}
 
 }
