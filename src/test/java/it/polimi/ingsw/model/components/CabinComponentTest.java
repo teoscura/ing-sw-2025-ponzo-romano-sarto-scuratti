@@ -44,7 +44,7 @@ class CabinComponentTest {
 	@Test
 	void check() {
 	}
-	
+
 	//TODO
 	/*@Test
 	void getCrew() {
@@ -71,7 +71,7 @@ class CabinComponentTest {
 	@Test
 	void setCrew() {
 		ship.addComponent(component_human, coords);
-		assertThrows(NegativeArgumentException.class, () -> component_both.setCrew(ship, 0, AlienType.HUMAN));
+		assertThrows(NegativeArgumentException.class, () -> component_both.setCrew(ship, -1, AlienType.HUMAN));
 		assertThrows(IllegalArgumentException.class, () -> component_both.setCrew(ship, 1, AlienType.BOTH));
 		assertThrows(ArgumentTooBigException.class, () -> component_both.setCrew(ship, 3, AlienType.HUMAN));
 		assertEquals(2, component_both.getCrew());
