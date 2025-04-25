@@ -1,14 +1,19 @@
 package it.polimi.ingsw.controller.server;
 
+import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import it.polimi.ingsw.message.client.ClientMessage;
 import it.polimi.ingsw.model.player.Player;
 
 public class ClientDescriptor {
     
+    protected static final long TIMEOUT_DURATION = 15000L;
     private final String username;
-    private final Connection connection;
-    //XXX timeout task running every time a ping gets here, pings reset it.
-    private Player player = null;
+    private transient final Connection connection;
+    private transient TimerTask pingtimer;
+    private transient Player player = null;
 
     public ClientDescriptor(String username, Connection connection){
         if(username==null||connection==null) throw new NullPointerException();
@@ -16,14 +21,19 @@ public class ClientDescriptor {
         this.connection = connection;
     }
 
-    public void bindPlayer(Player p) throws Exception{
-        if(player!=null) throw new Exception("This descriptor already has a player");
+    public void bindPlayer(Player p){
         p.bindDescriptor(this);
         this.player = p;
     }
 
-    public void sendMessage(ClientMessage m){
+    public void sendMessage(ClientMessage m) throws IOException {
         this.connection.sendMessage(m);
+    }
+
+    public void setPingTimerTask(TimerTask task){
+        this.pingtimer = task;
+        Timer t = new Timer(true);
+        t.schedule(task, TIMEOUT_DURATION);
     }
 
     public String getUsername(){
@@ -34,8 +44,12 @@ public class ClientDescriptor {
         return this.player;
     }
 
-    public void ping(){
-        this.timer.reset();
+    public TimerTask getPingTimerTask(){
+        return this.pingtimer;
     }
+
+	public Connection getConnection() {
+		return this.connection;
+	}
 
 }

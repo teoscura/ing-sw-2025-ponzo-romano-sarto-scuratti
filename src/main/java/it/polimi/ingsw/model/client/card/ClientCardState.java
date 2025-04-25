@@ -1,7 +1,9 @@
 package it.polimi.ingsw.model.client.card;
 
+import java.io.Serializable;
+
 import it.polimi.ingsw.view.ClientView;
 
-public interface ClientCardState {
-    public void showCardState(ClientView view);
+public interface ClientCardState extends Serializable {
+	void showCardState(ClientView view);
 }

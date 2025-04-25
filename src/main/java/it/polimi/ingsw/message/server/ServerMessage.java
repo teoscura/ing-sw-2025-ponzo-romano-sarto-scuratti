@@ -9,19 +9,30 @@ import it.polimi.ingsw.model.state.GameState;
 
 public abstract class ServerMessage {
 
-    protected final ClientDescriptor descriptor;
+	protected ClientDescriptor descriptor = null;
 
-    protected ServerMessage(ClientDescriptor descriptor){
-        if(descriptor==null) throw new NullPointerException();
-        this.descriptor = descriptor;
-    }
+	public void setDescriptor(ClientDescriptor client) {
+		this.descriptor = client;
+	}
 
-    public ClientDescriptor getDescriptor(){
-        return this.descriptor;
-    }
+	public ClientDescriptor getDescriptor() {
+		return this.descriptor;
+	}
 
-    public abstract void receive(ServerController server) throws ForbiddenCallException;
-    public abstract void receive(ModelInstance instance) throws ForbiddenCallException;
-    public abstract void receive(GameState state) throws ForbiddenCallException;
-    public abstract void receive(CardState state) throws ForbiddenCallException;
+	//All messages need to know what to do when initially executed.
+	public abstract void receive(ServerController server) throws ForbiddenCallException;
+
+	//Can be omitted
+	public void receive(ModelInstance instance) throws ForbiddenCallException {
+	}
+
+	//Can be omitted
+	public void receive(GameState state) throws ForbiddenCallException {
+	}
+
+	//Can be omitted
+	public void receive(CardState state) throws ForbiddenCallException {
+	}
+
+
 }

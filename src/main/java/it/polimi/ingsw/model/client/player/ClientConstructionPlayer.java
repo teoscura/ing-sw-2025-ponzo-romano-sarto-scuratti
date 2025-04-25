@@ -1,20 +1,22 @@
 package it.polimi.ingsw.model.client.player;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import it.polimi.ingsw.model.client.components.ClientSpaceShip;
 import it.polimi.ingsw.model.player.PlayerColor;
 
-public class ClientConstructionPlayer {
+public class ClientConstructionPlayer implements Serializable {
     
     private final String username;
     private final PlayerColor color;
     private final ClientSpaceShip ship;
-    private final List<Integer> reserved_components;
+    private final ArrayList<Integer> reserved_components;
     private final boolean finished;
 
     public ClientConstructionPlayer(String username, PlayerColor color, ClientSpaceShip ship, 
-                                    List<Integer> reserved_components, boolean finished){
+                                    ArrayList<Integer> reserved_components, boolean finished){
         if(username == null || ship==null || reserved_components==null || color == PlayerColor.NONE) throw new NullPointerException();
         if(reserved_components.size() > 3) throw new IllegalArgumentException();
         this.username = username;

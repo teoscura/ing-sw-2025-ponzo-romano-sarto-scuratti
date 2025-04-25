@@ -12,45 +12,43 @@ import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.player.iSpaceShip;
 
 public class EmptyComponent extends BaseComponent {
-    
-    public EmptyComponent(){
-        super(157, new ConnectorType[4], ComponentRotation.U000);
-    }
 
-    public EmptyComponent(ShipCoords coords){
-        super(157, new ConnectorType[4], ComponentRotation.U000, coords);
-    }
+	public EmptyComponent() {
+		super(157, new ConnectorType[4], ComponentRotation.U000);
+	}
 
-    @Override
-    public boolean verify(iSpaceShip ship){
-        return true;
-    }
+	public EmptyComponent(ShipCoords coords) {
+		super(157, new ConnectorType[4], ComponentRotation.U000, coords);
+	}
 
-    @Override
-    public void check(iVisitor v){
-        v.visit(this);
-    }
+	@Override
+	public boolean verify(iSpaceShip ship) {
+		return true;
+	}
 
-    @Override
-    public ConnectorType[] getConnectors(){
-        ConnectorType[] tmp = new ConnectorType[4];
-        Arrays.fill(tmp, ConnectorType.EMPTY);
-        return tmp;
-    }
+	@Override
+	public void check(iVisitor v) {
+		v.visit(this);
+	}
 
-    @Override
-    public void onCreation(iSpaceShip ship) {
-        return;
-    }
+	@Override
+	public ConnectorType[] getConnectors() {
+		ConnectorType[] tmp = new ConnectorType[4];
+		Arrays.fill(tmp, ConnectorType.EMPTY);
+		return tmp;
+	}
 
-    @Override
-    public void onDelete(iSpaceShip ship) {
-        return;
-    }
+	@Override
+	public void onCreation(iSpaceShip ship) {
+	}
 
-    @Override
-    public ClientComponent getClientComponent() {
-        return new ClientBaseComponent(157, ComponentRotation.U000);
-    }
+	@Override
+	public void onDelete(iSpaceShip ship) {
+	}
+
+	@Override
+	public ClientComponent getClientComponent() {
+		return new ClientBaseComponent(157, ComponentRotation.U000);
+	}
 
 }

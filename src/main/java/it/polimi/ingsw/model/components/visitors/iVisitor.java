@@ -4,24 +4,24 @@ import it.polimi.ingsw.model.components.*;
 
 public interface iVisitor {
 
-    abstract public void visit(CabinComponent c);
+	void visit(CabinComponent c);
 
-    abstract public void visit(EngineComponent c);
+	void visit(EngineComponent c);
 
-    abstract public void visit(AlienLifeSupportComponent c);
+	void visit(AlienLifeSupportComponent c);
 
-    abstract public void visit(CannonComponent c);
+	void visit(CannonComponent c);
 
-    abstract public void visit(StorageComponent c);
+	void visit(StorageComponent c);
 
-    abstract public void visit(BatteryComponent c);
+	void visit(BatteryComponent c);
 
-    abstract public void visit(ShieldComponent c);
+	void visit(ShieldComponent c);
 
-    abstract public void visit(EmptyComponent c);
+	void visit(EmptyComponent c);
 
-    public abstract void visit(StructuralComponent c);
+	void visit(StructuralComponent c);
 
-    public abstract void visit(StartingCabinComponent c);
+	void visit(StartingCabinComponent c);
 }
 

@@ -11,42 +11,79 @@ import it.polimi.ingsw.model.components.enums.AlienType;
 
 public interface iSpaceShip {
 
-	public void updateCrew(int new_num, AlienType type);
-	public VerifyResult[][] verify();
-	public boolean verifyAndClean();
-	public void addComponent(iBaseComponent component, ShipCoords coords);
-	public void removeComponent(ShipCoords coords);
-	public void updateShip();
-	public void resetPower();
-	public void turnOn(ShipCoords coords_target, ShipCoords battery_location);
-	public GameModeType getType();
-	public int getCannonPower();
-	public int[] getCrew();
-	public int[] getContains();
-	public iBaseComponent getComponent(ShipCoords coords);
-	public int getEnginePower();
-	public int getEnergyPower();
-	public boolean[] getShieldedDirections();
-	public int getHeight();
-	public int getWidth();
-    public iBaseComponent getEmpty();
-	public int getTotalCrew();
-	public boolean getBrokeCenter();
-	public void setBrokeCenter();
-	public void addStorageCoords(ShipCoords coords);
-	public void delStorageCoords(ShipCoords coords);
-	public void addCabinCoords(ShipCoords coords);
-	public void delCabinCoords(ShipCoords coords);
-	public void addBatteryCoords(ShipCoords coords);
-	public void delBatteryCoords(ShipCoords coords);
-	public void addPowerableCoords(ShipCoords coords);
-	public void delPowerableCoords(ShipCoords coords);
-	public void setCenter(ShipCoords new_center) throws ForbiddenCallException;
-	public ShipCoords getCenter();
-    public ArrayList<ShipCoords> findConnectedCabins();
-    public int countExposedConnectors();
-    public boolean handleMeteorite(Projectile p);
-    public boolean handleShot(Projectile p);
-	public boolean isCabin(ShipCoords coords);
-    public ClientSpaceShip getClientSpaceShip();
+	void updateCrew(int new_num, AlienType type);
+
+	VerifyResult[][] verify();
+
+	boolean verifyAndClean();
+
+	void addComponent(iBaseComponent component, ShipCoords coords);
+
+	void removeComponent(ShipCoords coords);
+
+	void updateShip();
+
+	void resetPower();
+
+	void turnOn(ShipCoords coords_target, ShipCoords battery_location);
+
+	GameModeType getType();
+
+	int getCannonPower();
+
+	int[] getCrew();
+
+	int[] getContains();
+
+	iBaseComponent getComponent(ShipCoords coords);
+
+	int getEnginePower();
+
+	int getEnergyPower();
+
+	boolean[] getShieldedDirections();
+
+	int getHeight();
+
+	int getWidth();
+
+	iBaseComponent getEmpty();
+
+	int getTotalCrew();
+
+	boolean getBrokeCenter();
+
+	void setBrokeCenter();
+
+	void addStorageCoords(ShipCoords coords);
+
+	void delStorageCoords(ShipCoords coords);
+
+	void addCabinCoords(ShipCoords coords);
+
+	void delCabinCoords(ShipCoords coords);
+
+	void addBatteryCoords(ShipCoords coords);
+
+	void delBatteryCoords(ShipCoords coords);
+
+	void addPowerableCoords(ShipCoords coords);
+
+	void delPowerableCoords(ShipCoords coords);
+
+	void setCenter(ShipCoords new_center) throws ForbiddenCallException;
+
+	ShipCoords getCenter();
+
+	ArrayList<ShipCoords> findConnectedCabins();
+
+	int countExposedConnectors();
+
+	boolean handleMeteorite(Projectile p);
+
+	boolean handleShot(Projectile p);
+
+	boolean isCabin(ShipCoords coords);
+
+	ClientSpaceShip getClientSpaceShip();
 }

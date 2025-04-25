@@ -1,6 +1,6 @@
 package it.polimi.ingsw.message.client;
 
-import it.polimi.ingsw.controller.client.iClientController;
+import it.polimi.ingsw.controller.client.ClientController;
 
 public class ViewMessage extends ClientMessage {
 
@@ -12,8 +12,8 @@ public class ViewMessage extends ClientMessage {
     }
 
     @Override
-    public void receive(iClientController client) {
-        client.showMessage(message);
+    public void receive(ClientController client) {
+        client.getView().showTextMessage(message);
     }
 
 }

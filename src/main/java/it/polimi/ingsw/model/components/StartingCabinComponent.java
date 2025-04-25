@@ -16,7 +16,7 @@ import it.polimi.ingsw.model.player.iSpaceShip;
 
 public class StartingCabinComponent extends BaseComponent {
     
-    private PlayerColor color;
+    private final PlayerColor color;
     private int crew_number = 0;
 
     public StartingCabinComponent(int id, 

@@ -16,7 +16,7 @@ import it.polimi.ingsw.model.components.visitors.iVisitor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.player.iSpaceShip;
 
-public class CabinComponent extends BaseComponent{
+public class CabinComponent extends BaseComponent {
     
     private int crew_number = 2;
     private AlienType crew_type = AlienType.HUMAN;

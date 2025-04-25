@@ -12,7 +12,7 @@ import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.VoyageState;
 
-public class EpidemicCard extends Card{
+public class EpidemicCard extends Card {
     
     public EpidemicCard(int id){
         super(id,0);

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.controller.client;
 
-public interface iRMIClient {
-    
+public enum ConnectionType {
+	SOCKET,
+	RMI
 }

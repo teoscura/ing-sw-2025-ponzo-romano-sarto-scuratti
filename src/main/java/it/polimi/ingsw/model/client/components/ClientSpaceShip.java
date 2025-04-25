@@ -1,10 +1,12 @@
 package it.polimi.ingsw.model.client.components;
 
+import java.io.Serializable;
+
 import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.player.VerifyResult;
 
-public class ClientSpaceShip {
+public class ClientSpaceShip implements Serializable {
     
     private final GameModeType type;
     private final ClientComponent[][] ship;

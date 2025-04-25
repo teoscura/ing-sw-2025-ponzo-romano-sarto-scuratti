@@ -6,6 +6,7 @@ import it.polimi.ingsw.model.state.VoyageState;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.ArrayList;
 
 import it.polimi.ingsw.exceptions.ArgumentTooBigException;
 import it.polimi.ingsw.model.adventure_cards.state.CardState;
@@ -15,18 +16,18 @@ import it.polimi.ingsw.model.adventure_cards.utils.Planet;
 
 public class PlanetCard extends Card {
 		
-	private final List<Planet> planets;
+	private final ArrayList<Planet> planets;
 	private int left;
 
 	public PlanetCard(int id, int days, Planet[] planets) { // costruttore
 		super(id, days);
-		this.planets = Arrays.asList(planets);
+		this.planets = new ArrayList<>(Arrays.asList(planets));
 		this.left = planets.length;
 	}
 
 	@Override
 	public CardState getState(VoyageState state) {
-		return new PlanetAnnounceState(state, this, state.getOrder(CardOrder.NORMAL));
+		return new PlanetAnnounceState(state, this, new ArrayList<>(state.getOrder(CardOrder.NORMAL)));
 	}
 
 	public List<Boolean> getVisited(){

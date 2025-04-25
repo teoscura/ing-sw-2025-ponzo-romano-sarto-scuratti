@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.client.state;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 import it.polimi.ingsw.model.GameModeType;
@@ -10,13 +11,13 @@ import it.polimi.ingsw.model.client.player.ClientConstructionPlayer;
 public class ClientConstructionState implements ClientModelState {
 
     private final GameModeType type;
-    private final List<ClientConstructionPlayer> playerlist;
-    private final List<Integer> construction_cards;
-    private final List<Integer> discarded_tiles;
+    private final ArrayList<ClientConstructionPlayer> playerlist;
+    private final ArrayList<Integer> construction_cards;
+    private final ArrayList<Integer> discarded_tiles;
     private final int tiles_left;
     private final Instant last_hourglass_toggle;
 
-    public ClientConstructionState(GameModeType type, List<ClientConstructionPlayer> playerlist, List<Integer> construction, List<Integer> discarded, int tiles, Instant last_hourglass_toggle) {
+    public ClientConstructionState(GameModeType type, ArrayList<ClientConstructionPlayer> playerlist, ArrayList<Integer> construction, ArrayList<Integer> discarded, int tiles, Instant last_hourglass_toggle) {
         if(discarded==null||playerlist==null) throw new NullPointerException();
         if(construction==null && type.getLevel()>0) throw new IllegalArgumentException();
         if(type.getLevel()>0){

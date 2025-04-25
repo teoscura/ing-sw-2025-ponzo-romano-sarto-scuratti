@@ -1,21 +1,22 @@
 package it.polimi.ingsw.message.server;
 
-import it.polimi.ingsw.controller.server.ClientDescriptor;
 import it.polimi.ingsw.controller.server.ServerController;
 import it.polimi.ingsw.model.ModelInstance;
 import it.polimi.ingsw.model.adventure_cards.exceptions.ForbiddenCallException;
-import it.polimi.ingsw.model.adventure_cards.state.CardState;
 import it.polimi.ingsw.model.state.GameState;
 
-public class DisconnectMessage extends ServerMessage {
+public class TakeDiscardedComponentMessage extends ServerMessage {
+    
+    private final int id;
 
-    protected DisconnectMessage(ClientDescriptor descriptor) {
-        super(descriptor);
-        if(this.descriptor.getPlayer()==null) throw new NullPointerException();
+    public TakeDiscardedComponentMessage(int id){
+        if(id <= 0 || id > 156) throw new IllegalArgumentException();
+        this.id = id;
     }
 
     @Override
     public void receive(ServerController server) throws ForbiddenCallException {
+        if(this.descriptor.getPlayer()==null) throw new ForbiddenCallException("Descriptor associated to message isn't bound to player");
         server.getModel().validate(this);
     }
 
@@ -26,12 +27,7 @@ public class DisconnectMessage extends ServerMessage {
 
     @Override
     public void receive(GameState state) throws ForbiddenCallException {
-        state.getCardState(this.descriptor.getPlayer()).validate(this);
+        state.takeDiscarded(this.descriptor.getPlayer(), id);
     }
 
-    @Override
-    public void receive(CardState state) throws ForbiddenCallException {
-        state.disconnect(this.descriptor.getPlayer());
-    }
-    
 }

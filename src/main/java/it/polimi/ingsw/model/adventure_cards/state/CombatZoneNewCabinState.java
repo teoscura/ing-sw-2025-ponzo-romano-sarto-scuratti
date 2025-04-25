@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.adventure_cards.state;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -21,86 +22,85 @@ import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.VoyageState;
 
 class CombatZoneNewCabinState extends CardState {
-    
-    private final int card_id;
-    private final List<CombatZoneSection> sections;
-    private final ProjectileArray shots;
-    private final Player target;
 
-    public CombatZoneNewCabinState(VoyageState state, int card_id, List<CombatZoneSection> sections, ProjectileArray shots, Player target){
-        super(state);
-        if(sections==null||shots==null||target==null);
-        if(card_id<1||card_id>120||(card_id<100&&1>20)) throw new IllegalArgumentException();
-        this.card_id = card_id;
-        this.sections = sections;
-        this.shots = shots;
-        this.target = target;
-    }
+	private final int card_id;
+	private final ArrayList<CombatZoneSection> sections;
+	private final ProjectileArray shots;
+	private final Player target;
 
-    @Override
-    public void init(ClientModelState new_state){
-        super.init(new_state);
-    }
+	public CombatZoneNewCabinState(VoyageState state, int card_id, ArrayList<CombatZoneSection> sections, ProjectileArray shots, Player target) {
+		super(state);
+		if (sections == null || shots == null || target == null) ;
+		if (card_id < 1 || card_id > 120) throw new IllegalArgumentException();
+		this.card_id = card_id;
+		this.sections = sections;
+		this.shots = shots;
+		this.target = target;
+	}
 
-    @Override
-    public void validate(ServerMessage message)throws ForbiddenCallException{
-        message.receive(this);
-        if(target.getSpaceShip().getBrokeCenter()){
-            this.state.broadcastMessage(new NotifyStateUpdateMessage(this.state.getClientState()));
-            return;
-        }
-        this.transition();
-    }
+	@Override
+	public void init(ClientModelState new_state) {
+		super.init(new_state);
+	}
 
-    @Override
-    public ClientCardState getClientCardState(){
-        List<PlayerColor> awaiting = Arrays.asList(new PlayerColor[]{target.getColor()});
-        return new ClientNewCenterCardStateDecorator(
-            new ClientCombatZoneIndexCardStateDecorator(
-                new ClientBaseCardState(this.card_id), 3 - this.sections.size()), 
-                awaiting);
-    }
+	@Override
+	public void validate(ServerMessage message) throws ForbiddenCallException {
+		message.receive(this);
+		if (target.getSpaceShip().getBrokeCenter()) {
+			this.state.broadcastMessage(new NotifyStateUpdateMessage(this.state.getClientState()));
+			return;
+		}
+		this.transition();
+	}
 
-    @Override
-    protected CardState getNext() {
-        if(this.target.getRetired()){
-            this.sections.removeFirst();
-            if(!this.sections.isEmpty()) return new CombatZoneAnnounceState(state, card_id, sections, shots);
-            return null;
-        }
-        if(!this.shots.getProjectiles().isEmpty()) return new CombatZonePenaltyState(state, card_id, sections, shots, target);
-        this.sections.removeFirst();
-        if(!this.sections.isEmpty()) return new CombatZoneAnnounceState(state, card_id, sections, shots);
-        return null;
-    }
+	@Override
+	public ClientCardState getClientCardState() {
+		List<PlayerColor> awaiting = Arrays.asList(target.getColor());
+		return new ClientNewCenterCardStateDecorator(
+				new ClientCombatZoneIndexCardStateDecorator(
+						new ClientBaseCardState(this.card_id), 3 - this.sections.size()),
+				new ArrayList<>(awaiting));
+	}
 
-    @Override
-    public void setNewShipCenter(Player p, ShipCoords new_center){
-        if(p!=this.target){
-            System.out.println("Player '"+p.getUsername()+"' attempted to set a new center during another player's turn!");
-            this.state.broadcastMessage(new ViewMessage("Player'"+p.getUsername()+"' attempted to set a new center during another player's turn!"));
-            return;
-        }
-        try{
-            p.getSpaceShip().setCenter(new_center);
-        } catch (IllegalTargetException e){
-            System.out.println("Player '"+p.getUsername()+"' attempted to set his new center on an empty space!");
-            this.state.broadcastMessage(new ViewMessage("Player'"+p.getUsername()+"' attempted to set his new center on an empty space!"));
-            return;
-        } catch (ForbiddenCallException e){
-            //Should be unreachable.
-            System.out.println("Player '"+p.getUsername()+"' attempted to set his new center while having a unbroken ship!");
-            this.state.broadcastMessage(new ViewMessage("Player'"+p.getUsername()+"' attempted to set his new center while having a unbroken ship!"));
-            return;
-        }
-    }
+	@Override
+	protected CardState getNext() {
+		if (this.target.getRetired()) {
+			this.sections.removeFirst();
+			if (!this.sections.isEmpty()) return new CombatZoneAnnounceState(state, card_id, sections, shots);
+			return null;
+		}
+		if (!this.shots.getProjectiles().isEmpty())
+			return new CombatZonePenaltyState(state, card_id, sections, shots, target);
+		this.sections.removeFirst();
+		if (!this.sections.isEmpty()) return new CombatZoneAnnounceState(state, card_id, sections, shots);
+		return null;
+	}
 
-    @Override
-    public void disconnect(Player p) throws ForbiddenCallException {
-        if(target==p){
-            this.state.loseGame(p);
-            this.transition();
-        }
-    }
+	@Override
+	public void setNewShipCenter(Player p, ShipCoords new_center) {
+		if (p != this.target) {
+			System.out.println("Player '" + p.getUsername() + "' attempted to set a new center during another player's turn!");
+			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to set a new center during another player's turn!"));
+			return;
+		}
+		try {
+			p.getSpaceShip().setCenter(new_center);
+		} catch (IllegalTargetException e) {
+			System.out.println("Player '" + p.getUsername() + "' attempted to set his new center on an empty space!");
+			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to set his new center on an empty space!"));
+		} catch (ForbiddenCallException e) {
+			//Should be unreachable.
+			System.out.println("Player '" + p.getUsername() + "' attempted to set his new center while having a unbroken ship!");
+			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to set his new center while having a unbroken ship!"));
+		}
+	}
+
+	@Override
+	public void disconnect(Player p) throws ForbiddenCallException {
+		if (target == p) {
+			this.state.loseGame(p);
+			this.transition();
+		}
+	}
 
 }

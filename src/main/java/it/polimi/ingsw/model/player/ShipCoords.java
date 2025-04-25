@@ -1,8 +1,10 @@
 package it.polimi.ingsw.model.player;
 
+import java.io.Serializable;
+
 import it.polimi.ingsw.model.GameModeType;
 
-public class ShipCoords {
+public class ShipCoords implements Serializable {
     private final GameModeType type;
     public final int x;
     public final int y;

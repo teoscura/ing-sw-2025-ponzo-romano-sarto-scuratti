@@ -1,9 +1,11 @@
 package it.polimi.ingsw.model.client.player;
 
+import java.io.Serializable;
+
 import it.polimi.ingsw.model.client.components.ClientSpaceShip;
 import it.polimi.ingsw.model.player.PlayerColor;
 
-public class ClientVoyagePlayer {
+public class ClientVoyagePlayer implements Serializable {
 
     private final String username;
     private final PlayerColor color;

@@ -1,8 +1,11 @@
 package it.polimi.ingsw.controller.client;
 
+import java.io.IOException;
+
 import it.polimi.ingsw.message.server.ServerMessage;
 
 public interface ServerConnection {
-    public void sendMessage(ServerMessage message);
-    public void close();
+	void sendMessage(ServerMessage message) throws IOException;
+
+	void close();
 }

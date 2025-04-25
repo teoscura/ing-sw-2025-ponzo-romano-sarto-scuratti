@@ -1,37 +1,37 @@
 package it.polimi.ingsw.model.adventure_cards;
 
 import it.polimi.ingsw.model.adventure_cards.exceptions.CardAlreadyExhaustedException;
-    
+
 public abstract class Card implements iCard {
-    
-    private int id;
-    protected int days;
-    private boolean exhausted;
 
-    protected Card(int id, int days){
-        if(days<0) throw new IllegalArgumentException("Negative arguments not allowed.");
-        this.id = id;
-        this.days = days;
-    }
+	private final int id;
+	protected int days;
+	private boolean exhausted;
 
-    @Override
-    public int getId(){
-        return this.id;
-    }
+	protected Card(int id, int days) {
+		if (days < 0) throw new IllegalArgumentException("Negative arguments not allowed.");
+		this.id = id;
+		this.days = days;
+	}
 
-    @Override
-    public int getDays(){
-        return this.days;
-    }
+	@Override
+	public int getId() {
+		return this.id;
+	}
 
-    @Override
-    public boolean getExhausted(){
-        return this.exhausted;
-    }
+	@Override
+	public int getDays() {
+		return this.days;
+	}
 
-    protected void exhaust(){
-        if(this.exhausted) throw new CardAlreadyExhaustedException("This card's effect was already exhausted.");
-        this.exhausted = true;
-    }
+	@Override
+	public boolean getExhausted() {
+		return this.exhausted;
+	}
+
+	protected void exhaust() {
+		if (this.exhausted) throw new CardAlreadyExhaustedException("This card's effect was already exhausted.");
+		this.exhausted = true;
+	}
 
 }

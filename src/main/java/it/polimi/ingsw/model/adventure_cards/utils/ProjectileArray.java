@@ -1,13 +1,14 @@
 //Done.
 package it.polimi.ingsw.model.adventure_cards.utils;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class ProjectileArray {
+public class ProjectileArray implements Serializable {
     
-    private final List<Projectile> projectiles;
+    private final ArrayList<Projectile> projectiles;
 
     public ProjectileArray(Projectile[] projectiles){
         if(projectiles==null || projectiles.length==0) throw new NullPointerException("Meteorites Array is empty or null");
@@ -18,11 +19,11 @@ public class ProjectileArray {
                                             projectiles[i].getDimension(), 
                                             value);
         }
-        this.projectiles = Arrays.asList(projectiles);
+        this.projectiles = new ArrayList<>(Arrays.asList(projectiles));
         
     }
 
-    public List<Projectile> getProjectiles(){
+    public ArrayList<Projectile> getProjectiles(){
         return this.projectiles;
     }
 }

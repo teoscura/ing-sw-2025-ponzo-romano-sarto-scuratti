@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.adventure_cards.state;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
@@ -18,63 +18,62 @@ import it.polimi.ingsw.model.state.VoyageState;
 
 public class StardustState extends CardState {
 
-    private final StardustCard card;
-    private List<Player> awaiting = null;
+	private final StardustCard card;
+	private ArrayList<Player> awaiting = null;
 
-    public StardustState(VoyageState state, StardustCard card){
-        super(state);
-        if(card==null) throw new NullPointerException();
-        this.card = card;
-    }
+	public StardustState(VoyageState state, StardustCard card) {
+		super(state);
+		if (card == null) throw new NullPointerException();
+		this.card = card;
+	}
 
-    @Override
-    public void init(ClientModelState new_state) {
-        super.init(new_state);
-        for(Player p : this.state.getOrder(CardOrder.INVERSE)){
-            card.apply(this.state, p);
-        }
-        this.awaiting = state.getOrder(CardOrder.NORMAL);
-    }
-    
-    @Override
-    public void validate(ServerMessage message) throws ForbiddenCallException {
-        message.receive(this);
-        if(!awaiting.isEmpty()){
-            this.state.broadcastMessage(new NotifyStateUpdateMessage(this.state.getClientState()));
-            return;
-        }
-        this.transition();
-    }
+	@Override
+	public void init(ClientModelState new_state) {
+		super.init(new_state);
+		for (Player p : this.state.getOrder(CardOrder.INVERSE)) {
+			card.apply(this.state, p);
+		}
+		this.awaiting = new ArrayList<>(state.getOrder(CardOrder.NORMAL));
+	}
 
-    @Override
-    public ClientCardState getClientCardState(){
-        List<PlayerColor> tmp = this.awaiting.stream().map(p -> p.getColor()).toList();
-        return new ClientAwaitConfirmCardStateDecorator(
-            new ClientBaseCardState(card.getId()),
-            tmp);
-    }
+	@Override
+	public void validate(ServerMessage message) throws ForbiddenCallException {
+		message.receive(this);
+		if (!awaiting.isEmpty()) {
+			this.state.broadcastMessage(new NotifyStateUpdateMessage(this.state.getClientState()));
+			return;
+		}
+		this.transition();
+	}
 
-    @Override
-    public void progressTurn(Player p){
-        if(!this.awaiting.contains(p)){
-            System.out.println("Player '"+p.getUsername()+"' attempted to progress the turn while already having done so!");
-            this.state.broadcastMessage(new ViewMessage("Player'"+p.getUsername()+"' attempted to progress the turn while already having done so!"));
-            return;
-        }
-        this.awaiting.remove(p);
-    }
+	@Override
+	public ClientCardState getClientCardState() {
+		ArrayList<PlayerColor> tmp = new ArrayList<>(this.awaiting.stream().map(p -> p.getColor()).toList());
+		return new ClientAwaitConfirmCardStateDecorator(
+				new ClientBaseCardState(card.getId()),
+				tmp);
+	}
 
-    @Override
-    protected CardState getNext() {
-        return null;
-    }
+	@Override
+	public void progressTurn(Player p) {
+		if (!this.awaiting.contains(p)) {
+			System.out.println("Player '" + p.getUsername() + "' attempted to progress the turn while already having done so!");
+			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to progress the turn while already having done so!"));
+			return;
+		}
+		this.awaiting.remove(p);
+	}
 
-    @Override
-    public void disconnect(Player p) throws ForbiddenCallException {
-        if(this.awaiting.contains(p)){
-            this.awaiting.remove(p);
-            return;
-        }
-    }
-    
+	@Override
+	protected CardState getNext() {
+		return null;
+	}
+
+	@Override
+	public void disconnect(Player p) throws ForbiddenCallException {
+		if (this.awaiting.contains(p)) {
+			this.awaiting.remove(p);
+		}
+	}
+
 }

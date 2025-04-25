@@ -1,14 +1,16 @@
 package it.polimi.ingsw.model.client.player;
 
+import java.io.Serializable;
+
 import it.polimi.ingsw.model.player.PlayerColor;
 
-public class ClientWaitingPlayer {
+public class ClientWaitingPlayer implements Serializable {
     
     private final String username;
     private final PlayerColor color;
 
     public ClientWaitingPlayer(String username, PlayerColor color){
-        if(username == null || color == PlayerColor.NONE) throw new NullPointerException();
+        if(username == null) throw new NullPointerException();
         this.username = username;
         this.color = color;
     }
