@@ -64,7 +64,7 @@ public class ServerController extends Thread implements RemoteServer {
 		queue_lock = new Object();
 		File current_directory = new File(current_filepath);
 		File[] files = current_directory.listFiles();
-		assert files != null;
+		if(files == null) throw new NullPointerException();
 		for (File f : files) {
 			Matcher matcher = saved_game_pattern.matcher(f.getName());
 			if (matcher.matches()) {
