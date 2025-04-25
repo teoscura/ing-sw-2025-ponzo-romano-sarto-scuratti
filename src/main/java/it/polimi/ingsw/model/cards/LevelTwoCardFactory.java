@@ -12,7 +12,7 @@ public class LevelTwoCardFactory implements iCardFactory {
 
 	@Override
 	public iCard getCard(int id) {
-		if (this.cards.containsKey(id)) throw new IllegalArgumentException("Non valid card id.");
+		if (!this.cards.containsKey(id)) throw new IllegalArgumentException("Non valid card id.");
 		return this.cards.get(id);
 	}
 
