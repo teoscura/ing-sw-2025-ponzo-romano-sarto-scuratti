@@ -10,7 +10,7 @@ public class ShipCoords implements Serializable {
     public final int y;
 
     public ShipCoords(GameModeType type, int x, int y){
-        if(x<0 || y<0 || x>=type.getWidth() || y>=type.getWidth());
+        if(x<0 || y<0 || x>=type.getWidth() || y>=type.getWidth()) throw new IllegalArgumentException();
         this.type = type;
         this.x = x; 
         this.y = y;
