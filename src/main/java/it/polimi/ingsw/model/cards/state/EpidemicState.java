@@ -73,7 +73,7 @@ public class EpidemicState extends CardState {
 			return;
 		}
 		this.awaiting.remove(p);
-		System.out.println("Player '" + p.getUsername() + "' motioned to progress! ("+(this.state.getCount().getNumber()-this.awaiting.size())+").");
+		System.out.println("Player '" + p.getUsername() + "' motioned to progress! ("+this.awaiting.size()+" missing).");
 	}
 
 	@Override

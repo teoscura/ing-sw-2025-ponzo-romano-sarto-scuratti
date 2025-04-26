@@ -71,10 +71,6 @@ class EpidemicCardTest {
 		p2desc = new ClientDescriptor(player2.getUsername(), null);
 		p2desc.bindPlayer(player2);
 
-	}
-
-	@Test
-	void test() throws ForbiddenCallException {
 		ArrayList<Player> order = new ArrayList<>(Arrays.asList(player1, player2));
 		ArrayList<Player> players = new ArrayList<>(Arrays.asList(player1, player2));
 		model = new DummyModelInstance(1, null, GameModeType.LVL2, PlayerCount.TWO);
@@ -88,11 +84,47 @@ class EpidemicCardTest {
 		state.setCard(card);
 		cstate = card.getState(state);
 
+	}
+
+	@Test
+	void test() throws ForbiddenCallException {
 		// Check status before card application
 		int[] exp1 = new int[]{8, 0, 0};
 		assertArrayEquals(exp1, player1.getSpaceShip().getCrew());
 		state.setCardState(cstate);
+		// Check status after card application
+		exp1 = new int[]{6, 0, 0};
+		assertArrayEquals(exp1, player1.getSpaceShip().getCrew());
+		ShipCoords coords = new ShipCoords(GameModeType.TEST, 4, 3);
+		CabinComponent cabin = (CabinComponent) player1.getSpaceShip().getComponent(coords);
+		assertEquals(1, cabin.getCrew());
+		coords = new ShipCoords(GameModeType.TEST, 5, 3);
+		cabin = (CabinComponent) player1.getSpaceShip().getComponent(coords);
+		assertEquals(1, cabin.getCrew());
+		// Unsupported message (it should fail)
+		server_message_wrong = new TakeRewardMessage(false);
+		server_message_wrong.setDescriptor(p1desc);
+		assertThrows(ForbiddenCallException.class, () -> state.validate(server_message_wrong));
+		// Send message for both players
+		message = new SendContinueMessage();
+		message.setDescriptor(p1desc);
+		state.validate(message);
+		// try again (it should fail)
+		message = new SendContinueMessage();
+		message.setDescriptor(p1desc);
+		state.validate(message);
+		message = new SendContinueMessage();
+		message.setDescriptor(p2desc);
+		state.validate(message);
+		assertNull(state.getCardState(player1));
+	}
 
+	@Test
+	void disconnectionResilience() throws ForbiddenCallException{
+		// Check status before card application
+		int[] exp1 = new int[]{8, 0, 0};
+		assertArrayEquals(exp1, player1.getSpaceShip().getCrew());
+		state.setCardState(cstate);
 		// Check status after card application
 		exp1 = new int[]{6, 0, 0};
 		assertArrayEquals(exp1, player1.getSpaceShip().getCrew());
@@ -109,14 +141,13 @@ class EpidemicCardTest {
 		assertThrows(ForbiddenCallException.class, () -> state.validate(server_message_wrong));
 
 		// Send message for both players
-		message = new SendContinueMessage();
-		message.setDescriptor(p1desc);
-		state.validate(message);
-
+		state.disconnect(player1);
+        cstate = this.state.getCardState(player1);
 		// try again (it should fail)
 		message = new SendContinueMessage();
 		message.setDescriptor(p1desc);
 		state.validate(message);
+		// Woop
 		message = new SendContinueMessage();
 		message.setDescriptor(p2desc);
 		state.validate(message);

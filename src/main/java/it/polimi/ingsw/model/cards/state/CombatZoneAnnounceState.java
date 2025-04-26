@@ -8,6 +8,7 @@ import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.cards.utils.CardOrder;
 import it.polimi.ingsw.model.cards.utils.CombatZoneSection;
+import it.polimi.ingsw.model.cards.utils.Projectile;
 import it.polimi.ingsw.model.cards.utils.ProjectileArray;
 import it.polimi.ingsw.model.client.card.ClientAwaitConfirmCardStateDecorator;
 import it.polimi.ingsw.model.client.card.ClientBaseCardState;
@@ -45,8 +46,8 @@ public class CombatZoneAnnounceState extends CardState {
 			this.transition();
 			return;
 		} 
-		if (sections.size()==3) System.out.println("New CardState -> Combat Zone Announce State! [Section "+(3-sections.size())+" - "+this.sections.getFirst().getPenalty()+"].");
-		else System.out.println("    CardState -> Combat Zone Announce State! [Section "+(3-sections.size())+" - "+this.sections.getFirst().getPenalty()+"].");
+		if (sections.size()==3) System.out.println("New CardState -> Combat Zone Announce State! [Section "+(3-sections.size())+" - "+this.sections.getFirst().getCriteria()+" - "+this.sections.getFirst().getPenalty()+"].");
+		else System.out.println("    CardState -> Combat Zone Announce State! [Section "+(3-sections.size())+" - "+this.sections.getFirst().getCriteria()+" - "+this.sections.getFirst().getPenalty()+"].");
 		for(Player p : this.state.getOrder(CardOrder.NORMAL)){
 			System.out.println("	 - "+p.getUsername());
 		}
@@ -58,10 +59,6 @@ public class CombatZoneAnnounceState extends CardState {
 		if (!awaiting.isEmpty()) {
 			this.state.broadcastMessage(new NotifyStateUpdateMessage(this.state.getClientState()));
 			return;
-		}
-		for(Player p : this.state.getOrder(CardOrder.NORMAL)){
-			p.getSpaceShip().updateShip();
-			System.out.println("     - "+p.getUsername()+": "+p.getSpaceShip().getCannonPower()+"/"+p.getSpaceShip().getEnginePower()+"/"+p.getSpaceShip().getTotalCrew());
 		}
 		this.target = this.state.findCriteria(this.sections.getFirst().getCriteria());
 		System.out.println("Applying penalty to player: '"+target.getUsername()+"'");
@@ -80,7 +77,7 @@ public class CombatZoneAnnounceState extends CardState {
 	@Override
     public CardState getNext() {
 		if (this.state.getOrder(CardOrder.NORMAL).size() > 1) return new CombatZonePenaltyState(state, card_id, sections, shots, target);
-		System.out.println("Card exhausted, moving to a new one!");
+		System.out.println("...Card exhausted, moving to a new one!");
 		return null;
 	}
 

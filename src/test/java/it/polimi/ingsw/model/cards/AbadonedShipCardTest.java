@@ -15,7 +15,6 @@ import it.polimi.ingsw.controller.server.ClientDescriptor;
 import it.polimi.ingsw.exceptions.PlayerNotFoundException;
 import it.polimi.ingsw.message.server.*;
 import it.polimi.ingsw.model.GameModeType;
-import it.polimi.ingsw.model.ModelInstance;
 import it.polimi.ingsw.model.PlayerCount;
 import it.polimi.ingsw.model.board.Planche;
 import it.polimi.ingsw.model.board.TestFlightCards;
@@ -40,12 +39,13 @@ import it.polimi.ingsw.model.components.enums.StorageType;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.ShipCoords;
-import it.polimi.ingsw.model.state.VoyageState;
+import it.polimi.ingsw.model.DummyModelInstance;
+import it.polimi.ingsw.model.state.DummyVoyageState;
 
 public class AbadonedShipCardTest {
     
-    private ModelInstance model;
-    private VoyageState state;
+    private DummyModelInstance model;
+    private DummyVoyageState state;
     private Planche planche;
     private AbandonedShipCard card;
     private CardState cstate;
@@ -144,13 +144,14 @@ public class AbadonedShipCardTest {
         ((CabinComponent)player_scarso.getSpaceShip().getComponent(new ShipCoords(GameModeType.LVL2, 2, 3))).setCrew(player_scarso.getSpaceShip(), 0, AlienType.HUMAN);
         ArrayList<Player> order = new ArrayList<>(Arrays.asList(new Player[]{player1, player_scarso, player2}));
         ArrayList<Player> players = new ArrayList<>(Arrays.asList(new Player[]{player1, player2, player_scarso}));
-        model = new ModelInstance(1, null, GameModeType.LVL2, PlayerCount.THREE);
+        model = new DummyModelInstance(1, null, GameModeType.LVL2, PlayerCount.THREE);
         TestFlightCards cards = new TestFlightCards();
         planche = new Planche(GameModeType.LVL2, order);
-        state = new VoyageState(model, GameModeType.LVL2, PlayerCount.THREE, players, cards, planche);
+        state = new DummyVoyageState(model, GameModeType.LVL2, PlayerCount.THREE, players, cards, planche);
         model.setState(state);
         LevelOneCardFactory factory = new LevelOneCardFactory();
         card = (AbandonedShipCard) factory.getCard(17);
+        state.setCard(card);
         cstate = card.getState(state);
         state.setCardState(cstate);
 
@@ -161,8 +162,8 @@ public class AbadonedShipCardTest {
 
     @Test
     void behaviour() throws ForbiddenCallException, PlayerNotFoundException {
-        planche.printOrder();
         //giocatore giallo tenta, ma non e' il suo turno
+        assertTrue(6 == player2.getSpaceShip().getTotalCrew());
         SelectLandingMessage mess1 = new SelectLandingMessage(0);
         mess1.setDescriptor(psdesc);
         cstate.validate(mess1);
@@ -182,8 +183,8 @@ public class AbadonedShipCardTest {
         SelectLandingMessage mess4 = new SelectLandingMessage(0);
         mess4.setDescriptor(p2desc);
         cstate.validate(mess4);
-        assertTrue(this.state.getCardState(state.getPlayer(PlayerColor.RED)) instanceof AbandonedShipRewardState);
-        cstate = this.state.getCardState(state.getPlayer(PlayerColor.RED));
+        assertTrue(this.state.getCardState(player1) instanceof AbandonedShipRewardState);
+        cstate = this.state.getCardState(player1);
         //blu tenta un azione proibita.
         ServerMessage messwrong = new TakeRewardMessage(true);
         messwrong.setDescriptor(p2desc);
@@ -192,14 +193,15 @@ public class AbadonedShipCardTest {
         ServerMessage mess5 = new RemoveCrewMessage(new ShipCoords(GameModeType.LVL2, 2, 2));
         mess5.setDescriptor(p2desc);
         cstate.validate(mess5);
-        assertThrows(ForbiddenCallException.class, () ->cstate.validate(messwrong));
+        //Giusto un test in piu'
         assertThrows(ForbiddenCallException.class, () ->cstate.validate(mess4));
+        //Toglie il secondo.
         ServerMessage mess6 = new RemoveCrewMessage(new ShipCoords(GameModeType.LVL2, 3, 1));
         mess6.setDescriptor(p2desc);
         cstate.validate(mess6);
+        assertTrue(4 == player2.getSpaceShip().getTotalCrew());
         //Finito.
-        cstate = this.state.getCardState(player1);
-        System.out.println(cstate.getClass().getSimpleName());
+        assertTrue(null==state.getCardState(player1));
     }
 
     @Test
@@ -216,7 +218,7 @@ public class AbadonedShipCardTest {
         state.validate(messa);
         cstate = this.state.getCardState(player1);
         //carta conclusa.
-        System.out.println(cstate.getClass().getSimpleName());
+        assertTrue(null==state.getCardState(player1));
     }
 
 }

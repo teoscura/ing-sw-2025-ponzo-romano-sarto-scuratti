@@ -41,7 +41,7 @@ public class SpaceShipUpdateVisitor implements iVisitor {
 	public void visit(StorageComponent c) {
 		for (ShipmentType t : ShipmentType.values()) {
 			if (t.getValue() < 1) continue;
-			this.storage_containers[t.getValue() - 1] = c.howMany(t);
+			this.storage_containers[t.getValue() - 1] += c.howMany(t);
 		}
 	}
 

@@ -115,7 +115,7 @@ public class SpaceShip implements iSpaceShip {
 		}
 		for (int t = 0; t < this.getHeight(); t++) {
 			for (int r = 0; r < this.getWidth(); r++) {
-				if (res[t][r] == VerifyResult.UNCHECKED) res[t][r] = VerifyResult.NOT_LINKED;
+				if (res[t][r] == VerifyResult.UNCHECKED && this.components[t][r]!=this.empty) res[t][r] = VerifyResult.NOT_LINKED;
 			}
 		}
 		return res;
@@ -168,6 +168,7 @@ public class SpaceShip implements iSpaceShip {
 		this.components[coords.y][coords.x] = this.empty;
 		this.player.addScore(-1);
 		tmp.onDelete(this);
+		System.out.println("Removed component on coords: "+coords);
 		this.updateShip();
 	}
 

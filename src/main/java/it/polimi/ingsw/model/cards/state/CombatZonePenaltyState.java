@@ -71,7 +71,7 @@ class CombatZonePenaltyState extends CardState {
 	@Override
 	public void init(ClientModelState new_state) {
 		super.init(new_state);
-		System.out.println("    CardState -> Combat Zone New Cabin State!: ["+(3-sections.size())+" - "+this.sections.getFirst().getPenalty()+"].");
+		System.out.println("    CardState -> Combat Zone Penalty State!: ["+(3-sections.size())+" - "+this.sections.getFirst().getPenalty()+"].");
 		System.out.println("    Targeting: '"+this.target.getUsername()+"'.");
 		if (sections.getFirst().getPenalty() != CombatZonePenalty.DAYS) return;
 		this.state.getPlanche().movePlayer(state, target, -sections.getFirst().getAmount());
@@ -87,6 +87,7 @@ class CombatZonePenaltyState extends CardState {
 		}
 		if (this.sections.getFirst().getPenalty() == CombatZonePenalty.SHOTS) {
 			this.target.getSpaceShip().handleShot(this.shots.getProjectiles().get(0));
+			System.out.println("Hit player with projectile on offset: "+this.shots.getProjectiles().getFirst().getOffset());
 		}
 		this.transition();
 	}
@@ -128,11 +129,11 @@ class CombatZonePenaltyState extends CardState {
 		if (this.target.getRetired() || this.target.getDisconnected()) {
 			this.sections.removeFirst();
 			if (!this.sections.isEmpty()) return new CombatZoneAnnounceState(state, card_id, sections, shots);
-			System.out.println("Card exhausted, moving to a new one!");
+			System.out.println("...Card exhausted, moving to a new one!");
 			return null;
 		}
 		if (!target.getSpaceShip().getBrokeCenter()&&this.sections.getFirst().getPenalty()==CombatZonePenalty.SHOTS) target.getSpaceShip().verifyAndClean();
-		this.shots.getProjectiles().removeFirst();
+		if(this.sections.getFirst().getPenalty()==CombatZonePenalty.SHOTS) this.shots.getProjectiles().removeFirst();
 		if (this.target.getSpaceShip().getBrokeCenter())
 			return new CombatZoneNewCabinState(state, card_id, sections, shots, target);
 		if (this.sections.getFirst().getPenalty() == CombatZonePenalty.SHOTS && !this.shots.getProjectiles().isEmpty()) {
@@ -140,7 +141,7 @@ class CombatZonePenaltyState extends CardState {
 		}
 		this.sections.removeFirst();
 		if (!this.sections.isEmpty()) return new CombatZoneAnnounceState(state, card_id, sections, shots);
-		System.out.println("Card exhausted, moving to a new one!");
+		System.out.println("...Card exhausted, moving to a new one!");
 		return null;
 	}
 
