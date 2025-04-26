@@ -43,8 +43,8 @@ public class EngineComponent extends BaseComponent {
 
     @Override
     public boolean verify(iSpaceShip ship){
-        iBaseComponent tmp = ship.getComponent(this.coords.down());
-        return tmp==ship.getEmpty() && super.verify(ship);
+        if(this.getRotation()!=ComponentRotation.U000||ship.getComponent(this.coords.down())!=ship.getEmpty()) return false; 
+        return super.verify(ship);
     }
 
     @Override
@@ -70,10 +70,7 @@ public class EngineComponent extends BaseComponent {
     }
             
     private int getPower(){
-        if(powerable && !powered){
-            return 0;
-        }
-        return this.max_power;
+        return this.powerable ? this.powered ? 0 : this.max_power : this.max_power;
     } 
     
     @Override

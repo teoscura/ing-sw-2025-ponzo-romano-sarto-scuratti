@@ -57,7 +57,7 @@ public class StorageComponent extends BaseComponent {
 		if (shipment.getValue() < 1) throw new IllegalArgumentException();
 		if (shipment.getSpecial() && !this.type.getSpecial()) return false;
 		if (this.currently_full == 0) throw new ContainerEmptyException();
-		if (this.shipments[shipment.getValue() - 1] <= 0) return false;
+		if (this.shipments[shipment.getValue() - 1] <= 0) throw new ContainerEmptyException();
 		this.shipments[shipment.getValue() - 1]--;
 		this.currently_full--;
 		return true;

@@ -5,11 +5,13 @@ import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ConnectorType;
 import it.polimi.ingsw.model.components.enums.ShipmentType;
 import it.polimi.ingsw.model.components.enums.StorageType;
+import it.polimi.ingsw.model.components.exceptions.ContainerEmptyException;
 import it.polimi.ingsw.model.components.exceptions.ContainerFullException;
 import it.polimi.ingsw.model.components.exceptions.ContainerNotSpecialException;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.ShipCoords;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -22,6 +24,7 @@ class StorageComponentTest {
 
 	@BeforeEach
 	void setUp() {
+		player1 = new Player(GameModeType.LVL2, "gigi", PlayerColor.BLUE);
 		connectors = new ConnectorType[]{ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL};
 		coords = new ShipCoords(GameModeType.LVL2, 4, 3);
 	}
@@ -60,19 +63,20 @@ class StorageComponentTest {
 		}
 	}
 
-	// TODO
-	/*@Test
+	@Test
 	void takeOut() {
 		ConnectorType[] connectors = {ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL};
 		StorageComponent takeout_storage_component1 = new StorageComponent(1, connectors, ComponentRotation.U000, StorageType.DOUBLENORMAL);
+		takeout_storage_component1.onCreation(player1.getSpaceShip(),coords);
 		ShipmentType shipment1 = ShipmentType.BLUE;
 		ShipmentType shipment2 = ShipmentType.GREEN;
 		assertThrows(NullPointerException.class, () -> takeout_storage_component1.takeOut(null));
 		takeout_storage_component1.putIn(shipment1);
+		assertEquals(1, takeout_storage_component1.howMany(shipment1));
 		assertTrue(takeout_storage_component1.takeOut(shipment1));
-		assertFalse(takeout_storage_component1.takeOut(shipment2));
+		assertThrows(ContainerEmptyException.class, ()->takeout_storage_component1.takeOut(shipment2));
 	}
-*/
+
 	@Test
 	void howMany() {
 		StorageComponent howmany_storage_component1 = new StorageComponent(1, connectors, ComponentRotation.U000, StorageType.DOUBLENORMAL, coords);
