@@ -99,4 +99,13 @@ public class Player implements Serializable {
 	public ClientDescriptor getDescriptor() {
 		return this.descriptor;
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || !(o instanceof Player)) return false;
+		Player player = (Player) o;
+		return this.username == player.username
+				&& this.color == player.color;
+	}
 }
