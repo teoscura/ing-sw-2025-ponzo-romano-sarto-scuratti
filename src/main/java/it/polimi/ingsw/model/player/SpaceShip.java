@@ -61,6 +61,7 @@ public class SpaceShip implements iSpaceShip {
 		this.containers = new int[4];
 		this.crew = new int[3];
 		this.empty = new EmptyComponent();
+		this.empty.onCreation(this, new ShipCoords(type, 0,0));
 		this.storage_coords = new ArrayList<ShipCoords>();
 		this.cabin_coords = new ArrayList<ShipCoords>();
 		this.battery_coords = new ArrayList<ShipCoords>();

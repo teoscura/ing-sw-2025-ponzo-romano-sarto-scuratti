@@ -1,6 +1,5 @@
 package it.polimi.ingsw.model;
 
-
 import java.util.List;
 
 import it.polimi.ingsw.controller.server.ClientDescriptor;
