@@ -107,7 +107,7 @@ class SmugglersLoseState extends CardState {
 				this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to discard cargo that's not his most valuable!"));
 				return;
 			}
-			ContainsRemoveVisitor v = new ContainsRemoveVisitor(t);
+			ContainsRemoveVisitor v = new ContainsRemoveVisitor(p.getSpaceShip(),t);
 			try {
 				p.getSpaceShip().getComponent(coords).check(v);
 				this.required[t.getValue() - 1]--;
@@ -124,7 +124,7 @@ class SmugglersLoseState extends CardState {
 			}
 		}
 		if (this.required[4] > 0 && p.getSpaceShip().getEnergyPower() > 0) {
-			ContainsRemoveVisitor v = new ContainsRemoveVisitor();
+			ContainsRemoveVisitor v = new ContainsRemoveVisitor(p.getSpaceShip());
 			try {
 				p.getSpaceShip().getComponent(coords).check(v);
 				System.out.println("Player '"+p.getUsername()+"' removed a battery from "+coords);

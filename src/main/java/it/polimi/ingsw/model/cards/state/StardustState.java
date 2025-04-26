@@ -31,7 +31,7 @@ public class StardustState extends CardState {
 	@Override
 	public void init(ClientModelState new_state) {
 		super.init(new_state);
-		System.out.println("    CardState -> Stardust State!");
+		System.out.println("New CardState -> Stardust State!");
 		for(Player p : this.state.getOrder(CardOrder.NORMAL)){
 			System.out.println("	 - "+p.getUsername());
 		}

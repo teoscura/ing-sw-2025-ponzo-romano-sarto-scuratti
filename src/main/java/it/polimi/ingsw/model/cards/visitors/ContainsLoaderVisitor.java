@@ -50,6 +50,7 @@ public class ContainsLoaderVisitor implements iVisitor {
         } catch (ContainerNotSpecialException e){
             throw new ContainerNotSpecialException();
         }
+        ship.updateShip();
     }
 
     @Override

@@ -151,7 +151,7 @@ class PlanetRewardState extends CardState {
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to load cargo from coords that dont contain the shipment!"));
 			return;
 		}
-		ContainsRemoveVisitor vr = new ContainsRemoveVisitor(type);
+		ContainsRemoveVisitor vr = new ContainsRemoveVisitor(p.getSpaceShip(),type);
 		ContainsLoaderVisitor vl = new ContainsLoaderVisitor(p.getSpaceShip(),type);
 		p.getSpaceShip().getComponent(source_coords).check(vr);
 		p.getSpaceShip().getComponent(target_coords).check(vl);
@@ -170,7 +170,7 @@ class PlanetRewardState extends CardState {
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to discard cargo with an invalid type!"));
 			return;
 		}
-		ContainsRemoveVisitor v = new ContainsRemoveVisitor(type);
+		ContainsRemoveVisitor v = new ContainsRemoveVisitor(p.getSpaceShip(),type);
 		try {
 			p.getSpaceShip().getComponent(target_coords).check(v);
 			System.out.println("Player '"+p.getUsername()+"' removed cargo type: "+type+" from "+target_coords);

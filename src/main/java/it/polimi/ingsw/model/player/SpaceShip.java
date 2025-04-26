@@ -81,6 +81,7 @@ public class SpaceShip implements iSpaceShip {
 		Arrays.fill(shielded_directions, false);
 		Arrays.fill(containers, 0);
 		Arrays.fill(crew, 0);
+		this.updateShip();
 	}
 
 	@Override
@@ -163,6 +164,7 @@ public class SpaceShip implements iSpaceShip {
 		if (!next) throw new IllegalTargetException("Component is not adjacent to others.");
 		component.onCreation(this, coords);
 		this.components[coords.y][coords.x] = component;
+		this.updateShip();
 	}
 
 	@Override
@@ -174,6 +176,7 @@ public class SpaceShip implements iSpaceShip {
 		this.components[coords.y][coords.x] = this.empty;
 		this.player.addScore(-1);
 		tmp.onDelete(this);
+		this.updateShip();
 	}
 
 	@Override
@@ -206,6 +209,7 @@ public class SpaceShip implements iSpaceShip {
 				cell.check(v);
 			}
 		}
+		this.updateShip();
 	}
 
 	@Override
@@ -213,13 +217,13 @@ public class SpaceShip implements iSpaceShip {
 		if (coords_target == null) throw new NullPointerException();
 		if (battery_location == null) throw new NullPointerException();
 		if (!this.powerable_coords.contains(coords_target)) throw new IllegalTargetException("Target is not powerable");
-		if (!this.battery_coords.contains(battery_location))
-			throw new IllegalTargetException("Battery component wasn't present at location");
+		if (!this.battery_coords.contains(battery_location)) throw new IllegalTargetException("Battery component wasn't present at location");
 		BatteryComponent c = (BatteryComponent) getComponent(battery_location);
 		EnergyVisitor v = new EnergyVisitor(true);
 		if (c.getContains() == 0) throw new IllegalTargetException("No batteries found at location");
 		c.takeOne();
 		this.getComponent(coords_target).check(v);
+		this.updateShip();
 	}
 
 	@Override
@@ -234,25 +238,21 @@ public class SpaceShip implements iSpaceShip {
 
 	@Override
 	public int getCannonPower() {
-		this.updateShip();
 		return this.cannon_power;
 	}
 
 	@Override
 	public int getEnginePower() {
-		this.updateShip();
 		return this.engine_power;
 	}
 
 	@Override
 	public int getEnergyPower() {
-		this.updateShip();
 		return this.battery_power;
 	}
 
 	@Override
 	public boolean[] getShieldedDirections() {
-		this.updateShip();
 		return this.shielded_directions;
 	}
 
@@ -492,6 +492,7 @@ public class SpaceShip implements iSpaceShip {
 
 	@Override
 	public int[] getContains() {
+		this.updateShip();
 		int[] tmp = new int[5];
 		tmp[4] = this.battery_power;
 		for (ShipmentType t : ShipmentType.values()) {

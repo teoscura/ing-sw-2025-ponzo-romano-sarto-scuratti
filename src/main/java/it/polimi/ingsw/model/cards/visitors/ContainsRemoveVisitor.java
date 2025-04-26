@@ -14,17 +14,23 @@ import it.polimi.ingsw.model.components.enums.ShipmentType;
 import it.polimi.ingsw.model.components.exceptions.ContainerEmptyException;
 import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
 import it.polimi.ingsw.model.components.visitors.iVisitor;
+import it.polimi.ingsw.model.player.iSpaceShip;
 
 public class ContainsRemoveVisitor implements iVisitor {
 
+    private final iSpaceShip ship;
     private ShipmentType searching;
 
-    public ContainsRemoveVisitor(ShipmentType type){
+    public ContainsRemoveVisitor(iSpaceShip ship, ShipmentType type){
+        if(ship==null) throw new NullPointerException();
         if(type==ShipmentType.EMPTY) throw new IllegalTargetException();
+        this.ship = ship;
         this.searching = type;
     }
 
-    public ContainsRemoveVisitor(){
+    public ContainsRemoveVisitor(iSpaceShip ship){
+        if(ship==null) throw new NullPointerException();
+        this.ship = ship;
         this.searching = null;
     }
 
@@ -58,6 +64,7 @@ public class ContainsRemoveVisitor implements iVisitor {
         if(this.searching==null) throw new IllegalTargetException();
         if(c.howMany(searching)<=0) throw new ContainerEmptyException();
         c.takeOut(searching);
+        ship.updateShip();
     }
 
     @Override
@@ -65,6 +72,7 @@ public class ContainsRemoveVisitor implements iVisitor {
         if(this.searching!=null) throw new IllegalTargetException();
         if(c.getContains()>0){
             c.takeOne();
+            ship.updateShip();
             return;
         }
         throw new ContainerEmptyException();

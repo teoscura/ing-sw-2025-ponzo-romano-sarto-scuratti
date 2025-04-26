@@ -48,4 +48,13 @@ public class ShipCoords implements Serializable {
         return "("+this.x+","+this.y+")";
     }
 
+    @Override public boolean equals(Object o) {
+        if (o == this)
+            return true;
+        if (!(o instanceof ShipCoords))
+            return false;
+        ShipCoords c = (ShipCoords)o;
+        return this.x == c.x && this.y == c.y;
+    }
+
 }

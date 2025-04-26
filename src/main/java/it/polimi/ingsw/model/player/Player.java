@@ -10,14 +10,15 @@ import java.io.Serializable;
 import it.polimi.ingsw.controller.server.ClientDescriptor;
 
 public class Player implements Serializable {
+	private transient ClientDescriptor descriptor;
 	private final String username;
 	private final PlayerColor color;
-	private transient ClientDescriptor descriptor;
-	private boolean retired = false;
-	private boolean disconnected = false;
+	private final iSpaceShip ship;
 	private int credits;
 	private int score;
-	private final iSpaceShip ship;
+	private boolean retired = false;
+	private boolean disconnected = false;
+	
 
 	public Player(GameModeType gamemode, String username, PlayerColor color) {
 		if (username == null || color == PlayerColor.NONE) throw new NullPointerException();

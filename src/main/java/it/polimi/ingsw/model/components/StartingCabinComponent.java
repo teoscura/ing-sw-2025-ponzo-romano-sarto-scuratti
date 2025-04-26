@@ -17,7 +17,7 @@ import it.polimi.ingsw.model.player.iSpaceShip;
 public class StartingCabinComponent extends BaseComponent {
     
     private final PlayerColor color;
-    private int crew_number = 0;
+    private int crew_number;
 
     public StartingCabinComponent(int id, 
                           ConnectorType[] connectors, 
@@ -26,6 +26,7 @@ public class StartingCabinComponent extends BaseComponent {
         super(id, connectors, rotation);
         if(color.getOrder()<0) throw new IllegalArgumentException("Color can't be \"NONE\".");
         this.color = color;
+        this.crew_number = 2;
     }
 
     public StartingCabinComponent(int id, 
@@ -36,6 +37,7 @@ public class StartingCabinComponent extends BaseComponent {
         super(id, connectors, rotation, coords);
         if(color.getOrder()<0) throw new IllegalArgumentException("Color can't be \"NONE\".");
         this.color = color;
+        this.crew_number = 2;
     }
 
     @Override

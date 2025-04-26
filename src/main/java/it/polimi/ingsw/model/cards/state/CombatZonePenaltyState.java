@@ -233,7 +233,7 @@ class CombatZonePenaltyState extends CardState {
 				this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to discard cargo that's not his most valuable!"));
 				return;
 			}
-			ContainsRemoveVisitor v = new ContainsRemoveVisitor(t);
+			ContainsRemoveVisitor v = new ContainsRemoveVisitor(p.getSpaceShip(),t);
 			try {
 				p.getSpaceShip().getComponent(coords).check(v);
 				System.out.println("Player '" + p.getUsername() + "' discarded cargo type: "+type+" from "+coords+"!");
@@ -250,7 +250,7 @@ class CombatZonePenaltyState extends CardState {
 			}
 		}
 		if (this.required[4] > 0 && p.getSpaceShip().getEnergyPower() > 0) {
-			ContainsRemoveVisitor v = new ContainsRemoveVisitor();
+			ContainsRemoveVisitor v = new ContainsRemoveVisitor(p.getSpaceShip());
 			try {
 				p.getSpaceShip().getComponent(coords).check(v);
 				System.out.println("Player '"+p.getUsername()+"' removed battery from "+coords);

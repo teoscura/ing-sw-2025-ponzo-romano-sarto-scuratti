@@ -18,7 +18,7 @@ public class CannonComponent extends BaseComponent {
 
 	private final int max_power;
 	private boolean powered = false;
-	private boolean powerable = false;
+	private final boolean powerable;
 
 	public CannonComponent(int id,
 						   ConnectorType[] components,
@@ -96,18 +96,18 @@ public class CannonComponent extends BaseComponent {
 
 	@Override
 	public boolean powerable() {
-		return true;
+		return this.powerable;
 	}
 
 	@Override
 	public void onCreation(iSpaceShip ship, ShipCoords coords) {
 		this.coords = coords;
-		if (powerable) ship.addPowerableCoords(this.coords);
+		if(this.powerable) ship.addPowerableCoords(coords);
 	}
 
 	@Override
 	public void onDelete(iSpaceShip ship) {
-		if (powerable) ship.delPowerableCoords(this.coords);
+		if (powerable) ship.delPowerableCoords(coords);
 	}
 
 	@Override

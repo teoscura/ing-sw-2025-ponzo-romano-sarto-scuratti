@@ -20,6 +20,7 @@ public class CrewSetVisitor implements iVisitor {
     @Override
     public void visit(CabinComponent c) {
         c.setCrew(ship, type.getMaxCapacity(), type);
+        ship.updateShip();
     }
 
     @Override
