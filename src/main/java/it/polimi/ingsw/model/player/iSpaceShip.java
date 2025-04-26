@@ -26,7 +26,7 @@ public interface iSpaceShip {
 
 	GameModeType getType();
 
-	int getCannonPower();
+	float getCannonPower();
 
 	int[] getCrew();
 

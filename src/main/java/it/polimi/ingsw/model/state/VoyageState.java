@@ -139,7 +139,7 @@ public class VoyageState extends GameState {
 		tmp.addAll(this.players);
 		switch (criteria) {
 			case LEAST_CANNON:
-				int min_cannon_power = tmp.stream().mapToInt(p -> p.getSpaceShip().getCannonPower()).min().orElse(0);
+				double min_cannon_power = tmp.stream().mapToDouble(p -> p.getSpaceShip().getCannonPower()).min().orElse(0);
 				return tmp.stream()
 						.filter((p) -> p.getSpaceShip().getCannonPower() == min_cannon_power && !p.getRetired() && !p.getDisconnected())
 						.sorted((p1, p2) -> this.planche.getPlayerPosition(p1) > this.planche.getPlayerPosition(p2) ? 1 : -1)

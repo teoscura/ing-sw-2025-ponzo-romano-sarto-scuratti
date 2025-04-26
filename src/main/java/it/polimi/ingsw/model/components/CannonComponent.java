@@ -80,9 +80,9 @@ public class CannonComponent extends BaseComponent {
 		this.powered = false;
 	}
 
-	public int getCurrentPower() {
+	public float getCurrentPower() {
 		if (this.getRotation() != ComponentRotation.U000) {
-			return this.getPower() >> 1;
+			return this.getPower()/2;
 		}
 		return this.getPower();
 	}

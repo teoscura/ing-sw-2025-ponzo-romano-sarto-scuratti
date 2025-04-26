@@ -7,7 +7,7 @@ public class SpaceShipUpdateVisitor implements iVisitor {
 
 	private int battery_power;
 	private int engine_power;
-	private int cannon_power;
+	private float cannon_power;
 	private final int[] storage_containers;
 	private final int[] crew_members;
 	private final boolean[] directions;
@@ -78,7 +78,7 @@ public class SpaceShipUpdateVisitor implements iVisitor {
 		return this.engine_power;
 	}
 
-	public int getCannonPower() {
+	public float getCannonPower() {
 		return this.cannon_power;
 	}
 

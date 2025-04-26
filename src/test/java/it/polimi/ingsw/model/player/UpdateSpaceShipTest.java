@@ -2,26 +2,16 @@ package it.polimi.ingsw.model.player;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import it.polimi.ingsw.model.DummyModelInstance;
 import it.polimi.ingsw.model.GameModeType;
-import it.polimi.ingsw.model.PlayerCount;
-import it.polimi.ingsw.model.board.Planche;
-import it.polimi.ingsw.model.board.TestFlightCards;
-import it.polimi.ingsw.model.cards.LevelTwoCardFactory;
-import it.polimi.ingsw.model.cards.OpenSpaceCard;
 import it.polimi.ingsw.model.cards.visitors.CrewRemoveVisitor;
 import it.polimi.ingsw.model.components.CabinComponent;
 import it.polimi.ingsw.model.components.ComponentFactory;
 import it.polimi.ingsw.model.components.iBaseComponent;
 import it.polimi.ingsw.model.components.enums.AlienType;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
-import it.polimi.ingsw.model.state.DummyVoyageState;
 
 public class UpdateSpaceShipTest {
 
@@ -31,6 +21,7 @@ public class UpdateSpaceShipTest {
     private Player dummy3;
     private Player dummy4;
     private Player dummy5;
+    private Player dummy6;
 
 	@BeforeEach
 	void setUp() {
@@ -85,6 +76,14 @@ public class UpdateSpaceShipTest {
         c.rotate(ComponentRotation.U000); 
         dummy5.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 4, 3));
         
+        dummy6 = new Player(GameModeType.TEST, "bingus", PlayerColor.RED);
+        c = f.getComponent(14);
+        c.rotate(ComponentRotation.U090); 
+        dummy6.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 2, 2));
+        c = f.getComponent(133);
+        c.rotate(ComponentRotation.U000); 
+        dummy6.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 3, 1));
+
     }
 
     @Test
@@ -112,6 +111,7 @@ public class UpdateSpaceShipTest {
         CrewRemoveVisitor v = new CrewRemoveVisitor(dummy2.getSpaceShip());
         dummy2.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 3, 2)).check(v);
         assertTrue(1 == dummy2.getSpaceShip().getTotalCrew());
+        //assertTrue( dummy2.getSpaceShip().countExposedConnectors());
     }
 
     @Test
@@ -126,6 +126,7 @@ public class UpdateSpaceShipTest {
         dummy3.getSpaceShip().removeComponent(new ShipCoords(GameModeType.TEST, 4, 4));
         assertTrue(4 == dummy3.getSpaceShip().getTotalCrew());
         assertTrue(0 == dummy2.getSpaceShip().getCannonPower());
+        //assertTrue( dummy2.getSpaceShip().countExposedConnectors());
     }
 
     @Test
@@ -134,13 +135,12 @@ public class UpdateSpaceShipTest {
         assertTrue(0 == dummy3.getSpaceShip().getCannonPower());
         ((CabinComponent) dummy3.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 4, 3))).setCrew(dummy3.getSpaceShip(), 1, AlienType.BROWN);
         assertTrue(7 == dummy3.getSpaceShip().getTotalCrew());
-        System.out.println(dummy3.getSpaceShip().getTotalCrew());
         dummy3.getSpaceShip().removeComponent(new ShipCoords(GameModeType.TEST, 4, 4));
-        System.out.println(dummy3.getSpaceShip().getTotalCrew());
         assertTrue(6 == dummy3.getSpaceShip().getTotalCrew());
         dummy3.getSpaceShip().removeComponent(new ShipCoords(GameModeType.TEST, 5, 3));
         assertTrue(4 == dummy3.getSpaceShip().getTotalCrew());
-        assertTrue(0 == dummy2.getSpaceShip().getCannonPower());
+        assertTrue(0 == dummy3.getSpaceShip().getCannonPower());
+        //assertTrue( dummy3.getSpaceShip().countExposedConnectors());
     }
 
     @Test
@@ -156,19 +156,42 @@ public class UpdateSpaceShipTest {
         assertTrue(0 == dummy3.getSpaceShip().getCannonPower());
         ((CabinComponent) dummy3.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 4, 3))).setCrew(dummy3.getSpaceShip(), 1, AlienType.BROWN);
         assertTrue(7 == dummy3.getSpaceShip().getTotalCrew());
-        System.out.println(dummy3.getSpaceShip().getTotalCrew());
         dummy3.getSpaceShip().removeComponent(new ShipCoords(GameModeType.TEST, 4, 4));
-        System.out.println(dummy3.getSpaceShip().getTotalCrew());
         assertTrue(7 == dummy3.getSpaceShip().getTotalCrew());
         dummy3.getSpaceShip().removeComponent(new ShipCoords(GameModeType.TEST, 5, 3));
-        System.out.println(dummy3.getSpaceShip().getTotalCrew());
         assertTrue(5 == dummy3.getSpaceShip().getTotalCrew());
-        assertTrue(0 == dummy2.getSpaceShip().getCannonPower());
+        assertTrue(0 == dummy3.getSpaceShip().getCannonPower());
+        //assertTrue( dummy3.getSpaceShip().countExposedConnectors());
     }
 
     @Test
     void dummy4Update(){
-        
+        assertTrue(2 == dummy4.getSpaceShip().getTotalCrew());
+        assertTrue(0 == dummy4.getSpaceShip().getCannonPower());
+        assertTrue(0 == dummy4.getSpaceShip().getEnginePower());
+        dummy4.getSpaceShip().turnOn(new ShipCoords(GameModeType.TEST, 3, 3), new ShipCoords(GameModeType.TEST, 2, 2));
+        assertTrue(2 == dummy4.getSpaceShip().getEnginePower());
+        assertTrue(2 == dummy4.getSpaceShip().getTotalCrew());
+        assertTrue(0 == dummy4.getSpaceShip().getCannonPower());
+        //assertTrue( dummy4.getSpaceShip().countExposedConnectors());
     }
+
+    @Test
+    void dummy5Update(){
+        assertTrue(2 == dummy5.getSpaceShip().getTotalCrew());
+        assertTrue(0 == dummy5.getSpaceShip().getCannonPower());
+        assertTrue(1 == dummy5.getSpaceShip().getEnginePower());
+        dummy5.getSpaceShip().turnOn(new ShipCoords(GameModeType.TEST, 4, 3), new ShipCoords(GameModeType.TEST, 2, 2));
+        assertTrue(3 == dummy5.getSpaceShip().getEnginePower());
+        assertTrue(2 == dummy5.getSpaceShip().getTotalCrew());
+        assertTrue(0 == dummy5.getSpaceShip().getCannonPower());
+        //assertTrue( dummy5.getSpaceShip().countExposedConnectors());
+    }
+
+    @Test
+    void dummy6Update(){
+
+    }
+
 
 }
