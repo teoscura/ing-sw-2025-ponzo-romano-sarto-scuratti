@@ -41,7 +41,6 @@ public class DummyVoyageState extends VoyageState {
 
 	@Override
 	public void init() {
-		super.init();
 		this.broadcastMessage(new NotifyStateUpdateMessage(this.getClientState()));
 	}
 
