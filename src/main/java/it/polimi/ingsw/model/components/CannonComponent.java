@@ -16,7 +16,7 @@ import it.polimi.ingsw.model.player.iSpaceShip;
 
 public class CannonComponent extends BaseComponent {
 
-	private final int max_power;
+	private final double max_power;
 	private boolean powered = false;
 	private final boolean powerable;
 
@@ -80,14 +80,14 @@ public class CannonComponent extends BaseComponent {
 		this.powered = false;
 	}
 
-	public float getCurrentPower() {
+	public double getCurrentPower() {
 		if (this.getRotation() != ComponentRotation.U000) {
 			return this.getPower()/2;
 		}
 		return this.getPower();
 	}
 
-	private int getPower() {
+	private double getPower() {
 		if(this.powerable) return this.powered ? max_power : 0;
         return this.max_power;
 	}

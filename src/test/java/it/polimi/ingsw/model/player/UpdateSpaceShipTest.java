@@ -64,7 +64,6 @@ public class UpdateSpaceShipTest {
         c.rotate(ComponentRotation.U000); 
         dummy4.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 2, 2));
 
-
         dummy5 = new Player(GameModeType.TEST, "bingus", PlayerColor.RED);
         c = f.getComponent(14);
         c.rotate(ComponentRotation.U090); 
@@ -83,6 +82,9 @@ public class UpdateSpaceShipTest {
         c = f.getComponent(133);
         c.rotate(ComponentRotation.U000); 
         dummy6.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 3, 1));
+        c = f.getComponent(120);
+        c.rotate(ComponentRotation.U090); 
+        dummy6.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 4, 2));
 
     }
 
@@ -190,8 +192,16 @@ public class UpdateSpaceShipTest {
 
     @Test
     void dummy6Update(){
-
+        assertTrue(2 == dummy6.getSpaceShip().getTotalCrew());
+        System.out.println(dummy6.getSpaceShip().getCannonPower());
+        assertTrue(0.5f == dummy6.getSpaceShip().getCannonPower());
+        assertTrue(0 == dummy6.getSpaceShip().getEnginePower());
+        dummy6.getSpaceShip().turnOn(new ShipCoords(GameModeType.TEST, 3, 1), new ShipCoords(GameModeType.TEST, 2, 2));
+        assertTrue(0 == dummy6.getSpaceShip().getEnginePower());
+        assertTrue(2 == dummy6.getSpaceShip().getTotalCrew());
+        assertTrue(2.5 == dummy6.getSpaceShip().getCannonPower());
     }
 
+    
 
 }

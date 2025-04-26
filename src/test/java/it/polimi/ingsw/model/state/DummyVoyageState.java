@@ -168,6 +168,7 @@ public class DummyVoyageState extends VoyageState {
 
 	public void setCardState(CardState next) {
 		if (next == null) {
+			this.state = null;
 			return;
 		}
 		this.state = next;

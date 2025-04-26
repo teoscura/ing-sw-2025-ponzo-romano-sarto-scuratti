@@ -11,7 +11,7 @@ public class ClientSpaceShip implements Serializable {
     private final GameModeType type;
     private final ClientComponent[][] ship;
     private final boolean[] shielded;
-    private final float cannon_power;
+    private final double cannon_power;
     private final int engine_power;
     private final int energy_power;
     private final int[] crew;
@@ -19,7 +19,7 @@ public class ClientSpaceShip implements Serializable {
     public ClientSpaceShip(GameModeType type,
                            ClientComponent[][] ship,
                            boolean[] shielded,
-                           float cannon_power,
+                           double cannon_power,
                            int engine_power, 
                            int energy_power,
                            int[] crew){
@@ -64,7 +64,7 @@ public class ClientSpaceShip implements Serializable {
         return this.shielded;
     }
 
-    public float getCannonPower() {
+    public double getCannonPower() {
         return this.cannon_power;
     }
 

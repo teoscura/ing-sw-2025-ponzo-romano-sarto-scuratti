@@ -46,7 +46,7 @@ public class SpaceShip implements iSpaceShip {
 	private int[] containers;
 	private boolean[] shielded_directions;
 	private boolean broke_center;
-	private float cannon_power = 0;
+	private double cannon_power = 0;
 	private int engine_power = 0;
 	private int battery_power = 0;
 
@@ -229,7 +229,7 @@ public class SpaceShip implements iSpaceShip {
 	}
 
 	@Override
-	public float getCannonPower() {
+	public double getCannonPower() {
 		return this.cannon_power;
 	}
 
