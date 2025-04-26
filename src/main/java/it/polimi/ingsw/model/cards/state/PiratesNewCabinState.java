@@ -37,6 +37,8 @@ class PiratesNewCabinState extends CardState {
 	@Override
 	public void init(ClientModelState new_state) {
 		super.init(new_state);
+		System.out.println("    CardState -> Pirates New Cabin State!");
+		System.out.println("    Awaiting: '"+this.list.getFirst().getUsername()+"'.");
 	}
 
 	@Override
@@ -80,6 +82,7 @@ class PiratesNewCabinState extends CardState {
 		}
 		try {
 			p.getSpaceShip().setCenter(new_center);
+			System.out.println("Player '"+p.getUsername()+"' set a new ship center at "+new_center+".");
 		} catch (IllegalTargetException e) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to set his new center on an empty space!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to set his new center on an empty space!"));

@@ -67,7 +67,7 @@ class AbandonedStationRewardState extends CardState {
 
 	@Override
     public CardState getNext() {
-		System.out.println("Card exhausted, moving to a new one!");
+		System.out.println("...Card exhausted, moving to a new one!");
 		return null;
 	}
 
@@ -92,6 +92,8 @@ class AbandonedStationRewardState extends CardState {
 		ContainsLoaderVisitor v = new ContainsLoaderVisitor(p.getSpaceShip(),type);
 		try {
 			p.getSpaceShip().getComponent(target_coords).check(v);
+			this.card.getPlanet().getContains()[type.getValue() - 1]--;
+			System.out.println("Player '"+p.getUsername()+"' took cargo type: "+type+", placed it at "+target_coords);
 		} catch (IllegalTargetException e) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to position cargo in illegal coordinates!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to position cargo in illegal coordinates!"));
@@ -105,7 +107,6 @@ class AbandonedStationRewardState extends CardState {
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to position cargo in a storage that doesn't support it!"));
 			return;
 		}
-		this.card.getPlanet().getContains()[type.getValue() - 1]--;
 		for (int i : this.card.getPlanet().getContains()) {
 			if (i > 0) return;
 		}
@@ -143,6 +144,7 @@ class AbandonedStationRewardState extends CardState {
 		ContainsLoaderVisitor vl = new ContainsLoaderVisitor(p.getSpaceShip(),type);
 		p.getSpaceShip().getComponent(source_coords).check(vr);
 		p.getSpaceShip().getComponent(target_coords).check(vl);
+		System.out.println("Player '"+p.getUsername()+"' moved cargo type: "+type+", from "+source_coords+" to "+target_coords);
 	}
 
 	@Override
@@ -160,6 +162,7 @@ class AbandonedStationRewardState extends CardState {
 		ContainsRemoveVisitor v = new ContainsRemoveVisitor(type);
 		try {
 			p.getSpaceShip().getComponent(target_coords).check(v);
+			System.out.println("Player '"+p.getUsername()+"' removed cargo type: "+type+" from "+target_coords);
 		} catch (IllegalTargetException e) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to discard cargo from illegal coordinates!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to discard cargo from illegal coordinates!"));

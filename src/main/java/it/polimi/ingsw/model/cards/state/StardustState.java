@@ -31,6 +31,10 @@ public class StardustState extends CardState {
 	@Override
 	public void init(ClientModelState new_state) {
 		super.init(new_state);
+		System.out.println("    CardState -> Stardust State!");
+		for(Player p : this.state.getOrder(CardOrder.NORMAL)){
+			System.out.println("	 - "+p.getUsername());
+		}
 		for (Player p : this.state.getOrder(CardOrder.INVERSE)) {
 			card.apply(this.state, p);
 		}
@@ -61,6 +65,7 @@ public class StardustState extends CardState {
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to progress the turn while already having done so!"));
 			return;
 		}
+		System.out.println("Player '" + p.getUsername() + "' motioned to progress!");
 		this.awaiting.remove(p);
 	}
 

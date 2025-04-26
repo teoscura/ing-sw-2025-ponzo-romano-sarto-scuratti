@@ -89,6 +89,7 @@ class CombatZoneNewCabinState extends CardState {
 		}
 		try {
 			p.getSpaceShip().setCenter(new_center);
+			System.out.println("Player '"+p.getUsername()+"' set a new ship center at "+new_center+".");
 		} catch (IllegalTargetException e) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to set his new center on an empty space!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to set his new center on an empty space!"));
@@ -98,7 +99,6 @@ class CombatZoneNewCabinState extends CardState {
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to set his new center while having a unbroken ship!"));
 			System.out.println("Player '" + p.getUsername() + "' set a new ship center.");
 		}
-		System.out.println("Player '"+p.getUsername()+"' set a new ship center at "+new_center+".");
 	}
 
 	@Override

@@ -53,6 +53,10 @@ class SmugglersLoseState extends CardState {
 	@Override
 	public void init(ClientModelState new_state) {
 		super.init(new_state);
+		System.out.println("    CardState -> Smugglers Lose State!");
+		for(Player p : this.list){
+			System.out.println("	 - "+p.getUsername());
+		}
 	}
 
 	@Override
@@ -107,6 +111,7 @@ class SmugglersLoseState extends CardState {
 			try {
 				p.getSpaceShip().getComponent(coords).check(v);
 				this.required[t.getValue() - 1]--;
+				System.out.println("Player '"+p.getUsername()+"' removed cargo type: "+type+" from "+coords);
 				break;
 			} catch (ContainerEmptyException e) {
 				System.out.println("Player '" + p.getUsername() + "' attempted to discard cargo from a storage that doesn't contain it!");
@@ -122,6 +127,7 @@ class SmugglersLoseState extends CardState {
 			ContainsRemoveVisitor v = new ContainsRemoveVisitor();
 			try {
 				p.getSpaceShip().getComponent(coords).check(v);
+				System.out.println("Player '"+p.getUsername()+"' removed a battery from "+coords);
 			} catch (ContainerEmptyException e) {
 				System.out.println("Player '" + p.getUsername() + "' attempted to discard batteries from a container that doesn't contain any!");
 				this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to discard batteries from a container that doesn't contain any!"));

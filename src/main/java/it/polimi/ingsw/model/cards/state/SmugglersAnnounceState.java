@@ -37,6 +37,11 @@ public class SmugglersAnnounceState extends CardState {
 	@Override
 	public void init(ClientModelState new_state) {
 		super.init(new_state);
+		if(list.size()==this.state.getCount().getNumber()) System.out.println("New CardState -> Smugglers Announce State!");
+		else System.out.println("    CardState -> Smugglers Announce State!");
+		for(Player p : this.list){
+			System.out.println("	 - "+p.getUsername());
+		}
 	}
 
 	@Override
@@ -94,6 +99,7 @@ public class SmugglersAnnounceState extends CardState {
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to progress during another player's turn!"));
 			return;
 		}
+		System.out.println("Player '" + p.getUsername() + "' motioned to progress!");
 		this.responded = true;
 	}
 

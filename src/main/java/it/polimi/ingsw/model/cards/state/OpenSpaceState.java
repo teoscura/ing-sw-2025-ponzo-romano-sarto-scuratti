@@ -34,6 +34,10 @@ public class OpenSpaceState extends CardState {
 	@Override
 	public void init(ClientModelState new_state) {
 		super.init(new_state);
+		System.out.println("New CardState -> Open Space State!");
+		for(Player p : this.state.getOrder(CardOrder.NORMAL)){
+			System.out.println("	 - "+p.getUsername());
+		}
 	}
 
 	@Override
@@ -70,6 +74,7 @@ public class OpenSpaceState extends CardState {
 		}
 		try {
 			p.getSpaceShip().turnOn(target_coords, battery_coords);
+			System.out.println("Player '" + p.getUsername() + "' turned on component at"+target_coords+" using battery from "+battery_coords+"!");
 		} catch (IllegalTargetException e) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to turn on a component with invalid coordinates!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to turn on a component with invalid coordinates!"));
@@ -83,6 +88,7 @@ public class OpenSpaceState extends CardState {
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to progress the turn while already having done so!"));
 			return;
 		}
+		System.out.println("Player '" + p.getUsername() + "' motioned to progress! ("+(this.state.getCount().getNumber()-this.awaiting.size())+").");
 		this.awaiting.remove(p);
 	}
 

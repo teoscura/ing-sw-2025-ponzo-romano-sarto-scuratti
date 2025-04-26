@@ -33,6 +33,10 @@ class PiratesRewardState extends CardState {
 	@Override
 	public void init(ClientModelState new_state) {
 		super.init(new_state);
+		System.out.println("    CardState -> Pirates Reward State!");
+		for(Player p : this.list){
+			System.out.println("	 - "+p.getUsername());
+		}
 	}
 
 	@Override
@@ -71,6 +75,7 @@ class PiratesRewardState extends CardState {
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to accept a reward during another player's turn!"));
 			return;
 		}
+		System.out.println("Player '"+p.getUsername()+"' took the reward? "+take);
 		this.took_reward = take;
 		this.responded = true;
 	}

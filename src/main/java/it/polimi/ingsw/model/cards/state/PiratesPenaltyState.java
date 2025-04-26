@@ -41,6 +41,10 @@ public class PiratesPenaltyState extends CardState {
 	@Override
 	public void init(ClientModelState new_state) {
 		super.init(new_state);
+		System.out.println("    CardState -> Pirates Penalty State!");
+		for(Player p : this.list){
+			System.out.println("	 - "+p.getUsername());
+		}
 	}
 
 	@Override
@@ -93,6 +97,7 @@ public class PiratesPenaltyState extends CardState {
 		}
 		try {
 			p.getSpaceShip().turnOn(target_coords, battery_coords);
+			System.out.println("Player '" + p.getUsername() + "' turned on component at"+target_coords+" using battery from "+battery_coords+"!");
 		} catch (IllegalTargetException e) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to turn on a component with invalid coordinates!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to turn on a component with invalid coordinates!"));
@@ -107,6 +112,7 @@ public class PiratesPenaltyState extends CardState {
 			return;
 		}
 		this.responded = true;
+		System.out.println("Player '" + p.getUsername() + "' motioned to progress!");
 	}
 
 	@Override

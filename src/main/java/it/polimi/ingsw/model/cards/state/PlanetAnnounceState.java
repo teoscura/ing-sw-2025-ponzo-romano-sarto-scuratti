@@ -33,9 +33,10 @@ public class PlanetAnnounceState extends CardState {
 	@Override
 	public void init(ClientModelState new_state) {
 		super.init(new_state);
+		if(list.size()==this.state.getCount().getNumber()) System.out.println("New CardState -> Planet Announce State!");
+		else System.out.println("    CardState -> Planet Announce State!");
 		for(Player p : this.list){
-			p.getSpaceShip().updateShip();
-			System.out.println(" - "+p.getUsername());
+			System.out.println("	 - "+p.getUsername());
 		}
 	}
 

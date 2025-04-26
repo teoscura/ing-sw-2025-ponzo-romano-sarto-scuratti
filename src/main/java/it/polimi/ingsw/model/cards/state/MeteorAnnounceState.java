@@ -39,7 +39,7 @@ public class MeteorAnnounceState extends CardState {
 	@Override
 	public void init(ClientModelState new_state) {
 		super.init(new_state);
-		System.out.println("New CardState -> Meteor Announce State! [Left "+left.getProjectiles().size()+"].");
+		System.out.println("New CardState -> Meteor Swarm Announce State! [Left "+left.getProjectiles().size()+"].");
 		for(Player p : this.state.getOrder(CardOrder.NORMAL)){
 			System.out.println("	 - "+p.getUsername());
 		}

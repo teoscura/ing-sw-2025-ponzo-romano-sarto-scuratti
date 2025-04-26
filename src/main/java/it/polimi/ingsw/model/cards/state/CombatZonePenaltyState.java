@@ -196,6 +196,8 @@ class CombatZonePenaltyState extends CardState {
 		CrewRemoveVisitor v = new CrewRemoveVisitor(p.getSpaceShip());
 		try {
 			p.getSpaceShip().getComponent(cabin_coords).check(v);
+			this.amount++;
+			System.out.println("Player '" + p.getUsername() + "' removed a crewmate from "+cabin_coords+"!");
 		} catch (IllegalTargetException e) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to remove a crew member from invalid coordinates!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to remove a crew member from invalid coordinates!"));
@@ -206,8 +208,6 @@ class CombatZonePenaltyState extends CardState {
 			this.state.loseGame(p);
 			return;
 		}
-		System.out.println("Player '" + p.getUsername() + "' removed a crewmate from "+cabin_coords+"!");
-		this.amount++;
 		if (this.amount == this.sections.getFirst().getAmount()) {
 			this.responded = true;
 		}
@@ -253,6 +253,7 @@ class CombatZonePenaltyState extends CardState {
 			ContainsRemoveVisitor v = new ContainsRemoveVisitor();
 			try {
 				p.getSpaceShip().getComponent(coords).check(v);
+				System.out.println("Player '"+p.getUsername()+"' removed battery from "+coords);
 			} catch (ContainerEmptyException e) {
 				System.out.println("Player '" + p.getUsername() + "' attempted to discard batteries from a container that doesn't contain any!");
 				this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to discard batteries from a container that doesn't contain any!"));

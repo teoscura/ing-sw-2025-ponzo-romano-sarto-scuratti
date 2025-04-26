@@ -45,8 +45,9 @@ class PlanetRewardState extends CardState {
 	@Override
 	public void init(ClientModelState new_state) {
 		super.init(new_state);
+		System.out.println("    CardState -> Planet Reward State!");
 		for(Player p : this.list){
-			System.out.println(" - "+p.getUsername());
+			System.out.println("	 - "+p.getUsername());
 		}
 	}
 
@@ -154,6 +155,7 @@ class PlanetRewardState extends CardState {
 		ContainsLoaderVisitor vl = new ContainsLoaderVisitor(p.getSpaceShip(),type);
 		p.getSpaceShip().getComponent(source_coords).check(vr);
 		p.getSpaceShip().getComponent(target_coords).check(vl);
+		System.out.println("Player '"+p.getUsername()+"' moved cargo type: "+type+", from "+source_coords+" to "+target_coords);
 	}
 
 	@Override
@@ -171,6 +173,7 @@ class PlanetRewardState extends CardState {
 		ContainsRemoveVisitor v = new ContainsRemoveVisitor(type);
 		try {
 			p.getSpaceShip().getComponent(target_coords).check(v);
+			System.out.println("Player '"+p.getUsername()+"' removed cargo type: "+type+" from "+target_coords);
 		} catch (IllegalTargetException e) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to discard cargo from illegal coordinates!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to discard cargo from illegal coordinates!"));
@@ -187,6 +190,7 @@ class PlanetRewardState extends CardState {
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to progress during another player's turn!"));
 			return;
 		}
+		System.out.println("Player '" + p.getUsername() + "' motioned to progress!");
 		this.responded = true;
 	}
 

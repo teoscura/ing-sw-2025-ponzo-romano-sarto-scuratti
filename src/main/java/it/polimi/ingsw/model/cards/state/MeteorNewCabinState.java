@@ -35,7 +35,7 @@ class MeteorNewCabinState extends CardState {
 	@Override
 	public void init(ClientModelState new_state) {
 		super.init(new_state);
-		System.out.println("    CardState -> Combat Zone New Cabin State!");
+		System.out.println("    CardState -> Meteor Swarm New Cabin State!");
 	}
 
 	@Override
@@ -73,6 +73,7 @@ class MeteorNewCabinState extends CardState {
 	public void setNewShipCenter(Player p, ShipCoords new_center) {
 		try {
 			p.getSpaceShip().setCenter(new_center);
+			System.out.println("Player '"+p.getUsername()+"' set a new ship center at "+new_center+".");
 		} catch (IllegalTargetException e) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to set his new center on an empty space!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to set his new center on an empty space!"));
