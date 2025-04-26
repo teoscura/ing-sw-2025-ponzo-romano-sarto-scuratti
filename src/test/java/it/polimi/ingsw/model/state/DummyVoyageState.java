@@ -3,7 +3,6 @@ package it.polimi.ingsw.model.state;
 import java.util.ArrayList;
 import java.util.List;
 
-import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerDisconnectMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
@@ -41,7 +40,7 @@ public class DummyVoyageState extends VoyageState {
 
 	@Override
 	public void init() {
-		this.broadcastMessage(new NotifyStateUpdateMessage(this.getClientState()));
+	
 	}
 
 	@Override
