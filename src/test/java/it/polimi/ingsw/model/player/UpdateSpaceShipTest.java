@@ -13,7 +13,7 @@ import it.polimi.ingsw.model.components.iBaseComponent;
 import it.polimi.ingsw.model.components.enums.AlienType;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 
-public class SpaceShipTestAgain {
+public class UpdateSpaceShipTest {
     
     private Player nocomponents;
     private Player dummy2;
