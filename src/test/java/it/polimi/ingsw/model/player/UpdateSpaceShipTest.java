@@ -2,16 +2,26 @@ package it.polimi.ingsw.model.player;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import it.polimi.ingsw.model.DummyModelInstance;
 import it.polimi.ingsw.model.GameModeType;
+import it.polimi.ingsw.model.PlayerCount;
+import it.polimi.ingsw.model.board.Planche;
+import it.polimi.ingsw.model.board.TestFlightCards;
+import it.polimi.ingsw.model.cards.LevelTwoCardFactory;
+import it.polimi.ingsw.model.cards.OpenSpaceCard;
 import it.polimi.ingsw.model.cards.visitors.CrewRemoveVisitor;
 import it.polimi.ingsw.model.components.CabinComponent;
 import it.polimi.ingsw.model.components.ComponentFactory;
 import it.polimi.ingsw.model.components.iBaseComponent;
 import it.polimi.ingsw.model.components.enums.AlienType;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
+import it.polimi.ingsw.model.state.DummyVoyageState;
 
 public class UpdateSpaceShipTest {
 

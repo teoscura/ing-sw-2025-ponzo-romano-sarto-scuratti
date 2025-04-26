@@ -63,9 +63,6 @@ public class DummyModelInstance extends ModelInstance {
 			this.endGame();
 		}
 		this.state = next;
-		if (this.state.toSerialize()) {
-			this.serialize();
-		}
 		next.init();
 	}
 

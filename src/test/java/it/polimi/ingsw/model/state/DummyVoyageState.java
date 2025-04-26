@@ -162,6 +162,10 @@ public class DummyVoyageState extends VoyageState {
 		return planche;
 	}
 
+	public void setCard(iCard card){
+		this.card = card;
+	}
+
 	public void setCardState(CardState next) {
 		if (next == null) {
 			return;
