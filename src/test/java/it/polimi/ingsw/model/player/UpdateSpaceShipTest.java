@@ -14,7 +14,8 @@ import it.polimi.ingsw.model.components.enums.AlienType;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 
 public class UpdateSpaceShipTest {
-    
+
+    //TODO: gestione nuova cabina centrale prima di verify
     private Player nocomponents;
     private Player dummy2;
     private Player dummy3;
@@ -153,6 +154,11 @@ public class UpdateSpaceShipTest {
         System.out.println(dummy3.getSpaceShip().getTotalCrew());
         assertTrue(5 == dummy3.getSpaceShip().getTotalCrew());
         assertTrue(0 == dummy2.getSpaceShip().getCannonPower());
+    }
+
+    @Test
+    void dummy4Update(){
+        
     }
 
 }

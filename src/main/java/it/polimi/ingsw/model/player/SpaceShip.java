@@ -21,7 +21,6 @@ import it.polimi.ingsw.model.components.BatteryComponent;
 import it.polimi.ingsw.model.components.EmptyComponent;
 import it.polimi.ingsw.model.components.StartingCabinComponent;
 import it.polimi.ingsw.model.components.iBaseComponent;
-import it.polimi.ingsw.model.components.enums.AlienType;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ConnectorType;
 import it.polimi.ingsw.model.components.enums.ShipmentType;
@@ -29,7 +28,6 @@ import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
 import it.polimi.ingsw.model.components.visitors.SpaceShipUpdateVisitor;
 import it.polimi.ingsw.model.components.visitors.EnergyVisitor;
 import it.polimi.ingsw.model.player.exceptions.IllegalComponentAdd;
-import it.polimi.ingsw.model.player.exceptions.NegativeCrewException;
 
 
 public class SpaceShip implements iSpaceShip {
@@ -88,13 +86,6 @@ public class SpaceShip implements iSpaceShip {
 	@Override
 	public GameModeType getType() {
 		return this.type;
-	}
-
-	@Override
-	public void updateCrew(int new_num, AlienType type) {
-		if (type.getArraypos() == -1) throw new IllegalArgumentException();
-		if (new_num < 0) throw new NegativeCrewException("Cannot set a negative crew.");
-		this.crew[type.getArraypos()] = new_num;
 	}
 
 	@Override

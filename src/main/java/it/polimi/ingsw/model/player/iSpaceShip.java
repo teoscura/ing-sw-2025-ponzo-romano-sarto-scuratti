@@ -7,11 +7,8 @@ import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.cards.utils.Projectile;
 import it.polimi.ingsw.model.client.components.ClientSpaceShip;
 import it.polimi.ingsw.model.components.iBaseComponent;
-import it.polimi.ingsw.model.components.enums.AlienType;
 
 public interface iSpaceShip {
-
-	void updateCrew(int new_num, AlienType type);
 
 	VerifyResult[][] verify();
 

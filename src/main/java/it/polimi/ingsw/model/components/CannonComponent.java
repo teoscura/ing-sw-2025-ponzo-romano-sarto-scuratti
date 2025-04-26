@@ -88,10 +88,8 @@ public class CannonComponent extends BaseComponent {
 	}
 
 	private int getPower() {
-		if (max_power == 2 && !this.powered) {
-			return 0;
-		}
-		return max_power;
+		if(this.powerable) return this.powered ? max_power : 0;
+        return this.max_power;
 	}
 
 	@Override

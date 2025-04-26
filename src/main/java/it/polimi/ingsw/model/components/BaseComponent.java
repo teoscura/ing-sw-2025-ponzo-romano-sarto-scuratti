@@ -146,4 +146,5 @@ public abstract class BaseComponent implements iBaseComponent, iVisitable {
 		}
 		return res;
 	}
+
 }

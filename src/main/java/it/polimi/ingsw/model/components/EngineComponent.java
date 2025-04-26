@@ -70,7 +70,8 @@ public class EngineComponent extends BaseComponent {
     }
             
     private int getPower(){
-        return this.powerable ? this.powered ? 0 : this.max_power : this.max_power;
+        if(this.powerable) return this.powered ? max_power : 0;
+        return this.max_power;
     } 
     
     @Override
