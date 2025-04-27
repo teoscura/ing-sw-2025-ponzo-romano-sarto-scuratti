@@ -136,9 +136,9 @@ public class AbadonedShipCardTest {
         mess = new RemoveCrewMessage(new ShipCoords(GameModeType.TEST, 3, 2));
         mess.setDescriptor(p2desc);
         state.validate(mess);
-        //Ha finito.
-        assertTrue(j-2 == player2.getSpaceShip().getTotalCrew());
-        //Ha dovuto saltare anche player3
+        //Ha dovuto saltare anche player3, ma ha guadagnato crediti, ha esaurito la carta.
+        assertTrue(j-2== player2.getSpaceShip().getTotalCrew());
+        assertTrue(card.getExhausted());
         assertTrue(x-card.getDays()-1==state.getPlanche().getPlayerPosition(player2));
         assertTrue(z+card.getCredits()==player2.getCredits());
         assertTrue(null == state.getCardState(player1));
@@ -146,9 +146,10 @@ public class AbadonedShipCardTest {
 
     @Test
     void disconnectionResilience() throws ForbiddenCallException, PlayerNotFoundException{
+        //Si disconnettono due tizi, prima uno in coda, poi il leader
         state.disconnect(player2);
         state.disconnect(player1);
-        //giocatore scarso rifiuta, sapendo che non puo entrare
+        //giocatore 3 rifiuta, non volendo perdere tempo.
         ServerMessage messa = new SelectLandingMessage(-1);
         messa.setDescriptor(p3desc);
         state.validate(messa);
