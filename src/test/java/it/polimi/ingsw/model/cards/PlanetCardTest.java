@@ -153,7 +153,7 @@ public class PlanetCardTest {
         mess.setDescriptor(p1desc);
         state.validate(mess);
         //Lets validate the changes.
-        assertArrayEquals(new int[]{0,0,0,1,0}, player1.getSpaceShip().getContains());
+        assertArrayEquals(new int[]{0,0,0,0,1}, player1.getSpaceShip().getContains());
         assertArrayEquals(new int[]{0,0,0,0,0}, player2.getSpaceShip().getContains());
         assertArrayEquals(new int[]{0,0,0,0,0}, player3.getSpaceShip().getContains());
         //P2 attempts to do something, lets see if something changes.
@@ -161,7 +161,7 @@ public class PlanetCardTest {
         mess.setDescriptor(p2desc);
         state.validate(mess);
         //Lets validate the lack of changes.
-        assertArrayEquals(new int[]{0,0,0,1,0}, player1.getSpaceShip().getContains());
+        assertArrayEquals(new int[]{0,0,0,0,1}, player1.getSpaceShip().getContains());
         assertArrayEquals(new int[]{0,0,0,0,0}, player2.getSpaceShip().getContains());
         assertArrayEquals(new int[]{0,0,0,0,0}, player3.getSpaceShip().getContains());
         //p1 is done, next up is p2.
@@ -183,7 +183,7 @@ public class PlanetCardTest {
         mess.setDescriptor(p2desc);
         state.validate(mess);
         //Lets validate the changes.
-        assertArrayEquals(new int[]{0,0,0,1,0}, player1.getSpaceShip().getContains());
+        assertArrayEquals(new int[]{0,0,0,0,1}, player1.getSpaceShip().getContains());
         assertArrayEquals(new int[]{0,0,0,0,0}, player2.getSpaceShip().getContains());
         assertArrayEquals(new int[]{0,0,0,0,0}, player3.getSpaceShip().getContains());
         //p2 takes a blue, but its not there!
@@ -191,16 +191,16 @@ public class PlanetCardTest {
         mess.setDescriptor(p2desc);
         state.validate(mess);
         //Lets validate the changes.
-        assertArrayEquals(new int[]{0,0,0,1,0}, player1.getSpaceShip().getContains());
-        assertArrayEquals(new int[]{1,0,0,0,0}, player2.getSpaceShip().getContains());
+        assertArrayEquals(new int[]{0,0,0,0,1}, player1.getSpaceShip().getContains());
+        assertArrayEquals(new int[]{0,1,0,0,0}, player2.getSpaceShip().getContains());
         assertArrayEquals(new int[]{0,0,0,0,0}, player3.getSpaceShip().getContains());
         //p2 moves the blue!
         mess = new MoveCargoMessage(new ShipCoords(GameModeType.TEST, 4, 2), new ShipCoords(GameModeType.TEST, 2, 2), ShipmentType.BLUE);
         mess.setDescriptor(p2desc);
         state.validate(mess);
         //Lets validate the lack of changes.
-        assertArrayEquals(new int[]{0,0,0,1,0}, player1.getSpaceShip().getContains());
-        assertArrayEquals(new int[]{1,0,0,0,0}, player2.getSpaceShip().getContains());
+        assertArrayEquals(new int[]{0,0,0,0,1}, player1.getSpaceShip().getContains());
+        assertArrayEquals(new int[]{0,1,0,0,0}, player2.getSpaceShip().getContains());
         assertArrayEquals(new int[]{0,0,0,0,0}, player3.getSpaceShip().getContains());
         //E' stato effettivamente spostato.
         assertTrue(0 == ((StorageComponent)player2.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 2, 2))).howMany(ShipmentType.BLUE) &&
@@ -210,8 +210,8 @@ public class PlanetCardTest {
         mess.setDescriptor(p2desc);
         state.validate(mess);
         //Lets validate the lack of changes.
-        assertArrayEquals(new int[]{0,0,0,1,0}, player1.getSpaceShip().getContains());
-        assertArrayEquals(new int[]{1,0,0,0,0}, player2.getSpaceShip().getContains());
+        assertArrayEquals(new int[]{0,0,0,0,1}, player1.getSpaceShip().getContains());
+        assertArrayEquals(new int[]{0,1,0,0,0}, player2.getSpaceShip().getContains());
         assertArrayEquals(new int[]{0,0,0,0,0}, player3.getSpaceShip().getContains());
         //Stops.
         x = this.planche.getPlayerPosition(player3);
@@ -229,8 +229,8 @@ public class PlanetCardTest {
         state.validate(mess);
         assertTrue(state.getPlanche().getPlayerPosition(player3)==x);
         //Lets validate the lack of changes.
-        assertArrayEquals(new int[]{0,0,0,1,0}, player1.getSpaceShip().getContains());
-        assertArrayEquals(new int[]{1,0,0,0,0}, player2.getSpaceShip().getContains());
+        assertArrayEquals(new int[]{0,0,0,0,1}, player1.getSpaceShip().getContains());
+        assertArrayEquals(new int[]{0,1,0,0,0}, player2.getSpaceShip().getContains());
         assertArrayEquals(new int[]{0,0,0,0,0}, player3.getSpaceShip().getContains());
         assertTrue(null==state.getCardState(player1));
     }
@@ -280,7 +280,7 @@ public class PlanetCardTest {
         state.validate(mess);
         //Lets validate the changes.
         assertArrayEquals(new int[]{0,0,0,0,0}, player1.getSpaceShip().getContains());
-        assertArrayEquals(new int[]{1,0,0,0,0}, player2.getSpaceShip().getContains());
+        assertArrayEquals(new int[]{0,1,0,0,0}, player2.getSpaceShip().getContains());
         assertArrayEquals(new int[]{0,0,0,0,0}, player3.getSpaceShip().getContains());
         //p2 moves the blue!
         mess = new MoveCargoMessage(new ShipCoords(GameModeType.TEST, 4, 2), new ShipCoords(GameModeType.TEST, 2, 2), ShipmentType.BLUE);
@@ -288,7 +288,7 @@ public class PlanetCardTest {
         state.validate(mess);
         //Lets validate the lack of changes.
         assertArrayEquals(new int[]{0,0,0,0,0}, player1.getSpaceShip().getContains());
-        assertArrayEquals(new int[]{1,0,0,0,0}, player2.getSpaceShip().getContains());
+        assertArrayEquals(new int[]{0,1,0,0,0}, player2.getSpaceShip().getContains());
         assertArrayEquals(new int[]{0,0,0,0,0}, player3.getSpaceShip().getContains());
         //E' stato effettivamente spostato.
         assertTrue(0 == ((StorageComponent)player2.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 2, 2))).howMany(ShipmentType.BLUE) &&
@@ -299,7 +299,7 @@ public class PlanetCardTest {
         state.validate(mess);
         //Lets validate the lack of changes.
         assertArrayEquals(new int[]{0,0,0,0,0}, player1.getSpaceShip().getContains());
-        assertArrayEquals(new int[]{1,0,0,0,0}, player2.getSpaceShip().getContains());
+        assertArrayEquals(new int[]{0,1,0,0,0}, player2.getSpaceShip().getContains());
         assertArrayEquals(new int[]{0,0,0,0,0}, player3.getSpaceShip().getContains());
         //Stops.
         mess = new SendContinueMessage();
@@ -307,7 +307,7 @@ public class PlanetCardTest {
         state.validate(mess);
         //Lets validate the lack of changes.
         assertArrayEquals(new int[]{0,0,0,0,0}, player1.getSpaceShip().getContains());
-        assertArrayEquals(new int[]{1,0,0,0,0}, player2.getSpaceShip().getContains());
+        assertArrayEquals(new int[]{0,1,0,0,0}, player2.getSpaceShip().getContains());
         assertArrayEquals(new int[]{0,0,0,0,0}, player3.getSpaceShip().getContains());
         assertTrue(null==state.getCardState(player1));
     }

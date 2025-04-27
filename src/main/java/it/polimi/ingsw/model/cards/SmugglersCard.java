@@ -41,9 +41,15 @@ public class SmugglersCard extends Card {
 	public boolean apply(Player p) {
 		if (p == null) throw new NullPointerException();
 		if (p.getSpaceShip().getCannonPower() > this.min_power) {
+			System.out.println("Player '"+p.getUsername()+"' beat the smugglers!");
 			this.exhaust();
 			return true;
-		} else return p.getSpaceShip().getCannonPower() == this.min_power;
+		} else if (p.getSpaceShip().getCannonPower() == this.min_power){
+			System.out.println("Player '"+p.getUsername()+"' tied the smugglers!");
+			return true;
+		}
+		System.out.println("Player '"+p.getUsername()+"' lost to the smugglers!");
+		return p.getSpaceShip().getCannonPower() == this.min_power;
 	}
 
 }

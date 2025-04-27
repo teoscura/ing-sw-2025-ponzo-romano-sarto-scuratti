@@ -48,7 +48,7 @@ class SlaversRewardState extends CardState {
 		}
 		if (took_reward) {
 			this.list.getFirst().giveCredits(card.getCredits());
-			this.state.getPlanche().movePlayer(state, list.getFirst(), card.getDays());
+			this.state.getPlanche().movePlayer(state, list.getFirst(), -card.getDays());
 		}
 		this.transition();
 	}

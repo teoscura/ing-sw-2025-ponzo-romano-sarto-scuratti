@@ -42,9 +42,15 @@ public class PiratesCard extends Card {
 	public boolean apply(VoyageState state, Player p) {
 		if (state == null || p == null) throw new NullPointerException();
 		if (p.getSpaceShip().getCannonPower() > this.min_power) {
+			System.out.println("Player '"+p.getUsername()+"' beat the pirates!");
 			this.exhaust();
 			return true;
-		} else return p.getSpaceShip().getCannonPower() == this.min_power;
+		} else if (p.getSpaceShip().getCannonPower() == this.min_power){
+			System.out.println("Player '"+p.getUsername()+"' tied the pirates!");
+			return true;
+		}
+		System.out.println("Player '"+p.getUsername()+"' lost to the pirates!");
+		return p.getSpaceShip().getCannonPower() == this.min_power;
 	}
 
 }
