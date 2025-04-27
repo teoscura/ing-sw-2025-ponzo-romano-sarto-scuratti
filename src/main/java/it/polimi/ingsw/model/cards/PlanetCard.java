@@ -50,9 +50,7 @@ public class PlanetCard extends Card {
 			return;
 		}
 		if(this.planets.get(id).getVisited()) throw new AlreadyVisitedException();
-		System.out.println(this.left);
 		this.left--;
-		System.out.println(this.left);
 		this.planets.get(id).visit();
 		if(left==0) this.exhaust();
 	}

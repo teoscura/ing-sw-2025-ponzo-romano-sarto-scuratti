@@ -58,10 +58,6 @@ class PlanetRewardState extends CardState {
 			this.state.broadcastMessage(new NotifyStateUpdateMessage(this.state.getClientState()));
 			return;
 		}
-		for(int i=0; i<this.card.getVisited().size();i++){
-			System.out.println(i+": "+this.card.getVisited().get(i));
-		}
-		System.out.println(this.card.getExhausted());
 		this.transition();
 	}
 

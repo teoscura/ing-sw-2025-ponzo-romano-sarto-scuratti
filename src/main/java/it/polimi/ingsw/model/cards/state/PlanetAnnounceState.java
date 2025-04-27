@@ -49,7 +49,7 @@ public class PlanetAnnounceState extends CardState {
 		}
 		if(this.id>=0){
 			this.card.apply(this.list.getFirst(), id);
-			System.out.println("Player '" + this.list.getFirst().getUsername() + "'' moved back "+card.getDays());
+			System.out.println("Player '" + this.list.getFirst().getUsername() + "' moved back "+card.getDays());
 			this.state.getPlanche().movePlayer(state, list.getFirst(), -card.getDays());
 		}
 		this.transition();
