@@ -139,7 +139,8 @@ public class PlanetCardTest {
         mess = new SelectLandingMessage(0);
         mess.setDescriptor(p1desc);
         state.validate(mess);
-        assertTrue(state.getPlanche().getPlayerPosition(player1)==x-2);
+        //Muove indietro di days
+        assertTrue(state.getPlanche().getPlayerPosition(player1)==x-card.getDays());
         //He takes a red, but places it wrong.
         mess = new TakeCargoMessage(new ShipCoords(GameModeType.TEST, 2, 2), ShipmentType.RED);
         mess.setDescriptor(p1desc);
@@ -177,7 +178,8 @@ public class PlanetCardTest {
         mess = new SelectLandingMessage(1);
         mess.setDescriptor(p2desc);
         state.validate(mess);
-        assertTrue(state.getPlanche().getPlayerPosition(player2)==x-2);
+        //Deve saltare p3, muove indietro di days. + 1
+        assertTrue(state.getPlanche().getPlayerPosition(player2)==x-this.card.getDays()-1);
         //p2 takes a yellow, but its not there!
         mess = new TakeCargoMessage(new ShipCoords(GameModeType.TEST, 2, 2), ShipmentType.YELLOW);
         mess.setDescriptor(p2desc);
@@ -261,7 +263,8 @@ public class PlanetCardTest {
         mess = new SelectLandingMessage(1);
         mess.setDescriptor(p2desc);
         state.validate(mess);
-        assertTrue(state.getPlanche().getPlayerPosition(player2)==x-2);
+        //Ha dovuto saltare p3, quindi ora e' dietro di lui, muove indietro di days + 1
+        assertTrue(state.getPlanche().getPlayerPosition(player2)==x-card.getDays()-1);
         //p2 takes a yellow, but its not there!
         mess = new TakeCargoMessage(new ShipCoords(GameModeType.TEST, 2, 2), ShipmentType.YELLOW);
         mess.setDescriptor(p2desc);

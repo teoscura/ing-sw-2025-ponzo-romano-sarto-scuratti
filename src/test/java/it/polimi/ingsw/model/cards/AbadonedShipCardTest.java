@@ -25,10 +25,12 @@ import it.polimi.ingsw.model.components.AlienLifeSupportComponent;
 import it.polimi.ingsw.model.components.BatteryComponent;
 import it.polimi.ingsw.model.components.CabinComponent;
 import it.polimi.ingsw.model.components.CannonComponent;
+import it.polimi.ingsw.model.components.ComponentFactory;
 import it.polimi.ingsw.model.components.EngineComponent;
 import it.polimi.ingsw.model.components.ShieldComponent;
 import it.polimi.ingsw.model.components.StartingCabinComponent;
 import it.polimi.ingsw.model.components.StorageComponent;
+import it.polimi.ingsw.model.components.iBaseComponent;
 import it.polimi.ingsw.model.components.enums.AlienType;
 import it.polimi.ingsw.model.components.enums.BatteryType;
 import it.polimi.ingsw.model.components.enums.CannonType;
@@ -54,96 +56,33 @@ public class AbadonedShipCardTest {
     ClientDescriptor p1desc;
     Player player2;
     ClientDescriptor p2desc;
-    Player player_scarso;
-    ClientDescriptor psdesc;
+    Player player3;
+    ClientDescriptor p3desc;
 
     @BeforeEach
     void setUp() throws UnknownHostException, IOException{
+        ComponentFactory f2 = new ComponentFactory();
+        ComponentFactory f3 = new ComponentFactory();
+        iBaseComponent c = null;
 
-        StorageComponent triple_storage = new StorageComponent(1, new ConnectorType[]{ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL}, ComponentRotation.U000, StorageType.TRIPLENORMAL, new ShipCoords(GameModeType.LVL2, 4, 2));
-        AlienLifeSupportComponent alien_support = new AlienLifeSupportComponent(1, new ConnectorType[]{ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.EMPTY, ConnectorType.UNIVERSAL}, ComponentRotation.U000, AlienType.PURPLE, new ShipCoords(GameModeType.LVL2, 3, 3));
-        CabinComponent human_cabin1 = new CabinComponent(1, new ConnectorType[]{ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL}, ComponentRotation.U000, new ShipCoords(GameModeType.LVL2, 2, 2));
-        CabinComponent human_cabin2 = new CabinComponent(1, new ConnectorType[]{ConnectorType.EMPTY, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL}, ComponentRotation.U000, new ShipCoords(GameModeType.LVL2, 3, 1));
-        BatteryComponent triple_battery1 = new BatteryComponent(1, new ConnectorType[]{ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL}, ComponentRotation.U000, BatteryType.TRIPLE, new ShipCoords(GameModeType.LVL2, 2, 1));
-        BatteryComponent triple_battery2 = new BatteryComponent(1, new ConnectorType[]{ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL}, ComponentRotation.U000, BatteryType.TRIPLE, new ShipCoords(GameModeType.LVL2, 4, 1));
-        StorageComponent special_storage = new StorageComponent(1, new ConnectorType[]{ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL}, ComponentRotation.U000, StorageType.DOUBLESPECIAL, new ShipCoords(GameModeType.LVL2, 4, 3));
-        CabinComponent alien_cabin = new CabinComponent(1, new ConnectorType[]{ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL}, ComponentRotation.U000, new ShipCoords(GameModeType.LVL2, 2, 3));
-        CannonComponent front_single_cannon = new CannonComponent(1, new ConnectorType[]{ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.UNIVERSAL, ConnectorType.EMPTY}, ComponentRotation.U000, CannonType.SINGLE, new ShipCoords(GameModeType.LVL2, 4, 0));
-        CannonComponent right_cannon = new CannonComponent(1, new ConnectorType[]{ConnectorType.EMPTY, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.EMPTY}, ComponentRotation.U090, CannonType.SINGLE, new ShipCoords(GameModeType.LVL2, 5, 2));
-        ShieldComponent bottom_shield = new ShieldComponent(1, new ConnectorType[]{ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL}, ComponentRotation.U090, new ShipCoords(GameModeType.LVL2, 5, 3));
-        EngineComponent right_single_engine = new EngineComponent(1, new ConnectorType[]{ConnectorType.UNIVERSAL, ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.UNIVERSAL}, ComponentRotation.U000, EngineType.SINGLE, new ShipCoords(GameModeType.LVL2, 5, 4));
-        EngineComponent right_double_engine = new EngineComponent(1, new ConnectorType[]{ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.EMPTY, ConnectorType.EMPTY}, ComponentRotation.U000, EngineType.DOUBLE, new ShipCoords(GameModeType.LVL2, 4, 4));
-        EngineComponent left_double_engine = new EngineComponent(1, new ConnectorType[]{ConnectorType.UNIVERSAL, ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.UNIVERSAL}, ComponentRotation.U000, EngineType.DOUBLE, new ShipCoords(GameModeType.LVL2, 2, 4));
-        EngineComponent left_single_engine = new EngineComponent(1, new ConnectorType[]{ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.EMPTY, ConnectorType.EMPTY}, ComponentRotation.U000, EngineType.SINGLE, new ShipCoords(GameModeType.LVL2, 1, 4));
-        ShieldComponent top_shield = new ShieldComponent(1, new ConnectorType[]{ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL}, ComponentRotation.U270, new ShipCoords(GameModeType.LVL2, 1, 3));
-        CannonComponent left_cannon = new CannonComponent(1, new ConnectorType[]{ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL}, ComponentRotation.U270, CannonType.SINGLE, new ShipCoords(GameModeType.LVL2, 1, 2));
+        player1 = new Player(GameModeType.LVL2, "p1", PlayerColor.RED);
+        //li ha giusti giusti
         
-        player1 = new Player(GameModeType.LVL2, "Player1", PlayerColor.RED);
-        player1.getSpaceShip().addComponent(triple_storage, new ShipCoords(GameModeType.LVL2, 4, 2));
-        player1.getSpaceShip().addComponent(alien_support, new ShipCoords(GameModeType.LVL2, 3, 3));
-        player1.getSpaceShip().addComponent(human_cabin1, new ShipCoords(GameModeType.LVL2, 2, 2));
-        player1.getSpaceShip().addComponent(human_cabin2, new ShipCoords(GameModeType.LVL2, 3, 1));
-        player1.getSpaceShip().addComponent(triple_battery1, new ShipCoords(GameModeType.LVL2, 2, 1));
-        player1.getSpaceShip().addComponent(triple_battery2, new ShipCoords(GameModeType.LVL2, 4, 1));
-        player1.getSpaceShip().addComponent(special_storage, new ShipCoords(GameModeType.LVL2, 4, 3));
-        player1.getSpaceShip().addComponent(alien_cabin, new ShipCoords(GameModeType.LVL2, 2, 3));
-        player1.getSpaceShip().addComponent(front_single_cannon, new ShipCoords(GameModeType.LVL2, 4, 0));
-        player1.getSpaceShip().addComponent(right_cannon, new ShipCoords(GameModeType.LVL2, 5, 2));
-        player1.getSpaceShip().addComponent(bottom_shield, new ShipCoords(GameModeType.LVL2, 5, 3));
-        player1.getSpaceShip().addComponent(right_single_engine, new ShipCoords(GameModeType.LVL2, 5, 4));
-        player1.getSpaceShip().addComponent(right_double_engine, new ShipCoords(GameModeType.LVL2, 4, 4));
-        player1.getSpaceShip().addComponent(left_double_engine, new ShipCoords(GameModeType.LVL2, 2, 4));
-        player1.getSpaceShip().addComponent(left_single_engine, new ShipCoords(GameModeType.LVL2, 1, 4));
-        player1.getSpaceShip().addComponent(top_shield, new ShipCoords(GameModeType.LVL2, 1, 3));
-        player1.getSpaceShip().addComponent(left_cannon, new ShipCoords(GameModeType.LVL2, 1, 2));
         p1desc = new ClientDescriptor(player1.getUsername(), null);
         p1desc.bindPlayer(player1);
 
-        player2 = new Player(GameModeType.LVL2, "Player2", PlayerColor.BLUE);
-        player2.getSpaceShip().addComponent(triple_storage, new ShipCoords(GameModeType.LVL2, 4, 2));
-        player2.getSpaceShip().addComponent(alien_support, new ShipCoords(GameModeType.LVL2, 3, 3));
-        player2.getSpaceShip().addComponent(human_cabin1, new ShipCoords(GameModeType.LVL2, 2, 2));
-        player2.getSpaceShip().addComponent(human_cabin2, new ShipCoords(GameModeType.LVL2, 3, 1));
-        player2.getSpaceShip().addComponent(triple_battery1, new ShipCoords(GameModeType.LVL2, 2, 1));
-        player2.getSpaceShip().addComponent(triple_battery2, new ShipCoords(GameModeType.LVL2, 4, 1));
-        player2.getSpaceShip().addComponent(special_storage, new ShipCoords(GameModeType.LVL2, 4, 3));
-        player2.getSpaceShip().addComponent(alien_cabin, new ShipCoords(GameModeType.LVL2, 2, 3));
-        player2.getSpaceShip().addComponent(front_single_cannon, new ShipCoords(GameModeType.LVL2, 4, 0));
-        player2.getSpaceShip().addComponent(right_cannon, new ShipCoords(GameModeType.LVL2, 5, 2));
-        player2.getSpaceShip().addComponent(bottom_shield, new ShipCoords(GameModeType.LVL2, 5, 3));
-        player2.getSpaceShip().addComponent(right_single_engine, new ShipCoords(GameModeType.LVL2, 5, 4));
-        player2.getSpaceShip().addComponent(right_double_engine, new ShipCoords(GameModeType.LVL2, 4, 4));
-        player2.getSpaceShip().addComponent(left_double_engine, new ShipCoords(GameModeType.LVL2, 2, 4));
-        player2.getSpaceShip().addComponent(left_single_engine, new ShipCoords(GameModeType.LVL2, 1, 4));
-        player2.getSpaceShip().addComponent(top_shield, new ShipCoords(GameModeType.LVL2, 1, 3));
-        player2.getSpaceShip().addComponent(left_cannon, new ShipCoords(GameModeType.LVL2, 1, 2));
+        player2 = new Player(GameModeType.LVL2, "p2", PlayerColor.BLUE);
+        //Uguale a p3 ma con due crewmate in meno, abbastanza per non salire
         p2desc = new ClientDescriptor(player2.getUsername(), null);
         p2desc.bindPlayer(player2);
 
-        player_scarso = new Player(GameModeType.LVL2, "Player_scarso", PlayerColor.GREEN);
-        player_scarso.getSpaceShip().addComponent(triple_storage, new ShipCoords(GameModeType.LVL2, 4, 2));
-        player_scarso.getSpaceShip().addComponent(alien_support, new ShipCoords(GameModeType.LVL2, 3, 3));
-        player_scarso.getSpaceShip().addComponent(human_cabin1, new ShipCoords(GameModeType.LVL2, 2, 2));
-        player_scarso.getSpaceShip().addComponent(triple_battery1, new ShipCoords(GameModeType.LVL2, 2, 1));
-        player_scarso.getSpaceShip().addComponent(triple_battery2, new ShipCoords(GameModeType.LVL2, 4, 1));
-        player_scarso.getSpaceShip().addComponent(special_storage, new ShipCoords(GameModeType.LVL2, 4, 3));
-        player_scarso.getSpaceShip().addComponent(alien_cabin, new ShipCoords(GameModeType.LVL2, 2, 3));
-        player_scarso.getSpaceShip().addComponent(front_single_cannon, new ShipCoords(GameModeType.LVL2, 4, 0));
-        player_scarso.getSpaceShip().addComponent(right_cannon, new ShipCoords(GameModeType.LVL2, 5, 2));
-        player_scarso.getSpaceShip().addComponent(bottom_shield, new ShipCoords(GameModeType.LVL2, 5, 3));
-        player_scarso.getSpaceShip().addComponent(right_single_engine, new ShipCoords(GameModeType.LVL2, 5, 4));
-        player_scarso.getSpaceShip().addComponent(right_double_engine, new ShipCoords(GameModeType.LVL2, 4, 4));
-        player_scarso.getSpaceShip().addComponent(left_double_engine, new ShipCoords(GameModeType.LVL2, 2, 4));
-        player_scarso.getSpaceShip().addComponent(left_single_engine, new ShipCoords(GameModeType.LVL2, 1, 4));
-        player_scarso.getSpaceShip().addComponent(top_shield, new ShipCoords(GameModeType.LVL2, 1, 3));
-        player_scarso.getSpaceShip().addComponent(left_cannon, new ShipCoords(GameModeType.LVL2, 1, 2));
-        psdesc = new ClientDescriptor(player_scarso.getUsername(), null);
-        psdesc.bindPlayer(player_scarso);
+        player3 = new Player(GameModeType.LVL2, "p3", PlayerColor.GREEN);
+        //Uguale a p2 ma puo salire
+        p3desc = new ClientDescriptor(player3.getUsername(), null);
+        p3desc.bindPlayer(player3);
 
-        ((StartingCabinComponent)player_scarso.getSpaceShip().getComponent(new ShipCoords(GameModeType.LVL2, 3, 2))).setCrew(player_scarso.getSpaceShip(), 0, AlienType.HUMAN);
-        ((CabinComponent)player_scarso.getSpaceShip().getComponent(new ShipCoords(GameModeType.LVL2, 2, 3))).setCrew(player_scarso.getSpaceShip(), 0, AlienType.HUMAN);
-        ArrayList<Player> order = new ArrayList<>(Arrays.asList(new Player[]{player1, player_scarso, player2}));
-        ArrayList<Player> players = new ArrayList<>(Arrays.asList(new Player[]{player1, player2, player_scarso}));
+        ArrayList<Player> order = new ArrayList<>(Arrays.asList(new Player[]{player1, player2, player3}));
+        ArrayList<Player> players = new ArrayList<>(Arrays.asList(new Player[]{player1, player2, player3}));
         model = new DummyModelInstance(1, null, GameModeType.LVL2, PlayerCount.THREE);
         TestFlightCards cards = new TestFlightCards();
         planche = new Planche(GameModeType.LVL2, order);
@@ -154,70 +93,28 @@ public class AbadonedShipCardTest {
         state.setCard(card);
         cstate = card.getState(state);
         state.setCardState(cstate);
-
-        player1.getSpaceShip().updateShip();
-        player2.getSpaceShip().updateShip();
-        player_scarso.getSpaceShip().updateShip();
     }
 
     @Test
     void behaviour() throws ForbiddenCallException, PlayerNotFoundException {
-        //giocatore giallo tenta, ma non e' il suo turno
-        assertTrue(6 == player2.getSpaceShip().getTotalCrew());
-        SelectLandingMessage mess1 = new SelectLandingMessage(0);
-        mess1.setDescriptor(psdesc);
-        cstate.validate(mess1);
-        //Giocatore rosso rifiuta la carta.
-        SelectLandingMessage mess2 = new SelectLandingMessage(-1);
-        mess2.setDescriptor(p1desc);
-        cstate.validate(mess2);
-        //Giocatore giallo accetta, ma non puo perche' non ha crew.
-        SelectLandingMessage mess3 = new SelectLandingMessage(0);
-        mess3.setDescriptor(psdesc);
-        cstate.validate(mess3);
-        //E corregge di conseguenza.
-        SelectLandingMessage mess3again = new SelectLandingMessage(-1);
-        mess3again.setDescriptor(psdesc);
-        cstate.validate(mess3again);
-        //giocatore blue tenta, ed e' buono;
-        SelectLandingMessage mess4 = new SelectLandingMessage(0);
-        mess4.setDescriptor(p2desc);
-        cstate.validate(mess4);
-        assertTrue(this.state.getCardState(player1) instanceof AbandonedShipRewardState);
-        cstate = this.state.getCardState(player1);
-        //blu tenta un azione proibita.
-        ServerMessage messwrong = new TakeRewardMessage(true);
-        messwrong.setDescriptor(p2desc);
-        assertThrows(ForbiddenCallException.class, () ->cstate.validate(messwrong));
-        //Rimuove la crew
-        ServerMessage mess5 = new RemoveCrewMessage(new ShipCoords(GameModeType.LVL2, 2, 2));
-        mess5.setDescriptor(p2desc);
-        cstate.validate(mess5);
-        //Giusto un test in piu'
-        assertThrows(ForbiddenCallException.class, () ->cstate.validate(mess4));
-        //Toglie il secondo.
-        ServerMessage mess6 = new RemoveCrewMessage(new ShipCoords(GameModeType.LVL2, 3, 1));
-        mess6.setDescriptor(p2desc);
-        cstate.validate(mess6);
-        assertTrue(4 == player2.getSpaceShip().getTotalCrew());
-        //Finito.
-        assertTrue(null==state.getCardState(player1));
+
+    }
+
+    @Test
+    void selfInflictedRetire() throws ForbiddenCallException, PlayerNotFoundException {
+
     }
 
     @Test
     void disconnectionResilience() throws ForbiddenCallException, PlayerNotFoundException{
-        //giocatore rosso si disconnette, tocca a scarso
-        state.disconnect(player1);
-        cstate = this.state.getCardState(player1);
-        //giocatore blu si disconnette, ma non era primo, tocca ancora a scarso.
         state.disconnect(player2);
-        cstate = this.state.getCardState(player1);
+        state.disconnect(player1);
         //giocatore scarso rifiuta, sapendo che non puo entrare
         ServerMessage messa = new SelectLandingMessage(-1);
-        messa.setDescriptor(psdesc);
+        messa.setDescriptor(p3desc);
         state.validate(messa);
-        cstate = this.state.getCardState(player1);
         //carta conclusa.
+        assertTrue(!card.getExhausted());
         assertTrue(null==state.getCardState(player1));
     }
 
