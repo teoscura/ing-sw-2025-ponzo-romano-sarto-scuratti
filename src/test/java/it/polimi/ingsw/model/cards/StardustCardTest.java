@@ -32,8 +32,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class StardustCardTest {
 
-    private ModelInstance model;
-    private VoyageState state;
+    private DummyModelInstance model;
+    private DummyVoyageState state;
     private Planche planche;
     private StardustCard card;
     private CardState cstate;
@@ -79,10 +79,10 @@ class StardustCardTest {
 
         ArrayList<Player> order = new ArrayList<>(Arrays.asList(new Player[]{player1, player2, player3}));
         ArrayList<Player> players = new ArrayList<>(Arrays.asList(new Player[]{player1, player2, player3}));
-        model = new ModelInstance(1, null, GameModeType.LVL2, PlayerCount.THREE);
+        model = new DummyModelInstance(1, null, GameModeType.LVL2, PlayerCount.THREE);
         TestFlightCards cards = new TestFlightCards();
         planche = new Planche(GameModeType.LVL2, order);
-        state = new VoyageState(model, GameModeType.LVL2, PlayerCount.THREE, players, cards, planche);
+        state = new DummyVoyageState(model, GameModeType.LVL2, PlayerCount.THREE, players, cards, planche);
         model.setState(state);
         cstate = this.state.getCardState(player1);
 
@@ -92,6 +92,7 @@ class StardustCardTest {
         player2.getSpaceShip().updateShip();
         player3.getSpaceShip().updateShip();
         cstate = card.getState(state);
+        this.state.setCard(card);
     }
 
     @Test
