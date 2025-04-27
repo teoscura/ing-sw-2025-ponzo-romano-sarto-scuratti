@@ -15,6 +15,8 @@ import it.polimi.ingsw.controller.server.ClientDescriptor;
 import it.polimi.ingsw.message.server.DiscardCargoMessage;
 import it.polimi.ingsw.message.server.SendContinueMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
+import it.polimi.ingsw.message.server.TakeCargoMessage;
+import it.polimi.ingsw.message.server.TurnOnMessage;
 import it.polimi.ingsw.model.DummyModelInstance;
 import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.PlayerCount;
@@ -22,7 +24,9 @@ import it.polimi.ingsw.model.board.Planche;
 import it.polimi.ingsw.model.board.TestFlightCards;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.cards.state.CardState;
+import it.polimi.ingsw.model.cards.state.SmugglersAnnounceState;
 import it.polimi.ingsw.model.cards.state.SmugglersLoseState;
+import it.polimi.ingsw.model.cards.state.SmugglersRewardState;
 import it.polimi.ingsw.model.cards.visitors.ContainsLoaderVisitor;
 import it.polimi.ingsw.model.cards.visitors.ContainsRemoveVisitor;
 import it.polimi.ingsw.model.components.ComponentFactory;
@@ -84,8 +88,8 @@ public class SmugglersCardTest {
         c = f2.getComponent(14); 
         c.rotate(ComponentRotation.U000);
         player2.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 3, 3));
-        c = f2.getComponent(18); 
-        c.rotate(ComponentRotation.U000);
+        c = f2.getComponent(31); 
+        c.rotate(ComponentRotation.U090);
         player2.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 2, 2));
         c = f2.getComponent(126); 
         c.rotate(ComponentRotation.U000);
@@ -98,7 +102,6 @@ public class SmugglersCardTest {
         player2.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 5, 2));
         p2desc = new ClientDescriptor(player2.getUsername(), null);
         p2desc.bindPlayer(player2);
-
 
         //deve avere esattamente 4 per pareggiare.
         player3 = new Player(GameModeType.TEST, "p3", PlayerColor.RED);
@@ -154,14 +157,71 @@ public class SmugglersCardTest {
         //succede niente
         assertArrayEquals(new int[]{3,2,0,0,0}, player1.getSpaceShip().getContains());
         //p1 prova a cedere delle batterie prima di aver esaurito i container blu.
-        message = new DiscardCargoMessage(new ShipCoords(GameModeType.TEST, 2, 2), ShipmentType.EMPTY);
+        message = new DiscardCargoMessage(new ShipCoords(GameModeType.TEST, 3, 3), ShipmentType.EMPTY);
 		message.setDescriptor(p1desc);
 		state.validate(message);
         //succede niente
         assertArrayEquals(new int[]{3,2,0,0,0}, player1.getSpaceShip().getContains());
-        //assert che gli storage sian giusti.
+        //p1 cede un blue
+        message = new DiscardCargoMessage(new ShipCoords(GameModeType.TEST, 2, 2), ShipmentType.BLUE);
+        message.setDescriptor(p1desc);
+        state.validate(message);
+        //e va bene
+        assertArrayEquals(new int[]{3,1,0,0,0}, player1.getSpaceShip().getContains());
+        //p1 cede un blue
+        message = new DiscardCargoMessage(new ShipCoords(GameModeType.TEST, 2, 2), ShipmentType.BLUE);
+        message.setDescriptor(p1desc);
+        state.validate(message);
+        //e va bene
+        assertArrayEquals(new int[]{3,0,0,0,0}, player1.getSpaceShip().getContains());
+        //Si torna in announce
+        assertTrue(state.getCardState(player1) instanceof SmugglersAnnounceState);
+        //P3 vuole pareggiare
+        message = new TurnOnMessage(new ShipCoords(GameModeType.TEST, 2, 2), new ShipCoords(GameModeType.TEST, 3, 3));
+		message.setDescriptor(p3desc);
+		state.validate(message);
+        message = new TurnOnMessage(new ShipCoords(GameModeType.TEST, 4, 2), new ShipCoords(GameModeType.TEST, 3, 3));
+		message.setDescriptor(p3desc);
+		state.validate(message);
+        assertTrue(!player3.getRetired());
+        assertArrayEquals(new int[]{1,0,0,0,0}, player3.getSpaceShip().getContains());
+        message = new SendContinueMessage();
+		message.setDescriptor(p3desc);
+		state.validate(message);
+        assertTrue(!this.card.getExhausted());
+        assertTrue(state.getCardState(player1) instanceof SmugglersAnnounceState);
+        //P2 accende, vince
+        message = new TurnOnMessage(new ShipCoords(GameModeType.TEST, 3, 1), new ShipCoords(GameModeType.TEST, 3, 3));
+		message.setDescriptor(p2desc);
+		state.validate(message);
+        message = new TurnOnMessage(new ShipCoords(GameModeType.TEST, 4, 2), new ShipCoords(GameModeType.TEST, 3, 3));
+		message.setDescriptor(p2desc);
+		state.validate(message);
+        message = new SendContinueMessage();
+		message.setDescriptor(p2desc);
+		state.validate(message);
+        assertTrue(state.getCardState(player1) instanceof SmugglersRewardState);
+        //He takes rewards.
+        message = new TakeCargoMessage(new ShipCoords(GameModeType.TEST, 2, 2), ShipmentType.YELLOW);
+        message.setDescriptor(p2desc);
+		state.validate(message);
+        assertArrayEquals(new int[]{1,0,0,1,0}, player2.getSpaceShip().getContains());
+        message = new TakeCargoMessage(new ShipCoords(GameModeType.TEST, 2, 2), ShipmentType.GREEN);
+        message.setDescriptor(p2desc);
+		state.validate(message);
+        assertArrayEquals(new int[]{1,0,1,1,0}, player2.getSpaceShip().getContains());
+        message = new TakeCargoMessage(new ShipCoords(GameModeType.TEST, 2, 2), ShipmentType.RED);
+        message.setDescriptor(p2desc);
+		state.validate(message);
+        assertArrayEquals(new int[]{1,0,1,1,0}, player2.getSpaceShip().getContains());
+        message = new TakeCargoMessage(new ShipCoords(GameModeType.TEST, 2, 2), ShipmentType.BLUE);
+        message.setDescriptor(p2desc);
+		state.validate(message);
+        assertArrayEquals(new int[]{1,1,1,1,0}, player2.getSpaceShip().getContains());
+        assertTrue(null == state.getCardState(player1));
     }
 
+    //Deve dare una batteria,
     @Test
     void behaviour2() throws ForbiddenCallException{
         //assert che gli storage sian giusti.
@@ -181,11 +241,78 @@ public class SmugglersCardTest {
 		message.setDescriptor(p1desc);
 		state.validate(message);
         assertTrue(state.getCardState(player1) instanceof SmugglersLoseState);
-        //Riempire p1 abbastanza per dover usare una batteria.
-        //Testare ordine sbagliato di cedimento merci.
-        //assert che gli storage sian giusti.
+        //p1 prova a cedere qualcosa che non ha.
+        message = new DiscardCargoMessage(new ShipCoords(GameModeType.TEST, 2, 2), ShipmentType.YELLOW);
+		message.setDescriptor(p1desc);
+		state.validate(message);
+        //succede niente
+        assertArrayEquals(new int[]{3,1,0,0,0}, player1.getSpaceShip().getContains());
+        //p1 prova a cedere delle batterie prima di aver esaurito i container blu.
+        message = new DiscardCargoMessage(new ShipCoords(GameModeType.TEST, 3, 3), ShipmentType.EMPTY);
+		message.setDescriptor(p1desc);
+		state.validate(message);
+        //succede niente
+        assertArrayEquals(new int[]{3,1,0,0,0}, player1.getSpaceShip().getContains());
+        //p1 cede un blue
+        message = new DiscardCargoMessage(new ShipCoords(GameModeType.TEST, 2, 2), ShipmentType.BLUE);
+        message.setDescriptor(p1desc);
+        state.validate(message);
+        //e va bene
+        assertArrayEquals(new int[]{3,0,0,0,0}, player1.getSpaceShip().getContains());
+        //p1 cede una batteria
+        message = new DiscardCargoMessage(new ShipCoords(GameModeType.TEST, 3, 3), ShipmentType.EMPTY);
+        message.setDescriptor(p1desc);
+        state.validate(message);
+        //e va bene
+        assertArrayEquals(new int[]{2,0,0,0,0}, player1.getSpaceShip().getContains());
+        //Si torna in announce
+        assertTrue(state.getCardState(player1) instanceof SmugglersAnnounceState);
+        //P3 vuole pareggiare
+        message = new TurnOnMessage(new ShipCoords(GameModeType.TEST, 2, 2), new ShipCoords(GameModeType.TEST, 3, 3));
+		message.setDescriptor(p3desc);
+		state.validate(message);
+        message = new TurnOnMessage(new ShipCoords(GameModeType.TEST, 4, 2), new ShipCoords(GameModeType.TEST, 3, 3));
+		message.setDescriptor(p3desc);
+		state.validate(message);
+        assertTrue(!player3.getRetired());
+        assertArrayEquals(new int[]{1,0,0,0,0}, player3.getSpaceShip().getContains());
+        message = new SendContinueMessage();
+		message.setDescriptor(p3desc);
+		state.validate(message);
+        assertTrue(!this.card.getExhausted());
+        assertTrue(state.getCardState(player1) instanceof SmugglersAnnounceState);
+        //P2 accende, vince
+        message = new TurnOnMessage(new ShipCoords(GameModeType.TEST, 3, 1), new ShipCoords(GameModeType.TEST, 3, 3));
+		message.setDescriptor(p2desc);
+		state.validate(message);
+        message = new TurnOnMessage(new ShipCoords(GameModeType.TEST, 4, 2), new ShipCoords(GameModeType.TEST, 3, 3));
+		message.setDescriptor(p2desc);
+		state.validate(message);
+        message = new SendContinueMessage();
+		message.setDescriptor(p2desc);
+		state.validate(message);
+        assertTrue(state.getCardState(player1) instanceof SmugglersRewardState);
+        //He takes rewards.
+        message = new TakeCargoMessage(new ShipCoords(GameModeType.TEST, 2, 2), ShipmentType.YELLOW);
+        message.setDescriptor(p2desc);
+		state.validate(message);
+        assertArrayEquals(new int[]{1,0,0,1,0}, player2.getSpaceShip().getContains());
+        message = new TakeCargoMessage(new ShipCoords(GameModeType.TEST, 2, 2), ShipmentType.GREEN);
+        message.setDescriptor(p2desc);
+		state.validate(message);
+        assertArrayEquals(new int[]{1,0,1,1,0}, player2.getSpaceShip().getContains());
+        message = new TakeCargoMessage(new ShipCoords(GameModeType.TEST, 2, 2), ShipmentType.RED);
+        message.setDescriptor(p2desc);
+		state.validate(message);
+        assertArrayEquals(new int[]{1,0,1,1,0}, player2.getSpaceShip().getContains());
+        message = new TakeCargoMessage(new ShipCoords(GameModeType.TEST, 2, 2), ShipmentType.BLUE);
+        message.setDescriptor(p2desc);
+		state.validate(message);
+        assertArrayEquals(new int[]{1,1,1,1,0}, player2.getSpaceShip().getContains());
+        assertTrue(null == state.getCardState(player1));
     }
 
+    //Deve dare una batteria e poi ha finito.
     @Test
     void behaviour3() throws ForbiddenCallException{
         //assert che gli storage sian giusti.
@@ -206,17 +333,126 @@ public class SmugglersCardTest {
 		message.setDescriptor(p1desc);
 		state.validate(message);
         assertTrue(state.getCardState(player1) instanceof SmugglersLoseState);
-
-        //p1 deve bruciare anche tutte le batterie, non ne ha abbastanza.
-        //Testare ordine sbagliato di cedimento merci.
-        //assert che gli storage sian giusti.
+        //p1 prova a cedere qualcosa che non ha.
+        message = new DiscardCargoMessage(new ShipCoords(GameModeType.TEST, 2, 2), ShipmentType.YELLOW);
+		message.setDescriptor(p1desc);
+		state.validate(message);
+        //succede niente
+        assertArrayEquals(new int[]{1,0,0,0,0}, player1.getSpaceShip().getContains());
+        //p1 prova a cedere delle batterie.
+        message = new DiscardCargoMessage(new ShipCoords(GameModeType.TEST, 3, 3), ShipmentType.EMPTY);
+		message.setDescriptor(p1desc);
+		state.validate(message);
+        //ha gia finito
+        assertArrayEquals(new int[]{0,0,0,0,0}, player1.getSpaceShip().getContains());
+        //Si torna in announce
+        assertTrue(state.getCardState(player1) instanceof SmugglersAnnounceState);
+        //P3 vuole pareggiare
+        message = new TurnOnMessage(new ShipCoords(GameModeType.TEST, 2, 2), new ShipCoords(GameModeType.TEST, 3, 3));
+		message.setDescriptor(p3desc);
+		state.validate(message);
+        message = new TurnOnMessage(new ShipCoords(GameModeType.TEST, 4, 2), new ShipCoords(GameModeType.TEST, 3, 3));
+		message.setDescriptor(p3desc);
+		state.validate(message);
+        assertTrue(!player3.getRetired());
+        assertArrayEquals(new int[]{1,0,0,0,0}, player3.getSpaceShip().getContains());
+        message = new SendContinueMessage();
+		message.setDescriptor(p3desc);
+		state.validate(message);
+        assertTrue(!this.card.getExhausted());
+        assertTrue(state.getCardState(player1) instanceof SmugglersAnnounceState);
+        //P2 accende, vince
+        message = new TurnOnMessage(new ShipCoords(GameModeType.TEST, 3, 1), new ShipCoords(GameModeType.TEST, 3, 3));
+		message.setDescriptor(p2desc);
+		state.validate(message);
+        message = new TurnOnMessage(new ShipCoords(GameModeType.TEST, 4, 2), new ShipCoords(GameModeType.TEST, 3, 3));
+		message.setDescriptor(p2desc);
+		state.validate(message);
+        message = new SendContinueMessage();
+		message.setDescriptor(p2desc);
+		state.validate(message);
+        assertTrue(this.card.getExhausted());
+        assertTrue(state.getCardState(player1) instanceof SmugglersRewardState);
+        //He takes rewards.
+        message = new TakeCargoMessage(new ShipCoords(GameModeType.TEST, 2, 2), ShipmentType.YELLOW);
+        message.setDescriptor(p2desc);
+		state.validate(message);
+        assertArrayEquals(new int[]{1,0,0,1,0}, player2.getSpaceShip().getContains());
+        message = new TakeCargoMessage(new ShipCoords(GameModeType.TEST, 2, 2), ShipmentType.GREEN);
+        message.setDescriptor(p2desc);
+		state.validate(message);
+        assertArrayEquals(new int[]{1,0,1,1,0}, player2.getSpaceShip().getContains());
+        message = new TakeCargoMessage(new ShipCoords(GameModeType.TEST, 2, 2), ShipmentType.RED);
+        message.setDescriptor(p2desc);
+		state.validate(message);
+        assertArrayEquals(new int[]{1,0,1,1,0}, player2.getSpaceShip().getContains());
+        message = new TakeCargoMessage(new ShipCoords(GameModeType.TEST, 2, 2), ShipmentType.BLUE);
+        message.setDescriptor(p2desc);
+		state.validate(message);
+        assertArrayEquals(new int[]{1,1,1,1,0}, player2.getSpaceShip().getContains());
+        assertTrue(null == state.getCardState(player1));
     }
 
     @Test
-    void disconnectionResilience(){
+    void disconnectionResilience() throws ForbiddenCallException{
         //assert che gli storage sian giusti.
-        //p1 deve bruciare anche tutte le batterie,ma esce dopo il primo cargo. vedeere se continua
-        //assert che gli storage sian giusti.
+        ServerMessage message = null;
+        ContainsLoaderVisitor v = new ContainsLoaderVisitor(player1.getSpaceShip(), ShipmentType.BLUE);
+        player1.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 2, 2)).check(v);
+        assertArrayEquals(new int[]{3,1,0,0,0}, player1.getSpaceShip().getContains());
+        for(Player p : this.order){
+            System.out.println(p.getUsername()+" - e:"+p.getSpaceShip().getEnginePower()+" - cr:"+p.getSpaceShip().getTotalCrew()+" - c:"+p.getSpaceShip().getCannonPower());
+        }
+        //p2 prova a partire, non puo'
+        message = new SendContinueMessage();
+		message.setDescriptor(p2desc);
+		state.validate(message);
+        //p1 parte, ha perso, deve cedere.
+        message = new SendContinueMessage();
+		message.setDescriptor(p1desc);
+		state.validate(message);
+        assertTrue(state.getCardState(player1) instanceof SmugglersLoseState);
+        //p1 prova a cedere qualcosa che non ha.
+        message = new DiscardCargoMessage(new ShipCoords(GameModeType.TEST, 2, 2), ShipmentType.YELLOW);
+		message.setDescriptor(p1desc);
+		state.validate(message);
+        //succede niente
+        assertArrayEquals(new int[]{3,1,0,0,0}, player1.getSpaceShip().getContains());
+        //p1 prova a cedere delle batterie prima di aver esaurito i container blu.
+        message = new DiscardCargoMessage(new ShipCoords(GameModeType.TEST, 3, 3), ShipmentType.EMPTY);
+		message.setDescriptor(p1desc);
+		state.validate(message);
+        //succede niente
+        assertArrayEquals(new int[]{3,1,0,0,0}, player1.getSpaceShip().getContains());
+        //p1 cede un blue
+        message = new DiscardCargoMessage(new ShipCoords(GameModeType.TEST, 2, 2), ShipmentType.BLUE);
+        message.setDescriptor(p1desc);
+        state.validate(message);
+        //e va bene
+        assertArrayEquals(new int[]{3,0,0,0,0}, player1.getSpaceShip().getContains());
+        //p1 disconnette
+        state.disconnect(player1);
+        //pure p2
+        state.disconnect(player2);
+        //e non perde niente
+        assertArrayEquals(new int[]{3,0,0,0,0}, player1.getSpaceShip().getContains());
+        //Si torna in announce
+        assertTrue(!this.card.getExhausted());
+        assertTrue(state.getCardState(player1) instanceof SmugglersAnnounceState);
+        //P3 vuole pareggiare
+        message = new TurnOnMessage(new ShipCoords(GameModeType.TEST, 2, 2), new ShipCoords(GameModeType.TEST, 3, 3));
+		message.setDescriptor(p3desc);
+		state.validate(message);
+        message = new TurnOnMessage(new ShipCoords(GameModeType.TEST, 4, 2), new ShipCoords(GameModeType.TEST, 3, 3));
+		message.setDescriptor(p3desc);
+		state.validate(message);
+        assertTrue(!player3.getRetired());
+        assertArrayEquals(new int[]{1,0,0,0,0}, player3.getSpaceShip().getContains());
+        message = new SendContinueMessage();
+		message.setDescriptor(p3desc);
+		state.validate(message);
+        assertTrue(!this.card.getExhausted());
+        assertTrue(null==state.getCardState(player1));
     }
 
 

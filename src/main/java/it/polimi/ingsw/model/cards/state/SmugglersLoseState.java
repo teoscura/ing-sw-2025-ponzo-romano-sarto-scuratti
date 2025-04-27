@@ -74,7 +74,7 @@ public class SmugglersLoseState extends CardState {
 
 	@Override
     public CardState getNext() {
-		if (this.list.getFirst().getRetired() || this.list.getFirst().getDisconnected()) {
+		if (this.list.getFirst().getDisconnected()) {
 			this.list.removeFirst();
 			if (!this.list.isEmpty()) return new SmugglersAnnounceState(state, card, list);
 			System.out.println("Card exhausted, moving to a new one!");
@@ -135,6 +135,9 @@ public class SmugglersLoseState extends CardState {
 				}
 			}
 		}
+		for(int i = 4;i>=0;i--){
+			if(required[i]>0) return;
+		}
 		this.responded = true;
 	}
 
@@ -142,6 +145,7 @@ public class SmugglersLoseState extends CardState {
 	public void disconnect(Player p) throws ForbiddenCallException {
 		if (this.list.getFirst().equals(p)) {
 			this.responded = true;
+			return;
 		}
 		this.list.remove(p);
 		System.out.println("Player '" + p.getUsername() + "' disconnected!");

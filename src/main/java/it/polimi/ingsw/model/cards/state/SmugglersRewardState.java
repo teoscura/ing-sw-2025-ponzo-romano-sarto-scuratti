@@ -23,10 +23,11 @@ import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.VoyageState;
 
-class SmugglersRewardState extends CardState {
+public class SmugglersRewardState extends CardState {
 
 	private final SmugglersCard card;
 	private final ArrayList<Player> list;
+	private int left;
 	private boolean responded = false;
 	private boolean took_reward = false;
 
@@ -36,12 +37,15 @@ class SmugglersRewardState extends CardState {
 			throw new IllegalArgumentException("Created unsatisfyable state");
 		this.card = card;
 		this.list = list;
+		this.left = this.card.getReward().getTotalContains();
 	}
 
 	@Override
 	public void init(ClientModelState new_state) {
 		super.init(new_state);
 		System.out.println("    CardState -> Smugglers Reward State!");
+		int[] prize = this.card.getReward().getContains();
+		System.out.println("    Reward => Blu: "+prize[0]+" Grn: "+prize[1]+" Ylw: "+prize[2]+" Red: "+prize[3]);
 		for(Player p : this.list){
 			System.out.println("	 - "+p.getUsername());
 		}
@@ -81,7 +85,7 @@ class SmugglersRewardState extends CardState {
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to take cargo during another player's turn!"));
 			return;
 		}
-		if (type.getValue() <= 0) {
+		if (type.getValue() < 0) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to take cargo with an illegal shipment type!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "'  attempted to take cargo with an illegal shipment type!"));
 			return;
@@ -95,6 +99,7 @@ class SmugglersRewardState extends CardState {
 		try {
 			p.getSpaceShip().getComponent(target_coords).check(v);
 			this.card.getReward().getContains()[type.getValue() - 1]--;
+			this.left--;
 			System.out.println("Player '"+p.getUsername()+"' took cargo type: "+type+", placed it at "+target_coords);
 		} catch (IllegalTargetException e) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to position cargo in illegal coordinates!");
@@ -109,11 +114,7 @@ class SmugglersRewardState extends CardState {
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to position cargo in a storage that doesn't support it!"));
 			return;
 		}
-		this.card.getReward().getContains()[type.getValue() - 1]--;
-		for (int i : this.card.getReward().getContains()) {
-			if (i > 0) return;
-		}
-		this.responded = true;
+		if(this.left==0) this.responded = true;
 	}
 
 	@Override

@@ -105,7 +105,7 @@ public class SmugglersAnnounceState extends CardState {
 
 	@Override
 	public void disconnect(Player p) throws ForbiddenCallException {
-		if (this.list.getFirst() == p) {
+		if (this.list.getFirst().equals(p)) {
 			this.responded = true;
 		}
 		this.list.remove(p);

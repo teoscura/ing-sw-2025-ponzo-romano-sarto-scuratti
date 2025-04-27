@@ -44,7 +44,6 @@ public class ContainsLoaderVisitor implements iVisitor {
     public void visit(StorageComponent c) {
         try{
             c.putIn(cargo);
-            ship.getContains()[this.cargo.getValue()-1]++;
         } catch (ContainerFullException e){
             throw new ContainerFullException();
         } catch (ContainerNotSpecialException e){

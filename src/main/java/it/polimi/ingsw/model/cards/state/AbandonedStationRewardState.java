@@ -28,6 +28,7 @@ class AbandonedStationRewardState extends CardState {
 
 	private final AbandonedStationCard card;
 	private final ArrayList<Player> list;
+	private int left;
 	private boolean responded = false;
 
 	public AbandonedStationRewardState(VoyageState state, AbandonedStationCard card, List<Player> list) {
@@ -36,6 +37,7 @@ class AbandonedStationRewardState extends CardState {
 			throw new IllegalArgumentException("Constructed insatisfyable state");
 		if (card == null) throw new NullPointerException();
 		this.card = card;
+		this.left = this.card.getPlanet().getTotalContains();
 		this.list = new ArrayList<>(list);
 	}
 
@@ -79,7 +81,7 @@ class AbandonedStationRewardState extends CardState {
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to take cargo during another player's turn!"));
 			return;
 		}
-		if (type.getValue() <= 0) {
+		if (type.getValue() < 0) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to take cargo with an illegal shipment type!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "'  attempted to take cargo with an illegal shipment type!"));
 			return;
@@ -93,6 +95,7 @@ class AbandonedStationRewardState extends CardState {
 		try {
 			p.getSpaceShip().getComponent(target_coords).check(v);
 			this.card.getPlanet().getContains()[type.getValue() - 1]--;
+			this.left--;
 			System.out.println("Player '"+p.getUsername()+"' took cargo type: "+type+", placed it at "+target_coords);
 		} catch (IllegalTargetException e) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to position cargo in illegal coordinates!");
@@ -110,7 +113,7 @@ class AbandonedStationRewardState extends CardState {
 		for (int i : this.card.getPlanet().getContains()) {
 			if (i > 0) return;
 		}
-		this.responded = true;
+		if (left==0) this.responded = true;
 	}
 
 	@Override

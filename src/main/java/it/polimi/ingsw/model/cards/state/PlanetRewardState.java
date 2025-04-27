@@ -89,7 +89,7 @@ class PlanetRewardState extends CardState {
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to take cargo during another player's turn!"));
 			return;
 		}
-		if (type.getValue() <= 0) {
+		if (type.getValue() < 0) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to take cargo with an illegal shipment type!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "'  attempted to take cargo with an illegal shipment type!"));
 			return;
@@ -102,6 +102,9 @@ class PlanetRewardState extends CardState {
 		ContainsLoaderVisitor v = new ContainsLoaderVisitor(p.getSpaceShip(),type);
 		try {
 			p.getSpaceShip().getComponent(target_coords).check(v);
+			this.card.getPlanet(this.id).getContains()[type.getValue() - 1]--;
+			this.left--;
+			System.out.println("Player '"+p.getUsername()+"' took cargo type: "+type+", placed it at "+target_coords);
 		} catch (IllegalTargetException e) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to position cargo in illegal coordinates!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to position cargo in illegal coordinates!"));
@@ -115,8 +118,6 @@ class PlanetRewardState extends CardState {
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to position cargo in a storage that doesn't support it!"));
 			return;
 		}
-		this.card.getPlanet(this.id).getContains()[type.getValue() - 1]--;
-		this.left--;
 		if (left==0) this.responded = true;
 	}
 
