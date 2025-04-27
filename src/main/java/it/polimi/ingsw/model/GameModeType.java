@@ -94,9 +94,9 @@ public enum GameModeType {
 	}
 
 	public int[] getStartingPos() {
-		if (this.level == -1) {
+		if (this.level == 1) {
 			return new int[]{4, 2, 1, 0};
 		}
-		return new int[]{9, 5, 2, 0};
+		return new int[]{6, 3, 1, 0};
 	}
 }
