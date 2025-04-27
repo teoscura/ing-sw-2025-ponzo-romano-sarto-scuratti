@@ -65,28 +65,31 @@ public class AbadonedShipCardTest {
         ComponentFactory f3 = new ComponentFactory();
         iBaseComponent c = null;
 
-        player1 = new Player(GameModeType.LVL2, "p1", PlayerColor.RED);
-        //li ha giusti giusti
-        
+        player1 = new Player(GameModeType.TEST, "p1", PlayerColor.RED);
+        //non ha niente, tenta a salire ma non riesce, ha esattamente il richiesto.
         p1desc = new ClientDescriptor(player1.getUsername(), null);
         p1desc.bindPlayer(player1);
 
-        player2 = new Player(GameModeType.LVL2, "p2", PlayerColor.BLUE);
-        //Uguale a p3 ma con due crewmate in meno, abbastanza per non salire
+        player2 = new Player(GameModeType.TEST, "p2", PlayerColor.BLUE);
+        c = f2.getComponent(36);
+        c.rotate(ComponentRotation.U000);
+        player2.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 2, 2));
         p2desc = new ClientDescriptor(player2.getUsername(), null);
         p2desc.bindPlayer(player2);
 
-        player3 = new Player(GameModeType.LVL2, "p3", PlayerColor.GREEN);
-        //Uguale a p2 ma puo salire
+        player3 = new Player(GameModeType.TEST, "p3", PlayerColor.GREEN);
+        c = f3.getComponent(36);
+        c.rotate(ComponentRotation.U000);
+        player3.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 2, 2));
         p3desc = new ClientDescriptor(player3.getUsername(), null);
         p3desc.bindPlayer(player3);
 
         ArrayList<Player> order = new ArrayList<>(Arrays.asList(new Player[]{player1, player2, player3}));
         ArrayList<Player> players = new ArrayList<>(Arrays.asList(new Player[]{player1, player2, player3}));
-        model = new DummyModelInstance(1, null, GameModeType.LVL2, PlayerCount.THREE);
+        model = new DummyModelInstance(1, null, GameModeType.TEST, PlayerCount.THREE);
         TestFlightCards cards = new TestFlightCards();
-        planche = new Planche(GameModeType.LVL2, order);
-        state = new DummyVoyageState(model, GameModeType.LVL2, PlayerCount.THREE, players, cards, planche);
+        planche = new Planche(GameModeType.TEST, order);
+        state = new DummyVoyageState(model, GameModeType.TEST, PlayerCount.THREE, players, cards, planche);
         model.setState(state);
         LevelOneCardFactory factory = new LevelOneCardFactory();
         card = (AbandonedShipCard) factory.getCard(17);
@@ -97,12 +100,48 @@ public class AbadonedShipCardTest {
 
     @Test
     void behaviour() throws ForbiddenCallException, PlayerNotFoundException {
-
-    }
-
-    @Test
-    void selfInflictedRetire() throws ForbiddenCallException, PlayerNotFoundException {
-
+        ServerMessage mess = null;
+        assertTrue(0==player1.getCredits());
+        assertTrue(0==player2.getCredits());
+        assertTrue(0==player3.getCredits());
+        planche.printOrder();
+        //Non e' il suo turno
+        mess = new SelectLandingMessage(0);
+        mess.setDescriptor(p2desc);
+        state.validate(mess);
+        //Non ci riesce
+        mess = new SelectLandingMessage(0);
+        mess.setDescriptor(p1desc);
+        state.validate(mess);
+        //Lascia andare
+        mess = new SelectLandingMessage(-1);
+        mess.setDescriptor(p1desc);
+        state.validate(mess);
+        //Ci sale giusto
+        int x = planche.getPlayerPosition(player2);
+        int j = player2.getSpaceShip().getTotalCrew();
+        int z = player2.getCredits();
+        mess = new SelectLandingMessage(0);
+        mess.setDescriptor(p2desc);
+        state.validate(mess);
+        //Ora toglie la crew in due posti.
+        mess = new RemoveCrewMessage(new ShipCoords(GameModeType.TEST, 2, 2));
+        mess.setDescriptor(p2desc);
+        state.validate(mess);
+        //Ormai e' un'altro stato, non puo farlo.
+        ServerMessage w = new SelectLandingMessage(0);
+        w.setDescriptor(p3desc);
+        assertThrows(ForbiddenCallException.class, ()->state.validate(w));
+        //Secondo crewmate
+        mess = new RemoveCrewMessage(new ShipCoords(GameModeType.TEST, 3, 2));
+        mess.setDescriptor(p2desc);
+        state.validate(mess);
+        //Ha finito.
+        assertTrue(j-2 == player2.getSpaceShip().getTotalCrew());
+        //Ha dovuto saltare anche player3
+        assertTrue(x-card.getDays()-1==state.getPlanche().getPlayerPosition(player2));
+        assertTrue(z+card.getCredits()==player2.getCredits());
+        assertTrue(null == state.getCardState(player1));
     }
 
     @Test
