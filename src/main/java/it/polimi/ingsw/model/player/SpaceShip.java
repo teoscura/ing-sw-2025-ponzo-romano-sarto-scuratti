@@ -48,7 +48,6 @@ public class SpaceShip implements iSpaceShip {
 	private boolean broke_center;
 	private double cannon_power = 0;
 	private int engine_power = 0;
-	private int battery_power = 0;
 
 	public SpaceShip(GameModeType type,
 					 Player player) {
@@ -56,7 +55,7 @@ public class SpaceShip implements iSpaceShip {
 		this.type = type;
 		this.components = new iBaseComponent[type.getHeight()][type.getWidth()];
 		this.shielded_directions = new boolean[4];
-		this.containers = new int[4];
+		this.containers = new int[5];
 		this.crew = new int[3];
 		this.empty = new EmptyComponent();
 		this.empty.onCreation(this, new ShipCoords(type, 0,0));
@@ -181,9 +180,8 @@ public class SpaceShip implements iSpaceShip {
 			}
 		}
 		this.crew = v.getCrewMembers();
-		this.battery_power = v.getBatteryPower();
 		this.shielded_directions = v.getDirections();
-		this.containers = v.getStorageContainers();
+		this.containers = v.getContainers();
 		this.cannon_power = v.getCannonPower();
 		this.engine_power = v.getEnginePower();
 		if (v.getCannonPower() > 0) {
@@ -241,7 +239,7 @@ public class SpaceShip implements iSpaceShip {
 
 	@Override
 	public int getEnergyPower() {
-		return this.battery_power;
+		return this.containers[0];
 	}
 
 	@Override
@@ -485,14 +483,7 @@ public class SpaceShip implements iSpaceShip {
 
 	@Override
 	public int[] getContains() {
-		this.updateShip();
-		int[] tmp = new int[5];
-		tmp[4] = this.battery_power;
-		for (ShipmentType t : ShipmentType.values()) {
-			if (t.getValue() == 0) break;
-			tmp[t.getValue() - 1] = this.containers[t.getValue() - 1];
-		}
-		return tmp;
+		return this.containers;
 	}
 
 	@Override
@@ -509,7 +500,7 @@ public class SpaceShip implements iSpaceShip {
 				res[y][x] = this.components[y][x].getClientComponent();
 			}
 		}
-		return new ClientSpaceShip(type, res, shielded_directions, cannon_power, engine_power, battery_power, crew);
+		return new ClientSpaceShip(type, res, shielded_directions, cannon_power, engine_power, containers, crew);
 	}
 
 }

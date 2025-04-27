@@ -259,9 +259,9 @@ public class UpdateSpaceShipTest {
         }
         //2,2 speciale, 4,2 normale triplo.
         ContainsLoaderVisitor vl = new ContainsLoaderVisitor(storage.getSpaceShip(), ShipmentType.RED);
-        ContainsRemoveVisitor vr = new ContainsRemoveVisitor(storage.getSpaceShip());
+        ContainsRemoveVisitor vr = new ContainsRemoveVisitor(storage.getSpaceShip(), ShipmentType.EMPTY);
         storage.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 2, 2)).check(vl);
-        test = new int[]{0,0,0,1,0};
+        test = new int[]{0,0,0,0,1};
         for(int i = 0; i < 5; i++){
             System.out.print(storage.getSpaceShip().getContains()[i]);
             assertTrue(test[i]==storage.getSpaceShip().getContains()[i]);
@@ -274,7 +274,7 @@ public class UpdateSpaceShipTest {
         }
         vl = new ContainsLoaderVisitor(storage.getSpaceShip(), ShipmentType.BLUE);
         storage.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 2, 2)).check(vl);
-        test = new int[]{1,0,0,0,0};
+        test = new int[]{0,1,0,0,0};
         for(int i = 0; i < 5; i++){
             assertTrue(test[i]==storage.getSpaceShip().getContains()[i]);
         }
@@ -282,18 +282,18 @@ public class UpdateSpaceShipTest {
         storage.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 4, 2)).check(vl);
         ContainsLoaderVisitor vlt = new ContainsLoaderVisitor(storage.getSpaceShip(), ShipmentType.RED);
         assertThrows(ContainerNotSpecialException.class,()->storage.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 4, 2)).check(vlt));
-        test = new int[]{3,0,0,0,0};
+        test = new int[]{0,3,0,0,0};
         for(int i = 0; i < 5; i++){
             assertTrue(test[i]==storage.getSpaceShip().getContains()[i]);
         }
         vl = new ContainsLoaderVisitor(storage.getSpaceShip(), ShipmentType.GREEN);
         storage.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 4, 2)).check(vl);
-        test = new int[]{3,1,0,0,0};
+        test = new int[]{0,3,1,0,0};
         for(int i = 0; i < 5; i++){
             assertTrue(test[i]==storage.getSpaceShip().getContains()[i]);
         }
         storage.getSpaceShip().removeComponent(new ShipCoords(GameModeType.TEST, 4, 2));
-        test = new int[]{1,0,0,0,0};
+        test = new int[]{0,1,0,0,0};
         for(int i = 0; i < 5; i++){
             assertTrue(test[i]==storage.getSpaceShip().getContains()[i]);
         }

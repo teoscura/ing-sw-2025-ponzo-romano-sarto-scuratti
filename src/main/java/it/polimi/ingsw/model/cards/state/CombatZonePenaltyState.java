@@ -49,22 +49,14 @@ class CombatZonePenaltyState extends CardState {
 			this.required = null;
 			return;
 		}
-		this.required = new int[5];
-		int penalty = this.sections.getFirst().getAmount();
-		int[] player_cargo = this.target.getSpaceShip().getContains();
-		for (ShipmentType t : ShipmentType.values()) {
-			if (t.getValue() == 0) break;
-			int tmp = penalty - player_cargo[t.getValue() - 1];
-			if (tmp <= 0) {
-				this.required[t.getValue() - 1] = penalty;
-				return;
-			} else {
-				this.required[t.getValue() - 1] = player_cargo[t.getValue() - 1];
-				penalty = tmp;
-			}
-		}
-		if (penalty > 0) {
-			this.required[4] = penalty;
+		this.required = new int[]{0,0,0,0,0};
+		int pen = this.sections.getFirst().getAmount();
+		int idx = 4;
+		while(pen>=1){
+			if(idx<0) break;
+			this.required[idx] = pen - this.target.getSpaceShip().getContains()[idx] >= 0 ? this.target.getSpaceShip().getContains()[idx] : pen;
+			pen -= this.required[idx];
+			idx--;
 		}
 	}
 
@@ -216,7 +208,7 @@ class CombatZonePenaltyState extends CardState {
 
 	@Override
 	public void discardCargo(Player p, ShipmentType type, ShipCoords coords) {
-		if (p != this.target) {
+		if (!p.equals(this.target)) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to discard cargo during another player's turn!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to discard cargo during another player's turn!"));
 			return;
@@ -226,43 +218,44 @@ class CombatZonePenaltyState extends CardState {
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to discard cargo when the penalty doesn't allow it!"));
 			return;
 		}
-		for (ShipmentType t : ShipmentType.values()) {
-			if (t.getValue() == 0) break;
-			if (this.required[t.getValue() - 1] <= 0) continue;
-			if (t != type) {
+		int idx = 4;
+		while(idx>=0){
+			if(this.required[idx]<=0){
+				idx--;
+				continue;
+			};
+			if(type.getValue()!=idx){
 				System.out.println("Player '" + p.getUsername() + "' attempted to discard cargo that's not his most valuable!");
 				this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to discard cargo that's not his most valuable!"));
 				return;
 			}
-			ContainsRemoveVisitor v = new ContainsRemoveVisitor(p.getSpaceShip(),t);
+			ContainsRemoveVisitor v = new ContainsRemoveVisitor(p.getSpaceShip(), type);
 			try {
 				p.getSpaceShip().getComponent(coords).check(v);
-				System.out.println("Player '" + p.getUsername() + "' discarded cargo type: "+type+" from "+coords+"!");
-				this.required[t.getValue() - 1]--;
+				this.required[idx]--;
+				if(type!=ShipmentType.EMPTY) System.out.println("Player '"+p.getUsername()+"' removed cargo type: "+type+" from "+coords);
+				else System.out.println("Player '"+p.getUsername()+"' removed battery from "+coords);
 				break;
 			} catch (ContainerEmptyException e) {
-				System.out.println("Player '" + p.getUsername() + "' attempted to discard cargo from a storage that doesn't contain it!");
-				this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to discard cargo from a storage that doesn't contain it!"));
+				if(type!=ShipmentType.EMPTY){
+					System.out.println("Player '" + p.getUsername() + "' attempted to discard cargo from a storage that doesn't contain it!");
+					this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to discard cargo from a storage that doesn't contain it!"));
+				} else {
+					System.out.println("Player '" + p.getUsername() + "' attempted to discard a battery from a storage that doesn't contain it!");
+					this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to discard a battery from a storage that doesn't contain it!"));
+				}
 				return;
 			} catch (IllegalArgumentException e) {
-				System.out.println("Player '" + p.getUsername() + "' attempted to discard cargo from illegal coordinates!");
-				this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to discard cargo from illegal coordinates!"));
-				return;
+				if(type!=ShipmentType.EMPTY){
+					System.out.println("Player '" + p.getUsername() + "' attempted to discard cargo from illegal coordinates!");
+					this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to discard cargo from illegal coordinates!"));
+				} else {
+					System.out.println("Player '" + p.getUsername() + "' attempted to discard a battery from illegal coordinates!");
+					this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to discard a battery from illegal coordinates!"));
+				}
 			}
 		}
-		if (this.required[4] > 0 && p.getSpaceShip().getEnergyPower() > 0) {
-			ContainsRemoveVisitor v = new ContainsRemoveVisitor(p.getSpaceShip());
-			try {
-				p.getSpaceShip().getComponent(coords).check(v);
-				System.out.println("Player '"+p.getUsername()+"' removed battery from "+coords);
-			} catch (ContainerEmptyException e) {
-				System.out.println("Player '" + p.getUsername() + "' attempted to discard batteries from a container that doesn't contain any!");
-				this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to discard batteries from a container that doesn't contain any!"));
-			} catch (IllegalArgumentException e) {
-				System.out.println("Player '" + p.getUsername() + "' attempted to discard batteries from illegal coordinates!");
-				this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to discard batteries from illegal coordinates!"));
-			}
-		} else this.responded = true;
+		this.responded = true;
 	}
 
 	@Override

@@ -11,7 +11,7 @@ public class ClientCargoPenaltyCardStateDecorator implements ClientCardState {
     private final int[] shipments;
 
     public ClientCargoPenaltyCardStateDecorator(ClientCardState base, PlayerColor turn, int[] shipments){
-        if(base == null || shipments == null || shipments.length != 4 || turn == PlayerColor.NONE) throw new NullPointerException();
+        if(base == null || shipments == null || shipments.length != 5 || turn == PlayerColor.NONE) throw new NullPointerException();
         for(int t : shipments){
             if(t<0) throw new IllegalArgumentException();
         }

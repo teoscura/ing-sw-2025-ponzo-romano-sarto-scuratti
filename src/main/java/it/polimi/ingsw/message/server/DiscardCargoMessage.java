@@ -14,7 +14,7 @@ public class DiscardCargoMessage extends ServerMessage {
     private final ShipmentType type;
 
     public DiscardCargoMessage(ShipCoords coords, ShipmentType type){
-        if(coords == null || type.getValue()<1) throw new NullPointerException();
+        if(coords == null) throw new NullPointerException();
         this.coords = coords;
         this.type = type;
     }

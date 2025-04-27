@@ -1,0 +1,223 @@
+package it.polimi.ingsw.model.cards;
+
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.io.IOException;
+import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import it.polimi.ingsw.controller.server.ClientDescriptor;
+import it.polimi.ingsw.message.server.DiscardCargoMessage;
+import it.polimi.ingsw.message.server.SendContinueMessage;
+import it.polimi.ingsw.message.server.ServerMessage;
+import it.polimi.ingsw.model.DummyModelInstance;
+import it.polimi.ingsw.model.GameModeType;
+import it.polimi.ingsw.model.PlayerCount;
+import it.polimi.ingsw.model.board.Planche;
+import it.polimi.ingsw.model.board.TestFlightCards;
+import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
+import it.polimi.ingsw.model.cards.state.CardState;
+import it.polimi.ingsw.model.cards.state.SmugglersLoseState;
+import it.polimi.ingsw.model.cards.visitors.ContainsLoaderVisitor;
+import it.polimi.ingsw.model.cards.visitors.ContainsRemoveVisitor;
+import it.polimi.ingsw.model.components.ComponentFactory;
+import it.polimi.ingsw.model.components.iBaseComponent;
+import it.polimi.ingsw.model.components.enums.ComponentRotation;
+import it.polimi.ingsw.model.components.enums.ShipmentType;
+import it.polimi.ingsw.model.player.Player;
+import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.model.player.ShipCoords;
+import it.polimi.ingsw.model.state.DummyVoyageState;
+
+public class SmugglersCardTest {
+    
+    private DummyModelInstance model;
+    private DummyVoyageState state;
+    private TestFlightCards cards;
+    private Planche planche;
+    private SmugglersCard card;
+    private CardState cstate;
+
+    Player player1;
+    ClientDescriptor p1desc;
+    Player player2;
+    ClientDescriptor p2desc;
+    Player player3;
+    ClientDescriptor p3desc;
+
+    ArrayList<Player> order, players;
+
+    @BeforeEach
+    void setUp() throws UnknownHostException, IOException {
+        iBaseComponent c = null;
+        ComponentFactory f1 = new ComponentFactory();
+        ComponentFactory f2 = new ComponentFactory();
+        ComponentFactory f3 = new ComponentFactory();
+
+        //P1 puo vincere ma non accende, e perde di conseguenza.
+        player1 = new Player(GameModeType.TEST, "p1", PlayerColor.RED);
+        c = f1.getComponent(14); 
+        c.rotate(ComponentRotation.U000);
+        player1.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 3, 3));
+        c = f1.getComponent(18); 
+        c.rotate(ComponentRotation.U000);
+        player1.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 2, 2));
+        c = f1.getComponent(126); 
+        c.rotate(ComponentRotation.U000);
+        player1.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 3, 1));
+        c = f1.getComponent(132); 
+        c.rotate(ComponentRotation.U000);
+        player1.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 4, 2));
+        c = f1.getComponent(118); 
+        c.rotate(ComponentRotation.U000);
+        player1.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 5, 2));
+        p1desc = new ClientDescriptor(player1.getUsername(), null);
+        p1desc.bindPlayer(player1);
+
+        //P2 accende e vince
+        player2 = new Player(GameModeType.TEST, "p2", PlayerColor.RED);
+        c = f2.getComponent(14); 
+        c.rotate(ComponentRotation.U000);
+        player2.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 3, 3));
+        c = f2.getComponent(18); 
+        c.rotate(ComponentRotation.U000);
+        player2.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 2, 2));
+        c = f2.getComponent(126); 
+        c.rotate(ComponentRotation.U000);
+        player2.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 3, 1));
+        c = f2.getComponent(132); 
+        c.rotate(ComponentRotation.U000);
+        player2.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 4, 2));
+        c = f2.getComponent(118); 
+        c.rotate(ComponentRotation.U000);
+        player2.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 5, 2));
+        p2desc = new ClientDescriptor(player2.getUsername(), null);
+        p2desc.bindPlayer(player2);
+
+
+        //deve avere esattamente 4 per pareggiare.
+        player3 = new Player(GameModeType.TEST, "p3", PlayerColor.RED);
+        c = f3.getComponent(14); 
+        c.rotate(ComponentRotation.U000);
+        player3.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 3, 3));
+        c = f3.getComponent(132); 
+        c.rotate(ComponentRotation.U000);
+        player3.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 4, 2));
+        c = f3.getComponent(128); 
+        c.rotate(ComponentRotation.U000);
+        player3.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 2, 2));
+        p3desc = new ClientDescriptor(player3.getUsername(), null);
+        p3desc.bindPlayer(player3);
+
+        LevelOneCardFactory factory = new LevelOneCardFactory();
+        order = new ArrayList<>(Arrays.asList(new Player[]{player1, player3, player2}));
+        players = new ArrayList<>(Arrays.asList(new Player[]{player1, player2, player3}));
+        model = new DummyModelInstance(1, null, GameModeType.LVL2, PlayerCount.THREE);
+        planche = new Planche(GameModeType.LVL2, order);
+        cards = new TestFlightCards();
+        state = new DummyVoyageState(model, GameModeType.LVL2, PlayerCount.THREE, players, cards, planche);
+		card = (SmugglersCard) factory.getCard(2);
+		model.setState(state);
+        state.setCard(card);
+        state.setCardState(card.getState(state));
+    }
+
+    @Test
+    void behaviour() throws ForbiddenCallException{
+        //assert che gli storage sian giusti.
+        ServerMessage message = null;
+        ContainsLoaderVisitor v = new ContainsLoaderVisitor(player1.getSpaceShip(), ShipmentType.BLUE);
+        player1.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 2, 2)).check(v);
+        player1.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 2, 2)).check(v);
+        assertArrayEquals(new int[]{3,2,0,0,0}, player1.getSpaceShip().getContains());
+        for(Player p : this.order){
+            System.out.println(p.getUsername()+" - e:"+p.getSpaceShip().getEnginePower()+" - cr:"+p.getSpaceShip().getTotalCrew()+" - c:"+p.getSpaceShip().getCannonPower());
+        }
+        //p2 prova a partire, non puo'
+        message = new SendContinueMessage();
+		message.setDescriptor(p2desc);
+		state.validate(message);
+        //p1 parte, ha perso, deve cedere.
+        message = new SendContinueMessage();
+		message.setDescriptor(p1desc);
+		state.validate(message);
+        assertTrue(state.getCardState(player1) instanceof SmugglersLoseState);
+        //p1 prova a cedere qualcosa che non ha.
+        message = new DiscardCargoMessage(new ShipCoords(GameModeType.TEST, 2, 2), ShipmentType.YELLOW);
+		message.setDescriptor(p1desc);
+		state.validate(message);
+        //succede niente
+        assertArrayEquals(new int[]{3,2,0,0,0}, player1.getSpaceShip().getContains());
+        //p1 prova a cedere delle batterie prima di aver esaurito i container blu.
+        message = new DiscardCargoMessage(new ShipCoords(GameModeType.TEST, 2, 2), ShipmentType.EMPTY);
+		message.setDescriptor(p1desc);
+		state.validate(message);
+        //succede niente
+        assertArrayEquals(new int[]{3,2,0,0,0}, player1.getSpaceShip().getContains());
+        //assert che gli storage sian giusti.
+    }
+
+    @Test
+    void behaviour2() throws ForbiddenCallException{
+        //assert che gli storage sian giusti.
+        ServerMessage message = null;
+        ContainsLoaderVisitor v = new ContainsLoaderVisitor(player1.getSpaceShip(), ShipmentType.BLUE);
+        player1.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 2, 2)).check(v);
+        assertArrayEquals(new int[]{3,1,0,0,0}, player1.getSpaceShip().getContains());
+        for(Player p : this.order){
+            System.out.println(p.getUsername()+" - e:"+p.getSpaceShip().getEnginePower()+" - cr:"+p.getSpaceShip().getTotalCrew()+" - c:"+p.getSpaceShip().getCannonPower());
+        }
+        //p2 prova a partire, non puo'
+        message = new SendContinueMessage();
+		message.setDescriptor(p2desc);
+		state.validate(message);
+        //p1 parte, ha perso, deve cedere.
+        message = new SendContinueMessage();
+		message.setDescriptor(p1desc);
+		state.validate(message);
+        assertTrue(state.getCardState(player1) instanceof SmugglersLoseState);
+        //Riempire p1 abbastanza per dover usare una batteria.
+        //Testare ordine sbagliato di cedimento merci.
+        //assert che gli storage sian giusti.
+    }
+
+    @Test
+    void behaviour3() throws ForbiddenCallException{
+        //assert che gli storage sian giusti.
+        ServerMessage message = null;
+        ContainsRemoveVisitor v = new ContainsRemoveVisitor(player1.getSpaceShip(), ShipmentType.EMPTY);
+        player1.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 3, 3)).check(v);
+        player1.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 3, 3)).check(v);
+        assertArrayEquals(new int[]{1,0,0,0,0}, player1.getSpaceShip().getContains());
+        for(Player p : this.order){
+            System.out.println(p.getUsername()+" - e:"+p.getSpaceShip().getEnginePower()+" - cr:"+p.getSpaceShip().getTotalCrew()+" - c:"+p.getSpaceShip().getCannonPower());
+        }
+        //p2 prova a partire, non puo'
+        message = new SendContinueMessage();
+		message.setDescriptor(p2desc);
+		state.validate(message);
+        //p1 parte, ha perso, deve cedere.
+        message = new SendContinueMessage();
+		message.setDescriptor(p1desc);
+		state.validate(message);
+        assertTrue(state.getCardState(player1) instanceof SmugglersLoseState);
+
+        //p1 deve bruciare anche tutte le batterie, non ne ha abbastanza.
+        //Testare ordine sbagliato di cedimento merci.
+        //assert che gli storage sian giusti.
+    }
+
+    @Test
+    void disconnectionResilience(){
+        //assert che gli storage sian giusti.
+        //p1 deve bruciare anche tutte le batterie,ma esce dopo il primo cargo. vedeere se continua
+        //assert che gli storage sian giusti.
+    }
+
+
+}

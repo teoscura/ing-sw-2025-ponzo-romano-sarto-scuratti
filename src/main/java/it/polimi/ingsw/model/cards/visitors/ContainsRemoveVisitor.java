@@ -22,20 +22,13 @@ public class ContainsRemoveVisitor implements iVisitor {
     private ShipmentType searching;
 
     public ContainsRemoveVisitor(iSpaceShip ship, ShipmentType type){
-        if(ship==null) throw new NullPointerException();
-        if(type==ShipmentType.EMPTY) throw new IllegalTargetException();
+        if(ship==null || type == null) throw new NullPointerException();
         this.ship = ship;
         this.searching = type;
     }
 
-    public ContainsRemoveVisitor(iSpaceShip ship){
-        if(ship==null) throw new NullPointerException();
-        this.ship = ship;
-        this.searching = null;
-    }
-
     public void changeType(ShipmentType type){
-        if(type==ShipmentType.EMPTY) throw new IllegalTargetException();
+        if(type==null) throw new NullPointerException();
         this.searching = type;
     }
 
@@ -61,7 +54,7 @@ public class ContainsRemoveVisitor implements iVisitor {
 
     @Override
     public void visit(StorageComponent c) {
-        if(this.searching==null) throw new IllegalTargetException();
+        if(this.searching==ShipmentType.EMPTY) throw new IllegalTargetException();
         if(c.howMany(searching)<=0) throw new ContainerEmptyException();
         c.takeOut(searching);
         ship.updateShip();
@@ -69,7 +62,7 @@ public class ContainsRemoveVisitor implements iVisitor {
 
     @Override
     public void visit(BatteryComponent c) {
-        if(this.searching!=null) throw new IllegalTargetException();
+        if(this.searching!=ShipmentType.EMPTY) throw new IllegalTargetException();
         if(c.getContains()>0){
             c.takeOne();
             ship.updateShip();
