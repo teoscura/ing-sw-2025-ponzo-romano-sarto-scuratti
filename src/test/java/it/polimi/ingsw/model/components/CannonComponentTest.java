@@ -21,7 +21,7 @@ import org.junit.jupiter.api.BeforeEach;
 class CannonComponentTest {
 	private CannonComponent cannon1;
 	private CannonComponent cannon_wrong;
-	private CannonComponent cannon2;
+	private CannonComponent cannon_double;
 
 	@BeforeEach
 	void setUp() {
@@ -36,7 +36,7 @@ class CannonComponentTest {
 
 		cannon1 = new CannonComponent(1, connectors, ComponentRotation.U000, CannonType.SINGLE, coords);
 		cannon_wrong = new CannonComponent(1, connectors, ComponentRotation.U090, CannonType.SINGLE, coords);
-		cannon2 = new CannonComponent(1, connectors, ComponentRotation.U000, CannonType.DOUBLE, coords);
+		cannon_double = new CannonComponent(1, connectors, ComponentRotation.U000, CannonType.DOUBLE, coords);
 
 	}
 
@@ -65,21 +65,21 @@ class CannonComponentTest {
 
 	@Test
 	void turnOnOff() {
-		assertEquals(0, cannon2.getCurrentPower());
-		cannon2.turnOn();
-		assertEquals(2, cannon2.getCurrentPower());
+		assertEquals(0, cannon_double.getCurrentPower());
+		cannon_double.turnOn();
+		assertEquals(2, cannon_double.getCurrentPower());
 		assertThrows(AlreadyPoweredException.class, () -> {
-			cannon2.turnOn();
+			cannon_double.turnOn();
 		});
-		assertEquals(2, cannon2.getCurrentPower());
-		cannon2.turnOff();
-		assertEquals(0, cannon2.getCurrentPower());
+		assertEquals(2, cannon_double.getCurrentPower());
+		cannon_double.turnOff();
+		assertEquals(0, cannon_double.getCurrentPower());
 
-		assertEquals(0, cannon_wrong.getCurrentPower());
+		assertEquals(0.5, cannon_wrong.getCurrentPower());
 		assertThrows(UnpowerableException.class, () -> {
 			cannon_wrong.turnOn();
 		});
-		assertEquals(0, cannon_wrong.getCurrentPower());
+		assertEquals(0.5, cannon_wrong.getCurrentPower());
 
 	}
 
@@ -87,8 +87,8 @@ class CannonComponentTest {
 	void getCurrentPower() {
 
 		assertEquals(1, cannon1.getCurrentPower());
-		assertEquals(0, cannon_wrong.getCurrentPower());
-		assertEquals(0, cannon2.getCurrentPower());
+		assertEquals(0.5, cannon_wrong.getCurrentPower());
+		assertEquals(0, cannon_double.getCurrentPower());
 
 	}
 }
