@@ -24,7 +24,7 @@ import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.VoyageState;
 
-class AbandonedStationRewardState extends CardState {
+public class AbandonedStationRewardState extends CardState {
 
 	private final AbandonedStationCard card;
 	private final ArrayList<Player> list;

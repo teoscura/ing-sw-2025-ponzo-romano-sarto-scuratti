@@ -23,7 +23,6 @@ import it.polimi.ingsw.model.PlayerCount;
 import it.polimi.ingsw.model.board.Planche;
 import it.polimi.ingsw.model.board.TestFlightCards;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
-import it.polimi.ingsw.model.cards.state.CardState;
 import it.polimi.ingsw.model.cards.state.SmugglersAnnounceState;
 import it.polimi.ingsw.model.cards.state.SmugglersLoseState;
 import it.polimi.ingsw.model.cards.state.SmugglersRewardState;
@@ -45,7 +44,6 @@ public class SmugglersCardTest {
     private TestFlightCards cards;
     private Planche planche;
     private SmugglersCard card;
-    private CardState cstate;
 
     Player player1;
     ClientDescriptor p1desc;

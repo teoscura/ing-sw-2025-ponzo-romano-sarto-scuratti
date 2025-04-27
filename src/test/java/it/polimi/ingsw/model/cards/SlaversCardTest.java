@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model.cards;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
@@ -23,7 +22,6 @@ import it.polimi.ingsw.model.PlayerCount;
 import it.polimi.ingsw.model.board.Planche;
 import it.polimi.ingsw.model.board.TestFlightCards;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
-import it.polimi.ingsw.model.cards.state.CardState;
 import it.polimi.ingsw.model.cards.state.SlaversAnnounceState;
 import it.polimi.ingsw.model.cards.state.SlaversLoseState;
 import it.polimi.ingsw.model.cards.visitors.CrewRemoveVisitor;
@@ -42,7 +40,6 @@ public class SlaversCardTest {
     private TestFlightCards cards;
     private Planche planche;
     private SlaversCard card;
-    private CardState cstate;
 
     Player player1;
     ClientDescriptor p1desc;

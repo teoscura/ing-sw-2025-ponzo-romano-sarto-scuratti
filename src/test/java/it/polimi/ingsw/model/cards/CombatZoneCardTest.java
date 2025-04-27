@@ -14,18 +14,14 @@ import it.polimi.ingsw.message.server.RemoveCrewMessage;
 import it.polimi.ingsw.message.server.SendContinueMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.message.server.TakeRewardMessage;
-import it.polimi.ingsw.message.server.TurnOnMessage;
 import it.polimi.ingsw.model.DummyModelInstance;
 import it.polimi.ingsw.model.GameModeType;
-import it.polimi.ingsw.model.ModelInstance;
 import it.polimi.ingsw.model.PlayerCount;
 import it.polimi.ingsw.model.board.Planche;
 import it.polimi.ingsw.model.board.TestFlightCards;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.cards.state.CardState;
-import it.polimi.ingsw.model.cards.utils.CardOrder;
 import it.polimi.ingsw.model.cards.visitors.CrewRemoveVisitor;
-import it.polimi.ingsw.model.components.CabinComponent;
 import it.polimi.ingsw.model.components.ComponentFactory;
 import it.polimi.ingsw.model.components.iBaseComponent;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
@@ -33,7 +29,6 @@ import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.DummyVoyageState;
-import it.polimi.ingsw.model.state.VoyageState;
 
 public class CombatZoneCardTest {
     

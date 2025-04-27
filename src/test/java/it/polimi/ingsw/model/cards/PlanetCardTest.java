@@ -16,44 +16,24 @@ import it.polimi.ingsw.controller.server.ClientDescriptor;
 import it.polimi.ingsw.message.server.MoveCargoMessage;
 import it.polimi.ingsw.message.server.SelectLandingMessage;
 import it.polimi.ingsw.message.server.SendContinueMessage;
-import it.polimi.ingsw.message.server.ServerDisconnectMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.message.server.TakeCargoMessage;
 import it.polimi.ingsw.message.server.TakeRewardMessage;
 import it.polimi.ingsw.model.DummyModelInstance;
 import it.polimi.ingsw.model.GameModeType;
-import it.polimi.ingsw.model.ModelInstance;
 import it.polimi.ingsw.model.PlayerCount;
-import it.polimi.ingsw.model.board.LevelTwoCards;
 import it.polimi.ingsw.model.board.Planche;
 import it.polimi.ingsw.model.board.TestFlightCards;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
-import it.polimi.ingsw.model.cards.state.CardState;
-import it.polimi.ingsw.model.cards.utils.Planet;
-import it.polimi.ingsw.model.cards.visitors.CrewRemoveVisitor;
-import it.polimi.ingsw.model.components.AlienLifeSupportComponent;
-import it.polimi.ingsw.model.components.BatteryComponent;
-import it.polimi.ingsw.model.components.CabinComponent;
-import it.polimi.ingsw.model.components.CannonComponent;
 import it.polimi.ingsw.model.components.ComponentFactory;
-import it.polimi.ingsw.model.components.EngineComponent;
-import it.polimi.ingsw.model.components.ShieldComponent;
-import it.polimi.ingsw.model.components.StartingCabinComponent;
 import it.polimi.ingsw.model.components.StorageComponent;
 import it.polimi.ingsw.model.components.iBaseComponent;
-import it.polimi.ingsw.model.components.enums.AlienType;
-import it.polimi.ingsw.model.components.enums.BatteryType;
-import it.polimi.ingsw.model.components.enums.CannonType;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
-import it.polimi.ingsw.model.components.enums.ConnectorType;
-import it.polimi.ingsw.model.components.enums.EngineType;
 import it.polimi.ingsw.model.components.enums.ShipmentType;
-import it.polimi.ingsw.model.components.enums.StorageType;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.DummyVoyageState;
-import it.polimi.ingsw.model.state.VoyageState;
 
 public class PlanetCardTest {
     
@@ -62,7 +42,6 @@ public class PlanetCardTest {
     private TestFlightCards cards;
     private Planche planche;
     private PlanetCard card;
-    private CardState cstate;
 
     Player player1;
     ClientDescriptor p1desc;

@@ -8,6 +8,7 @@ import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.cards.AbandonedStationCard;
+import it.polimi.ingsw.model.cards.exceptions.CrewSizeException;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.client.card.ClientBaseCardState;
 import it.polimi.ingsw.model.client.card.ClientCardState;
@@ -48,7 +49,13 @@ public class AbandonedStationAnnounceState extends CardState {
 			this.state.broadcastMessage(new NotifyStateUpdateMessage(this.state.getClientState()));
 			return;
 		}
-		this.card.apply(state, this.list.getFirst(), id);
+		try{
+			this.card.apply(state, this.list.getFirst(), id);
+		} catch (CrewSizeException e) {
+			System.out.println("Player '" + this.list.getFirst().getUsername() + "' attempted to land with not enough crew!");
+			this.state.broadcastMessage(new ViewMessage("Player'" + this.list.getFirst().getUsername() + "' attempted to land with not enough crew!"));
+			return;
+		}
 		this.transition();
 	}
 
