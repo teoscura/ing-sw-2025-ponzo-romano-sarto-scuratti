@@ -105,8 +105,8 @@ public class SmugglersLoseState extends CardState {
 				continue;
 			};
 			if(type.getValue()!=idx){
-				System.out.println("Player '" + p.getUsername() + "' attempted to discard cargo that's not his most valuable!");
-				this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to discard cargo that's not his most valuable!"));
+				System.out.println("Player '" + p.getUsername() + "' attempted to discard cargo that's not their most valuable!");
+				this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to discard cargo that's not their most valuable!"));
 				return;
 			}
 			ContainsRemoveVisitor v = new ContainsRemoveVisitor(p.getSpaceShip(), type);
