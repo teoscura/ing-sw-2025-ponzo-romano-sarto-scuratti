@@ -11,11 +11,11 @@ import it.polimi.ingsw.model.state.VoyageState;
 
 public class SlaversCard extends Card {
 
-    private final int min_power;
+    private final double min_power;
     private final int crew_penalty;
     private final int credits;
 
-    public SlaversCard(int id, int days, int min_power, int crew_penalty, int credits){
+    public SlaversCard(int id, int days, double min_power, int crew_penalty, int credits){
         super(id, days);
         if(credits<=0||crew_penalty<=0) throw new NegativeArgumentException();
         this.min_power = min_power;

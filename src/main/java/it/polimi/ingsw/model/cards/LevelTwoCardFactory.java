@@ -18,17 +18,17 @@ public class LevelTwoCardFactory implements iCardFactory {
 
 	public LevelTwoCardFactory() {
 		this.cards = new HashMap<Integer, iCard>() {{
-			put(101, new SlaversCard(101, 2, 7, 4, 8));
+			put(101, new SlaversCard(101, 2, 7F, 4, 8));
 			put(102, new SmugglersCard(102, 1,
 					new Planet(new int[]{0, 0, 2, 1}),
-					3, 8));
+					3, 8F));
 			put(103, new PiratesCard(103, 2,
 					new ProjectileArray(
 							new Projectile[]{
 									new Projectile(ProjectileDirection.U180, ProjectileDimension.BIG),
 									new Projectile(ProjectileDirection.U180, ProjectileDimension.SMALL),
 									new Projectile(ProjectileDirection.U180, ProjectileDimension.BIG)}),
-					6, 7)
+					6F, 7)
 			);
 			put(104, new StardustCard(104));
 			put(105, new EpidemicCard(105));

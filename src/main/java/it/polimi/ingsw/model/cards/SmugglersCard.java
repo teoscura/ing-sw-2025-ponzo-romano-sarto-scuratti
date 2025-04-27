@@ -14,9 +14,9 @@ public class SmugglersCard extends Card {
 
 	private final Planet reward;
 	private final int cargo_taken;
-	private final int min_power;
+	private final double min_power;
 
-	public SmugglersCard(int id, int days, Planet reward, int cargo_taken, int min_power) {
+	public SmugglersCard(int id, int days, Planet reward, int cargo_taken, double min_power) {
 		super(id, days);
 		if (reward == null) throw new NullPointerException();
 		if (min_power <= 0 || cargo_taken <= 0) throw new NegativeArgumentException();

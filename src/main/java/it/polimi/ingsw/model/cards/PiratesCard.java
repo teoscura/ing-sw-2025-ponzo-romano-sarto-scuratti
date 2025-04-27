@@ -14,9 +14,9 @@ public class PiratesCard extends Card {
 
 	private final ProjectileArray shots;
 	private final int credits;
-	private final int min_power;
+	private final double min_power;
 
-	public PiratesCard(int id, int days, ProjectileArray shots, int min_power, int credits) {
+	public PiratesCard(int id, int days, ProjectileArray shots, double min_power, int credits) {
 		super(id, days);
 		if (shots == null) throw new NullPointerException();
 		if (min_power <= 0 || credits <= 0)
