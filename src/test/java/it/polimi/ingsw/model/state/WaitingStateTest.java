@@ -26,7 +26,7 @@ class WaitingStateTest {
 
     @BeforeEach
     void setUp() {
-        model = new DummyModelInstance(1, server, GameModeType.LVL2, PlayerCount.THREE);
+        model = new DummyModelInstance(1, null, GameModeType.LVL2, PlayerCount.THREE);
         waiting_state = new WaitingState(model, GameModeType.LVL2, PlayerCount.THREE);
         model.setState(waiting_state);
         player1 = new Player(GameModeType.LVL2, "Player1", PlayerColor.RED);
