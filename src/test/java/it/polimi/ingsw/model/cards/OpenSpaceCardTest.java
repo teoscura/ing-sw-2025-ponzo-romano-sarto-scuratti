@@ -86,11 +86,6 @@ class OpenSpaceCardTest {
 	}
 
 	@Test
-	void getState() {
-
-	}
-
-	@Test
 	void apply() throws ForbiddenCallException {
 		int initialPos4 = state.getPlanche().getPlayerPosition(dummy4);
 		int initialPos5 = state.getPlanche().getPlayerPosition(dummy5);
