@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.cards;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -144,15 +145,16 @@ public class MeteorSwarmCardTest {
         assertEquals(player2.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 2, 2)), c1);
         assertEquals(player2.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 3, 2)), c2);
         assertEquals(player2.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 4, 2)), c3);
+        //P2 is alone, continues,
         message = new SendContinueMessage();
         message.setDescriptor(p2desc);
         model.validate(message);
-        // assertEquals(player2.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 2, 2)), c1);
-        // assertEquals(player2.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 3, 2)), c2);
-        // assertEquals(player2.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 4, 2)), c3);
-        // //done.
-        // assertNull(state.getCardState(player1));
-        // assertTrue(!player2.getRetired());
+        player2.getSpaceShip().resetPower();
+        assertArrayEquals(player2.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 3, 2)).getConnectors(), c2.getConnectors());
+        assertArrayEquals(player2.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 4, 2)).getConnectors(), c3.getConnectors());
+        //done.
+        assertNull(state.getCardState(player1));
+        assertTrue(!player2.getRetired());
     }
 
     @Test

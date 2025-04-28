@@ -23,7 +23,6 @@ import it.polimi.ingsw.model.components.StartingCabinComponent;
 import it.polimi.ingsw.model.components.iBaseComponent;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ConnectorType;
-import it.polimi.ingsw.model.components.enums.ShipmentType;
 import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
 import it.polimi.ingsw.model.components.visitors.SpaceShipUpdateVisitor;
 import it.polimi.ingsw.model.components.visitors.EnergyVisitor;
@@ -168,7 +167,7 @@ public class SpaceShip implements iSpaceShip {
 		this.components[coords.y][coords.x] = this.empty;
 		this.player.addScore(-1);
 		tmp.onDelete(this);
-		System.out.println("Removed component on coords: "+coords);
+		System.out.println("Removed component on coords: "+coords+" for player '"+this.player.getUsername()+"'.");
 		this.updateShip();
 	}
 
@@ -395,7 +394,7 @@ public class SpaceShip implements iSpaceShip {
 			this.removeComponent(tmp);
 			return this.broke_center;
 		}
-		boolean shielded = p.getDimension() != ProjectileDimension.BIG && this.shielded_directions[p.getDirection().getOpposite().getShift()];
+		boolean shielded = this.shielded_directions[p.getDirection().getOpposite().getShift()];
 		if (shielded) return false;
 		ShipCoords tmp = this.getFirst(p.getDirection(), index);
 		if (tmp.equals(this.empty.getCoords())) return false;
@@ -430,10 +429,11 @@ public class SpaceShip implements iSpaceShip {
 	}
 
 	private ShipCoords getFirst(ProjectileDirection d, int index) {
+		//XXX fix.
 		if (index < 0 || index >= (d.getShift() % 2 == 0 ? this.getWidth() : this.getHeight()))
 			throw new OutOfBoundsException("Offset goes out of bounds");
 		iBaseComponent[] line = d.getShift() % 2 == 0 ? this.constructCol(index) : this.components[index];
-		if (d.getShift() == 0 || d.getShift() == 3) Collections.reverse(Arrays.asList(line));
+		if (d.getShift() == 0 || d.getShift() == 3) Collections.reverse(Arrays.asList(line.clone()));
 		for (iBaseComponent c : line) {
 			if (c == this.empty || this.type.isForbidden(c.getCoords())) continue;
 			return c.getCoords();
