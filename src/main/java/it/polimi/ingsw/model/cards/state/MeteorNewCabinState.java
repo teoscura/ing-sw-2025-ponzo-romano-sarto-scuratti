@@ -44,6 +44,7 @@ class MeteorNewCabinState extends CardState {
 		boolean missing = false;
 		for (Player p : this.state.getOrder(CardOrder.NORMAL)) {
 			missing = missing || p.getSpaceShip().getBrokeCenter();
+			if(!p.getSpaceShip().getBrokeCenter() && p.getSpaceShip().getCrew()[0]<=0) this.state.loseGame(p);
 		}
 		if (missing) {
 			this.state.broadcastMessage(new NotifyStateUpdateMessage(this.state.getClientState()));

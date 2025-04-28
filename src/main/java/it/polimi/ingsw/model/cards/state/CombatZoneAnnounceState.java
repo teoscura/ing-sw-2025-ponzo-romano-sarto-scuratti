@@ -8,7 +8,6 @@ import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.cards.utils.CardOrder;
 import it.polimi.ingsw.model.cards.utils.CombatZoneSection;
-import it.polimi.ingsw.model.cards.utils.Projectile;
 import it.polimi.ingsw.model.cards.utils.ProjectileArray;
 import it.polimi.ingsw.model.client.card.ClientAwaitConfirmCardStateDecorator;
 import it.polimi.ingsw.model.client.card.ClientBaseCardState;

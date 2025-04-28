@@ -46,6 +46,8 @@ public class DummyVoyageState extends VoyageState {
 	@Override
 	public void validate(ServerMessage message) throws ForbiddenCallException {
 		message.receive(this);
+		Player p = message.getDescriptor().getPlayer();
+		if (!p.getRetired() && p.getSpaceShip().getCrew()[0]<=0) this.loseGame(p);
 		if (this.state != null) return;
 		this.transition();
 	}

@@ -55,6 +55,7 @@ public class PiratesPenaltyState extends CardState {
 			return;
 		}
 		if(!this.list.getFirst().getDisconnected()) this.list.getFirst().getSpaceShip().handleShot(this.shots.getProjectiles().getFirst());
+		if(this.list.getFirst().getSpaceShip().getCrew()[0]<=0) this.state.loseGame(this.list.getFirst());
 		this.transition();
 	}
 

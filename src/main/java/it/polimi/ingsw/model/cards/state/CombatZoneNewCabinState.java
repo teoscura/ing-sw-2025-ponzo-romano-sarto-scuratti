@@ -52,6 +52,7 @@ public class CombatZoneNewCabinState extends CardState {
 			this.state.broadcastMessage(new NotifyStateUpdateMessage(this.state.getClientState()));
 			return;
 		}
+		if(target.getSpaceShip().getCrew()[0]<=0) this.state.loseGame(target);
 		this.transition();
 	}
 

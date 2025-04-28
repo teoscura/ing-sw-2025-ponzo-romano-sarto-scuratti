@@ -27,6 +27,12 @@ import java.util.Arrays;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class PlanetCardTest {
+	
+	private DummyModelInstance model;
+	private DummyVoyageState state;
+	private TestFlightCards cards;
+	private Planche planche;
+	private PlanetCard card;
 
 	Player player1;
 	ClientDescriptor p1desc;
@@ -35,11 +41,7 @@ public class PlanetCardTest {
 	Player player3;
 	ClientDescriptor p3desc;
 	ArrayList<Player> order, players;
-	private DummyModelInstance model;
-	private DummyVoyageState state;
-	private TestFlightCards cards;
-	private Planche planche;
-	private PlanetCard card;
+	
 
 	@BeforeEach
 	void setUp() throws IOException {

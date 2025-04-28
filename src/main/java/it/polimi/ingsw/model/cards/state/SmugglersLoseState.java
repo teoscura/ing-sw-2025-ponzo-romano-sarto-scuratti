@@ -13,7 +13,6 @@ import it.polimi.ingsw.model.client.card.ClientCargoPenaltyCardStateDecorator;
 import it.polimi.ingsw.model.client.state.ClientModelState;
 import it.polimi.ingsw.model.client.card.ClientBaseCardState;
 import it.polimi.ingsw.model.components.enums.ShipmentType;
-import it.polimi.ingsw.model.components.enums.StorageType;
 import it.polimi.ingsw.model.components.exceptions.ContainerEmptyException;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.ShipCoords;

@@ -54,6 +54,7 @@ public class MeteorAnnounceState extends CardState {
 		}
 		for (Player p : this.state.getOrder(CardOrder.NORMAL)) {
 			this.broke_cabin = p.getSpaceShip().handleMeteorite(this.left.getProjectiles().getFirst());
+			if(p.getSpaceShip().getCrew()[0]<=0) this.state.loseGame(p);
 		}
 		this.transition();
 	}
