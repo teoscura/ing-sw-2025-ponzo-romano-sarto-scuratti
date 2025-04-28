@@ -120,7 +120,7 @@ class EpidemicCardTest {
 	}
 
 	@Test
-	void disconnectionResilience() throws ForbiddenCallException{
+	void disconnectionResilience() throws ForbiddenCallException {
 		// Check status before card application
 		int[] exp1 = new int[]{8, 0, 0};
 		assertArrayEquals(exp1, player1.getSpaceShip().getCrew());
@@ -142,7 +142,7 @@ class EpidemicCardTest {
 
 		// Send message for both players
 		state.disconnect(player1);
-        cstate = this.state.getCardState(player1);
+		cstate = this.state.getCardState(player1);
 		// try again (it should fail)
 		message = new SendContinueMessage();
 		message.setDescriptor(p1desc);
