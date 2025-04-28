@@ -429,7 +429,6 @@ public class SpaceShip implements iSpaceShip {
 	}
 
 	private ShipCoords getFirst(ProjectileDirection d, int index) {
-		//XXX fix.
 		if (index < 0 || index >= (d.getShift() % 2 == 0 ? this.getWidth() : this.getHeight()))
 			throw new OutOfBoundsException("Offset goes out of bounds");
 		iBaseComponent[] line = d.getShift() % 2 == 0 ? this.constructCol(index) : this.components[index];
@@ -440,6 +439,7 @@ public class SpaceShip implements iSpaceShip {
 		}
 		return this.empty.getCoords();
 	}
+
 
 	private iBaseComponent[] constructCol(int index) {
 		//No validation needed, it's only used in getFirst.
