@@ -65,6 +65,7 @@ class CombatZonePenaltyState extends CardState {
 		super.init(new_state);
 		System.out.println("    CardState -> Combat Zone Penalty State!: ["+(3-sections.size())+" - "+this.sections.getFirst().getPenalty()+"].");
 		System.out.println("    Targeting: '"+this.target.getUsername()+"'.");
+		if (sections.getFirst().getPenalty() == CombatZonePenalty.CARGO) System.out.println("    Bat: "+required[0]+" Blu: "+required[1]+" Grn: "+required[2]+" Ylw: "+required[3]+" Red: "+required[4]);
 		if (sections.getFirst().getPenalty() != CombatZonePenalty.DAYS) return;
 		this.state.getPlanche().movePlayer(state, target, -sections.getFirst().getAmount());
 		this.transition();
@@ -78,8 +79,8 @@ class CombatZonePenaltyState extends CardState {
 			return;
 		}
 		if (this.sections.getFirst().getPenalty() == CombatZonePenalty.SHOTS) {
-			this.target.getSpaceShip().handleShot(this.shots.getProjectiles().get(0));
-			System.out.println("Hit player with projectile on offset: "+this.shots.getProjectiles().getFirst().getOffset());
+			this.target.getSpaceShip().handleShot(this.shots.getProjectiles().getFirst());
+			if(this.target.getSpaceShip().getCrew()[0]<=0) this.target.retire();
 		}
 		this.transition();
 	}
@@ -138,8 +139,8 @@ class CombatZonePenaltyState extends CardState {
 	}
 
 	@Override
-	public void turnOn(Player p, ShipCoords target_coords, ShipCoords battery_coords) {
-		if (p != this.target) {
+	public void turnOn(Player p, ShipCoords target_coords, ShipCoords battery_coords) throws ForbiddenCallException {
+		if (!p.equals(this.target)) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to turn on a component during another player's turn!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to turn on a component during another player's turn!"));
 			return;
@@ -147,7 +148,7 @@ class CombatZonePenaltyState extends CardState {
 		if (this.sections.getFirst().getPenalty() != CombatZonePenalty.SHOTS) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to turn on a component when the penalty doesn't allow it!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to turn on a component when the penalty doesn't allow it!"));
-			return;
+			throw new ForbiddenCallException();
 		}
 		try {
 			p.getSpaceShip().turnOn(target_coords, battery_coords);
@@ -160,8 +161,8 @@ class CombatZonePenaltyState extends CardState {
 	}
 
 	@Override
-	public void progressTurn(Player p) {
-		if (p != this.target) {
+	public void progressTurn(Player p) throws ForbiddenCallException {
+		if (!p.equals(this.target)) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to progress during another player's turn!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to progress during another player's turn!"));
 			return;
@@ -169,14 +170,14 @@ class CombatZonePenaltyState extends CardState {
 		if (this.sections.getFirst().getPenalty() != CombatZonePenalty.SHOTS) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to progress when the penalty doesn't allow it!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to progress when the penalty doesn't allow it!"));
-			return;
+			throw new ForbiddenCallException();
 		}
 		this.responded = true;
 	}
 
 	@Override
 	public void removeCrew(Player p, ShipCoords cabin_coords) throws ForbiddenCallException {
-		if (p != this.target) {
+		if (!p.equals(this.target)) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to remove a crew member during another player's turn!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to remove a crew member during another player's turn!"));
 			return;
@@ -184,7 +185,7 @@ class CombatZonePenaltyState extends CardState {
 		if (this.sections.getFirst().getPenalty() != CombatZonePenalty.CREW) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to remove a crew member when the penalty doesn't allow it!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to remove a crew member when the penalty doesn't allow it!"));
-			return;
+			throw new ForbiddenCallException();
 		}
 		CrewRemoveVisitor v = new CrewRemoveVisitor(p.getSpaceShip());
 		try {
@@ -207,7 +208,7 @@ class CombatZonePenaltyState extends CardState {
 	}
 
 	@Override
-	public void discardCargo(Player p, ShipmentType type, ShipCoords coords) {
+	public void discardCargo(Player p, ShipmentType type, ShipCoords coords) throws ForbiddenCallException {
 		if (!p.equals(this.target)) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to discard cargo during another player's turn!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to discard cargo during another player's turn!"));
@@ -216,7 +217,7 @@ class CombatZonePenaltyState extends CardState {
 		if (this.sections.getFirst().getPenalty() != CombatZonePenalty.CARGO) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to discard cargo when the penalty doesn't allow it!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to discard cargo when the penalty doesn't allow it!"));
-			return;
+			throw new ForbiddenCallException();
 		}
 		int idx = 4;
 		while(idx>=0){
@@ -245,7 +246,7 @@ class CombatZonePenaltyState extends CardState {
 					this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to discard a battery from a storage that doesn't contain it!"));
 				}
 				return;
-			} catch (IllegalArgumentException e) {
+			} catch (IllegalTargetException e) {
 				if(type!=ShipmentType.EMPTY){
 					System.out.println("Player '" + p.getUsername() + "' attempted to discard cargo from illegal coordinates!");
 					this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to discard cargo from illegal coordinates!"));
@@ -253,7 +254,11 @@ class CombatZonePenaltyState extends CardState {
 					System.out.println("Player '" + p.getUsername() + "' attempted to discard a battery from illegal coordinates!");
 					this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to discard a battery from illegal coordinates!"));
 				}
+				return;
 			}
+		}
+		for(int i = 4;i>=0;i--){
+			if(required[i]>0) return;
 		}
 		this.responded = true;
 	}

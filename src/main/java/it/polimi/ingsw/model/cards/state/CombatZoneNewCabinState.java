@@ -21,7 +21,7 @@ import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.VoyageState;
 
-class CombatZoneNewCabinState extends CardState {
+public class CombatZoneNewCabinState extends CardState {
 
 	private final int card_id;
 	private final ArrayList<CombatZoneSection> sections;

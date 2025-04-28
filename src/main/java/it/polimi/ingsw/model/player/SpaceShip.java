@@ -128,6 +128,7 @@ public class SpaceShip implements iSpaceShip {
 			for (int j = 0; j < this.type.getWidth(); j++) {
 				if (ver[i][j] != VerifyResult.NOT_LINKED) continue;
 				had_to_clean = true;
+				System.out.println("Cleaning up!");
 				this.removeComponent(new ShipCoords(this.type, j, i));
 			}
 		}

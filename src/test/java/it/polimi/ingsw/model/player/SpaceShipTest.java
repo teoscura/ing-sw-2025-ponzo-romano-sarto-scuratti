@@ -33,7 +33,7 @@ class SpaceShipTest {
 	}
 
 	@Test
-	void verify() { //FIXME
+	void verify() {
 		VerifyResult[][] check_results = new VerifyResult[ship.getHeight()][ship.getWidth()];
 		check_results = ship.verify();
 		assertEquals(VerifyResult.GOOD, check_results[2][3]);
@@ -48,7 +48,8 @@ class SpaceShipTest {
 				ComponentRotation.U000, coords2);
 		ship.addComponent(component2, coords2);
 		check_results = ship.verify();
-		//assertEquals(VerifyResult.NOT_LINKED, check_results[3][3]);
+		assertEquals(ship.getEmpty(), ship.getComponent(new ShipCoords(GameModeType.LVL2, 3, 3)));
+		assertEquals(VerifyResult.UNCHECKED, check_results[3][3]);
 		assertEquals(VerifyResult.BROKEN, check_results[2][4]);
 		assertEquals(VerifyResult.NOT_LINKED, check_results[2][5]);
 	}
