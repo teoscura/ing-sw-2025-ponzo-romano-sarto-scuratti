@@ -4,6 +4,7 @@ import java.util.List;
 
 import it.polimi.ingsw.controller.server.ClientDescriptor;
 import it.polimi.ingsw.controller.server.ServerController;
+import it.polimi.ingsw.message.server.ServerDisconnectMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.player.*;
@@ -88,7 +89,6 @@ public class DummyModelInstance extends ModelInstance {
 		try {
 			//XXX validate message dont do this
 			this.state.connect(p);
-			System.out.println("Client: '" + p.getUsername() + "' reconnected to the game!");
 		} catch (ForbiddenCallException e) {
 			System.out.println("Client: '" + p.getUsername() + "' tried reconnecting when the current state doesn't support it anymore!");
 		}
@@ -96,9 +96,12 @@ public class DummyModelInstance extends ModelInstance {
 
 	public void disconnect(Player p) {
 		try {
-			//XXX validate message dont do this
-			this.state.disconnect(p);
-			System.out.println("Client: '" + p.getUsername() + "' disconnected from the game!");
+			if (p == null) throw new NullPointerException();
+			if (p.getDisconnected()) throw new ForbiddenCallException();
+			p.disconnect();
+			ServerMessage disc = new ServerDisconnectMessage();
+			disc.setDescriptor(p.getDescriptor());
+			this.state.validate(disc);
 		} catch (ForbiddenCallException e) {
 			System.out.println("Client: '" + p.getUsername() + "' tried disconnecting when the current state doesn't support it anymore!");
 		}

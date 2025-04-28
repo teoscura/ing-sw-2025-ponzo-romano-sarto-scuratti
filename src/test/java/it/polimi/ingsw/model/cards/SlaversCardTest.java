@@ -29,18 +29,21 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class SlaversCardTest {
 
+	private DummyModelInstance model;
+	private DummyVoyageState state;
+	private TestFlightCards cards;
+	private Planche planche;
+	private SlaversCard card;
+
 	Player player1;
 	ClientDescriptor p1desc;
 	Player player2;
 	ClientDescriptor p2desc;
 	Player player3;
 	ClientDescriptor p3desc;
+	
 	ArrayList<Player> order, players;
-	private DummyModelInstance model;
-	private DummyVoyageState state;
-	private TestFlightCards cards;
-	private Planche planche;
-	private SlaversCard card;
+	
 
 	@BeforeEach
 	void setUp() throws IOException {
@@ -346,7 +349,7 @@ public class SlaversCardTest {
 		message = new RemoveCrewMessage(new ShipCoords(GameModeType.TEST, 2, 3));
 		message.setDescriptor(p1desc);
 		state.validate(message);
-		state.disconnect(player1);
+		model.disconnect(player1);
 		assertEquals(3, player1.getSpaceShip().getTotalCrew());
 		assertInstanceOf(SlaversAnnounceState.class, state.getCardState(player1));
 		//P3 accende e pareggia.
@@ -380,7 +383,7 @@ public class SlaversCardTest {
 		//P2 si disconnette, bruciando il reward e non subendo penalita';
 		int x = state.getPlanche().getPlayerPosition(player2);
 		int y = player2.getCredits();
-		state.disconnect(player2);
+		model.disconnect(player2);
 		assertEquals(x, state.getPlanche().getPlayerPosition(player2));
 		assertEquals(y, player2.getCredits());
 		assertNull(state.getCardState(player1));

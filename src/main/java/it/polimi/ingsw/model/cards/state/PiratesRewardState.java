@@ -48,7 +48,7 @@ class PiratesRewardState extends CardState {
 		}
 		if (took_reward) {
 			this.list.getFirst().giveCredits(card.getCredits());
-			this.state.getPlanche().movePlayer(state, list.getFirst(), card.getDays());
+			this.state.getPlanche().movePlayer(state, list.getFirst(), -card.getDays());
 		}
 		this.transition();
 	}
@@ -70,7 +70,7 @@ class PiratesRewardState extends CardState {
 
 	@Override
 	public void setTakeReward(Player p, boolean take) {
-		if (p != this.list.getFirst()) {
+		if (!this.list.getFirst().equals(p)) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to accept a reward during another player's turn!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to accept a reward during another player's turn!"));
 			return;
@@ -82,11 +82,11 @@ class PiratesRewardState extends CardState {
 
 	@Override
 	public void disconnect(Player p) throws ForbiddenCallException {
-		if (this.list.getFirst() == p) {
+		if (this.list.getFirst().equals(p)) {
 			this.responded = true;
 			this.took_reward = false;
-			System.out.println("Player '" + p.getUsername() + "' disconnected!");
 		}
+		System.out.println("Player '" + p.getUsername() + "' disconnected!");
 	}
 
 }

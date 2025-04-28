@@ -90,7 +90,7 @@ public class PiratesPenaltyState extends CardState {
 
 	@Override
 	public void turnOn(Player p, ShipCoords target_coords, ShipCoords battery_coords) {
-		if (this.list.getFirst() != p) {
+		if (!this.list.getFirst().equals(p)) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to turn on a component during another player's turn!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to turn on a component during another player's turn!"));
 			return;
@@ -106,7 +106,7 @@ public class PiratesPenaltyState extends CardState {
 
 	@Override
 	public void progressTurn(Player p) {
-		if (p != this.list.getFirst()) {
+		if (!this.list.getFirst().equals(p)) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to progress during another player's turn!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to progress during another player's turn!"));
 			return;
@@ -117,8 +117,10 @@ public class PiratesPenaltyState extends CardState {
 
 	@Override
 	public void disconnect(Player p) throws ForbiddenCallException {
-		if (this.list.getFirst() == p) {
+		if (!this.list.getFirst().equals(p)) {
+			System.out.println("Player '" + p.getUsername() + "' disconnected!");
 			this.responded = true;
+			return;
 		}
 		this.list.remove(p);
 		System.out.println("Player '" + p.getUsername() + "' disconnected!");

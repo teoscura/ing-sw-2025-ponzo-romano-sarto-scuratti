@@ -103,15 +103,13 @@ class StardustCardTest {
 		//p1 confirms
 		SendContinueMessage message1 = new SendContinueMessage();
 		message1.setDescriptor(p1desc);
-		cstate.validate(message1);
+		state.validate(message1);
 		//p1 tries to send again, is interrupted
 		SendContinueMessage message1_wrong = new SendContinueMessage();
 		message1_wrong.setDescriptor(p1desc);
-		cstate.validate(message1_wrong);
+		state.validate(message1_wrong);
 		//player 2 disconnects
-		ServerDisconnectMessage p2disconnect = new ServerDisconnectMessage();
-		p2disconnect.setDescriptor(p2desc);
-		cstate.validate(p2disconnect);
+		model.disconnect(player2);
 		//unexpected message sent
 		TakeRewardMessage message3_wrong = new TakeRewardMessage(false);
 		message3_wrong.setDescriptor(p3desc);
@@ -119,6 +117,6 @@ class StardustCardTest {
 		//player 3 sends confirm, card continues
 		SendContinueMessage message3 = new SendContinueMessage();
 		message3.setDescriptor(p3desc);
-		cstate.validate(message3);
+		state.validate(message3);
 	}
 }

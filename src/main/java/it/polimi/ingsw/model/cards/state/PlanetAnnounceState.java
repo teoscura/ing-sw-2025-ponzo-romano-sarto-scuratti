@@ -104,6 +104,7 @@ public class PlanetAnnounceState extends CardState {
 	@Override
 	public void disconnect(Player p) throws ForbiddenCallException {
 		if (this.list.getFirst() == p) {
+			System.out.println("Player '" + p.getUsername() + "' disconnected!");
 			this.responded = true;
 			this.id = -1;
 			return;

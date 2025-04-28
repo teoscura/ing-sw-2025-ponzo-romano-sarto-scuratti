@@ -103,7 +103,9 @@ public class SlaversLoseState extends CardState {
 	@Override
 	public void disconnect(Player p) throws ForbiddenCallException {
 		if (this.list.getFirst() == p) {
+			System.out.println("Player '" + p.getUsername() + "' disconnected!");
 			this.responded = true;
+			return;
 		}
 		this.list.remove(p);
 		System.out.println("Player '" + p.getUsername() + "' disconnected!");
