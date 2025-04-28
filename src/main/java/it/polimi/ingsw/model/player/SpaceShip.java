@@ -104,8 +104,8 @@ public class SpaceShip implements iSpaceShip {
 		iBaseComponent tmp = null;
 		while (!queue.isEmpty()) {
 			tmp = queue.poll();
-			if (!tmp.verify(this)) res[tmp.getCoords().y][tmp.getCoords().x] = VerifyResult.BROKEN;
-			else res[tmp.getCoords().y][tmp.getCoords().x] = VerifyResult.GOOD;
+			if (!tmp.verify(this)) res[tmp.getCoords().y][tmp.getCoords().x] = VerifyResult.BRKN_COMP;
+			else res[tmp.getCoords().y][tmp.getCoords().x] = VerifyResult.GOOD_COMP;
 			for (iBaseComponent c : tmp.getConnectedComponents(this)) {
 				if (c == this.empty) continue;
 				ShipCoords xy = c.getCoords();
@@ -114,7 +114,7 @@ public class SpaceShip implements iSpaceShip {
 		}
 		for (int t = 0; t < this.getHeight(); t++) {
 			for (int r = 0; r < this.getWidth(); r++) {
-				if (res[t][r] == VerifyResult.UNCHECKED && this.components[t][r]!=this.empty) res[t][r] = VerifyResult.NOT_LINKED;
+				if (res[t][r] == VerifyResult.UNCHECKED && this.components[t][r]!=this.empty) res[t][r] = VerifyResult.NOT_LNKED;
 			}
 		}
 		return res;
