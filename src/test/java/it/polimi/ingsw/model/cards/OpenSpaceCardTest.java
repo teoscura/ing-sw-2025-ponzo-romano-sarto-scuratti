@@ -42,7 +42,6 @@ class OpenSpaceCardTest {
 
 	@BeforeEach
 	void setUp() {
-		ComponentFactory f3 = new ComponentFactory();
 		ComponentFactory f4 = new ComponentFactory();
 		ComponentFactory f5 = new ComponentFactory();
 		iBaseComponent c = null;

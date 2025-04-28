@@ -16,17 +16,13 @@ public class ServerDisconnectMessage extends ServerMessage {
 
 	@Override
 	public void receive(ModelInstance model) throws ForbiddenCallException {
-		if(descriptor.getPlayer()==null) throw new ForbiddenCallException("Descriptor associated to message isn't bound to player");
-		model.disconnect(this.descriptor.getPlayer());
+		if(descriptor.getPlayer()==null) model.disconnect(descriptor);
+		else model.disconnect(this.descriptor.getPlayer());
 	}
 
 	@Override
 	public void receive(GameState state) throws ForbiddenCallException {
-		if (state instanceof VoyageState) {
-			state.getCardState(this.descriptor.getPlayer()).validate(this);
-		} else {
-			state.sendContinue(this.descriptor.getPlayer());
-		}
+		state.disconnect(descriptor.getPlayer());
 	}
 
 	@Override

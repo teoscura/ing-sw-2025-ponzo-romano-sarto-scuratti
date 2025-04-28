@@ -127,7 +127,6 @@ public class SpaceShip implements iSpaceShip {
 			for (int j = 0; j < this.type.getWidth(); j++) {
 				if (ver[i][j] != VerifyResult.NOT_LNKED) continue;
 				had_to_clean = true;
-				System.out.println("Cleaning up!");
 				this.removeComponent(new ShipCoords(this.type, j, i));
 			}
 		}
@@ -398,7 +397,7 @@ public class SpaceShip implements iSpaceShip {
 		if (shielded) return false;
 		ShipCoords tmp = this.getFirst(p.getDirection(), index);
 		if (tmp.equals(this.empty.getCoords())) return false;
-		if (this.getComponent(tmp).getConnectors()[p.getDirection().getOpposite().getShift()] == ConnectorType.EMPTY)
+		if (this.getComponent(tmp).getConnector(ComponentRotation.getRotation(p.getDirection().getOpposite())) == ConnectorType.EMPTY)
 			return false;
 		this.removeComponent(tmp);
 		return this.broke_center;
@@ -431,8 +430,8 @@ public class SpaceShip implements iSpaceShip {
 	private ShipCoords getFirst(ProjectileDirection d, int index) {
 		if (index < 0 || index >= (d.getShift() % 2 == 0 ? this.getWidth() : this.getHeight()))
 			throw new OutOfBoundsException("Offset goes out of bounds");
-		iBaseComponent[] line = d.getShift() % 2 == 0 ? this.constructCol(index) : this.components[index];
-		if (d.getShift() == 0 || d.getShift() == 3) Collections.reverse(Arrays.asList(line.clone()));
+		iBaseComponent[] line = d.getShift() % 2 == 0 ? this.constructCol(index).clone() : this.components[index].clone();
+		if (d.getShift() == 0 || d.getShift() == 3) Collections.reverse(Arrays.asList(line));
 		for (iBaseComponent c : line) {
 			if (c == this.empty || this.type.isForbidden(c.getCoords())) continue;
 			return c.getCoords();

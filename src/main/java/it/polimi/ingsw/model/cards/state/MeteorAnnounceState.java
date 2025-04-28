@@ -34,6 +34,7 @@ public class MeteorAnnounceState extends CardState {
 		this.card_id = card_id;
 		this.left = array;
 		this.awaiting = new ArrayList<>(this.state.getOrder(CardOrder.NORMAL));
+		
 	}
 
 	@Override

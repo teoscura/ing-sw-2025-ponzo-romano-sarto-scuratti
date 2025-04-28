@@ -98,7 +98,6 @@ public class DummyModelInstance extends ModelInstance {
 		try {
 			if (p == null) throw new NullPointerException();
 			if (p.getDisconnected()) throw new ForbiddenCallException();
-			p.disconnect();
 			ServerMessage disc = new ServerDisconnectMessage();
 			disc.setDescriptor(p.getDescriptor());
 			this.state.validate(disc);

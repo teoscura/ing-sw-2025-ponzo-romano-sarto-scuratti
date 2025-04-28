@@ -491,6 +491,10 @@ public class CombatZoneCardTest {
 		message = new SendContinueMessage();
 		message.setDescriptor(p1desc);
 		state.validate(message);
+		System.out.println(player1.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 3, 3)).getClass().getSimpleName());
+		System.out.println(player1.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 4, 3)).getClass().getSimpleName());
+		System.out.println(player1.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 5, 3)).getClass().getSimpleName());
+		System.out.println(player1.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 5, 2)).getClass().getSimpleName());
 		assertSame(player1.getSpaceShip().getEmpty(), player1.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 3, 3)));
 		assertSame(player1.getSpaceShip().getEmpty(), player1.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 4, 3)));
 		assertSame(player1.getSpaceShip().getEmpty(), player1.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 5, 3)));

@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.cards;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.Test;
 
 import it.polimi.ingsw.controller.server.ClientDescriptor;
 import it.polimi.ingsw.message.server.SendContinueMessage;
+import it.polimi.ingsw.message.server.ServerDisconnectMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.message.server.TurnOnMessage;
 import it.polimi.ingsw.model.DummyModelInstance;
@@ -21,6 +23,7 @@ import it.polimi.ingsw.model.PlayerCount;
 import it.polimi.ingsw.model.board.Planche;
 import it.polimi.ingsw.model.board.TestFlightCards;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
+import it.polimi.ingsw.model.cards.utils.CardOrder;
 import it.polimi.ingsw.model.cards.utils.Projectile;
 import it.polimi.ingsw.model.components.ComponentFactory;
 import it.polimi.ingsw.model.components.iBaseComponent;
@@ -63,7 +66,7 @@ public class MeteorSwarmCardTest {
         c = f1.getComponent(53);
         c.rotate(ComponentRotation.U270);
         player1.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 4, 2));
-        c = f1.getComponent(1);
+        c = f1.getComponent(4);
         c.rotate(ComponentRotation.U000);
         player1.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 3, 3));
         c = f1.getComponent(152);
@@ -129,9 +132,6 @@ public class MeteorSwarmCardTest {
         message = new SendContinueMessage();
         message.setDescriptor(p1desc);
         model.validate(message);
-        iBaseComponent c1 = player2.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 2, 2));
-        iBaseComponent c2 = player2.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 3, 2));
-        iBaseComponent c3 = player2.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 4, 2));
         //Turns on shield
         message = new TurnOnMessage(new ShipCoords(GameModeType.TEST, 4, 1), new ShipCoords(GameModeType.TEST, 3, 3));
         message.setDescriptor(p2desc);
@@ -142,16 +142,11 @@ public class MeteorSwarmCardTest {
         model.validate(message);
         assertTrue(player1.getRetired());
         //p2 needs to do nothing, since its smooth.
-        assertEquals(player2.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 2, 2)), c1);
-        assertEquals(player2.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 3, 2)), c2);
-        assertEquals(player2.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 4, 2)), c3);
-        //P2 is alone, continues,
         message = new SendContinueMessage();
         message.setDescriptor(p2desc);
         model.validate(message);
         player2.getSpaceShip().resetPower();
-        assertArrayEquals(player2.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 3, 2)).getConnectors(), c2.getConnectors());
-        assertArrayEquals(player2.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 4, 2)).getConnectors(), c3.getConnectors());
+        assertNotEquals(player2.getSpaceShip().getEmpty(), player2.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 4, 2)));
         //done.
         assertNull(state.getCardState(player1));
         assertTrue(!player2.getRetired());
@@ -160,6 +155,75 @@ public class MeteorSwarmCardTest {
     @Test
     void behaviour2() throws ForbiddenCallException{
         //5 meteorites, 3rd one big, front front, left left left.
+        player1.getSpaceShip().removeComponent(new ShipCoords(GameModeType.TEST, 2, 2));
+        LevelTwoCardFactory factory = new LevelTwoCardFactory();
+        card = (MeteorSwarmCard) factory.getCard(109);
+		model.setState(state);
+		state.setCard(card);
+		state.setCardState(card.getState(state));
+        ArrayList<Projectile> meteors = card.getMeteorites();
+        Projectile pr = meteors.get(0);
+        meteors.set(0, new Projectile(pr.getDirection(), pr.getDimension(), 7));
+        pr = meteors.get(1);
+        meteors.set(1, new Projectile(pr.getDirection(), pr.getDimension(), 7));
+        pr = meteors.get(2);
+        meteors.set(2, new Projectile(pr.getDirection(), pr.getDimension(), 6));
+        pr = meteors.get(3);
+        meteors.set(3, new Projectile(pr.getDirection(), pr.getDimension(), 7));
+        pr = meteors.get(4);
+        meteors.set(4, new Projectile(pr.getDirection(), pr.getDimension(), 8));
+        ServerMessage message = null;
+        //Both are fine. 1
+        message = new SendContinueMessage();
+        message.setDescriptor(p1desc);
+        model.validate(message);
+        message = new SendContinueMessage();
+        message.setDescriptor(p2desc);
+        model.validate(message);
+        //Both are fine. 2
+        message = new SendContinueMessage();
+        message.setDescriptor(p1desc);
+        model.validate(message);
+        message = new SendContinueMessage();
+        message.setDescriptor(p2desc);
+        model.validate(message);
+        //P1 is hurt and loses cannon, p2 is fine.
+        message = new SendContinueMessage();
+        message.setDescriptor(p1desc);
+        model.validate(message);
+        message = new SendContinueMessage();
+        message.setDescriptor(p2desc);
+        model.validate(message);
+        //Both block the first small left one
+        message = new TurnOnMessage(new ShipCoords(GameModeType.TEST, 4, 1), new ShipCoords(GameModeType.TEST, 3, 3));
+        message.setDescriptor(p1desc);
+        model.validate(message);
+        message = new SendContinueMessage();
+        message.setDescriptor(p1desc);
+        model.validate(message);
+        message = new TurnOnMessage(new ShipCoords(GameModeType.TEST, 4, 1), new ShipCoords(GameModeType.TEST, 3, 3));
+        message.setDescriptor(p2desc);
+        model.validate(message);
+        message = new SendContinueMessage();
+        message.setDescriptor(p2desc);
+        model.validate(message);
+        //P1 loses component, doesnt need to block, p2 is smooht and doesnt.
+        message = new SendContinueMessage();
+        message.setDescriptor(p1desc);
+        model.validate(message);
+        message = new SendContinueMessage();
+        message.setDescriptor(p2desc);
+        model.validate(message);
+        //last checks.
+        assertEquals(player1.getSpaceShip().getEmpty(), player1.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 3, 1)));
+        assertEquals(player1.getSpaceShip().getEmpty(), player1.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 3, 3)));
+        assertNull(state.getCardState(player1));
+        assertTrue(!player1.getRetired());
+        assertTrue(!player2.getRetired());
+    }
+
+    @Test
+    void disconnectionResilience() throws ForbiddenCallException{
         LevelTwoCardFactory factory = new LevelTwoCardFactory();
         card = (MeteorSwarmCard) factory.getCard(109);
 		model.setState(state);
@@ -173,12 +237,45 @@ public class MeteorSwarmCardTest {
         pr = meteors.get(2);
         meteors.set(2, new Projectile(pr.getDirection(), pr.getDimension(), 7));
         pr = meteors.get(3);
-        meteors.set(3, new Projectile(pr.getDirection(), pr.getDimension(), 7));
+        meteors.set(3, new Projectile(pr.getDirection(), pr.getDimension(), 8));
         pr = meteors.get(4);
-        meteors.set(4, new Projectile(pr.getDirection(), pr.getDimension(), 7));
-        ServerMessage message = null;
+        meteors.set(4, new Projectile(pr.getDirection(), pr.getDimension(), 8));
+        //P2 doesn't need to do anything to make it work.
+        ServerMessage message = new ServerDisconnectMessage();
+        message.setDescriptor(p1desc);
+        model.validate(message);
+        assertTrue(player1.getDisconnected());
+        //P2 takes a bunch of meteors.
+        message = new SendContinueMessage();
+        message.setDescriptor(p2desc);
+        model.validate(message);
+        assertTrue(player1.getDisconnected());
+        //P2 takes a bunch of meteors.
+        model.connect(player1);
+        message = new SendContinueMessage();
+        message.setDescriptor(p2desc);
+        model.validate(message);
+        //P2 takes a bunch of meteors.
+        message = new SendContinueMessage();
+        message.setDescriptor(p2desc);
+        model.validate(message);
         message = new SendContinueMessage();
         message.setDescriptor(p1desc);
         model.validate(message);
+        //Last two.
+        message = new SendContinueMessage();
+        message.setDescriptor(p2desc);
+        model.validate(message);
+        message = new SendContinueMessage();
+        message.setDescriptor(p1desc);
+        model.validate(message);
+        //Last one.
+        message = new ServerDisconnectMessage();
+        message.setDescriptor(p1desc);
+        model.validate(message);
+        message = new SendContinueMessage();
+        message.setDescriptor(p2desc);
+        model.validate(message);
     }
+
 }

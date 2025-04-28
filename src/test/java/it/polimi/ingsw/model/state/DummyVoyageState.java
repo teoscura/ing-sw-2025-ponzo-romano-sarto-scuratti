@@ -87,6 +87,8 @@ public class DummyVoyageState extends VoyageState {
 	public void connect(Player p) throws ForbiddenCallException {
 		if (p == null) throw new NullPointerException();
 		if (!p.getDisconnected()) throw new ForbiddenCallException();
+		System.out.println("Player '" + p.getUsername() + "' reconnected!");
+	    this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' reconnected!"));
 		p.reconnect();
 	}
 
@@ -94,6 +96,7 @@ public class DummyVoyageState extends VoyageState {
 	public void disconnect(Player p) throws ForbiddenCallException {
 		if (p == null) throw new NullPointerException();
 		if (p.getDisconnected()) throw new ForbiddenCallException();
+		p.disconnect();
 		ServerMessage disc = new ServerDisconnectMessage();
 		disc.setDescriptor(p.getDescriptor());
 		this.state.validate(disc);
@@ -128,7 +131,7 @@ public class DummyVoyageState extends VoyageState {
 	}
 
 	public List<Player> getOrder(CardOrder order) {
-		List<Player> tmp = this.players.stream().filter(p->!p.getRetired()).sorted((Player player1, Player player2) -> Integer.compare(planche.getPlayerPosition(player1), planche.getPlayerPosition(player2))).toList();
+		List<Player> tmp = this.players.stream().filter(p->!p.getRetired()&&!p.getDisconnected()).sorted((Player player1, Player player2) -> Integer.compare(planche.getPlayerPosition(player1), planche.getPlayerPosition(player2))).toList();
 		return order!=CardOrder.NORMAL ? tmp : tmp.reversed();
 	}
 
