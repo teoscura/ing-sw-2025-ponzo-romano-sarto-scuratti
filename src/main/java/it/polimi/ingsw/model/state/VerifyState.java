@@ -93,7 +93,7 @@ public class VerifyState extends GameState {
 		VerifyResult[][] tmp = p.getSpaceShip().verify();
 		for (VerifyResult[] row : tmp) {
 			for (VerifyResult r : row) {
-				if (r == VerifyResult.BROKEN) {
+				if (r == VerifyResult.BRKN_COMP) {
 					System.out.println("Player '" + p.getUsername() + "' attempted to continue when their ship is still broken!");
 					this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' attempted to continue when their ship is still broken!"));
 					return;

@@ -2,10 +2,10 @@ package it.polimi.ingsw.model.player;
 
 public enum VerifyResult {
 	
-	GOOD (1),
+	GOOD_COMP (1),
 	UNCHECKED (false),
-	NOT_LINKED (-1),
-	BROKEN (-2);
+	NOT_LNKED (-1),
+	BRKN_COMP (-2);
 
 	private int result = 0;
 	private boolean checked = true;

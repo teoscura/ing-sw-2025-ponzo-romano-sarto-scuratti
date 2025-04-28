@@ -36,13 +36,13 @@ class SpaceShipTest {
 	void verify() {
 		VerifyResult[][] check_results = new VerifyResult[ship.getHeight()][ship.getWidth()];
 		check_results = ship.verify();
-		assertEquals(VerifyResult.GOOD, check_results[2][3]);
+		assertEquals(VerifyResult.GOOD_COMP, check_results[2][3]);
 		ShipCoords coords1 = new ShipCoords(GameModeType.LVL2, 4, 2);
 		StructuralComponent component1 = new StructuralComponent(1, new ConnectorType[]{ConnectorType.EMPTY, ConnectorType.SINGLE_CONNECTOR, ConnectorType.EMPTY, ConnectorType.SINGLE_CONNECTOR},
 				ComponentRotation.U000, coords1);
 		ship.addComponent(component1, coords1);
 		check_results = ship.verify();
-		assertEquals(VerifyResult.GOOD, check_results[2][4]);
+		assertEquals(VerifyResult.GOOD_COMP, check_results[2][4]);
 		ShipCoords coords2 = new ShipCoords(GameModeType.LVL2, 5, 2);
 		StructuralComponent component2 = new StructuralComponent(1, new ConnectorType[]{ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.DOUBLE_CONNECTOR},
 				ComponentRotation.U000, coords2);
@@ -50,8 +50,8 @@ class SpaceShipTest {
 		check_results = ship.verify();
 		assertEquals(ship.getEmpty(), ship.getComponent(new ShipCoords(GameModeType.LVL2, 3, 3)));
 		assertEquals(VerifyResult.UNCHECKED, check_results[3][3]);
-		assertEquals(VerifyResult.BROKEN, check_results[2][4]);
-		assertEquals(VerifyResult.NOT_LINKED, check_results[2][5]);
+		assertEquals(VerifyResult.BRKN_COMP, check_results[2][4]);
+		assertEquals(VerifyResult.NOT_LNKED, check_results[2][5]);
 	}
 
 	@Test

@@ -47,7 +47,7 @@ public class ClientSpaceShip implements Serializable {
         ClientComponent[][] tmp = new ClientComponent[this.type.getHeight()][this.type.getWidth()];
         for(int i = 0; i < this.type.getHeight(); i++){
             for(int j=0;j < this.type.getWidth(); j++){
-                if(results[i][j]==VerifyResult.BROKEN) tmp[i][j] = new ClientBrokenVerifyComponentDecorator(this.ship[i][j]);
+                if(results[i][j]==VerifyResult.BRKN_COMP) tmp[i][j] = new ClientBrokenVerifyComponentDecorator(this.ship[i][j]);
                 else tmp[i][j] = this.ship[i][j];
             }
         }
