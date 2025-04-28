@@ -59,6 +59,7 @@ public class Planche implements iPlanche {
 			for(Player other : this.planche.keySet()){
 				if(p.equals(other)||p.getRetired()) continue;
 				if(this.planche.get(other)-this.planche.get(p)>=this.length){
+					System.out.println("WOo");
 					state.loseGame(p);
 					return;
 				}

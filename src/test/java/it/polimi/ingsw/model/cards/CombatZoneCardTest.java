@@ -502,21 +502,221 @@ public class CombatZoneCardTest {
 	}
 
 	@Test
-	void newCabinTest(){
-		//Testare una cabina che si rompe.
-		//fail();
+	void newCabinTest() throws ForbiddenCallException{
+		LevelOneCardFactory factory = new LevelOneCardFactory();
+		card = (CombatZoneCard) factory.getCard(16);
+		model.setState(state);
+		state.setCard(card);
+		//Fisso gli offset della carta per avere dei risultati deterministici.
+		ArrayList<Projectile> shots = card.getShots();
+		Projectile pr = shots.get(0);
+		shots.set(0, new Projectile(pr.getDirection(), pr.getDimension(), 7));
+		pr = shots.get(1);
+		shots.set(1, new Projectile(pr.getDirection(), pr.getDimension(), 7));
+		//Aggiungo shield component
+		iBaseComponent c = null;
+		ComponentFactory f = new ComponentFactory();
+		//Ha motori = 3 se usa batteria. minor crew.
+		c = f.getComponent(48);
+		c.rotate(ComponentRotation.U000);
+		player1.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 3, 1));
+		//Test start
+		ServerMessage message = null;
+		for (Player p : this.order) {
+			System.out.println(p.getUsername() + " - e:" + p.getSpaceShip().getEnginePower() + " - cr:" + p.getSpaceShip().getTotalCrew() + " - c:" + p.getSpaceShip().getCannonPower());
+		}
+		cstate = card.getState(state);
+		state.setCardState(cstate);
+		int x = this.planche.getPlayerPosition(player3);
+		System.out.println(x);
+		//Phase 1 perde p1
+		message = new SendContinueMessage();
+		message.setDescriptor(p1desc);
+		state.validate(message);
+		message = new SendContinueMessage();
+		message.setDescriptor(p2desc);
+		state.validate(message);
+		message = new SendContinueMessage();
+		message.setDescriptor(p3desc);
+		state.validate(message);
+		assertTrue(this.planche.getPlayerPosition(player3) == x-3);
+		//Phase 2 perde p2
+		x = player2.getSpaceShip().getTotalCrew();
+		message = new SendContinueMessage();
+		message.setDescriptor(p1desc);
+		state.validate(message);
+		message = new SendContinueMessage();
+		message.setDescriptor(p2desc);
+		state.validate(message);
+		message = new SendContinueMessage();
+		message.setDescriptor(p3desc);
+		state.validate(message);
+		//p2 toglie due crewmate, tenta una roba proibita.
+		message = new RemoveCrewMessage(new ShipCoords(GameModeType.TEST, 3, 2));
+		message.setDescriptor(p2desc);
+		state.validate(message);
+		ServerMessage w = new TakeRewardMessage(false);
+		w.setDescriptor(p2desc);
+		assertThrows(ForbiddenCallException.class, () -> state.validate(w));
+		message = new RemoveCrewMessage(new ShipCoords(GameModeType.TEST, 3, 2));
+		message.setDescriptor(p2desc);
+		state.validate(message);
+		assertEquals(player2.getSpaceShip().getTotalCrew(), x - 2);
+		//Phase 3 perde p1
+		message = new SendContinueMessage();
+		message.setDescriptor(p1desc);
+		state.validate(message);
+		message = new SendContinueMessage();
+		message.setDescriptor(p2desc);
+		state.validate(message);
+		message = new SendContinueMessage();
+		message.setDescriptor(p3desc);
+		state.validate(message);
+		// Take two shots and lose cabin.
+		message = new SendContinueMessage();
+		message.setDescriptor(p1desc);
+		state.validate(message);
+		message = new SendContinueMessage();
+		message.setDescriptor(p1desc);
+		state.validate(message);
+		assertTrue(player1.getSpaceShip().getBrokeCenter());
+		//selects the last cabin, enough to survive.
+		message = new NewCenterMessage(new ShipCoords(GameModeType.TEST, 3, 1));
+		message.setDescriptor(p1desc);
+		state.validate(message);
+		assertTrue(!player1.getSpaceShip().getBrokeCenter());
+		// //Over.
+		assertSame(player1.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 3, 3)), player1.getSpaceShip().getEmpty());
+		assertSame(player1.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 4, 3)), player1.getSpaceShip().getEmpty());
+		assertSame(player1.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 5, 3)), player1.getSpaceShip().getEmpty());
+		assertEquals(0, player1.getSpaceShip().getEnginePower());
+		assertEquals(2, player1.getSpaceShip().getTotalCrew());
+		assertNull(this.state.getCardState((player1)));
 	}
 
 	@Test
 	void disconnectionResilience1() throws ForbiddenCallException {
-		// todo: disconnettersi prima della penalita' ed evitarla;
-		//fail();
+		LevelOneCardFactory factory = new LevelOneCardFactory();
+		card = (CombatZoneCard) factory.getCard(16);
+		model.setState(state);
+		state.setCard(card);
+		//Fisso gli offset della carta per avere dei risultati deterministici.
+		ArrayList<Projectile> shots = card.getShots();
+		Projectile pr = shots.get(0);
+		shots.set(0, new Projectile(pr.getDirection(), pr.getDimension(), 7));
+		pr = shots.get(1);
+		shots.set(1, new Projectile(pr.getDirection(), pr.getDimension(), 7));
+		ServerMessage message = null;
+		for (Player p : this.order) {
+			System.out.println(p.getUsername() + " - e:" + p.getSpaceShip().getEnginePower() + " - cr:" + p.getSpaceShip().getTotalCrew() + " - c:" + p.getSpaceShip().getCannonPower());
+		}
+		int x = planche.getPlayerPosition(player1);
+		cstate = card.getState(state);
+		state.setCardState(cstate);
+		//Phase 1
+		message = new SendContinueMessage();
+		message.setDescriptor(p1desc);
+		state.validate(message);
+		message = new SendContinueMessage();
+		message.setDescriptor(p2desc);
+		state.validate(message);
+		message = new SendContinueMessage();
+		message.setDescriptor(p3desc);
+		state.validate(message);
+		assertTrue(x-4 == planche.getPlayerPosition(player1));
+		//Phase 2
+		message = new SendContinueMessage();
+		message.setDescriptor(p1desc);
+		state.validate(message);
+		//P2 disconnects. therefore is not considered.
+		message = new ServerDisconnectMessage();
+        message.setDescriptor(p2desc);
+        model.validate(message);
+		//p2 disconnects, its p3's penalty. and he gets killed.
+		message = new SendContinueMessage();
+		message.setDescriptor(p3desc);
+		state.validate(message);
+        //P3 gives up two crew in coords
+		message = new RemoveCrewMessage(new ShipCoords(GameModeType.TEST, 3, 2));
+		message.setDescriptor(p3desc);
+		state.validate(message);
+		message = new RemoveCrewMessage(new ShipCoords(GameModeType.TEST, 3, 2));
+		message.setDescriptor(p3desc);
+		model.validate(message);
+		//And loses.
+		assertTrue(player3.getRetired());
+		//Phase 3 gets skipped since p1 is the only one left.
+		assertNull(state.getCardState(player1));
 	}
 
 	@Test
 	void disconnectionResilience2() throws ForbiddenCallException {
-		// todo: disconnettersi durante e scamparla
-		//fail();
+		LevelOneCardFactory factory = new LevelOneCardFactory();
+		card = (CombatZoneCard) factory.getCard(16);
+		model.setState(state);
+		state.setCard(card);
+		//Fisso gli offset della carta per avere dei risultati deterministici.
+		ArrayList<Projectile> shots = card.getShots();
+		Projectile pr = shots.get(0);
+		shots.set(0, new Projectile(pr.getDirection(), pr.getDimension(), 7));
+		pr = shots.get(1);
+		shots.set(1, new Projectile(pr.getDirection(), pr.getDimension(), 7));
+		ServerMessage message = null;
+		for (Player p : this.order) {
+			System.out.println(p.getUsername() + " - e:" + p.getSpaceShip().getEnginePower() + " - cr:" + p.getSpaceShip().getTotalCrew() + " - c:" + p.getSpaceShip().getCannonPower());
+		}
+		int x = planche.getPlayerPosition(player1);
+		cstate = card.getState(state);
+		state.setCardState(cstate);
+		//Phase 1
+		message = new SendContinueMessage();
+		message.setDescriptor(p1desc);
+		state.validate(message);
+		message = new SendContinueMessage();
+		message.setDescriptor(p2desc);
+		state.validate(message);
+		message = new SendContinueMessage();
+		message.setDescriptor(p3desc);
+		state.validate(message);
+		assertTrue(x-4 == planche.getPlayerPosition(player1));
+		//Phase 2
+		message = new SendContinueMessage();
+		message.setDescriptor(p1desc);
+		state.validate(message);
+		message = new SendContinueMessage();
+		message.setDescriptor(p2desc);
+		state.validate(message);
+		message = new SendContinueMessage();
+		message.setDescriptor(p3desc);
+		state.validate(message);
+        //P2 disconnects. abd escapes penalty.
+		message = new ServerDisconnectMessage();
+        message.setDescriptor(p2desc);
+        model.validate(message);
+		//Phase 3
+		message = new SendContinueMessage();
+		message.setDescriptor(p1desc);
+		state.validate(message);
+		message = new SendContinueMessage();
+		message.setDescriptor(p3desc);
+		state.validate(message);
+		// Take two shots and lose cabin.
+		message = new SendContinueMessage();
+		message.setDescriptor(p1desc);
+		state.validate(message);
+		message = new SendContinueMessage();
+		message.setDescriptor(p1desc);
+		state.validate(message);
+		assertTrue(player1.getSpaceShip().getBrokeCenter());
+		//selects the last cabin, enough to survive.
+		assertTrue(player1.getRetired());
+		// //Over.
+		assertSame(player1.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 3, 3)), player1.getSpaceShip().getEmpty());
+		assertSame(player1.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 4, 3)), player1.getSpaceShip().getEmpty());
+		assertSame(player1.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 5, 3)), player1.getSpaceShip().getEmpty());
+		assertEquals(0, player1.getSpaceShip().getEnginePower());
+		assertEquals(0, player1.getSpaceShip().getTotalCrew());
+		assertNull(this.state.getCardState((player1)));
 	}
 
 }
