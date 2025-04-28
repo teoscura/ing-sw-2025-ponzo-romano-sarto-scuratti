@@ -160,8 +160,8 @@ public class AbandonedStationCardTest {
 		assertArrayEquals(new int[]{0, 0, 0, 0, 0}, player1.getSpaceShip().getContains());
 		assertArrayEquals(new int[]{0, 0, 0, 0, 0}, player2.getSpaceShip().getContains());
 		assertArrayEquals(new int[]{0, 0, 0, 0, 0}, player3.getSpaceShip().getContains());
-		state.disconnect(player1);
-		state.disconnect(player3);
+		model.disconnect(player1);
+		model.disconnect(player3);
 		//Lands
 		mess = new SelectLandingMessage(0);
 		mess.setDescriptor(p2desc);

@@ -92,7 +92,6 @@ public class DummyVoyageState extends VoyageState {
 	public void disconnect(Player p) throws ForbiddenCallException {
 		if (p == null) throw new NullPointerException();
 		if (p.getDisconnected()) throw new ForbiddenCallException();
-		p.disconnect();
 		ServerMessage disc = new ServerDisconnectMessage();
 		disc.setDescriptor(p.getDescriptor());
 		this.state.validate(disc);

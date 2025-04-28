@@ -44,7 +44,7 @@ class PiratesNewCabinState extends CardState {
 	@Override
 	public void validate(ServerMessage message) throws ForbiddenCallException {
 		message.receive(this);
-		if (this.list.getFirst().getSpaceShip().getBrokeCenter()) {
+		if (!this.list.getFirst().getRetired()&&this.list.getFirst().getSpaceShip().getBrokeCenter()) {
 			this.state.broadcastMessage(new NotifyStateUpdateMessage(this.state.getClientState()));
 			return;
 		}
@@ -65,8 +65,10 @@ class PiratesNewCabinState extends CardState {
 			System.out.println("Card exhausted, moving to a new one!");
 			return null;
 		}
-		this.shots.getProjectiles().removeFirst();
-		if (!this.shots.getProjectiles().isEmpty()) return new PiratesPenaltyState(state, card, list, shots);
+		if (!this.shots.getProjectiles().isEmpty()) {
+			this.shots.getProjectiles().removeFirst();
+			return new PiratesPenaltyState(state, card, list, shots);
+		}
 		this.list.removeFirst();
 		if (!this.list.isEmpty()) return new PiratesAnnounceState(state, card, list);
 		System.out.println("Card exhausted, moving to a new one!");
@@ -95,9 +97,10 @@ class PiratesNewCabinState extends CardState {
 
 	@Override
 	public void disconnect(Player p) throws ForbiddenCallException {
-		if (this.list.getFirst() == p) {
+		if (this.list.getFirst().equals(p)) {
+			System.out.println("Player '" + p.getUsername() + "' disconnected!");
 			this.state.loseGame(p);
-			this.transition();
+			return;
 		}
 		this.list.remove(p);
 		System.out.println("Player '" + p.getUsername() + "' disconnected!");

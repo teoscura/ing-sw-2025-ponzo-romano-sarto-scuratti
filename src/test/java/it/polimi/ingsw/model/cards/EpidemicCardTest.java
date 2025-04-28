@@ -141,8 +141,7 @@ class EpidemicCardTest {
 		assertThrows(ForbiddenCallException.class, () -> state.validate(server_message_wrong));
 
 		// Send message for both players
-		state.disconnect(player1);
-		cstate = this.state.getCardState(player1);
+		model.disconnect(player1);
 		// try again (it should fail)
 		message = new SendContinueMessage();
 		message.setDescriptor(p1desc);

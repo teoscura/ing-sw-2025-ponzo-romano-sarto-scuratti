@@ -130,8 +130,8 @@ public class AbadonedShipCardTest {
 	@Test
 	void disconnectionResilience() throws ForbiddenCallException, PlayerNotFoundException {
 		//Si disconnettono due tizi, prima uno in coda, poi il leader
-		state.disconnect(player2);
-		state.disconnect(player1);
+		model.disconnect(player2);
+		model.disconnect(player1);
 		//giocatore 3 rifiuta, non volendo perdere tempo.
 		ServerMessage messa = new SelectLandingMessage(-1);
 		messa.setDescriptor(p3desc);

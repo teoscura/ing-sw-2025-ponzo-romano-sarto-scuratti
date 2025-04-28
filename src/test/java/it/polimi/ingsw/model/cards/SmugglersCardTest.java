@@ -420,9 +420,9 @@ public class SmugglersCardTest {
 		//e va bene
 		assertArrayEquals(new int[]{3, 0, 0, 0, 0}, player1.getSpaceShip().getContains());
 		//p1 disconnette
-		state.disconnect(player1);
+		model.disconnect(player1);
 		//pure p2
-		state.disconnect(player2);
+		model.disconnect(player2);
 		//e non perde niente
 		assertArrayEquals(new int[]{3, 0, 0, 0, 0}, player1.getSpaceShip().getContains());
 		//Si torna in announce

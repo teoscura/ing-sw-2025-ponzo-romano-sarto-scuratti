@@ -220,7 +220,7 @@ public class PlanetCardTest {
 		assertThrows(ForbiddenCallException.class, () -> state.validate(w));
 		//P1 disconnects.
 		x = state.getPlanche().getPlayerPosition(player1);
-		state.disconnect(player1);
+		model.disconnect(player1);
 		assertEquals(x, state.getPlanche().getPlayerPosition(player1));
 		//P1 lands on 0 - unallowed.
 		x = state.getPlanche().getPlayerPosition(player2);
@@ -239,7 +239,7 @@ public class PlanetCardTest {
 		state.validate(mess);
 		//Player3 disconnects
 		x = this.planche.getPlayerPosition(player3);
-		state.disconnect(player3);
+		model.disconnect(player3);
 		assertEquals(state.getPlanche().getPlayerPosition(player3), x);
 		//Lets validate the changes.
 		assertArrayEquals(new int[]{0, 0, 0, 0, 0}, player1.getSpaceShip().getContains());

@@ -97,7 +97,6 @@ public class ModelInstance {
 		try {
 			//XXX validate message dont do this
 			this.state.connect(p);
-			System.out.println("Client: '" + p.getUsername() + "' reconnected to the game!");
 		} catch (ForbiddenCallException e) {
 			System.out.println("Client: '" + p.getUsername() + "' tried reconnecting when the current state doesn't support it anymore!");
 		}
@@ -107,7 +106,6 @@ public class ModelInstance {
 		try {
 			//XXX validate message dont do this
 			this.state.disconnect(p);
-			System.out.println("Client: '" + p.getUsername() + "' disconnected from the game!");
 		} catch (ForbiddenCallException e) {
 			System.out.println("Client: '" + p.getUsername() + "' tried disconnecting when the current state doesn't support it anymore!");
 		}

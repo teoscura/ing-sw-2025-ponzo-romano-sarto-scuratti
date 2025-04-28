@@ -495,7 +495,24 @@ public class CombatZoneCardTest {
 		assertSame(player1.getSpaceShip().getEmpty(), player1.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 4, 3)));
 		assertSame(player1.getSpaceShip().getEmpty(), player1.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 5, 3)));
 		assertSame(player1.getSpaceShip().getEmpty(), player1.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 5, 2)));
+	}
 
+	@Test
+	void newCabinTest(){
+		//Testare una cabina che si rompe.
+		fail();
+	}
+
+	@Test
+	void disconnectionResilience1() throws ForbiddenCallException {
+		// todo: disconnettersi prima della penalita' ed evitarla;
+		fail();
+	}
+
+	@Test
+	void disconnectionResilience2() throws ForbiddenCallException {
+		// todo: disconnettersi durante e scamparla
+		fail();
 	}
 
 }
