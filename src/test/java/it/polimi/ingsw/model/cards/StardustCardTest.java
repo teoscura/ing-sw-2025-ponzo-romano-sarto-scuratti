@@ -2,7 +2,6 @@ package it.polimi.ingsw.model.cards;
 
 import it.polimi.ingsw.controller.server.ClientDescriptor;
 import it.polimi.ingsw.message.server.SendContinueMessage;
-import it.polimi.ingsw.message.server.ServerDisconnectMessage;
 import it.polimi.ingsw.message.server.TakeRewardMessage;
 import it.polimi.ingsw.model.DummyModelInstance;
 import it.polimi.ingsw.model.GameModeType;

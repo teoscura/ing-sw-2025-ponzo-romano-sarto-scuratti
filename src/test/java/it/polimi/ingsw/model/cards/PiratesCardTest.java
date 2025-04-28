@@ -1,8 +1,5 @@
 package it.polimi.ingsw.model.cards;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -15,7 +12,6 @@ import org.junit.jupiter.api.Test;
 
 import it.polimi.ingsw.controller.server.ClientDescriptor;
 import it.polimi.ingsw.message.server.NewCenterMessage;
-import it.polimi.ingsw.message.server.RemoveCrewMessage;
 import it.polimi.ingsw.message.server.SendContinueMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.message.server.TakeRewardMessage;
@@ -26,10 +22,7 @@ import it.polimi.ingsw.model.PlayerCount;
 import it.polimi.ingsw.model.board.Planche;
 import it.polimi.ingsw.model.board.TestFlightCards;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
-import it.polimi.ingsw.model.cards.state.SlaversAnnounceState;
-import it.polimi.ingsw.model.cards.state.SlaversLoseState;
 import it.polimi.ingsw.model.cards.utils.Projectile;
-import it.polimi.ingsw.model.cards.visitors.CrewRemoveVisitor;
 import it.polimi.ingsw.model.components.ComponentFactory;
 import it.polimi.ingsw.model.components.iBaseComponent;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
