@@ -54,7 +54,7 @@ public class PiratesPenaltyState extends CardState {
 			this.state.broadcastMessage(new NotifyStateUpdateMessage(this.state.getClientState()));
 			return;
 		}
-		this.list.getFirst().getSpaceShip().handleShot(this.shots.getProjectiles().getFirst());
+		if(!this.list.getFirst().getDisconnected()) this.list.getFirst().getSpaceShip().handleShot(this.shots.getProjectiles().getFirst());
 		this.transition();
 	}
 
@@ -117,7 +117,7 @@ public class PiratesPenaltyState extends CardState {
 
 	@Override
 	public void disconnect(Player p) throws ForbiddenCallException {
-		if (!this.list.getFirst().equals(p)) {
+		if (this.list.getFirst().equals(p)) {
 			System.out.println("Player '" + p.getUsername() + "' disconnected!");
 			this.responded = true;
 			return;

@@ -256,37 +256,37 @@ public class PiratesCardTest {
 		planche.printOrder();
 		message = new SendContinueMessage();
 		message.setDescriptor(p1desc);
-		state.validate(message);
+		model.validate(message);
 		//First misses, loses nothing
 		message = new SendContinueMessage();
 		message.setDescriptor(p1desc);
-		state.validate(message);
+		model.validate(message);
 		//Second hits front cannon.
 		int x = player1.getScore();
 		message = new SendContinueMessage();
 		message.setDescriptor(p1desc);
-		state.validate(message);
+		model.validate(message);
 		assertTrue(x-1 == player1.getScore());
-		state.disconnect(player1);
+		model.disconnect(player1);
 		assertTrue(!player1.getRetired());
 		//P2 accende e vince
 		x = player2.getCredits();
 		int pos = planche.getPlayerPosition(player2);
 		message = new TurnOnMessage(new ShipCoords(GameModeType.TEST, 3, 1), new ShipCoords(GameModeType.TEST, 3, 3));
 		message.setDescriptor(p2desc);
-		state.validate(message);
+		model.validate(message);
 		message = new TurnOnMessage(new ShipCoords(GameModeType.TEST, 4, 2), new ShipCoords(GameModeType.TEST, 3, 3));
 		message.setDescriptor(p2desc);
-		state.validate(message);
+		model.validate(message);
 		message = new TurnOnMessage(new ShipCoords(GameModeType.TEST, 2, 2), new ShipCoords(GameModeType.TEST, 3, 3));
 		message.setDescriptor(p2desc);
-		state.validate(message);
+		model.validate(message);
 		message = new SendContinueMessage();
 		message.setDescriptor(p2desc);
-		state.validate(message);
+		model.validate(message);
 		message = new TakeRewardMessage(true);
 		message.setDescriptor(p2desc);
-		state.validate(message);
+		model.validate(message);
 		assertTrue(player2.getCredits()== x + this.card.getCredits());
 		assertTrue(pos-this.card.getDays()==planche.getPlayerPosition(player2));
 		assertTrue(card.getExhausted());

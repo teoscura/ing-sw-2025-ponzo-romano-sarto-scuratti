@@ -23,21 +23,14 @@ class WaitingStateTest {
     Player player3;
     ClientDescriptor p3desc;
 
-
     @BeforeEach
     void setUp() {
         model = new DummyModelInstance(1, null, GameModeType.LVL2, PlayerCount.THREE);
         waiting_state = new WaitingState(model, GameModeType.LVL2, PlayerCount.THREE);
         model.setState(waiting_state);
-        player1 = new Player(GameModeType.LVL2, "Player1", PlayerColor.RED);
-        player2 = new Player(GameModeType.LVL2, "Player2", PlayerColor.BLUE);
-        player3 = new Player(GameModeType.LVL2, "Player3", PlayerColor.GREEN);
-        p1desc = new ClientDescriptor(player1.getUsername(), null);
-        p1desc.bindPlayer(player1);
-        p2desc = new ClientDescriptor(player2.getUsername(), null);
-        p2desc.bindPlayer(player2);
-        p3desc = new ClientDescriptor(player3.getUsername(), null);
-        p3desc.bindPlayer(player3);
+        p1desc = new ClientDescriptor("Gigio1", null);
+        p2desc = new ClientDescriptor("Gigio2", null);
+        p3desc = new ClientDescriptor("Gigio3", null);
     }
 
     @Test
@@ -50,9 +43,9 @@ class WaitingStateTest {
         waiting_state.disconnect(p2desc);
         //player 2 connects
         waiting_state.connect(p2desc);
-
-        //assertInstanceOf(ConstructionState.class, model.getState());
+        
         waiting_state.connect(p3desc);
+        //assertInstanceOf(ConstructionState.class, model.getState());
         //waiting_state.transition();
     }
 }
