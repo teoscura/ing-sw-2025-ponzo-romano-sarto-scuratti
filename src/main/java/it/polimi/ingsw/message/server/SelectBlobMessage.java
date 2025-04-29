@@ -6,6 +6,7 @@ import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.cards.state.CardState;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.GameState;
+import it.polimi.ingsw.model.state.VoyageState;
 
 public class SelectBlobMessage extends ServerMessage {
     
@@ -29,7 +30,11 @@ public class SelectBlobMessage extends ServerMessage {
 
     @Override
     public void receive(GameState state) throws ForbiddenCallException {
-        state.getCardState(this.descriptor.getPlayer()).validate(this);
+        if (state instanceof VoyageState) {
+			state.getCardState(this.descriptor.getPlayer()).validate(this);
+		} else {
+			state.selectBlob(this.descriptor.getPlayer(), blob_coord);
+		}
     }
 
     @Override

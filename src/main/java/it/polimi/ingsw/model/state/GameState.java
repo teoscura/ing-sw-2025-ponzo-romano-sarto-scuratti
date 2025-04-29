@@ -153,6 +153,12 @@ public abstract class GameState implements Serializable {
 		throw new ForbiddenCallException("This state doesn't support this function.");
 	}
 
+	public void selectBlob(Player p, ShipCoords blob_coord) throws ForbiddenCallException {
+		this.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' tried to select a new blob in a state that doesn't allow it!"));
+		System.out.println("Player: '" + p.getUsername() + "' tried to select a new blob in a state that doesn't allow it!");
+		throw new ForbiddenCallException("This state doesn't support this function.");
+	}
+
 	public CardState getCardState(Player p) throws ForbiddenCallException {
 		this.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' tried to get the card state in a state that doesn't allow it!"));
 		System.out.println("Player: '" + p.getUsername() + "' tried to get the card state in a state that doesn't allow it!");

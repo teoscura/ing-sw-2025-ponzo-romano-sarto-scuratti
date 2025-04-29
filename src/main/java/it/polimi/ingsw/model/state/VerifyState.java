@@ -26,33 +26,45 @@ import it.polimi.ingsw.model.player.VerifyResult;
 public class VerifyState extends GameState {
 
 	private final iCards voyage_deck;
-	private final ArrayList<Player> to_validate;
-	private final ArrayList<Player> multi_blobs;
+	private final ArrayList<Player> to_remove_broken;
+	private final ArrayList<Player> to_choose_blob;
 	private final ArrayList<Player> finish_order;
+	private final ArrayList<Player> awaiting;
+	private final ArrayList<Player> starts_losing;
 
 	public VerifyState(ModelInstance model, GameModeType type, PlayerCount count, ArrayList<Player> players, iCards voyage_deck, ArrayList<Player> finish_order) {
 		super(model, type, count, players);
 		if (voyage_deck == null || finish_order == null || players == null) throw new NullPointerException();
 		this.voyage_deck = voyage_deck;
-		this.to_validate = new ArrayList<>();
-		this.to_validate.addAll(this.players);
+		this.to_remove_broken= new ArrayList<>();
+		this.to_choose_blob = new ArrayList<>();
 		this.finish_order = finish_order;
-		for (Player p : this.players) {
-			boolean tmp = p.getSpaceShip().verifyAndClean();
-			if (tmp) finish_order.remove(p);
-		}
+		this.awaiting = new ArrayList<>();
+		this.awaiting.addAll(players);
+		this.starts_losing = new ArrayList<>();
 	}
 
 	@Override
 	public void init() {
 		super.init();
+		for(Player p : this.finish_order){
+			if (p.getSpaceShip().bulkVerifyResult() && p.getSpaceShip().getBlobsSize() == 1) continue;
+			else if (!p.getSpaceShip().bulkVerifyResult()) this.to_remove_broken.add(p);
+			else this.to_choose_blob.add(p);
+			this.finish_order.remove(p);
+		}
 		this.broadcastMessage(new NotifyStateUpdateMessage(this.getClientState()));
+
 	}
 
 	@Override
 	public void validate(ServerMessage message) throws ForbiddenCallException {
 		message.receive(this);
-		if (!to_validate.isEmpty()) {
+		int disconnected = 0;
+		for(Player p : this.awaiting){
+			if(p.getDisconnected()) disconnected++;
+		}
+		if (this.awaiting.size()-disconnected>0) {
 			this.broadcastMessage(new NotifyStateUpdateMessage(this.getClientState()));
 			return;
 		}
@@ -61,8 +73,15 @@ public class VerifyState extends GameState {
 
 	@Override
 	public GameState getNext() {
+		for(Player p : this.players){
+			if(p.getDisconnected()) this.starts_losing.add(p);
+		}
 		Planche planche = new Planche(type, finish_order);
-		return new VoyageState(model, type, count, players, voyage_deck, planche);
+		VoyageState res = new VoyageState(model, type, count, players, voyage_deck, planche);
+		for(Player p : this.players){
+			if(p.getSpaceShip().getBlobsSize()<=0 || this.starts_losing.contains(p)) res.loseGame(p);
+		}
+		return res;
 	}
 
 	@Override
@@ -71,7 +90,7 @@ public class VerifyState extends GameState {
 		for (Player p : this.players) {
 			tmp.add(new ClientVerifyPlayer(p.getUsername(),
 					p.getColor(),
-					p.getSpaceShip().getClientSpaceShip().getVerifyShip(p.getSpaceShip().verify()),
+					p.getSpaceShip().getClientSpaceShip().getVerifyShip(p.getSpaceShip().bulkVerify()),
 					p.getSpaceShip().bulkVerify(),
 					this.finish_order.contains(p),
 					this.finish_order.indexOf(p)));
@@ -86,43 +105,24 @@ public class VerifyState extends GameState {
 
 	@Override
 	public void sendContinue(Player p) throws ForbiddenCallException {
-		if (!this.to_validate.contains(p)) {
+		if (!this.awaiting.contains(p)) {
 			System.out.println("Player '" + p.getUsername() + "' already finished validating!");
 			this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' already finished validating!"));
 			return;
 		}
-		VerifyResult[][] tmp = p.getSpaceShip().verify();
-		for (VerifyResult[] row : tmp) {
-			for (VerifyResult r : row) {
-				if (r == VerifyResult.BRKN_COMP) {
-					System.out.println("Player '" + p.getUsername() + "' attempted to continue when their ship is still broken!");
-					this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' attempted to continue when their ship is still broken!"));
-					return;
-				}
-			}
+		if (this.to_choose_blob.contains(p)||this.to_remove_broken.contains(p)) {
+			System.out.println("Player '" + p.getUsername() + "' motioned to progress without validating and finalizing his ship!");
+			this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' motioned to progress without validating and finalizing his ship!"));
+			return;
 		}
-		this.to_validate.remove(p);
-		this.finish_order.addLast(p);
-		boolean only_disconnected_left = true;
-		for (Player other : this.players) {
-			if (!other.getDisconnected() && this.to_validate.contains(other)) {
-				only_disconnected_left = false;
-				break;
-			}
-		}
-		if (only_disconnected_left) {
-			for (Player left : this.to_validate) {
-				left.getSpaceShip().verifyAndClean();
-			}
-			this.transition();
-		}
+		this.awaiting.remove(p);
 	}
 
 	@Override
 	public void removeComponent(Player p, ShipCoords coords) throws ForbiddenCallException {
-		if (!this.to_validate.contains(p)) {
-			System.out.println("Player '" + p.getUsername() + "' attempted to act on the ship after validating!");
-			this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' attempted to act on the ship after validating!"));
+		if (!this.to_remove_broken.contains(p)) {
+			System.out.println("Player '" + p.getUsername() + "' attempted to act on the ship after cleaning it!");
+			this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' attempted to act on the ship after cleaning it!"));
 			return;
 		}
 		try {
@@ -132,12 +132,38 @@ public class VerifyState extends GameState {
 			this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' tried to remove an empty component!"));
 			return;
 		}
-		p.getSpaceShip().aaoo
+		if(!p.getSpaceShip().bulkVerifyResult()) return;
+		this.to_remove_broken.remove(p);
+		if(p.getSpaceShip().getBlobsSize()>1) this.to_choose_blob.add(p);
+		else this.finish_order.addLast(p);
 	}
 
 	@Override
+	public void selectBlob(Player p, ShipCoords blob_coord) {
+		if (!this.to_choose_blob.contains(p)) {
+			System.out.println("Player '" + p.getUsername() + "' attempted to set a new center during another player's turn!");
+			this.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to set a new center during another player's turn!"));
+			return;
+		}
+		try {
+			p.getSpaceShip().selectShipBlob(blob_coord);
+			System.out.println("Player '"+p.getUsername()+"' selected blob that contains coords "+blob_coord+".");
+			if(p.getSpaceShip().getCrew()[0]<=0) this.starts_losing.add(p);
+			this.finish_order.addLast(p);
+		} catch (IllegalTargetException e) {
+			System.out.println("Player '" + p.getUsername() + "' attempted to set his new center on an empty space!");
+			this.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to set his new center on an empty space!"));
+		} catch (ForbiddenCallException e) {
+			//Should be unreachable.
+			System.out.println("Player '" + p.getUsername() + "' attempted to set his new center while having a unbroken ship!");
+			this.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to set his new center while having a unbroken ship!"));
+		}
+	}
+
+
+	@Override
 	public void setCrewType(Player p, ShipCoords coords, AlienType type) throws ForbiddenCallException {
-		if (!this.to_validate.contains(p)) {
+		if (!this.awaiting.contains(p)) {
 			System.out.println("Player '" + p.getUsername() + "' tried to set crew type after finishing!");
 			this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' tried to set crew type after finishing!"));
 			return;
@@ -172,7 +198,6 @@ public class VerifyState extends GameState {
 		if (p == null) throw new NullPointerException();
 		if (p.getDisconnected()) throw new ForbiddenCallException();
 		p.disconnect();
-		this.model.kick(p.getDescriptor());
 	}
 
 	@Override
