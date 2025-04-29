@@ -40,7 +40,7 @@ public abstract class CardState implements Serializable {
         this.state.setCardState(this.getNext());
     }
 
-    public void setNewShipCenter(Player p, ShipCoords new_center) throws ForbiddenCallException{
+    public void selectBlob(Player p, ShipCoords blob_coord) throws ForbiddenCallException{
         this.state.broadcastMessage(new ViewMessage("Player: '" +p.getUsername()+"' tried to set a new center in a state that doesn't allow it!"));
         System.out.println("Player: '" +p.getUsername()+"' tried to connect in a state that doesn't allow it!");
         throw new ForbiddenCallException("This state doesn't support this function.");

@@ -80,7 +80,7 @@ class CombatZonePenaltyState extends CardState {
 		}
 		if (this.sections.getFirst().getPenalty() == CombatZonePenalty.SHOTS) {
 			this.target.getSpaceShip().handleShot(this.shots.getProjectiles().getFirst());
-			if(this.target.getSpaceShip().getCrew()[0]<=0) this.target.retire();
+			if(this.target.getSpaceShip().getCrew()[0]<=0 || this.target.getSpaceShip().getBlobsSize() <= 0) this.state.loseGame(target);
 		}
 		this.transition();
 	}
@@ -125,10 +125,8 @@ class CombatZonePenaltyState extends CardState {
 			System.out.println("...Card exhausted, moving to a new one!");
 			return null;
 		}
-		x;x;x;x;x;x;x;x;
-		if (!target.getSpaceShip().getBrokeCenter()&&this.sections.getFirst().getPenalty()==CombatZonePenalty.SHOTS) target.getSpaceShip().verifyAndClean();
 		if(this.sections.getFirst().getPenalty()==CombatZonePenalty.SHOTS) this.shots.getProjectiles().removeFirst();
-		if (this.target.getSpaceShip().getBrokeCenter())
+		if (this.target.getSpaceShip().getBlobsSize() > 1)
 			return new CombatZoneSelectShipState(state, card_id, sections, shots, target);
 		if (this.sections.getFirst().getPenalty() == CombatZonePenalty.SHOTS && !this.shots.getProjectiles().isEmpty()) {
 			return new CombatZonePenaltyState(state, card_id, sections, shots, target);

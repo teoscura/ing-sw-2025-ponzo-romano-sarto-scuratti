@@ -48,11 +48,10 @@ public class CombatZoneSelectShipState extends CardState {
 	@Override
 	public void validate(ServerMessage message) throws ForbiddenCallException {
 		message.receive(this);
-		if (target.getSpaceShip().getBrokeCenter()) {
+		if (target.getSpaceShip().getBlobsSize() > 1 && !target.getDisconnected()) {
 			this.state.broadcastMessage(new NotifyStateUpdateMessage(this.state.getClientState()));
 			return;
 		}
-		if(target.getSpaceShip().getCrew()[0]<=0) this.state.loseGame(target);
 		this.transition();
 	}
 
@@ -82,15 +81,16 @@ public class CombatZoneSelectShipState extends CardState {
 	}
 
 	@Override
-	public void setNewShipCenter(Player p, ShipCoords new_center) {
-		if (p != this.target) {
+	public void selectBlob(Player p, ShipCoords blob_coord) {
+		if (!p.equals(target)) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to set a new center during another player's turn!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to set a new center during another player's turn!"));
 			return;
 		}
 		try {
-			p.getSpaceShip().setCenter(new_center);
-			System.out.println("Player '"+p.getUsername()+"' set a new ship center at "+new_center+".");
+			p.getSpaceShip().selectShipBlob(blob_coord);
+			System.out.println("Player '"+p.getUsername()+"' selected blob that contains coords "+blob_coord+".");
+			if(p.getSpaceShip().getCrew()[0]<=0) this.state.loseGame(p);
 		} catch (IllegalTargetException e) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to set his new center on an empty space!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to set his new center on an empty space!"));
@@ -100,15 +100,10 @@ public class CombatZoneSelectShipState extends CardState {
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to set his new center while having a unbroken ship!"));
 			System.out.println("Player '" + p.getUsername() + "' set a new ship center.");
 		}
-		x;x;x;x;x;x;x;x;
 	}
 
 	@Override
 	public void disconnect(Player p) throws ForbiddenCallException {
-		if (target == p) {
-			this.state.loseGame(p);
-			x;x;x;x;x;x;x;x;
-		}
 		System.out.println("Player '" + p.getUsername() + "' disconnected!");
 	}
 

@@ -33,6 +33,7 @@ public class SpaceShip{
 
 	private final Player player;
 
+	private ArrayList<ArrayList<ShipCoords>> blobs;
 	private final ArrayList<ShipCoords> storage_coords;
 	private final ArrayList<ShipCoords> cabin_coords;
 	private final ArrayList<ShipCoords> battery_coords;
@@ -44,7 +45,6 @@ public class SpaceShip{
 	private ShipCoords center;
 	private int[] containers;
 	private boolean[] shielded_directions;
-	private boolean broke_center;
 	private double cannon_power = 0;
 	private int engine_power = 0;
 
@@ -87,52 +87,94 @@ public class SpaceShip{
 		return this.type;
 	}
 
-
 	public int[] getCrew() {
 		return this.crew;
 	}
 
-
-	public VerifyResult[][] verify() {
-		VerifyResult[][] res = new VerifyResult[this.type.getHeight()][];
-		Queue<BaseComponent> queue = new ArrayDeque<BaseComponent>();
-		for (int i = 0; i < res.length; i++) {
-			res[i] = new VerifyResult[this.type.getWidth()];
-			Arrays.fill(res[i], VerifyResult.UNCHECKED);
-		}
-		queue.add(this.getComponent(this.getCenter()));
-		BaseComponent tmp = null;
-		while (!queue.isEmpty()) {
-			tmp = queue.poll();
-			if (!tmp.verify(this)) res[tmp.getCoords().y][tmp.getCoords().x] = VerifyResult.BRKN_COMP;
-			else res[tmp.getCoords().y][tmp.getCoords().x] = VerifyResult.GOOD_COMP;
-			for (BaseComponent c : tmp.getConnectedComponents(this)) {
-				if (c == this.empty) continue;
-				ShipCoords xy = c.getCoords();
-				if (res[xy.y][xy.x] == VerifyResult.UNCHECKED) queue.add(c);
+	public VerifyResult[][] bulkVerify() {
+		VerifyResult[][] res = new VerifyResult[this.type.getHeight()][this.type.getWidth()];
+		for(int y = 0; y < this.type.getHeight(); y++){
+			for(int x = 0; x < this.type.getWidth(); x++){
+				res[y][x] = this.components[y][x] == this.empty ? VerifyResult.UNCHECKED : VerifyResult.NOT_LNKED;
 			}
 		}
-		for (int t = 0; t < this.getHeight(); t++) {
-			for (int r = 0; r < this.getWidth(); r++) {
-				if (res[t][r] == VerifyResult.UNCHECKED && this.components[t][r]!=this.empty) res[t][r] = VerifyResult.NOT_LNKED;
+		for(int y = 0; y < this.type.getHeight(); y++){
+			for(int x = 0; x < this.type.getWidth(); x++){
+				if(res[y][x]==VerifyResult.UNCHECKED) continue;
+				BaseComponent tmp = this.components[y][x];
+				if (!tmp.verify(this)) res[y][x] = VerifyResult.BRKN_COMP;
+				else res[y][x] = VerifyResult.GOOD_COMP;
 			}
 		}
 		return res;
 	}
 
-
-	public boolean verifyAndClean() {
-		VerifyResult[][] ver = this.verify();
-		boolean had_to_clean = false;
-		for (int i = 0; i < this.type.getHeight(); i++) {
-			for (int j = 0; j < this.type.getWidth(); j++) {
-				if (ver[i][j] != VerifyResult.NOT_LNKED) continue;
-				had_to_clean = true;
-				this.removeComponent(new ShipCoords(this.type, j, i));
+	public boolean bulkVerifyResult(){
+		var t = bulkVerify();
+		for(var row : t){
+			for (var r : row){
+				if(r==VerifyResult.BRKN_COMP) return false;
 			}
 		}
-		return had_to_clean;
+		return true;
 	}
+
+    public int getBlobsSize(){
+        this.updateShipBlobs();
+        return this.blobs.size();
+    }
+
+    public void updateShipBlobs(){
+        ArrayList<ArrayList<ShipCoords>> res = new ArrayList<>();
+        VerifyResult[][] map = new VerifyResult[this.type.getHeight()][this.type.getWidth()];
+        for(int y = 0; y<type.getHeight(); y++){
+            for(int x = 0; x<type.getWidth(); x++){
+                map[y][x] = this.components[y][x] == this.empty ? VerifyResult.UNCHECKED : VerifyResult.NOT_LNKED;
+            }
+        }
+        for(int y = 0; y<type.getHeight(); y++){
+            for(int x = 0; x<type.getWidth(); x++){
+                if(map[y][x]!=VerifyResult.NOT_LNKED) continue;
+                res.add(this.verifyBlob(map, new ShipCoords(this.type, x, y)));
+            }
+        }
+        this.blobs = res;
+    }
+
+	private ArrayList<ShipCoords> verifyBlob(VerifyResult[][] map, ShipCoords starting_point) {
+        ArrayList<ShipCoords> res = new ArrayList<>();
+		Queue<ShipCoords> queue = new ArrayDeque<>();
+		queue.add(starting_point);
+		ShipCoords tmp = null;
+		while (!queue.isEmpty()) {
+			tmp = queue.poll();
+            res.add(tmp);
+			if (!this.getComponent(tmp).verify(this)) map[tmp.y][tmp.x] = VerifyResult.BRKN_COMP;
+			else map[tmp.y][tmp.x] = VerifyResult.GOOD_COMP;
+			for (BaseComponent c : this.getComponent(tmp).getConnectedComponents(this)) {
+				if (c == this.empty) continue;
+				ShipCoords xy = c.getCoords();
+				if (map[xy.y][xy.x] == VerifyResult.NOT_LNKED) queue.add(c.getCoords());
+			}
+		}
+        return res;
+	}
+
+    public void selectShipBlob(ShipCoords blob_coord) throws ForbiddenCallException{
+		if(this.blobs.size()<=1) throw new ForbiddenCallException();
+        for(ArrayList<ShipCoords> blob : this.blobs){
+            if(!blob.contains(blob_coord)) continue;
+            ArrayList<ArrayList<ShipCoords>> previous = this.blobs;
+            previous.remove(blob);
+            previous.stream().forEach(b->b.stream().forEach(c->this.removeComponent(c)));
+            this.blobs = new ArrayList<>(){{add(blob);}};
+			this.center = blob_coord;
+			updateShip();
+            return;
+        }
+        throw new IllegalTargetException("Blob coordinate was invalid!");
+    }
+
 
 	public void addComponent(BaseComponent component, ShipCoords coords) {
 		if (coords == null) throw new NullPointerException();
@@ -159,7 +201,6 @@ public class SpaceShip{
 
 	public void removeComponent(ShipCoords coords) {
 		if (coords == null) throw new NullPointerException();
-		if (coords == this.getCenter()) this.setBrokeCenter();
 		BaseComponent tmp = this.getComponent(coords);
 		if (this.components[coords.y][coords.x] == this.empty) throw new IllegalTargetException();
 		this.components[coords.y][coords.x] = this.empty;
@@ -228,39 +269,32 @@ public class SpaceShip{
 	public int getEnginePower() {
 		return this.engine_power;
 	}
-
 	
 	public int getEnergyPower() {
 		return this.containers[0];
 	}
 
-	
 	public boolean[] getShieldedDirections() {
 		return this.shielded_directions;
 	}
 
-	
 	public int getHeight() {
 		return this.type.getHeight();
 	}
 
-	
 	public int getWidth() {
 		return this.type.getWidth();
 	}
 
-	
 	public BaseComponent getEmpty() {
 		return this.empty;
 	}
 
-	
 	public void addStorageCoords(ShipCoords coords) {
 		if (this.storage_coords.contains(coords))
 			throw new NotUniqueException("Coords are already present in storage coords");
 		this.storage_coords.add(coords);
 	}
-
 	
 	public void delStorageCoords(ShipCoords coords) {
 		if (!this.storage_coords.contains(coords))
@@ -268,19 +302,16 @@ public class SpaceShip{
 		this.storage_coords.remove(coords);
 	}
 
-	
 	public void addCabinCoords(ShipCoords coords) {
 		if (this.cabin_coords.contains(coords))
 			throw new NotUniqueException("Coords are already present in cabin coords");
 		this.cabin_coords.add(coords);
 	}
 
-	
 	public void delCabinCoords(ShipCoords coords) {
 		if (!this.cabin_coords.contains(coords)) throw new NotPresentException("Coords arent present in cabin coords");
 		this.cabin_coords.remove(coords);
 	}
-
 	
 	public void addBatteryCoords(ShipCoords coords) {
 		if (this.battery_coords.contains(coords))
@@ -288,27 +319,23 @@ public class SpaceShip{
 		this.battery_coords.add(coords);
 	}
 
-	
 	public void delBatteryCoords(ShipCoords coords) {
 		if (!this.battery_coords.contains(coords))
 			throw new NotPresentException("Coords arent present in battery coords");
 		this.battery_coords.remove(coords);
 	}
-
 	
 	public void addPowerableCoords(ShipCoords coords) {
 		if (this.powerable_coords.contains(coords))
 			throw new NotUniqueException("Coords are already present in powerable coords");
 		this.powerable_coords.add(coords);
 	}
-
 	
 	public void delPowerableCoords(ShipCoords coords) {
 		if (!this.powerable_coords.contains(coords))
 			throw new NotPresentException("Coords arent present in powerable coords");
 		this.powerable_coords.remove(coords);
 	}
-
 	
 	public int getTotalCrew() {
 		int sum = 0;
@@ -317,22 +344,6 @@ public class SpaceShip{
 		}
 		return sum;
 	}
-
-	
-	public void setCenter(ShipCoords new_center) throws ForbiddenCallException {
-		if (this.type.isForbidden(new_center) || this.getComponent(new_center) == this.empty)
-			throw new IllegalTargetException("New center is either forbidden or illegal.");
-		if (!broke_center) throw new ForbiddenCallException("Cabin isn't broken");
-		this.center = new_center;
-		this.broke_center = false;
-		this.verifyAndClean();
-	}
-
-	
-	public ShipCoords getCenter() {
-		return this.center;
-	}
-
 	
 	public ArrayList<ShipCoords> findConnectedCabins() {
 		ArrayList<ShipCoords> res = new ArrayList<>();
@@ -371,44 +382,42 @@ public class SpaceShip{
 	}
 
 	
-	public boolean handleMeteorite(Projectile p) {
+	public void handleMeteorite(Projectile p) {
 		//Normalize Roll and see if it grazes or is in a possible row.
 		int index = normalizeRoll(p.getDirection(), p.getOffset());
-		if (index < 0) return false;
+		if (index < 0) return;
 		//If it is in a possible row, handle the logic.
 		if (p.getDimension() == ProjectileDimension.BIG) {
 			//Handle adjacent rows.
 			boolean found_cannon = findCannon(p.getDirection(), index);
-			if (found_cannon) return false;
+			if (found_cannon) return;
 			ShipCoords tmp = this.getFirst(p.getDirection(), index);
-			if (tmp.equals(this.empty.getCoords())) return false;
+			if (tmp.equals(this.empty.getCoords())) return;
 			//if (tmp==this.getCenterCabin()) return true -> gestita response nuova nave nuovo centro
 			this.removeComponent(tmp);
-			return this.broke_center;
+			return;
 		}
 		boolean shielded = this.shielded_directions[p.getDirection().getOpposite().getShift()];
-		if (shielded) return false;
+		if (shielded) return;
 		ShipCoords tmp = this.getFirst(p.getDirection(), index);
-		if (tmp.equals(this.empty.getCoords())) return false;
+		if (tmp.equals(this.empty.getCoords())) return;
 		if (this.getComponent(tmp).getConnector(ComponentRotation.getRotation(p.getDirection().getOpposite())) == ConnectorType.EMPTY)
-			return false;
+			return;
 		this.removeComponent(tmp);
-		return this.broke_center;
 	}
 
 	
-	public boolean handleShot(Projectile p) {
+	public void handleShot(Projectile p) {
 		//Normalize Roll and see if it grazes or is in a possible row.
 		int index = normalizeRoll(p.getDirection(), p.getOffset());
-		if (index < 0) return false;
+		if (index < 0) return;
 		//If it is in a possible row, handle the logic.
 		boolean shielded = p.getDimension() != ProjectileDimension.BIG && this.shielded_directions[p.getDirection().getOpposite().getShift()];
-		if (shielded) return false;
+		if (shielded) return;
 		//Traverse row/column and destroy first block found.
 		ShipCoords tmp = this.getFirst(p.getDirection(), index);
-		if (tmp.equals(this.empty.getCoords())) return false;
+		if (tmp.equals(this.empty.getCoords())) return;
 		this.removeComponent(tmp);
-		return this.broke_center;
 	}
 
 	private int normalizeRoll(ProjectileDirection direction, int roll) {
@@ -463,28 +472,19 @@ public class SpaceShip{
 		}
 		return v.getFoundCannon();
 	}
-
-	
-	public boolean getBrokeCenter() {
-		return this.broke_center;
-	}
-
-	
-	public void setBrokeCenter() {
-		this.broke_center = true;
-	}
-
 	
 	public int[] getContains() {
 		return this.containers;
 	}
 
-	
+	// public ShipCoords getCenter(){
+	// 	return this.center;
+	// }
+
 	public boolean isCabin(ShipCoords coords) {
 		if (coords == null) throw new NullPointerException();
 		return this.cabin_coords.contains(coords);
 	}
-
 	
 	public ClientSpaceShip getClientSpaceShip() {
 		ClientComponent[][] res = new ClientComponent[this.type.getHeight()][this.type.getWidth()];

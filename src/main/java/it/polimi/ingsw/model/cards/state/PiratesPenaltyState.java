@@ -54,8 +54,11 @@ public class PiratesPenaltyState extends CardState {
 			this.state.broadcastMessage(new NotifyStateUpdateMessage(this.state.getClientState()));
 			return;
 		}
-		if(!this.list.getFirst().getDisconnected()) this.list.getFirst().getSpaceShip().handleShot(this.shots.getProjectiles().getFirst());
-		if(this.list.getFirst().getSpaceShip().getCrew()[0]<=0) this.state.loseGame(this.list.getFirst());
+		if(!this.list.getFirst().getDisconnected()) {
+			this.list.getFirst().getSpaceShip().handleShot(this.shots.getProjectiles().getFirst());
+			if(this.list.getFirst().getSpaceShip().getCrew()[0] <= 0 || 
+			   this.list.getFirst().getSpaceShip().getBlobsSize() <= 0) this.state.loseGame(this.list.getFirst());
+		}
 		this.transition();
 	}
 
@@ -78,11 +81,7 @@ public class PiratesPenaltyState extends CardState {
 			return null;
 		}
 		this.shots.getProjectiles().removeFirst();
-		x;x;x;x;x;x;x;x;
-		if (!this.list.getFirst().getSpaceShip().getBrokeCenter()) this.list.getFirst().getSpaceShip().verifyAndClean();
-		else {
-			return new PiratesNewCabinState(state, card, list, shots);
-		}
+		if (this.list.getFirst().getSpaceShip().getBlobsSize()>1) return new PiratesSelectShipState(state, card, list, shots);
 		if (!this.shots.getProjectiles().isEmpty()) return new PiratesPenaltyState(state, card, list, shots);
 		this.list.removeFirst();
 		if (!this.list.isEmpty()) return new PiratesAnnounceState(state, card, list);

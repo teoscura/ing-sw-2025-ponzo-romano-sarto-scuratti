@@ -43,7 +43,7 @@ public class SelectShipReconnectState extends CardState {
     @Override
     public void validate(ServerMessage message) throws ForbiddenCallException {
         message.receive(this);
-        if(!responded){
+        if(this.awaiting.getSpaceShip().getBlobsSize()>1||!this.awaiting.getDisconnected()){
             this.state.broadcastMessage(new NotifyStateUpdateMessage(this.state.getClientState()));
 			return;
         }
@@ -58,21 +58,20 @@ public class SelectShipReconnectState extends CardState {
 
     @Override
     public CardState getNext() {
-        x;x;x;x;x;x;x;x;
         return this.resume;
     }
 
     @Override
-	public void setNewShipCenter(Player p, ShipCoords new_center) {
+	public void selectBlob(Player p, ShipCoords blob_coord) {
 		if (!p.equals(awaiting)) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to set a new center during another player's turn!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to set a new center during another player's turn!"));
 			return;
 		}
 		try {
-			p.getSpaceShip().setCenter(new_center);
-			System.out.println("Player '"+p.getUsername()+"' set a new ship center at "+new_center+".");
-            this.responded = true;
+			p.getSpaceShip().selectShipBlob(blob_coord);
+			System.out.println("Player '"+p.getUsername()+"' selected blob that contains coords "+blob_coord+".");
+			if(p.getSpaceShip().getCrew()[0]<=0) this.state.loseGame(p);
 		} catch (IllegalTargetException e) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to set his new center on an empty space!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to set his new center on an empty space!"));
@@ -85,9 +84,6 @@ public class SelectShipReconnectState extends CardState {
 
     @Override
     public void disconnect(Player p){
-        if(p.equals(awaiting)){
-            this.responded = true;
-        }
         System.out.println("Player '" + p.getUsername() + "' disconnected!");
     }
     

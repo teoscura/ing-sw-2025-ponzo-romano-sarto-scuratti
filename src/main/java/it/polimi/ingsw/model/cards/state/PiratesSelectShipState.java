@@ -20,13 +20,13 @@ import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.VoyageState;
 
-class PiratesNewCabinState extends CardState {
+class PiratesSelectShipState extends CardState {
 
 	private final PiratesCard card;
 	private final ArrayList<Player> list;
 	private final ProjectileArray shots;
 
-	public PiratesNewCabinState(VoyageState state, PiratesCard card, ArrayList<Player> list, ProjectileArray shots) {
+	public PiratesSelectShipState(VoyageState state, PiratesCard card, ArrayList<Player> list, ProjectileArray shots) {
 		super(state);
 		if (card == null || list == null || shots == null) throw new NullPointerException();
 		this.card = card;
@@ -44,11 +44,10 @@ class PiratesNewCabinState extends CardState {
 	@Override
 	public void validate(ServerMessage message) throws ForbiddenCallException {
 		message.receive(this);
-		if (!this.list.getFirst().getRetired()&&this.list.getFirst().getSpaceShip().getBrokeCenter()) {
+		if (!this.list.getFirst().getRetired()&&!this.list.getFirst().getDisconnected()) {
 			this.state.broadcastMessage(new NotifyStateUpdateMessage(this.state.getClientState()));
 			return;
 		}
-		if(!this.list.getFirst().getRetired()&&this.list.getFirst().getSpaceShip().getCrew()[0]<=0) this.state.loseGame(this.list.getFirst());
 		this.transition();
 	}
 
@@ -77,15 +76,16 @@ class PiratesNewCabinState extends CardState {
 	}
 
 	@Override
-	public void setNewShipCenter(Player p, ShipCoords new_center) {
+	public void selectBlob(Player p, ShipCoords blob_coord) {
 		if (p != this.list.getFirst()) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to set a new center during another player's turn!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to set a new center during another player's turn!"));
 			return;
 		}
 		try {
-			p.getSpaceShip().setCenter(new_center);
-			System.out.println("Player '"+p.getUsername()+"' set a new ship center at "+new_center+".");
+			p.getSpaceShip().selectShipBlob(blob_coord);
+			System.out.println("Player '"+p.getUsername()+"' selected blob that contains coords "+blob_coord+".");
+			if(p.getSpaceShip().getCrew()[0]<=0) this.state.loseGame(p);
 		} catch (IllegalTargetException e) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to set his new center on an empty space!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to set his new center on an empty space!"));
@@ -94,18 +94,13 @@ class PiratesNewCabinState extends CardState {
 			System.out.println("Player '" + p.getUsername() + "' attempted to set his new center while having a unbroken ship!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to set his new center while having a unbroken ship!"));
 		}
-		x;x;x;x;x;x;x;x;
 	}
 
 	@Override
 	public void disconnect(Player p) throws ForbiddenCallException {
-		if (this.list.getFirst().equals(p)) {
-			System.out.println("Player '" + p.getUsername() + "' disconnected!");
-			this.state.loseGame(p);
-			x;x;x;x;x;x;x;x;
-			return;
+		if (!this.list.getFirst().equals(p)) {
+			this.list.remove(p);
 		}
-		this.list.remove(p);
 		System.out.println("Player '" + p.getUsername() + "' disconnected!");
 	}
 

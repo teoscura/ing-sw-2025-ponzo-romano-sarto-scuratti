@@ -35,23 +35,23 @@ class SpaceShipTest {
 	@Test
 	void verify() {
 		VerifyResult[][] check_results = new VerifyResult[ship.getHeight()][ship.getWidth()];
-		check_results = ship.verify();
+		check_results = ship.bulkVerify();
 		assertEquals(VerifyResult.GOOD_COMP, check_results[2][3]);
 		ShipCoords coords1 = new ShipCoords(GameModeType.LVL2, 4, 2);
 		StructuralComponent component1 = new StructuralComponent(1, new ConnectorType[]{ConnectorType.EMPTY, ConnectorType.SINGLE_CONNECTOR, ConnectorType.EMPTY, ConnectorType.SINGLE_CONNECTOR},
 				ComponentRotation.U000, coords1);
 		ship.addComponent(component1, coords1);
-		check_results = ship.verify();
+		check_results = ship.bulkVerify();
 		assertEquals(VerifyResult.GOOD_COMP, check_results[2][4]);
 		ShipCoords coords2 = new ShipCoords(GameModeType.LVL2, 5, 2);
 		StructuralComponent component2 = new StructuralComponent(1, new ConnectorType[]{ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.DOUBLE_CONNECTOR},
 				ComponentRotation.U000, coords2);
 		ship.addComponent(component2, coords2);
-		check_results = ship.verify();
+		check_results = ship.bulkVerify();
 		assertEquals(ship.getEmpty(), ship.getComponent(new ShipCoords(GameModeType.LVL2, 3, 3)));
 		assertEquals(VerifyResult.UNCHECKED, check_results[3][3]);
 		assertEquals(VerifyResult.BRKN_COMP, check_results[2][4]);
-		assertEquals(VerifyResult.NOT_LNKED, check_results[2][5]);
+		assertEquals(VerifyResult.BRKN_COMP, check_results[2][5]);
 	}
 
 	@Test
@@ -314,20 +314,6 @@ class SpaceShipTest {
 	}
 
 	@Test
-	void setCenter() {
-		ShipCoords coords = new ShipCoords(GameModeType.LVL2, 3, 3);
-		assertThrows(IllegalTargetException.class, () -> ship.setCenter(coords));
-	}
-
-	@Test
-	void getCenter() {
-		ShipCoords expected = new ShipCoords(GameModeType.LVL2, 3, 2);
-		ShipCoords actual = ship.getCenter();
-		assertEquals(expected.x, actual.x);
-		assertEquals(expected.y, actual.y);
-	}
-
-	@Test
 	void findConnectedCabins() {
 		ConnectorType[] connectors = {ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL};
 		ShipCoords coords = new ShipCoords(GameModeType.LVL2, 3, 3);
@@ -335,7 +321,7 @@ class SpaceShipTest {
 		ship.addComponent(cabin1, coords);
 		ArrayList<ShipCoords> results = ship.findConnectedCabins();
 		assertTrue(results.contains(coords));
-		assertTrue(results.contains(ship.getCenter()));
+		assertTrue(results.contains(new ShipCoords(GameModeType.LVL2, 3, 2)));
 	}
 
 	@Test
@@ -351,7 +337,8 @@ class SpaceShipTest {
 	@Test
 	void handleMeteorite() {
 		Projectile missed_meteor = new Projectile(ProjectileDirection.U180, ProjectileDimension.SMALL, 2);
-		assertFalse(ship.handleMeteorite(missed_meteor));
+		ship.handleMeteorite(missed_meteor);
+		assertTrue(1==ship.getBlobsSize());
 		ConnectorType[] connectors = {ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.UNIVERSAL, ConnectorType.EMPTY};
 		ShipCoords coords = new ShipCoords(GameModeType.LVL2, 2, 2);
 		CannonComponent cannon = new CannonComponent(1, connectors, ComponentRotation.U000, CannonType.SINGLE, coords);
@@ -364,7 +351,8 @@ class SpaceShipTest {
 	@Test
 	void handleShot() {
 		Projectile missed_shot = new Projectile(ProjectileDirection.U180, ProjectileDimension.SMALL, 2);
-		assertFalse(ship.handleShot(missed_shot));
+		ship.handleShot(missed_shot);
+		assertTrue(1==ship.getBlobsSize());
 
 		ConnectorType[] connectors = {ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.UNIVERSAL, ConnectorType.EMPTY};
 		ShipCoords coords = new ShipCoords(GameModeType.LVL2, 2, 2);
@@ -372,11 +360,9 @@ class SpaceShipTest {
 		ship.addComponent(cabin, coords);
 
 		Projectile shot = new Projectile(ProjectileDirection.U090, ProjectileDimension.SMALL, 7);
-		boolean hitCenter = ship.handleShot(shot);
+		ship.handleShot(shot);
 
 		assertEquals(ship.getEmpty(), ship.getComponent(coords));
-
-		assertEquals(coords.equals(ship.getCenter()), hitCenter);
 	}
 
 }

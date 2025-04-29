@@ -25,7 +25,7 @@ public class MeteorAnnounceState extends CardState {
 	private final int card_id;
 	private final ProjectileArray left;
 	private final ArrayList<Player> awaiting;
-	private boolean broke_cabin;
+	private boolean reselect;
 
 	public MeteorAnnounceState(VoyageState state, int card_id, ProjectileArray array) {
 		super(state);
@@ -54,8 +54,11 @@ public class MeteorAnnounceState extends CardState {
 			return;
 		}
 		for (Player p : this.state.getOrder(CardOrder.NORMAL)) {
-			this.broke_cabin = p.getSpaceShip().handleMeteorite(this.left.getProjectiles().getFirst());
-			if(p.getSpaceShip().getCrew()[0]<=0) this.state.loseGame(p);
+			p.getSpaceShip().handleMeteorite(this.left.getProjectiles().getFirst());
+			this.reselect = this.reselect || p.getSpaceShip().getBlobsSize() > 1;
+		}
+		for (Player p : this.state.getOrder(CardOrder.NORMAL)) {
+			if (p.getSpaceShip().getBlobsSize() <= 0 || p.getSpaceShip().getCrew()[0] <= 0) this.state.loseGame(p);
 		}
 		this.transition();
 	}
@@ -72,11 +75,7 @@ public class MeteorAnnounceState extends CardState {
 
 	@Override
     public CardState getNext() {
-		for (Player p : this.state.getOrder(CardOrder.NORMAL)) {
-			x;x;x;x;x;x;x;x;
-			if (!p.getSpaceShip().getBrokeCenter()) p.getSpaceShip().verifyAndClean();
-		}
-		if (broke_cabin) return new MeteorNewCabinState(state, card_id, left);
+		if (reselect) return new MeteorSelectShipState(state, card_id, left);
 		this.left.getProjectiles().removeFirst();
 		if (!this.left.getProjectiles().isEmpty()) return new MeteorAnnounceState(state, card_id, left);
 		System.out.println("Card exhausted, moving to a new one!");

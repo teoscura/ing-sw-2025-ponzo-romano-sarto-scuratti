@@ -231,7 +231,7 @@ public class UpdateSpaceShipTest {
     }
 
     @Test
-    void newCabinUpdateShot() throws ForbiddenCallException{
+    void blobSelectShot() throws ForbiddenCallException{
         assertTrue(10 == nocabin.getSpaceShip().getTotalCrew());
         nocabin.getSpaceShip().handleShot(new Projectile(ProjectileDirection.U180, ProjectileDimension.SMALL, 7));
         assertTrue(nocabin.getSpaceShip().getBrokeCenter());
@@ -241,7 +241,7 @@ public class UpdateSpaceShipTest {
     }
 
     @Test
-    void newCabinUpdateMeteorite() throws ForbiddenCallException{
+    void blobSelectMeteorite() throws ForbiddenCallException{
         assertTrue(10 == nocabin.getSpaceShip().getTotalCrew());
         nocabin.getSpaceShip().handleMeteorite(new Projectile(ProjectileDirection.U180, ProjectileDimension.SMALL, 7));
         assertTrue(nocabin.getSpaceShip().getBrokeCenter());

@@ -27,6 +27,7 @@ public class VerifyState extends GameState {
 
 	private final iCards voyage_deck;
 	private final ArrayList<Player> to_validate;
+	private final ArrayList<Player> multi_blobs;
 	private final ArrayList<Player> finish_order;
 
 	public VerifyState(ModelInstance model, GameModeType type, PlayerCount count, ArrayList<Player> players, iCards voyage_deck, ArrayList<Player> finish_order) {
@@ -71,7 +72,7 @@ public class VerifyState extends GameState {
 			tmp.add(new ClientVerifyPlayer(p.getUsername(),
 					p.getColor(),
 					p.getSpaceShip().getClientSpaceShip().getVerifyShip(p.getSpaceShip().verify()),
-					p.getSpaceShip().verify(),
+					p.getSpaceShip().bulkVerify(),
 					this.finish_order.contains(p),
 					this.finish_order.indexOf(p)));
 		}
@@ -126,11 +127,12 @@ public class VerifyState extends GameState {
 		}
 		try {
 			p.getSpaceShip().removeComponent(coords);
-			p.getSpaceShip().verifyAndClean();
 		} catch (IllegalTargetException e) {
 			System.out.println("Player '" + p.getUsername() + "' tried to remove an empty component!");
 			this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' tried to remove an empty component!"));
+			return;
 		}
+		p.getSpaceShip().aaoo
 	}
 
 	@Override

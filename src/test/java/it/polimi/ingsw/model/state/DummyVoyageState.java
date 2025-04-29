@@ -12,6 +12,7 @@ import it.polimi.ingsw.model.PlayerCount;
 import it.polimi.ingsw.model.cards.iCard;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.cards.state.CardState;
+import it.polimi.ingsw.model.cards.state.SelectShipReconnectState;
 import it.polimi.ingsw.model.cards.utils.CardOrder;
 import it.polimi.ingsw.model.cards.utils.CombatZoneCriteria;
 import it.polimi.ingsw.model.board.iCards;
@@ -90,6 +91,9 @@ public class DummyVoyageState extends VoyageState {
 		System.out.println("Player '" + p.getUsername() + "' reconnected!");
 	    this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' reconnected!"));
 		p.reconnect();
+		if(!p.getRetired()&&p.getSpaceShip().getBlobsSize()>1){
+			this.setCardState(new SelectShipReconnectState(this, this.state, p));
+		}
 	}
 
 	@Override

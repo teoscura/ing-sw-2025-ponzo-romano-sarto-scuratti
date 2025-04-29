@@ -7,13 +7,13 @@ import it.polimi.ingsw.model.cards.state.CardState;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.GameState;
 
-public class NewCenterMessage extends ServerMessage {
+public class SelectBlobMessage extends ServerMessage {
     
-    private final ShipCoords new_center;
+    private final ShipCoords blob_coord; 
 
-    public NewCenterMessage(ShipCoords new_center){
-        if(new_center == null) throw new NullPointerException();
-        this.new_center = new_center;
+    public SelectBlobMessage(ShipCoords blob_coord){
+        if(blob_coord == null) throw new NullPointerException();
+        this.blob_coord = blob_coord;
     }
 
     @Override
@@ -34,7 +34,7 @@ public class NewCenterMessage extends ServerMessage {
 
     @Override
     public void receive(CardState state) throws ForbiddenCallException {
-        state.setNewShipCenter(this.descriptor.getPlayer(), new_center);
+        state.selectBlob(this.descriptor.getPlayer(), blob_coord);
     }
 
 }
