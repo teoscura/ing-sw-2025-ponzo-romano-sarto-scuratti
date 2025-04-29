@@ -94,6 +94,7 @@ class PiratesNewCabinState extends CardState {
 			System.out.println("Player '" + p.getUsername() + "' attempted to set his new center while having a unbroken ship!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to set his new center while having a unbroken ship!"));
 		}
+		x;x;x;x;x;x;x;x;
 	}
 
 	@Override
@@ -101,6 +102,7 @@ class PiratesNewCabinState extends CardState {
 		if (this.list.getFirst().equals(p)) {
 			System.out.println("Player '" + p.getUsername() + "' disconnected!");
 			this.state.loseGame(p);
+			x;x;x;x;x;x;x;x;
 			return;
 		}
 		this.list.remove(p);

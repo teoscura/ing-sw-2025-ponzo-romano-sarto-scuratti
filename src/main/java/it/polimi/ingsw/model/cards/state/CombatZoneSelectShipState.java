@@ -21,14 +21,14 @@ import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.VoyageState;
 
-public class CombatZoneNewCabinState extends CardState {
+public class CombatZoneSelectShipState extends CardState {
 
 	private final int card_id;
 	private final ArrayList<CombatZoneSection> sections;
 	private final ProjectileArray shots;
 	private final Player target;
 
-	public CombatZoneNewCabinState(VoyageState state, int card_id, ArrayList<CombatZoneSection> sections, ProjectileArray shots, Player target) {
+	public CombatZoneSelectShipState(VoyageState state, int card_id, ArrayList<CombatZoneSection> sections, ProjectileArray shots, Player target) {
 		super(state);
 		if (sections == null || shots == null || target == null) ;
 		if (card_id < 1 || card_id > 120) throw new IllegalArgumentException();
@@ -100,13 +100,14 @@ public class CombatZoneNewCabinState extends CardState {
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to set his new center while having a unbroken ship!"));
 			System.out.println("Player '" + p.getUsername() + "' set a new ship center.");
 		}
+		x;x;x;x;x;x;x;x;
 	}
 
 	@Override
 	public void disconnect(Player p) throws ForbiddenCallException {
 		if (target == p) {
 			this.state.loseGame(p);
-			this.transition();
+			x;x;x;x;x;x;x;x;
 		}
 		System.out.println("Player '" + p.getUsername() + "' disconnected!");
 	}

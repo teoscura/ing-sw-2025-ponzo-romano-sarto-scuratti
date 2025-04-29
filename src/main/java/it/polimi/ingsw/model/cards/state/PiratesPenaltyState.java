@@ -78,6 +78,7 @@ public class PiratesPenaltyState extends CardState {
 			return null;
 		}
 		this.shots.getProjectiles().removeFirst();
+		x;x;x;x;x;x;x;x;
 		if (!this.list.getFirst().getSpaceShip().getBrokeCenter()) this.list.getFirst().getSpaceShip().verifyAndClean();
 		else {
 			return new PiratesNewCabinState(state, card, list, shots);

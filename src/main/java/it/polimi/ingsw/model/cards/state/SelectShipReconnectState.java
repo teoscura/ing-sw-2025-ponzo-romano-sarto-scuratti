@@ -18,13 +18,13 @@ import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.VoyageState;
 
-public class NewCabinReconnectState extends CardState {
+public class SelectShipReconnectState extends CardState {
 
     private final CardState resume;
     private final Player awaiting;
     private boolean responded = false;
 
-    public NewCabinReconnectState(VoyageState state, CardState resume, Player awaiting){
+    public SelectShipReconnectState(VoyageState state, CardState resume, Player awaiting){
         super(state);
         if(awaiting==null||resume==null) throw new NullPointerException();
         this.resume = resume;
@@ -58,6 +58,7 @@ public class NewCabinReconnectState extends CardState {
 
     @Override
     public CardState getNext() {
+        x;x;x;x;x;x;x;x;
         return this.resume;
     }
 

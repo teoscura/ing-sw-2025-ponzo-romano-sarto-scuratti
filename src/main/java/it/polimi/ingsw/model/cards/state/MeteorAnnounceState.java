@@ -73,6 +73,7 @@ public class MeteorAnnounceState extends CardState {
 	@Override
     public CardState getNext() {
 		for (Player p : this.state.getOrder(CardOrder.NORMAL)) {
+			x;x;x;x;x;x;x;x;
 			if (!p.getSpaceShip().getBrokeCenter()) p.getSpaceShip().verifyAndClean();
 		}
 		if (broke_cabin) return new MeteorNewCabinState(state, card_id, left);

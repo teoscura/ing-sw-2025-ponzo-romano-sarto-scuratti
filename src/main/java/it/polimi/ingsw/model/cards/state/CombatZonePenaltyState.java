@@ -125,10 +125,11 @@ class CombatZonePenaltyState extends CardState {
 			System.out.println("...Card exhausted, moving to a new one!");
 			return null;
 		}
+		x;x;x;x;x;x;x;x;
 		if (!target.getSpaceShip().getBrokeCenter()&&this.sections.getFirst().getPenalty()==CombatZonePenalty.SHOTS) target.getSpaceShip().verifyAndClean();
 		if(this.sections.getFirst().getPenalty()==CombatZonePenalty.SHOTS) this.shots.getProjectiles().removeFirst();
 		if (this.target.getSpaceShip().getBrokeCenter())
-			return new CombatZoneNewCabinState(state, card_id, sections, shots, target);
+			return new CombatZoneSelectShipState(state, card_id, sections, shots, target);
 		if (this.sections.getFirst().getPenalty() == CombatZonePenalty.SHOTS && !this.shots.getProjectiles().isEmpty()) {
 			return new CombatZonePenaltyState(state, card_id, sections, shots, target);
 		}

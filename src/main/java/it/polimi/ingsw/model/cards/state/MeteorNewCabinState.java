@@ -82,12 +82,14 @@ class MeteorNewCabinState extends CardState {
 			System.out.println("Player '" + p.getUsername() + "' attempted to set his new center while having a unbroken ship!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to set his new center while having a unbroken ship!"));
 		}
+		x;x;x;x;x;x;x;x;
 	}
 
 	@Override
 	public void disconnect(Player p) throws ForbiddenCallException {
 		if (p.getSpaceShip().getBrokeCenter()) {
 			this.state.loseGame(p);
+			x;x;x;x;x;x;x;x;
 		}
 		System.out.println("Player '" + p.getUsername() + "' disconnected!");
 	}
