@@ -5,7 +5,6 @@ import it.polimi.ingsw.model.ModelInstance;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.cards.state.CardState;
 import it.polimi.ingsw.model.state.GameState;
-import it.polimi.ingsw.model.state.VoyageState;
 
 public class ServerDisconnectMessage extends ServerMessage {
 
@@ -22,7 +21,8 @@ public class ServerDisconnectMessage extends ServerMessage {
 
 	@Override
 	public void receive(GameState state) throws ForbiddenCallException {
-		state.disconnect(descriptor.getPlayer());
+		if(this.descriptor.getPlayer()==null) state.disconnect(this.descriptor);
+		else state.disconnect(this.descriptor.getPlayer());
 	}
 
 	@Override

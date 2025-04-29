@@ -4,6 +4,7 @@ import java.util.List;
 
 import it.polimi.ingsw.controller.server.ClientDescriptor;
 import it.polimi.ingsw.controller.server.ServerController;
+import it.polimi.ingsw.message.server.ServerConnectMessage;
 import it.polimi.ingsw.message.server.ServerDisconnectMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
@@ -69,8 +70,8 @@ public class DummyModelInstance extends ModelInstance {
 
 	public void connect(ClientDescriptor client) {
 		try {
-			//XXX validate message dont do this
-			this.state.connect(client);
+			ServerMessage mess = new ServerConnectMessage(client);
+			this.state.validate(mess);
 		} catch (ForbiddenCallException e) {
 			System.out.println("Client: '" + client.getUsername() + "' tried connecting when the current state doesn't support it anymore!");
 		}
@@ -78,8 +79,9 @@ public class DummyModelInstance extends ModelInstance {
 
 	public void disconnect(ClientDescriptor client) {
 		try {
-			//XXX validate message dont do this
-			this.state.disconnect(client);
+			ServerMessage mess = new ServerDisconnectMessage();
+			mess.setDescriptor(client);
+			this.state.validate(mess);
 		} catch (ForbiddenCallException e) {
 			System.out.println("Client: '" + client.getUsername() + "' tried disconnecting when the current state doesn't support it anymore!");
 		}
