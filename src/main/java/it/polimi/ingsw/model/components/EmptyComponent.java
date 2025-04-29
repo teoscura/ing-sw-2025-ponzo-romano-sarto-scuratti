@@ -9,7 +9,7 @@ import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ConnectorType;
 import it.polimi.ingsw.model.components.visitors.iVisitor;
 import it.polimi.ingsw.model.player.ShipCoords;
-import it.polimi.ingsw.model.player.iSpaceShip;
+import it.polimi.ingsw.model.player.SpaceShip;
 
 public class EmptyComponent extends BaseComponent {
 
@@ -22,7 +22,7 @@ public class EmptyComponent extends BaseComponent {
 	}
 
 	@Override
-	public boolean verify(iSpaceShip ship) {
+	public boolean verify(SpaceShip ship) {
 		return true;
 	}
 
@@ -39,12 +39,12 @@ public class EmptyComponent extends BaseComponent {
 	}
 
 	@Override
-	public void onCreation(iSpaceShip ship, ShipCoords coords) {
+	public void onCreation(SpaceShip ship, ShipCoords coords) {
 		this.coords = coords;
 	}	
 
 	@Override
-	public void onDelete(iSpaceShip ship) {
+	public void onDelete(SpaceShip ship) {
 	}
 
 	@Override

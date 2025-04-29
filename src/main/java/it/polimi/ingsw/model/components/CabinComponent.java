@@ -14,7 +14,7 @@ import it.polimi.ingsw.model.components.exceptions.UnsupportedAlienCabinExceptio
 import it.polimi.ingsw.model.components.visitors.CabinVisitor;
 import it.polimi.ingsw.model.components.visitors.iVisitor;
 import it.polimi.ingsw.model.player.ShipCoords;
-import it.polimi.ingsw.model.player.iSpaceShip;
+import it.polimi.ingsw.model.player.SpaceShip;
 
 public class CabinComponent extends BaseComponent {
     
@@ -47,7 +47,7 @@ public class CabinComponent extends BaseComponent {
         return this.crew_type;
     }
 
-    public void setCrew(iSpaceShip ship, int new_crew, AlienType type){
+    public void setCrew(SpaceShip ship, int new_crew, AlienType type){
         if(new_crew<0) throw new NegativeArgumentException("Crew size can't be negative");
         if(type.getArraypos()<0) throw new IllegalArgumentException("Type must be a single alien type, not a collector");
         if(new_crew>type.getMaxCapacity()) throw new ArgumentTooBigException("Crew size exceeds type's max capacity");
@@ -63,13 +63,13 @@ public class CabinComponent extends BaseComponent {
     }
 
     @Override
-    public void onCreation(iSpaceShip ship, ShipCoords coords) {
+    public void onCreation(SpaceShip ship, ShipCoords coords) {
         this.coords = coords;
         ship.addCabinCoords(this.coords);
     }
 
     @Override
-    public void onDelete(iSpaceShip ship) {
+    public void onDelete(SpaceShip ship) {
         ship.delCabinCoords(this.coords);
     }
 

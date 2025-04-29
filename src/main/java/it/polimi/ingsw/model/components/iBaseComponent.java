@@ -8,7 +8,7 @@ import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ConnectorType;
 import it.polimi.ingsw.model.components.visitors.iVisitor;
 import it.polimi.ingsw.model.player.ShipCoords;
-import it.polimi.ingsw.model.player.iSpaceShip;
+import it.polimi.ingsw.model.player.SpaceShip;
 
 
 public interface iBaseComponent extends Serializable {
@@ -17,14 +17,14 @@ public interface iBaseComponent extends Serializable {
 
 	int getID();
 
-	boolean verify(iSpaceShip ship);
+	boolean verify(SpaceShip ship);
 
 	void check(iVisitor v);
 
 	//On delete/Creation
-	void onCreation(iSpaceShip ship, ShipCoords coords);
+	void onCreation(SpaceShip ship, ShipCoords coords);
 
-	void onDelete(iSpaceShip ship);
+	void onDelete(SpaceShip ship);
 
 	//Return the connector pointing up.
 	void rotate(ComponentRotation rotation);
@@ -37,7 +37,7 @@ public interface iBaseComponent extends Serializable {
 
 	ComponentRotation getRotation();
 
-	iBaseComponent[] getConnectedComponents(iSpaceShip ship);
+	iBaseComponent[] getConnectedComponents(SpaceShip ship);
 
 	boolean powerable();
 

@@ -15,7 +15,7 @@ import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
 import it.polimi.ingsw.model.components.visitors.LifeSupportUpdateVisitor;
 import it.polimi.ingsw.model.components.visitors.iVisitor;
 import it.polimi.ingsw.model.player.ShipCoords;
-import it.polimi.ingsw.model.player.iSpaceShip;
+import it.polimi.ingsw.model.player.SpaceShip;
 
 public class AlienLifeSupportComponent extends BaseComponent {
 
@@ -54,12 +54,12 @@ public class AlienLifeSupportComponent extends BaseComponent {
 	}
 
 	@Override
-	public void onCreation(iSpaceShip ship, ShipCoords coords) {
+	public void onCreation(SpaceShip ship, ShipCoords coords) {
 		this.coords = coords;
 	}
 
 	@Override
-	public void onDelete(iSpaceShip ship) {
+	public void onDelete(SpaceShip ship) {
 		iBaseComponent[] tmp = this.getConnectedComponents(ship);
 		for (iBaseComponent c : tmp) {
 			if (!ship.isCabin(c.getCoords())) continue;

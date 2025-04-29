@@ -29,7 +29,7 @@ import it.polimi.ingsw.model.components.visitors.EnergyVisitor;
 import it.polimi.ingsw.model.player.exceptions.IllegalComponentAdd;
 
 
-public class SpaceShip implements iSpaceShip {
+public class SpaceShip{
 
 	private final Player player;
 
@@ -81,17 +81,16 @@ public class SpaceShip implements iSpaceShip {
 		this.updateShip();
 	}
 
-	@Override
 	public GameModeType getType() {
 		return this.type;
 	}
 
-	@Override
+
 	public int[] getCrew() {
 		return this.crew;
 	}
 
-	@Override
+
 	public VerifyResult[][] verify() {
 		VerifyResult[][] res = new VerifyResult[this.type.getHeight()][];
 		Queue<iBaseComponent> queue = new ArrayDeque<iBaseComponent>();
@@ -119,7 +118,7 @@ public class SpaceShip implements iSpaceShip {
 		return res;
 	}
 
-	@Override
+
 	public boolean verifyAndClean() {
 		VerifyResult[][] ver = this.verify();
 		boolean had_to_clean = false;
@@ -133,7 +132,6 @@ public class SpaceShip implements iSpaceShip {
 		return had_to_clean;
 	}
 
-	@Override
 	public void addComponent(iBaseComponent component, ShipCoords coords) {
 		if (coords == null) throw new NullPointerException();
 		if (coords.x < 0 || coords.x >= this.type.getWidth())
@@ -157,7 +155,6 @@ public class SpaceShip implements iSpaceShip {
 		this.updateShip();
 	}
 
-	@Override
 	public void removeComponent(ShipCoords coords) {
 		if (coords == null) throw new NullPointerException();
 		if (coords == this.getCenter()) this.setBrokeCenter();
@@ -170,7 +167,6 @@ public class SpaceShip implements iSpaceShip {
 		this.updateShip();
 	}
 
-	@Override
 	public void updateShip() {
 		SpaceShipUpdateVisitor v = new SpaceShipUpdateVisitor();
 		for (iBaseComponent[] col : this.components) {
@@ -191,7 +187,6 @@ public class SpaceShip implements iSpaceShip {
 		}
 	}
 
-	@Override
 	public void resetPower() {
 		EnergyVisitor v = new EnergyVisitor(false);
 		for (iBaseComponent[] col : this.components) {
@@ -202,7 +197,6 @@ public class SpaceShip implements iSpaceShip {
 		this.updateShip();
 	}
 
-	@Override
 	public void turnOn(ShipCoords coords_target, ShipCoords battery_location) {
 		if (coords_target == null) throw new NullPointerException();
 		if (battery_location == null) throw new NullPointerException();
@@ -216,7 +210,6 @@ public class SpaceShip implements iSpaceShip {
 		this.updateShip();
 	}
 
-	@Override
 	public iBaseComponent getComponent(ShipCoords coords) {
 		if (coords == null) throw new NullPointerException();
 		if (coords.x < 0 || coords.x >= this.type.getWidth())
@@ -226,97 +219,95 @@ public class SpaceShip implements iSpaceShip {
 		return this.components[coords.y][coords.x];
 	}
 
-	@Override
 	public double getCannonPower() {
 		return this.cannon_power;
 	}
 
-	@Override
 	public int getEnginePower() {
 		return this.engine_power;
 	}
 
-	@Override
+	
 	public int getEnergyPower() {
 		return this.containers[0];
 	}
 
-	@Override
+	
 	public boolean[] getShieldedDirections() {
 		return this.shielded_directions;
 	}
 
-	@Override
+	
 	public int getHeight() {
 		return this.type.getHeight();
 	}
 
-	@Override
+	
 	public int getWidth() {
 		return this.type.getWidth();
 	}
 
-	@Override
+	
 	public iBaseComponent getEmpty() {
 		return this.empty;
 	}
 
-	@Override
+	
 	public void addStorageCoords(ShipCoords coords) {
 		if (this.storage_coords.contains(coords))
 			throw new NotUniqueException("Coords are already present in storage coords");
 		this.storage_coords.add(coords);
 	}
 
-	@Override
+	
 	public void delStorageCoords(ShipCoords coords) {
 		if (!this.storage_coords.contains(coords))
 			throw new NotPresentException("Coords arent present in storage coords");
 		this.storage_coords.remove(coords);
 	}
 
-	@Override
+	
 	public void addCabinCoords(ShipCoords coords) {
 		if (this.cabin_coords.contains(coords))
 			throw new NotUniqueException("Coords are already present in cabin coords");
 		this.cabin_coords.add(coords);
 	}
 
-	@Override
+	
 	public void delCabinCoords(ShipCoords coords) {
 		if (!this.cabin_coords.contains(coords)) throw new NotPresentException("Coords arent present in cabin coords");
 		this.cabin_coords.remove(coords);
 	}
 
-	@Override
+	
 	public void addBatteryCoords(ShipCoords coords) {
 		if (this.battery_coords.contains(coords))
 			throw new NotUniqueException("Coords are already present in battery coords");
 		this.battery_coords.add(coords);
 	}
 
-	@Override
+	
 	public void delBatteryCoords(ShipCoords coords) {
 		if (!this.battery_coords.contains(coords))
 			throw new NotPresentException("Coords arent present in battery coords");
 		this.battery_coords.remove(coords);
 	}
 
-	@Override
+	
 	public void addPowerableCoords(ShipCoords coords) {
 		if (this.powerable_coords.contains(coords))
 			throw new NotUniqueException("Coords are already present in powerable coords");
 		this.powerable_coords.add(coords);
 	}
 
-	@Override
+	
 	public void delPowerableCoords(ShipCoords coords) {
 		if (!this.powerable_coords.contains(coords))
 			throw new NotPresentException("Coords arent present in powerable coords");
 		this.powerable_coords.remove(coords);
 	}
 
-	@Override
+	
 	public int getTotalCrew() {
 		int sum = 0;
 		for (int i : this.getCrew()) {
@@ -325,7 +316,7 @@ public class SpaceShip implements iSpaceShip {
 		return sum;
 	}
 
-	@Override
+	
 	public void setCenter(ShipCoords new_center) throws ForbiddenCallException {
 		if (this.type.isForbidden(new_center) || this.getComponent(new_center) == this.empty)
 			throw new IllegalTargetException("New center is either forbidden or illegal.");
@@ -335,12 +326,12 @@ public class SpaceShip implements iSpaceShip {
 		this.verifyAndClean();
 	}
 
-	@Override
+	
 	public ShipCoords getCenter() {
 		return this.center;
 	}
 
-	@Override
+	
 	public ArrayList<ShipCoords> findConnectedCabins() {
 		ArrayList<ShipCoords> res = new ArrayList<>();
 		for (ShipCoords coords : this.cabin_coords) {
@@ -353,7 +344,7 @@ public class SpaceShip implements iSpaceShip {
 		return res;
 	}
 
-	@Override
+	
 	public int countExposedConnectors() {
 		int sum = 0;
 		for (iBaseComponent[] col : this.components) {
@@ -377,7 +368,7 @@ public class SpaceShip implements iSpaceShip {
 		return sum;
 	}
 
-	@Override
+	
 	public boolean handleMeteorite(Projectile p) {
 		//Normalize Roll and see if it grazes or is in a possible row.
 		int index = normalizeRoll(p.getDirection(), p.getOffset());
@@ -403,7 +394,7 @@ public class SpaceShip implements iSpaceShip {
 		return this.broke_center;
 	}
 
-	@Override
+	
 	public boolean handleShot(Projectile p) {
 		//Normalize Roll and see if it grazes or is in a possible row.
 		int index = normalizeRoll(p.getDirection(), p.getOffset());
@@ -471,28 +462,28 @@ public class SpaceShip implements iSpaceShip {
 		return v.getFoundCannon();
 	}
 
-	@Override
+	
 	public boolean getBrokeCenter() {
 		return this.broke_center;
 	}
 
-	@Override
+	
 	public void setBrokeCenter() {
 		this.broke_center = true;
 	}
 
-	@Override
+	
 	public int[] getContains() {
 		return this.containers;
 	}
 
-	@Override
+	
 	public boolean isCabin(ShipCoords coords) {
 		if (coords == null) throw new NullPointerException();
 		return this.cabin_coords.contains(coords);
 	}
 
-	@Override
+	
 	public ClientSpaceShip getClientSpaceShip() {
 		ClientComponent[][] res = new ClientComponent[this.type.getHeight()][this.type.getWidth()];
 		for (int x = 0; x < this.type.getWidth(); x++) {

@@ -2,11 +2,11 @@
 set separator ::
 class adventure_cards::AbandonedShipCard {
   + AbandonedShipCard(int): 
-  + apply(iSpaceShip, iPlayerResponse): int
+  + apply(SpaceShip, iPlayerResponse): int
 }
 class adventure_cards::AbandonedStationCard {
   + AbandonedStationCard(int): 
-  + apply(iSpaceShip, iPlayerResponse): int
+  + apply(SpaceShip, iPlayerResponse): int
 }
 class components::AlienLifeSupportComponent {
   + AlienLifeSupportComponent(ConnectorType[], ComponentRotation, AlienType): 
@@ -24,7 +24,7 @@ class components::BaseComponent {
   - connectors: ConnectorType[]
   + check(iVisitor): void
   + getConnector(ComponentRotation): ConnectorType
-  + verify(iSpaceShip): boolean
+  + verify(SpaceShip): boolean
    rotation: ComponentRotation
    connectors: ConnectorType[]
    coords: ShipCoords
@@ -46,7 +46,7 @@ class components::CabinComponent {
   - upgradeCrewType(AlienType): void
   + check(iVisitor): void
   + setCrew(int, AlienType): void
-  + updateCrewType(iSpaceShip): void
+  + updateCrewType(SpaceShip): void
    crew: int
    crewType: AlienType
 }
@@ -69,7 +69,7 @@ class components::CannonComponent {
   + CannonComponent(ConnectorType[], ComponentRotation, CannonType): 
   + CannonComponent(ConnectorType[], ComponentRotation, CannonType, ShipCoords): 
   + check(iVisitor): void
-  + verify(iSpaceShip): boolean
+  + verify(SpaceShip): boolean
   + turnOn(): void
   + turnOff(): void
    currentPower: int
@@ -79,7 +79,7 @@ class components::CannonComponent {
 class adventure_cards::Card {
   # Card(int): 
   - id: int
-  + apply(iSpaceShip, iPlayerResponse): int
+  + apply(SpaceShip, iPlayerResponse): int
    id: int
 }
 
@@ -89,7 +89,7 @@ class board::Cards {
 }
 class adventure_cards::CombatZoneCard {
   + CombatZoneCard(int): 
-  + apply(iSpaceShip, iPlayerResponse): int
+  + apply(SpaceShip, iPlayerResponse): int
 }
 class board::CommonBoard {
   + CommonBoard(): 
@@ -102,7 +102,7 @@ class components::EmptyComponent {
   + EmptyComponent(ShipCoords): 
   + EmptyComponent(): 
   + check(iVisitor): void
-  + verify(iSpaceShip): boolean
+  + verify(SpaceShip): boolean
    connectors: ConnectorType[]
 }
 class components::visitors::EnergyVisitor {
@@ -127,7 +127,7 @@ class components::EngineComponent {
   + EngineComponent(ConnectorType[], ComponentRotation, EngineType, ShipCoords): 
   + turnOff(): void
   + check(iVisitor): void
-  + verify(iSpaceShip): boolean
+  + verify(SpaceShip): boolean
   + turnOn(): void
    currentPower: int
    power: int
@@ -135,7 +135,7 @@ class components::EngineComponent {
 
 class adventure_cards::EpidemicCard {
   + EpidemicCard(int): 
-  + apply(iSpaceShip, iPlayerResponse): int
+  + apply(SpaceShip, iPlayerResponse): int
 }
 class components::visitors::FreeSpaceVisitor {
   + FreeSpaceVisitor(): 
@@ -153,15 +153,15 @@ class components::visitors::FreeSpaceVisitor {
 }
 class adventure_cards::MeteorSwarmCard {
   + MeteorSwarmCard(Projectile[], int): 
-  + apply(iSpaceShip, iPlayerResponse): int
+  + apply(SpaceShip, iPlayerResponse): int
 }
 class adventure_cards::OpenSpaceCard {
   + OpenSpaceCard(): 
-  + apply(iSpaceShip, iPlayerResponse): int
+  + apply(SpaceShip, iPlayerResponse): int
 }
 class adventure_cards::PiratesCard {
   + PiratesCard(int): 
-  + apply(iSpaceShip, iPlayerResponse): int
+  + apply(SpaceShip, iPlayerResponse): int
 }
 class board::Planche {
   + Planche(): 
@@ -187,7 +187,7 @@ class adventure_cards::Planet {
 }
 class adventure_cards::PlanetCard {
   + PlanetCard(Planet[], int): 
-  + apply(iSpaceShip, iPlayerResponse): int
+  + apply(SpaceShip, iPlayerResponse): int
 }
 class adventure_cards::PlanetShipments {
   + PlanetShipments(): 
@@ -203,7 +203,7 @@ class adventure_cards::Projectile {
 
 class adventure_cards::SabotageCard {
   + SabotageCard(int): 
-  + apply(iSpaceShip, iPlayerResponse): int
+  + apply(SpaceShip, iPlayerResponse): int
 }
 class components::ShieldComponent {
   + ShieldComponent(ConnectorType[], ComponentRotation, ShieldType, ShipCoords): 
@@ -225,11 +225,11 @@ class player::ShipCoords {
 }
 class adventure_cards::SlaversCard {
   + SlaversCard(int): 
-  + apply(iSpaceShip, iPlayerResponse): int
+  + apply(SpaceShip, iPlayerResponse): int
 }
 class adventure_cards::SmugglersCard {
   + SmugglersCard(int): 
-  + apply(iSpaceShip, iPlayerResponse): int
+  + apply(SpaceShip, iPlayerResponse): int
 }
 class player::SpaceShip {
   + SpaceShip(ShipType, PlayerColor): 
@@ -258,7 +258,7 @@ class player::SpaceShip {
    height: int
 }
 class components::visitors::SpaceShipUpdateVisitor {
-  + SpaceShipUpdateVisitor(iSpaceShip): 
+  + SpaceShipUpdateVisitor(SpaceShip):
   - directions: boolean[]
   + visit(ShieldComponent): void
   + visit(EmptyComponent): void
@@ -278,7 +278,7 @@ class components::visitors::SpaceShipUpdateVisitor {
 }
 class adventure_cards::StardustCard {
   + StardustCard(int): 
-  + apply(iSpaceShip, iPlayerResponse): int
+  + apply(SpaceShip, iPlayerResponse): int
 }
 class components::StorageComponent {
   + StorageComponent(ConnectorType[], ComponentRotation, StorageType): 
@@ -300,7 +300,7 @@ class components::StructuralComponent {
 }
 
 interface components::iBaseComponent << interface >> {
-  + verify(iSpaceShip): boolean
+  + verify(SpaceShip): boolean
   + check(iVisitor): void
   + getConnector(ComponentRotation): ConnectorType
    rotation: ComponentRotation
@@ -308,7 +308,7 @@ interface components::iBaseComponent << interface >> {
    coords: ShipCoords
 }
 interface adventure_cards::iCard << interface >> {
-  + apply(iSpaceShip, iPlayerResponse): int
+  + apply(SpaceShip, iPlayerResponse): int
    id: int
 }
 interface board::iCards << interface >> {
@@ -331,7 +331,7 @@ interface adventure_cards::iPlayerResponse << interface >> {
    id: int
    coordArray: ShipCoords[]
 }
-interface player::iSpaceShip << interface >> {
+interface player::SpaceShip << interface >> {
   + giveCredits(int): int
   + verify(): VerifyResult[][]
   + resetPower(): void
@@ -422,8 +422,8 @@ SpaceShip                         -[#595959,dashed]->  SpaceShipUpdateVisitor   
 SpaceShip                         -[#595959,dashed]->  VerifyResult                     : "«create»"
 SpaceShip                         -[#595959,dashed]->  iBaseComponent                   : "«create»"
 SpaceShip                        "1" *-[#595959,plain]-> "components\n*" iBaseComponent                   
-SpaceShip                         -[#008200,dashed]-^  iSpaceShip                       
-SpaceShipUpdateVisitor           "1" *-[#595959,plain]-> "state\n1" iSpaceShip                       
+SpaceShip                         -[#008200,dashed]-^  SpaceShip
+SpaceShipUpdateVisitor           "1" *-[#595959,plain]-> "state\n1" SpaceShip
 SpaceShipUpdateVisitor            -[#008200,dashed]-^  iVisitor                         
 StardustCard                      -[#000082,plain]-^  Card                             
 StorageComponent                  -[#000082,plain]-^  BaseComponent                    

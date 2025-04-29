@@ -12,7 +12,7 @@ import it.polimi.ingsw.model.components.enums.ConnectorType;
 import it.polimi.ingsw.model.components.visitors.iVisitor;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.ShipCoords;
-import it.polimi.ingsw.model.player.iSpaceShip;
+import it.polimi.ingsw.model.player.SpaceShip;
 
 public class StartingCabinComponent extends BaseComponent {
     
@@ -57,7 +57,7 @@ public class StartingCabinComponent extends BaseComponent {
         return this.color;
     }
 
-    public void setCrew(iSpaceShip ship, int new_crew, AlienType type){
+    public void setCrew(SpaceShip ship, int new_crew, AlienType type){
         if(new_crew<0) throw new NegativeArgumentException("Crew size can't be zero or negative");
         if(type!=AlienType.HUMAN) throw new IllegalArgumentException("Central cabin can only contain humans");
         if(new_crew>AlienType.HUMAN.getMaxCapacity()) throw new ArgumentTooBigException("Crew size exceeds type's max capacity");
@@ -65,13 +65,13 @@ public class StartingCabinComponent extends BaseComponent {
     }
 
     @Override
-    public void onCreation(iSpaceShip ship, ShipCoords coords) {
+    public void onCreation(SpaceShip ship, ShipCoords coords) {
         this.coords = coords;
         ship.addCabinCoords(this.coords);
     }
 
     @Override
-    public void onDelete(iSpaceShip ship) {
+    public void onDelete(SpaceShip ship) {
         ship.delCabinCoords(this.coords);
     }
 

@@ -87,11 +87,11 @@ package Controller{
 
 
         class ModelInstance{
-            {field} - player_ships : iSpaceShip[]
+            {field} - player_ships : SpaceShip[]
             {field} - planche : iPlanche
             {field} - board : iCommonBoard
             {field} - card_piles : iCards[]
-            {method} + getShip(PlayerColor) : iSpaceShip
+            {method} + getShip(PlayerColor) : SpaceShip
             {method} + getPlanche() : iPlanche 
             {method} + getBoard() : iCommonBoard
             {method} + getCard(int) : iCard

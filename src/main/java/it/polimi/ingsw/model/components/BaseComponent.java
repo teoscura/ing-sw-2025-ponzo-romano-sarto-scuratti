@@ -7,7 +7,7 @@ import it.polimi.ingsw.model.components.enums.ConnectorType;
 import it.polimi.ingsw.model.components.exceptions.ConnectorsSizeException;
 import it.polimi.ingsw.model.components.visitors.*;
 import it.polimi.ingsw.model.player.ShipCoords;
-import it.polimi.ingsw.model.player.iSpaceShip;
+import it.polimi.ingsw.model.player.SpaceShip;
 
 public abstract class BaseComponent implements iBaseComponent, iVisitable {
 
@@ -61,7 +61,7 @@ public abstract class BaseComponent implements iBaseComponent, iVisitable {
 	}
 
 	@Override
-	public boolean verify(iSpaceShip ship) {
+	public boolean verify(SpaceShip ship) {
 		if (this.coords == null) throw new NullPointerException("Coords are not set");
 		iBaseComponent up = ship.getComponent(this.coords.up());
 		iBaseComponent right = ship.getComponent(this.coords.right());
@@ -103,10 +103,10 @@ public abstract class BaseComponent implements iBaseComponent, iVisitable {
 	}
 
 	@Override
-	public abstract void onCreation(iSpaceShip ship, ShipCoords coords);
+	public abstract void onCreation(SpaceShip ship, ShipCoords coords);
 
 	@Override
-	public abstract void onDelete(iSpaceShip ship);
+	public abstract void onDelete(SpaceShip ship);
 
 	@Override
 	public abstract ClientComponent getClientComponent();
@@ -114,7 +114,7 @@ public abstract class BaseComponent implements iBaseComponent, iVisitable {
 	@Override
 	public abstract void check(iVisitor v);
 
-	public iBaseComponent[] getConnectedComponents(iSpaceShip ship) {
+	public iBaseComponent[] getConnectedComponents(SpaceShip ship) {
 		iBaseComponent[] res = new iBaseComponent[]{ship.getEmpty(), ship.getEmpty(), ship.getEmpty(), ship.getEmpty()};
 		if (ship.getComponent(this.getCoords().up()) != ship.getEmpty()) {
 			if (this.getConnector(ComponentRotation.U000)

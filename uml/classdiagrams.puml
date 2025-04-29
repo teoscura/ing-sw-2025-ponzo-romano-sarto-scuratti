@@ -21,7 +21,7 @@ interface Model::Components::iSC as "iBaseComponent"{
     ==methods==
     {method} +getConnectors() : ConnectorType[4]
     
-    {method} +verify(iSpaceShip state, int position): bool
+    {method} +verify(SpaceShip state, int position): bool
     {method} +check(iVisitor v): void
 }
 
@@ -32,7 +32,7 @@ interface Model::Components::iVisitable as "iVisitable" {
 
 interface Model::Components::iVisitor as "iVisitor" {
     ==methods==
-    {method} +updateSpaceShip(iSpaceShip ship) : void
+    {method} +updateSpaceShip(SpaceShip ship) : void
     {method} +visit(CC cabin) : void
     {method} +visit(ACC aliencabin) : void
     {method} +visit(EC engine) : void
@@ -45,7 +45,7 @@ interface Model::Components::iVisitor as "iVisitor" {
 }
 
 class Model::Components::Visitor as "Visitor" {
-    {method} +updateSpaceShip(iSpaceShip ship) : void
+    {method} +updateSpaceShip(SpaceShip ship) : void
     {method} +visit(CC cabin): void
     {method} +visit(ACC aliencabin): void
     {method} +visit(EC engine): void
@@ -63,7 +63,7 @@ abstract Model::Components::SC as "Base Component" {
     ==methods==
     {method} +getConnectors() : ConnectorType[4]
     {method} +getRotation() : ComponentRotation
-    {method} +verify(iSpaceShip state, int position): bool
+    {method} +verify(SpaceShip state, int position): bool
     {method} +check(iVisitor v): void
 }
 
@@ -72,7 +72,7 @@ class Model::Components::CC as "Cabin Component" {
     ==methods==
     {method} +getConnectors() : ConnectorType[4]
     {method} +getRotation() : ComponentRotation
-    {method} +verify(iSpaceShip state, int position): bool
+    {method} +verify(SpaceShip state, int position): bool
     {method} +getCrew(): int
     {method} +check(iVisitor v): void
 }
@@ -82,7 +82,7 @@ class Model::Components::ACC as "Alien Cabin Component" {
     ==methods==
     {method} +getConnectors() : ConnectorType[4]
     {method} +getRotation() : ComponentRotation
-    {method} +verify(iSpaceShip state, int position): bool
+    {method} +verify(SpaceShip state, int position): bool
     {method} +getAlienType(): AlienType
     {method} +getCrew(): int
     {method} +check(iVisitor v): void
@@ -94,7 +94,7 @@ class Model::Components::EC as "Engine Component" {
     ==methods==
     {method} +getConnectors() : ConnectorType[4]
     {method} +getRotation() : ComponentRotation
-    {method} +verify(iSpaceShip state, int position): bool
+    {method} +verify(SpaceShip state, int position): bool
     {method} +turnOn(): void
     {method} +getCurrentPower(): int
     {method} +check(iVisitor v): void
@@ -105,7 +105,7 @@ class Model::Components::ASC as "Life Support Component" {
     ==methods==
     {method} +getConnectors() : ConnectorType[4]
     {method} +getRotation() : ComponentRotation
-    {method} +verify(iSpaceShip state, int position): bool
+    {method} +verify(SpaceShip state, int position): bool
     {method} +getType(): AlienType
     {method} +check(iVisitor v): void
 }
@@ -116,7 +116,7 @@ class Model::Components::CNC as "Cannon Component"{
     ==methods==
     {method} +getConnectors() : ConnectorType[4]
     {method} +getRotation() : ComponentRotation
-    {method} +verify(iSpaceShip state, int position): bool
+    {method} +verify(SpaceShip state, int position): bool
     {method} +turnOn(): void
     {method} +getCurrentPower(): int
     {method} +check(iVisitor v): void
@@ -128,7 +128,7 @@ class Model::Components::STC as "Storage Component" {
     ==methods==
     {method} +getConnectors() : ConnectorType[4]
     {method} +getRotation() : ComponentRotation
-    {method} +verify(iSpaceShip state, int position): bool
+    {method} +verify(SpaceShip state, int position): bool
     {method} +putIn(ShipmentType item): void
     {method} +getContents(): ShipmentType[]
     {method} +getCapacity(): int
@@ -140,7 +140,7 @@ class Model::Components::BC as "Battery Component" {
     ==methods==
     {method} +getConnectors() : ConnectorType[4]
     {method} +getRotation() : ComponentRotation
-    {method} +verify(iSpaceShip state, int position): bool
+    {method} +verify(SpaceShip state, int position): bool
     {method} +getBatteries(): int
     {method} +check(iVisitor v): void
 }
@@ -149,7 +149,7 @@ class Model::Components::SHC as "Shield Component" {
     ==methods==
     {method} +getConnectors() : ConnectorType[4]
     {method} +getRotation() : ComponentRotation
-    {method} +verify(iSpaceShip state, int position): bool
+    {method} +verify(SpaceShip state, int position): bool
     {method} +getShield(): ShieldType
     {method} +check(iVisitor v): void
 }
@@ -158,7 +158,7 @@ class Model::Components::EPC as "Empty Space Component" {
     ==methods==
     {method} +getConnectors() : ConnectorType[4]
     {method} +getRotation() : ComponentRotation
-    {method} +verify(iSpaceShip state, int position): bool
+    {method} +verify(SpaceShip state, int position): bool
     {method} +check(iVisitor v): void
     'A block with no connectors.
 }
@@ -194,7 +194,7 @@ class Model::Card{
 
 interface Model::iCardEffect{
     ==methods==
-    {method} +apply(iSpaceShip ship): Functional.BiConsumer<iStarShip, Player>.
+    {method} +apply(SpaceShip ship): Functional.BiConsumer<iStarShip, Player>.
 }
 
 class Model::CardEffect{
@@ -203,7 +203,7 @@ class Model::CardEffect{
     {field} -on_satisfy: Functional.Functional.BiConsumer<iStarShip, Player>.
     {field} -on_unsatisfy: Functional.Functional.BiConsumer<iStarShip, Player>.
     ==methods==
-    {method} +apply(iSpaceShip ship): Functional.BiConsumer<iStarShip, Player>.
+    {method} +apply(SpaceShip ship): Functional.BiConsumer<iStarShip, Player>.
 }
 
 'La planche su cui giocare
@@ -257,7 +257,7 @@ class Model::Player::Player{
     ' TODO getters and setters
 }
 
-interface Model::Player::iSpaceShip{
+interface Model::Player::SpaceShip{
     ==methods==
     {method} +verify() : void
     {method} +add_component(Starship Component comp, int position) : void
@@ -335,8 +335,8 @@ Model::iCardEffect<--*Model::Card
 Model::iCardEffect^...Model::CardEffect
 
 'Players and ships
-Model::Player::Player <--* Model::Player::iSpaceShip
-Model::Player::iSpaceShip ^.. Model::Player::SpaceShip
+Model::Player::Player <--* Model::Player::SpaceShip
+Model::Player::SpaceShip ^.. Model::Player::SpaceShip
 Model::Components::SC <--  "35" Model::Player::SpaceShip
 
 'Board

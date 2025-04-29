@@ -1,12 +1,12 @@
 package it.polimi.ingsw.model.board;
 
-import it.polimi.ingsw.model.player.iSpaceShip;
+import it.polimi.ingsw.model.player.SpaceShip;
 
 class PlancheTest {
 
 	private Planche planche;
-	private iSpaceShip shipRed;
-	private iSpaceShip shipBlue;
+	private SpaceShip shipRed;
+	private SpaceShip shipBlue;
 
 	// @BeforeEach
 	// void setUp() {

@@ -6,14 +6,14 @@ import it.polimi.ingsw.model.components.exceptions.ContainerFullException;
 import it.polimi.ingsw.model.components.exceptions.ContainerNotSpecialException;
 import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
 import it.polimi.ingsw.model.components.visitors.iVisitor;
-import it.polimi.ingsw.model.player.iSpaceShip;
+import it.polimi.ingsw.model.player.SpaceShip;
 
 public class ContainsLoaderVisitor implements iVisitor {
 
-    private final iSpaceShip ship;
+    private final SpaceShip ship;
     private final ShipmentType cargo;
 
-    public ContainsLoaderVisitor(iSpaceShip ship, ShipmentType cargo){
+    public ContainsLoaderVisitor(SpaceShip ship, ShipmentType cargo){
         if(ship==null) throw new NullPointerException();
         if(cargo.getValue()<=0) throw new IllegalArgumentException();
         this.ship = ship;

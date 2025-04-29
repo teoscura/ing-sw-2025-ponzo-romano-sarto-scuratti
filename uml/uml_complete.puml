@@ -430,7 +430,7 @@ package Model {
             }
 
             class CrewRemoveVisitor {
-                {field} [final] ship : iSpaceShip
+                {field} [final] ship : SpaceShip
                 {method} + visit(CabinComponent) : void
                 {method} + visit(AlienLifeSupportComponent) : void
                 {method} + visit(StartingCabinComponent) : void
@@ -658,8 +658,8 @@ package Model {
 			{field} - type: AlienType
 			{method} + check(iVisitor) : void
 			{method} + getType() : AlienType
-			{method} + onCreation(iSpaceShip) : void
-			{method} + onDelete(iSpaceShip) : void
+			{method} + onCreation(SpaceShip) : void
+			{method} + onDelete(SpaceShip) : void
 			{method} + getClientComponent() : ClientComponent
 		}
 
@@ -672,8 +672,8 @@ package Model {
 			{method} + getCapacity() : int
 			{method} + takeOne() : void
 			{method} + putOne() : void
-			{method} + onCreation(iSpaceShip) : void
-			{method} + onDelete(iSpaceShip) : void
+			{method} + onCreation(SpaceShip) : void
+			{method} + onDelete(SpaceShip) : void
 			{method} + getClientComponent() : ClientComponent
 		}
 
@@ -684,9 +684,9 @@ package Model {
 		   	{method} + check(iVisitor) : void
 			{method} + getCrew() : int
 			{method} + getCrewType() : AlienType			
-			{method} + setCrew(iSpaceShip, int, AlienType) : void
-			{method} + onCreation(iSpaceShip) : void
-			{method} + onDelete(iSpaceShip) : void
+			{method} + setCrew(SpaceShip, int, AlienType) : void
+			{method} + onCreation(SpaceShip) : void
+			{method} + onDelete(SpaceShip) : void
 			{method} + getClientComponent() : ClientComponent
 		}
 
@@ -698,9 +698,9 @@ package Model {
 			{method} + getCrew() : int
 			{method} + getCrewType() : AlienType		
 			{method} + getColor() : PlayerColor
-			{method} + setCrew(iSpaceShip, int, AlienType)
-			{method} + onCreation(iSpaceShip) : void
-			{method} + onDelete(iSpaceShip) : void
+			{method} + setCrew(SpaceShip, int, AlienType)
+			{method} + onCreation(SpaceShip) : void
+			{method} + onDelete(SpaceShip) : void
 			{method} + getClientComponent() : ClientComponent
 		}
 
@@ -710,24 +710,24 @@ package Model {
 			{field} - powered : boolean
 			{field} - powerable : boolean
 			{method} + check(iVisitor) : void
-			{method} + verify(iSpaceShip) : boolean
+			{method} + verify(SpaceShip) : boolean
 			{method} + turnOn() : void
 			{method} + turnOff() : void
 			{method} + getCurrentPower() : int
 			{method} + getPower() : int
 			{method} + powerable() : boolean		
-			{method} + onCreation(iSpaceShip) : void
-			{method} + onDelete(iSpaceShip) : void
+			{method} + onCreation(SpaceShip) : void
+			{method} + onDelete(SpaceShip) : void
 			{method} + getClientComponent() : ClientComponent
 		}
 
         BaseComponent^..EmptyComponent
         class EmptyComponent{
-			{method} + verify(iSpaceShip) : boolean
+			{method} + verify(SpaceShip) : boolean
 			{method} + check(iVisitor) : void
 			{method} + getConnectors() : ConnectorType[]
-			{method} + onCreation(iSpaceShip) : void
-			{method} + onDelete(iSpaceShip) : void
+			{method} + onCreation(SpaceShip) : void
+			{method} + onDelete(SpaceShip) : void
 			{method} + getClientComponent() : ClientComponent
 		}
 
@@ -736,15 +736,15 @@ package Model {
 			{field} - max_power : int
 			{field} - powered : boolean
 			{field} - powerable : boolean
-			{method} + verify(iSpaceShip) : boolean
+			{method} + verify(SpaceShip) : boolean
 			{method} + check(iVisitor) : void
 			{method} + turnOn() : void
 			{method} + turnOff() : void
 			{method} + getCurrentPower() : int
 			{method} + getPower() : int
 			{method} + powerable() : boolean		
-			{method} + onCreation(iSpaceShip) : void
-			{method} + onDelete(iSpaceShip) : void
+			{method} + onCreation(SpaceShip) : void
+			{method} + onDelete(SpaceShip) : void
 			{method} + getClientComponent() : ClientComponent
 		}
 
@@ -756,8 +756,8 @@ package Model {
 			{method} + turnOff() : void
 			{method} + getPowered() : boolean
 			{method} + powerable() : boolean	
-			{method} + onCreation(iSpaceShip) : void
-			{method} + onDelete(iSpaceShip) : void
+			{method} + onCreation(SpaceShip) : void
+			{method} + onDelete(SpaceShip) : void
 			{method} + getShield() : ShieldType
 			{method} + getClientComponent() : ClientComponent
 
@@ -774,8 +774,8 @@ package Model {
 			{method} + getFreeSpaces() : int
 			{method} + getSpecial() : boolean
 			{method} + getCapacity() : int
-			{method} + onCreation(iSpaceShip) : void
-			{method} + onDelete(iSpaceShip) : void
+			{method} + onCreation(SpaceShip) : void
+			{method} + onDelete(SpaceShip) : void
 			{method} + check(iVisitor) : void
 			{method} + getClientComponent() : ClientComponent
 
@@ -783,8 +783,8 @@ package Model {
         BaseComponent^..StructuralComponent
         class StructuralComponent{
 			{method} + check(iVisitor) : void
-			{method} + onCreation(iSpaceShip) : void
-			{method} + onDelete(iSpaceShip) : void
+			{method} + onCreation(SpaceShip) : void
+			{method} + onDelete(SpaceShip) : void
 			{method} + getClientComponent() : ClientComponent
 		}
 
@@ -792,11 +792,11 @@ package Model {
 
     package Player {
         
-        interface iSpaceShip <<interface>> {
+        interface SpaceShip <<interface>> {
             TODO
         }
 
-        iSpaceShip^..SpaceShip
+        SpaceShip^..SpaceShip
         class SpaceShip {
             TODO
         }

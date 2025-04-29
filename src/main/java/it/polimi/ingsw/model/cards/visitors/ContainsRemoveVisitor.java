@@ -14,14 +14,14 @@ import it.polimi.ingsw.model.components.enums.ShipmentType;
 import it.polimi.ingsw.model.components.exceptions.ContainerEmptyException;
 import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
 import it.polimi.ingsw.model.components.visitors.iVisitor;
-import it.polimi.ingsw.model.player.iSpaceShip;
+import it.polimi.ingsw.model.player.SpaceShip;
 
 public class ContainsRemoveVisitor implements iVisitor {
 
-    private final iSpaceShip ship;
+    private final SpaceShip ship;
     private ShipmentType searching;
 
-    public ContainsRemoveVisitor(iSpaceShip ship, ShipmentType type){
+    public ContainsRemoveVisitor(SpaceShip ship, ShipmentType type){
         if(ship==null || type == null) throw new NullPointerException();
         this.ship = ship;
         this.searching = type;

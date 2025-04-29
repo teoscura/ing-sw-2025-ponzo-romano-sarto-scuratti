@@ -5,13 +5,13 @@ import it.polimi.ingsw.model.components.*;
 import it.polimi.ingsw.model.components.enums.AlienType;
 import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
 import it.polimi.ingsw.model.components.visitors.iVisitor;
-import it.polimi.ingsw.model.player.iSpaceShip;
+import it.polimi.ingsw.model.player.SpaceShip;
 
 public class CrewRemoveVisitor implements iVisitor {
 
-    private final iSpaceShip ship;
+    private final SpaceShip ship;
 
-    public CrewRemoveVisitor(iSpaceShip ship){
+    public CrewRemoveVisitor(SpaceShip ship){
         if(ship==null) throw new NullPointerException();
         this.ship = ship;
     }

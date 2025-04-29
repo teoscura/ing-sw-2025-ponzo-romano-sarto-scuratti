@@ -12,7 +12,7 @@ import it.polimi.ingsw.model.components.exceptions.ComponentNotEmptyException;
 import it.polimi.ingsw.model.components.exceptions.UnpowerableException;
 import it.polimi.ingsw.model.components.visitors.iVisitor;
 import it.polimi.ingsw.model.player.ShipCoords;
-import it.polimi.ingsw.model.player.iSpaceShip;
+import it.polimi.ingsw.model.player.SpaceShip;
 
 public class EngineComponent extends BaseComponent {
     
@@ -42,7 +42,7 @@ public class EngineComponent extends BaseComponent {
     }
 
     @Override
-    public boolean verify(iSpaceShip ship){
+    public boolean verify(SpaceShip ship){
         if(this.getRotation()!=ComponentRotation.U000||ship.getComponent(this.coords.down())!=ship.getEmpty()) return false; 
         return super.verify(ship);
     }
@@ -80,13 +80,13 @@ public class EngineComponent extends BaseComponent {
     } //redundant
 
     @Override
-    public void onCreation(iSpaceShip ship, ShipCoords coords){
+    public void onCreation(SpaceShip ship, ShipCoords coords){
         this.coords = coords;
         if(powerable) ship.addPowerableCoords(this.coords);
     }
 
     @Override
-    public void onDelete(iSpaceShip ship){
+    public void onDelete(SpaceShip ship){
         if(powerable) ship.delPowerableCoords(this.coords);
     }
 

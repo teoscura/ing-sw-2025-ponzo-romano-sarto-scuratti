@@ -15,7 +15,7 @@ import it.polimi.ingsw.model.components.exceptions.ContainerFullException;
 import it.polimi.ingsw.model.components.exceptions.ContainerNotSpecialException;
 import it.polimi.ingsw.model.components.visitors.iVisitor;
 import it.polimi.ingsw.model.player.ShipCoords;
-import it.polimi.ingsw.model.player.iSpaceShip;
+import it.polimi.ingsw.model.player.SpaceShip;
 
 public class StorageComponent extends BaseComponent {
 
@@ -80,13 +80,13 @@ public class StorageComponent extends BaseComponent {
 	}
 
     @Override
-    public void onCreation(iSpaceShip ship, ShipCoords coords) {
+    public void onCreation(SpaceShip ship, ShipCoords coords) {
         this.coords = coords;
         ship.addStorageCoords(this.coords);
     }
 
 	@Override
-	public void onDelete(iSpaceShip ship) {
+	public void onDelete(SpaceShip ship) {
 		ship.delStorageCoords(this.coords);
 	}
 

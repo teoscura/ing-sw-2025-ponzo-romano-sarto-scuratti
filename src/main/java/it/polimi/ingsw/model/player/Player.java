@@ -13,7 +13,7 @@ public class Player implements Serializable {
 	private transient ClientDescriptor descriptor;
 	private final String username;
 	private final PlayerColor color;
-	private final iSpaceShip ship;
+	private final SpaceShip ship;
 	private int credits;
 	private int score;
 	private boolean retired = false;
@@ -88,7 +88,7 @@ public class Player implements Serializable {
 		this.disconnected = false;
 	}
 
-	public iSpaceShip getSpaceShip() {
+	public SpaceShip getSpaceShip() {
 		return this.ship;
 	}
 
