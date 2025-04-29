@@ -15,7 +15,7 @@ import it.polimi.ingsw.model.cards.visitors.CrewRemoveVisitor;
 import it.polimi.ingsw.model.components.ComponentFactory;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ShipmentType;
-import it.polimi.ingsw.model.components.iBaseComponent;
+import it.polimi.ingsw.model.components.BaseComponent;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.ShipCoords;
@@ -47,7 +47,7 @@ public class CombatZoneCardTest {
 	@BeforeEach
 	void setup() {
 
-		iBaseComponent c = null;
+		BaseComponent c = null;
 		ComponentFactory f = new ComponentFactory();
 
 		//Ha motori = 3 se usa batteria. minor crew.
@@ -296,7 +296,7 @@ public class CombatZoneCardTest {
 		pr = shots.get(1);
 		shots.set(1, new Projectile(pr.getDirection(), pr.getDimension(), 7));
 		//Aggiungo shield component
-		iBaseComponent c = null;
+		BaseComponent c = null;
 		ComponentFactory f = new ComponentFactory();
 		c = f.getComponent(149);
 		c.rotate(ComponentRotation.U090);
@@ -392,7 +392,7 @@ public class CombatZoneCardTest {
 		pr = shots.get(3);
 		shots.set(3, new Projectile(pr.getDirection(), pr.getDimension(), 7));
 		//Aggiungo shield component
-		iBaseComponent c = null;
+		BaseComponent c = null;
 		ComponentFactory f = new ComponentFactory();
 		c = f.getComponent(149);
 		c.rotate(ComponentRotation.U090);
@@ -514,7 +514,7 @@ public class CombatZoneCardTest {
 		pr = shots.get(1);
 		shots.set(1, new Projectile(pr.getDirection(), pr.getDimension(), 7));
 		//Aggiungo shield component
-		iBaseComponent c = null;
+		BaseComponent c = null;
 		ComponentFactory f = new ComponentFactory();
 		//Ha motori = 3 se usa batteria. minor crew.
 		c = f.getComponent(48);

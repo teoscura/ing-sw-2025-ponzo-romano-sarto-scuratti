@@ -21,7 +21,7 @@ import it.polimi.ingsw.model.board.iCommonBoard;
 import it.polimi.ingsw.model.client.player.ClientConstructionPlayer;
 import it.polimi.ingsw.model.client.state.ClientConstructionState;
 import it.polimi.ingsw.model.client.state.ClientModelState;
-import it.polimi.ingsw.model.components.iBaseComponent;
+import it.polimi.ingsw.model.components.BaseComponent;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.exceptions.ContainerEmptyException;
 import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
@@ -37,8 +37,8 @@ public class ConstructionState extends GameState {
 	private final ArrayList<Player> building;
 	private final ArrayList<Player> finished;
 	private final ConstructionStateHourglass hourglass;
-	private HashMap<Player, iBaseComponent> current_tile;
-	private final HashMap<Player, List<iBaseComponent>> hoarded_tile;
+	private HashMap<Player, BaseComponent> current_tile;
+	private final HashMap<Player, List<BaseComponent>> hoarded_tile;
 
 	public ConstructionState(ModelInstance model, GameModeType type, PlayerCount count, ArrayList<Player> players) {
 		super(model, type, count, players);
@@ -168,7 +168,7 @@ public class ConstructionState extends GameState {
 			this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' attempted to take a component, but the hourglass has run out!"));
 			return;
 		}
-		iBaseComponent tmp = this.board.pullComponent();
+		BaseComponent tmp = this.board.pullComponent();
 		if (tmp == null) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to take a component, but there are no more to take!");
 			this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' attempted to take a component, but there are no more to take!"));
@@ -177,7 +177,7 @@ public class ConstructionState extends GameState {
 		if (this.current_tile.get(p) == null) {
 			this.current_tile.put(p, tmp);
 		} else {
-			iBaseComponent old_current = this.current_tile.get(p);
+			BaseComponent old_current = this.current_tile.get(p);
 			this.current_tile.put(p, tmp);
 			this.hoarded_tile.get(p).addFirst(old_current);
 			while (this.hoarded_tile.get(p).size() >= 3) {
@@ -198,7 +198,7 @@ public class ConstructionState extends GameState {
 			this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' attempted to take a discarded component, but the hourglass has run out!"));
 			return;
 		}
-		iBaseComponent tmp = null;
+		BaseComponent tmp = null;
 		try {
 			tmp = this.board.pullDiscarded(id);
 		} catch (ContainerEmptyException e) {
@@ -225,12 +225,12 @@ public class ConstructionState extends GameState {
 			return;
 		}
 		if (this.current_tile.get(p).getID() == id) {
-			iBaseComponent tmp = this.current_tile.get(p);
+			BaseComponent tmp = this.current_tile.get(p);
 			this.current_tile.put(p, null);
 			this.board.discardComponent(tmp);
 			return;
 		}
-		Optional<iBaseComponent> c = this.hoarded_tile.get(p).stream().filter(a -> a.getID() == id).findFirst();
+		Optional<BaseComponent> c = this.hoarded_tile.get(p).stream().filter(a -> a.getID() == id).findFirst();
 		if (c.isPresent()) {
 			this.hoarded_tile.get(p).remove(c.get());
 			this.board.discardComponent(c.get());

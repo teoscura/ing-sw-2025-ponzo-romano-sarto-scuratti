@@ -26,7 +26,7 @@ import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.cards.utils.CardOrder;
 import it.polimi.ingsw.model.cards.utils.Projectile;
 import it.polimi.ingsw.model.components.ComponentFactory;
-import it.polimi.ingsw.model.components.iBaseComponent;
+import it.polimi.ingsw.model.components.BaseComponent;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
@@ -55,7 +55,7 @@ public class MeteorSwarmCardTest {
         //Cannoni parano grossi.
         //P1 puo vincere ma non accende, e perde di conseguenza.
 
-        iBaseComponent c = null;
+        BaseComponent c = null;
         ComponentFactory f1 = new ComponentFactory();
         ComponentFactory f2 = new ComponentFactory();
 

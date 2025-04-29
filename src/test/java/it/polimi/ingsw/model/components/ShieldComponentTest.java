@@ -56,7 +56,7 @@ class ShieldComponentTest {
 	@Test
 	void OnCreation() {
 		SpaceShip ship = new SpaceShip(GameModeType.LVL2, new Player(GameModeType.LVL2, "tizio", PlayerColor.RED));
-		ShipCoords coords = new ShipCoords(GameModeType.LVL2, 4, 4);
+		ShipCoords coords = new ShipCoords(GameModeType.LVL2, 3, 3);
 		ShieldComponent shieldWithCoords = new ShieldComponent(1, new ConnectorType[]{ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY}, ComponentRotation.U000, coords);
 
 		assertDoesNotThrow(() -> ship.addComponent(shieldWithCoords, coords));
@@ -67,7 +67,7 @@ class ShieldComponentTest {
 	@Test
 	void OnDelete() {
 		SpaceShip ship = new SpaceShip(GameModeType.LVL2, new Player(GameModeType.LVL2, "tizio", PlayerColor.RED));
-		ShipCoords coords = new ShipCoords(GameModeType.LVL2, 4, 4);
+		ShipCoords coords = new ShipCoords(GameModeType.LVL2, 3, 3);
 		ShieldComponent shieldWithCoords = new ShieldComponent(1,
 				new ConnectorType[]{ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY},
 				ComponentRotation.U000,

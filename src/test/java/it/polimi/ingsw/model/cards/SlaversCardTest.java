@@ -13,7 +13,7 @@ import it.polimi.ingsw.model.cards.state.SlaversLoseState;
 import it.polimi.ingsw.model.cards.visitors.CrewRemoveVisitor;
 import it.polimi.ingsw.model.components.ComponentFactory;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
-import it.polimi.ingsw.model.components.iBaseComponent;
+import it.polimi.ingsw.model.components.BaseComponent;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.ShipCoords;
@@ -47,7 +47,7 @@ public class SlaversCardTest {
 
 	@BeforeEach
 	void setUp() throws IOException {
-		iBaseComponent c = null;
+		BaseComponent c = null;
 		ComponentFactory f1 = new ComponentFactory();
 		ComponentFactory f2 = new ComponentFactory();
 		ComponentFactory f3 = new ComponentFactory();

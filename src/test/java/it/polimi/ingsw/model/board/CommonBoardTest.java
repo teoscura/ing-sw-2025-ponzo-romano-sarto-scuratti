@@ -12,13 +12,13 @@ package it.polimi.ingsw.model.board;
 
     @Test
     void pullComponent() {
-        iBaseComponent component = board.pullComponent();
+        BaseComponent component = board.pullComponent();
         assertNotNull(component);
     }
 
     @Test
     void discardComponent() {
-        iBaseComponent component = new StructuralComponent(1, new ConnectorType[]{ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY}, ComponentRotation.U000);
+        BaseComponent component = new StructuralComponent(1, new ConnectorType[]{ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY}, ComponentRotation.U000);
         board.discardComponent(component);
         //assertTrue(board.uncovered_components.contains(component));
         IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> board.discardComponent(component));
@@ -28,8 +28,8 @@ package it.polimi.ingsw.model.board;
     @Test
     void pullDiscarded() {
         assertEquals(null, board.pullDiscarded(1));
-        iBaseComponent component1 = new StructuralComponent(1, new ConnectorType[]{ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY}, ComponentRotation.U000);
-        iBaseComponent component2 = new StructuralComponent(2, new ConnectorType[]{ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY}, ComponentRotation.U000);
+        BaseComponent component1 = new StructuralComponent(1, new ConnectorType[]{ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY}, ComponentRotation.U000);
+        BaseComponent component2 = new StructuralComponent(2, new ConnectorType[]{ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY}, ComponentRotation.U000);
         board.discardComponent(component1);
         board.discardComponent(component2);
         assertThrows(OutOfBoundsException.class, () -> board.pullDiscarded(-1));

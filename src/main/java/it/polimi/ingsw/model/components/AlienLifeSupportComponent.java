@@ -60,8 +60,8 @@ public class AlienLifeSupportComponent extends BaseComponent {
 
 	@Override
 	public void onDelete(SpaceShip ship) {
-		iBaseComponent[] tmp = this.getConnectedComponents(ship);
-		for (iBaseComponent c : tmp) {
+		BaseComponent[] tmp = this.getConnectedComponents(ship);
+		for (BaseComponent c : tmp) {
 			if (!ship.isCabin(c.getCoords())) continue;
 			LifeSupportUpdateVisitor v = new LifeSupportUpdateVisitor(this.type);
 			c.check(v);

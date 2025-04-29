@@ -56,8 +56,8 @@ class CannonComponentTest {
 		ShipCoords coords_up = new ShipCoords(GameModeType.LVL2, 2, 2);
 		StructuralComponent component = new StructuralComponent(1, connectors2, ComponentRotation.U000, coords_up);
 		SpaceShip ship = new SpaceShip(GameModeType.LVL2, new Player(GameModeType.LVL2, "tizio", PlayerColor.RED));
-		ship.addComponent(cannon1, coords);
 		ship.addComponent(component, coords_up);
+		ship.addComponent(cannon1, coords);
 		assertFalse(cannon1.verify(ship));
 		ship.addComponent(cannon_wrong, coords2);
 		assertTrue(cannon_wrong.verify(ship));

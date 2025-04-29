@@ -44,7 +44,7 @@ class OpenSpaceCardTest {
 	void setUp() {
 		ComponentFactory f4 = new ComponentFactory();
 		ComponentFactory f5 = new ComponentFactory();
-		iBaseComponent c = null;
+		BaseComponent c = null;
 		dummy3 = new Player(GameModeType.TEST, "player3scarso", PlayerColor.RED);
 
 		dummy4 = new Player(GameModeType.TEST, "player4", PlayerColor.RED);

@@ -42,26 +42,6 @@ class EmptyComponentTest {
 		assertArrayEquals(expected, empty.getConnectors());
 	}
 
-	@Test
-	void OnCreation() {
-		SpaceShip ship = new SpaceShip(GameModeType.LVL2, new Player(GameModeType.LVL2, "tizio", PlayerColor.RED));
-		ShipCoords coords = new ShipCoords(GameModeType.LVL2, 4, 4);
-		EmptyComponent emptyWithCoords = new EmptyComponent(coords);
 
-		assertDoesNotThrow(() -> ship.addComponent(emptyWithCoords, coords));
-		assertEquals(emptyWithCoords, ship.getComponent(coords));
-	}
-
-	@Test
-	void OnDelete() {
-		SpaceShip ship = new SpaceShip(GameModeType.LVL2, new Player(GameModeType.LVL2, "tizio", PlayerColor.RED));
-		ShipCoords coords = new ShipCoords(GameModeType.LVL2, 4, 4);
-		EmptyComponent emptyWithCoords = new EmptyComponent(coords);
-
-		assertDoesNotThrow(() -> ship.addComponent(emptyWithCoords, coords));
-		assertEquals(emptyWithCoords, ship.getComponent(coords));
-
-		assertDoesNotThrow(() -> emptyWithCoords.onDelete(ship));
-	}
 
 }

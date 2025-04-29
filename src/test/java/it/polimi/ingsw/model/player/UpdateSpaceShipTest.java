@@ -16,7 +16,7 @@ import it.polimi.ingsw.model.cards.visitors.ContainsRemoveVisitor;
 import it.polimi.ingsw.model.cards.visitors.CrewRemoveVisitor;
 import it.polimi.ingsw.model.components.CabinComponent;
 import it.polimi.ingsw.model.components.ComponentFactory;
-import it.polimi.ingsw.model.components.iBaseComponent;
+import it.polimi.ingsw.model.components.BaseComponent;
 import it.polimi.ingsw.model.components.enums.AlienType;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ShipmentType;
@@ -34,7 +34,7 @@ public class UpdateSpaceShipTest {
 	@BeforeEach
 	void setUp() {
         ComponentFactory f = new ComponentFactory();
-        iBaseComponent c = null;
+        BaseComponent c = null;
 
         nocomponents =  new Player(GameModeType.TEST, "bingus", PlayerColor.RED);
 
@@ -177,7 +177,7 @@ public class UpdateSpaceShipTest {
     void dummy3Update3(){
         //Removed life support, but alien can still live.
         ComponentFactory f = new ComponentFactory();
-        iBaseComponent c = null;
+        BaseComponent c = null;
         c = f.getComponent(140);
         c.rotate(ComponentRotation.U000); 
         dummy3.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 4, 2));

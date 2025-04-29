@@ -49,7 +49,7 @@ public class CannonComponent extends BaseComponent {
 	@Override
 	public boolean verify(SpaceShip ship) {
 		ComponentRotation r = this.getRotation();
-		iBaseComponent tmp = null;
+		BaseComponent tmp = null;
 		switch (r.getShift()) {
 			case 0: {
 				tmp = ship.getComponent(this.coords.up());

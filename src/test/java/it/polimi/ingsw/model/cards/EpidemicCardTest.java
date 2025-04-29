@@ -15,7 +15,7 @@ import it.polimi.ingsw.model.cards.state.CardState;
 import it.polimi.ingsw.model.components.CabinComponent;
 import it.polimi.ingsw.model.components.ComponentFactory;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
-import it.polimi.ingsw.model.components.iBaseComponent;
+import it.polimi.ingsw.model.components.BaseComponent;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.ShipCoords;
@@ -49,7 +49,7 @@ class EpidemicCardTest {
 		player2 = new Player(GameModeType.TEST, "Player2", PlayerColor.BLUE);
 
 		ComponentFactory f = new ComponentFactory();
-		iBaseComponent c;
+		BaseComponent c;
 		player1 = new Player(GameModeType.TEST, "Player1", PlayerColor.RED);
 		c = f.getComponent(53);
 		c.rotate(ComponentRotation.U000);

@@ -7,9 +7,9 @@ import it.polimi.ingsw.model.player.PlayerColor;
 
 public class ComponentFactory {
 
-	private final HashMap<Integer, iBaseComponent> components;
+	private final HashMap<Integer, BaseComponent> components;
 
-	public iBaseComponent getComponent(int id) {
+	public BaseComponent getComponent(int id) {
 		if (!this.components.containsKey(id)) throw new IllegalArgumentException("Asked for a non-existant component.");
 		return this.components.get(id);
 	}
@@ -19,7 +19,7 @@ public class ComponentFactory {
 	}
 
 	public ComponentFactory() {
-		this.components = new HashMap<Integer, iBaseComponent>() {{
+		this.components = new HashMap<Integer, BaseComponent>() {{
 
 			put(1, new BatteryComponent(
 					1,

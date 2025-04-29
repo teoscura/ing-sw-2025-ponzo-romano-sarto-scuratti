@@ -12,7 +12,7 @@ import it.polimi.ingsw.model.components.ComponentFactory;
 import it.polimi.ingsw.model.components.StorageComponent;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ShipmentType;
-import it.polimi.ingsw.model.components.iBaseComponent;
+import it.polimi.ingsw.model.components.BaseComponent;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.ShipCoords;
@@ -45,7 +45,7 @@ public class PlanetCardTest {
 
 	@BeforeEach
 	void setUp() throws IOException {
-		iBaseComponent c = null;
+		BaseComponent c = null;
 		ComponentFactory f = new ComponentFactory();
 
 		player1 = new Player(GameModeType.TEST, "p1", PlayerColor.RED);

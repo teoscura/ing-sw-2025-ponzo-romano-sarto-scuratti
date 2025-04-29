@@ -53,7 +53,7 @@ public class CabinComponent extends BaseComponent {
         if(new_crew>type.getMaxCapacity()) throw new ArgumentTooBigException("Crew size exceeds type's max capacity");
         if(type.getLifeSupportExists()&&ship.getCrew()[type.getArraypos()]>0) throw new AlienTypeAlreadyPresentException("Spaceship already has one alien of this type.");
         CabinVisitor v = new CabinVisitor();
-        for(iBaseComponent c : this.getConnectedComponents(ship)){
+        for(BaseComponent c : this.getConnectedComponents(ship)){
             c.check(v);
         }
         if(!v.getSupportedType().compatible(type)) throw new UnsupportedAlienCabinException("Tried to insert crew type in cabin that doesn't support it.");
