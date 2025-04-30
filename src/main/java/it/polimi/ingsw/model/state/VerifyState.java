@@ -199,8 +199,8 @@ public class VerifyState extends GameState {
 			System.out.println("Player '" + p.getUsername() + "' attempted to set crew on a cabin that doesn't support the type: '" + type.toString() + "'!");
 			this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' attempted to set crew on a cabin that doesn't support the type: '" + type + "'!"));
 		} catch (AlienTypeAlreadyPresentException e) {
-			System.out.println("Player '" + p.getUsername() + "' attempted to set the type: '" + type.toString() + "' but it's already present, you can only have one!");
-			this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' attempted to set the type: '" + type + "' but it's already present, you can only have one!"));
+			System.out.println("Player '" + p.getUsername() + "' attempted to set the type: '" + type.toString() + "' but it's already present, can only have one!");
+			this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' attempted to set the type: '" + type + "' but it's already present, can only have one!"));
 		}
 	}
 
