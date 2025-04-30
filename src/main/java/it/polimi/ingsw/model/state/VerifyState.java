@@ -21,7 +21,6 @@ import it.polimi.ingsw.model.components.exceptions.UnsupportedAlienCabinExceptio
 import it.polimi.ingsw.model.components.visitors.CrewSetVisitor;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.ShipCoords;
-import it.polimi.ingsw.model.player.VerifyResult;
 
 public class VerifyState extends GameState {
 

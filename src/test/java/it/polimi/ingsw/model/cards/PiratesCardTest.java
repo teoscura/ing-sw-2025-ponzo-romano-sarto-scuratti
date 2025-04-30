@@ -11,8 +11,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import it.polimi.ingsw.controller.server.ClientDescriptor;
-import it.polimi.ingsw.message.server.NewCenterMessage;
+import it.polimi.ingsw.message.server.SelectBlobMessage;
 import it.polimi.ingsw.message.server.SendContinueMessage;
+import it.polimi.ingsw.message.server.ServerConnectMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.message.server.TakeRewardMessage;
 import it.polimi.ingsw.message.server.TurnOnMessage;
@@ -22,6 +23,8 @@ import it.polimi.ingsw.model.PlayerCount;
 import it.polimi.ingsw.model.board.Planche;
 import it.polimi.ingsw.model.board.TestFlightCards;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
+import it.polimi.ingsw.model.cards.state.PiratesSelectShipState;
+import it.polimi.ingsw.model.cards.state.SelectShipReconnectState;
 import it.polimi.ingsw.model.cards.utils.Projectile;
 import it.polimi.ingsw.model.components.ComponentFactory;
 import it.polimi.ingsw.model.components.BaseComponent;
@@ -57,12 +60,12 @@ public class PiratesCardTest {
 
 		//P1 puo vincere ma non accende, e perde di conseguenza.
 		player1 = new Player(GameModeType.TEST, "p1", PlayerColor.RED);
-		c = f1.getComponent(14);
+		c = f1.getComponent(16);
 		c.rotate(ComponentRotation.U000);
 		player1.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 3, 3));
-		c = f1.getComponent(35);
-		c.rotate(ComponentRotation.U180);
-		player1.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 2, 3));
+		c = f1.getComponent(44);
+		c.rotate(ComponentRotation.U270);
+		player1.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 4,3));
 		c = f1.getComponent(126);
 		c.rotate(ComponentRotation.U000);
 		player1.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 3, 1));
@@ -160,10 +163,13 @@ public class PiratesCardTest {
 		state.validate(message);
 		//Should remove 
 		x = player1.getScore();
-		message = new NewCenterMessage(new ShipCoords(GameModeType.TEST, 2, 2));
+		assertTrue(player1.getSpaceShip().getBlobsSize()>1);
+		assertTrue(state.getCardState(player1) instanceof PiratesSelectShipState);
+		message = new SelectBlobMessage(new ShipCoords(GameModeType.TEST, 4, 2));
 		message.setDescriptor(p1desc);
 		state.validate(message);
 		assertTrue(x-3 == player1.getScore());
+		assertTrue(player1.getRetired());
 		//P2 accende e vince
 		x = player2.getCredits();
 		int pos = planche.getPlayerPosition(player2);
@@ -215,7 +221,7 @@ public class PiratesCardTest {
 		state.validate(message);
 		//dude disconnects instead of setting cabin.
 		state.disconnect(player1);
-		assertTrue(player1.getRetired());
+		assertTrue(!player1.getRetired());
 		//P2 accende e vince
 		x = player2.getCredits();
 		int pos = planche.getPlayerPosition(player2);
@@ -231,6 +237,14 @@ public class PiratesCardTest {
 		message = new SendContinueMessage();
 		message.setDescriptor(p2desc);
 		state.validate(message);
+		//P1 reconnects, does his thing, then p2 continues;
+		message = new ServerConnectMessage(p1desc);
+		state.validate(message);
+		assertTrue(state.getCardState(player1) instanceof SelectShipReconnectState);
+		message = new SelectBlobMessage(new ShipCoords(GameModeType.TEST, 4, 2));
+		message.setDescriptor(p1desc);
+		state.validate(message);
+		//p2 does his thing.
 		message = new TakeRewardMessage(true);
 		message.setDescriptor(p2desc);
 		state.validate(message);

@@ -20,7 +20,7 @@ import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.VoyageState;
 
-class PiratesSelectShipState extends CardState {
+public class PiratesSelectShipState extends CardState {
 
 	private final PiratesCard card;
 	private final ArrayList<Player> list;
@@ -37,17 +37,18 @@ class PiratesSelectShipState extends CardState {
 	@Override
 	public void init(ClientModelState new_state) {
 		super.init(new_state);
-		System.out.println("    CardState -> Pirates New Cabin State!");
+		System.out.println("    CardState -> Pirates Select Ship State!");
 		System.out.println("    Awaiting: '"+this.list.getFirst().getUsername()+"'.");
 	}
 
 	@Override
 	public void validate(ServerMessage message) throws ForbiddenCallException {
 		message.receive(this);
-		if (!this.list.getFirst().getRetired()&&!this.list.getFirst().getDisconnected()) {
+		if (this.list.getFirst().getSpaceShip().getBlobsSize()>1&&!this.list.getFirst().getDisconnected()) {
 			this.state.broadcastMessage(new NotifyStateUpdateMessage(this.state.getClientState()));
 			return;
 		}
+		if(this.list.getFirst().getSpaceShip().getCrew()[0]<=0) this.state.loseGame(this.list.getFirst());
 		this.transition();
 	}
 
@@ -85,7 +86,6 @@ class PiratesSelectShipState extends CardState {
 		try {
 			p.getSpaceShip().selectShipBlob(blob_coord);
 			System.out.println("Player '"+p.getUsername()+"' selected blob that contains coords "+blob_coord+".");
-			if(p.getSpaceShip().getCrew()[0]<=0) this.state.loseGame(p);
 		} catch (IllegalTargetException e) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to set his new center on an empty space!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to set his new center on an empty space!"));

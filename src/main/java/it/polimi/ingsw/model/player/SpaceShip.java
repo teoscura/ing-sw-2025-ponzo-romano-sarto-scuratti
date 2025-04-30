@@ -123,6 +123,16 @@ public class SpaceShip{
         this.updateShipBlobs();
         return this.blobs.size();
     }
+	
+	public void printBlobs(){
+		this.updateShipBlobs();
+		for(var blob : this.blobs){
+			for(var c : blob){
+				System.out.print(c+" ");
+			}
+			System.out.println("");
+		}
+	}
 
     public void updateShipBlobs(){
         ArrayList<ArrayList<ShipCoords>> res = new ArrayList<>();
@@ -164,7 +174,7 @@ public class SpaceShip{
 		if(this.blobs.size()<=1) throw new ForbiddenCallException();
         for(ArrayList<ShipCoords> blob : this.blobs){
             if(!blob.contains(blob_coord)) continue;
-            ArrayList<ArrayList<ShipCoords>> previous = this.blobs;
+			ArrayList<ArrayList<ShipCoords>> previous = this.blobs;
             previous.remove(blob);
             previous.stream().forEach(b->b.stream().forEach(c->this.removeComponent(c)));
             this.blobs = new ArrayList<>(){{add(blob);}};

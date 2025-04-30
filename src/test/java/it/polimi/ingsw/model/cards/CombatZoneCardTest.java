@@ -62,7 +62,7 @@ public class CombatZoneCardTest {
 		c.rotate(ComponentRotation.U000);
 		player1.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 4, 3));
 		CrewRemoveVisitor v = new CrewRemoveVisitor(player1.getSpaceShip());
-		player1.getSpaceShip().getComponent(player1.getSpaceShip().getCenter()).check(v);
+		player1.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 3, 2)).check(v);
 		p1desc = new ClientDescriptor(player1.getUsername(), null);
 		p1desc.bindPlayer(player1);
 
@@ -72,7 +72,7 @@ public class CombatZoneCardTest {
 		c.rotate(ComponentRotation.U000);
 		player2.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 3, 3));
 		c = f.getComponent(38);
-		c.rotate(ComponentRotation.U270);
+		c.rotate(ComponentRotation.U180);
 		player2.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 2, 3));
 		c = f.getComponent(36);
 		c.rotate(ComponentRotation.U180);
@@ -192,12 +192,17 @@ public class CombatZoneCardTest {
 		message = new SendContinueMessage();
 		message.setDescriptor(p1desc);
 		state.validate(message);
-		//Take second.
+		player1.getSpaceShip().printBlobs();
+		//He needs to choose the ship first, then take second
+		message = new SelectBlobMessage(new ShipCoords(GameModeType.TEST, 3, 2));
+		message.setDescriptor(p1desc);
+		state.validate(message);
+		//Take second
 		message = new SendContinueMessage();
 		message.setDescriptor(p1desc);
 		state.validate(message);
 		//Over.
-		assertTrue(player1.getSpaceShip().getBrokeCenter() && player1.getRetired());
+		assertTrue(player1.getSpaceShip().getBlobsSize()==1 && player1.getRetired());
 		assertEquals(0, player1.getSpaceShip().getTotalCrew());
 		assertNull(this.state.getCardState((player1)));
 	}
@@ -276,7 +281,7 @@ public class CombatZoneCardTest {
 		state.validate(message);
 		//Over.
 		assertSame(player1.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 4, 3)), player1.getSpaceShip().getEmpty());
-		assertFalse(player1.getSpaceShip().getBrokeCenter());
+		assertTrue(!player1.getRetired());
 		assertEquals(1, player1.getSpaceShip().getEnginePower());
 		assertEquals(1, player1.getSpaceShip().getTotalCrew());
 		assertNull(this.state.getCardState((player1)));
@@ -353,6 +358,7 @@ public class CombatZoneCardTest {
 		message.setDescriptor(p3desc);
 		state.validate(message);
 		//Turn on shield and take first shot.
+		player1.getSpaceShip().printBlobs();
 		message = new TurnOnMessage(new ShipCoords(GameModeType.TEST, 5, 3), new ShipCoords(GameModeType.TEST, 2, 2));
 		message.setDescriptor(p1desc);
 		state.validate(message);
@@ -366,11 +372,15 @@ public class CombatZoneCardTest {
 		message = new SendContinueMessage();
 		message.setDescriptor(p1desc);
 		state.validate(message);
+		//Player 1 chooses ship piece.
+		message = new SelectBlobMessage(new ShipCoords(GameModeType.TEST, 3, 2));
+		message.setDescriptor(p1desc);
+		state.validate(message);
 		//Over.
+		player1.getSpaceShip().printBlobs();
 		assertSame(player1.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 3, 3)), player1.getSpaceShip().getEmpty());
 		assertSame(player1.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 4, 3)), player1.getSpaceShip().getEmpty());
 		assertSame(player1.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 5, 3)), player1.getSpaceShip().getEmpty());
-		assertFalse(player1.getSpaceShip().getBrokeCenter());
 		assertEquals(0, player1.getSpaceShip().getEnginePower());
 		assertEquals(1, player1.getSpaceShip().getTotalCrew());
 		assertNull(this.state.getCardState((player1)));
@@ -491,14 +501,18 @@ public class CombatZoneCardTest {
 		message = new SendContinueMessage();
 		message.setDescriptor(p1desc);
 		state.validate(message);
-		System.out.println(player1.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 3, 3)).getClass().getSimpleName());
-		System.out.println(player1.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 4, 3)).getClass().getSimpleName());
-		System.out.println(player1.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 5, 3)).getClass().getSimpleName());
-		System.out.println(player1.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 5, 2)).getClass().getSimpleName());
+		//Saves the crew
+		//Player 1 chooses ship piece.
+		message = new SelectBlobMessage(new ShipCoords(GameModeType.TEST, 3, 2));
+		message.setDescriptor(p1desc);
+		state.validate(message);
+		//End test
+		player1.getSpaceShip().printBlobs();
 		assertSame(player1.getSpaceShip().getEmpty(), player1.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 3, 3)));
 		assertSame(player1.getSpaceShip().getEmpty(), player1.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 4, 3)));
 		assertSame(player1.getSpaceShip().getEmpty(), player1.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 5, 3)));
 		assertSame(player1.getSpaceShip().getEmpty(), player1.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 5, 2)));
+		assertNull(state.getCardState(player1));
 	}
 
 	@Test
@@ -576,15 +590,21 @@ public class CombatZoneCardTest {
 		message = new SendContinueMessage();
 		message.setDescriptor(p1desc);
 		state.validate(message);
+		//P1 has to choose new ship;
+		player1.getSpaceShip().printBlobs();
+		message = new SelectBlobMessage(new ShipCoords(GameModeType.TEST, 3, 2));
+		message.setDescriptor(p1desc);
+		state.validate(message);
+		//Takes last one
 		message = new SendContinueMessage();
 		message.setDescriptor(p1desc);
 		state.validate(message);
-		assertTrue(player1.getSpaceShip().getBrokeCenter());
+		assertTrue(player1.getSpaceShip().getBlobsSize()>1);
 		//selects the last cabin, enough to survive.
-		message = new NewCenterMessage(new ShipCoords(GameModeType.TEST, 3, 1));
+		message = new SelectBlobMessage(new ShipCoords(GameModeType.TEST, 3, 1));
 		message.setDescriptor(p1desc);
 		state.validate(message);
-		assertTrue(!player1.getSpaceShip().getBrokeCenter());
+		assertTrue(player1.getSpaceShip().getBlobsSize()==1);
 		// //Over.
 		assertSame(player1.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 3, 3)), player1.getSpaceShip().getEmpty());
 		assertSame(player1.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 4, 3)), player1.getSpaceShip().getEmpty());
@@ -704,12 +724,23 @@ public class CombatZoneCardTest {
 		message = new SendContinueMessage();
 		message.setDescriptor(p1desc);
 		state.validate(message);
+		//Player1 chooses ship piece
+		player1.getSpaceShip().printBlobs();
+		//Player1 chooses wrong coords, nothing happens;
+		message = new SelectBlobMessage(new ShipCoords(GameModeType.TEST, 5, 2));
+		message.setDescriptor(p1desc);
+		state.validate(message);
+		assertTrue(player1.getSpaceShip().getBlobsSize()==2);
+		//then he chooses right
+		message = new SelectBlobMessage(new ShipCoords(GameModeType.TEST, 3, 2));
+		message.setDescriptor(p1desc);
+		state.validate(message);
+		assertTrue(player1.getSpaceShip().getBlobsSize()==1);
+		assertTrue(!player1.getRetired());
+		//Takes last
 		message = new SendContinueMessage();
 		message.setDescriptor(p1desc);
 		state.validate(message);
-		assertTrue(player1.getSpaceShip().getBrokeCenter());
-		//selects the last cabin, enough to survive.
-		assertTrue(player1.getRetired());
 		// //Over.
 		assertSame(player1.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 3, 3)), player1.getSpaceShip().getEmpty());
 		assertSame(player1.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 4, 3)), player1.getSpaceShip().getEmpty());

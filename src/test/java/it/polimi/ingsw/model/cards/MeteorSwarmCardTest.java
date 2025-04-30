@@ -1,6 +1,5 @@
 package it.polimi.ingsw.model.cards;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -13,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import it.polimi.ingsw.controller.server.ClientDescriptor;
+import it.polimi.ingsw.message.server.SelectBlobMessage;
 import it.polimi.ingsw.message.server.SendContinueMessage;
 import it.polimi.ingsw.message.server.ServerDisconnectMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
@@ -23,7 +23,6 @@ import it.polimi.ingsw.model.PlayerCount;
 import it.polimi.ingsw.model.board.Planche;
 import it.polimi.ingsw.model.board.TestFlightCards;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
-import it.polimi.ingsw.model.cards.utils.CardOrder;
 import it.polimi.ingsw.model.cards.utils.Projectile;
 import it.polimi.ingsw.model.components.ComponentFactory;
 import it.polimi.ingsw.model.components.BaseComponent;
@@ -140,7 +139,11 @@ public class MeteorSwarmCardTest {
         message = new SendContinueMessage();
         message.setDescriptor(p2desc);
         model.validate(message);
-        assertTrue(player1.getRetired());
+        assertTrue(!player1.getRetired());
+        //p1 needs to choose its new ship section before actually dying.
+        message = new SelectBlobMessage(new ShipCoords(GameModeType.TEST, 4, 1));
+        message.setDescriptor(p1desc);
+        model.validate(message);
         //p2 needs to do nothing, since its smooth.
         message = new SendContinueMessage();
         message.setDescriptor(p2desc);

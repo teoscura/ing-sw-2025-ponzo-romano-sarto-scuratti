@@ -127,7 +127,7 @@ public class SlaversCardTest {
 	@Test
 	void behaviour() throws ForbiddenCallException {
 		CrewRemoveVisitor v = new CrewRemoveVisitor(player1.getSpaceShip());
-		player1.getSpaceShip().getComponent(player1.getSpaceShip().getCenter()).check(v);
+		player1.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 3, 2)).check(v);
 		ServerMessage message = null;
 		for (Player p : this.order) {
 			System.out.println(p.getUsername() + " - e:" + p.getSpaceShip().getEnginePower() + " - cr:" + p.getSpaceShip().getTotalCrew() + " - c:" + p.getSpaceShip().getCannonPower());
@@ -190,7 +190,7 @@ public class SlaversCardTest {
 	@Test
 	void behaviour2() throws ForbiddenCallException {
 		CrewRemoveVisitor v = new CrewRemoveVisitor(player1.getSpaceShip());
-		player1.getSpaceShip().getComponent(player1.getSpaceShip().getCenter()).check(v);
+		player1.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 3, 2)).check(v);
 		ServerMessage message = null;
 		for (Player p : this.order) {
 			System.out.println(p.getUsername() + " - e:" + p.getSpaceShip().getEnginePower() + " - cr:" + p.getSpaceShip().getTotalCrew() + " - c:" + p.getSpaceShip().getCannonPower());

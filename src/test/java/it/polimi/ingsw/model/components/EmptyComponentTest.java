@@ -1,13 +1,7 @@
 package it.polimi.ingsw.model.components;
 
-import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ConnectorType;
-import it.polimi.ingsw.model.player.Player;
-import it.polimi.ingsw.model.player.PlayerColor;
-import it.polimi.ingsw.model.player.ShipCoords;
-import it.polimi.ingsw.model.player.SpaceShip;
-import it.polimi.ingsw.model.player.SpaceShip;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -35,7 +35,7 @@ class MeteorSelectShipState extends CardState {
 	@Override
 	public void init(ClientModelState new_state) {
 		super.init(new_state);
-		System.out.println("    CardState -> Meteor Swarm New Cabin State!");
+		System.out.println("    CardState -> Meteor Swarm Select Ship State!");
 	}
 
 	@Override
@@ -44,11 +44,13 @@ class MeteorSelectShipState extends CardState {
 		boolean missing = false;
 		for (Player p : this.state.getOrder(CardOrder.NORMAL)) {
 			missing = missing || p.getSpaceShip().getBlobsSize() > 1;
-			if(p.getSpaceShip().getBlobsSize() == 1 && p.getSpaceShip().getCrew()[0]<=0) this.state.loseGame(p);
 		}
 		if (missing) {
 			this.state.broadcastMessage(new NotifyStateUpdateMessage(this.state.getClientState()));
 			return;
+		}
+		for(Player p : this.state.getOrder(CardOrder.NORMAL)){
+			if(p.getSpaceShip().getBlobsSize() == 1 && p.getSpaceShip().getCrew()[0]<=0) this.state.loseGame(p);
 		}
 		this.transition();
 	}
@@ -75,7 +77,6 @@ class MeteorSelectShipState extends CardState {
 		try {
 			p.getSpaceShip().selectShipBlob(blob_coord);
 			System.out.println("Player '"+p.getUsername()+"' selected blob that contains coords "+blob_coord+".");
-			if(p.getSpaceShip().getCrew()[0]<=0) this.state.loseGame(p);
 		} catch (IllegalTargetException e) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to set his new center on an empty space!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to set his new center on an empty space!"));

@@ -55,10 +55,8 @@ public class MeteorAnnounceState extends CardState {
 		}
 		for (Player p : this.state.getOrder(CardOrder.NORMAL)) {
 			p.getSpaceShip().handleMeteorite(this.left.getProjectiles().getFirst());
-			this.reselect = this.reselect || p.getSpaceShip().getBlobsSize() > 1;
-		}
-		for (Player p : this.state.getOrder(CardOrder.NORMAL)) {
-			if (p.getSpaceShip().getBlobsSize() <= 0 || p.getSpaceShip().getCrew()[0] <= 0) this.state.loseGame(p);
+			if (p.getSpaceShip().getBlobsSize() <= 0) this.state.loseGame(p);
+			this.reselect = this.reselect || (p.getSpaceShip().getBlobsSize() > 1);
 		}
 		this.transition();
 	}

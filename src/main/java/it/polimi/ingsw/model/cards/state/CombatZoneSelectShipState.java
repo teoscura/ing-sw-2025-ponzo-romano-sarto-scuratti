@@ -41,7 +41,7 @@ public class CombatZoneSelectShipState extends CardState {
 	@Override
 	public void init(ClientModelState new_state) {
 		super.init(new_state);
-		System.out.println("    CardState -> Combat Zone New Cabin State!: ["+(3-sections.size())+" - "+this.sections.getFirst().getPenalty()+"].");
+		System.out.println("    CardState -> Combat Zone Select Ship State!: ["+(3-sections.size())+" - "+this.sections.getFirst().getPenalty()+"].");
 		System.out.println("    Awaiting: '"+this.target.getUsername()+"'.");
 	}
 
@@ -52,6 +52,7 @@ public class CombatZoneSelectShipState extends CardState {
 			this.state.broadcastMessage(new NotifyStateUpdateMessage(this.state.getClientState()));
 			return;
 		}
+		if(this.target.getSpaceShip().getCrew()[0]<=0) this.state.loseGame(target);
 		this.transition();
 	}
 
@@ -90,7 +91,6 @@ public class CombatZoneSelectShipState extends CardState {
 		try {
 			p.getSpaceShip().selectShipBlob(blob_coord);
 			System.out.println("Player '"+p.getUsername()+"' selected blob that contains coords "+blob_coord+".");
-			if(p.getSpaceShip().getCrew()[0]<=0) this.state.loseGame(p);
 		} catch (IllegalTargetException e) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to set his new center on an empty space!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to set his new center on an empty space!"));

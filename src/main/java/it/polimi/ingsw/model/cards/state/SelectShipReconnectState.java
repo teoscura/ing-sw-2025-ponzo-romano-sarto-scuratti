@@ -8,7 +8,6 @@ import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
-import it.polimi.ingsw.model.cards.utils.CardOrder;
 import it.polimi.ingsw.model.client.card.ClientCardState;
 import it.polimi.ingsw.model.client.card.ClientNewCenterCardStateDecorator;
 import it.polimi.ingsw.model.client.state.ClientModelState;
@@ -22,7 +21,6 @@ public class SelectShipReconnectState extends CardState {
 
     private final CardState resume;
     private final Player awaiting;
-    private boolean responded = false;
 
     public SelectShipReconnectState(VoyageState state, CardState resume, Player awaiting){
         super(state);
@@ -34,19 +32,18 @@ public class SelectShipReconnectState extends CardState {
     @Override
     public void init(ClientModelState new_state) {
 		super.init(new_state);
-        System.out.println("    CardState -> Reconnect New Cabin State!");
-		for(Player p : this.state.getOrder(CardOrder.NORMAL)){
-			System.out.println("	 - "+p.getUsername());
-		}
+        System.out.println("    CardState -> Reconnect New Cabin State for Player '"+awaiting.getUsername()+"'!");
+		
     }
 
     @Override
     public void validate(ServerMessage message) throws ForbiddenCallException {
         message.receive(this);
-        if(this.awaiting.getSpaceShip().getBlobsSize()>1||!this.awaiting.getDisconnected()){
+        if(this.awaiting.getSpaceShip().getBlobsSize()>1&&!this.awaiting.getDisconnected()){
             this.state.broadcastMessage(new NotifyStateUpdateMessage(this.state.getClientState()));
 			return;
         }
+		if(this.awaiting.getSpaceShip().getCrew()[0]<=0) this.state.loseGame(awaiting);
         this.transition();
     }
 
@@ -71,7 +68,6 @@ public class SelectShipReconnectState extends CardState {
 		try {
 			p.getSpaceShip().selectShipBlob(blob_coord);
 			System.out.println("Player '"+p.getUsername()+"' selected blob that contains coords "+blob_coord+".");
-			if(p.getSpaceShip().getCrew()[0]<=0) this.state.loseGame(p);
 		} catch (IllegalTargetException e) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to set his new center on an empty space!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to set his new center on an empty space!"));

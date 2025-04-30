@@ -234,9 +234,9 @@ public class UpdateSpaceShipTest {
     void blobSelectShot() throws ForbiddenCallException{
         assertTrue(10 == nocabin.getSpaceShip().getTotalCrew());
         nocabin.getSpaceShip().handleShot(new Projectile(ProjectileDirection.U180, ProjectileDimension.SMALL, 7));
-        assertTrue(nocabin.getSpaceShip().getBrokeCenter());
-        nocabin.getSpaceShip().setCenter(new ShipCoords(GameModeType.TEST,1,2));
-        assertTrue(!nocabin.getSpaceShip().getBrokeCenter());
+        assertTrue(nocabin.getSpaceShip().getBlobsSize()>1);
+        nocabin.getSpaceShip().selectShipBlob(new ShipCoords(GameModeType.TEST,1,2));
+        assertTrue(nocabin.getSpaceShip().getBlobsSize()==1);
         assertTrue(4 == nocabin.getSpaceShip().getTotalCrew());
     }
 
@@ -244,9 +244,9 @@ public class UpdateSpaceShipTest {
     void blobSelectMeteorite() throws ForbiddenCallException{
         assertTrue(10 == nocabin.getSpaceShip().getTotalCrew());
         nocabin.getSpaceShip().handleMeteorite(new Projectile(ProjectileDirection.U180, ProjectileDimension.SMALL, 7));
-        assertTrue(nocabin.getSpaceShip().getBrokeCenter());
-        nocabin.getSpaceShip().setCenter(new ShipCoords(GameModeType.TEST,1,2));
-        assertTrue(!nocabin.getSpaceShip().getBrokeCenter());
+        assertTrue(nocabin.getSpaceShip().getBlobsSize()>1);
+        nocabin.getSpaceShip().selectShipBlob(new ShipCoords(GameModeType.TEST,1,2));
+        assertTrue(nocabin.getSpaceShip().getBlobsSize()==1);
         assertTrue(4 == nocabin.getSpaceShip().getTotalCrew());
     }
 

@@ -80,7 +80,7 @@ class CombatZonePenaltyState extends CardState {
 		}
 		if (this.sections.getFirst().getPenalty() == CombatZonePenalty.SHOTS) {
 			this.target.getSpaceShip().handleShot(this.shots.getProjectiles().getFirst());
-			if(this.target.getSpaceShip().getCrew()[0]<=0 || this.target.getSpaceShip().getBlobsSize() <= 0) this.state.loseGame(target);
+			if(this.target.getSpaceShip().getBlobsSize() <= 0) this.state.loseGame(target);
 		}
 		this.transition();
 	}
