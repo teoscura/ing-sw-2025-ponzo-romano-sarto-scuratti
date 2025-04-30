@@ -34,8 +34,6 @@ public abstract class CardState implements Serializable {
     public abstract ClientCardState getClientCardState();
     public abstract CardState getNext();
 
-    //TODO public abstract JsonCardState serialize();
-
     public void transition(){
         this.state.setCardState(this.getNext());
     }

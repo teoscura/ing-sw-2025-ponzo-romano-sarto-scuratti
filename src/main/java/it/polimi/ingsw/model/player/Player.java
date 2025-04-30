@@ -38,6 +38,13 @@ public class Player implements Serializable {
 	public void retire() {
 		if (this.retired) throw new AlreadyPoweredException("Player has alredy retired.");
 		this.retired = true;
+		this.score += credits;
+		int sum = 0;
+		for (ShipmentType t : ShipmentType.values()) {
+			if (t.getValue() <= 0) continue;
+			sum += getSpaceShip().getContains()[t.getValue()] * t.getValue();
+		}
+		addScore((sum / 2 + sum % 2));
 	}
 
 	public boolean getRetired() {
@@ -79,8 +86,9 @@ public class Player implements Serializable {
 	public void finalScore() {
 		for (ShipmentType t : ShipmentType.values()) {
 			if (t.getValue() <= 0) continue;
-			this.score += this.getSpaceShip().getContains()[t.getValue() - 1] * t.getValue();
+			this.score += getSpaceShip().getContains()[t.getValue()] * t.getValue();
 		}
+		this.score += credits;
 	}
 
 	public void reconnect(ClientDescriptor new_descriptor) {

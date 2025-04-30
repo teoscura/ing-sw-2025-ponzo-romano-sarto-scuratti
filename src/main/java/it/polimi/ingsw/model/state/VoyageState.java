@@ -49,7 +49,7 @@ public class VoyageState extends GameState {
 	@Override
 	public void validate(ServerMessage message) throws ForbiddenCallException {
 		message.receive(this);
-		if (this.state != null) return;
+		if (this.state != null && this.getOrder(CardOrder.NORMAL).size() > 0) return;
 		this.transition();
 	}
 
@@ -60,8 +60,8 @@ public class VoyageState extends GameState {
 		//Retired players dont count in the distance scoring.
 		tmp = new ArrayList<>(tmp.stream().filter(p -> !p.getRetired()).toList());
 		//Sort in descending order, so the farthest one gets the first index, second farthest gets second index and so on.
-		tmp.sort((p1, p2) -> this.planche.getPlayerPosition(p1) < this.planche.getPlayerPosition(p2) ? 1 : -1);
-		return new EndscreenState(model, type, count, players, tmp);
+		tmp.sort((p1, p2) -> Integer.compare(planche.getPlayerPosition(p1), planche.getPlayerPosition(p2)));
+		return new EndscreenState(model, type, count, players, new ArrayList<>(tmp.reversed()));
 	}
 
 	@Override
@@ -114,11 +114,6 @@ public class VoyageState extends GameState {
 
 	public void loseGame(Player p) {
 		int sum = 0;
-		for (ShipmentType t : ShipmentType.values()) {
-			if (t.getValue() <= 0) continue;
-			sum += p.getSpaceShip().getContains()[t.getValue() - 1] * t.getValue();
-		}
-		p.addScore(sum / 2 + sum % 2);
 		this.planche.loseGame(p);
 		p.retire();
 	}

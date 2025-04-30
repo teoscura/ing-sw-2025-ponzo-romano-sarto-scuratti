@@ -5,7 +5,6 @@ import it.polimi.ingsw.model.DummyModelInstance;
 import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.PlayerCount;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
-import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,14 +12,12 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class WaitingStateTest {
-    DummyModelInstance model;
-    WaitingState waiting_state;
-    Player player1;
-    ClientDescriptor p1desc;
-    Player player2;
-    ClientDescriptor p2desc;
-    Player player3;
-    ClientDescriptor p3desc;
+
+    private DummyModelInstance model;
+    private WaitingState waiting_state;
+    private ClientDescriptor p1desc;
+    private ClientDescriptor p2desc;
+    private ClientDescriptor p3desc;
 
     @BeforeEach
     void setUp() {
