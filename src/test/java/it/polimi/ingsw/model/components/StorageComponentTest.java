@@ -17,7 +17,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class StorageComponentTest {
+public class StorageComponentTest {
 	Player player1;
 	ConnectorType[] connectors;
 	ShipCoords coords;

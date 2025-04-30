@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ShipmentTypeTest {
+public class ShipmentTypeTest {
 
 	@Test
 	void getSpecial() {

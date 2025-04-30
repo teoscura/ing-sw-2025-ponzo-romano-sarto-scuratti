@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
 
-class AlienTypeTest {
+public class AlienTypeTest {
 
 	private AlienType human_cabin;
 	private AlienType brown_cabin;
