@@ -38,6 +38,8 @@ public class ResumeWaitingState extends GameState {
 
     @Override
     public void init(){
+        System.out.println("New Game State -> Resume Waiting Room State");
+        this.broadcastMessage(new NotifyStateUpdateMessage(this.getClientState()));
     }
 
     @Override

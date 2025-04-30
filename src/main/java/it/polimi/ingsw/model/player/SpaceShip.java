@@ -164,7 +164,7 @@ public class SpaceShip{
 			for (BaseComponent c : this.getComponent(tmp).getConnectedComponents(this)) {
 				if (c == this.empty) continue;
 				ShipCoords xy = c.getCoords();
-				if (map[xy.y][xy.x] == VerifyResult.NOT_LNKED) queue.add(c.getCoords());
+				if (map[xy.y][xy.x] == VerifyResult.NOT_LNKED && !queue.contains(xy)) queue.add(c.getCoords());
 			}
 		}
         return res;
@@ -182,7 +182,7 @@ public class SpaceShip{
 			updateShip();
             return;
         }
-        throw new IllegalTargetException("Blob coordinate was invalid!");
+        throw new NotPresentException("Blob coordinate was invalid!");
     }
 
 
@@ -211,12 +211,12 @@ public class SpaceShip{
 
 	public void removeComponent(ShipCoords coords) {
 		if (coords == null) throw new NullPointerException();
+		System.out.println("Removed component on coords: "+coords+" for player '"+this.player.getUsername()+"'.");
 		BaseComponent tmp = this.getComponent(coords);
 		if (this.components[coords.y][coords.x] == this.empty) throw new IllegalTargetException();
 		this.components[coords.y][coords.x] = this.empty;
 		this.player.addScore(-1);
 		tmp.onDelete(this);
-		System.out.println("Removed component on coords: "+coords+" for player '"+this.player.getUsername()+"'.");
 		this.updateShip();
 	}
 

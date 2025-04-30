@@ -20,7 +20,6 @@ import it.polimi.ingsw.model.board.iPlanche;
 import it.polimi.ingsw.model.client.player.ClientVoyagePlayer;
 import it.polimi.ingsw.model.client.state.ClientModelState;
 import it.polimi.ingsw.model.client.state.ClientVoyageState;
-import it.polimi.ingsw.model.components.enums.ShipmentType;
 import it.polimi.ingsw.model.player.Player;
 
 public class VoyageState extends GameState {
@@ -42,6 +41,7 @@ public class VoyageState extends GameState {
 	@Override
 	public void init() {
 		super.init();
+		System.out.println("New Game State -> Voyage State");
 		this.setCardState(null);
 		this.broadcastMessage(new NotifyStateUpdateMessage(this.getClientState()));
 	}

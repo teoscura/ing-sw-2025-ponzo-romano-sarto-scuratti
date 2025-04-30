@@ -59,6 +59,7 @@ public class ConstructionState extends GameState {
 
 	@Override
 	public void init() {
+        System.out.println("New Game State -> Construction State");
 		this.broadcastMessage(new NotifyStateUpdateMessage(this.getClientState()));
 	}
 
@@ -143,6 +144,7 @@ public class ConstructionState extends GameState {
 		try {
 			this.current_tile.get(p).rotate(rotation);
 			p.getSpaceShip().addComponent(this.current_tile.get(p), coords);
+			System.out.println("Player '" + p.getUsername() + "' placed a component in "+coords);
 			this.current_tile = null;
 		} catch (OutOfBoundsException e) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to place a component, but the coordinates are illegal!");

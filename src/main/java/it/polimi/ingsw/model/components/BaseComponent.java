@@ -71,11 +71,7 @@ public abstract class BaseComponent implements iVisitable {
 			if (!up.getConnector(ComponentRotation.U180).compatible(getConnector(ComponentRotation.U000))) return false;
 		}
 		if (right != ship.getEmpty()) {
-			if (!right.getConnector(ComponentRotation.U270).compatible(getConnector(ComponentRotation.U090))) {
-				System.out.println(this.coords);
-				System.out.println(right.getConnector(ComponentRotation.U270)+" - "+getConnector(ComponentRotation.U090));
-				return false;
-			}
+			if (!right.getConnector(ComponentRotation.U270).compatible(getConnector(ComponentRotation.U090))) return false;
 		}
 		if (down != ship.getEmpty()) {
 			if (!down.getConnector(ComponentRotation.U000).compatible(getConnector(ComponentRotation.U180))) return false;

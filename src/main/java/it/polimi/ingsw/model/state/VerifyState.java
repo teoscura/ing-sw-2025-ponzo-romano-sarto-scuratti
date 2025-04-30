@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.state;
 
 import java.util.ArrayList;
 
+import it.polimi.ingsw.exceptions.NotPresentException;
 import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
@@ -50,8 +51,14 @@ public class VerifyState extends GameState {
 			if (p.getSpaceShip().bulkVerifyResult() && p.getSpaceShip().getBlobsSize() == 1) continue;
 			else if (!p.getSpaceShip().bulkVerifyResult()) this.to_remove_broken.add(p);
 			else this.to_choose_blob.add(p);
-			this.finish_order.remove(p);
 		}
+		for(Player p : this.to_choose_blob){
+			if(finish_order.contains(p)) finish_order.remove(p);
+		}
+		for(Player p : this.to_remove_broken){
+			if(finish_order.contains(p)) finish_order.remove(p);
+		}
+		System.out.println("New Game State -> Verify State");
 		this.broadcastMessage(new NotifyStateUpdateMessage(this.getClientState()));
 
 	}
@@ -74,6 +81,9 @@ public class VerifyState extends GameState {
 	public GameState getNext() {
 		for(Player p : this.players){
 			if(p.getDisconnected()) this.starts_losing.add(p);
+		}
+		for(Player p : this.players){
+			if(p.getSpaceShip().getBlobsSize()<=0 || this.starts_losing.contains(p)) this.finish_order.remove(p);
 		}
 		Planche planche = new Planche(type, finish_order);
 		VoyageState res = new VoyageState(model, type, count, players, voyage_deck, planche);
@@ -115,6 +125,7 @@ public class VerifyState extends GameState {
 			return;
 		}
 		this.awaiting.remove(p);
+		System.out.println("Player '" + p.getUsername() + "' motioned to progress! ("+(this.awaiting.size())+" missing).");
 	}
 
 	@Override
@@ -148,10 +159,11 @@ public class VerifyState extends GameState {
 			p.getSpaceShip().selectShipBlob(blob_coord);
 			System.out.println("Player '"+p.getUsername()+"' selected blob that contains coords "+blob_coord+".");
 			if(p.getSpaceShip().getCrew()[0]<=0) this.starts_losing.add(p);
+			this.to_choose_blob.remove(p);
 			this.finish_order.addLast(p);
-		} catch (IllegalTargetException e) {
-			System.out.println("Player '" + p.getUsername() + "' attempted to set his new center on an empty space!");
-			this.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to set his new center on an empty space!"));
+		} catch (NotPresentException e) {
+			System.out.println("Player '" + p.getUsername() + "' attempted to select a nonexistant blob!");
+			this.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to select a nonexistant blob!"));
 		} catch (ForbiddenCallException e) {
 			//Should be unreachable.
 			System.out.println("Player '" + p.getUsername() + "' attempted to set his new center while having a unbroken ship!");
@@ -162,6 +174,11 @@ public class VerifyState extends GameState {
 
 	@Override
 	public void setCrewType(Player p, ShipCoords coords, AlienType type) throws ForbiddenCallException {
+		if (this.to_choose_blob.contains(p)||this.to_remove_broken.contains(p)) {
+			System.out.println("Player '" + p.getUsername() + "' tried to set crew type before having a valid ship!");
+			this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' tried to set crew type before having a valid ship!"));
+			return;
+		}
 		if (!this.awaiting.contains(p)) {
 			System.out.println("Player '" + p.getUsername() + "' tried to set crew type after finishing!");
 			this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' tried to set crew type after finishing!"));
@@ -170,6 +187,8 @@ public class VerifyState extends GameState {
 		try {
 			CrewSetVisitor v = new CrewSetVisitor(p.getSpaceShip(), type);
 			p.getSpaceShip().getComponent(coords).check(v);
+			System.out.println("Player '" + p.getUsername() + "' set crew type "+type+" on coords "+coords+"!");
+			this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' set crew type "+type+" on coords "+coords+"!"));
 		} catch (IllegalTargetException e) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to set crew on a invalid coordinate!");
 			this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' attempted to set crew on a invalid coordinate!"));
