@@ -1,10 +1,12 @@
 package it.polimi.ingsw.model.state;
 
 import it.polimi.ingsw.controller.server.ClientDescriptor;
+import it.polimi.ingsw.controller.server.ServerController;
 import it.polimi.ingsw.model.DummyModelInstance;
 import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.PlayerCount;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
+import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,11 +34,11 @@ class WaitingStateTest {
     @Test
     void behaviour() throws ForbiddenCallException {
         //player1 connects
-        model.connect(p1desc);
+        waiting_state.connect(p1desc);
         //player1 attempts connection again
-        model.connect(p1desc);
+        waiting_state.connect(p1desc);
         //player 2 attempts to diconnect before being connected
-        model.disconnect(p2desc);
+        waiting_state.disconnect(p2desc);
         //player 2 connects
         model.connect(p2desc);
         model.connect(p3desc);
