@@ -6,7 +6,6 @@ import it.polimi.ingsw.model.cards.state.CardState;
 import it.polimi.ingsw.model.cards.state.MeteorAnnounceState;
 import it.polimi.ingsw.model.cards.utils.Projectile;
 import it.polimi.ingsw.model.cards.utils.ProjectileArray;
-import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.state.VoyageState;
 
 public class MeteorSwarmCard extends Card {

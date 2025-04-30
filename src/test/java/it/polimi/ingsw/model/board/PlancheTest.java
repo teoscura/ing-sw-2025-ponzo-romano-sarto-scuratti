@@ -1,54 +1,52 @@
 package it.polimi.ingsw.model.board;
 
-import it.polimi.ingsw.model.player.SpaceShip;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import org.junit.jupiter.api.Test;
+
+import it.polimi.ingsw.model.DummyModelInstance;
+import it.polimi.ingsw.model.GameModeType;
+import it.polimi.ingsw.model.PlayerCount;
+import it.polimi.ingsw.model.player.Player;
+import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.model.state.DummyVoyageState;
 
 class PlancheTest {
+	
+	private DummyModelInstance model;
+	private DummyVoyageState state;
 
-	private Planche planche;
-	private SpaceShip shipRed;
-	private SpaceShip shipBlue;
+	@Test
+	void lappedFrontTest(){
+		Player p1 = new Player(GameModeType.TEST, "bingus", PlayerColor.RED);
+		Player p2 = new Player(GameModeType.TEST, "sbingus", PlayerColor.BLUE);
+		ArrayList<Player> order = new ArrayList<>(Arrays.asList(new Player[]{p1,p2}));
+		Planche planche = new Planche(GameModeType.TEST, order);
+		model = new DummyModelInstance(1, null, GameModeType.TEST, PlayerCount.TWO);
+		state = new DummyVoyageState(model, GameModeType.TEST, PlayerCount.TWO, order, new TestFlightCards(), planche);
+		
+		assertTrue(2==(planche.getPlayerPosition(p1)-planche.getPlayerPosition(p2)));
+		planche.movePlayer(state, p1, +31);
+		assertTrue(p2.getRetired());
+	}
 
-	// @BeforeEach
-	// void setUp() {
-	//     planche = new Planche(GameModeType.LVL2, PlayerCount.TWO);
-	//     shipRed = new SpaceShip(GameModeType.LVL2, PlayerColor.RED);
-	//     shipBlue = new SpaceShip(GameModeType.LVL2, PlayerColor.BLUE);
-	// }
+	@Test
+	void lappedBackTest(){
+		Player p1 = new Player(GameModeType.TEST, "bingus", PlayerColor.RED);
+		Player p2 = new Player(GameModeType.TEST, "sbingus", PlayerColor.BLUE);
+		ArrayList<Player> order = new ArrayList<>(Arrays.asList(new Player[]{p1,p2}));
+		Planche planche = new Planche(GameModeType.TEST, order);
+		model = new DummyModelInstance(1, null, GameModeType.TEST, PlayerCount.TWO);
+		state = new DummyVoyageState(model, GameModeType.TEST, PlayerCount.TWO, order, new TestFlightCards(), planche);
+		
+		assertTrue(2==(planche.getPlayerPosition(p1)-planche.getPlayerPosition(p2)));
+		planche.movePlayer(state, p1, +10);
+		planche.movePlayer(state, p2, +10);
+		planche.movePlayer(state, p2, -20);
+		assertTrue(p2.getRetired());
+	}
 
-	// @Test
-	// void getPlayerPosition() {
-	//     assertEquals(0, planche.getPlayerPosition(shipRed));
-	//     assertEquals(0, planche.getPlayerPosition(shipBlue));
-	// }
-
-	// @Test
-	// void getPlayersAt() {
-	//     planche.movePlayer(shipBlue, 1);
-	//     assertEquals(PlayerColor.RED, planche.getPlayersAt(0));
-	//     assertEquals(PlayerColor.BLUE, planche.getPlayersAt(1));
-	// }
-
-	// @Test
-	// void movePlayer() {
-	//     planche.movePlayer(shipRed, 3);
-	//     planche.movePlayer(shipBlue, 2);
-	//     planche.movePlayer(shipBlue, 1);
-	//     assertEquals(4, planche.getPlayerPosition(shipBlue));
-	//     assertEquals(3, planche.getPlayerPosition(shipRed));
-
-	//     planche.movePlayer(shipBlue, -2);
-	//     planche.movePlayer(shipRed, -1);
-
-	//     assertEquals(2, planche.getPlayerPosition(shipRed));
-	//     assertEquals(1, planche.getPlayerPosition(shipBlue));
-	// }
-
-	// @Test
-	// void getOrder() {
-	//     planche.movePlayer(shipRed, 3);
-	//     planche.movePlayer(shipBlue, 1);
-
-	//     List<PlayerColor> order = planche.getOrder();
-	//     assertEquals(List.of(PlayerColor.BLUE, PlayerColor.RED), order);
-	// }
 }
