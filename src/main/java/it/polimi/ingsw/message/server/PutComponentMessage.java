@@ -13,7 +13,8 @@ public class PutComponentMessage extends ServerMessage {
 	private final ComponentRotation rotation;
 
 	public PutComponentMessage(ShipCoords coords, ComponentRotation rotation) {
-		if (coords == null) throw new NullPointerException();
+		if (coords == null)
+			throw new NullPointerException();
 		this.coords = coords;
 		this.rotation = rotation;
 	}
@@ -33,6 +34,14 @@ public class PutComponentMessage extends ServerMessage {
 	@Override
 	public void receive(GameState state) throws ForbiddenCallException {
 		state.putComponent(this.descriptor.getPlayer(), coords, rotation);
+	}
+
+	public ShipCoords getCoords() {
+		return coords;
+	}
+
+	public ComponentRotation getRotation() {
+		return rotation;
 	}
 
 }

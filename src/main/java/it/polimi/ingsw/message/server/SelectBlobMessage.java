@@ -9,37 +9,42 @@ import it.polimi.ingsw.model.state.GameState;
 import it.polimi.ingsw.model.state.VoyageState;
 
 public class SelectBlobMessage extends ServerMessage {
-    
-    private final ShipCoords blob_coord; 
 
-    public SelectBlobMessage(ShipCoords blob_coord){
-        if(blob_coord == null) throw new NullPointerException();
-        this.blob_coord = blob_coord;
-    }
+	private final ShipCoords blob_coord;
 
-    @Override
-    public void receive(ServerController server) throws ForbiddenCallException {
-        if(descriptor.getPlayer()==null) throw new ForbiddenCallException("Descriptor associated to message isn't bound to player");
-        server.getModel().validate(this);
-    }
+	public SelectBlobMessage(ShipCoords blob_coord) {
+		if (blob_coord == null) throw new NullPointerException();
+		this.blob_coord = blob_coord;
+	}
 
-    @Override
-    public void receive(ModelInstance instance) throws ForbiddenCallException {
-        instance.getState().validate(this);
-    }
+	@Override
+	public void receive(ServerController server) throws ForbiddenCallException {
+		if (descriptor.getPlayer() == null)
+			throw new ForbiddenCallException("Descriptor associated to message isn't bound to player");
+		server.getModel().validate(this);
+	}
 
-    @Override
-    public void receive(GameState state) throws ForbiddenCallException {
-        if (state instanceof VoyageState) {
+	@Override
+	public void receive(ModelInstance instance) throws ForbiddenCallException {
+		instance.getState().validate(this);
+	}
+
+	@Override
+	public void receive(GameState state) throws ForbiddenCallException {
+		if (state instanceof VoyageState) {
 			state.getCardState(this.descriptor.getPlayer()).validate(this);
 		} else {
 			state.selectBlob(this.descriptor.getPlayer(), blob_coord);
 		}
-    }
+	}
 
-    @Override
-    public void receive(CardState state) throws ForbiddenCallException {
-        state.selectBlob(this.descriptor.getPlayer(), blob_coord);
-    }
+	@Override
+	public void receive(CardState state) throws ForbiddenCallException {
+		state.selectBlob(this.descriptor.getPlayer(), blob_coord);
+	}
+
+	public ShipCoords getCoords() {
+		return blob_coord;
+	}
 
 }

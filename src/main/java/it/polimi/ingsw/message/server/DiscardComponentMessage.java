@@ -30,4 +30,8 @@ public class DiscardComponentMessage extends ServerMessage {
         state.discardComponent(this.descriptor.getPlayer(), id);
     }
 
+    public int getId(){
+		return id;
+	}
+
 }
