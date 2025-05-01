@@ -2,6 +2,7 @@ package it.polimi.ingsw.model;
 
 import java.util.List;
 
+import it.polimi.ingsw.controller.DummyController;
 import it.polimi.ingsw.controller.server.ClientDescriptor;
 import it.polimi.ingsw.controller.server.ServerController;
 import it.polimi.ingsw.message.server.ServerConnectMessage;
@@ -15,7 +16,6 @@ import it.polimi.ingsw.model.state.ResumeWaitingState;
 public class DummyModelInstance extends ModelInstance {
 
 	private final int id;
-	private transient ServerController controller;
 	private boolean started;
 	private GameState state;
 
@@ -23,7 +23,6 @@ public class DummyModelInstance extends ModelInstance {
 		super(id, server, type, count);
 		if (id < 0) throw new IllegalArgumentException();
 		this.id = id;
-		this.controller = server;
 	}
 
 	public String toString() {
@@ -107,12 +106,8 @@ public class DummyModelInstance extends ModelInstance {
 		}
 	}
 
-	public void setController(ServerController controller) {
-		this.controller = controller;
-	}
-
 	public ServerController getController() {
-		return this.controller;
+		return new DummyController();
 	}
 
 	public void afterSerialRestart() {

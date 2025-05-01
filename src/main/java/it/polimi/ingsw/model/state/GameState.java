@@ -51,9 +51,7 @@ public abstract class GameState implements Serializable {
 	}
 
 	public void broadcastMessage(ClientMessage message) {
-		return;
-		//XXX;
-		//this.model.getController().broadcast(message);
+		this.model.getController().broadcast(message);
 	}
 
 	public void transition() {
