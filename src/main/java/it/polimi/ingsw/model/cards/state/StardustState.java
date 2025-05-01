@@ -35,9 +35,6 @@ public class StardustState extends CardState {
 		for(Player p : this.state.getOrder(CardOrder.NORMAL)){
 			System.out.println("	 - "+p.getUsername());
 		}
-		for (Player p : this.state.getOrder(CardOrder.INVERSE)) {
-			card.apply(this.state, p);
-		}
 	}
 
 	@Override
@@ -46,6 +43,9 @@ public class StardustState extends CardState {
 		if (!awaiting.isEmpty()) {
 			this.state.broadcastMessage(new NotifyStateUpdateMessage(this.state.getClientState()));
 			return;
+		}
+		for (Player p : this.state.getOrder(CardOrder.INVERSE)) {
+			card.apply(this.state, p);
 		}
 		this.transition();
 	}

@@ -92,15 +92,6 @@ class EpidemicCardTest {
 		int[] exp1 = new int[]{8, 0, 0};
 		assertArrayEquals(exp1, player1.getSpaceShip().getCrew());
 		state.setCardState(cstate);
-		// Check status after card application
-		exp1 = new int[]{6, 0, 0};
-		assertArrayEquals(exp1, player1.getSpaceShip().getCrew());
-		ShipCoords coords = new ShipCoords(GameModeType.TEST, 4, 3);
-		CabinComponent cabin = (CabinComponent) player1.getSpaceShip().getComponent(coords);
-		assertEquals(1, cabin.getCrew());
-		coords = new ShipCoords(GameModeType.TEST, 5, 3);
-		cabin = (CabinComponent) player1.getSpaceShip().getComponent(coords);
-		assertEquals(1, cabin.getCrew());
 		// Unsupported message (it should fail)
 		server_message_wrong = new TakeRewardMessage(false);
 		server_message_wrong.setDescriptor(p1desc);
@@ -117,6 +108,15 @@ class EpidemicCardTest {
 		message.setDescriptor(p2desc);
 		state.validate(message);
 		assertNull(state.getCardState(player1));
+		// Check status after card application
+		ShipCoords coords = new ShipCoords(GameModeType.TEST, 4, 3);
+		CabinComponent cabin = (CabinComponent) player1.getSpaceShip().getComponent(coords);
+		assertEquals(1, cabin.getCrew());
+		coords = new ShipCoords(GameModeType.TEST, 5, 3);
+		cabin = (CabinComponent) player1.getSpaceShip().getComponent(coords);
+		assertEquals(1, cabin.getCrew());
+		exp1 = new int[]{6, 0, 0};
+		assertArrayEquals(exp1, player1.getSpaceShip().getCrew());
 	}
 
 	@Test
@@ -125,16 +125,6 @@ class EpidemicCardTest {
 		int[] exp1 = new int[]{8, 0, 0};
 		assertArrayEquals(exp1, player1.getSpaceShip().getCrew());
 		state.setCardState(cstate);
-		// Check status after card application
-		exp1 = new int[]{6, 0, 0};
-		assertArrayEquals(exp1, player1.getSpaceShip().getCrew());
-		ShipCoords coords = new ShipCoords(GameModeType.TEST, 4, 3);
-		CabinComponent cabin = (CabinComponent) player1.getSpaceShip().getComponent(coords);
-		assertEquals(1, cabin.getCrew());
-		coords = new ShipCoords(GameModeType.TEST, 5, 3);
-		cabin = (CabinComponent) player1.getSpaceShip().getComponent(coords);
-		assertEquals(1, cabin.getCrew());
-
 		// Unsupported message (it should fail)
 		server_message_wrong = new TakeRewardMessage(false);
 		server_message_wrong.setDescriptor(p1desc);
@@ -150,6 +140,15 @@ class EpidemicCardTest {
 		message = new SendContinueMessage();
 		message.setDescriptor(p2desc);
 		state.validate(message);
+		// Check status after card application
+		exp1 = new int[]{8, 0, 0};
+		assertArrayEquals(exp1, player1.getSpaceShip().getCrew());
+		ShipCoords coords = new ShipCoords(GameModeType.TEST, 4, 3);
+		CabinComponent cabin = (CabinComponent) player1.getSpaceShip().getComponent(coords);
+		assertEquals(2, cabin.getCrew());
+		coords = new ShipCoords(GameModeType.TEST, 5, 3);
+		cabin = (CabinComponent) player1.getSpaceShip().getComponent(coords);
+		assertEquals(2, cabin.getCrew());
 		assertNull(state.getCardState(player1));
 	}
 }

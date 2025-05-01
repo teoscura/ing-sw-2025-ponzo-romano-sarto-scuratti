@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class StardustCardTest {
@@ -96,9 +97,6 @@ class StardustCardTest {
 		assertEquals(27, planche.getPlayerPosition(player2));
 		assertEquals(25, planche.getPlayerPosition(player3));
 		state.setCardState(cstate);
-		assertEquals(25, planche.getPlayerPosition(player1));
-		assertEquals(27, planche.getPlayerPosition(player2));
-		assertEquals(13, planche.getPlayerPosition(player3));
 		//p1 confirms
 		SendContinueMessage message1 = new SendContinueMessage();
 		message1.setDescriptor(p1desc);
@@ -117,5 +115,9 @@ class StardustCardTest {
 		SendContinueMessage message3 = new SendContinueMessage();
 		message3.setDescriptor(p3desc);
 		state.validate(message3);
+		assertNull(state.getCardState(player1));
+		assertEquals(25, planche.getPlayerPosition(player1));
+		assertEquals(27, planche.getPlayerPosition(player2));
+		assertEquals(13, planche.getPlayerPosition(player3));
 	}
 }

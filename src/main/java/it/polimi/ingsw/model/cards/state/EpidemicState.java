@@ -33,14 +33,6 @@ public class EpidemicState extends CardState {
 	@Override
 	public void init(ClientModelState new_state) {
 		super.init(new_state);
-		for (Player p : this.state.getOrder(CardOrder.INVERSE)) {
-			try {
-				card.apply(this.state, p);
-				if (p.getSpaceShip().getCrew()[0] == 0) this.state.loseGame(p);
-			} catch (PlayerNotFoundException e) {
-				e.printStackTrace();
-			}
-		}
 		System.out.println("New CardState -> Epidemic State!");
 		for(Player p : this.state.getOrder(CardOrder.NORMAL)){
 			System.out.println("	 - "+p.getUsername());
@@ -53,6 +45,14 @@ public class EpidemicState extends CardState {
 		if (!awaiting.isEmpty()) {
 			this.state.broadcastMessage(new NotifyStateUpdateMessage(this.state.getClientState()));
 			return;
+		}
+		for (Player p : this.state.getOrder(CardOrder.INVERSE)) {
+			try {
+				card.apply(this.state, p);
+				if (p.getSpaceShip().getCrew()[0] == 0) this.state.loseGame(p);
+			} catch (PlayerNotFoundException e) {
+				e.printStackTrace();
+			}
 		}
 		this.transition();
 	}
