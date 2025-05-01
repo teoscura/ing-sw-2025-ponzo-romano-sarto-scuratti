@@ -13,6 +13,7 @@ import it.polimi.ingsw.model.PlayerCount;
 import it.polimi.ingsw.model.cards.iCard;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.cards.state.CardState;
+import it.polimi.ingsw.model.cards.state.SelectShipReconnectState;
 import it.polimi.ingsw.model.cards.utils.CardOrder;
 import it.polimi.ingsw.model.cards.utils.CombatZoneCriteria;
 import it.polimi.ingsw.model.board.iCards;
@@ -49,6 +50,8 @@ public class VoyageState extends GameState {
 	@Override
 	public void validate(ServerMessage message) throws ForbiddenCallException {
 		message.receive(this);
+		Player p = message.getDescriptor().getPlayer();
+		if (!p.getRetired() && p.getSpaceShip().getCrew()[0]<=0) this.loseGame(p);
 		if (this.state != null && this.getOrder(CardOrder.NORMAL).size() > 0) return;
 		this.transition();
 	}
@@ -88,7 +91,12 @@ public class VoyageState extends GameState {
 	public void connect(Player p) throws ForbiddenCallException {
 		if (p == null) throw new NullPointerException();
 		if (!p.getDisconnected()) throw new ForbiddenCallException();
+		System.out.println("Player '" + p.getUsername() + "' reconnected!");
+	    this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' reconnected!"));
 		p.reconnect();
+		if(!p.getRetired()&&p.getSpaceShip().getBlobsSize()>1){
+			this.setCardState(new SelectShipReconnectState(this, this.state, p));
+		}
 	}
 
 	@Override
@@ -124,10 +132,10 @@ public class VoyageState extends GameState {
 	}
 
 	public List<Player> getOrder(CardOrder order) {
-		List<Player> tmp = this.players.stream().filter(p->!p.getRetired()).filter(p->!p.getDisconnected()).sorted((Player player1, Player player2) -> Integer.compare(planche.getPlayerPosition(player1), planche.getPlayerPosition(player2))).toList();
+		List<Player> tmp = this.players.stream().filter(p->!p.getRetired()&&!p.getDisconnected()).sorted((Player player1, Player player2) -> Integer.compare(planche.getPlayerPosition(player1), planche.getPlayerPosition(player2))).toList();
 		return order!=CardOrder.NORMAL ? tmp : tmp.reversed();
 	}
-
+	
 	public Player findCriteria(CombatZoneCriteria criteria) {
 		List<Player> tmp = new ArrayList<>();
 		tmp.addAll(this.players);

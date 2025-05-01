@@ -4,6 +4,8 @@ import java.util.List;
 
 import it.polimi.ingsw.controller.server.ClientDescriptor;
 import it.polimi.ingsw.controller.server.ServerController;
+import it.polimi.ingsw.message.server.ServerConnectMessage;
+import it.polimi.ingsw.message.server.ServerDisconnectMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.player.*;
@@ -39,9 +41,7 @@ public class ModelInstance {
 	}
 
 	public void serialize() {
-		return;
-		//XXX;
-		//this.controller.serializeCurrentGame();
+		this.controller.serializeCurrentGame();
 	}
 
 	public void startGame(List<Player> players) throws ForbiddenCallException {
@@ -55,9 +55,7 @@ public class ModelInstance {
 
 	public void endGame() {
 		if (!this.started) throw new RuntimeException();
-		return;
-		//XXX;
-		//this.controller.endGame();
+		this.controller.endGame();
 	}
 
 	public GameState getState() {
@@ -77,8 +75,8 @@ public class ModelInstance {
 
 	public void connect(ClientDescriptor client) {
 		try {
-			//XXX validate message dont do this
-			this.state.connect(client);
+			ServerMessage mess = new ServerConnectMessage(client);
+			this.state.validate(mess);
 		} catch (ForbiddenCallException e) {
 			System.out.println("Client: '" + client.getUsername() + "' tried connecting when the current state doesn't support it anymore!");
 		}
@@ -86,8 +84,9 @@ public class ModelInstance {
 
 	public void disconnect(ClientDescriptor client) {
 		try {
-			//XXX validate message dont do this
-			this.state.disconnect(client);
+			ServerMessage mess = new ServerDisconnectMessage();
+			mess.setDescriptor(client);
+			this.state.validate(mess);
 		} catch (ForbiddenCallException e) {
 			System.out.println("Client: '" + client.getUsername() + "' tried disconnecting when the current state doesn't support it anymore!");
 		}
@@ -95,7 +94,6 @@ public class ModelInstance {
 
 	public void connect(Player p) {
 		try {
-			//XXX validate message dont do this
 			this.state.connect(p);
 		} catch (ForbiddenCallException e) {
 			System.out.println("Client: '" + p.getUsername() + "' tried reconnecting when the current state doesn't support it anymore!");
@@ -104,23 +102,14 @@ public class ModelInstance {
 
 	public void disconnect(Player p) {
 		try {
-			//XXX validate message dont do this
-			this.state.disconnect(p);
+			if (p == null) throw new NullPointerException();
+			if (p.getDisconnected()) throw new ForbiddenCallException();
+			ServerMessage disc = new ServerDisconnectMessage();
+			disc.setDescriptor(p.getDescriptor());
+			this.state.validate(disc);
 		} catch (ForbiddenCallException e) {
 			System.out.println("Client: '" + p.getUsername() + "' tried disconnecting when the current state doesn't support it anymore!");
 		}
-	}
-
-	public void kick(ClientDescriptor client) {
-		try {
-			//XXX validate message dont do this
-			this.state.disconnect(client);
-		} catch (ForbiddenCallException e) {
-			System.out.println("Player " + client.getUsername() + " is not connected, cannot kick!");
-		}
-		return;
-		//XXX;
-		//this.controller.kick(client);
 	}
 
 	public void setController(ServerController controller) {

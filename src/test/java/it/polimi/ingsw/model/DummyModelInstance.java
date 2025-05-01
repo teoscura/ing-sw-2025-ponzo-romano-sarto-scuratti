@@ -89,7 +89,6 @@ public class DummyModelInstance extends ModelInstance {
 
 	public void connect(Player p) {
 		try {
-			//XXX validate message dont do this
 			this.state.connect(p);
 		} catch (ForbiddenCallException e) {
 			System.out.println("Client: '" + p.getUsername() + "' tried reconnecting when the current state doesn't support it anymore!");
@@ -106,16 +105,6 @@ public class DummyModelInstance extends ModelInstance {
 		} catch (ForbiddenCallException e) {
 			System.out.println("Client: '" + p.getUsername() + "' tried disconnecting when the current state doesn't support it anymore!");
 		}
-	}
-
-	public void kick(ClientDescriptor client) {
-		try {
-			//XXX validate message dont do this
-			this.state.disconnect(client);
-		} catch (ForbiddenCallException e) {
-			System.out.println("Player " + client.getUsername() + " is not connected, cannot kick!");
-		}
-		return;
 	}
 
 	public void setController(ServerController controller) {

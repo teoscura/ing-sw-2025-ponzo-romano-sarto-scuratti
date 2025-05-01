@@ -81,7 +81,6 @@ public class EndscreenState extends GameState {
 	@Override
 	public void sendContinue(Player p) throws ForbiddenCallException {
 		this.awaiting.remove(p);
-		this.model.kick(p.getDescriptor());
 	}
 
 	@Override

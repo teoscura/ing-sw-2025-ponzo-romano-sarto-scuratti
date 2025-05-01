@@ -223,7 +223,6 @@ public abstract class ConstructionState extends GameState {
 		if (p == null) throw new NullPointerException();
 		if (p.getDisconnected()) throw new ForbiddenCallException();
 		p.disconnect();
-		this.model.kick(p.getDescriptor());
 	}
 
 	@Override
