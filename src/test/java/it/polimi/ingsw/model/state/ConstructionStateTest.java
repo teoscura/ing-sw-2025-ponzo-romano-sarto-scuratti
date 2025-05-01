@@ -40,14 +40,13 @@ public class ConstructionStateTest {
         player2 = new Player(GameModeType.TEST, "Gigio2", PlayerColor.BLUE);
         p2desc = new ClientDescriptor("Gigio2", null);
         p2desc.bindPlayer(player2);
-
-        ArrayList<Player> players = new ArrayList<>(Arrays.asList(new Player[]{player1, player2}));
-        state = new ConstructionState(model, GameModeType.TEST, PlayerCount.TWO, players);
-        model.setState(state);
     }
 
     @Test
     void testFlightConstruction() throws ForbiddenCallException{
+        ArrayList<Player> players = new ArrayList<>(Arrays.asList(new Player[]{player1, player2}));
+        state = new ConstructionState(model, GameModeType.TEST, PlayerCount.TWO, players);
+        model.setState(state);
         ServerMessage mess = null;
         mess = new TakeComponentMessage();
         mess.setDescriptor(p1desc);
