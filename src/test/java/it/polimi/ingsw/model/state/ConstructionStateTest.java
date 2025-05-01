@@ -25,7 +25,6 @@ import it.polimi.ingsw.model.player.PlayerColor;
 public class ConstructionStateTest {
     
     private DummyModelInstance model;
-    private ConstructionState state;
     private Player player1;
     private ClientDescriptor p1desc;
     private Player player2;
@@ -45,7 +44,7 @@ public class ConstructionStateTest {
     @Test
     void testFlightConstruction() throws ForbiddenCallException{
         ArrayList<Player> players = new ArrayList<>(Arrays.asList(new Player[]{player1, player2}));
-        state = new ConstructionState(model, GameModeType.TEST, PlayerCount.TWO, players);
+        TestFlightConstructionState state = new TestFlightConstructionState(model, GameModeType.TEST, PlayerCount.TWO, players);
         model.setState(state);
         ServerMessage mess = null;
         mess = new TakeComponentMessage();
@@ -93,9 +92,16 @@ public class ConstructionStateTest {
         mess = new SendContinueMessage();
         mess.setDescriptor(p2desc);
         model.validate(mess);
+        mess = new TakeDiscardedComponentMessage(test);
+        mess.setDescriptor(p2desc);
+        model.validate(mess);
+        int test2 = test;
+        assertTrue(state.getHoarded(player2).stream().filter(c->c.getID()==test2).toList().isEmpty());
         mess = new SendContinueMessage();
         mess.setDescriptor(p1desc);
         model.validate(mess);
         assertTrue(model.getState() instanceof VerifyState);
     }
+
+    
 }

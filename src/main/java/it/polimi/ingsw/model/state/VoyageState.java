@@ -113,7 +113,6 @@ public class VoyageState extends GameState {
 	}
 
 	public void loseGame(Player p) {
-		int sum = 0;
 		this.planche.loseGame(p);
 		p.retire();
 	}

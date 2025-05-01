@@ -13,7 +13,6 @@ import it.polimi.ingsw.model.ModelInstance;
 import it.polimi.ingsw.model.PlayerCount;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.board.CommonBoard;
-import it.polimi.ingsw.model.board.LevelTwoCards;
 import it.polimi.ingsw.model.board.TestFlightCards;
 import it.polimi.ingsw.model.board.iCards;
 import it.polimi.ingsw.model.board.iCommonBoard;
@@ -28,23 +27,19 @@ import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.player.exceptions.IllegalComponentAdd;
 
-public class ConstructionState extends GameState {
+public class TestFlightConstructionState extends GameState {
 
 	private final iCommonBoard board;
-	private final ArrayList<Integer> construction_cards;
 	private final iCards voyage_deck;
 	private final ArrayList<Player> building;
 	private final ArrayList<Player> finished;
-	private final ConstructionStateHourglass hourglass;
 	private HashMap<Player, BaseComponent> current_tile;
 	private final HashMap<Player, ArrayList<BaseComponent>> hoarded_tile;
 
-	public ConstructionState(ModelInstance model, GameModeType type, PlayerCount count, ArrayList<Player> players) {
+	public TestFlightConstructionState(ModelInstance model, GameModeType type, PlayerCount count, ArrayList<Player> players) {
 		super(model, type, count, players);
 		this.board = new CommonBoard();
-		this.voyage_deck = type.getLevel() == -1 ? new TestFlightCards() : new LevelTwoCards();
-		this.hourglass = type.getLevel() == -1 ? new ConstructionStateHourglass(60, 0) : new ConstructionStateHourglass(60, 4);
-		this.construction_cards = new ArrayList<>(this.voyage_deck.getConstructionCards());
+		this.voyage_deck = new TestFlightCards();
 		this.finished = new ArrayList<>();
 		this.building = new ArrayList<>();
 		this.building.addAll(this.players);
@@ -80,7 +75,6 @@ public class ConstructionState extends GameState {
 	@Override
 	public ClientModelState getClientState() {
 		ArrayList<ClientConstructionPlayer> tmp = new ArrayList<>();
-		ArrayList<Integer> construction_cards = new ArrayList<>(this.construction_cards);
 		ArrayList<Integer> discarded = new ArrayList<>(this.board.getDiscarded());
 		for (Player p : this.players) {
 			ArrayList<Integer> stash = new ArrayList<>();
@@ -92,7 +86,7 @@ public class ConstructionState extends GameState {
 					stash,
 					this.finished.contains(p)));
 		}
-		return new ClientConstructionState(this.type, tmp, construction_cards, discarded, this.board.getCoveredSize(), this.hourglass.getInstant());
+		return new ClientConstructionState(this.type, tmp, null, discarded, this.board.getCoveredSize(), null);
 	}
 
 	@Override
@@ -116,10 +110,6 @@ public class ConstructionState extends GameState {
 				break;
 			}
 		}
-		if (!this.hourglass.started()) {
-			this.hourglass.enable();
-			this.hourglass.toggle();
-		}
 		if (only_disconnected_left) this.transition();
 	}
 
@@ -128,11 +118,6 @@ public class ConstructionState extends GameState {
 		if (!this.building.contains(p)) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to place a component, but their ship is already confirmed!");
 			this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' attempted to place a component, but their ship is already confirmed!"));
-			return;
-		}
-		if (!this.hourglass.running()) {
-			System.out.println("Player '" + p.getUsername() + "' attempted to place a component, but the hourglass has run out!");
-			this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' attempted to place a component, but the hourglass has run out!"));
 			return;
 		}
 		if (this.current_tile.get(p) == null) {
@@ -164,11 +149,6 @@ public class ConstructionState extends GameState {
 			this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' attempted to take a component, but their ship is already confirmed!"));
 			return;
 		}
-		if (!this.hourglass.running()) {
-			System.out.println("Player '" + p.getUsername() + "' attempted to take a component, but the hourglass has run out!");
-			this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' attempted to take a component, but the hourglass has run out!"));
-			return;
-		}
 		BaseComponent tmp = this.board.pullComponent();
 		if (tmp == null) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to take a component, but there are no more to take!");
@@ -194,11 +174,6 @@ public class ConstructionState extends GameState {
 		if (!this.building.contains(p)) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to take a discarded component, but their ship is already confirmed!");
 			this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' attempted to take a discarded component, but their ship is already confirmed!"));
-			return;
-		}
-		if (!this.hourglass.running()) {
-			System.out.println("Player '" + p.getUsername() + "' attempted to take a discarded component, but the hourglass has run out!");
-			this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' attempted to take a discarded component, but the hourglass has run out!"));
 			return;
 		}
 		BaseComponent tmp = null;
@@ -228,11 +203,6 @@ public class ConstructionState extends GameState {
 			this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' attempted to discard a component, but their ship is already confirmed!"));
 			return;
 		}
-		if (!this.hourglass.running()) {
-			System.out.println("Player '" + p.getUsername() + "' attempted to discard a component, but the hourglass has run out!");
-			this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' attempted to discard a component, but the hourglass has run out!"));
-			return;
-		}
 		if (this.current_tile.get(p).getID() == id) {
 			BaseComponent tmp = this.current_tile.get(p);
 			this.current_tile.put(p, null);
@@ -248,26 +218,6 @@ public class ConstructionState extends GameState {
 		} else {
 			System.out.println("Player '" + p.getUsername() + "' attempted to discard a component, but they don't own the one with the id provided!");
 			this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' attempted to discard a component, but they don't own the one with the id provided!"));
-		}
-	}
-
-	@Override
-	public void toggleHourglass(Player p) throws ForbiddenCallException {
-		if (this.hourglass.running()) {
-			System.out.println("Player '" + p.getUsername() + "' attempted to toggle the hourglass, but it's still running!");
-			this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' attempted to toggle the hourglass, but it's still running!"));
-			return;
-		}
-		if (this.building.contains(p)) {
-			System.out.println("Player '" + p.getUsername() + "' attempted to toggle the hourglass, but they haven't finished building their ship!");
-			this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' attempted to toggle the hourglass, but they haven't finished building their ship!"));
-			return;
-		}
-		try {
-			this.hourglass.toggle();
-		} catch (ForbiddenCallException e) {
-			System.out.println("Player '" + p.getUsername() + "' attempted to toggle the hourglass, but either nobody finished or it has run out!");
-			this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' attempted to toggle the hourglass, but either nobody finished or it has run out!"));
 		}
 	}
 

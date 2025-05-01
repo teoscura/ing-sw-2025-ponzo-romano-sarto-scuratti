@@ -21,8 +21,8 @@ class WaitingStateTest {
 
     @BeforeEach
     void setUp() {
-        model = new DummyModelInstance(1, null, GameModeType.LVL2, PlayerCount.THREE);
-        waiting_state = new WaitingState(model, GameModeType.LVL2, PlayerCount.THREE);
+        model = new DummyModelInstance(1, null, GameModeType.TEST, PlayerCount.THREE);
+        waiting_state = new WaitingState(model, GameModeType.TEST, PlayerCount.THREE);
         model.setState(waiting_state);
         p1desc = new ClientDescriptor("Gigio1", null);
         p2desc = new ClientDescriptor("Gigio2", null);
@@ -40,7 +40,7 @@ class WaitingStateTest {
         //player 2 connects
         model.connect(p2desc);
         model.connect(p3desc);
-        assertInstanceOf(ConstructionState.class, model.getState());
+        assertInstanceOf(TestFlightConstructionState.class, model.getState());
         //Did everyone generate with a player.
         assertNotNull(p1desc.getPlayer());
         assertEquals(p1desc.getPlayer().getColor(), PlayerColor.RED);
