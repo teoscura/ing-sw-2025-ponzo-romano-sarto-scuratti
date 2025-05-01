@@ -2,7 +2,6 @@ package it.polimi.ingsw.model.state;
 
 import java.util.ArrayList;
 
-import it.polimi.ingsw.exceptions.NotPresentException;
 import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
@@ -46,7 +45,6 @@ public class VerifyState extends GameState {
 
 	@Override
 	public void init() {
-		super.init();
 		for(Player p : this.finish_order){
 			if (p.getSpaceShip().bulkVerifyResult() && p.getSpaceShip().getBlobsSize() == 1) continue;
 			else if (!p.getSpaceShip().bulkVerifyResult()) this.to_remove_broken.add(p);
@@ -161,7 +159,7 @@ public class VerifyState extends GameState {
 			if(p.getSpaceShip().getCrew()[0]<=0) this.starts_losing.add(p);
 			this.to_choose_blob.remove(p);
 			this.finish_order.addLast(p);
-		} catch (NotPresentException e) {
+		} catch (IllegalTargetException e) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to select a nonexistant blob!");
 			this.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to select a nonexistant blob!"));
 		} catch (ForbiddenCallException e) {

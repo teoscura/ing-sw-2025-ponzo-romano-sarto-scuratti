@@ -2,7 +2,6 @@ package it.polimi.ingsw.model.state;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Optional;
 
 import it.polimi.ingsw.exceptions.OutOfBoundsException;
@@ -38,7 +37,7 @@ public class ConstructionState extends GameState {
 	private final ArrayList<Player> finished;
 	private final ConstructionStateHourglass hourglass;
 	private HashMap<Player, BaseComponent> current_tile;
-	private final HashMap<Player, List<BaseComponent>> hoarded_tile;
+	private final HashMap<Player, ArrayList<BaseComponent>> hoarded_tile;
 
 	public ConstructionState(ModelInstance model, GameModeType type, PlayerCount count, ArrayList<Player> players) {
 		super(model, type, count, players);
@@ -176,6 +175,7 @@ public class ConstructionState extends GameState {
 			this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' attempted to take a component, but there are no more to take!"));
 			return;
 		}
+		System.out.println("Player '" + p.getUsername() + "' took component "+tmp.getID()+" from the covered pile!");
 		if (this.current_tile.get(p) == null) {
 			this.current_tile.put(p, tmp);
 		} else {
@@ -183,6 +183,7 @@ public class ConstructionState extends GameState {
 			this.current_tile.put(p, tmp);
 			this.hoarded_tile.get(p).addFirst(old_current);
 			while (this.hoarded_tile.get(p).size() >= 3) {
+				System.out.println("Component "+this.hoarded_tile.get(p).getLast().getID()+" added to discarded components.");
 				this.board.discardComponent(this.hoarded_tile.get(p).removeLast());
 			}
 		}
@@ -208,7 +209,13 @@ public class ConstructionState extends GameState {
 			this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' attempted to take a discarded component, but there aren't any with that ID!"));
 			return;
 		}
-		this.hoarded_tile.get(p).addFirst(tmp);
+		System.out.println("Player '" + p.getUsername() + "' took component "+tmp.getID()+" from the uncovered pile!");
+		BaseComponent oldcurrent = this.current_tile.get(p);
+		if(oldcurrent==null) this.current_tile.put(p, tmp);
+		else {
+			this.current_tile.put(p, tmp);
+			this.hoarded_tile.get(p).addFirst(oldcurrent);
+		}
 		while (this.hoarded_tile.get(p).size() >= 3) {
 			this.board.discardComponent(this.hoarded_tile.get(p).removeLast());
 		}
@@ -230,12 +237,14 @@ public class ConstructionState extends GameState {
 			BaseComponent tmp = this.current_tile.get(p);
 			this.current_tile.put(p, null);
 			this.board.discardComponent(tmp);
+			System.out.println("Player '" + p.getUsername() + "' discarded component "+tmp.getID()+"!");
 			return;
 		}
 		Optional<BaseComponent> c = this.hoarded_tile.get(p).stream().filter(a -> a.getID() == id).findFirst();
 		if (c.isPresent()) {
 			this.hoarded_tile.get(p).remove(c.get());
 			this.board.discardComponent(c.get());
+			System.out.println("Player '" + p.getUsername() + "' discarded component "+c.get().getID()+"!");
 		} else {
 			System.out.println("Player '" + p.getUsername() + "' attempted to discard a component, but they don't own the one with the id provided!");
 			this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' attempted to discard a component, but they don't own the one with the id provided!"));
@@ -285,6 +294,18 @@ public class ConstructionState extends GameState {
 			res.concat(p.getUsername() + ": " + p.getColor().toString() + ", ");
 		}
 		return res;
+	}
+
+	public BaseComponent getCurrent(Player p){
+		return this.current_tile.get(p);
+	}
+
+	public ArrayList<BaseComponent> getHoarded(Player p){
+		return this.hoarded_tile.get(p);
+	}
+
+	public ArrayList<Integer> getDiscarded(){
+		return this.board.getDiscarded();
 	}
 
 }

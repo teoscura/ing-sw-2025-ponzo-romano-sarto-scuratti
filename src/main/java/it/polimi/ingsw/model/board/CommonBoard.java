@@ -5,7 +5,6 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 
 import it.polimi.ingsw.model.components.ComponentFactory;
 import it.polimi.ingsw.model.components.BaseComponent;
@@ -58,7 +57,7 @@ public class CommonBoard implements iCommonBoard {
 	}
 
 	@Override
-	public List<Integer> getDiscarded() {
+	public ArrayList<Integer> getDiscarded() {
 		return new ArrayList<Integer>(this.uncovered_components.keySet());
 	}
 

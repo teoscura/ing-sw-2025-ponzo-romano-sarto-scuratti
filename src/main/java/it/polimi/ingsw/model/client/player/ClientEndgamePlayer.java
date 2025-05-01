@@ -15,7 +15,7 @@ public class ClientEndgamePlayer implements Serializable {
 
     public ClientEndgamePlayer(String username, PlayerColor color, int planche_slot, int credits, int[] shipments, int score){
         if(username == null || shipments==null || color == PlayerColor.NONE) throw new NullPointerException();
-        if(shipments.length!=4) throw new IllegalArgumentException(); 
+        if(shipments.length!=5) throw new IllegalArgumentException(); 
         this.username = username;
         this.color = color;
         this.planche_slot = planche_slot;

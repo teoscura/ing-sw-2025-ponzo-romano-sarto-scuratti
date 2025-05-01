@@ -182,7 +182,7 @@ public class SpaceShip{
 			updateShip();
             return;
         }
-        throw new NotPresentException("Blob coordinate was invalid!");
+        throw new IllegalTargetException("Blob coordinate was invalid!");
     }
 
 
