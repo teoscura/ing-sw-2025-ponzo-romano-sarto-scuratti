@@ -2,7 +2,7 @@ package it.polimi.ingsw.model.state;
 
 import java.util.ArrayList;
 import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
-import it.polimi.ingsw.message.server.ServerMessage;
+import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.ModelInstance;
 import it.polimi.ingsw.model.PlayerCount;
@@ -19,30 +19,16 @@ public class LevelTwoConstructionState extends ConstructionState {
 
     private final ConstructionStateHourglass hourglass;
 
-	public LevelTwoConstructionState(ModelInstance model, GameModeType type, PlayerCount count, ArrayList<Player> players) {
+	public LevelTwoConstructionState(ModelInstance model, GameModeType type, PlayerCount count, ArrayList<Player> players, int seconds) {
 		super(model, type, count, players, new LevelTwoCards());
-        this.hourglass = new ConstructionStateHourglass(90, 3);
+        this.hourglass = new ConstructionStateHourglass(seconds, 3);
 	}
 
 	@Override
 	public void init() {
         System.out.println("New Game State -> Construction State");
 		this.broadcastMessage(new NotifyStateUpdateMessage(this.getClientState()));
-	}
-
-	@Override
-	public void validate(ServerMessage message) throws ForbiddenCallException {
-		message.receive(this);
-		if (this.finished.size() != this.players.size()) {
-			this.broadcastMessage(new NotifyStateUpdateMessage(this.getClientState()));
-			return;
-		}
-		this.transition();
-	}
-
-	@Override
-	public GameState getNext() {
-		return new VerifyState(model, type, count, players, voyage_deck, finished);
+		this.hourglass.start();
 	}
 
 	@Override
@@ -63,37 +49,80 @@ public class LevelTwoConstructionState extends ConstructionState {
 	}
 
 	@Override
-	public boolean toSerialize() {
-		return true;
-	}
-
-	@Override
 	public void sendContinue(Player p) throws ForbiddenCallException {
-		//XXX condizione extra costruzione.
+		super.sendContinue(p);
 	}
 
 	@Override
 	public void putComponent(Player p, ShipCoords coords, ComponentRotation rotation) throws ForbiddenCallException {
-        //XXX Condizione extra clessidra
+        if(!hourglass.canAct()){
+			System.out.println("Player '" + p.getUsername() + "' attempted to place a component, but the hourglass has ran out on the last space!");
+			this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' attempted to place a component, but the hourglass has ran out on the last space!"));
+			return;
+		}
         super.putComponent(p, coords, rotation);
 	}
 
 	@Override
 	public void takeComponent(Player p) throws ForbiddenCallException {
-        //XXX Condizione extra clessidra
+        if(!hourglass.canAct()){
+			System.out.println("Player '" + p.getUsername() + "' attempted to take a component, but the hourglass has ran out on the last space!");
+			this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' attempted to take a component, but the hourglass has ran out on the last space!"));
+			return;
+		}
         super.takeComponent(p);
 	}
 
 	@Override
 	public void takeDiscarded(Player p, int id) throws ForbiddenCallException {
-		//XXX condizione extra clessidra
+		if(!hourglass.canAct()){
+			System.out.println("Player '" + p.getUsername() + "' attempted to take a discarded component, but the hourglass has ran out on the last space!");
+			this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' attempted to take a discarded component, but the hourglass has ran out on the last space!"));
+			return;
+		}
         super.takeDiscarded(p, id);
 	}
 
 	@Override
 	public void discardComponent(Player p, int id) throws ForbiddenCallException {
-		//XXX condizione extra clessidra
+		if(!hourglass.canAct()){
+			System.out.println("Player '" + p.getUsername() + "' attempted to discard a component, but the hourglass has ran out on the last space!");
+			this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' attempted to discard a component, but the hourglass has ran out on the last space!"));
+			return;
+		}
         super.discardComponent(p, id);
+	}
+
+	@Override
+	public void toggleHourglass(Player p){
+		if(hourglass.isRunning()){
+			System.out.println("Player '" + p.getUsername() + "' attempted to move and toggle the hourglass, but sand is still falling!");
+			this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' attempted to move and toggle the hourglass, but sand is still falling!"));
+			return;
+		}
+		if(hourglass.timesLeft()>1){
+			try {
+				hourglass.toggle();
+				System.out.println("Player '" + p.getUsername() + "' turned the hourglass and moved it to the next slot! (Times remaining: "+hourglass.timesLeft()+")");
+				this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' turned the hourglass and moved it to the next slot! (Times remaining: "+hourglass.timesLeft()+")"));
+				return;
+			} catch (ForbiddenCallException e) {
+				//Checks were done beforehand, should never happen. Getting here is gamebreaking.
+				System.exit(-1);
+			}
+		}
+		if(this.building.contains(p)){
+			System.out.println("Player '" + p.getUsername() + "' attempted to move and toggle the hourglass to the last slot, but they're still building!");
+			this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' attempted to move and toggle the hourglass to the last slot, but they're still building!"));
+			return;
+		}
+		try {
+			hourglass.toggle();
+		} catch (ForbiddenCallException e) {
+			System.out.println("Player '" + p.getUsername() + "' attempted to toggle the hourglass, but it's already run out on the last slot!");
+			this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' attempted to toggle the hourglass, but it's already run out on the last slot!"));
+			return;
+		}
 	}
 
 }

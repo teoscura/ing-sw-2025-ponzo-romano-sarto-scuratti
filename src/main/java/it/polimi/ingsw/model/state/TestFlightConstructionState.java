@@ -33,6 +33,5 @@ public class TestFlightConstructionState extends ConstructionState {
 		}
 		return new ClientConstructionState(this.type, tmp, null, discarded, this.board.getCoveredSize(), null);
 	}
-
     
 }

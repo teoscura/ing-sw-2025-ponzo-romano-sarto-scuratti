@@ -10,8 +10,7 @@ public class ConstructionStateHourglass implements Serializable {
 
 	private final Duration period;
 	private Instant toggled = null;
-	private boolean can_toggle = false;
-	private final int times;
+	private int times;
 
 	public ConstructionStateHourglass(int seconds, int times) {
 		if (seconds <= 0 || times < 0) throw new IllegalArgumentException();
@@ -19,22 +18,28 @@ public class ConstructionStateHourglass implements Serializable {
 		this.period = Duration.ofSeconds(seconds);
 	}
 
-	public boolean started() {
-		return toggled != null;
+	public int timesLeft(){
+		return this.times;
 	}
 
-	public void enable() {
-		this.can_toggle = true;
+	public void start(){
+		this.toggled = Instant.now();
+		this.times--;
 	}
 
-	public void toggle() throws ForbiddenCallException {
-		if (!can_toggle || times <= 0) throw new ForbiddenCallException();
+	public void toggle() throws ForbiddenCallException{
+		if(isRunning() || times<=0) throw new ForbiddenCallException();
+		this.times--;
 		this.toggled = Instant.now();
 	}
 
-	public boolean running() {
-		if (toggled == null) return true;
-		return Duration.between(Instant.now(), toggled).compareTo(period) < 0;
+	public boolean canAct(){
+		return Duration.between(Instant.now(), toggled).compareTo(period) >= 0 || this.times >= 1;
+	}
+
+	public boolean isRunning() {
+		if(this.toggled==null) return true;
+		return Duration.between(Instant.now(), toggled).compareTo(period) >= 0;
 	}
 
 	public Instant getInstant() {
