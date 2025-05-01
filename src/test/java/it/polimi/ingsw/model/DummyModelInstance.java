@@ -1,10 +1,8 @@
 package it.polimi.ingsw.model;
 
-import java.util.List;
-
-import it.polimi.ingsw.controller.DummyController;
 import it.polimi.ingsw.controller.server.ClientDescriptor;
 import it.polimi.ingsw.controller.server.ServerController;
+import it.polimi.ingsw.message.client.ClientMessage;
 import it.polimi.ingsw.message.server.ServerConnectMessage;
 import it.polimi.ingsw.message.server.ServerDisconnectMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
@@ -15,14 +13,8 @@ import it.polimi.ingsw.model.state.ResumeWaitingState;
 
 public class DummyModelInstance extends ModelInstance {
 
-	private final int id;
-	private boolean started;
-	private GameState state;
-
 	public DummyModelInstance(int id, ServerController server, GameModeType type, PlayerCount count) {
 		super(id, server, type, count);
-		if (id < 0) throw new IllegalArgumentException();
-		this.id = id;
 	}
 
 	public String toString() {
@@ -41,12 +33,12 @@ public class DummyModelInstance extends ModelInstance {
 		return;
 	}
 
-	public void startGame(List<Player> players) throws ForbiddenCallException {
-		if (this.started) throw new ForbiddenCallException();
+	public void startGame() {
+		System.out.println("Game Started. Dummy");
 		this.started = true;
 	}
 
-	public boolean getStarted() {
+	public boolean hasStarted() {
 		return this.started;
 	}
 
@@ -107,12 +99,17 @@ public class DummyModelInstance extends ModelInstance {
 	}
 
 	public ServerController getController() {
-		return new DummyController();
+		return null;
 	}
 
 	public void afterSerialRestart() {
 		ResumeWaitingState next = new ResumeWaitingState(this, this.state.getType(), this.state.getCount(), this.state);
 		this.setState(next);
 	}
+
+	public void broadcast(ClientMessage message) {
+		return;
+	}
+	
 
 }

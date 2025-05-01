@@ -31,6 +31,7 @@ class WaitingStateTest {
 
     @Test
     void behaviour() throws ForbiddenCallException {
+        assertTrue(!model.hasStarted());
         //player1 connects
         waiting_state.connect(p1desc);
         //player1 attempts connection again
@@ -51,5 +52,6 @@ class WaitingStateTest {
         assertNotNull(p3desc.getPlayer());
         assertEquals(p3desc.getPlayer().getColor(), PlayerColor.GREEN);
         assertEquals(p3desc.getUsername(), p3desc.getPlayer().getUsername());
+        assertTrue(model.hasStarted());
     }
 }

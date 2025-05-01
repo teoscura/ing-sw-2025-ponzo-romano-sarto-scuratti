@@ -1,9 +1,8 @@
 package it.polimi.ingsw.model;
 
-import java.util.List;
-
 import it.polimi.ingsw.controller.server.ClientDescriptor;
 import it.polimi.ingsw.controller.server.ServerController;
+import it.polimi.ingsw.message.client.ClientMessage;
 import it.polimi.ingsw.message.server.ServerConnectMessage;
 import it.polimi.ingsw.message.server.ServerDisconnectMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
@@ -15,10 +14,10 @@ import it.polimi.ingsw.model.state.WaitingState;
 
 public class ModelInstance {
 
-	private final int id;
-	private transient ServerController controller;
-	private boolean started;
-	private GameState state;
+	protected final int id;
+	protected transient ServerController controller;
+	protected boolean started;
+	protected GameState state;
 
 	public ModelInstance(int id, ServerController server, GameModeType type, PlayerCount count) {
 		if (id < 0) throw new IllegalArgumentException();
@@ -44,8 +43,8 @@ public class ModelInstance {
 		this.controller.serializeCurrentGame();
 	}
 
-	public void startGame(List<Player> players) throws ForbiddenCallException {
-		if (this.started) throw new ForbiddenCallException();
+	public void startGame() {
+		System.out.println("Game Started.");
 		this.started = true;
 	}
 
@@ -121,8 +120,13 @@ public class ModelInstance {
 	}
 
 	public void afterSerialRestart() {
+		this.started = false;
 		ResumeWaitingState next = new ResumeWaitingState(this, this.state.getType(), this.state.getCount(), this.state);
 		this.setState(next);
+	}
+
+	public void broadcast(ClientMessage message) {
+		this.controller.broadcast(message);
 	}
 
 }

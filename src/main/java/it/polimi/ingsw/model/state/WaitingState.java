@@ -58,6 +58,7 @@ public class WaitingState extends GameState {
 				e.printStackTrace();
 			}
 		}
+		this.model.startGame();
 		if(type.getLevel()>1) return new LevelTwoConstructionState(model, type, count, playerlist, 90);
 		return new TestFlightConstructionState(model, type, count, playerlist);
 	}
