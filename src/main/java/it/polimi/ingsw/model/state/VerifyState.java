@@ -218,12 +218,7 @@ public class VerifyState extends GameState {
 
 	@Override
 	public String toString() {
-		String res = "";
-		res.concat("Verify State - ");
-		for (Player p : this.players) {
-			res.concat(p.getUsername() + ": " + p.getColor().toString() + ", ");
-		}
-		return res;
+		return "Verify State";
 	}
 
 }

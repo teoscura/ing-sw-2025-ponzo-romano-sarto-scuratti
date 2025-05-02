@@ -27,10 +27,6 @@ public class ModelInstance {
 		this.state.init();
 	}
 
-	public String toString() {
-		return id + " - " + this.state.toString();
-	}
-
 	public int getID() {
 		return this.id;
 	}
@@ -40,6 +36,7 @@ public class ModelInstance {
 	}
 
 	public void serialize() {
+		if(!this.state.toSerialize()) return;
 		this.controller.serializeCurrentGame();
 	}
 
@@ -127,6 +124,10 @@ public class ModelInstance {
 
 	public void broadcast(ClientMessage message) {
 		this.controller.broadcast(message);
+	}
+
+	public String getUnfinishedString(){
+		return this.state.toString();
 	}
 
 }

@@ -6,6 +6,8 @@ import it.polimi.ingsw.model.client.components.*;
 
 public interface ClientView {
 	//Game states
+	void show(ClientSetupState clientSetupState);
+
 	void show(ClientWaitingRoomState state);
 
 	void show(ClientConstructionState state);
@@ -54,4 +56,5 @@ public interface ClientView {
 
 	//Misc and debug
 	void showTextMessage(String message);
+
 }

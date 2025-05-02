@@ -248,6 +248,7 @@ public class ServerController extends Thread implements RemoteServer {
 				this.broadcast(new ViewMessage("Client '" + client.getUsername() + "' attempted to open a unfinished game while server is in setup mode!"));
 				return;
 			}
+			//XXX add check for name
 			this.setup_complete = true;
 			this.model.afterSerialRestart();
 			this.model = this.unfinished.get(id);

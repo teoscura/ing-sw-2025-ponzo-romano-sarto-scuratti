@@ -227,12 +227,7 @@ public abstract class ConstructionState extends GameState {
 
 	@Override
 	public String toString() {
-		String res = "";
-		res.concat("Construction State - ");
-		for (Player p : this.players) {
-			res.concat(p.getUsername() + ": " + p.getColor().toString() + ", ");
-		}
-		return res;
+		return "Construction State";
 	}
 
 	public BaseComponent getCurrent(Player p){

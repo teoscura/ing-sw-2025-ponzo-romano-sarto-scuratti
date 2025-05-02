@@ -190,9 +190,6 @@ public class VoyageState extends GameState {
 	public String toString() {
 		String res = "";
 		res.concat("Voyage State - ");
-		for (Player p : this.players) {
-			res.concat(p.getUsername() + ": " + p.getColor().toString() + ", ");
-		}
 		res.concat("Cards left: " + this.voyage_deck.getLeft() + ", Current card state: " + this.state.getClass().getSimpleName());
 		return res;
 	}
