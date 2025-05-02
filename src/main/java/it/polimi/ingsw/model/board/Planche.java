@@ -24,7 +24,8 @@ public class Planche implements iPlanche {
 
 	@Override
 	public int getPlayerPosition(Player p) {
-		return this.planche.get(p) - this.length;
+		if(!this.planche.containsKey(p)) return -1;
+		return this.planche.get(p);
 	}
 
 	@Override
@@ -46,9 +47,10 @@ public class Planche implements iPlanche {
 			if(this.getPlayerAt(position)!=null) continue;
 			count--;
 		}
+		this.planche.put(p, position);
 		if(rel_change>0){
 			for(Player other : this.planche.keySet()){
-				if(p.equals(other)||p.getRetired()) continue;				
+				if(p.equals(other)) continue;				
 				if(this.planche.get(p)-this.planche.get(other)>=this.length){
 					state.loseGame(other);
 				}
@@ -56,19 +58,28 @@ public class Planche implements iPlanche {
 		}
 		else{
 			for(Player other : this.planche.keySet()){
-				if(p.equals(other)||p.getRetired()) continue;
+				if(p.equals(other)) continue;
 				if(this.planche.get(other)-this.planche.get(p)>=this.length){
 					state.loseGame(p);
 					return;
 				}
 			}
 		}
+		
 	}
 
 	@Override
 	public void loseGame(Player p) {
 		this.planche.remove(p);
 	}
+
+	@Override
+    public void printOrder() {
+        List<Player> tmp = this.planche.keySet().stream().sorted((p1, p2) -> this.planche.get(p1) < this.planche.get(p2) ? 1 : -1).toList();
+		for(Player p : tmp){
+			System.out.println(p.getUsername()+" : "+this.getPlayerPosition(p));
+		}
+    }
 
 }
 

@@ -24,4 +24,9 @@ public class CombatZoneCard extends Card {
 		return new CombatZoneAnnounceState(state, this.getId(), sections, shots);
 	}
 
+	//Used only to fix offsets to ensure same results during tests.
+	public ArrayList<Projectile> getShots(){
+		return this.shots.getProjectiles();
+	}
+
 }

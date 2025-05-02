@@ -22,8 +22,6 @@ class CabinComponentTest {
 	private ShipCoords coords;
 	ShipCoords coords2;
 	private CabinComponent component_both;
-	private CabinComponent component_brown;
-	private CabinComponent component_purple;
 	private CabinComponent component_human;
 	private SpaceShip ship;
 
@@ -35,8 +33,6 @@ class CabinComponentTest {
 		ConnectorType[] connectors = {ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL,
 				ConnectorType.UNIVERSAL};
 		component_both = new CabinComponent(1, connectors, ComponentRotation.U000, coords);
-		component_brown = new CabinComponent(1, connectors, ComponentRotation.U000, coords);
-		component_purple = new CabinComponent(1, connectors, ComponentRotation.U000, coords2);
 		component_human = new CabinComponent(1, connectors, ComponentRotation.U000, coords);
 		ship = new SpaceShip(GameModeType.LVL2, new Player(GameModeType.LVL2, "tizio", PlayerColor.RED));
 	}
@@ -44,7 +40,7 @@ class CabinComponentTest {
 	@Test
 	void check() {
 	}
-	
+
 	//TODO
 	/*@Test
 	void getCrew() {
@@ -71,7 +67,7 @@ class CabinComponentTest {
 	@Test
 	void setCrew() {
 		ship.addComponent(component_human, coords);
-		assertThrows(NegativeArgumentException.class, () -> component_both.setCrew(ship, 0, AlienType.HUMAN));
+		assertThrows(NegativeArgumentException.class, () -> component_both.setCrew(ship, -1, AlienType.HUMAN));
 		assertThrows(IllegalArgumentException.class, () -> component_both.setCrew(ship, 1, AlienType.BOTH));
 		assertThrows(ArgumentTooBigException.class, () -> component_both.setCrew(ship, 3, AlienType.HUMAN));
 		assertEquals(2, component_both.getCrew());

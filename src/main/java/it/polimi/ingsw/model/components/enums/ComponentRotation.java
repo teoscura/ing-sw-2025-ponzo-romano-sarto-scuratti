@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model.components.enums;
 
+import it.polimi.ingsw.model.cards.utils.ProjectileDirection;
+
 //Defined clockwise; Up is zero.
 public enum ComponentRotation {
 	U000(0),
@@ -30,5 +32,20 @@ public enum ComponentRotation {
 		}
 		return ComponentRotation.U000;
 	}
+
+	static public ComponentRotation getRotation(ProjectileDirection dir) {
+		switch (dir.getShift()) {
+			case 0:
+				return ComponentRotation.U000;
+			case 1:
+				return ComponentRotation.U090;
+			case 2:
+				return ComponentRotation.U180;
+			case 3:
+				return ComponentRotation.U270;
+		}
+		return ComponentRotation.U000;
+	}
+
 
 }

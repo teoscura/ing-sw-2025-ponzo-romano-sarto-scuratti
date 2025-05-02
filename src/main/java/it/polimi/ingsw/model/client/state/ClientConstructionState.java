@@ -19,8 +19,8 @@ public class ClientConstructionState implements ClientModelState {
 
     public ClientConstructionState(GameModeType type, ArrayList<ClientConstructionPlayer> playerlist, ArrayList<Integer> construction, ArrayList<Integer> discarded, int tiles, Instant last_hourglass_toggle) {
         if(discarded==null||playerlist==null) throw new NullPointerException();
-        if(construction==null && type.getLevel()>0) throw new IllegalArgumentException();
-        if(type.getLevel()>0){
+        if(construction==null && type.getLevel()>1) throw new IllegalArgumentException();
+        if(type.getLevel()>1){
             for(int i : construction){
                 if(i<1||i>120||(i>20&&i<100)) throw new IllegalArgumentException();
             }

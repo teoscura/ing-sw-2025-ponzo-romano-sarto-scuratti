@@ -36,6 +36,7 @@ public class WaitingState extends GameState {
 	public void validate(ServerMessage message) throws ForbiddenCallException {
 		message.receive(this);
 		if (this.connected.size() < count.getNumber()) {
+			System.out.println("Missing "+(this.count.getNumber()-this.connected.size())+" players to start the game!");
 			this.broadcastMessage(new NotifyStateUpdateMessage(this.getClientState()));
 			return;
 		}
@@ -47,6 +48,7 @@ public class WaitingState extends GameState {
 		ArrayList<Player> playerlist = new ArrayList<>();
 		for (PlayerColor c : PlayerColor.values()) {
 			if (c.getOrder() < 0) continue;
+			if(c.getOrder() >= this.count.getNumber()) continue;
 			String username = this.connected.get(c.getOrder()).getUsername();
 			playerlist.addLast(new Player(this.type, username, c));
 			try {
@@ -56,7 +58,9 @@ public class WaitingState extends GameState {
 				e.printStackTrace();
 			}
 		}
-		return new ConstructionState(model, type, count, playerlist);
+		this.model.startGame();
+		if(type.getLevel()>1) return new LevelTwoConstructionState(model, type, count, playerlist, 90);
+		return new TestFlightConstructionState(model, type, count, playerlist);
 	}
 
 	@Override
@@ -83,6 +87,8 @@ public class WaitingState extends GameState {
 			this.broadcastMessage(new ViewMessage("Client '" + client.getUsername() + "' attempted to connect from an already connected connection!"));
 			return;
 		}
+		System.out.println("Client '" + client.getUsername() + "' connected!");
+		this.broadcastMessage(new ViewMessage("Client '" + client.getUsername() + "' connected!"));
 		this.connected.add(client);
 	}
 
@@ -92,6 +98,8 @@ public class WaitingState extends GameState {
 			this.broadcastMessage(new ViewMessage("Client '" + client.getUsername() + "' attempted to disconnect from a connection that isn't connected!"));
 			return;
 		}
+		System.out.println("Client '" + client.getUsername() + "' disconnected!");
+		this.broadcastMessage(new ViewMessage("Client '" + client.getUsername() + "' disconnected!"));
 		this.connected.remove(client);
 	}
 

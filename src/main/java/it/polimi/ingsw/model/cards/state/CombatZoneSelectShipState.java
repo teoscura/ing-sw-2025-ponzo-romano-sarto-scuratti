@@ -7,11 +7,12 @@ import java.util.List;
 import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
-import it.polimi.ingsw.model.cards.PiratesCard;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
+import it.polimi.ingsw.model.cards.utils.CombatZoneSection;
 import it.polimi.ingsw.model.cards.utils.ProjectileArray;
 import it.polimi.ingsw.model.client.card.ClientBaseCardState;
 import it.polimi.ingsw.model.client.card.ClientCardState;
+import it.polimi.ingsw.model.client.card.ClientCombatZoneIndexCardStateDecorator;
 import it.polimi.ingsw.model.client.card.ClientNewCenterCardStateDecorator;
 import it.polimi.ingsw.model.client.state.ClientModelState;
 import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
@@ -20,64 +21,76 @@ import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.VoyageState;
 
-class PiratesNewCabinState extends CardState {
+public class CombatZoneSelectShipState extends CardState {
 
-	private final PiratesCard card;
-	private final ArrayList<Player> list;
+	private final int card_id;
+	private final ArrayList<CombatZoneSection> sections;
 	private final ProjectileArray shots;
+	private final Player target;
 
-	public PiratesNewCabinState(VoyageState state, PiratesCard card, ArrayList<Player> list, ProjectileArray shots) {
+	public CombatZoneSelectShipState(VoyageState state, int card_id, ArrayList<CombatZoneSection> sections, ProjectileArray shots, Player target) {
 		super(state);
-		if (card == null || list == null || shots == null) throw new NullPointerException();
-		this.card = card;
-		this.list = list;
+		if (sections == null || shots == null || target == null) ;
+		if (card_id < 1 || card_id > 120) throw new IllegalArgumentException();
+		this.card_id = card_id;
+		this.sections = sections;
 		this.shots = shots;
+		this.target = target;
 	}
 
 	@Override
 	public void init(ClientModelState new_state) {
 		super.init(new_state);
+		System.out.println("    CardState -> Combat Zone Select Ship State!: ["+(3-sections.size())+" - "+this.sections.getFirst().getPenalty()+"].");
+		System.out.println("    Awaiting: '"+this.target.getUsername()+"'.");
 	}
 
 	@Override
 	public void validate(ServerMessage message) throws ForbiddenCallException {
 		message.receive(this);
-		if (this.list.getFirst().getSpaceShip().getBrokeCenter()) {
+		if (target.getSpaceShip().getBlobsSize() > 1 && !target.getDisconnected()) {
 			this.state.broadcastMessage(new NotifyStateUpdateMessage(this.state.getClientState()));
 			return;
 		}
+		if(this.target.getSpaceShip().getCrew()[0]<=0) this.state.loseGame(target);
 		this.transition();
 	}
 
 	@Override
 	public ClientCardState getClientCardState() {
-		List<PlayerColor> awaiting = Arrays.asList(this.list.getFirst().getColor());
-		return new ClientNewCenterCardStateDecorator(new ClientBaseCardState(this.card.getId()), new ArrayList<>(awaiting));
+		List<PlayerColor> awaiting = Arrays.asList(target.getColor());
+		return new ClientNewCenterCardStateDecorator(
+				new ClientCombatZoneIndexCardStateDecorator(
+						new ClientBaseCardState(this.card_id), 3 - this.sections.size()),
+				new ArrayList<>(awaiting));
 	}
 
 	@Override
-	protected CardState getNext() {
-		if (this.list.getFirst().getRetired()) {
-			this.list.removeFirst();
-			if (!this.list.isEmpty()) return new PiratesAnnounceState(state, card, list);
+    public CardState getNext() {
+		if (this.target.getRetired()) {
+			this.sections.removeFirst();
+			if (!this.sections.isEmpty()) return new CombatZoneAnnounceState(state, card_id, sections, shots);
+			System.out.println("Card exhausted, moving to a new one!");
 			return null;
 		}
-		this.shots.getProjectiles().removeFirst();
-		if (!this.shots.getProjectiles().isEmpty()) return new PiratesPenaltyState(state, card, list, shots);
-		this.list.removeFirst();
-		if (!this.list.isEmpty()) return new PiratesAnnounceState(state, card, list);
+		if (!this.shots.getProjectiles().isEmpty())
+			return new CombatZonePenaltyState(state, card_id, sections, shots, target);
+		this.sections.removeFirst();
+		if (!this.sections.isEmpty()) return new CombatZoneAnnounceState(state, card_id, sections, shots);
+		System.out.println("Card exhausted, moving to a new one!");
 		return null;
 	}
 
 	@Override
-	public void setNewShipCenter(Player p, ShipCoords new_center) {
-		if (p != this.list.getFirst()) {
+	public void selectBlob(Player p, ShipCoords blob_coord) {
+		if (!p.equals(target)) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to set a new center during another player's turn!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to set a new center during another player's turn!"));
 			return;
 		}
 		try {
-			p.getSpaceShip().setCenter(new_center);
+			p.getSpaceShip().selectShipBlob(blob_coord);
+			System.out.println("Player '"+p.getUsername()+"' selected blob that contains coords "+blob_coord+".");
 		} catch (IllegalTargetException e) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to set his new center on an empty space!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to set his new center on an empty space!"));
@@ -85,16 +98,13 @@ class PiratesNewCabinState extends CardState {
 			//Should be unreachable.
 			System.out.println("Player '" + p.getUsername() + "' attempted to set his new center while having a unbroken ship!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to set his new center while having a unbroken ship!"));
+			System.out.println("Player '" + p.getUsername() + "' set a new ship center.");
 		}
 	}
 
 	@Override
 	public void disconnect(Player p) throws ForbiddenCallException {
-		if (this.list.getFirst() == p) {
-			this.state.loseGame(p);
-			this.transition();
-		}
-		this.list.remove(p);
+		System.out.println("Player '" + p.getUsername() + "' disconnected!");
 	}
 
 }

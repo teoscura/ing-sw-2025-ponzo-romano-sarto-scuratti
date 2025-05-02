@@ -18,7 +18,7 @@ import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.VoyageState;
 
-class AbandonedShipRewardState extends CardState {
+public class AbandonedShipRewardState extends CardState {
 
 	private final AbandonedShipCard card;
 	private final ArrayList<Player> list;
@@ -36,6 +36,10 @@ class AbandonedShipRewardState extends CardState {
 	@Override
 	public void init(ClientModelState new_state) {
 		super.init(new_state);
+		System.out.println("    CardState -> Abandoned Ship Reward State!");
+		for(Player p : this.list){
+			System.out.println("	 - "+p.getUsername());
+		}
 	}
 
 	@Override
@@ -58,7 +62,8 @@ class AbandonedShipRewardState extends CardState {
 	}
 
 	@Override
-	protected CardState getNext() {
+    public CardState getNext() {
+		System.out.println("Card exhausted, moving to a new one!");
 		return null;
 	}
 
@@ -90,6 +95,7 @@ class AbandonedShipRewardState extends CardState {
 	@Override
 	public void disconnect(Player p) throws ForbiddenCallException {
 		if (this.list.getFirst() == p) this.transition();
+		System.out.println("Player '" + p.getUsername() + "' disconnected!");
 	}
 
 }

@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
 
-class ShieldTypeTest {
+public class ShieldTypeTest {
 
 	private ShieldType north_east;
 	private ShieldType north_west;

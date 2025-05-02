@@ -15,7 +15,7 @@ import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
 import it.polimi.ingsw.model.components.visitors.LifeSupportUpdateVisitor;
 import it.polimi.ingsw.model.components.visitors.iVisitor;
 import it.polimi.ingsw.model.player.ShipCoords;
-import it.polimi.ingsw.model.player.iSpaceShip;
+import it.polimi.ingsw.model.player.SpaceShip;
 
 public class AlienLifeSupportComponent extends BaseComponent {
 
@@ -54,23 +54,26 @@ public class AlienLifeSupportComponent extends BaseComponent {
 	}
 
 	@Override
-	public void onCreation(iSpaceShip ship) {
+	public void onCreation(SpaceShip ship, ShipCoords coords) {
+		this.coords = coords;
 	}
 
 	@Override
-	public void onDelete(iSpaceShip ship) {
-		iBaseComponent[] tmp = this.getConnectedComponents(ship);
-		for (iBaseComponent c : tmp) {
+	public void onDelete(SpaceShip ship) {
+		BaseComponent[] tmp = this.getConnectedComponents(ship);
+		for (BaseComponent c : tmp) {
 			if (!ship.isCabin(c.getCoords())) continue;
 			LifeSupportUpdateVisitor v = new LifeSupportUpdateVisitor(this.type);
 			c.check(v);
 			if (v.getStillAlive()) continue;
-			List<iBaseComponent> to_check = Arrays.asList(c.getConnectedComponents(ship));
-			to_check.remove(this);
-			for (iBaseComponent s : to_check) {
-				s.check(v);
+			List<ShipCoords> to_check = Arrays.asList(c.getConnectedComponents(ship)).stream().map(comp->comp.getCoords()).toList();
+			LifeSupportUpdateVisitor v2 = new LifeSupportUpdateVisitor(this.type);
+			for (ShipCoords s : to_check){
+				if(s==this.getCoords()) continue;
+				if(ship.isCabin(s)) continue;
+				ship.getComponent(s).check(v2);
 			}
-			if (v.getStillAlive()) continue;
+			if (v2.getStillAlive()) continue;
 			CrewRemoveVisitor cr = new CrewRemoveVisitor(ship);
 			try {
 				c.check(cr);
@@ -78,6 +81,7 @@ public class AlienLifeSupportComponent extends BaseComponent {
 				//crew was already empty, so we ignore this exception;
 			}
 		}
+		
 	}
 
 	@Override

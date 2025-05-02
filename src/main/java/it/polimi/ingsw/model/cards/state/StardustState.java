@@ -19,21 +19,22 @@ import it.polimi.ingsw.model.state.VoyageState;
 public class StardustState extends CardState {
 
 	private final StardustCard card;
-	private ArrayList<Player> awaiting = null;
+	private final ArrayList<Player> awaiting;
 
 	public StardustState(VoyageState state, StardustCard card) {
 		super(state);
 		if (card == null) throw new NullPointerException();
 		this.card = card;
+		this.awaiting = new ArrayList<>(state.getOrder(CardOrder.NORMAL));
 	}
 
 	@Override
 	public void init(ClientModelState new_state) {
 		super.init(new_state);
-		for (Player p : this.state.getOrder(CardOrder.INVERSE)) {
-			card.apply(this.state, p);
+		System.out.println("New CardState -> Stardust State!");
+		for(Player p : this.state.getOrder(CardOrder.NORMAL)){
+			System.out.println("	 - "+p.getUsername());
 		}
-		this.awaiting = new ArrayList<>(state.getOrder(CardOrder.NORMAL));
 	}
 
 	@Override
@@ -42,6 +43,9 @@ public class StardustState extends CardState {
 		if (!awaiting.isEmpty()) {
 			this.state.broadcastMessage(new NotifyStateUpdateMessage(this.state.getClientState()));
 			return;
+		}
+		for (Player p : this.state.getOrder(CardOrder.INVERSE)) {
+			card.apply(this.state, p);
 		}
 		this.transition();
 	}
@@ -61,11 +65,13 @@ public class StardustState extends CardState {
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to progress the turn while already having done so!"));
 			return;
 		}
+		System.out.println("Player '" + p.getUsername() + "' motioned to progress!");
 		this.awaiting.remove(p);
 	}
 
 	@Override
-	protected CardState getNext() {
+    public CardState getNext() {
+		System.out.println("Card exhausted, moving to a new one!");
 		return null;
 	}
 
@@ -74,6 +80,7 @@ public class StardustState extends CardState {
 		if (this.awaiting.contains(p)) {
 			this.awaiting.remove(p);
 		}
+		System.out.println("Player '" + p.getUsername() + "' disconnected!");
 	}
 
 }

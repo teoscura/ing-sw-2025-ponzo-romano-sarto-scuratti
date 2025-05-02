@@ -1,18 +1,18 @@
 package it.polimi.ingsw.model.components.enums;
 
 public enum CannonType {
-	SINGLE(1, false),
-	DOUBLE(2, true);
+	SINGLE(1f, false),
+	DOUBLE(2f, true);
 
-	private final int max_power;
+	private final double max_power;
 	private final boolean powerable;
 
-	CannonType(int max_power, boolean powerable) {
+	CannonType(double max_power, boolean powerable) {
 		this.max_power = max_power;
 		this.powerable = powerable;
 	}
 
-	public int getMaxPower() {
+	public double getMaxPower() {
 		return this.max_power;
 	}
 

@@ -30,7 +30,7 @@ public class AbandonedShipCard extends Card {
 	}
 
 	public int getCrewLost() {
-		return this.getCrewLost();
+		return this.crew_lost;
 	}
 
 	public void apply(VoyageState state, Player p, int id) {

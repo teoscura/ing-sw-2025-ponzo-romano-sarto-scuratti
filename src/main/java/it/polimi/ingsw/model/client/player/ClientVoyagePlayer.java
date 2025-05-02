@@ -18,7 +18,7 @@ public class ClientVoyagePlayer implements Serializable {
     public ClientVoyagePlayer(String username, PlayerColor color, ClientSpaceShip ship, int planche_slot, 
                               int credits, boolean disconnected, boolean retired_lost){
         if(username==null || ship == null) throw new NullPointerException();
-        if(planche_slot<0||credits<0) throw new IllegalArgumentException();
+        if(planche_slot<-1||credits<0) throw new IllegalArgumentException();
         this.username = username;
         this.color = color;
         this.ship = ship;

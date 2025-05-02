@@ -12,7 +12,7 @@ import it.polimi.ingsw.model.components.exceptions.ComponentNotEmptyException;
 import it.polimi.ingsw.model.components.exceptions.UnpowerableException;
 import it.polimi.ingsw.model.components.visitors.iVisitor;
 import it.polimi.ingsw.model.player.ShipCoords;
-import it.polimi.ingsw.model.player.iSpaceShip;
+import it.polimi.ingsw.model.player.SpaceShip;
 
 public class EngineComponent extends BaseComponent {
     
@@ -42,9 +42,9 @@ public class EngineComponent extends BaseComponent {
     }
 
     @Override
-    public boolean verify(iSpaceShip ship){
-        iBaseComponent tmp = ship.getComponent(this.coords.down());
-        return tmp==ship.getEmpty() && super.verify(ship);
+    public boolean verify(SpaceShip ship){
+        if(this.getRotation()!=ComponentRotation.U000||ship.getComponent(this.coords.down())!=ship.getEmpty()) return false; 
+        return super.verify(ship);
     }
 
     @Override
@@ -70,9 +70,7 @@ public class EngineComponent extends BaseComponent {
     }
             
     private int getPower(){
-        if(powerable && !powered){
-            return 0;
-        }
+        if(this.powerable) return this.powered ? max_power : 0;
         return this.max_power;
     } 
     
@@ -82,12 +80,13 @@ public class EngineComponent extends BaseComponent {
     } //redundant
 
     @Override
-    public void onCreation(iSpaceShip ship){
+    public void onCreation(SpaceShip ship, ShipCoords coords){
+        this.coords = coords;
         if(powerable) ship.addPowerableCoords(this.coords);
     }
 
     @Override
-    public void onDelete(iSpaceShip ship){
+    public void onDelete(SpaceShip ship){
         if(powerable) ship.delPowerableCoords(this.coords);
     }
 

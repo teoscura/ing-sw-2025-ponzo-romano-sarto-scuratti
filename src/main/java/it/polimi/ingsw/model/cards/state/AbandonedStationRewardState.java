@@ -24,10 +24,11 @@ import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.VoyageState;
 
-class AbandonedStationRewardState extends CardState {
+public class AbandonedStationRewardState extends CardState {
 
 	private final AbandonedStationCard card;
 	private final ArrayList<Player> list;
+	private int left;
 	private boolean responded = false;
 
 	public AbandonedStationRewardState(VoyageState state, AbandonedStationCard card, List<Player> list) {
@@ -36,12 +37,17 @@ class AbandonedStationRewardState extends CardState {
 			throw new IllegalArgumentException("Constructed insatisfyable state");
 		if (card == null) throw new NullPointerException();
 		this.card = card;
+		this.left = this.card.getPlanet().getTotalContains();
 		this.list = new ArrayList<>(list);
 	}
 
 	@Override
 	public void init(ClientModelState new_state) {
 		super.init(new_state);
+		System.out.println("    CardState -> Abandoned Station Announce State!");
+		for(Player p : this.list){
+			System.out.println("	 - "+p.getUsername());
+		}
 	}
 
 	@Override
@@ -62,7 +68,8 @@ class AbandonedStationRewardState extends CardState {
 	}
 
 	@Override
-	protected CardState getNext() {
+    public CardState getNext() {
+		System.out.println("...Card exhausted, moving to a new one!");
 		return null;
 	}
 
@@ -74,7 +81,7 @@ class AbandonedStationRewardState extends CardState {
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to take cargo during another player's turn!"));
 			return;
 		}
-		if (type.getValue() <= 0) {
+		if (type.getValue() < 0) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to take cargo with an illegal shipment type!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "'  attempted to take cargo with an illegal shipment type!"));
 			return;
@@ -84,9 +91,12 @@ class AbandonedStationRewardState extends CardState {
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "'  attempted to take cargo the card doesn't have!"));
 			return;
 		}
-		ContainsLoaderVisitor v = new ContainsLoaderVisitor(type);
+		ContainsLoaderVisitor v = new ContainsLoaderVisitor(p.getSpaceShip(),type);
 		try {
 			p.getSpaceShip().getComponent(target_coords).check(v);
+			this.card.getPlanet().getContains()[type.getValue() - 1]--;
+			this.left--;
+			System.out.println("Player '"+p.getUsername()+"' took cargo type: "+type+", placed it at "+target_coords);
 		} catch (IllegalTargetException e) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to position cargo in illegal coordinates!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to position cargo in illegal coordinates!"));
@@ -100,11 +110,10 @@ class AbandonedStationRewardState extends CardState {
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to position cargo in a storage that doesn't support it!"));
 			return;
 		}
-		this.card.getPlanet().getContains()[type.getValue() - 1]--;
 		for (int i : this.card.getPlanet().getContains()) {
 			if (i > 0) return;
 		}
-		this.responded = true;
+		if (left==0) this.responded = true;
 	}
 
 	@Override
@@ -134,10 +143,11 @@ class AbandonedStationRewardState extends CardState {
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to move cargo to coords that can't contain the shipment!"));
 			return;
 		}
-		ContainsRemoveVisitor vr = new ContainsRemoveVisitor(type);
-		ContainsLoaderVisitor vl = new ContainsLoaderVisitor(type);
+		ContainsRemoveVisitor vr = new ContainsRemoveVisitor(p.getSpaceShip(),type);
+		ContainsLoaderVisitor vl = new ContainsLoaderVisitor(p.getSpaceShip(),type);
 		p.getSpaceShip().getComponent(source_coords).check(vr);
 		p.getSpaceShip().getComponent(target_coords).check(vl);
+		System.out.println("Player '"+p.getUsername()+"' moved cargo type: "+type+", from "+source_coords+" to "+target_coords);
 	}
 
 	@Override
@@ -152,9 +162,10 @@ class AbandonedStationRewardState extends CardState {
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to discard cargo with an invalid type!"));
 			return;
 		}
-		ContainsRemoveVisitor v = new ContainsRemoveVisitor(type);
+		ContainsRemoveVisitor v = new ContainsRemoveVisitor(p.getSpaceShip(),type);
 		try {
 			p.getSpaceShip().getComponent(target_coords).check(v);
+			System.out.println("Player '"+p.getUsername()+"' removed cargo type: "+type+" from "+target_coords);
 		} catch (IllegalTargetException e) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to discard cargo from illegal coordinates!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to discard cargo from illegal coordinates!"));
@@ -177,6 +188,7 @@ class AbandonedStationRewardState extends CardState {
 	@Override
 	public void disconnect(Player p) throws ForbiddenCallException {
 		if (this.list.getFirst() == p) this.transition();
+		System.out.println("Player '" + p.getUsername() + "' disconnected!");
 	}
 
 }

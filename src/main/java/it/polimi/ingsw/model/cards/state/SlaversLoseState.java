@@ -17,7 +17,7 @@ import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.VoyageState;
 
-class SlaversLoseState extends CardState {
+public class SlaversLoseState extends CardState {
 
 	private final SlaversCard card;
 	private final ArrayList<Player> list;
@@ -36,6 +36,10 @@ class SlaversLoseState extends CardState {
 	@Override
 	public void init(ClientModelState new_state) {
 		super.init(new_state);
+		System.out.println("    CardState -> Slavers Lose State!");
+		for(Player p : this.list){
+			System.out.println("	 - "+p.getUsername());
+		}
 	}
 
 	@Override
@@ -57,14 +61,16 @@ class SlaversLoseState extends CardState {
 	}
 
 	@Override
-	protected CardState getNext() {
+    public CardState getNext() {
 		if (this.list.getFirst().getRetired() || this.list.getFirst().getDisconnected()) {
 			this.list.removeFirst();
 			if (!this.list.isEmpty()) return new SlaversAnnounceState(state, card, list);
+			System.out.println("...Card exhausted, moving to a new one!");
 			return null;
 		}
 		this.list.removeFirst();
 		if (!list.isEmpty()) return new SlaversAnnounceState(state, card, list);
+		System.out.println("...Card exhausted, moving to a new one!");
 		return null;
 	}
 
@@ -78,6 +84,8 @@ class SlaversLoseState extends CardState {
 		CrewRemoveVisitor v = new CrewRemoveVisitor(p.getSpaceShip());
 		try {
 			p.getSpaceShip().getComponent(cabin_coords).check(v);
+			this.done++;
+			System.out.println("Player '" + p.getUsername() + "' removed a crewmate from "+cabin_coords+"!");
 		} catch (IllegalTargetException e) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to remove a crew member from invalid coordinates!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to remove a crew member from invalid coordinates!"));
@@ -87,7 +95,6 @@ class SlaversLoseState extends CardState {
 			this.state.loseGame(p);
 			return;
 		}
-		this.done++;
 		if (this.done >= this.card.getCrewLost()) {
 			this.responded = true;
 		}
@@ -96,9 +103,12 @@ class SlaversLoseState extends CardState {
 	@Override
 	public void disconnect(Player p) throws ForbiddenCallException {
 		if (this.list.getFirst() == p) {
+			System.out.println("Player '" + p.getUsername() + "' disconnected!");
 			this.responded = true;
+			return;
 		}
 		this.list.remove(p);
+		System.out.println("Player '" + p.getUsername() + "' disconnected!");
 	}
 
 }

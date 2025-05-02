@@ -5,15 +5,14 @@ import it.polimi.ingsw.model.components.enums.ShipmentType;
 
 public class SpaceShipUpdateVisitor implements iVisitor {
 
-	private int battery_power;
-	private int engine_power;
-	private int cannon_power;
-	private final int[] storage_containers;
+	private final int[] containers;
 	private final int[] crew_members;
 	private final boolean[] directions;
+	private int engine_power;
+	private double cannon_power;
 
 	public SpaceShipUpdateVisitor() {
-		this.storage_containers = new int[4];
+		this.containers = new int[5];
 		this.crew_members = new int[3];
 		this.directions = new boolean[4];
 	}
@@ -41,13 +40,13 @@ public class SpaceShipUpdateVisitor implements iVisitor {
 	public void visit(StorageComponent c) {
 		for (ShipmentType t : ShipmentType.values()) {
 			if (t.getValue() < 1) continue;
-			this.storage_containers[t.getValue() - 1] = c.howMany(t);
+			this.containers[t.getValue()] += c.howMany(t);
 		}
 	}
 
 	@Override
 	public void visit(BatteryComponent c) {
-		this.battery_power += c.getContains();
+		this.containers[0] += c.getContains();
 	}
 
 	@Override
@@ -67,23 +66,19 @@ public class SpaceShipUpdateVisitor implements iVisitor {
 
 	@Override
 	public void visit(StartingCabinComponent c) {
-		this.crew_members[c.getCrewType().getArraypos()] += c.getCrew();
-	}
-
-	public int getBatteryPower() {
-		return this.battery_power;
+		this.crew_members[0] += c.getCrew();
 	}
 
 	public int getEnginePower() {
 		return this.engine_power;
 	}
 
-	public int getCannonPower() {
+	public double getCannonPower() {
 		return this.cannon_power;
 	}
 
-	public int[] getStorageContainers() {
-		return this.storage_containers;
+	public int[] getContainers() {
+		return this.containers;
 	}
 
 	public int[] getCrewMembers() {

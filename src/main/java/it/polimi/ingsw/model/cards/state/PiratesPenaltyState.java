@@ -41,6 +41,10 @@ public class PiratesPenaltyState extends CardState {
 	@Override
 	public void init(ClientModelState new_state) {
 		super.init(new_state);
+		System.out.println("    CardState -> Pirates Penalty State!");
+		for(Player p : this.list){
+			System.out.println("	 - "+p.getUsername());
+		}
 	}
 
 	@Override
@@ -50,7 +54,10 @@ public class PiratesPenaltyState extends CardState {
 			this.state.broadcastMessage(new NotifyStateUpdateMessage(this.state.getClientState()));
 			return;
 		}
-		this.list.getFirst().getSpaceShip().handleShot(this.shots.getProjectiles().getFirst());
+		if(!this.list.getFirst().getDisconnected()) {
+			this.list.getFirst().getSpaceShip().handleShot(this.shots.getProjectiles().getFirst());
+			if(this.list.getFirst().getSpaceShip().getBlobsSize() <= 0) this.state.loseGame(this.list.getFirst());
+		}
 		this.transition();
 	}
 
@@ -65,32 +72,32 @@ public class PiratesPenaltyState extends CardState {
 	}
 
 	@Override
-	protected CardState getNext() {
+    public CardState getNext() {
 		if (this.list.getFirst().getRetired() || this.list.getFirst().getDisconnected()) {
 			this.list.removeFirst();
 			if (!this.list.isEmpty()) return new PiratesAnnounceState(state, card, list);
+			System.out.println("Card exhausted, moving to a new one!");
 			return null;
 		}
 		this.shots.getProjectiles().removeFirst();
-		if (!this.list.getFirst().getSpaceShip().getBrokeCenter()) this.list.getFirst().getSpaceShip().verifyAndClean();
-		else {
-			return new PiratesNewCabinState(state, card, list, shots);
-		}
+		if (this.list.getFirst().getSpaceShip().getBlobsSize()>1) return new PiratesSelectShipState(state, card, list, shots);
 		if (!this.shots.getProjectiles().isEmpty()) return new PiratesPenaltyState(state, card, list, shots);
 		this.list.removeFirst();
 		if (!this.list.isEmpty()) return new PiratesAnnounceState(state, card, list);
+		System.out.println("Card exhausted, moving to a new one!");
 		return null;
 	}
 
 	@Override
 	public void turnOn(Player p, ShipCoords target_coords, ShipCoords battery_coords) {
-		if (this.list.getFirst() != p) {
+		if (!this.list.getFirst().equals(p)) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to turn on a component during another player's turn!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to turn on a component during another player's turn!"));
 			return;
 		}
 		try {
 			p.getSpaceShip().turnOn(target_coords, battery_coords);
+			System.out.println("Player '" + p.getUsername() + "' turned on component at"+target_coords+" using battery from "+battery_coords+"!");
 		} catch (IllegalTargetException e) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to turn on a component with invalid coordinates!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to turn on a component with invalid coordinates!"));
@@ -99,20 +106,24 @@ public class PiratesPenaltyState extends CardState {
 
 	@Override
 	public void progressTurn(Player p) {
-		if (p != this.list.getFirst()) {
+		if (!this.list.getFirst().equals(p)) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to progress during another player's turn!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to progress during another player's turn!"));
 			return;
 		}
 		this.responded = true;
+		System.out.println("Player '" + p.getUsername() + "' motioned to progress!");
 	}
 
 	@Override
 	public void disconnect(Player p) throws ForbiddenCallException {
-		if (this.list.getFirst() == p) {
+		if (this.list.getFirst().equals(p)) {
+			System.out.println("Player '" + p.getUsername() + "' disconnected!");
 			this.responded = true;
+			return;
 		}
 		this.list.remove(p);
+		System.out.println("Player '" + p.getUsername() + "' disconnected!");
 	}
 
 }

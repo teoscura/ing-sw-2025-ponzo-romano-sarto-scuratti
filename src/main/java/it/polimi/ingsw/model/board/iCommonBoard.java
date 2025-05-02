@@ -1,18 +1,18 @@
 package it.polimi.ingsw.model.board;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.ArrayList;
 
-import it.polimi.ingsw.model.components.iBaseComponent;
+import it.polimi.ingsw.model.components.BaseComponent;
 
 public interface iCommonBoard extends Serializable {
 	int getCoveredSize();
 
-	iBaseComponent pullComponent();
+	BaseComponent pullComponent();
 
-	void discardComponent(iBaseComponent c);
+	void discardComponent(BaseComponent c);
 
-	iBaseComponent pullDiscarded(int id);
+	BaseComponent pullDiscarded(int id);
 
-	List<Integer> getDiscarded();
+	ArrayList<Integer> getDiscarded();
 }

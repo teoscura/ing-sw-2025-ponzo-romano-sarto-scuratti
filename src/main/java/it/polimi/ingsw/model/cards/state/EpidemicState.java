@@ -21,26 +21,22 @@ import it.polimi.ingsw.model.state.VoyageState;
 public class EpidemicState extends CardState {
 
 	private final EpidemicCard card;
-	private ArrayList<Player> awaiting;
+	private final ArrayList<Player> awaiting;
 
 	public EpidemicState(VoyageState state, EpidemicCard card) {
 		super(state);
 		if (card == null) throw new NullPointerException();
 		this.card = card;
+		this.awaiting = new ArrayList<>(state.getOrder(CardOrder.NORMAL));
 	}
 
 	@Override
 	public void init(ClientModelState new_state) {
 		super.init(new_state);
-		for (Player p : this.state.getOrder(CardOrder.INVERSE)) {
-			try {
-				card.apply(this.state, p);
-				if (p.getSpaceShip().getCrew()[0] == 0) this.state.loseGame(p);
-			} catch (PlayerNotFoundException e) {
-				e.printStackTrace();
-			}
+		System.out.println("New CardState -> Epidemic State!");
+		for(Player p : this.state.getOrder(CardOrder.NORMAL)){
+			System.out.println("	 - "+p.getUsername());
 		}
-		this.awaiting = new ArrayList<>(state.getOrder(CardOrder.NORMAL));
 	}
 
 	@Override
@@ -49,6 +45,14 @@ public class EpidemicState extends CardState {
 		if (!awaiting.isEmpty()) {
 			this.state.broadcastMessage(new NotifyStateUpdateMessage(this.state.getClientState()));
 			return;
+		}
+		for (Player p : this.state.getOrder(CardOrder.INVERSE)) {
+			try {
+				card.apply(this.state, p);
+				if (p.getSpaceShip().getCrew()[0] == 0) this.state.loseGame(p);
+			} catch (PlayerNotFoundException e) {
+				e.printStackTrace();
+			}
 		}
 		this.transition();
 	}
@@ -69,10 +73,12 @@ public class EpidemicState extends CardState {
 			return;
 		}
 		this.awaiting.remove(p);
+		System.out.println("Player '" + p.getUsername() + "' motioned to progress! ("+this.awaiting.size()+" missing).");
 	}
 
 	@Override
-	protected CardState getNext() {
+    public CardState getNext() {
+		System.out.println("Card exhausted, moving to a new one!");
 		return null;
 	}
 
@@ -81,6 +87,7 @@ public class EpidemicState extends CardState {
 		if (this.awaiting.contains(p)) {
 			this.awaiting.remove(p);
 		}
+		System.out.println("Player '" + p.getUsername() + "' disconnected!");
 	}
 
 }

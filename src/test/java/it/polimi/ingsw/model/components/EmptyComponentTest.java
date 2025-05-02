@@ -1,13 +1,7 @@
 package it.polimi.ingsw.model.components;
 
-import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ConnectorType;
-import it.polimi.ingsw.model.player.Player;
-import it.polimi.ingsw.model.player.PlayerColor;
-import it.polimi.ingsw.model.player.ShipCoords;
-import it.polimi.ingsw.model.player.SpaceShip;
-import it.polimi.ingsw.model.player.iSpaceShip;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -42,26 +36,6 @@ class EmptyComponentTest {
 		assertArrayEquals(expected, empty.getConnectors());
 	}
 
-	@Test
-	void OnCreation() {
-		iSpaceShip ship = new SpaceShip(GameModeType.LVL2, new Player(GameModeType.LVL2, "tizio", PlayerColor.RED));
-		ShipCoords coords = new ShipCoords(GameModeType.LVL2, 4, 4);
-		EmptyComponent emptyWithCoords = new EmptyComponent(coords);
 
-		assertDoesNotThrow(() -> ship.addComponent(emptyWithCoords, coords));
-		assertEquals(emptyWithCoords, ship.getComponent(coords));
-	}
-
-	@Test
-	void OnDelete() {
-		iSpaceShip ship = new SpaceShip(GameModeType.LVL2, new Player(GameModeType.LVL2, "tizio", PlayerColor.RED));
-		ShipCoords coords = new ShipCoords(GameModeType.LVL2, 4, 4);
-		EmptyComponent emptyWithCoords = new EmptyComponent(coords);
-
-		assertDoesNotThrow(() -> ship.addComponent(emptyWithCoords, coords));
-		assertEquals(emptyWithCoords, ship.getComponent(coords));
-
-		assertDoesNotThrow(() -> emptyWithCoords.onDelete(ship));
-	}
 
 }

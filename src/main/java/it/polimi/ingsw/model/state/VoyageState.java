@@ -1,11 +1,11 @@
 package it.polimi.ingsw.model.state;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
+import it.polimi.ingsw.message.server.ServerDisconnectMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.ModelInstance;
@@ -13,6 +13,7 @@ import it.polimi.ingsw.model.PlayerCount;
 import it.polimi.ingsw.model.cards.iCard;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.cards.state.CardState;
+import it.polimi.ingsw.model.cards.state.SelectShipReconnectState;
 import it.polimi.ingsw.model.cards.utils.CardOrder;
 import it.polimi.ingsw.model.cards.utils.CombatZoneCriteria;
 import it.polimi.ingsw.model.board.iCards;
@@ -20,7 +21,6 @@ import it.polimi.ingsw.model.board.iPlanche;
 import it.polimi.ingsw.model.client.player.ClientVoyagePlayer;
 import it.polimi.ingsw.model.client.state.ClientModelState;
 import it.polimi.ingsw.model.client.state.ClientVoyageState;
-import it.polimi.ingsw.model.components.enums.ShipmentType;
 import it.polimi.ingsw.model.player.Player;
 
 public class VoyageState extends GameState {
@@ -42,6 +42,7 @@ public class VoyageState extends GameState {
 	@Override
 	public void init() {
 		super.init();
+		System.out.println("New Game State -> Voyage State");
 		this.setCardState(null);
 		this.broadcastMessage(new NotifyStateUpdateMessage(this.getClientState()));
 	}
@@ -49,7 +50,9 @@ public class VoyageState extends GameState {
 	@Override
 	public void validate(ServerMessage message) throws ForbiddenCallException {
 		message.receive(this);
-		if (this.state != null) return;
+		Player p = message.getDescriptor().getPlayer();
+		if (!p.getRetired() && p.getSpaceShip().getCrew()[0]<=0) this.loseGame(p);
+		if (this.state != null && this.getOrder(CardOrder.NORMAL).size() > 0) return;
 		this.transition();
 	}
 
@@ -60,8 +63,8 @@ public class VoyageState extends GameState {
 		//Retired players dont count in the distance scoring.
 		tmp = new ArrayList<>(tmp.stream().filter(p -> !p.getRetired()).toList());
 		//Sort in descending order, so the farthest one gets the first index, second farthest gets second index and so on.
-		tmp.sort((p1, p2) -> this.planche.getPlayerPosition(p1) < this.planche.getPlayerPosition(p2) ? 1 : -1);
-		return new EndscreenState(model, type, count, players, tmp);
+		tmp.sort((p1, p2) -> Integer.compare(planche.getPlayerPosition(p1), planche.getPlayerPosition(p2)));
+		return new EndscreenState(model, type, count, players, new ArrayList<>(tmp.reversed()));
 	}
 
 	@Override
@@ -88,7 +91,12 @@ public class VoyageState extends GameState {
 	public void connect(Player p) throws ForbiddenCallException {
 		if (p == null) throw new NullPointerException();
 		if (!p.getDisconnected()) throw new ForbiddenCallException();
+		System.out.println("Player '" + p.getUsername() + "' reconnected!");
+	    this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' reconnected!"));
 		p.reconnect();
+		if(!p.getRetired()&&p.getSpaceShip().getBlobsSize()>1){
+			this.setCardState(new SelectShipReconnectState(this, this.state, p));
+		}
 	}
 
 	@Override
@@ -96,7 +104,9 @@ public class VoyageState extends GameState {
 		if (p == null) throw new NullPointerException();
 		if (p.getDisconnected()) throw new ForbiddenCallException();
 		p.disconnect();
-		this.state.disconnect(p);
+		ServerMessage disc = new ServerDisconnectMessage();
+		disc.setDescriptor(p.getDescriptor());
+		this.state.validate(disc);
 	}
 
 	@Override
@@ -111,12 +121,6 @@ public class VoyageState extends GameState {
 	}
 
 	public void loseGame(Player p) {
-		int sum = 0;
-		for (ShipmentType t : ShipmentType.values()) {
-			if (t.getValue() <= 0) continue;
-			sum += p.getSpaceShip().getContains()[t.getValue() - 1] * t.getValue();
-		}
-		p.addScore(sum / 2 + sum % 2);
 		this.planche.loseGame(p);
 		p.retire();
 	}
@@ -128,42 +132,31 @@ public class VoyageState extends GameState {
 	}
 
 	public List<Player> getOrder(CardOrder order) {
-		List<Player> tmp = new ArrayList<>();
-		tmp.addAll(this.players);
-		switch (order) {
-			case NORMAL: {
-				Collections.sort(tmp, (p1, p2) -> this.planche.getPlayerPosition(p1) > this.planche.getPlayerPosition(p2) ? 1 : -1);
-				return tmp.stream().filter((p) -> !p.getRetired() && !p.getDisconnected()).toList();
-			}
-			case INVERSE: {
-				Collections.sort(tmp, (p1, p2) -> this.planche.getPlayerPosition(p1) > this.planche.getPlayerPosition(p2) ? -1 : 1);
-				return tmp.stream().filter((p) -> !p.getRetired() && !p.getDisconnected()).toList();
-			}
-		}
-		return tmp;
+		List<Player> tmp = this.players.stream().filter(p->!p.getRetired()&&!p.getDisconnected()).sorted((Player player1, Player player2) -> Integer.compare(planche.getPlayerPosition(player1), planche.getPlayerPosition(player2))).toList();
+		return order!=CardOrder.NORMAL ? tmp : tmp.reversed();
 	}
-
+	
 	public Player findCriteria(CombatZoneCriteria criteria) {
 		List<Player> tmp = new ArrayList<>();
 		tmp.addAll(this.players);
 		switch (criteria) {
 			case LEAST_CANNON:
-				int min_cannon_power = tmp.stream().mapToInt(p -> p.getSpaceShip().getCannonPower()).min().orElse(0);
+				double min_cannon_power = tmp.stream().mapToDouble(p -> p.getSpaceShip().getCannonPower()).min().orElse(0);
 				return tmp.stream()
 						.filter((p) -> p.getSpaceShip().getCannonPower() == min_cannon_power && !p.getRetired() && !p.getDisconnected())
-						.sorted((p1, p2) -> this.planche.getPlayerPosition(p1) > this.planche.getPlayerPosition(p2) ? 1 : -1)
+						.sorted((p1, p2) -> -Integer.compare(planche.getPlayerPosition(p1), planche.getPlayerPosition(p1)))
 						.findFirst().orElse(null);
 			case LEAST_CREW:
 				int min_crew = tmp.stream().mapToInt(p -> p.getSpaceShip().getTotalCrew()).min().orElse(0);
 				return tmp.stream()
 						.filter((p) -> p.getSpaceShip().getTotalCrew() == min_crew && !p.getRetired() && !p.getDisconnected())
-						.sorted((p1, p2) -> this.planche.getPlayerPosition(p1) > this.planche.getPlayerPosition(p2) ? 1 : -1)
+						.sorted((p1, p2) -> -Integer.compare(planche.getPlayerPosition(p1), planche.getPlayerPosition(p1)))
 						.findFirst().orElse(null);
 			case LEAST_ENGINE:
 				int min_engine_power = tmp.stream().mapToInt(p -> p.getSpaceShip().getEnginePower()).min().orElse(0);
 				return tmp.stream()
 						.filter((p) -> p.getSpaceShip().getEnginePower() == min_engine_power && !p.getRetired() && !p.getDisconnected())
-						.sorted((p1, p2) -> this.planche.getPlayerPosition(p1) > this.planche.getPlayerPosition(p2) ? 1 : -1)
+						.sorted((p1, p2) -> -Integer.compare(planche.getPlayerPosition(p1), planche.getPlayerPosition(p1)))
 						.findFirst().orElse(null);
 			default:
 				return null;
@@ -187,6 +180,7 @@ public class VoyageState extends GameState {
 			this.state = card.getState(this);
 			this.model.serialize();
 			this.state.init(this.getClientState());
+			return;
 		}
 		this.state = next;
 		next.init(this.getClientState());
@@ -201,6 +195,11 @@ public class VoyageState extends GameState {
 		}
 		res.concat("Cards left: " + this.voyage_deck.getLeft() + ", Current card state: " + this.state.getClass().getSimpleName());
 		return res;
+	}
+
+	@Override
+	public CardState getCardState(Player p){
+		return this.state;
 	}
 
 }

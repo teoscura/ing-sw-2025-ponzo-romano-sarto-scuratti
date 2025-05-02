@@ -40,4 +40,12 @@ public class TurnOnMessage extends ServerMessage {
 		state.turnOn(this.descriptor.getPlayer(), target, battery);
 	}
 
+	public ShipCoords getTarget() {
+		return target;
+	}
+
+	public ShipCoords getBattery() {
+		return battery;
+	}
+
 }

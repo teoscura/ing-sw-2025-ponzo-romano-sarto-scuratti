@@ -12,13 +12,13 @@ import it.polimi.ingsw.model.components.exceptions.ComponentNotEmptyException;
 import it.polimi.ingsw.model.components.exceptions.UnpowerableException;
 import it.polimi.ingsw.model.components.visitors.iVisitor;
 import it.polimi.ingsw.model.player.ShipCoords;
-import it.polimi.ingsw.model.player.iSpaceShip;
+import it.polimi.ingsw.model.player.SpaceShip;
 
 public class CannonComponent extends BaseComponent {
 
-	private final int max_power;
+	private final double max_power;
 	private boolean powered = false;
-	private boolean powerable = false;
+	private final boolean powerable;
 
 	public CannonComponent(int id,
 						   ConnectorType[] components,
@@ -47,9 +47,9 @@ public class CannonComponent extends BaseComponent {
 	}
 
 	@Override
-	public boolean verify(iSpaceShip ship) {
+	public boolean verify(SpaceShip ship) {
 		ComponentRotation r = this.getRotation();
-		iBaseComponent tmp = null;
+		BaseComponent tmp = null;
 		switch (r.getShift()) {
 			case 0: {
 				tmp = ship.getComponent(this.coords.up());
@@ -80,33 +80,32 @@ public class CannonComponent extends BaseComponent {
 		this.powered = false;
 	}
 
-	public int getCurrentPower() {
+	public double getCurrentPower() {
 		if (this.getRotation() != ComponentRotation.U000) {
-			return this.getPower() >> 1;
+			return this.getPower()/2;
 		}
 		return this.getPower();
 	}
 
-	private int getPower() {
-		if (max_power == 2 && !this.powered) {
-			return 0;
-		}
-		return max_power;
+	private double getPower() {
+		if(this.powerable) return this.powered ? max_power : 0;
+        return this.max_power;
 	}
 
 	@Override
 	public boolean powerable() {
-		return true;
+		return this.powerable;
 	}
 
 	@Override
-	public void onCreation(iSpaceShip ship) {
-		if (powerable) ship.addPowerableCoords(this.coords);
+	public void onCreation(SpaceShip ship, ShipCoords coords) {
+		this.coords = coords;
+		if(this.powerable) ship.addPowerableCoords(coords);
 	}
 
 	@Override
-	public void onDelete(iSpaceShip ship) {
-		if (powerable) ship.delPowerableCoords(this.coords);
+	public void onDelete(SpaceShip ship) {
+		if (powerable) ship.delPowerableCoords(coords);
 	}
 
 	@Override

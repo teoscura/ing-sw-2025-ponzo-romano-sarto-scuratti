@@ -11,11 +11,11 @@ import it.polimi.ingsw.model.state.VoyageState;
 
 public class SlaversCard extends Card {
 
-    private final int min_power;
+    private final double min_power;
     private final int crew_penalty;
     private final int credits;
 
-    public SlaversCard(int id, int days, int min_power, int crew_penalty, int credits){
+    public SlaversCard(int id, int days, double min_power, int crew_penalty, int credits){
         super(id, days);
         if(credits<=0||crew_penalty<=0) throw new NegativeArgumentException();
         this.min_power = min_power;
@@ -39,15 +39,20 @@ public class SlaversCard extends Card {
 	public boolean apply(VoyageState state, Player p){
         if(state==null||p==null) throw new NullPointerException();
         if(p.getSpaceShip().getCannonPower()>this.min_power){
+            System.out.println("Player '"+p.getUsername()+"' beat the slavers!");
             this.exhaust();
             return true;
         }
         else if(p.getSpaceShip().getCannonPower()==this.min_power){
+            System.out.println("Player '"+p.getUsername()+"' tied the slavers!");
             return true;
         }
         if(p.getSpaceShip().getTotalCrew()<=this.crew_penalty){
+            System.out.println("Player '"+p.getUsername()+"' lost and the whole crew got captured by slavers!");
             state.loseGame(p);
+            return false;
         }
+        System.out.println("Player '"+p.getUsername()+"' lost to the slavers!");
         return false;
 	}
 

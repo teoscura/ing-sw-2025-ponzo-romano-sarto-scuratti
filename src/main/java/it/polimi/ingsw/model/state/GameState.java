@@ -51,7 +51,7 @@ public abstract class GameState implements Serializable {
 	}
 
 	public void broadcastMessage(ClientMessage message) {
-		this.model.getController().broadcast(message);
+		this.model.broadcast(message);
 	}
 
 	public void transition() {
@@ -148,6 +148,12 @@ public abstract class GameState implements Serializable {
 	public void giveUp(Player p) throws ForbiddenCallException {
 		this.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' tried to give up in a state that doesn't allow it!"));
 		System.out.println("Player: '" + p.getUsername() + "' tried to give up in a state that doesn't allow it!");
+		throw new ForbiddenCallException("This state doesn't support this function.");
+	}
+
+	public void selectBlob(Player p, ShipCoords blob_coord) throws ForbiddenCallException {
+		this.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' tried to select a new blob in a state that doesn't allow it!"));
+		System.out.println("Player: '" + p.getUsername() + "' tried to select a new blob in a state that doesn't allow it!");
 		throw new ForbiddenCallException("This state doesn't support this function.");
 	}
 

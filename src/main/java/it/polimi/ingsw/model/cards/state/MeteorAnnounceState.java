@@ -25,7 +25,7 @@ public class MeteorAnnounceState extends CardState {
 	private final int card_id;
 	private final ProjectileArray left;
 	private final ArrayList<Player> awaiting;
-	private boolean broke_cabin;
+	private boolean reselect;
 
 	public MeteorAnnounceState(VoyageState state, int card_id, ProjectileArray array) {
 		super(state);
@@ -34,11 +34,16 @@ public class MeteorAnnounceState extends CardState {
 		this.card_id = card_id;
 		this.left = array;
 		this.awaiting = new ArrayList<>(this.state.getOrder(CardOrder.NORMAL));
+		
 	}
 
 	@Override
 	public void init(ClientModelState new_state) {
 		super.init(new_state);
+		System.out.println("New CardState -> Meteor Swarm Announce State! [Left "+left.getProjectiles().size()+"].");
+		for(Player p : this.state.getOrder(CardOrder.NORMAL)){
+			System.out.println("	 - "+p.getUsername());
+		}
 	}
 
 	@Override
@@ -49,7 +54,9 @@ public class MeteorAnnounceState extends CardState {
 			return;
 		}
 		for (Player p : this.state.getOrder(CardOrder.NORMAL)) {
-			this.broke_cabin = p.getSpaceShip().handleMeteorite(this.left.getProjectiles().getFirst());
+			p.getSpaceShip().handleMeteorite(this.left.getProjectiles().getFirst());
+			if (p.getSpaceShip().getBlobsSize() <= 0) this.state.loseGame(p);
+			this.reselect = this.reselect || (p.getSpaceShip().getBlobsSize() > 1);
 		}
 		this.transition();
 	}
@@ -65,13 +72,11 @@ public class MeteorAnnounceState extends CardState {
 	}
 
 	@Override
-	protected CardState getNext() {
-		for (Player p : this.state.getOrder(CardOrder.NORMAL)) {
-			if (!p.getSpaceShip().getBrokeCenter()) p.getSpaceShip().verifyAndClean();
-		}
-		if (broke_cabin) return new MeteorNewCabinState(state, card_id, left);
+    public CardState getNext() {
+		if (reselect) return new MeteorSelectShipState(state, card_id, left);
 		this.left.getProjectiles().removeFirst();
 		if (!this.left.getProjectiles().isEmpty()) return new MeteorAnnounceState(state, card_id, left);
+		System.out.println("Card exhausted, moving to a new one!");
 		return null;
 	}
 
@@ -84,6 +89,7 @@ public class MeteorAnnounceState extends CardState {
 		}
 		try {
 			p.getSpaceShip().turnOn(target_coords, battery_coords);
+			System.out.println("Player '" + p.getUsername() + "' turned on component at"+target_coords+" using battery from "+battery_coords+"!");
 		} catch (IllegalTargetException e) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to turn on a component with invalid coordinates!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to turn on a component with invalid coordinates!"));
@@ -98,6 +104,7 @@ public class MeteorAnnounceState extends CardState {
 			return;
 		}
 		this.awaiting.remove(p);
+		System.out.println("Player '" + p.getUsername() + "' motioned to progress! ("+(this.state.getCount().getNumber()-this.awaiting.size())+").");
 	}
 
 	@Override
@@ -105,6 +112,7 @@ public class MeteorAnnounceState extends CardState {
 		if (this.awaiting.contains(p)) {
 			this.awaiting.remove(p);
 		}
+		System.out.println("Player '" + p.getUsername() + "' disconnected!");
 	}
 
 }

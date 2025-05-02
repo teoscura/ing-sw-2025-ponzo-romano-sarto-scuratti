@@ -10,7 +10,7 @@ public class ShipCoords implements Serializable {
     public final int y;
 
     public ShipCoords(GameModeType type, int x, int y){
-        if(x<0 || y<0 || x>=type.getWidth() || y>=type.getWidth());
+        if(x<0 || y<0 || x>=type.getWidth() || y>=type.getWidth()) throw new IllegalArgumentException();
         this.type = type;
         this.x = x; 
         this.y = y;
@@ -43,4 +43,18 @@ public class ShipCoords implements Serializable {
         if(this.x==0) return new ShipCoords(this.type, 0, 0);
         return new ShipCoords(this.type, this.x-1, this.y);
     }
+
+    public String toString(){
+        return "("+this.x+","+this.y+")";
+    }
+
+    @Override public boolean equals(Object o) {
+        if (o == this)
+            return true;
+        if (!(o instanceof ShipCoords))
+            return false;
+        ShipCoords c = (ShipCoords)o;
+        return this.x == c.x && this.y == c.y;
+    }
+
 }

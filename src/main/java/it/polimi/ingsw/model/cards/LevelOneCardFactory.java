@@ -12,16 +12,16 @@ public class LevelOneCardFactory implements iCardFactory {
 
 	@Override
 	public iCard getCard(int id) {
-		if (this.cards.containsKey(id)) throw new IllegalArgumentException("Non valid card id.");
+		if (!this.cards.containsKey(id)) throw new IllegalArgumentException("Non valid card id.");
 		return this.cards.get(id);
 	}
 
 	public LevelOneCardFactory() {
 		this.cards = new HashMap<Integer, iCard>() {{
-			put(1, new SlaversCard(1, 1, 6, 3, 5));
+			put(1, new SlaversCard(1, 1, 6F, 3, 5));
 			put(2, new SmugglersCard(2, 1,
 					new Planet(new int[]{1, 1, 1, 0}),
-					2, 4)
+					2, 4F)
 			);
 			put(3, new PiratesCard(3, 1,
 					new ProjectileArray(
@@ -29,7 +29,7 @@ public class LevelOneCardFactory implements iCardFactory {
 									new Projectile(ProjectileDirection.U180, ProjectileDimension.SMALL),
 									new Projectile(ProjectileDirection.U180, ProjectileDimension.BIG),
 									new Projectile(ProjectileDirection.U180, ProjectileDimension.SMALL)}),
-					5, 4)
+					5F, 4)
 			);
 			put(4, new StardustCard(4));
 			put(5, new OpenSpaceCard(5));

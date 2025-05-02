@@ -33,6 +33,10 @@ class SlaversRewardState extends CardState {
 	@Override
 	public void init(ClientModelState new_state) {
 		super.init(new_state);
+		System.out.println("    CardState -> Slavers Reward State!");
+		for(Player p : this.list){
+			System.out.println("	 - "+p.getUsername());
+		}
 	}
 
 	@Override
@@ -44,7 +48,7 @@ class SlaversRewardState extends CardState {
 		}
 		if (took_reward) {
 			this.list.getFirst().giveCredits(card.getCredits());
-			this.state.getPlanche().movePlayer(state, list.getFirst(), card.getDays());
+			this.state.getPlanche().movePlayer(state, list.getFirst(), -card.getDays());
 		}
 		this.transition();
 	}
@@ -59,7 +63,8 @@ class SlaversRewardState extends CardState {
 	}
 
 	@Override
-	protected CardState getNext() {
+    public CardState getNext() {
+		System.out.println("Card exhausted, moving to a new one!");
 		return null;
 	}
 
@@ -70,6 +75,7 @@ class SlaversRewardState extends CardState {
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to accept a reward during another player's turn!"));
 			return;
 		}
+		System.out.println("Player '"+p.getUsername()+"' took the reward? "+take);
 		this.took_reward = take;
 		this.responded = true;
 	}
@@ -80,6 +86,7 @@ class SlaversRewardState extends CardState {
 			this.responded = true;
 			this.took_reward = false;
 		}
+		System.out.println("Player '" + p.getUsername() + "' disconnected!");
 	}
 
 }

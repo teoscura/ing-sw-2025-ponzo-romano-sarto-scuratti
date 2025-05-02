@@ -1,9 +1,10 @@
 package it.polimi.ingsw.model;
 
-import java.util.List;
-
 import it.polimi.ingsw.controller.server.ClientDescriptor;
 import it.polimi.ingsw.controller.server.ServerController;
+import it.polimi.ingsw.message.client.ClientMessage;
+import it.polimi.ingsw.message.server.ServerConnectMessage;
+import it.polimi.ingsw.message.server.ServerDisconnectMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.player.*;
@@ -13,10 +14,10 @@ import it.polimi.ingsw.model.state.WaitingState;
 
 public class ModelInstance {
 
-	private final int id;
-	private transient ServerController controller;
-	private boolean started;
-	private GameState state;
+	protected final int id;
+	protected transient ServerController controller;
+	protected boolean started;
+	protected GameState state;
 
 	public ModelInstance(int id, ServerController server, GameModeType type, PlayerCount count) {
 		if (id < 0) throw new IllegalArgumentException();
@@ -42,8 +43,8 @@ public class ModelInstance {
 		this.controller.serializeCurrentGame();
 	}
 
-	public void startGame(List<Player> players) throws ForbiddenCallException {
-		if (this.started) throw new ForbiddenCallException();
+	public void startGame() {
+		System.out.println("Game Started.");
 		this.started = true;
 	}
 
@@ -73,7 +74,8 @@ public class ModelInstance {
 
 	public void connect(ClientDescriptor client) {
 		try {
-			this.state.connect(client);
+			ServerMessage mess = new ServerConnectMessage(client);
+			this.state.validate(mess);
 		} catch (ForbiddenCallException e) {
 			System.out.println("Client: '" + client.getUsername() + "' tried connecting when the current state doesn't support it anymore!");
 		}
@@ -81,7 +83,9 @@ public class ModelInstance {
 
 	public void disconnect(ClientDescriptor client) {
 		try {
-			this.state.disconnect(client);
+			ServerMessage mess = new ServerDisconnectMessage();
+			mess.setDescriptor(client);
+			this.state.validate(mess);
 		} catch (ForbiddenCallException e) {
 			System.out.println("Client: '" + client.getUsername() + "' tried disconnecting when the current state doesn't support it anymore!");
 		}
@@ -89,8 +93,7 @@ public class ModelInstance {
 
 	public void connect(Player p) {
 		try {
-			this.state.disconnect(p);
-			System.out.println("Client: '" + p.getUsername() + "' reconnected to the game!");
+			this.state.connect(p);
 		} catch (ForbiddenCallException e) {
 			System.out.println("Client: '" + p.getUsername() + "' tried reconnecting when the current state doesn't support it anymore!");
 		}
@@ -98,20 +101,14 @@ public class ModelInstance {
 
 	public void disconnect(Player p) {
 		try {
-			this.state.disconnect(p);
-			System.out.println("Client: '" + p.getUsername() + "' disconnected from the game!");
+			if (p == null) throw new NullPointerException();
+			if (p.getDisconnected()) throw new ForbiddenCallException();
+			ServerMessage disc = new ServerDisconnectMessage();
+			disc.setDescriptor(p.getDescriptor());
+			this.state.validate(disc);
 		} catch (ForbiddenCallException e) {
 			System.out.println("Client: '" + p.getUsername() + "' tried disconnecting when the current state doesn't support it anymore!");
 		}
-	}
-
-	public void kick(ClientDescriptor client) {
-		try {
-			this.state.disconnect(client);
-		} catch (ForbiddenCallException e) {
-			System.out.println("Player " + client.getUsername() + " is not connected, cannot kick!");
-		}
-		this.controller.kick(client);
 	}
 
 	public void setController(ServerController controller) {
@@ -123,8 +120,13 @@ public class ModelInstance {
 	}
 
 	public void afterSerialRestart() {
+		this.started = false;
 		ResumeWaitingState next = new ResumeWaitingState(this, this.state.getType(), this.state.getCount(), this.state);
 		this.setState(next);
+	}
+
+	public void broadcast(ClientMessage message) {
+		this.controller.broadcast(message);
 	}
 
 }

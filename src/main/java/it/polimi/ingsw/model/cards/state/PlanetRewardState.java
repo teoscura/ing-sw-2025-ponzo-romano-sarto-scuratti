@@ -28,6 +28,7 @@ class PlanetRewardState extends CardState {
 	private final PlanetCard card;
 	private final ArrayList<Player> list;
 	private final int id;
+	private int left;
 	private boolean responded = false;
 
 	public PlanetRewardState(VoyageState state, PlanetCard card, int id, ArrayList<Player> clist) {
@@ -36,6 +37,7 @@ class PlanetRewardState extends CardState {
 			throw new IllegalArgumentException("Constructed insatisfyable state");
 		if (card == null) throw new NullPointerException();
 		this.id = id;
+		this.left = card.getPlanet(id).getTotalContains();
 		this.list = clist;
 		this.card = card;
 	}
@@ -43,6 +45,10 @@ class PlanetRewardState extends CardState {
 	@Override
 	public void init(ClientModelState new_state) {
 		super.init(new_state);
+		System.out.println("    CardState -> Planet Reward State!");
+		for(Player p : this.list){
+			System.out.println("	 - "+p.getUsername());
+		}
 	}
 
 	@Override
@@ -52,7 +58,6 @@ class PlanetRewardState extends CardState {
 			this.state.broadcastMessage(new NotifyStateUpdateMessage(this.state.getClientState()));
 			return;
 		}
-		this.state.getPlanche().movePlayer(state, list.getFirst(), card.getDays());
 		this.transition();
 	}
 
@@ -61,15 +66,19 @@ class PlanetRewardState extends CardState {
 		return new ClientCargoRewardCardStateDecorator(
 				new ClientBaseCardState(this.card.getId()),
 				this.list.getFirst().getColor(),
-				0,
-				this.card.getPlanet(id).getContains());
+				this.card.getDays(),
+				this.card.getPlanet(this.id).getContains());
 	}
 
 	@Override
-	protected CardState getNext() {
-		if (this.card.getExhausted()) return null;
+    public CardState getNext() {
+		if (this.card.getExhausted()){
+			System.out.println("Card exhausted, moving to a new one!");
+			return null;
+		};
 		this.list.removeFirst();
-		if (this.list.isEmpty()) return new PlanetAnnounceState(state, card, list);
+		if (!this.list.isEmpty()) return new PlanetAnnounceState(state, card, list);
+		System.out.println("Card exhausted, moving to a new one!");
 		return null;
 	}
 
@@ -90,9 +99,12 @@ class PlanetRewardState extends CardState {
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "'  attempted to take cargo the card doesn't have!"));
 			return;
 		}
-		ContainsLoaderVisitor v = new ContainsLoaderVisitor(type);
+		ContainsLoaderVisitor v = new ContainsLoaderVisitor(p.getSpaceShip(),type);
 		try {
 			p.getSpaceShip().getComponent(target_coords).check(v);
+			this.card.getPlanet(this.id).getContains()[type.getValue() - 1]--;
+			this.left--;
+			System.out.println("Player '"+p.getUsername()+"' took cargo type: "+type+", placed it at "+target_coords);
 		} catch (IllegalTargetException e) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to position cargo in illegal coordinates!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to position cargo in illegal coordinates!"));
@@ -106,11 +118,7 @@ class PlanetRewardState extends CardState {
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to position cargo in a storage that doesn't support it!"));
 			return;
 		}
-		this.card.getPlanet(this.id).getContains()[type.getValue() - 1]--;
-		for (int i : this.card.getPlanet(this.id).getContains()) {
-			if (i > 0) return;
-		}
-		this.responded = true;
+		if (left==0) this.responded = true;
 	}
 
 	@Override
@@ -140,10 +148,11 @@ class PlanetRewardState extends CardState {
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to load cargo from coords that dont contain the shipment!"));
 			return;
 		}
-		ContainsRemoveVisitor vr = new ContainsRemoveVisitor(type);
-		ContainsLoaderVisitor vl = new ContainsLoaderVisitor(type);
+		ContainsRemoveVisitor vr = new ContainsRemoveVisitor(p.getSpaceShip(),type);
+		ContainsLoaderVisitor vl = new ContainsLoaderVisitor(p.getSpaceShip(),type);
 		p.getSpaceShip().getComponent(source_coords).check(vr);
 		p.getSpaceShip().getComponent(target_coords).check(vl);
+		System.out.println("Player '"+p.getUsername()+"' moved cargo type: "+type+", from "+source_coords+" to "+target_coords);
 	}
 
 	@Override
@@ -158,9 +167,10 @@ class PlanetRewardState extends CardState {
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to discard cargo with an invalid type!"));
 			return;
 		}
-		ContainsRemoveVisitor v = new ContainsRemoveVisitor(type);
+		ContainsRemoveVisitor v = new ContainsRemoveVisitor(p.getSpaceShip(),type);
 		try {
 			p.getSpaceShip().getComponent(target_coords).check(v);
+			System.out.println("Player '"+p.getUsername()+"' removed cargo type: "+type+" from "+target_coords);
 		} catch (IllegalTargetException e) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to discard cargo from illegal coordinates!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to discard cargo from illegal coordinates!"));
@@ -177,16 +187,19 @@ class PlanetRewardState extends CardState {
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to progress during another player's turn!"));
 			return;
 		}
+		System.out.println("Player '" + p.getUsername() + "' motioned to progress!");
 		this.responded = true;
 	}
 
 	@Override
 	public void disconnect(Player p) throws ForbiddenCallException {
 		if (this.list.getFirst() == p) {
+			System.out.println("Player '" + p.getUsername() + "' disconnected!");
 			this.responded = true;
 			return;
 		}
 		this.list.remove(p);
+		System.out.println("Player '" + p.getUsername() + "' disconnected!");
 	}
 
 }

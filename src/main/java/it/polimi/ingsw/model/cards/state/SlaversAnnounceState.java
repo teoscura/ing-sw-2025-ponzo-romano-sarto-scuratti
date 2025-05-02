@@ -37,6 +37,11 @@ public class SlaversAnnounceState extends CardState {
 	@Override
 	public void init(ClientModelState new_state) {
 		super.init(new_state);
+		if(list.size()==this.state.getCount().getNumber()) System.out.println("New CardState -> Slavers Announce State!");
+		else System.out.println("    CardState -> Slavers Announce State!");
+		for(Player p : this.list){
+			System.out.println("	 - "+p.getUsername());
+		}
 	}
 
 	@Override
@@ -57,16 +62,18 @@ public class SlaversAnnounceState extends CardState {
 	}
 
 	@Override
-	protected CardState getNext() {
+    public CardState getNext() {
 		if (this.list.getFirst().getDisconnected() || this.list.getFirst().getRetired()) {
 			this.list.removeFirst();
 			if (!this.list.isEmpty()) return new SlaversAnnounceState(state, card, list);
+			System.out.println("Card exhausted, moving to a new one!");
 			return null;
 		}
 		if (!result) return new SlaversLoseState(state, card, list);
 		if (this.card.getExhausted()) return new SlaversRewardState(state, card, list);
 		this.list.removeFirst();
 		if (!this.list.isEmpty()) return new SlaversAnnounceState(state, card, list);
+		System.out.println("Card exhausted, moving to a new one!");
 		return null;
 	}
 
@@ -79,6 +86,7 @@ public class SlaversAnnounceState extends CardState {
 		}
 		try {
 			p.getSpaceShip().turnOn(target_coords, battery_coords);
+			System.out.println("Player '" + p.getUsername() + "' turned on component at"+target_coords+" using battery from "+battery_coords+"!");
 		} catch (IllegalTargetException e) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to turn on a component with invalid coordinates!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to turn on a component with invalid coordinates!"));
@@ -92,15 +100,18 @@ public class SlaversAnnounceState extends CardState {
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to progress during another player's turn!"));
 			return;
 		}
+		System.out.println("Player '" + p.getUsername() + "' motioned to progress!");
 		this.responded = true;
 	}
 
 	@Override
 	public void disconnect(Player p) throws ForbiddenCallException {
 		if (this.list.getFirst() == p) {
+			System.out.println("Player '" + p.getUsername() + "' disconnected!");
 			this.responded = true;
 		}
 		this.list.remove(p);
+		System.out.println("Player '" + p.getUsername() + "' disconnected!");
 	}
 
 

@@ -7,9 +7,9 @@ import it.polimi.ingsw.model.components.enums.ConnectorType;
 import it.polimi.ingsw.model.components.exceptions.ConnectorsSizeException;
 import it.polimi.ingsw.model.components.visitors.*;
 import it.polimi.ingsw.model.player.ShipCoords;
-import it.polimi.ingsw.model.player.iSpaceShip;
+import it.polimi.ingsw.model.player.SpaceShip;
 
-public abstract class BaseComponent implements iBaseComponent, iVisitable {
+public abstract class BaseComponent implements iVisitable {
 
 	private final int id;
 	private final ConnectorType[] connectors;
@@ -40,82 +40,79 @@ public abstract class BaseComponent implements iBaseComponent, iVisitable {
 		this.coords = coords;
 	}
 
-	@Override
+	
 	public int getID() {
 		return this.id;
 	}
 
-	@Override
+	
 	public ConnectorType[] getConnectors() {
 		return connectors;
 	}
 
-	@Override
+	
 	public ComponentRotation getRotation() {
 		return rotation;
 	}
 
-	@Override
+	
 	public void rotate(ComponentRotation rotation) {
 		this.rotation = rotation;
 	}
 
-	@Override
-	public boolean verify(iSpaceShip ship) {
+	
+	public boolean verify(SpaceShip ship) {
 		if (this.coords == null) throw new NullPointerException("Coords are not set");
-		iBaseComponent up = ship.getComponent(this.coords.up());
-		iBaseComponent right = ship.getComponent(this.coords.right());
-		iBaseComponent down = ship.getComponent(this.coords.down());
-		iBaseComponent left = ship.getComponent(this.coords.left());
-
+		BaseComponent up = ship.getComponent(this.coords.up());
+		BaseComponent right = ship.getComponent(this.coords.right());
+		BaseComponent down = ship.getComponent(this.coords.down());
+		BaseComponent left = ship.getComponent(this.coords.left());
 		if (up != ship.getEmpty()) {
 			if (!up.getConnector(ComponentRotation.U180).compatible(getConnector(ComponentRotation.U000))) return false;
 		}
 		if (right != ship.getEmpty()) {
-			if (!right.getConnector(ComponentRotation.U270).compatible(getConnector(ComponentRotation.U090)))
-				return false;
+			if (!right.getConnector(ComponentRotation.U270).compatible(getConnector(ComponentRotation.U090))) return false;
 		}
 		if (down != ship.getEmpty()) {
-			if (!down.getConnector(ComponentRotation.U000).compatible(getConnector(ComponentRotation.U180)))
-				return false;
+			if (!down.getConnector(ComponentRotation.U000).compatible(getConnector(ComponentRotation.U180))) return false;
 		}
-		if (left != ship.getEmpty()) {
-			return left.getConnector(ComponentRotation.U090).compatible(getConnector(ComponentRotation.U270));
+		if (left != ship.getEmpty()){
+			if(!left.getConnector(ComponentRotation.U090).compatible(getConnector(ComponentRotation.U270))) return false;
 		}
 		return true;
 	}
 
-	@Override
+	
 	public ConnectorType getConnector(ComponentRotation direction) {
 		int shift = direction.getShift() + (4 - this.rotation.getShift());
 		shift = shift % 4;
 		return connectors[shift];
 	}
 
-	@Override
+	
 	public ShipCoords getCoords() {
 		return this.coords;
 	}
 
-	@Override
+	
 	public boolean powerable() {
 		return false;
 	}
 
-	@Override
-	public abstract void onCreation(iSpaceShip ship);
+	
+	public abstract void onCreation(SpaceShip ship, ShipCoords coords);
 
-	@Override
-	public abstract void onDelete(iSpaceShip ship);
+	
+	public abstract void onDelete(SpaceShip ship);
 
-	@Override
+	
 	public abstract ClientComponent getClientComponent();
 
-	@Override
+	
 	public abstract void check(iVisitor v);
 
-	public iBaseComponent[] getConnectedComponents(iSpaceShip ship) {
-		iBaseComponent[] res = new iBaseComponent[]{ship.getEmpty(), ship.getEmpty(), ship.getEmpty(), ship.getEmpty()};
+	public BaseComponent[] getConnectedComponents(SpaceShip ship) {
+		BaseComponent[] res = new BaseComponent[]{ship.getEmpty(), ship.getEmpty(), ship.getEmpty(), ship.getEmpty()};
 		if (ship.getComponent(this.getCoords().up()) != ship.getEmpty()) {
 			if (this.getConnector(ComponentRotation.U000)
 					.connected(ship.getComponent(this.getCoords().up())
@@ -146,4 +143,5 @@ public abstract class BaseComponent implements iBaseComponent, iVisitable {
 		}
 		return res;
 	}
+
 }

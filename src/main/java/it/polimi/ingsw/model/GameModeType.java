@@ -65,15 +65,15 @@ public enum GameModeType {
 	}
 
 	private int[] getShape() {
-		if (this.level == 1) {
-			return new int[]{0, 1, 2, 4, 5, 6, 7, 8, 12, 13, 14, 20, 21, 27, 28, 31, 34};
-		} else {
+		if (this.level == 2) {
 			return new int[]{0, 1, 3, 5, 6, 7, 13, 31};
+		} else {
+			return new int[]{0, 1, 2, 4, 5, 6, 7, 8, 12, 13, 14, 20, 21, 27, 28, 31 ,34};
 		}
 	}
 
 	public ShipCoords getCenterCabin() {
-		if (this.level == 1 || this.level == 2) {
+		if (this.level == 2) {
 			return new ShipCoords(this, 3, 2);
 		} else {
 			return new ShipCoords(this, 3, 2);
@@ -81,6 +81,7 @@ public enum GameModeType {
 	}
 
 	public boolean isForbidden(ShipCoords coords) {
+		if(!coords.getType().equals(this)) throw new IllegalArgumentException();
 		int tmp = coords.y * this.width + coords.x;
 		for (int i : this.getShape()) {
 			if (i == tmp) return true;
@@ -93,9 +94,9 @@ public enum GameModeType {
 	}
 
 	public int[] getStartingPos() {
-		if (this.level == -1) {
+		if (this.level == 1) {
 			return new int[]{4, 2, 1, 0};
 		}
-		return new int[]{9, 5, 2, 0};
+		return new int[]{6, 3, 1, 0};
 	}
 }

@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 import it.polimi.ingsw.exceptions.ArgumentTooBigException;
+import it.polimi.ingsw.model.cards.exceptions.AlreadyVisitedException;
 import it.polimi.ingsw.model.cards.state.CardState;
 import it.polimi.ingsw.model.cards.state.PlanetAnnounceState;
 import it.polimi.ingsw.model.cards.utils.CardOrder;
@@ -45,7 +46,10 @@ public class PlanetCard extends Card {
 	public void apply(Player p, int id) {
 		if(p==null) throw new NullPointerException();
 		if(id>=this.planets.size()) throw new ArgumentTooBigException( "Sent a planet id larger than the list.");
-		if(id==-1 || this.planets.get(id).getVisited());
+		if(id==-1){
+			return;
+		}
+		if(this.planets.get(id).getVisited()) throw new AlreadyVisitedException();
 		this.left--;
 		this.planets.get(id).visit();
 		if(left==0) this.exhaust();

@@ -10,14 +10,15 @@ import java.io.Serializable;
 import it.polimi.ingsw.controller.server.ClientDescriptor;
 
 public class Player implements Serializable {
+	private transient ClientDescriptor descriptor;
 	private final String username;
 	private final PlayerColor color;
-	private transient ClientDescriptor descriptor;
-	private boolean retired = false;
-	private boolean disconnected = false;
+	private final SpaceShip ship;
 	private int credits;
 	private int score;
-	private final iSpaceShip ship;
+	private boolean retired = false;
+	private boolean disconnected = false;
+	
 
 	public Player(GameModeType gamemode, String username, PlayerColor color) {
 		if (username == null || color == PlayerColor.NONE) throw new NullPointerException();
@@ -37,6 +38,13 @@ public class Player implements Serializable {
 	public void retire() {
 		if (this.retired) throw new AlreadyPoweredException("Player has alredy retired.");
 		this.retired = true;
+		this.score += credits;
+		int sum = 0;
+		for (ShipmentType t : ShipmentType.values()) {
+			if (t.getValue() <= 0) continue;
+			sum += getSpaceShip().getContains()[t.getValue()] * t.getValue();
+		}
+		addScore((sum / 2 + sum % 2));
 	}
 
 	public boolean getRetired() {
@@ -78,8 +86,9 @@ public class Player implements Serializable {
 	public void finalScore() {
 		for (ShipmentType t : ShipmentType.values()) {
 			if (t.getValue() <= 0) continue;
-			this.score += this.getSpaceShip().getContains()[t.getValue() - 1] * t.getValue();
+			this.score += getSpaceShip().getContains()[t.getValue()] * t.getValue();
 		}
+		this.score += credits;
 	}
 
 	public void reconnect(ClientDescriptor new_descriptor) {
@@ -87,7 +96,7 @@ public class Player implements Serializable {
 		this.disconnected = false;
 	}
 
-	public iSpaceShip getSpaceShip() {
+	public SpaceShip getSpaceShip() {
 		return this.ship;
 	}
 
@@ -97,5 +106,14 @@ public class Player implements Serializable {
 
 	public ClientDescriptor getDescriptor() {
 		return this.descriptor;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || !(o instanceof Player)) return false;
+		Player player = (Player) o;
+		return this.username == player.username
+				&& this.color == player.color;
 	}
 }

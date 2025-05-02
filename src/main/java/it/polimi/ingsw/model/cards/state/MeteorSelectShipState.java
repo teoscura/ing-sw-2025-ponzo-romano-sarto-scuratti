@@ -19,12 +19,12 @@ import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.VoyageState;
 
-class MeteorNewCabinState extends CardState {
+class MeteorSelectShipState extends CardState {
 
 	private final int card_id;
 	private final ProjectileArray left;
 
-	public MeteorNewCabinState(VoyageState state, int card_id, ProjectileArray left) {
+	public MeteorSelectShipState(VoyageState state, int card_id, ProjectileArray left) {
 		super(state);
 		if (left == null) throw new NullPointerException();
 		if (card_id < 1 || card_id > 120) throw new IllegalArgumentException();
@@ -35,6 +35,7 @@ class MeteorNewCabinState extends CardState {
 	@Override
 	public void init(ClientModelState new_state) {
 		super.init(new_state);
+		System.out.println("    CardState -> Meteor Swarm Select Ship State!");
 	}
 
 	@Override
@@ -42,11 +43,14 @@ class MeteorNewCabinState extends CardState {
 		message.receive(this);
 		boolean missing = false;
 		for (Player p : this.state.getOrder(CardOrder.NORMAL)) {
-			missing = missing || p.getSpaceShip().getBrokeCenter();
+			missing = missing || p.getSpaceShip().getBlobsSize() > 1;
 		}
 		if (missing) {
 			this.state.broadcastMessage(new NotifyStateUpdateMessage(this.state.getClientState()));
 			return;
+		}
+		for(Player p : this.state.getOrder(CardOrder.NORMAL)){
+			if(p.getSpaceShip().getBlobsSize() == 1 && p.getSpaceShip().getCrew()[0]<=0) this.state.loseGame(p);
 		}
 		this.transition();
 	}
@@ -55,22 +59,24 @@ class MeteorNewCabinState extends CardState {
 	public ClientCardState getClientCardState() {
 		List<PlayerColor> tmp = new ArrayList<>();
 		for (Player p : this.state.getOrder(CardOrder.NORMAL)) {
-			if (p.getSpaceShip().getBrokeCenter()) tmp.add(p.getColor());
+			if (p.getSpaceShip().getBlobsSize()>1) tmp.add(p.getColor());
 		}
 		return new ClientNewCenterCardStateDecorator(new ClientBaseCardState(card_id), new ArrayList<>(tmp));
 	}
 
 	@Override
-	protected CardState getNext() {
+    public CardState getNext() {
 		this.left.getProjectiles().removeFirst();
 		if (!this.left.getProjectiles().isEmpty()) return new MeteorAnnounceState(state, card_id, left);
+		System.out.println("Card exhausted, moving to a new one!");
 		return null;
 	}
 
 	@Override
-	public void setNewShipCenter(Player p, ShipCoords new_center) {
+	public void selectBlob(Player p, ShipCoords blob_coord) {
 		try {
-			p.getSpaceShip().setCenter(new_center);
+			p.getSpaceShip().selectShipBlob(blob_coord);
+			System.out.println("Player '"+p.getUsername()+"' selected blob that contains coords "+blob_coord+".");
 		} catch (IllegalTargetException e) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to set his new center on an empty space!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to set his new center on an empty space!"));
@@ -82,9 +88,7 @@ class MeteorNewCabinState extends CardState {
 
 	@Override
 	public void disconnect(Player p) throws ForbiddenCallException {
-		if (p.getSpaceShip().getBrokeCenter()) {
-			this.state.loseGame(p);
-		}
+		System.out.println("Player '" + p.getUsername() + "' disconnected!");
 	}
 
 }

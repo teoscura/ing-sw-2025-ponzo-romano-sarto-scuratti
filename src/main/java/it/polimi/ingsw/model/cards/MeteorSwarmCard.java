@@ -1,12 +1,11 @@
 package it.polimi.ingsw.model.cards;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import it.polimi.ingsw.model.cards.state.CardState;
 import it.polimi.ingsw.model.cards.state.MeteorAnnounceState;
 import it.polimi.ingsw.model.cards.utils.Projectile;
 import it.polimi.ingsw.model.cards.utils.ProjectileArray;
-import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.state.VoyageState;
 
 public class MeteorSwarmCard extends Card {
@@ -23,14 +22,14 @@ public class MeteorSwarmCard extends Card {
         return new MeteorAnnounceState(state, this.getId(), meteorites);
     }
 
-    public List<Projectile> getMeteorites(){
+    public ArrayList<Projectile> getMeteorites(){
         return this.meteorites.getProjectiles();
     }
 
-    public boolean apply(Player p, Projectile meteorite){
-        if(p==null) throw new NullPointerException();
-        return p.getSpaceShip().handleMeteorite(meteorite);
-    }
+    // public boolean apply(Player p, Projectile meteorite){
+    //     if(p==null) throw new NullPointerException();
+    //     return p.getSpaceShip().handleMeteorite(meteorite);
+    // }
 
 }
 

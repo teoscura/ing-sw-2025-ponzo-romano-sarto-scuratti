@@ -38,6 +38,8 @@ public class ResumeWaitingState extends GameState {
 
     @Override
     public void init(){
+        System.out.println("New Game State -> Resume Waiting Room State");
+        this.broadcastMessage(new NotifyStateUpdateMessage(this.getClientState()));
     }
 
     @Override
@@ -47,7 +49,7 @@ public class ResumeWaitingState extends GameState {
             this.broadcastMessage(new NotifyStateUpdateMessage(this.getClientState()));
             return;
         }
-        for(Player p : this.players){
+        for(Player p : this.next.players){
             p.bindDescriptor(this.awaiting.get(p.getUsername()));
         }
         this.transition();
@@ -55,6 +57,7 @@ public class ResumeWaitingState extends GameState {
 
     @Override
     public GameState getNext() {
+        this.model.startGame();
         return this.next;
     }
 
@@ -88,6 +91,8 @@ public class ResumeWaitingState extends GameState {
             this.broadcastMessage(new ViewMessage("Client '"+client.getUsername()+"' attempted to connect to a resuming game, but someone already took that username's place!"));
             return;
         }
+        System.out.println("Client '"+client.getUsername()+"' connected!");
+        this.broadcastMessage(new ViewMessage("Client '"+client.getUsername()+"' connected!"));  
         this.awaiting.put(client.getUsername(), client);
         for(String username : this.next.players.stream().map(p->p.getUsername()).toList()){
             if(this.awaiting.get(username)==null) return;
