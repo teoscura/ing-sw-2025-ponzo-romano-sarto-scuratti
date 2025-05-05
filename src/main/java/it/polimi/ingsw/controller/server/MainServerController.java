@@ -105,8 +105,8 @@ public class MainServerController extends Thread implements RemoteServer {
 
     public void receiveMessage(ServerMessage message) {
 		if (message.getDescriptor() == null || !this.all_listeners.containsKey(message.getDescriptor().getUsername())) {
-			System.out.println("Recieved a message from a client not properly connected!");
-			this.broadcast(new ViewMessage("Recieved a message from a client not properly connected!"));
+			System.out.println("Received a message from a client not properly connected!");
+			this.broadcast(new ViewMessage("Received a message from a client not properly connected!"));
 			return;
 		}
         if (message.getDescriptor().getId() == -1 ) {
@@ -447,5 +447,5 @@ public class MainServerController extends Thread implements RemoteServer {
         ClientMessage message = new NotifyStateUpdateMessage(state);
         this.broadcast(message);
     }
-    
+
 }
