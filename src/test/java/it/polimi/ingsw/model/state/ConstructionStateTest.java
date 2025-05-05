@@ -10,6 +10,7 @@ import java.util.Arrays;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import it.polimi.ingsw.controller.DummyConnection;
 import it.polimi.ingsw.controller.server.ClientDescriptor;
 import it.polimi.ingsw.message.server.DiscardComponentMessage;
 import it.polimi.ingsw.message.server.SendContinueMessage;
@@ -36,10 +37,10 @@ public class ConstructionStateTest {
     void setUp() {
         model = new DummyModelInstance(1, null, GameModeType.TEST, PlayerCount.TWO);
         player1 = new Player(GameModeType.TEST, "Gigio1", PlayerColor.RED);
-        p1desc = new ClientDescriptor("Gigio1", null);
+        p1desc = new ClientDescriptor("Gigio1", new DummyConnection());
         p1desc.bindPlayer(player1);
         player2 = new Player(GameModeType.TEST, "Gigio2", PlayerColor.BLUE);
-        p2desc = new ClientDescriptor("Gigio2", null);
+        p2desc = new ClientDescriptor("Gigio2", new DummyConnection());
         p2desc.bindPlayer(player2);
     }
 

@@ -8,6 +8,7 @@ import java.util.Arrays;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import it.polimi.ingsw.controller.DummyConnection;
 import it.polimi.ingsw.controller.server.ClientDescriptor;
 import it.polimi.ingsw.model.DummyModelInstance;
 import it.polimi.ingsw.model.GameModeType;
@@ -59,12 +60,12 @@ public class EndscreenStateTest {
         player1.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 4, 2));
         c = f1.getComponent(55);
         player1.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 4, 1));
-        p1desc = new ClientDescriptor("p1", null);
+        p1desc = new ClientDescriptor("p1", new DummyConnection());
         p1desc.bindPlayer(player1);
         //4-2
         
         player2 = new Player(GameModeType.TEST, "p2", PlayerColor.BLUE);
-        p2desc = new ClientDescriptor("p2", null);
+        p2desc = new ClientDescriptor("p2", new DummyConnection());
         p2desc.bindPlayer(player2);
         c = f2.getComponent(62);
         c.rotate(ComponentRotation.U000); 
@@ -80,7 +81,7 @@ public class EndscreenStateTest {
         //Score is 13;
         
         player3 = new Player(GameModeType.TEST, "p3", PlayerColor.GREEN);
-        p3desc = new ClientDescriptor("p3", null);
+        p3desc = new ClientDescriptor("p3", new DummyConnection());
         p3desc.bindPlayer(player3);
         c = f3.getComponent(62);
         c.rotate(ComponentRotation.U000); 

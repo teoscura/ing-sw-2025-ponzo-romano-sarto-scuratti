@@ -29,6 +29,7 @@ import it.polimi.ingsw.model.PlayerCount;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.player.Player;
 
+@Deprecated
 public class ServerController extends Thread implements RemoteServer {
 
 	private final Server server;

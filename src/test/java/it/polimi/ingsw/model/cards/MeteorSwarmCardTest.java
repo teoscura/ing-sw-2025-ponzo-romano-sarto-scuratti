@@ -11,6 +11,7 @@ import java.util.Arrays;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import it.polimi.ingsw.controller.DummyConnection;
 import it.polimi.ingsw.controller.server.ClientDescriptor;
 import it.polimi.ingsw.message.server.SelectBlobMessage;
 import it.polimi.ingsw.message.server.SendContinueMessage;
@@ -74,7 +75,7 @@ public class MeteorSwarmCardTest {
         c = f1.getComponent(102);
         c.rotate(ComponentRotation.U270);
         player1.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 2, 2));
-		p1desc = new ClientDescriptor(player1.getUsername(), null);
+		p1desc = new ClientDescriptor(player1.getUsername(), new DummyConnection());
 		p1desc.bindPlayer(player1);
 
 		player2 = new Player(GameModeType.TEST, "p2", PlayerColor.RED);
@@ -93,7 +94,7 @@ public class MeteorSwarmCardTest {
         c = f2.getComponent(102);
         c.rotate(ComponentRotation.U270);
         player2.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 2, 2));
-		p2desc = new ClientDescriptor(player2.getUsername(), null);
+		p2desc = new ClientDescriptor(player2.getUsername(), new DummyConnection());
 		p2desc.bindPlayer(player2);
 
 		order = new ArrayList<>(Arrays.asList(player1, player2));

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.cards;
 
+import it.polimi.ingsw.controller.DummyConnection;
 import it.polimi.ingsw.controller.server.ClientDescriptor;
 import it.polimi.ingsw.message.server.SendContinueMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
@@ -92,7 +93,7 @@ class OpenSpaceCardTest {
 				new ShipCoords(GameModeType.TEST, 3, 3),
 				new ShipCoords(GameModeType.TEST, 2, 2)
 		);
-		turnOnDummy4.setDescriptor(new ClientDescriptor(dummy4.getUsername(), null) {{
+		turnOnDummy4.setDescriptor(new ClientDescriptor(dummy4.getUsername(), new DummyConnection()) {{
 			bindPlayer(dummy4);
 		}});
 		state.validate(turnOnDummy4);
@@ -100,19 +101,19 @@ class OpenSpaceCardTest {
 				new ShipCoords(GameModeType.TEST, 4, 3),  // se metto 3 3 da il giusto errore cercando di accendere un motore singolo
 				new ShipCoords(GameModeType.TEST, 2, 2)
 		);
-		turnOnDummy5.setDescriptor(new ClientDescriptor(dummy5.getUsername(), null) {{ bindPlayer(dummy5); }});
+		turnOnDummy5.setDescriptor(new ClientDescriptor(dummy5.getUsername(), new DummyConnection()) {{ bindPlayer(dummy5); }});
 		state.validate(turnOnDummy5);
 
 		ServerMessage continueDummy3 = new SendContinueMessage();
-		continueDummy3.setDescriptor(new ClientDescriptor(dummy3.getUsername(), null) {{ bindPlayer(dummy3); }});
+		continueDummy3.setDescriptor(new ClientDescriptor(dummy3.getUsername(), new DummyConnection()) {{ bindPlayer(dummy3); }});
 		state.validate(continueDummy3);
 
 		ServerMessage continueDummy4 = new SendContinueMessage();
-		continueDummy4.setDescriptor(new ClientDescriptor(dummy4.getUsername(), null) {{ bindPlayer(dummy4); }});
+		continueDummy4.setDescriptor(new ClientDescriptor(dummy4.getUsername(), new DummyConnection()) {{ bindPlayer(dummy4); }});
 		state.validate(continueDummy4);
 
 		ServerMessage continueDummy5 = new SendContinueMessage();
-		continueDummy5.setDescriptor(new ClientDescriptor(dummy5.getUsername(), null) {{ bindPlayer(dummy5); }});
+		continueDummy5.setDescriptor(new ClientDescriptor(dummy5.getUsername(), new DummyConnection()) {{ bindPlayer(dummy5); }});
 		state.validate(continueDummy5);
 
 		assertTrue(dummy3.getRetired());

@@ -9,16 +9,18 @@ import it.polimi.ingsw.model.player.Player;
 
 public class ClientDescriptor {
     
-    protected static final long TIMEOUT_DURATION = 15000L;
+    private static final long TIMEOUT_DURATION = 15000L;
     private final String username;
-    private transient final Connection connection;
+    private transient int id;
     private transient TimerTask pingtimer;
     private transient Player player = null;
+    private transient final Connection connection;
 
     public ClientDescriptor(String username, Connection connection){
-        if(username==null/*XXX rimetti connection == null*/) throw new NullPointerException();
+        if(username==null || connection == null) throw new NullPointerException();
         this.username = username;
         this.connection = connection;
+        this.id = -1;
     }
 
     public void bindPlayer(Player p){
@@ -38,6 +40,15 @@ public class ClientDescriptor {
 
     public String getUsername(){
         return this.username;
+    }
+
+    public int getId(){
+        return this.id;
+    }
+
+    public void setID(int id){
+        if(id<-1) throw new IllegalArgumentException();
+        this.id = id;
     }
 
     public Player getPlayer(){

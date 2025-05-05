@@ -8,6 +8,8 @@ import java.util.Arrays;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import it.polimi.ingsw.controller.DummyConnection;
+import it.polimi.ingsw.controller.DummyController;
 import it.polimi.ingsw.controller.server.ClientDescriptor;
 import it.polimi.ingsw.message.server.PlayerGiveUpMessage;
 import it.polimi.ingsw.message.server.SendContinueMessage;
@@ -49,22 +51,22 @@ public class VoyageStateTest {
         c = f.getComponent(71);
         c.rotate(ComponentRotation.U000);
         player1.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 3, 3));
-        p1desc = new ClientDescriptor("p1", null);
+        p1desc = new ClientDescriptor("p1", new DummyConnection());
         p1desc.bindPlayer(player1);
         //Has 1 engine power and retires
         player2 = new Player(GameModeType.TEST, "p2", PlayerColor.BLUE);
         c = f.getComponent(72);
         c.rotate(ComponentRotation.U000);
         player2.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 3, 3));
-        p2desc = new ClientDescriptor("p2", null);
+        p2desc = new ClientDescriptor("p2", new DummyConnection());
         p2desc.bindPlayer(player2);
         //Has 0 engine power and retires
         player3 = new Player(GameModeType.TEST, "p3", PlayerColor.GREEN);
-        p3desc = new ClientDescriptor("p3", null);
+        p3desc = new ClientDescriptor("p3", new DummyConnection());
         p3desc.bindPlayer(player3);
         
         ArrayList<Player> players = new ArrayList<>(Arrays.asList(new Player[]{player1, player2, player3}));
-        model = new DummyModelInstance(0, null, GameModeType.TEST, PlayerCount.THREE);
+        model = new DummyModelInstance(0, new DummyController(), GameModeType.TEST, PlayerCount.THREE);
         deck = new DummyTestFlightCards();
         planche = new Planche(GameModeType.TEST, players);
         state = new VoyageState(model, GameModeType.TEST, PlayerCount.THREE, players, deck, planche);   

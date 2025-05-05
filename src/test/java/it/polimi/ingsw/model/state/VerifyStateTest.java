@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.state;
 
+import it.polimi.ingsw.controller.DummyConnection;
 import it.polimi.ingsw.controller.server.ClientDescriptor;
 import it.polimi.ingsw.message.server.*;
 import it.polimi.ingsw.model.DummyModelInstance;
@@ -54,7 +55,7 @@ class VerifyStateTest {
 		c = f1.getComponent(25);
 		c.rotate(ComponentRotation.U000);
 		player1.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.LVL2, 2, 2));
-		p1desc = new ClientDescriptor("player1", null);
+		p1desc = new ClientDescriptor("player1", new DummyConnection());
 		p1desc.bindPlayer(player1);
 
 		//player ciambella
@@ -80,7 +81,7 @@ class VerifyStateTest {
 		c = f2.getComponent(23);
 		c.rotate(ComponentRotation.U090);
 		player2.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.LVL2, 4, 3));
-		p2desc = new ClientDescriptor("player2", null);
+		p2desc = new ClientDescriptor("player2", new DummyConnection());
 		p2desc.bindPlayer(player2);
 
 		//player manubrio
@@ -109,7 +110,7 @@ class VerifyStateTest {
 		c = f3.getComponent(70);
 		c.rotate(ComponentRotation.U090);
 		player3.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.LVL2, 5, 3));
-		p3desc = new ClientDescriptor("player3", null);
+		p3desc = new ClientDescriptor("player3", new DummyConnection());
 		p3desc.bindPlayer(player3);
 
 		ArrayList<Player> players = new ArrayList<>(Arrays.asList(player1, player2, player3));

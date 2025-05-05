@@ -17,6 +17,7 @@ public class ModelInstance {
 	protected final int id;
 	protected transient ServerController controller;
 	protected boolean started;
+	protected boolean ended;
 	protected GameState state;
 
 	public ModelInstance(int id, ServerController server, GameModeType type, PlayerCount count) {
@@ -49,20 +50,15 @@ public class ModelInstance {
 		return this.started;
 	}
 
-	public void endGame() {
-		if (!this.started) throw new RuntimeException();
-		this.controller.endGame();
-	}
-
 	public GameState getState() {
 		return this.state;
 	}
 
 	public void setState(GameState next) {
-		if (next == null) {
-			this.endGame();
-		}
 		this.state = next;
+		if (this.state == null) {
+			return;
+		}
 		if (this.state.toSerialize()) {
 			this.serialize();
 		}

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.cards;
 
+import it.polimi.ingsw.controller.DummyConnection;
 import it.polimi.ingsw.controller.server.ClientDescriptor;
 import it.polimi.ingsw.message.server.*;
 import it.polimi.ingsw.model.DummyModelInstance;
@@ -63,7 +64,7 @@ public class CombatZoneCardTest {
 		player1.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 4, 3));
 		CrewRemoveVisitor v = new CrewRemoveVisitor(player1.getSpaceShip());
 		player1.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 3, 2)).check(v);
-		p1desc = new ClientDescriptor(player1.getUsername(), null);
+		p1desc = new ClientDescriptor(player1.getUsername(), new DummyConnection());
 		p1desc.bindPlayer(player1);
 
 		//Ha tanta tanta crew. minor cannone e motore
@@ -83,7 +84,7 @@ public class CombatZoneCardTest {
 		c = f.getComponent(49);
 		c.rotate(ComponentRotation.U000);
 		player2.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 5, 3));
-		p2desc = new ClientDescriptor(player2.getUsername(), null);
+		p2desc = new ClientDescriptor(player2.getUsername(), new DummyConnection());
 		p2desc.bindPlayer(player2);
 
 		//Ha tanti cannoni, zero motori.
@@ -97,7 +98,7 @@ public class CombatZoneCardTest {
 		c = f.getComponent(120);
 		c.rotate(ComponentRotation.U090);
 		player3.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 4, 2));
-		p3desc = new ClientDescriptor(player3.getUsername(), null);
+		p3desc = new ClientDescriptor(player3.getUsername(), new DummyConnection());
 		p3desc.bindPlayer(player3);
 
 
