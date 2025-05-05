@@ -189,7 +189,7 @@ public class LobbyController extends Thread implements RemoteServer {
 	public ClientGameListEntry getClientInfo() {
 		ClientGameListEntry entry = null;
 		synchronized(queue_lock){
-			entry = this.model.getOngoingEntry();
+			entry = this.model.getEntry();
 		}
 		return entry;
 	}

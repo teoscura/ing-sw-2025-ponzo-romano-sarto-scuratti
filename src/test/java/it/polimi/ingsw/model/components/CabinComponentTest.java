@@ -40,24 +40,7 @@ class CabinComponentTest {
 	@Test
 	void check() {
 	}
-
-	//TODO
-	/*@Test
-	void getCrew() {
-		assertEquals(2, component_both.getCrew());
-		assertEquals(0, component_brown.getCrew());
-		assertEquals(0, component_purple.getCrew());
-		assertEquals(0, component_human.getCrew());
-
-		ShipCoords coords = new ShipCoords(GameModeType.LVL2, 3, 3);
-		ship.addComponent(component_human, coords);
-		component_human.setCrew(ship, 2, AlienType.HUMAN);
-		assertEquals(2, component_human.getCrew());
-
-		/*component_brown.setCrew(ship, 1, AlienType.BROWN);
-		assertEquals(1, component_brown.getCrew());*/
-	//}
-
+	
 	@Test
 	void getCrewType() {
 		assertEquals(AlienType.HUMAN, component_human.getCrewType());

@@ -1,6 +1,6 @@
 package it.polimi.ingsw.message.server;
 
-import it.polimi.ingsw.controller.server.ServerController;
+import it.polimi.ingsw.controller.server.MainServerController;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 
 public class UsernameSetupMessage extends ServerMessage{
@@ -17,7 +17,7 @@ public class UsernameSetupMessage extends ServerMessage{
     }
 
     @Override
-    public void receive(ServerController server) throws ForbiddenCallException {
+    public void receive(MainServerController server) throws ForbiddenCallException {
         throw new ForbiddenCallException("Cannot setup username after finishing to connect!");
     }
     

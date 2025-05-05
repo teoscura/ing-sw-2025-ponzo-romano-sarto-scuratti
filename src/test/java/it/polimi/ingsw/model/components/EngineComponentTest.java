@@ -12,11 +12,6 @@ import static org.junit.jupiter.api.Assertions.*;
 class EngineComponentTest {
 
 	@Test
-	void verify() {
-		//TODO
-	}
-
-	@Test
 	void check() {
 	}
 

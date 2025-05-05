@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.TimerTask;
 
 import it.polimi.ingsw.message.client.ClientMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
@@ -12,6 +13,7 @@ import it.polimi.ingsw.message.server.UsernameSetupMessage;
 public class SocketClient implements Connection {
 
 	private final Socket socket;
+	private TimerTask setup_timeout;
 	private String username;
 	private final ObjectOutputStream out;
 	private final ObjectInputStream in;
@@ -21,6 +23,14 @@ public class SocketClient implements Connection {
 		this.socket = socket;
 		this.out = new ObjectOutputStream(socket.getOutputStream());
 		this.in = new ObjectInputStream(socket.getInputStream());
+	}
+
+	public void setTimeout(TimerTask task){
+		this.setup_timeout = task;
+	}
+
+	public void cancelTimeout(){
+		this.setup_timeout.cancel();
 	}
 
 	public Socket getSocket() {

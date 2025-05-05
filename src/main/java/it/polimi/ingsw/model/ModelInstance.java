@@ -1,10 +1,7 @@
 package it.polimi.ingsw.model;
 
-import java.util.HashMap;
-
 import it.polimi.ingsw.controller.server.ClientDescriptor;
 import it.polimi.ingsw.controller.server.LobbyController;
-import it.polimi.ingsw.exceptions.PlayerNotFoundException;
 import it.polimi.ingsw.message.client.ClientMessage;
 import it.polimi.ingsw.message.server.ServerConnectMessage;
 import it.polimi.ingsw.message.server.ServerDisconnectMessage;
@@ -125,22 +122,8 @@ public class ModelInstance {
 		this.controller.broadcast(message);
 	}
 
-	public ClientGameListEntry getOngoingEntry(){
-		return this.state.getOngoingEntry();
-	}
-
-	public ClientGameListEntry getUnfinishedEntry(){
-		HashMap<PlayerColor, String> players = new HashMap<>();
-		for(PlayerColor c : PlayerColor.values()){
-			if(c.getOrder()<0) continue;
-			if(c.getOrder()+1>=this.state.getCount().getNumber()) break;
-			try {
-				players.put(c, this.state.getPlayer(c).getUsername());
-			} catch (PlayerNotFoundException e) {
-				throw new RuntimeException();
-			}
-		}
-		return new ClientGameListEntry(this.state.getType(), this.state.toString(), players, id);
+	public ClientGameListEntry getEntry(){
+		return this.state.getOngoingEntry(this);
 	}
 
 }

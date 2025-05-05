@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Queue;
+import java.util.Timer;
 import java.util.TimerTask;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -65,7 +66,6 @@ public class MainServerController extends Thread implements RemoteServer {
         this.updateUnfinishedList();
         this.next_id = this.saved.keySet().stream().max(Integer::compare).orElse(0) + 1;
         server = new Server(this);
-        server.start();
     }
 
     static public MainServerController getInstance(){
@@ -78,6 +78,7 @@ public class MainServerController extends Thread implements RemoteServer {
 
     @Override
 	public void run() {
+        this.server.start();
 		while (true) {
 			synchronized (queue_lock) {
 				while(this.queue.isEmpty()){
@@ -159,7 +160,10 @@ public class MainServerController extends Thread implements RemoteServer {
 				return;
 			}
 			this.to_setup_tcp.add(client);
-            //XXX timeout 20seconds to avoid if they dont connect correctly.
+            TimerTask task = this.TCPTimeoutTask(instance, client);
+            Timer t = new Timer(true);
+            client.setTimeout(task);
+            t.schedule(task, 20000L);
 		}
 	}
 
@@ -169,7 +173,7 @@ public class MainServerController extends Thread implements RemoteServer {
 			return;
 		}
 		this.to_setup_tcp.remove(client);
-        //XXX kill timer for that client.
+        client.cancelTimeout();
 		if (!this.validateUsername(username)) {
 			System.out.println("A client attempted to connect with an invalid name!");
 			return;
@@ -210,7 +214,7 @@ public class MainServerController extends Thread implements RemoteServer {
 		return matcher.matches();
 	}
 
-    private void connect(ClientDescriptor client) throws ForbiddenCallException {
+    public void connect(ClientDescriptor client) throws ForbiddenCallException {
         //Either add him to a game if hes reconnecting, or add 
         synchronized(listeners_lock){
             this.all_listeners.put(client.getUsername(), client);
@@ -261,6 +265,17 @@ public class MainServerController extends Thread implements RemoteServer {
 		client.setPingTimerTask(this.timeoutTask(this, client));
 	}
 
+    public TimerTask TCPTimeoutTask(MainServerController controller, SocketClient client) {
+		return new TimerTask() {
+			public void run() {
+				synchronized (listeners_lock) {
+					System.out.println("Socket '" + client.getSocket().getInetAddress() + "' didn't setup before timing out!");
+					to_setup_tcp.remove(client);
+				}
+			}
+		};
+	}
+
     private TimerTask timeoutTask(MainServerController controller, ClientDescriptor client) {
 		return new TimerTask() {
 			public void run() {
@@ -275,6 +290,11 @@ public class MainServerController extends Thread implements RemoteServer {
     // -------------------------------------------------------------
     // Games management utilities and methods.
     // -------------------------------------------------------------
+
+    public void enterSetup(ClientDescriptor client){
+        //FIXME
+
+    }
 
     private void updateUnfinishedList(){
         Pattern saved_game_pattern = Pattern.compile("^gtunfinished-[0-9]+\\.gtuf$");
@@ -325,6 +345,7 @@ public class MainServerController extends Thread implements RemoteServer {
      //Game opening and closing.
      public void openNewRoom(ClientDescriptor client, GameModeType type, PlayerCount count) throws ForbiddenCallException {
         LobbyController new_lobby = new LobbyController(this.next_id, new ModelInstance(this.next_id, type, count));
+        new_lobby.start();
         synchronized(lobbies_lock){
             this.lobbies.put(this.next_id, new_lobby);
             this.next_id++;
@@ -344,10 +365,11 @@ public class MainServerController extends Thread implements RemoteServer {
             loaded = this.saved.get(id);
         }
         LobbyController new_lobby = null;
+        loaded.afterSerialRestart();
+        loaded.setController(new_lobby);
+        new_lobby = new LobbyController(id, loaded);
+        new_lobby.start();
         synchronized(lobbies_lock){
-            loaded.afterSerialRestart();
-            loaded.setController(new_lobby);
-            new_lobby = new LobbyController(id, loaded);
             this.lobbies.put(this.next_id, new_lobby);
             this.next_id++;
         }
@@ -355,11 +377,16 @@ public class MainServerController extends Thread implements RemoteServer {
         this.notifyLobbyListeners();
 	}
 
-    public void gameFinishCleanup(int id){
+    public void gameFinishCleanup(int id) {
         synchronized(lobbies_lock){
             var l = this.lobbies.get(id);
             if(l == null) throw new RuntimeException();
             this.lobbies.remove(id);
+            try {
+                l.join();
+            } catch (InterruptedException e){
+                e.printStackTrace();
+            }
         }
         this.updateUnfinishedList();
         this.notifyLobbyListeners();
@@ -395,5 +422,7 @@ public class MainServerController extends Thread implements RemoteServer {
         ClientMessage message = new NotifyStateUpdateMessage(state);
         this.broadcast(message);
     }
+
+    //XXX allow setups only to ppl inside setuppers class.
 
 }

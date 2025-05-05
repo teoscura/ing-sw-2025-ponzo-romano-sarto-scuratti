@@ -14,7 +14,6 @@ import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ConnectorType;
 import it.polimi.ingsw.model.components.exceptions.ContainerEmptyException;
 
-// TODO
 class CommonBoardTest {
 
     CommonBoard board;

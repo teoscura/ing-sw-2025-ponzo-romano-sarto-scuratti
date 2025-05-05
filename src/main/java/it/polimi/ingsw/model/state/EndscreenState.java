@@ -8,6 +8,7 @@ import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.ModelInstance;
 import it.polimi.ingsw.model.PlayerCount;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
+import it.polimi.ingsw.model.client.ClientGameListEntry;
 import it.polimi.ingsw.model.client.player.ClientEndgamePlayer;
 import it.polimi.ingsw.model.client.state.ClientEndgameState;
 import it.polimi.ingsw.model.client.state.ClientState;
@@ -93,7 +94,11 @@ public class EndscreenState extends GameState {
 
 	@Override
 	public String toString() {
-		return "should never be called";
+		return "Endscreen State";
+	}
+
+	public ClientGameListEntry getOngoingEntry(ModelInstance model){
+		return new ClientGameListEntry(type, this.toString(), this.players.stream().map(p->p.getUsername()).toList(), model.getID());
 	}
 
 }

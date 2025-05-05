@@ -10,6 +10,7 @@ import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.ModelInstance;
 import it.polimi.ingsw.model.PlayerCount;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
+import it.polimi.ingsw.model.client.ClientGameListEntry;
 import it.polimi.ingsw.model.client.player.ClientWaitingPlayer;
 import it.polimi.ingsw.model.client.state.ClientState;
 import it.polimi.ingsw.model.client.state.ClientWaitingRoomState;
@@ -105,7 +106,12 @@ public class WaitingState extends GameState {
 
 	@Override
 	public String toString() {
-		return "should never be called";
+		return "Waiting State";
+	}
+
+	@Override
+    public ClientGameListEntry getOngoingEntry(ModelInstance model){
+		return new ClientGameListEntry(type, this.toString(), connected.stream().map(c->c.getUsername()).toList(), model.getID());
 	}
 
 }

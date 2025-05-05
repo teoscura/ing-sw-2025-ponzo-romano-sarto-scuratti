@@ -15,6 +15,7 @@ import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.board.CommonBoard;
 import it.polimi.ingsw.model.board.iCards;
 import it.polimi.ingsw.model.board.iCommonBoard;
+import it.polimi.ingsw.model.client.ClientGameListEntry;
 import it.polimi.ingsw.model.client.state.ClientState;
 import it.polimi.ingsw.model.components.BaseComponent;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
@@ -241,5 +242,10 @@ public abstract class ConstructionState extends GameState {
 	public ArrayList<Integer> getDiscarded(){
 		return this.board.getDiscarded();
 	}
+
+	public ClientGameListEntry getOngoingEntry(ModelInstance model){
+		return new ClientGameListEntry(type, this.toString(), this.players.stream().map(p->p.getUsername()).toList(), model.getID());
+	}
+
 
 }

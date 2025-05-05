@@ -11,6 +11,7 @@ import it.polimi.ingsw.model.PlayerCount;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.board.Planche;
 import it.polimi.ingsw.model.board.iCards;
+import it.polimi.ingsw.model.client.ClientGameListEntry;
 import it.polimi.ingsw.model.client.player.ClientVerifyPlayer;
 import it.polimi.ingsw.model.client.state.ClientState;
 import it.polimi.ingsw.model.client.state.ClientVerifyState;
@@ -219,6 +220,11 @@ public class VerifyState extends GameState {
 	@Override
 	public String toString() {
 		return "Verify State";
+	}
+
+	@Override
+	public ClientGameListEntry getOngoingEntry(ModelInstance model){
+		return new ClientGameListEntry(type, this.toString(), this.players.stream().map(p->p.getUsername()).toList(), model.getID());
 	}
 
 }

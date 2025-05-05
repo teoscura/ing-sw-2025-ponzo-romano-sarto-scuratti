@@ -1,12 +1,12 @@
 package it.polimi.ingsw;
 
-import it.polimi.ingsw.controller.server.ServerController;
+import it.polimi.ingsw.controller.server.MainServerController;
 
 public class ServerMain {
 
 	public static void main(String[] args) {
 		//TODO: ip configuration.
-		ServerController controller = new ServerController();
+		MainServerController controller = MainServerController.getInstance();
 		controller.start();
 		String line = null;
 		do {
