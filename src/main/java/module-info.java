@@ -7,4 +7,5 @@ module it.polimi.ingsw {
 	opens it.polimi.ingsw to javafx.fxml;
 	opens it.polimi.ingsw.gui to javafx.graphics;
 	exports it.polimi.ingsw;
+	exports it.polimi.ingsw.gui;
 }
