@@ -101,7 +101,7 @@ public class MeteorSwarmCardTest {
 		order = new ArrayList<>(Arrays.asList(player1, player2));
 		players = new ArrayList<>(Arrays.asList(player1, player2));
 		model = new DummyModelInstance(1, GameModeType.TEST, PlayerCount.TWO);
-        model.setController(new DummyController(model.getID(), model));
+        model.setController(new DummyController(model.getID()));
 		planche = new Planche(GameModeType.LVL2, order);
 		cards = new TestFlightCards();
 		state = new DummyVoyageState(model, GameModeType.LVL2, PlayerCount.TWO, players, cards, planche);

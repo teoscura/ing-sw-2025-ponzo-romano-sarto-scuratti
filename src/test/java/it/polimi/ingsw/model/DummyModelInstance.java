@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.controller.DummyController;
 import it.polimi.ingsw.controller.server.ClientDescriptor;
 import it.polimi.ingsw.message.client.ClientMessage;
 import it.polimi.ingsw.message.server.ServerConnectMessage;
@@ -13,7 +14,7 @@ import it.polimi.ingsw.model.state.ResumeWaitingState;
 public class DummyModelInstance extends ModelInstance {
 
 	public DummyModelInstance(int id, GameModeType type, PlayerCount count) {
-		super(id, type, count);
+		super(id, new DummyController(id), type, count);
 	}
 
 	public String toString() {

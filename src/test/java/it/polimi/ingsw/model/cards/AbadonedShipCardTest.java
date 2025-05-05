@@ -72,7 +72,7 @@ public class AbadonedShipCardTest {
 		ArrayList<Player> order = new ArrayList<>(Arrays.asList(player1, player2, player3));
 		ArrayList<Player> players = new ArrayList<>(Arrays.asList(player1, player2, player3));
 		model = new DummyModelInstance(1, GameModeType.TEST, PlayerCount.THREE);
-		model.setController(new DummyController(model.getID(), model));
+		model.setController(new DummyController(model.getID()));
 		TestFlightCards cards = new TestFlightCards();
 		planche = new Planche(GameModeType.TEST, order);
 		state = new DummyVoyageState(model, GameModeType.TEST, PlayerCount.THREE, players, cards, planche);

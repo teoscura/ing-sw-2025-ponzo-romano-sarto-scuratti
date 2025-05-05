@@ -27,7 +27,7 @@ class PlancheTest {
 		ArrayList<Player> order = new ArrayList<>(Arrays.asList(new Player[]{p1,p2}));
 		Planche planche = new Planche(GameModeType.TEST, order);
 		model = new DummyModelInstance(1, GameModeType.TEST, PlayerCount.TWO);
-		model.setController(new DummyController(model.getID(), model));
+		model.setController(new DummyController(model.getID()));
 		state = new DummyVoyageState(model, GameModeType.TEST, PlayerCount.TWO, order, new TestFlightCards(), planche);
 		
 		assertTrue(2==(planche.getPlayerPosition(p1)-planche.getPlayerPosition(p2)));
@@ -42,7 +42,7 @@ class PlancheTest {
 		ArrayList<Player> order = new ArrayList<>(Arrays.asList(new Player[]{p1,p2}));
 		Planche planche = new Planche(GameModeType.TEST, order);
 		model = new DummyModelInstance(1, GameModeType.TEST, PlayerCount.TWO);
-		model.setController(new DummyController(model.getID(), model));
+		model.setController(new DummyController(model.getID()));
 		state = new DummyVoyageState(model, GameModeType.TEST, PlayerCount.TWO, order, new TestFlightCards(), planche);
 		
 		assertTrue(2==(planche.getPlayerPosition(p1)-planche.getPlayerPosition(p2)));

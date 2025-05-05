@@ -21,10 +21,11 @@ public class ModelInstance {
 	protected boolean ended;
 	protected GameState state;
 
-	public ModelInstance(int id, GameModeType type, PlayerCount count) {
+	public ModelInstance(int id, LobbyController controller, GameModeType type, PlayerCount count) {
 		if (id < 0) throw new IllegalArgumentException();
 		this.id = id;
 		this.state = new WaitingState(this, type, count);
+		this.controller = controller;
 		this.state.init();
 	}
 

@@ -37,7 +37,7 @@ public class ConstructionStateTest {
     @BeforeEach
     void setUp() {
         model = new DummyModelInstance(1, GameModeType.TEST, PlayerCount.TWO);
-        model.setController(new DummyController(model.getID(), model));
+        model.setController(new DummyController(model.getID()));
         player1 = new Player(GameModeType.TEST, "Gigio1", PlayerColor.RED);
         p1desc = new ClientDescriptor("Gigio1", new DummyConnection());
         p1desc.bindPlayer(player1);

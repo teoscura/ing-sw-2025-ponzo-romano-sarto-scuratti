@@ -38,6 +38,7 @@ public class MainServerController extends Thread implements RemoteServer {
 
     private final HashMap<String, ClientDescriptor> all_listeners;
     private final HashMap<String, ClientDescriptor> lob_listeners;
+    private final HashMap<String, ClientDescriptor> stp_listeners;
     private final HashMap<String, Integer> disconnected;
     private final List<SocketClient> to_setup_tcp;
 	private final Object listeners_lock;
@@ -54,6 +55,7 @@ public class MainServerController extends Thread implements RemoteServer {
     private MainServerController(){
         all_listeners = new HashMap<>();
         lob_listeners = new HashMap<>();
+        stp_listeners = new HashMap<>();
         disconnected = new HashMap<>();
         to_setup_tcp = new ArrayList<>();
         listeners_lock = new Object();
@@ -291,11 +293,6 @@ public class MainServerController extends Thread implements RemoteServer {
     // Games management utilities and methods.
     // -------------------------------------------------------------
 
-    public void enterSetup(ClientDescriptor client){
-        //FIXME
-
-    }
-
     private void updateUnfinishedList(){
         Pattern saved_game_pattern = Pattern.compile("^gtunfinished-[0-9]+\\.gtuf$");
 		File current_directory = new File(".");
@@ -322,6 +319,11 @@ public class MainServerController extends Thread implements RemoteServer {
                 e.printStackTrace();
             }
         }
+        synchronized(lobbies_lock){
+            for(ModelInstance m : saved_tmp){
+                if(this.lobbies.get(m.getID())!=null) saved_tmp.remove(m);
+            }
+        }
         synchronized(saved_lock){
             this.saved.clear();
             for(ModelInstance m : saved_tmp){
@@ -330,32 +332,52 @@ public class MainServerController extends Thread implements RemoteServer {
         }
     }
 
-	public void getUnfinishedList(ClientDescriptor client) throws ForbiddenCallException {
+	public void enterSetup(ClientDescriptor client) throws ForbiddenCallException {
+        synchronized(listeners_lock){
+            if (this.stp_listeners.containsKey(client.getUsername())) {
+                System.out.println("Client '" + client.getUsername() + "' started setting up a lobby, but he's already doing that!");
+                return;
+            }
+            this.stp_listeners.put(client.getUsername(), client);
+        }
 		ClientSetupState state = null;
         ArrayList<ClientGameListEntry> tmp = new ArrayList<>();
-        synchronized(lobbies_lock){
-            for(var l : this.lobbies.values()){
-                tmp.add(l.getClientInfo());
+        synchronized(saved_lock){
+            for(var m : this.saved.values()){
+                tmp.add(m.getEntry());
             }
         }
         state = new ClientSetupState(client.getUsername(), tmp);
         this.sendMessage(client, new NotifyStateUpdateMessage(state));
 	}
 
-     //Game opening and closing.
-     public void openNewRoom(ClientDescriptor client, GameModeType type, PlayerCount count) throws ForbiddenCallException {
-        LobbyController new_lobby = new LobbyController(this.next_id, new ModelInstance(this.next_id, type, count));
+    public void openNewRoom(ClientDescriptor client, GameModeType type, PlayerCount count) throws ForbiddenCallException {
+        synchronized(listeners_lock){
+            if (!this.stp_listeners.containsKey(client.getUsername())) {
+                System.out.println("Client '" + client.getUsername() + "' attempted open a lobby, but he isn't setting up anything!");
+                return;
+            }
+        }
+        LobbyController new_lobby = new LobbyController(this.next_id);
+        ModelInstance model = new ModelInstance(this.next_id, new_lobby, type, count);
+        new_lobby.setModel(model);
         new_lobby.start();
         synchronized(lobbies_lock){
             this.lobbies.put(this.next_id, new_lobby);
             this.next_id++;
         }
+        this.stp_listeners.remove(client.getUsername());
         new_lobby.connect(client);
         this.notifyLobbyListeners();
 	}
 
 	public void openUnfinished(ClientDescriptor client, int id) throws ForbiddenCallException {
-        //ADD TO MODEL LIST
+        synchronized(listeners_lock){
+            if (!this.stp_listeners.containsKey(client.getUsername())) {
+                System.out.println("Client '" + client.getUsername() + "' attempted open a lobby, but he isn't setting up anything!");
+                return;
+            }
+        }
         ModelInstance loaded = null;
         synchronized(saved_lock){
             if(!saved.containsKey(id)){
@@ -364,15 +386,18 @@ public class MainServerController extends Thread implements RemoteServer {
             }
             loaded = this.saved.get(id);
         }
+        this.updateUnfinishedList();
         LobbyController new_lobby = null;
         loaded.afterSerialRestart();
         loaded.setController(new_lobby);
-        new_lobby = new LobbyController(id, loaded);
+        new_lobby = new LobbyController(id);
+        new_lobby.setModel(loaded);
         new_lobby.start();
         synchronized(lobbies_lock){
             this.lobbies.put(this.next_id, new_lobby);
             this.next_id++;
         }
+        this.stp_listeners.remove(client.getUsername());
         new_lobby.connect(client);
         this.notifyLobbyListeners();
 	}
@@ -422,7 +447,5 @@ public class MainServerController extends Thread implements RemoteServer {
         ClientMessage message = new NotifyStateUpdateMessage(state);
         this.broadcast(message);
     }
-
-    //XXX allow setups only to ppl inside setuppers class.
-
+    
 }

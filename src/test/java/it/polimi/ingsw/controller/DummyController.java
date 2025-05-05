@@ -6,8 +6,8 @@ import it.polimi.ingsw.model.ModelInstance;
 
 public class DummyController extends LobbyController {
 
-    public DummyController(int id, ModelInstance model) {
-        super(id, model);
+    public DummyController(int id) {
+        super(id);
     }
 
     @Override

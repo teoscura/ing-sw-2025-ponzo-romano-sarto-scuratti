@@ -24,7 +24,7 @@ class WaitingStateTest {
     @BeforeEach
     void setUp() {
         model = new DummyModelInstance(1, GameModeType.TEST, PlayerCount.THREE);
-        model.setController(new DummyController(model.getID(), model));
+        model.setController(new DummyController(model.getID()));
         waiting_state = new WaitingState(model, GameModeType.TEST, PlayerCount.THREE);
         model.setState(waiting_state);
         p1desc = new ClientDescriptor("Gigio1", new DummyConnection());

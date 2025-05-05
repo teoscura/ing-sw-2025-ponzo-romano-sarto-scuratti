@@ -31,20 +31,23 @@ public class LobbyController extends Thread implements RemoteServer {
     private final Object queue_lock = new Object();
 
     private final String serializer_path;
-    private final ModelInstance model;
+    private ModelInstance model;
 	private Timer dsctimer = null;
 
 
-    public LobbyController(int id, ModelInstance model){
-        if(model == null) throw new NullPointerException();
+    public LobbyController(int id){
         if(id<0) throw new IllegalArgumentException();
         this.id = id;
-        this.model = model;
         this.serializer_path = "gtunfinished-" + this.id + ".gtuf";
     }
 
+	public void setModel(ModelInstance model){
+		this.model = model;
+	}
+
     @Override
 	public void run() {
+		if(model == null) throw new NullPointerException();
 		while (model.getState()!=null) {
 			synchronized (queue_lock) {
 				while(this.queue.isEmpty()){

@@ -69,7 +69,7 @@ class OpenSpaceCardTest {
 		ArrayList<Player> players = new ArrayList<>(Arrays.asList(new Player[]{dummy3, dummy4, dummy5}));
 
 		model = new DummyModelInstance(1, GameModeType.LVL2, PlayerCount.THREE);
-		model.setController(new DummyController(model.getID(), model));
+		model.setController(new DummyController(model.getID()));
 		
 		TestFlightCards cards = new TestFlightCards();
 		planche = new Planche(GameModeType.LVL2, order);

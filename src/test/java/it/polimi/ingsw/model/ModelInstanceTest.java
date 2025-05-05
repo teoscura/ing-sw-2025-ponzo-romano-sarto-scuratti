@@ -7,6 +7,7 @@ import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 
+import it.polimi.ingsw.controller.DummyConnection;
 import it.polimi.ingsw.controller.DummyController;
 import it.polimi.ingsw.controller.server.ClientDescriptor;
 import it.polimi.ingsw.message.server.ServerConnectMessage;
@@ -27,13 +28,13 @@ public class ModelInstanceTest {
     @Test
     void resumeFromSerial() throws ForbiddenCallException{
         ServerMessage mess = null;
-        ModelInstance model = new ModelInstance(0, GameModeType.TEST, PlayerCount.TWO);
-        model.setController(new DummyController(model.getID(), model));
+        ModelInstance model = new ModelInstance(0, new DummyController(0) ,GameModeType.TEST, PlayerCount.TWO);
+        model.setController(new DummyController(model.getID()));
         Player player1 = new Player(GameModeType.TEST, "bibo1", PlayerColor.RED);
-        ClientDescriptor p1desc = new ClientDescriptor("bibo1", null);
+        ClientDescriptor p1desc = new ClientDescriptor("bibo1", new DummyConnection());
         p1desc.bindPlayer(player1);
         Player player2 = new Player(GameModeType.TEST, "bibo2", PlayerColor.BLUE);
-        ClientDescriptor p2desc = new ClientDescriptor("bibo2", null);
+        ClientDescriptor p2desc = new ClientDescriptor("bibo2", new DummyConnection());
         p2desc.bindPlayer(player2);
         ArrayList<Player> order = new ArrayList<>(Arrays.asList(new Player[]{player1,player2}));
         Planche planche = new Planche(GameModeType.TEST, order);
@@ -44,8 +45,8 @@ public class ModelInstanceTest {
         model.afterSerialRestart();
         assertTrue(model.getState() instanceof ResumeWaitingState);
         //Now that we're restarting, lets create new descriptors for the same usernames.
-        ClientDescriptor p1descagain = new ClientDescriptor("bibo1", null);
-        ClientDescriptor p2descagain = new ClientDescriptor("bibo2", null);
+        ClientDescriptor p1descagain = new ClientDescriptor("bibo1", new DummyConnection());
+        ClientDescriptor p2descagain = new ClientDescriptor("bibo2", new DummyConnection());
         mess = new ServerConnectMessage(p1descagain);
         model.validate(mess);
         mess = new ServerDisconnectMessage();

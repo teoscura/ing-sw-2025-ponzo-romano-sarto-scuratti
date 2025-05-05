@@ -107,7 +107,7 @@ public class EndscreenStateTest {
         planche.loseGame(player2);
         player2.retire();
         model = new DummyModelInstance(0, GameModeType.TEST, PlayerCount.THREE);
-        model.setController(new DummyController(model.getID(), model));
+        model.setController(new DummyController(model.getID()));
 		tmp = new ArrayList<>(tmp.stream().filter(p -> !p.getRetired()).toList());
 		tmp.sort((p1, p2) -> Integer.compare(planche.getPlayerPosition(p1), planche.getPlayerPosition(p2)));
         this.state = new EndscreenState(model, GameModeType.TEST, PlayerCount.THREE, new ArrayList<>(Arrays.asList(new Player[]{player1,player2,player3})), new ArrayList<>(tmp.reversed()));
