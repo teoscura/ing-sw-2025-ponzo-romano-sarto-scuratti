@@ -67,7 +67,7 @@ public class MainServerController extends Thread implements RemoteServer {
         saved_lock = new Object();
         this.updateUnfinishedList();
         this.next_id = this.saved.keySet().stream().max(Integer::compare).orElse(0) + 1;
-        server = new Server(this);
+        server = new Server();
     }
 
     static public MainServerController getInstance(){

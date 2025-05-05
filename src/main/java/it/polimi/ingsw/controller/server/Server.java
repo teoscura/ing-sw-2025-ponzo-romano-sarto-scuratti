@@ -19,24 +19,17 @@ import it.polimi.ingsw.controller.server.rmi.RemoteServer;
 public class Server extends Thread implements RMISkeletonProvider {
 
 	private final ExecutorService serverPool;
-	private final MainServerController controller;
 	private String ip = "localhost";
 
-	public Server(MainServerController controller) {
-		if (controller == null) throw new NullPointerException();
-		this.controller = controller;
+	public Server() {
 		this.serverPool = new ThreadPoolExecutor(6, 60, Long.MAX_VALUE, TimeUnit.MILLISECONDS, new SynchronousQueue<>(true));
 	}
 
 	@Override
 	public void run() {
-		if (controller == null) throw new RuntimeException();
-		if (System.console() != null) {
-			System.out.println("Insert the desired server address [default: localhost]");
-			this.ip = System.console().readLine();
-		}
-		System.setProperty("java.rmi.server.hostname", this.ip);
-		Registry registry;
+		System.out.println("Starting server on localhost.");
+		System.out.println("Setting up RMI.");
+		Registry registry = null;
 		try {
 			registry = LocateRegistry.createRegistry(9999);
 			registry.rebind("galaxy_truckers", this);
@@ -44,6 +37,7 @@ public class Server extends Thread implements RMISkeletonProvider {
 		} catch (RemoteException e) {
 			throw new RuntimeException("Failed to setup the rmi registry and remote object, terminating.");
 		}
+		System.out.println("Finished setting up RMI.");
 		ServerSocket server = null;
 		try {
 			server = new ServerSocket();
@@ -54,14 +48,14 @@ public class Server extends Thread implements RMISkeletonProvider {
 			server.bind(new InetSocketAddress(this.ip, 10000));
 			while (true) {
 				SocketClient new_connection = new SocketClient(server.accept());
-				this.controller.connectListener(new_connection);
+				MainServerController.getInstance().connectListener(new_connection);
 				this.serverPool.submit(
 					() -> {
 						while (true) {
 							if (new_connection.getSocket().isClosed()) {
 								return;
 							}
-							new_connection.read(controller);
+							new_connection.read(MainServerController.getInstance());
 						}
 					}
 				);
@@ -77,11 +71,11 @@ public class Server extends Thread implements RMISkeletonProvider {
 	}
 
 	public RemoteServer accept(RMIClientStub client) throws RemoteException {
-		ClientDescriptor new_client = this.controller.connectListener(client);
+		ClientDescriptor new_client = MainServerController.getInstance().connectListener(client);
 		try {
-			return this.controller.getStub(new_client);
+			return MainServerController.getInstance().getStub(new_client);
 		} catch (RemoteException e) {
-			this.controller.disconnect(new_client);
+			MainServerController.getInstance().disconnect(new_client);
 			throw e;
 		}
 	}

@@ -6,6 +6,7 @@ public class ServerMain {
 
 	public static void main(String[] args) {
 		//TODO: ip configuration.
+		
 		MainServerController controller = MainServerController.getInstance();
 		controller.start();
 		String line = null;
