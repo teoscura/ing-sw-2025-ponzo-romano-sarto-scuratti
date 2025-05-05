@@ -1,6 +1,7 @@
 package it.polimi.ingsw.gui;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
@@ -16,7 +17,9 @@ public class starting_menu_application extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
 
-        Scene scene = new Scene(FXMLLoader.load(getClass().getResource("")));
+        /*GridPane pane = new GridPane();
+        Scene scene = new Scene(pane);*/
+        Scene scene = new Scene(FXMLLoader.load(getClass().getResource("/it/polimi/ingsw/starting_menu_view.fxml")));
         primaryStage.setScene(scene);
         primaryStage.show();
     }
