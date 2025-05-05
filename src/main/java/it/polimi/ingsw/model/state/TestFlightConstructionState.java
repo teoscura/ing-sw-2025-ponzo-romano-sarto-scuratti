@@ -8,7 +8,7 @@ import it.polimi.ingsw.model.PlayerCount;
 import it.polimi.ingsw.model.board.TestFlightCards;
 import it.polimi.ingsw.model.client.player.ClientConstructionPlayer;
 import it.polimi.ingsw.model.client.state.ClientConstructionState;
-import it.polimi.ingsw.model.client.state.ClientModelState;
+import it.polimi.ingsw.model.client.state.ClientState;
 import it.polimi.ingsw.model.player.Player;
 
 public class TestFlightConstructionState extends ConstructionState {
@@ -18,7 +18,7 @@ public class TestFlightConstructionState extends ConstructionState {
     }
 
     @Override
-    public ClientModelState getClientState() {
+    public ClientState getClientState() {
 		ArrayList<ClientConstructionPlayer> tmp = new ArrayList<>();
 		ArrayList<Integer> discarded = new ArrayList<>(this.board.getDiscarded());
 		for (Player p : this.players) {

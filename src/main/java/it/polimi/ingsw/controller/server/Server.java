@@ -19,15 +19,16 @@ import it.polimi.ingsw.controller.server.rmi.RemoteServer;
 public class Server extends Thread implements RMISkeletonProvider {
 
 	private final ExecutorService serverPool;
-	private final ServerController controller;
+	private final MainServerController controller;
 	private String ip = "localhost";
 
-	public Server(ServerController controller) {
+	public Server(MainServerController controller) {
 		if (controller == null) throw new NullPointerException();
 		this.controller = controller;
 		this.serverPool = new ThreadPoolExecutor(6, 60, Long.MAX_VALUE, TimeUnit.MILLISECONDS, new SynchronousQueue<>(true));
 	}
 
+	@Override
 	public void run() {
 		if (controller == null) throw new RuntimeException();
 		if (System.console() != null) {
@@ -51,22 +52,26 @@ public class Server extends Thread implements RMISkeletonProvider {
 		}
 		try {
 			server.bind(new InetSocketAddress(this.ip, 10000));
-			while (!this.controller.getEnded()) {
+			while (true) {
 				SocketClient new_connection = new SocketClient(server.accept());
 				this.controller.connectListener(new_connection);
 				this.serverPool.submit(
-						() -> {
-							while (true) {
-								if (new_connection.getSocket().isClosed()) {
-									return;
-								}
-								new_connection.read(this.controller);
+					() -> {
+						while (true) {
+							if (new_connection.getSocket().isClosed()) {
+								return;
 							}
+							new_connection.read(controller);
 						}
+					}
 				);
 			}
-			server.close();
 		} catch (IOException e) {
+			try {
+				server.close();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
 			throw new RuntimeException(e);
 		}
 	}

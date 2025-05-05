@@ -13,7 +13,8 @@ import it.polimi.ingsw.model.ModelInstance;
 import it.polimi.ingsw.model.PlayerCount;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.cards.state.CardState;
-import it.polimi.ingsw.model.client.state.ClientModelState;
+import it.polimi.ingsw.model.client.ClientGameListEntry;
+import it.polimi.ingsw.model.client.state.ClientState;
 import it.polimi.ingsw.model.components.enums.AlienType;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.player.Player;
@@ -41,11 +42,13 @@ public abstract class GameState implements Serializable {
 
 	public abstract GameState getNext();
 
-	public abstract ClientModelState getClientState();
+	public abstract ClientState getClientState();
 
 	public abstract boolean toSerialize();
 
 	public abstract String toString();
+
+	public abstract ClientGameListEntry getOngoingEntry();
 
 	public void init() {
 	}

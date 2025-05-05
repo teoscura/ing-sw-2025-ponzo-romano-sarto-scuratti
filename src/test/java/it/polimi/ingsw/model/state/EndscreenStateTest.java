@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import it.polimi.ingsw.controller.DummyConnection;
+import it.polimi.ingsw.controller.DummyController;
 import it.polimi.ingsw.controller.server.ClientDescriptor;
 import it.polimi.ingsw.model.DummyModelInstance;
 import it.polimi.ingsw.model.GameModeType;
@@ -105,7 +106,8 @@ public class EndscreenStateTest {
 		tmp.addAll(order);
         planche.loseGame(player2);
         player2.retire();
-        model = new DummyModelInstance(0, null, GameModeType.TEST, PlayerCount.THREE);
+        model = new DummyModelInstance(0, GameModeType.TEST, PlayerCount.THREE);
+        model.setController(new DummyController(model.getID(), model));
 		tmp = new ArrayList<>(tmp.stream().filter(p -> !p.getRetired()).toList());
 		tmp.sort((p1, p2) -> Integer.compare(planche.getPlayerPosition(p1), planche.getPlayerPosition(p2)));
         this.state = new EndscreenState(model, GameModeType.TEST, PlayerCount.THREE, new ArrayList<>(Arrays.asList(new Player[]{player1,player2,player3})), new ArrayList<>(tmp.reversed()));

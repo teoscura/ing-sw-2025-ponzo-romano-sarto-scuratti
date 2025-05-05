@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.cards;
 
 import it.polimi.ingsw.controller.DummyConnection;
+import it.polimi.ingsw.controller.DummyController;
 import it.polimi.ingsw.controller.server.ClientDescriptor;
 import it.polimi.ingsw.message.server.*;
 import it.polimi.ingsw.model.DummyModelInstance;
@@ -115,7 +116,10 @@ public class SlaversCardTest {
 		LevelOneCardFactory factory = new LevelOneCardFactory();
 		order = new ArrayList<>(Arrays.asList(player1, player3, player2));
 		players = new ArrayList<>(Arrays.asList(player1, player2, player3));
-		model = new DummyModelInstance(1, null, GameModeType.LVL2, PlayerCount.THREE);
+
+		model = new DummyModelInstance(1, GameModeType.LVL2, PlayerCount.THREE);
+		model.setController(new DummyController(model.getID(), model));
+
 		planche = new Planche(GameModeType.LVL2, order);
 		cards = new TestFlightCards();
 		state = new DummyVoyageState(model, GameModeType.LVL2, PlayerCount.THREE, players, cards, planche);

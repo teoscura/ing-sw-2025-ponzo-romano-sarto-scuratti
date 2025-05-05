@@ -1,7 +1,8 @@
 package it.polimi.ingsw.message.server;
 
 import it.polimi.ingsw.controller.server.ClientDescriptor;
-import it.polimi.ingsw.controller.server.ServerController;
+import it.polimi.ingsw.controller.server.LobbyController;
+import it.polimi.ingsw.controller.server.MainServerController;
 import it.polimi.ingsw.model.ModelInstance;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.cards.state.CardState;
@@ -20,19 +21,19 @@ public abstract class ServerMessage {
 	}
 
 	//All messages need to know what to do when initially executed.
-	public abstract void receive(ServerController server) throws ForbiddenCallException;
+	public abstract void receive(MainServerController server) throws ForbiddenCallException;
 
 	//Can be omitted
-	public void receive(ModelInstance instance) throws ForbiddenCallException {
-	}
+	public void receive(LobbyController lobby) throws ForbiddenCallException {}
 
 	//Can be omitted
-	public void receive(GameState state) throws ForbiddenCallException {
-	}
+	public void receive(ModelInstance instance) throws ForbiddenCallException {}
 
 	//Can be omitted
-	public void receive(CardState state) throws ForbiddenCallException {
-	}
+	public void receive(GameState state) throws ForbiddenCallException {}
+
+	//Can be omitted
+	public void receive(CardState state) throws ForbiddenCallException {}
 
 
 }

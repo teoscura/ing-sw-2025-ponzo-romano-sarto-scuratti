@@ -15,7 +15,7 @@ import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.board.CommonBoard;
 import it.polimi.ingsw.model.board.iCards;
 import it.polimi.ingsw.model.board.iCommonBoard;
-import it.polimi.ingsw.model.client.state.ClientModelState;
+import it.polimi.ingsw.model.client.state.ClientState;
 import it.polimi.ingsw.model.components.BaseComponent;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.exceptions.ContainerEmptyException;
@@ -77,7 +77,7 @@ public abstract class ConstructionState extends GameState {
 	}
 
 	@Override
-	public abstract ClientModelState getClientState();
+	public abstract ClientState getClientState();
 
 	@Override
 	public boolean toSerialize() {

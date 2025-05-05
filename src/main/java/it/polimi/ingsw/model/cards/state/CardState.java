@@ -8,7 +8,7 @@ import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.cards.utils.CardOrder;
 import it.polimi.ingsw.model.client.card.ClientCardState;
-import it.polimi.ingsw.model.client.state.ClientModelState;
+import it.polimi.ingsw.model.client.state.ClientState;
 import it.polimi.ingsw.model.components.enums.ShipmentType;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.ShipCoords;
@@ -23,7 +23,7 @@ public abstract class CardState implements Serializable {
         this.state = state;
     }
 
-    public void init(ClientModelState new_state){
+    public void init(ClientState new_state){
         for(Player p : state.getOrder(CardOrder.NORMAL)){
             p.getSpaceShip().resetPower();
         }

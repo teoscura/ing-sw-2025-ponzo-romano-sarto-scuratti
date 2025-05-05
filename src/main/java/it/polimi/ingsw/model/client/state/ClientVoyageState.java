@@ -7,7 +7,7 @@ import it.polimi.ingsw.model.client.card.ClientCardState;
 import it.polimi.ingsw.model.client.player.ClientVoyagePlayer;
 import it.polimi.ingsw.view.ClientView;
 
-public class ClientVoyageState implements ClientModelState {
+public class ClientVoyageState implements ClientState {
 
 	private final GameModeType type;
 	private final ArrayList<ClientVoyagePlayer> playerlist;

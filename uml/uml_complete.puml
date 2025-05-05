@@ -13,7 +13,7 @@ package Model {
 
             abstract CardState {
                 {field} [protected] state : VoyageState
-                {method} + init(ClientModelState) : void
+                {method} + init(ClientState) : void
                 {method} + [abstract] validate() : void
                 {method} + [abstract] getClientCardState() : ClientCardState
                 {method} + [abstract] getNext() : CardState
@@ -37,7 +37,7 @@ package Model {
                 {field} [final] list : List<Player>
                 {field} responded : boolean
                 {field} id : int
-                {method} + init(ClientModelState) : void
+                {method} + init(ClientState) : void
                 {method} + validate(ServerMessage) : void
                 {method} + getClientCardState() : ClientCardState
                 {method} [protected] getNext() : CardState
@@ -51,7 +51,7 @@ package Model {
                 {field} [final] list : List<Player>
                 {field} coords : List<ShipCoords>
                 {field} responded : boolean
-                {method} + init(ClientModelState) : void
+                {method} + init(ClientState) : void
                 {method} + validate(ServerMessage) : void
                 {method} + getClientCardState() : ClientCardState
                 {method} [protected] getNext() : CardState
@@ -65,7 +65,7 @@ package Model {
                 {field} [final] list : List<Player>
                 {field} responded : boolean
                 {field} id : int
-                {method} + init(ClientModelState) : void
+                {method} + init(ClientState) : void
                 {method} + validate(ServerMessage) : void
                 {method} + getClientCardState() : ClientCardState
                 {method} [protected] getNext() : CardState
@@ -78,7 +78,7 @@ package Model {
                 {field} [final] card : AbandonedStationCard
                 {field} [final] list : List<Player>
                 {field} responded : boolean
-                {method} + init(ClientModelState) : void
+                {method} + init(ClientState) : void
                 {method} + validate(ServerMessage) : void
                 {method} + getClientCardState() : ClientCardState
                 {method} [protected] getNext() : CardState
@@ -97,7 +97,7 @@ package Model {
                 {field} [final] shots : ProjectileArray
                 {field} awaiting : List<Player>
                 {field} target : Player
-                {method} + init(ClientModelState) : void
+                {method} + init(ClientState) : void
                 {method} + validate(ServerMessage) : void
                 {method} + getClientCardState() : ClientCardState
                 {method} [protected] getNext() : CardState
@@ -112,7 +112,7 @@ package Model {
                 {field} [final] sections : List<CombatZoneSection>
                 {field} [final] shots : ProjectileArray
                 {field} target : Player
-                {method} + init(ClientModelState) : void
+                {method} + init(ClientState) : void
                 {method} + validate(ServerMessage) : void
                 {method} + getClientCardState() : ClientCardState
                 {method} [protected] getNext() : CardState
@@ -129,7 +129,7 @@ package Model {
                 {field} [final] required : int[]
                 {field} responded : boolean
                 {field} coords : List<ShipCoords>
-                {method} + init(ClientModelState) : void
+                {method} + init(ClientState) : void
                 {method} + validate(ServerMessage) : void
                 {method} + getClientCardState() : ClientCardState
                 {method} [protected] getNext() : CardState
@@ -144,7 +144,7 @@ package Model {
             class EpidemicState {
                 {field} [final] card : EpidemicCard
                 {field} [final] awaiting : List<Player>
-                {method} + init(ClientModelState) : void
+                {method} + init(ClientState) : void
                 {method} + validate(ServerMessage) : void
                 {method} + getClientCardState() : ClientCardState
                 {method} [protected] getNext() : CardState
@@ -158,7 +158,7 @@ package Model {
                 {field} [final] left : ProjectileArray
                 {field} [final] awaiting : List<Player>
                 {field} broke_cabin : boolean
-                {method} + init(ClientModelState) : void
+                {method} + init(ClientState) : void
                 {method} + validate(ServerMessage) : void
                 {method} + getClientCardState() : ClientCardState
                 {method} [protected] getNext() : CardState
@@ -171,7 +171,7 @@ package Model {
             class MeteorNewCabinState {
                 {field} [final] card_id : int
                 {field} [final] left : ProjectileArray
-                {method} + init(ClientModelState) : void
+                {method} + init(ClientState) : void
                 {method} + validate(ServerMessage) : void
                 {method} + getClientCardState() : ClientCardState
                 {method} [protected] getNext() : CardState
@@ -183,7 +183,7 @@ package Model {
             class OpenSpaceState {
                 {field} [final] card : OpenSpaceCard
                 {field} [final] awaiting : List<Player>
-                {method} + init(ClientModelState) : void
+                {method} + init(ClientState) : void
                 {method} + validate(ServerMessage) : void
                 {method} + getClientCardState() : ClientCardState
                 {method} [protected] getNext() : CardState
@@ -198,7 +198,7 @@ package Model {
                 {field} [final] list : List<Player>
                 {field} responded : boolean
                 {field} result : boolean
-                {method} + init(ClientModelState) : void
+                {method} + init(ClientState) : void
                 {method} + validate(ServerMessage) : void
                 {method} + getClientCardState() : ClientCardState
                 {method} [protected] getNext() : CardState
@@ -212,7 +212,7 @@ package Model {
                 {field} [final] card : PiratesCard
                 {field} [final] list : List<Player>
                 {field} [final] shots : ProjectileArray
-                {method} + init(ClientModelState) : void
+                {method} + init(ClientState) : void
                 {method} + validate(ServerMessage) : void
                 {method} + getClientCardState() : ClientCardState
                 {method} [protected] getNext() : CardState
@@ -226,7 +226,7 @@ package Model {
                 {field} [final] list : List<Player>
                 {field} [final] shots : ProjectileArray
                 {field} responded : boolean
-                {method} + init(ClientModelState) : void
+                {method} + init(ClientState) : void
                 {method} + validate(ServerMessage) : void
                 {method} + getClientCardState() : ClientCardState
                 {method} [protected] getNext() : CardState
@@ -241,7 +241,7 @@ package Model {
                 {field} [final] list : List<Player>
                 {field} responded : boolean
                 {field} took_reward : boolean
-                {method} + init(ClientModelState) : void
+                {method} + init(ClientState) : void
                 {method} + validate(ServerMessage) : void
                 {method} + getClientCardState() : ClientCardState
                 {method} [protected] getNext() : CardState
@@ -255,7 +255,7 @@ package Model {
                 {field} [final] list : List<Player>
                 {field} responded : boolean
                 {field} id : int
-                {method} + init(ClientModelState) : void
+                {method} + init(ClientState) : void
                 {method} + validate(ServerMessage) : void
                 {method} + getClientCardState() : ClientCardState
                 {method} [protected] getNext() : CardState
@@ -269,7 +269,7 @@ package Model {
                 {field} [final] list : List<Player>
                 {field} [final] id : int
                 {field} responded : boolean
-                {method} + init(ClientModelState) : void
+                {method} + init(ClientState) : void
                 {method} + validate(ServerMessage) : void
                 {method} + getClientCardState() : ClientCardState
                 {method} [protected] getNext() : CardState
@@ -286,7 +286,7 @@ package Model {
                 {field} [final] list : List<Player>
                 {field} responded : boolean
                 {field} result : boolean
-                {method} + init(ClientModelState) : void
+                {method} + init(ClientState) : void
                 {method} + validate(ServerMessage) : void
                 {method} + getClientCardState() : ClientCardState
                 {method} [protected] getNext() : CardState
@@ -301,7 +301,7 @@ package Model {
                 {field} [final] list : List<Player>
                 {field} responded : boolean
                 {field} coords : List<ShipCoords>
-                {method} + init(ClientModelState) : void
+                {method} + init(ClientState) : void
                 {method} + validate(ServerMessage) : void
                 {method} + getClientCardState() : ClientCardState
                 {method} [protected] getNext() : CardState
@@ -315,7 +315,7 @@ package Model {
                 {field} [final] list : List<Player>
                 {field} responded : boolean
                 {field} took_reward : boolean
-                {method} + init(ClientModelState) : void
+                {method} + init(ClientState) : void
                 {method} + validate(ServerMessage) : void
                 {method} + getClientCardState() : ClientCardState
                 {method} [protected] getNext() : CardState
@@ -329,7 +329,7 @@ package Model {
                 {field} [final] list : List<Player>
                 {field} responded : boolean
                 {field} result : boolean
-                {method} + init(ClientModelState) : void
+                {method} + init(ClientState) : void
                 {method} + validate(ServerMessage) : void
                 {method} + getClientCardState() : ClientCardState
                 {method} [protected] getNext() : CardState
@@ -344,7 +344,7 @@ package Model {
                 {field} [final] list : List<Player>
                 {field} [final] required : int[]
                 {field} responded : boolean
-                {method} + init(ClientModelState) : void
+                {method} + init(ClientState) : void
                 {method} + validate(ServerMessage) : void
                 {method} + getClientCardState() : ClientCardState
                 {method} [protected] getNext() : CardState
@@ -358,7 +358,7 @@ package Model {
                 {field} [final] list : List<Player>
                 {field} responded : boolean
                 {field} took_reward : boolean
-                {method} + init(ClientModelState) : void
+                {method} + init(ClientState) : void
                 {method} + validate(ServerMessage) : void
                 {method} + getClientCardState() : ClientCardState
                 {method} [protected] getNext() : CardState
@@ -373,7 +373,7 @@ package Model {
             class StardustState {
                 {field} [final] card : StardustCard
                 {field} awaiting : List<Player>
-                {method} + init(ClientModelState) : void
+                {method} + init(ClientState) : void
                 {method} + validate(ServerMessage) : void
                 {method} + getClientCardState() : ClientCardState
                 {method} [protected] getNext() : CardState
@@ -817,7 +817,7 @@ package Model {
             {field} # [final] players : List<Player>
             {method} + [abstract] validate(ServerMessage message) : void
             {method} + [abstract] getNext() : GameState 
-            {method} + [abstract] getClientState() : ClientModelState 
+            {method} + [abstract] getClientState() : ClientState 
             {method} + init() : void : void
             {method} + transition() : void : void
             {method} + getCount() : void : PlayerCount
@@ -845,7 +845,7 @@ package Model {
             {field} - [final] count : PlayerCount
             {method} + validate(ServerMessage message) : void
             {method} + getNext() : GameState 
-            {method} + getClientState() : ClientModelState 
+            {method} + getClientState() : ClientState 
             {method} + init() : void : void
             {method} + connect(ClientDescriptor client) : void
             {method} + disconnect(ClientDescriptor client) : void
@@ -862,7 +862,7 @@ package Model {
             {field} - hoarded_tile : HashMap<Player, List<iBaseComponent>> 
             {method} + validate(ServerMessage message) : void
             {method} + getNext() : GameState 
-            {method} + getClientState() : ClientModelState 
+            {method} + getClientState() : ClientState 
             {method} + init() : void : void
             {method} + connect(Player) : void
             {method} + disconnect(Player) : void
@@ -881,7 +881,7 @@ package Model {
             {field} - [final] finish_order : List<Player>
             {method} + validate(ServerMessage message) : void
             {method} + getNext() : GameState 
-            {method} + getClientState() : ClientModelState 
+            {method} + getClientState() : ClientState 
             {method} + init() : void : void
             {method} + connect(Player) : void
             {method} + disconnect(Player) : void
@@ -899,7 +899,7 @@ package Model {
             {field} - state : CardState state
             {method} + validate(ServerMessage message) : void
             {method} + getNext() : GameState 
-            {method} + getClientState() : ClientModelState 
+            {method} + getClientState() : ClientState 
             {method} + init() : void : void
             {method} + connect(Player) : void
             {method} + disconnect(Player) : void
@@ -919,7 +919,7 @@ package Model {
             {field} - [final] order_arrival : List<Player> 
             {method} + validate(ServerMessage message) : void
             {method} + getNext() : GameState 
-            {method} + getClientState() : ClientModelState 
+            {method} + getClientState() : ClientState 
             {method} + init() : void : void
             {method} + sendContinue(Player) : void
             {method} + disconnect(Player) : void
@@ -1204,11 +1204,11 @@ package Model {
 
         package State {
             
-            interface ClientModelState <<interface>> {
+            interface ClientState <<interface>> {
                 {method} + sendToView(ClientView) : void
             }
 
-            ClientModelState ^.. ClientWaitingRoomState
+            ClientState ^.. ClientWaitingRoomState
             class ClientWaitingRoomState {
                 {field} - [final] type : GameModeType
                 {field} - [final] playerlist : List<ClientWaitingPlayer>
@@ -1217,7 +1217,7 @@ package Model {
                 {method} + sendToView(ClientView) : void 
             }
 
-            ClientModelState ^.. ClientConstructionState
+            ClientState ^.. ClientConstructionState
             class ClientConstructionState {
                 {field} - [final] type : GameModeType
                 {field} - [final] playerlist : List<ClientConstructionPlayer> 
@@ -1234,14 +1234,14 @@ package Model {
                 {method} + sendToView(ClientView) : void 
             }
 
-            ClientModelState ^.. ClientVerifyState
+            ClientState ^.. ClientVerifyState
             class ClientVerifyState {
                 {field} - [final] players : List<ClientVerifyPlayer> 
                 {method} + getPlayers() : List<ClientVerifyPlayer> 
                 {method} + sendToView(ClientView) : void  
             }
 
-            ClientModelState ^.. ClientVoyageState
+            ClientState ^.. ClientVoyageState
             class ClientVoyageState {
                 {field} - [final] type : GameModeType
                 {field} - [final] playerlist : List<ClientVoyagePlayer> 
@@ -1254,7 +1254,7 @@ package Model {
                 {method} + sendToView(ClientView) : void 
             }
 
-            ClientModelState ^.. ClientEndgameState
+            ClientState ^.. ClientEndgameState
             class ClientEndgameState {
                 {field} - [final] playerlist : List<ClientEndgamePlayer>
                 {method} + getPlayerList() : List<ClientEndgamePlayer>

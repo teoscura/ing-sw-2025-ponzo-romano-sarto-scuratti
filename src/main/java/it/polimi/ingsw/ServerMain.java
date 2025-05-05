@@ -11,7 +11,7 @@ public class ServerMain {
 		String line = null;
 		do {
 			line = System.console().readLine();
-		} while (!line.trim().equalsIgnoreCase("stop") && !controller.getEnded());
+		} while (!line.trim().equalsIgnoreCase("stop"));
 
 		controller.interrupt();
 

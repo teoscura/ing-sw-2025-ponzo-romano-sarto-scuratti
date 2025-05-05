@@ -4,15 +4,15 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
 import it.polimi.ingsw.controller.server.ClientDescriptor;
-import it.polimi.ingsw.controller.server.ServerController;
+import it.polimi.ingsw.controller.server.MainServerController;
 import it.polimi.ingsw.message.server.ServerMessage;
 
 public class RMIServerStubImpl extends UnicastRemoteObject implements RemoteServer {
 
-	private transient final ServerController controller;
+	private transient final MainServerController controller;
 	private transient final ClientDescriptor client;
 
-	public RMIServerStubImpl(ServerController controller, ClientDescriptor client) throws RemoteException {
+	public RMIServerStubImpl(MainServerController controller, ClientDescriptor client) throws RemoteException {
 		this.controller = controller;
 		this.client = client;
 		UnicastRemoteObject.exportObject(this, 0);

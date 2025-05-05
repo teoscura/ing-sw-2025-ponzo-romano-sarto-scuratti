@@ -12,7 +12,7 @@ import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.board.Planche;
 import it.polimi.ingsw.model.board.iCards;
 import it.polimi.ingsw.model.client.player.ClientVerifyPlayer;
-import it.polimi.ingsw.model.client.state.ClientModelState;
+import it.polimi.ingsw.model.client.state.ClientState;
 import it.polimi.ingsw.model.client.state.ClientVerifyState;
 import it.polimi.ingsw.model.components.enums.AlienType;
 import it.polimi.ingsw.model.components.exceptions.AlienTypeAlreadyPresentException;
@@ -92,7 +92,7 @@ public class VerifyState extends GameState {
 	}
 
 	@Override
-	public ClientModelState getClientState() {
+	public ClientState getClientState() {
 		ArrayList<ClientVerifyPlayer> tmp = new ArrayList<>();
 		for (Player p : this.players) {
 			tmp.add(new ClientVerifyPlayer(p.getUsername(),

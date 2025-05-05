@@ -34,7 +34,7 @@ public class SocketClient implements Connection {
 		this.out.flush();
 	}
 
-	public void read(ServerController controller) {
+	public void read(MainServerController controller) {
 		ServerMessage message = null;
 		try {
 			message = (ServerMessage) in.readObject();

@@ -6,7 +6,9 @@ import it.polimi.ingsw.model.client.components.*;
 
 public interface ClientView {
 	//Game states
-	void show(ClientSetupState clientSetupState);
+	void show(ClientLobbySelectState state);
+
+	void show(ClientSetupState state);
 
 	void show(ClientWaitingRoomState state);
 

@@ -10,7 +10,7 @@ import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.cards.visitors.ContainsRemoveVisitor;
 import it.polimi.ingsw.model.client.card.ClientCardState;
 import it.polimi.ingsw.model.client.card.ClientCargoPenaltyCardStateDecorator;
-import it.polimi.ingsw.model.client.state.ClientModelState;
+import it.polimi.ingsw.model.client.state.ClientState;
 import it.polimi.ingsw.model.client.card.ClientBaseCardState;
 import it.polimi.ingsw.model.components.enums.ShipmentType;
 import it.polimi.ingsw.model.components.exceptions.ContainerEmptyException;
@@ -43,7 +43,7 @@ public class SmugglersLoseState extends CardState {
 	}
 
 	@Override
-	public void init(ClientModelState new_state) {
+	public void init(ClientState new_state) {
 		super.init(new_state);
 		System.out.println("    CardState -> Smugglers Lose State!");
 		System.out.println("    Bat: "+required[0]+" Blu: "+required[1]+" Grn: "+required[2]+" Ylw: "+required[3]+" Red: "+required[4]);

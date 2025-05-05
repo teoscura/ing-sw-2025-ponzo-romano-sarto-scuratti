@@ -19,7 +19,7 @@ import it.polimi.ingsw.model.client.card.ClientCargoPenaltyCardStateDecorator;
 import it.polimi.ingsw.model.client.card.ClientCombatZoneIndexCardStateDecorator;
 import it.polimi.ingsw.model.client.card.ClientCrewPenaltyCardStateDecorator;
 import it.polimi.ingsw.model.client.card.ClientProjectileCardStateDecorator;
-import it.polimi.ingsw.model.client.state.ClientModelState;
+import it.polimi.ingsw.model.client.state.ClientState;
 import it.polimi.ingsw.model.components.enums.ShipmentType;
 import it.polimi.ingsw.model.components.exceptions.ContainerEmptyException;
 import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
@@ -61,7 +61,7 @@ class CombatZonePenaltyState extends CardState {
 	}
 
 	@Override
-	public void init(ClientModelState new_state) {
+	public void init(ClientState new_state) {
 		super.init(new_state);
 		System.out.println("    CardState -> Combat Zone Penalty State!: ["+(3-sections.size())+" - "+this.sections.getFirst().getPenalty()+"].");
 		System.out.println("    Targeting: '"+this.target.getUsername()+"'.");

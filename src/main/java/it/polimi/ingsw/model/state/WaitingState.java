@@ -11,7 +11,7 @@ import it.polimi.ingsw.model.ModelInstance;
 import it.polimi.ingsw.model.PlayerCount;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.client.player.ClientWaitingPlayer;
-import it.polimi.ingsw.model.client.state.ClientModelState;
+import it.polimi.ingsw.model.client.state.ClientState;
 import it.polimi.ingsw.model.client.state.ClientWaitingRoomState;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
@@ -64,7 +64,7 @@ public class WaitingState extends GameState {
 	}
 
 	@Override
-	public ClientModelState getClientState() {
+	public ClientState getClientState() {
 		ArrayList<ClientWaitingPlayer> tmp = new ArrayList<>();
 		for (PlayerColor c : PlayerColor.values()) {
 			if (c.getOrder() < tmp.size()) {

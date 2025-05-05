@@ -27,7 +27,8 @@ public class ModelInstanceTest {
     @Test
     void resumeFromSerial() throws ForbiddenCallException{
         ServerMessage mess = null;
-        ModelInstance model = new ModelInstance(0, new DummyController(), GameModeType.TEST, PlayerCount.TWO);
+        ModelInstance model = new ModelInstance(0, GameModeType.TEST, PlayerCount.TWO);
+        model.setController(new DummyController(model.getID(), model));
         Player player1 = new Player(GameModeType.TEST, "bibo1", PlayerColor.RED);
         ClientDescriptor p1desc = new ClientDescriptor("bibo1", null);
         p1desc.bindPlayer(player1);

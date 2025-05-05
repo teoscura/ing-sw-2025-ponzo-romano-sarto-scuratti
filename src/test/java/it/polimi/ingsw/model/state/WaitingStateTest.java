@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.state;
 
 import it.polimi.ingsw.controller.DummyConnection;
+import it.polimi.ingsw.controller.DummyController;
 import it.polimi.ingsw.controller.server.ClientDescriptor;
 import it.polimi.ingsw.model.DummyModelInstance;
 import it.polimi.ingsw.model.GameModeType;
@@ -22,7 +23,8 @@ class WaitingStateTest {
 
     @BeforeEach
     void setUp() {
-        model = new DummyModelInstance(1, null, GameModeType.TEST, PlayerCount.THREE);
+        model = new DummyModelInstance(1, GameModeType.TEST, PlayerCount.THREE);
+        model.setController(new DummyController(model.getID(), model));
         waiting_state = new WaitingState(model, GameModeType.TEST, PlayerCount.THREE);
         model.setState(waiting_state);
         p1desc = new ClientDescriptor("Gigio1", new DummyConnection());

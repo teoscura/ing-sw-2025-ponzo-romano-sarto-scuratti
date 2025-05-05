@@ -10,7 +10,7 @@ import it.polimi.ingsw.model.PlayerCount;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.client.player.ClientEndgamePlayer;
 import it.polimi.ingsw.model.client.state.ClientEndgameState;
-import it.polimi.ingsw.model.client.state.ClientModelState;
+import it.polimi.ingsw.model.client.state.ClientState;
 import it.polimi.ingsw.model.player.Player;
 
 public class EndscreenState extends GameState {
@@ -59,7 +59,7 @@ public class EndscreenState extends GameState {
 	}
 
 	@Override
-	public ClientModelState getClientState() {
+	public ClientState getClientState() {
 		ArrayList<ClientEndgamePlayer> tmp = new ArrayList<>();
 		for (Player p : this.players) {
 			tmp.add(new ClientEndgamePlayer(p.getUsername(),

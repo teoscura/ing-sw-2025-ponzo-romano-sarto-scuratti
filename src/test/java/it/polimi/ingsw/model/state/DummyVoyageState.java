@@ -18,7 +18,7 @@ import it.polimi.ingsw.model.cards.utils.CombatZoneCriteria;
 import it.polimi.ingsw.model.board.iCards;
 import it.polimi.ingsw.model.board.iPlanche;
 import it.polimi.ingsw.model.client.player.ClientVoyagePlayer;
-import it.polimi.ingsw.model.client.state.ClientModelState;
+import it.polimi.ingsw.model.client.state.ClientState;
 import it.polimi.ingsw.model.client.state.ClientVoyageState;
 import it.polimi.ingsw.model.player.Player;
 
@@ -64,7 +64,7 @@ public class DummyVoyageState extends VoyageState {
 	}
 
 	@Override
-	public ClientModelState getClientState() {
+	public ClientState getClientState() {
 		ArrayList<ClientVoyagePlayer> tmp = new ArrayList<>();
 		for (Player p : this.players) {
 			tmp.add(new ClientVoyagePlayer(p.getUsername(),

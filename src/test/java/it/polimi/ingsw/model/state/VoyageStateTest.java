@@ -66,7 +66,8 @@ public class VoyageStateTest {
         p3desc.bindPlayer(player3);
         
         ArrayList<Player> players = new ArrayList<>(Arrays.asList(new Player[]{player1, player2, player3}));
-        model = new DummyModelInstance(0, new DummyController(), GameModeType.TEST, PlayerCount.THREE);
+        model = new DummyModelInstance(0, GameModeType.TEST, PlayerCount.THREE);
+        model.setController(new DummyController(model.getID(), model));
         deck = new DummyTestFlightCards();
         planche = new Planche(GameModeType.TEST, players);
         state = new VoyageState(model, GameModeType.TEST, PlayerCount.THREE, players, deck, planche);   

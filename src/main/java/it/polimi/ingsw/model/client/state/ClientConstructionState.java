@@ -8,7 +8,7 @@ import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.view.ClientView;
 import it.polimi.ingsw.model.client.player.ClientConstructionPlayer;
 
-public class ClientConstructionState implements ClientModelState {
+public class ClientConstructionState implements ClientState {
 
     private final GameModeType type;
     private final ArrayList<ClientConstructionPlayer> playerlist;

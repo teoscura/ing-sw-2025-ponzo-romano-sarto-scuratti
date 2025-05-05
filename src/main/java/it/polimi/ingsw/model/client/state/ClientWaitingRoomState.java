@@ -6,7 +6,7 @@ import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.client.player.ClientWaitingPlayer;
 import it.polimi.ingsw.view.ClientView;
 
-public class ClientWaitingRoomState implements ClientModelState {
+public class ClientWaitingRoomState implements ClientState {
 
     private final GameModeType type;
     private final ArrayList<ClientWaitingPlayer> playerlist;

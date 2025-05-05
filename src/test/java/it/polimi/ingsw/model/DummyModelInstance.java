@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.controller.server.ClientDescriptor;
-import it.polimi.ingsw.controller.server.ServerController;
 import it.polimi.ingsw.message.client.ClientMessage;
 import it.polimi.ingsw.message.server.ServerConnectMessage;
 import it.polimi.ingsw.message.server.ServerDisconnectMessage;
@@ -13,8 +12,8 @@ import it.polimi.ingsw.model.state.ResumeWaitingState;
 
 public class DummyModelInstance extends ModelInstance {
 
-	public DummyModelInstance(int id, ServerController server, GameModeType type, PlayerCount count) {
-		super(id, server, type, count);
+	public DummyModelInstance(int id, GameModeType type, PlayerCount count) {
+		super(id, type, count);
 	}
 
 	public String toString() {
@@ -96,10 +95,6 @@ public class DummyModelInstance extends ModelInstance {
 		} catch (ForbiddenCallException e) {
 			System.out.println("Client: '" + p.getUsername() + "' tried disconnecting when the current state doesn't support it anymore!");
 		}
-	}
-
-	public ServerController getController() {
-		return null;
 	}
 
 	public void afterSerialRestart() {

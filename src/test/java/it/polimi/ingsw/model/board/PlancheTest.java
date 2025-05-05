@@ -7,6 +7,7 @@ import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 
+import it.polimi.ingsw.controller.DummyController;
 import it.polimi.ingsw.model.DummyModelInstance;
 import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.PlayerCount;
@@ -25,7 +26,8 @@ class PlancheTest {
 		Player p2 = new Player(GameModeType.TEST, "sbingus", PlayerColor.BLUE);
 		ArrayList<Player> order = new ArrayList<>(Arrays.asList(new Player[]{p1,p2}));
 		Planche planche = new Planche(GameModeType.TEST, order);
-		model = new DummyModelInstance(1, null, GameModeType.TEST, PlayerCount.TWO);
+		model = new DummyModelInstance(1, GameModeType.TEST, PlayerCount.TWO);
+		model.setController(new DummyController(model.getID(), model));
 		state = new DummyVoyageState(model, GameModeType.TEST, PlayerCount.TWO, order, new TestFlightCards(), planche);
 		
 		assertTrue(2==(planche.getPlayerPosition(p1)-planche.getPlayerPosition(p2)));
@@ -39,7 +41,8 @@ class PlancheTest {
 		Player p2 = new Player(GameModeType.TEST, "sbingus", PlayerColor.BLUE);
 		ArrayList<Player> order = new ArrayList<>(Arrays.asList(new Player[]{p1,p2}));
 		Planche planche = new Planche(GameModeType.TEST, order);
-		model = new DummyModelInstance(1, null, GameModeType.TEST, PlayerCount.TWO);
+		model = new DummyModelInstance(1, GameModeType.TEST, PlayerCount.TWO);
+		model.setController(new DummyController(model.getID(), model));
 		state = new DummyVoyageState(model, GameModeType.TEST, PlayerCount.TWO, order, new TestFlightCards(), planche);
 		
 		assertTrue(2==(planche.getPlayerPosition(p1)-planche.getPlayerPosition(p2)));

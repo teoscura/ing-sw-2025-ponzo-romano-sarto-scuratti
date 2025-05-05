@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import it.polimi.ingsw.model.client.player.ClientVerifyPlayer;
 import it.polimi.ingsw.view.ClientView;
 
-public class ClientVerifyState implements ClientModelState {
+public class ClientVerifyState implements ClientState {
 
     private final ArrayList<ClientVerifyPlayer> players;
 

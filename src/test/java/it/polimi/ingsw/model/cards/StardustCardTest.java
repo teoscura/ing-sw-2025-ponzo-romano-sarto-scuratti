@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.cards;
 
 import it.polimi.ingsw.controller.DummyConnection;
+import it.polimi.ingsw.controller.DummyController;
 import it.polimi.ingsw.controller.server.ClientDescriptor;
 import it.polimi.ingsw.message.server.SendContinueMessage;
 import it.polimi.ingsw.message.server.TakeRewardMessage;
@@ -76,7 +77,10 @@ class StardustCardTest {
 
 		ArrayList<Player> order = new ArrayList<>(Arrays.asList(player1, player2, player3));
 		ArrayList<Player> players = new ArrayList<>(Arrays.asList(player1, player2, player3));
-		model = new DummyModelInstance(1, null, GameModeType.LVL2, PlayerCount.THREE);
+		
+		model = new DummyModelInstance(1, GameModeType.LVL2, PlayerCount.THREE);
+		model.setController(new DummyController(model.getID(), model));
+		
 		TestFlightCards cards = new TestFlightCards();
 		planche = new Planche(GameModeType.LVL2, order);
 		state = new DummyVoyageState(model, GameModeType.LVL2, PlayerCount.THREE, players, cards, planche);

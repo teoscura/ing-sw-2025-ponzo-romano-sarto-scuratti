@@ -10,7 +10,7 @@ import it.polimi.ingsw.model.board.LevelTwoCards;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.client.player.ClientConstructionPlayer;
 import it.polimi.ingsw.model.client.state.ClientConstructionState;
-import it.polimi.ingsw.model.client.state.ClientModelState;
+import it.polimi.ingsw.model.client.state.ClientState;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.ShipCoords;
@@ -32,7 +32,7 @@ public class LevelTwoConstructionState extends ConstructionState {
 	}
 
 	@Override
-	public ClientModelState getClientState() {
+	public ClientState getClientState() {
 		ArrayList<ClientConstructionPlayer> tmp = new ArrayList<>();
 		ArrayList<Integer> discarded = new ArrayList<>(this.board.getDiscarded());
 		for (Player p : this.players) {

@@ -11,6 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import it.polimi.ingsw.controller.DummyConnection;
+import it.polimi.ingsw.controller.DummyController;
 import it.polimi.ingsw.controller.server.ClientDescriptor;
 import it.polimi.ingsw.message.server.DiscardComponentMessage;
 import it.polimi.ingsw.message.server.SendContinueMessage;
@@ -35,7 +36,8 @@ public class ConstructionStateTest {
 
     @BeforeEach
     void setUp() {
-        model = new DummyModelInstance(1, null, GameModeType.TEST, PlayerCount.TWO);
+        model = new DummyModelInstance(1, GameModeType.TEST, PlayerCount.TWO);
+        model.setController(new DummyController(model.getID(), model));
         player1 = new Player(GameModeType.TEST, "Gigio1", PlayerColor.RED);
         p1desc = new ClientDescriptor("Gigio1", new DummyConnection());
         p1desc.bindPlayer(player1);
