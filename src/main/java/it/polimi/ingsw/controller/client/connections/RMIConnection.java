@@ -5,7 +5,7 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
-import it.polimi.ingsw.controller.client.ClientController;
+import it.polimi.ingsw.controller.client.ThreadSafeMessageQueue;
 import it.polimi.ingsw.controller.server.connections.RMISkeletonProvider;
 import it.polimi.ingsw.controller.server.connections.RemoteServer;
 import it.polimi.ingsw.message.server.ServerMessage;
@@ -15,9 +15,9 @@ public class RMIConnection implements ServerConnection {
 	private final RMIClientStub stub;
 	private RemoteServer server = null;
 
-	public RMIConnection(ClientController controller, String server_ip, String username) throws RemoteException, NotBoundException {
-		this.stub = new RMIClientStub(controller, username);
-		Registry registry = LocateRegistry.getRegistry("localhost", 9999);
+	public RMIConnection(ThreadSafeMessageQueue queue, String server_ip, String username, int port) throws RemoteException, NotBoundException {
+		this.stub = new RMIClientStub(queue, username, port);
+		Registry registry = LocateRegistry.getRegistry("localhost", port);
 		this.server = ((RMISkeletonProvider) registry.lookup("galaxy_truckers")).accept(stub);
 	}
 

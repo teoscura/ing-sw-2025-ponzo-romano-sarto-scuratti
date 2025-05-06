@@ -1,6 +1,6 @@
 package it.polimi.ingsw.message.client;
 
-import it.polimi.ingsw.controller.client.ClientController;
+import it.polimi.ingsw.controller.client.state.ConnectedState;
 import it.polimi.ingsw.model.client.state.ClientState;
 
 public class NotifyStateUpdateMessage extends ClientMessage {
@@ -13,7 +13,7 @@ public class NotifyStateUpdateMessage extends ClientMessage {
     }
 
     @Override
-    public void receive(ClientController client) {
+    public void receive(ConnectedState client) {
         this.state.sendToView(client.getView());
     }
     

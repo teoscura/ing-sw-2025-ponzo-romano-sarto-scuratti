@@ -1,6 +1,7 @@
 package it.polimi.ingsw.controller.client.state;
 
 import it.polimi.ingsw.controller.client.ClientController;
+import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.view.ClientView;
 
 public abstract class ClientControllerState {
@@ -16,7 +17,6 @@ public abstract class ClientControllerState {
 
     public abstract void init();
     public abstract ClientControllerState getNext();
-    public abstract void nextStep();
 
     protected void transition(){
         this.controller.setState(this.getNext());
@@ -24,6 +24,10 @@ public abstract class ClientControllerState {
 
     protected ClientView getView(){
         return this.view;
+    }
+
+    public void sendMessage(ServerMessage messsage) throws Exception {
+        throw new Exception();
     }
 
 }

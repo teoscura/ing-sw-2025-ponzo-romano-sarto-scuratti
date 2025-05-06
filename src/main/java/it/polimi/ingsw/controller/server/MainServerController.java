@@ -357,6 +357,11 @@ public class MainServerController extends Thread implements RemoteServer {
         this.sendMessage(client, new NotifyStateUpdateMessage(state));
 	}
 
+    public void leaveSetup(ClientDescriptor descriptor) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'leaveSetup'");
+    }
+
     public void openNewRoom(ClientDescriptor client, GameModeType type, PlayerCount count) throws ForbiddenCallException {
         synchronized(listeners_lock){
             if (!this.stp_listeners.containsKey(client.getUsername())) {

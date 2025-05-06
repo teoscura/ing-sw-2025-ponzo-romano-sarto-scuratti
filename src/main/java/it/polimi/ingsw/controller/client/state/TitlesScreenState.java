@@ -10,8 +10,6 @@ public class TitlesScreenState extends ClientControllerState {
 
     private String username;
 
-    //XXX orribile.
-
     public TitlesScreenState(ClientController controller, ClientView view){
         super(controller, view);
     }
@@ -26,18 +24,13 @@ public class TitlesScreenState extends ClientControllerState {
         return new ConnectingState(this.controller, this.view, this.username);
     }
 
-    @Override
-    public void nextStep() {
-        if(!this.validateUsername(this.username)){
-            view.showTextMessage("Username is invalid! Username should only contain letters, numbers or '_','.','-'.");
+    public void setUsername(String username){
+        this.username = username;
+        if(!validateUsername(username)){
+            view.showTextMessage("Invalid username.");
             return;
         }
         this.transition();
-    }
-
-    public void setUsername(String username){
-        this.username = username;
-        nextStep();
     }
 
     private boolean validateUsername(String username) {

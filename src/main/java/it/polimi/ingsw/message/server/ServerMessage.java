@@ -1,5 +1,7 @@
 package it.polimi.ingsw.message.server;
 
+import java.io.Serializable;
+
 import it.polimi.ingsw.controller.server.ClientDescriptor;
 import it.polimi.ingsw.controller.server.LobbyController;
 import it.polimi.ingsw.controller.server.MainServerController;
@@ -8,9 +10,9 @@ import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.cards.state.CardState;
 import it.polimi.ingsw.model.state.GameState;
 
-public abstract class ServerMessage {
+public abstract class ServerMessage implements Serializable {
 
-	protected ClientDescriptor descriptor = null;
+	protected transient ClientDescriptor descriptor = null;
 
 	public void setDescriptor(ClientDescriptor client) {
 		this.descriptor = client;

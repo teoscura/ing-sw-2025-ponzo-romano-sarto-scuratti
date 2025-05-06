@@ -5,22 +5,22 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-import it.polimi.ingsw.controller.client.ClientController;
+import it.polimi.ingsw.controller.client.ThreadSafeMessageQueue;
 import it.polimi.ingsw.message.client.ClientMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
 
 public class SocketConnection extends Thread implements ServerConnection {
 
-	private final ClientController controller;
+	private final ThreadSafeMessageQueue inqueue;
 	private final Socket socket;
 	private final ObjectOutputStream out;
 	private final ObjectInputStream in;
 
-	public SocketConnection(ClientController controller, String server_ip, int server_port)
+	public SocketConnection(ThreadSafeMessageQueue inqueue, String server_ip, int server_port)
 			throws IOException {
-		if (controller == null)
+		if (inqueue == null)
 			throw new NullPointerException();
-		this.controller = controller;
+		this.inqueue = inqueue;
 		this.socket = new Socket(server_ip, server_port);
 		this.out = new ObjectOutputStream(socket.getOutputStream());
 		this.in = new ObjectInputStream(socket.getInputStream());
@@ -38,7 +38,7 @@ public class SocketConnection extends Thread implements ServerConnection {
 				this.close();
 				e.printStackTrace();
 			}
-			controller.receiveMessage(message);
+			inqueue.receiveMessage(message);
 		}
 	}
 

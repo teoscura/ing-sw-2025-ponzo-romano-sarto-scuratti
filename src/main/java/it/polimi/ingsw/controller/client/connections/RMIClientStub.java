@@ -6,24 +6,24 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
 import it.polimi.ingsw.controller.server.connections.Connection;
-import it.polimi.ingsw.controller.client.ClientController;
+import it.polimi.ingsw.controller.client.ThreadSafeMessageQueue;
 import it.polimi.ingsw.message.client.ClientMessage;
 
 public class RMIClientStub implements Remote, Connection {
 
-	private transient final ClientController controller;
+	private transient final ThreadSafeMessageQueue inqueue;
 	private final String username;
 
-	public RMIClientStub(ClientController controller, String username) throws RemoteException, NotBoundException {
-		if (controller == null || username == null) throw new NullPointerException();
-		this.controller = controller;
+	public RMIClientStub(ThreadSafeMessageQueue inqueue, String username, int port) throws RemoteException, NotBoundException {
+		if (inqueue == null || username == null) throw new NullPointerException();
+		this.inqueue = inqueue;
 		this.username = username;
-		UnicastRemoteObject.exportObject(this, 9999);
+		UnicastRemoteObject.exportObject(this, port);
 	}
 
 	@Override
 	public void sendMessage(ClientMessage message) {
-		controller.receiveMessage(message);
+		inqueue.receiveMessage(message);
 	}
 
 	public String getUsername() {
