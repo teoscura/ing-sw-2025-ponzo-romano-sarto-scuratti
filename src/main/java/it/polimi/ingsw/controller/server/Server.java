@@ -3,6 +3,8 @@ package it.polimi.ingsw.controller.server;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
+import java.rmi.AccessException;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -21,6 +23,7 @@ public class Server extends Thread implements RMISkeletonProvider {
 
 	private final ExecutorService serverPool;
 	private String ip = "localhost";
+	private ServerSocket server;
 
 	public Server() {
 		this.serverPool = new ThreadPoolExecutor(6, 60, Long.MAX_VALUE, TimeUnit.MILLISECONDS, new SynchronousQueue<>(true));
@@ -39,14 +42,14 @@ public class Server extends Thread implements RMISkeletonProvider {
 			throw new RuntimeException("Failed to setup the rmi registry and remote object, terminating.");
 		}
 		System.out.println("Finished setting up RMI.");
-		ServerSocket server = null;
 		try {
-			server = new ServerSocket();
+			this.server = new ServerSocket();
 		} catch (IOException e) {
 			throw new RuntimeException("Failed to setup the server socket, terminating.");
 		}
 		try {
-			server.bind(new InetSocketAddress(this.ip, 10000));
+			this.server.bind(new InetSocketAddress(this.ip, 10000));
+			Runtime.getRuntime().addShutdownHook(new Thread(){public void run(){cleanUp();}});
 			while (true) {
 				SocketClient new_connection = new SocketClient(server.accept());
 				MainServerController.getInstance().connectListener(new_connection);
@@ -63,11 +66,24 @@ public class Server extends Thread implements RMISkeletonProvider {
 			}
 		} catch (IOException e) {
 			try {
-				server.close();
+				this.server.close();
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
-			throw new RuntimeException(e);
+			System.exit(-1);
+		}
+	}
+
+	private void cleanUp(){
+		try {
+			Registry registry = LocateRegistry.createRegistry(9999);
+			registry.unbind("galaxy_truckers");
+			this.server.close();
+			//Exceptions dont matter in a shutdown hook.
+		} catch (AccessException e) {
+		} catch (RemoteException e) {
+		} catch (NotBoundException e) {
+		} catch (IOException e) {
 		}
 	}
 
