@@ -8,6 +8,10 @@ import java.util.Queue;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import it.polimi.ingsw.controller.client.connections.ConnectionType;
+import it.polimi.ingsw.controller.client.connections.RMIConnection;
+import it.polimi.ingsw.controller.client.connections.ServerConnection;
+import it.polimi.ingsw.controller.client.connections.SocketConnection;
 import it.polimi.ingsw.message.client.ClientMessage;
 import it.polimi.ingsw.message.server.PingMessage;
 import it.polimi.ingsw.message.server.ServerDisconnectMessage;

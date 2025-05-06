@@ -2,7 +2,7 @@ package it.polimi.ingsw.controller;
 
 import java.io.IOException;
 
-import it.polimi.ingsw.controller.server.Connection;
+import it.polimi.ingsw.controller.server.connections.Connection;
 import it.polimi.ingsw.message.client.ClientMessage;
 
 public class DummyConnection implements Connection {

@@ -1,11 +1,12 @@
-package it.polimi.ingsw.controller.client;
+package it.polimi.ingsw.controller.client.connections;
 
 import java.rmi.NotBoundException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
-import it.polimi.ingsw.controller.server.Connection;
+import it.polimi.ingsw.controller.server.connections.Connection;
+import it.polimi.ingsw.controller.client.ClientController;
 import it.polimi.ingsw.message.client.ClientMessage;
 
 public class RMIClientStub implements Remote, Connection {

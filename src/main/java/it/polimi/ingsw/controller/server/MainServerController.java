@@ -15,9 +15,10 @@ import java.util.TimerTask;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import it.polimi.ingsw.controller.client.RMIClientStub;
-import it.polimi.ingsw.controller.server.rmi.RMIServerStubImpl;
-import it.polimi.ingsw.controller.server.rmi.RemoteServer;
+import it.polimi.ingsw.controller.client.connections.RMIClientStub;
+import it.polimi.ingsw.controller.server.connections.RMIServerStubImpl;
+import it.polimi.ingsw.controller.server.connections.RemoteServer;
+import it.polimi.ingsw.controller.server.connections.SocketClient;
 import it.polimi.ingsw.message.client.ClientMessage;
 import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
@@ -334,10 +335,15 @@ public class MainServerController extends Thread implements RemoteServer {
 
 	public void enterSetup(ClientDescriptor client) throws ForbiddenCallException {
         synchronized(listeners_lock){
+            if (!this.lob_listeners.containsKey(client.getUsername())) {
+                System.out.println("Client '" + client.getUsername() + "' started setting up a lobby, but he's already playing!");
+                return;
+            }
             if (this.stp_listeners.containsKey(client.getUsername())) {
                 System.out.println("Client '" + client.getUsername() + "' started setting up a lobby, but he's already doing that!");
                 return;
             }
+            this.lob_listeners.remove(client.getUsername());
             this.stp_listeners.put(client.getUsername(), client);
         }
 		ClientSetupState state = null;
@@ -355,8 +361,11 @@ public class MainServerController extends Thread implements RemoteServer {
         synchronized(listeners_lock){
             if (!this.stp_listeners.containsKey(client.getUsername())) {
                 System.out.println("Client '" + client.getUsername() + "' attempted open a lobby, but he isn't setting up anything!");
+                this.stp_listeners.remove(client.getUsername());
+                this.lob_listeners.put(client.getUsername(), client);
                 return;
             }
+            //XXX check if hes setupping already and if hes not in a lobby. 
         }
         LobbyController new_lobby = new LobbyController(this.next_id);
         ModelInstance model = new ModelInstance(this.next_id, new_lobby, type, count);
@@ -377,11 +386,14 @@ public class MainServerController extends Thread implements RemoteServer {
                 System.out.println("Client '" + client.getUsername() + "' attempted open a lobby, but he isn't setting up anything!");
                 return;
             }
+            //XXX check if hes setupping already and if hes not in a lobby. 
         }
         ModelInstance loaded = null;
         synchronized(saved_lock){
             if(!saved.containsKey(id)){
                 System.out.println("Client '"+client.getUsername()+"' attempted to open a non-existant saved game!");
+                this.stp_listeners.remove(client.getUsername());
+                this.lob_listeners.put(client.getUsername(), client);
                 return;
             }
             loaded = this.saved.get(id);
@@ -447,5 +459,7 @@ public class MainServerController extends Thread implements RemoteServer {
         ClientMessage message = new NotifyStateUpdateMessage(state);
         this.broadcast(message);
     }
+
+    //XXX In case someone is kicked back to lobby, send them the lobby list again.
 
 }

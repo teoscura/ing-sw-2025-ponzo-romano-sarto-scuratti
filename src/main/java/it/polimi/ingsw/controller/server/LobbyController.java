@@ -10,7 +10,7 @@ import java.util.Queue;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import it.polimi.ingsw.controller.server.rmi.RemoteServer;
+import it.polimi.ingsw.controller.server.connections.RemoteServer;
 import it.polimi.ingsw.message.client.ClientMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;

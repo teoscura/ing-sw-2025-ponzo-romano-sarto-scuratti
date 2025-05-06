@@ -1,12 +1,13 @@
-package it.polimi.ingsw.controller.client;
+package it.polimi.ingsw.controller.client.connections;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
-import it.polimi.ingsw.controller.server.rmi.RMISkeletonProvider;
-import it.polimi.ingsw.controller.server.rmi.RemoteServer;
+import it.polimi.ingsw.controller.client.ClientController;
+import it.polimi.ingsw.controller.server.connections.RMISkeletonProvider;
+import it.polimi.ingsw.controller.server.connections.RemoteServer;
 import it.polimi.ingsw.message.server.ServerMessage;
 
 public class RMIConnection implements ServerConnection {

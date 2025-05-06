@@ -1,10 +1,11 @@
-package it.polimi.ingsw.controller.client;
+package it.polimi.ingsw.controller.client.connections;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
+import it.polimi.ingsw.controller.client.ClientController;
 import it.polimi.ingsw.message.client.ClientMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
 
