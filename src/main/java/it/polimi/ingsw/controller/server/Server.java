@@ -44,12 +44,12 @@ public class Server extends Thread implements RMISkeletonProvider {
 		System.out.println("Finished setting up RMI.");
 		try {
 			this.server = new ServerSocket();
+			this.server.bind(new InetSocketAddress(this.ip, 10000));
+			Runtime.getRuntime().addShutdownHook(new Thread(){public void run(){cleanUp();}});
 		} catch (IOException e) {
 			throw new RuntimeException("Failed to setup the server socket, terminating.");
 		}
 		try {
-			this.server.bind(new InetSocketAddress(this.ip, 10000));
-			Runtime.getRuntime().addShutdownHook(new Thread(){public void run(){cleanUp();}});
 			while (true) {
 				SocketClient new_connection = new SocketClient(server.accept());
 				MainServerController.getInstance().connectListener(new_connection);
