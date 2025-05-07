@@ -3,6 +3,8 @@ package it.polimi.ingsw.controller.server;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
+import java.nio.channels.AlreadyConnectedException;
+import java.nio.channels.NotYetConnectedException;
 import java.rmi.AccessException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -23,32 +25,44 @@ public class Server extends Thread implements RMISkeletonProvider {
 
 	private final ExecutorService serverPool;
 	private String ip = "localhost";
+	private int rmiport;
+	private boolean init = false;
 	private ServerSocket server;
 
 	public Server() {
-		this.serverPool = new ThreadPoolExecutor(6, 60, Long.MAX_VALUE, TimeUnit.MILLISECONDS, new SynchronousQueue<>(true));
+		this.serverPool = new ThreadPoolExecutor(20, 120, Long.MAX_VALUE, TimeUnit.MILLISECONDS, new SynchronousQueue<>(true));
 	}
+
+	public void init(String address, int rmiport){
+        if(this.init) throw new AlreadyConnectedException();
+		this.ip = address;
+		this.rmiport = rmiport;
+        this.init = true;
+    }
 
 	@Override
 	public void run() {
-		System.out.println("Starting server on localhost.");
+		if(!this.init) throw new NotYetConnectedException();
 		System.out.println("Setting up RMI.");
 		Registry registry = null;
 		try {
-			registry = LocateRegistry.createRegistry(9999);
+			registry = LocateRegistry.createRegistry(this.rmiport);
 			registry.rebind("galaxy_truckers", this);
-			UnicastRemoteObject.exportObject(this, 9999);
+			UnicastRemoteObject.exportObject(this, this.rmiport);
 		} catch (RemoteException e) {
 			throw new RuntimeException("Failed to setup the rmi registry and remote object, terminating.");
 		}
-		System.out.println("Finished setting up RMI.");
+		System.out.println("Successfully set up RMI.");
+		System.out.println("Starting server on: \'"+ip+"\'.");
 		try {
 			this.server = new ServerSocket();
-			this.server.bind(new InetSocketAddress(this.ip, 10000));
+			this.server.bind(new InetSocketAddress(this.ip, 0));
 			Runtime.getRuntime().addShutdownHook(new Thread(){public void run(){cleanUp();}});
 		} catch (IOException e) {
+			e.printStackTrace();
 			throw new RuntimeException("Failed to setup the server socket, terminating.");
 		}
+		System.out.println("Successfully started server on: \'"+ip+"\':\'"+this.server.getLocalPort()+"\''.");
 		try {
 			while (true) {
 				SocketClient new_connection = new SocketClient(server.accept());

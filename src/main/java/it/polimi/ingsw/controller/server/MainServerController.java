@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.nio.channels.AlreadyConnectedException;
+import java.nio.channels.NotYetConnectedException;
 import java.rmi.RemoteException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -36,6 +38,7 @@ public class MainServerController extends Thread implements RemoteServer {
     static private MainServerController instance = new MainServerController();
 
     private final Server server;
+    private boolean init = false;
 
     private final HashMap<String, ClientDescriptor> all_listeners;
     private final HashMap<String, ClientDescriptor> lob_listeners;
@@ -75,12 +78,19 @@ public class MainServerController extends Thread implements RemoteServer {
         return instance;
     }
 
+    public void init(String address, int rmiport){
+        if(this.init) throw new AlreadyConnectedException();
+        this.server.init(address, rmiport);
+        this.init = true;
+    }
+
     // -------------------------------------------------------------
     // Message handling, reception and sending.
     // -------------------------------------------------------------
 
     @Override
 	public void run() {
+        if(!this.init) throw new NotYetConnectedException();
         this.server.start();
 		while (true) {
 			synchronized (queue_lock) {

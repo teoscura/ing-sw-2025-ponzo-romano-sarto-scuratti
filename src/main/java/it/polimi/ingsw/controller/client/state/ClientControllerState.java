@@ -1,6 +1,7 @@
 package it.polimi.ingsw.controller.client.state;
 
 import it.polimi.ingsw.controller.client.ClientController;
+import it.polimi.ingsw.controller.client.connections.ConnectionType;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.view.ClientView;
 
@@ -26,8 +27,20 @@ public abstract class ClientControllerState {
         return this.view;
     }
 
-    public void sendMessage(ServerMessage messsage) throws Exception {
-        throw new Exception();
+    public void setUsername(String username){
+        throw new RuntimeException();
+    }
+
+    public void connect(String address, int port, ConnectionType type){
+        throw new RuntimeException();
+    }
+
+    public void sendMessage(ServerMessage messsage) {
+        throw new RuntimeException();
+    }
+
+    public void disconnect(){
+        throw new RuntimeException();
     }
 
 }
