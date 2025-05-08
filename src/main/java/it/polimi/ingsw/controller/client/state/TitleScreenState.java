@@ -6,11 +6,11 @@ import java.util.regex.Pattern;
 import it.polimi.ingsw.controller.client.ClientController;
 import it.polimi.ingsw.view.ClientView;
 
-public class TitlesScreenState extends ClientControllerState {
+public class TitleScreenState extends ClientControllerState {
 
     private String username;
 
-    public TitlesScreenState(ClientController controller, ClientView view){
+    public TitleScreenState(ClientController controller, ClientView view){
         super(controller, view);
     }
 
@@ -21,16 +21,20 @@ public class TitlesScreenState extends ClientControllerState {
 
     @Override
     public ClientControllerState getNext() {
+        if (!validateUsername(username)){
+            view.showTextMessage("Invalid username.");
+            return new TitleScreenState(controller, view);
+        }
         return new ConnectingState(this.controller, this.view, this.username);
     }
 
     public void setUsername(String username){
         this.username = username;
-        if(!validateUsername(username)){
-            view.showTextMessage("Invalid username.");
-            return;
-        }
         this.transition();
+    }
+
+    public void exit(){
+        this.controller.close();
     }
 
     private boolean validateUsername(String username) {
@@ -38,7 +42,5 @@ public class TitlesScreenState extends ClientControllerState {
 		Matcher matcher = allowed.matcher(username);
 		return matcher.matches();
 	}
-
-
 
 }

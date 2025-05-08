@@ -4,7 +4,7 @@
   <groupId>it.polimi.ingsw</groupId>
   <artifactId>GC13</artifactId>
   <name>prova-finale</name>
-  <version>1.0-SNAPSHOT</version>
+  <version>0.3</version>
   <build>
     <plugins>
       <plugin>
@@ -39,7 +39,8 @@
         <version>3.6.0</version>
         <executions>
           <execution>
-            <phase>package</phase>
+            <id>1</id>
+            <phase>package1</phase>
             <goals>
               <goal>shade</goal>
             </goals>
@@ -48,6 +49,21 @@
               <transformers>
                 <transformer>
                   <mainClass>it.polimi.ingsw.ServerMain</mainClass>
+                </transformer>
+              </transformers>
+            </configuration>
+          </execution>
+          <execution>
+            <id>2</id>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <finalName>${project.artifactId}-client-${project.version}</finalName>
+              <transformers>
+                <transformer>
+                  <mainClass>it.polimi.ingsw.ClientMain</mainClass>
                 </transformer>
               </transformers>
             </configuration>

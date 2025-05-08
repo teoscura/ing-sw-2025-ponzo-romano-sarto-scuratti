@@ -1,7 +1,7 @@
 package it.polimi.ingsw.controller.client;
 
 import it.polimi.ingsw.controller.client.state.ClientControllerState;
-import it.polimi.ingsw.controller.client.state.TitlesScreenState;
+import it.polimi.ingsw.controller.client.state.TitleScreenState;
 import it.polimi.ingsw.view.ClientView;
 
 public class ClientController {
@@ -10,7 +10,7 @@ public class ClientController {
 	private boolean closed = false;
 
 	public ClientController(ClientView view) {
-		this.state = new TitlesScreenState(this, view);
+		this.setState(new TitleScreenState(this, view));
 	}
 
 	public ClientControllerState getState(){

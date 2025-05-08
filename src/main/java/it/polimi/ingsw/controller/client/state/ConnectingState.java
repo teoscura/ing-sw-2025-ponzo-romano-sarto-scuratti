@@ -30,9 +30,13 @@ public class ConnectingState extends ClientControllerState {
         view.showConnectionScreen(this); 
     }
 
+    public ClientController getController(){
+        return this.controller;
+    }
+
     @Override
     public ClientControllerState getNext() {
-        if (this.connection == null) return new TitlesScreenState(controller, view);
+        if (this.connection == null) return new TitleScreenState(controller, view);
         else return new ConnectedState(controller, view, username, connection, this.inqueue);
     }
 

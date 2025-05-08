@@ -2,7 +2,7 @@ package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.model.client.state.*;
 import it.polimi.ingsw.controller.client.state.ConnectingState;
-import it.polimi.ingsw.controller.client.state.TitlesScreenState;
+import it.polimi.ingsw.controller.client.state.TitleScreenState;
 import it.polimi.ingsw.model.client.card.*;
 import it.polimi.ingsw.model.client.components.*;
 
@@ -61,7 +61,7 @@ public interface ClientView {
 	//Misc and debug
 	void showTextMessage(String message);
 
-    void showTitleScreen(TitlesScreenState titlesScreenState);
+    void showTitleScreen(TitleScreenState titlesScreenState);
 
     void showConnectionScreen(ConnectingState connectingState);
 

@@ -2,6 +2,7 @@ package it.polimi.ingsw;
 
 import it.polimi.ingsw.controller.client.ClientController;
 import it.polimi.ingsw.view.ClientView;
+import it.polimi.ingsw.view.commandbuilder.CBView;
 
 public class ClientMain {
     
@@ -14,7 +15,7 @@ public class ClientMain {
         switch(args[0]){
             case "gui": /*Start GUI*/ ; break;
             case "tui": /*start TUI*/ ; break;
-            /*XXX remove after testing done*/case "cb": /*start commandbuilder*/; break;
+            case "cb": v = new CBView(); break;
         }
         ClientController c = new ClientController(v);
         while(!c.getClosed()){}

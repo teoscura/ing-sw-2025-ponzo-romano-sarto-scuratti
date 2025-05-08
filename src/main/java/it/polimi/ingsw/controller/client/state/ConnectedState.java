@@ -35,7 +35,7 @@ public class ConnectedState extends ClientControllerState {
 
 	@Override
 	public ClientControllerState getNext(){
-		return new TitlesScreenState(controller, view);
+		return new TitleScreenState(controller, view);
 	}
 
 	// -------------------------------------------------------------
