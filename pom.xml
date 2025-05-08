@@ -78,7 +78,7 @@
                 <executions>
                     <execution>
                         <id>1</id>
-                        <phase>package1</phase>
+                        <phase>package</phase>
                         <goals>
                             <goal>shade</goal>
                         </goals>
