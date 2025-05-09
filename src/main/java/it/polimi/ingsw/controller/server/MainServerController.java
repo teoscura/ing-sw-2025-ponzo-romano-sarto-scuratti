@@ -511,6 +511,4 @@ public class MainServerController extends Thread implements RemoteServer {
         client.setID(-1);
     }
 
-    //XXX In case someone is kicked back to lobby, send them the lobby list again.
-
 }
