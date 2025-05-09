@@ -120,8 +120,8 @@ public class LobbyController extends Thread implements RemoteServer {
         	f.delete();
 		}
         MainServerController s = MainServerController.getInstance();
-        for(var e : this.listeners.entrySet()){
-            e.getValue().setID(-1);
+        for(var e : this.listeners.values()){
+			s.joinFromEndedGame(e);
         }
         for(var e : this.disconnected_usernames.keySet()){
             s.removeDisconnected(e);

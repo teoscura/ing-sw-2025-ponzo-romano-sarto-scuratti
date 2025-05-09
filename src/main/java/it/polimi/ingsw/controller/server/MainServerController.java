@@ -345,18 +345,18 @@ public class MainServerController extends Thread implements RemoteServer {
 
 	public void enterSetup(ClientDescriptor client) throws ForbiddenCallException {
         synchronized(listeners_lock){
-            if (!this.lob_listeners.containsKey(client.getUsername())) {
+            if(!lob_listeners.containsKey(client.getUsername())){
                 System.out.println("Client '" + client.getUsername() + "' started setting up a lobby, but he's already playing!");
                 return;
             }
-            if (this.stp_listeners.containsKey(client.getUsername())) {
+            else if(stp_listeners.containsKey(client.getUsername())){
                 System.out.println("Client '" + client.getUsername() + "' started setting up a lobby, but he's already doing that!");
                 return;
             }
             this.lob_listeners.remove(client.getUsername());
             this.stp_listeners.put(client.getUsername(), client);
         }
-		ClientSetupState state = null;
+        ClientSetupState state = null;
         ArrayList<ClientGameListEntry> tmp = new ArrayList<>();
         synchronized(saved_lock){
             for(var m : this.saved.values()){
@@ -364,23 +364,45 @@ public class MainServerController extends Thread implements RemoteServer {
             }
         }
         state = new ClientSetupState(client.getUsername(), tmp);
+        System.out.println("Client: '"+client.getUsername()+"' has entered setup state!");
         this.sendMessage(client, new NotifyStateUpdateMessage(state));
 	}
 
-    public void leaveSetup(ClientDescriptor descriptor) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'leaveSetup'");
-    }
-
-    public void openNewRoom(ClientDescriptor client, GameModeType type, PlayerCount count) throws ForbiddenCallException {
+    public void leaveSetup(ClientDescriptor client) {
         synchronized(listeners_lock){
-            if (!this.stp_listeners.containsKey(client.getUsername())) {
-                System.out.println("Client '" + client.getUsername() + "' attempted open a lobby, but he isn't setting up anything!");
-                this.stp_listeners.remove(client.getUsername());
-                this.lob_listeners.put(client.getUsername(), client);
+            if(lob_listeners.containsKey(client.getUsername())){
+                System.out.println("Client '" + client.getUsername() + "' tried to leave setup, but he's in the lobby!");
                 return;
             }
-            //XXX check if hes setupping already and if hes not in a lobby. 
+            else if(!stp_listeners.containsKey(client.getUsername())){
+                System.out.println("Client '" + client.getUsername() + "' tried to leave setup, but he wasn't never setupping!");
+                return;
+            }
+            this.stp_listeners.remove(client.getUsername());
+            this.lob_listeners.put(client.getUsername(), client);
+        }
+        ClientLobbySelectState state = null;
+        ArrayList<ClientGameListEntry> tmp = new ArrayList<>();
+        synchronized(lobbies_lock){
+            for(var l : this.lobbies.values()){
+                tmp.add(l.getClientInfo());
+            }
+        }
+        state = new ClientLobbySelectState(tmp);
+        this.sendMessage(client, new NotifyStateUpdateMessage(state));
+    }
+
+    public void openNewRoom(ClientDescriptor client, GameModeType type, PlayerCount count) throws ForbiddenCallException {  
+        synchronized(listeners_lock){
+            if(!this.stp_listeners.containsKey(client.getUsername()) && this.lob_listeners.containsKey(client.getUsername())){
+                System.out.println("Client: '"+client.getUsername()+"' tried opening a lobby, but he's not setupping!");
+                return;
+            }
+            if(!this.lob_listeners.containsKey(client.getUsername())){
+                System.out.println("Client: '"+client.getUsername()+"' tried opening a lobby, but he's already playing!");
+                return;
+            }
+            this.stp_listeners.remove(client.getUsername());
         }
         LobbyController new_lobby = new LobbyController(this.next_id);
         ModelInstance model = new ModelInstance(this.next_id, new_lobby, type, count);
@@ -390,18 +412,22 @@ public class MainServerController extends Thread implements RemoteServer {
             this.lobbies.put(this.next_id, new_lobby);
             this.next_id++;
         }
-        this.stp_listeners.remove(client.getUsername());
         new_lobby.connect(client);
         this.notifyLobbyListeners();
 	}
 
+
 	public void openUnfinished(ClientDescriptor client, int id) throws ForbiddenCallException {
         synchronized(listeners_lock){
-            if (!this.stp_listeners.containsKey(client.getUsername())) {
-                System.out.println("Client '" + client.getUsername() + "' attempted open a lobby, but he isn't setting up anything!");
+            if(!this.stp_listeners.containsKey(client.getUsername()) && this.lob_listeners.containsKey(client.getUsername())){
+                System.out.println("Client: '"+client.getUsername()+"' tried opening a lobby, but he's not setupping!");
                 return;
             }
-            //XXX check if hes setupping already and if hes not in a lobby. 
+            if(!this.lob_listeners.containsKey(client.getUsername())){
+                System.out.println("Client: '"+client.getUsername()+"' tried opening a lobby, but he's already playing!");
+                return;
+            }
+            this.stp_listeners.remove(client.getUsername());   
         }
         ModelInstance loaded = null;
         synchronized(saved_lock){
@@ -424,7 +450,6 @@ public class MainServerController extends Thread implements RemoteServer {
             this.lobbies.put(this.next_id, new_lobby);
             this.next_id++;
         }
-        this.stp_listeners.remove(client.getUsername());
         new_lobby.connect(client);
         this.notifyLobbyListeners();
 	}
@@ -473,6 +498,17 @@ public class MainServerController extends Thread implements RemoteServer {
         state = new ClientLobbySelectState(tmp);
         ClientMessage message = new NotifyStateUpdateMessage(state);
         this.broadcast(message);
+    }
+
+    public void joinFromEndedGame(ClientDescriptor client) {
+        synchronized(listeners_lock){
+            if(this.lob_listeners.containsKey(client.getUsername())){
+                System.out.println("Client '" + client.getUsername() + "' is already in lobby!");
+                return;
+            }
+            this.lob_listeners.put(client.getUsername(), client);
+        }
+        client.setID(-1);
     }
 
     //XXX In case someone is kicked back to lobby, send them the lobby list again.
