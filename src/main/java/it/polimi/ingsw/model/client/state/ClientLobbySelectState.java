@@ -8,15 +8,15 @@ import it.polimi.ingsw.view.ClientView;
 
 public class ClientLobbySelectState implements ClientState {
 
-    private ArrayList<ClientGameListEntry> games;
+    private ArrayList<ClientGameListEntry> unfinished_games;
 
     public ClientLobbySelectState(List<ClientGameListEntry> unfinished_games){
-        if(games == null) throw new NullPointerException();
-        this.games = new ArrayList<>(games);
+        if(unfinished_games == null) throw new NullPointerException();
+        this.unfinished_games = new ArrayList<>(unfinished_games);
     }
 
     public ArrayList<ClientGameListEntry> getLobbyList(){
-        return this.games;
+        return this.unfinished_games;
     }
 
     @Override

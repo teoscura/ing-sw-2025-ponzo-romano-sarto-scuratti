@@ -138,6 +138,7 @@ public class MainServerController extends Thread implements RemoteServer {
     public void broadcast(ClientMessage message) {
 		synchronized (listeners_lock) {
 			for (ClientDescriptor c : this.lob_listeners.values()) {
+                if(stp_listeners.containsKey(c.getUsername())) continue;
 				try {
 					c.sendMessage(message);
 				} catch (IOException e) {
@@ -229,15 +230,27 @@ public class MainServerController extends Thread implements RemoteServer {
 
     public void connect(ClientDescriptor client) throws ForbiddenCallException {
         //Either add him to a game if hes reconnecting, or add 
+        int id = -1; boolean disconnected = false;
         synchronized(listeners_lock){
+            if(all_listeners.containsKey(client.getUsername())){
+                System.out.println("Client '"+client.getUsername()+"' tried to connect twice!");
+                return;
+            }
             this.all_listeners.put(client.getUsername(), client);
             if (this.disconnected.containsKey(client.getUsername())) {
-                int id = this.disconnected.get(client.getUsername());
+                id = this.disconnected.get(client.getUsername());
                 client.setID(id);
                 this.disconnected.remove(client.getUsername());
-                this.lobbies.get(id).connect(client);
+                disconnected = true;
             } else {
                 this.lob_listeners.put(client.getUsername(), client);
+                System.out.println("Client '"+client.getUsername()+"' connected!");
+            }
+        }
+        if (disconnected) {
+            synchronized(lobbies_lock){
+                this.lobbies.get(id).connect(client);
+                System.out.println("Client '"+client.getUsername()+"' reconnected!");
             }
         }
     }
@@ -353,7 +366,6 @@ public class MainServerController extends Thread implements RemoteServer {
                 System.out.println("Client '" + client.getUsername() + "' started setting up a lobby, but he's already doing that!");
                 return;
             }
-            this.lob_listeners.remove(client.getUsername());
             this.stp_listeners.put(client.getUsername(), client);
         }
         ClientSetupState state = null;
@@ -370,8 +382,8 @@ public class MainServerController extends Thread implements RemoteServer {
 
     public void leaveSetup(ClientDescriptor client) {
         synchronized(listeners_lock){
-            if(lob_listeners.containsKey(client.getUsername())){
-                System.out.println("Client '" + client.getUsername() + "' tried to leave setup, but he's in the lobby!");
+            if(!lob_listeners.containsKey(client.getUsername())){
+                System.out.println("Client '" + client.getUsername() + "' tried to leave setup, but he's already playing!");
                 return;
             }
             else if(!stp_listeners.containsKey(client.getUsername())){
@@ -379,17 +391,8 @@ public class MainServerController extends Thread implements RemoteServer {
                 return;
             }
             this.stp_listeners.remove(client.getUsername());
-            this.lob_listeners.put(client.getUsername(), client);
         }
-        ClientLobbySelectState state = null;
-        ArrayList<ClientGameListEntry> tmp = new ArrayList<>();
-        synchronized(lobbies_lock){
-            for(var l : this.lobbies.values()){
-                tmp.add(l.getClientInfo());
-            }
-        }
-        state = new ClientLobbySelectState(tmp);
-        this.sendMessage(client, new NotifyStateUpdateMessage(state));
+        this.notifyLobbyListeners();
     }
 
     public void openNewRoom(ClientDescriptor client, GameModeType type, PlayerCount count) throws ForbiddenCallException {  
@@ -403,6 +406,7 @@ public class MainServerController extends Thread implements RemoteServer {
                 return;
             }
             this.stp_listeners.remove(client.getUsername());
+            this.lob_listeners.remove(client.getUsername());
         }
         LobbyController new_lobby = new LobbyController(this.next_id);
         ModelInstance model = new ModelInstance(this.next_id, new_lobby, type, count);
@@ -412,7 +416,9 @@ public class MainServerController extends Thread implements RemoteServer {
             this.lobbies.put(this.next_id, new_lobby);
             this.next_id++;
         }
+        client.setID(new_lobby.getID());
         new_lobby.connect(client);
+        System.out.println("Client: '"+client.getUsername()+"' opened a new lobby! [Type: "+model.getState().getType()+" | Size: "+model.getState().getCount()+"]");
         this.notifyLobbyListeners();
 	}
 
@@ -427,7 +433,8 @@ public class MainServerController extends Thread implements RemoteServer {
                 System.out.println("Client: '"+client.getUsername()+"' tried opening a lobby, but he's already playing!");
                 return;
             }
-            this.stp_listeners.remove(client.getUsername());   
+            this.stp_listeners.remove(client.getUsername());  
+            this.lob_listeners.remove(client.getUsername()); 
         }
         ModelInstance loaded = null;
         synchronized(saved_lock){
@@ -450,7 +457,9 @@ public class MainServerController extends Thread implements RemoteServer {
             this.lobbies.put(this.next_id, new_lobby);
             this.next_id++;
         }
+        client.setID(new_lobby.getID());
         new_lobby.connect(client);
+        System.out.println("Client: '"+client.getUsername()+"' opened a new lobby! [Type: "+loaded.getState().getType()+" | Size: "+loaded.getState().getCount()+"]");
         this.notifyLobbyListeners();
 	}
 
@@ -464,6 +473,7 @@ public class MainServerController extends Thread implements RemoteServer {
             } catch (InterruptedException e){
                 e.printStackTrace();
             }
+            System.out.println("Game ["+id+"] ended, closing its controller!");
         }
         this.updateUnfinishedList();
         this.notifyLobbyListeners();
@@ -479,6 +489,7 @@ public class MainServerController extends Thread implements RemoteServer {
                 System.out.println("Client '" + client.getUsername() + "' attempted to join a lobby, but is already playing!");
                 return;
             }
+            this.lob_listeners.remove(client.getUsername());
         }
         synchronized(lobbies_lock){
             client.setID(id);
@@ -488,16 +499,19 @@ public class MainServerController extends Thread implements RemoteServer {
     }
 
     public void notifyLobbyListeners(){
-        ClientLobbySelectState state = null;
+        ClientLobbySelectState state = new ClientLobbySelectState(this.getLobbyList());
+        ClientMessage message = new NotifyStateUpdateMessage(state);
+        this.broadcast(message);
+    }
+
+    public ArrayList<ClientGameListEntry> getLobbyList(){
         ArrayList<ClientGameListEntry> tmp = new ArrayList<>();
         synchronized(lobbies_lock){
             for(var l : this.lobbies.values()){
                 tmp.add(l.getClientInfo());
             }
+            return tmp;
         }
-        state = new ClientLobbySelectState(tmp);
-        ClientMessage message = new NotifyStateUpdateMessage(state);
-        this.broadcast(message);
     }
 
     public void joinFromEndedGame(ClientDescriptor client) {

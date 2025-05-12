@@ -41,6 +41,10 @@ public class LobbyController extends Thread implements RemoteServer {
         this.serializer_path = "gtunfinished-" + this.id + ".gtuf";
     }
 
+	public int getID(){
+		return this.id;
+	}
+
 	public void setModel(ModelInstance model){
 		this.model = model;
 	}
@@ -150,7 +154,7 @@ public class LobbyController extends Thread implements RemoteServer {
 			if (this.listeners.containsKey(client.getUsername())) {
 				System.out.println("Client '" + client.getUsername() + "' attempted to connect twice!");
 				this.broadcast(new ViewMessage("Client '" + client.getUsername() + "' attempted to connect twice!"));
-				this.disconnect(client);
+				return;
 			} else if (this.disconnected_usernames.containsKey(client.getUsername())) {
 				this.listeners.put(client.getUsername(), client);
 				this.disconnected_usernames.remove(client.getUsername());

@@ -15,7 +15,7 @@ public class ClientGameListEntry implements Serializable {
 
     public ClientGameListEntry(GameModeType type, String state, List<String> players, int model_id){
         if(players == null || type == null || state == null) throw new NullPointerException();
-        if(players.size()<2 || players.size()>4 || model_id < 0) throw new IllegalArgumentException();
+        if(players.size()<0 || players.size()>4 || model_id < 0) throw new IllegalArgumentException();
         this.players = new ArrayList<>(players);
         this.model_id = model_id;
         this.type = type;
