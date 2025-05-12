@@ -66,6 +66,8 @@ public class MainServerControllerTest {
         Thread.sleep(100);
         assertEquals(1, p1.getId());
         assertEquals(1, t.getLobbyList().size());
+        //XXX aggiungere che se waiting list rimane vuota allora gioco si chiude.
+        //E che verify e construction prendono e serializzano ogni mossa.
     }
 }
 
