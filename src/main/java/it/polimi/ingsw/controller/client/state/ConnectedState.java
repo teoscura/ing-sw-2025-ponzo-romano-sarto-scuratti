@@ -5,10 +5,11 @@ import java.rmi.RemoteException;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import it.polimi.ingsw.controller.ThreadSafeMessageQueue;
 import it.polimi.ingsw.controller.client.ClientController;
 import it.polimi.ingsw.controller.client.ConsumerThread;
-import it.polimi.ingsw.controller.client.ThreadSafeMessageQueue;
 import it.polimi.ingsw.controller.client.connections.ServerConnection;
+import it.polimi.ingsw.message.client.ClientMessage;
 import it.polimi.ingsw.message.server.PingMessage;
 import it.polimi.ingsw.message.server.ServerDisconnectMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
@@ -20,7 +21,7 @@ public class ConnectedState extends ClientControllerState {
 	private final String username;
 	private final Thread consumer_thread;
 
-	public ConnectedState(ClientController controller, ClientView view, String username, ServerConnection connection, ThreadSafeMessageQueue inqueue){
+	public ConnectedState(ClientController controller, ClientView view, String username, ServerConnection connection, ThreadSafeMessageQueue<ClientMessage> inqueue){
 		super(controller, view);
 		this.username = username;
 		this.connection = connection;

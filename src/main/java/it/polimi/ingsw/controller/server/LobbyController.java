@@ -4,12 +4,12 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.util.ArrayDeque;
 import java.util.HashMap;
-import java.util.Queue;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import it.polimi.ingsw.controller.AsyncInsertTask;
+import it.polimi.ingsw.controller.ThreadSafeMessageQueue;
 import it.polimi.ingsw.controller.server.connections.RemoteServer;
 import it.polimi.ingsw.message.client.ClientMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
@@ -23,21 +23,25 @@ public class LobbyController extends Thread implements RemoteServer {
 
     private final int id;
 
-    private final HashMap<String, ClientDescriptor> listeners = new HashMap<>();
-    private final HashMap<String, Player> disconnected_usernames = new HashMap<>();
-	private final Object listeners_lock = new Object();
-
-    private final Queue<ServerMessage> queue = new ArrayDeque<>();
-    private final Object queue_lock = new Object();
-
+    private final HashMap<String, ClientDescriptor> listeners;
+    private final HashMap<String, Player> disconnected_usernames;
+	private final Object listeners_lock;
+    private final ThreadSafeMessageQueue<ServerMessage> queue;
     private final String serializer_path;
+
     private ModelInstance model;
+	private final Object model_lock;
 	private Timer dsctimer = null;
 
 
     public LobbyController(int id){
         if(id<0) throw new IllegalArgumentException();
+		this.listeners = new HashMap<>();
+		this.disconnected_usernames = new HashMap<>();
+		this.listeners_lock = new Object();
+		this.queue = new ThreadSafeMessageQueue<>();
         this.id = id;
+		this.model_lock = new Object();
         this.serializer_path = "gtunfinished-" + this.id + ".gtuf";
     }
 
@@ -52,25 +56,19 @@ public class LobbyController extends Thread implements RemoteServer {
     @Override
 	public void run() {
 		if(model == null) throw new NullPointerException();
-		while (model.getState()!=null) {
-			synchronized (queue_lock) {
-				while(this.queue.isEmpty()){
-					try {
-						queue_lock.wait();
-					} catch (InterruptedException e) {
-						System.out.println("Force closing run thread!");
-					}
+		boolean running = true;
+		while (running) {
+			try {
+				ServerMessage mess = queue.poll();
+				synchronized(model){
+					mess.receive(this);
+					running = this.model.getState() == null;
 				}
-				while (!queue.isEmpty()) {
-					ServerMessage message = this.queue.poll();
-					try {
-						message.receive(this);
-					} catch (ForbiddenCallException e) {
-						System.out.println(e.getMessage());
-					}
-				}
-				queue_lock.notifyAll();
-			}
+            } catch (ForbiddenCallException e) {
+                System.out.println(e.getMessage());
+            } catch (InterruptedException e) {
+                System.out.println("Force shutdown of lobby "+this.id+" thread!");
+            }
 		}
         this.endGame();
 	}
@@ -81,10 +79,9 @@ public class LobbyController extends Thread implements RemoteServer {
 			this.broadcast(new ViewMessage("Recieved a message from a client not properly connected!"));
 			return;
 		}
-		synchronized (queue_lock) {
-			this.queue.add(message);
-			queue_lock.notifyAll();
-		}
+		AsyncInsertTask<ServerMessage> t = new AsyncInsertTask<>(this.queue, message);
+		t.start();
+		return;
 	}
 
 	public void broadcast(ClientMessage message) {
@@ -105,9 +102,9 @@ public class LobbyController extends Thread implements RemoteServer {
 	}
 
     public void serializeCurrentGame() {
-		synchronized (queue_lock) {
+		synchronized(model_lock){
 			try (FileOutputStream file = new FileOutputStream(this.serializer_path);
-				 ObjectOutputStream oos = new ObjectOutputStream(file)) {
+			ObjectOutputStream oos = new ObjectOutputStream(file)) {
 				oos.reset();
 				oos.writeObject(this.model);
 				oos.reset();
@@ -159,7 +156,7 @@ public class LobbyController extends Thread implements RemoteServer {
 				this.listeners.put(client.getUsername(), client);
 			}
 		}
-		synchronized (queue_lock) {
+		synchronized (model_lock) {
 			if (!model.getStarted()) {
 				System.out.println("Client '" + client.getUsername() + "' connected to waiting room!");
 				this.model.connect(client);
@@ -170,7 +167,6 @@ public class LobbyController extends Thread implements RemoteServer {
 				this.dsctimer = null;
 			} else {
 				System.out.println("Client '" + client.getUsername() + "' started spectating!");
-				this.listeners.put(client.getUsername(), client);
 			}
 		}
 	}
@@ -189,7 +185,7 @@ public class LobbyController extends Thread implements RemoteServer {
 				s.addDisconnected(client.getUsername(), this.id);
 			}
 		}
-		synchronized (queue_lock) {
+		synchronized (model_lock) {
 			if (client.getPlayer() != null) {
 				this.model.disconnect(client.getPlayer());
 			} else if (!this.model.getStarted()) {
@@ -210,7 +206,7 @@ public class LobbyController extends Thread implements RemoteServer {
 
 	public ClientGameListEntry getClientInfo() {
 		ClientGameListEntry entry = null;
-		synchronized(queue_lock){
+		synchronized(model_lock){
 			entry = this.model.getEntry();
 		}
 		return entry;

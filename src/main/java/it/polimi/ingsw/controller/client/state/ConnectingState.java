@@ -4,12 +4,13 @@ import java.io.IOException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 
+import it.polimi.ingsw.controller.ThreadSafeMessageQueue;
 import it.polimi.ingsw.controller.client.ClientController;
-import it.polimi.ingsw.controller.client.ThreadSafeMessageQueue;
 import it.polimi.ingsw.controller.client.connections.ConnectionType;
 import it.polimi.ingsw.controller.client.connections.RMIConnection;
 import it.polimi.ingsw.controller.client.connections.ServerConnection;
 import it.polimi.ingsw.controller.client.connections.SocketConnection;
+import it.polimi.ingsw.message.client.ClientMessage;
 import it.polimi.ingsw.message.server.UsernameSetupMessage;
 import it.polimi.ingsw.view.ClientView;
 
@@ -17,7 +18,7 @@ public class ConnectingState extends ClientControllerState {
 
     private final String username;
     private ServerConnection connection = null;
-    private ThreadSafeMessageQueue inqueue;
+    private ThreadSafeMessageQueue<ClientMessage> inqueue;
 
     public ConnectingState(ClientController controller, ClientView view, String username){
         super(controller, view);
@@ -41,7 +42,7 @@ public class ConnectingState extends ClientControllerState {
     }
 
     public void connect(String address, int port, ConnectionType type){
-        this.inqueue = new ThreadSafeMessageQueue();
+        this.inqueue = new ThreadSafeMessageQueue<>();
         switch(type){
             case ConnectionType.RMI: {
                 try {

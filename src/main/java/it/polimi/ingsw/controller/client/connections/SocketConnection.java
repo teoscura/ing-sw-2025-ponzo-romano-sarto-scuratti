@@ -5,18 +5,18 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-import it.polimi.ingsw.controller.client.ThreadSafeMessageQueue;
+import it.polimi.ingsw.controller.ThreadSafeMessageQueue;
 import it.polimi.ingsw.message.client.ClientMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
 
 public class SocketConnection extends Thread implements ServerConnection {
 
-	private final ThreadSafeMessageQueue inqueue;
+	private final ThreadSafeMessageQueue<ClientMessage> inqueue;
 	private final Socket socket;
 	private final ObjectOutputStream out;
 	private final ObjectInputStream in;
 
-	public SocketConnection(ThreadSafeMessageQueue inqueue, String server_ip, int server_port)
+	public SocketConnection(ThreadSafeMessageQueue<ClientMessage> inqueue, String server_ip, int server_port)
 			throws IOException {
 		if (inqueue == null)
 			throw new NullPointerException();
@@ -38,7 +38,7 @@ public class SocketConnection extends Thread implements ServerConnection {
 				this.close();
 				e.printStackTrace();
 			}
-			inqueue.receiveMessage(message);
+			inqueue.insert(message);
 		}
 	}
 

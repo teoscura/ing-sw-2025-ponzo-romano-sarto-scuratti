@@ -7,16 +7,16 @@ import java.io.ObjectInputStream;
 import java.nio.channels.AlreadyConnectedException;
 import java.nio.channels.NotYetConnectedException;
 import java.rmi.RemoteException;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Queue;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import it.polimi.ingsw.controller.AsyncInsertTask;
+import it.polimi.ingsw.controller.ThreadSafeMessageQueue;
 import it.polimi.ingsw.controller.client.connections.RMIClientStub;
 import it.polimi.ingsw.controller.server.connections.RMIServerStubImpl;
 import it.polimi.ingsw.controller.server.connections.RemoteServer;
@@ -47,8 +47,7 @@ public class MainServerController extends Thread implements RemoteServer {
     private final List<SocketClient> to_setup_tcp;
 	private final Object listeners_lock;
 
-    private final Queue<ServerMessage> queue;
-    private final Object queue_lock;
+    private final ThreadSafeMessageQueue<ServerMessage> queue;
 
     private int next_id;
     private HashMap<Integer, LobbyController> lobbies;
@@ -63,8 +62,7 @@ public class MainServerController extends Thread implements RemoteServer {
         disconnected = new HashMap<>();
         to_setup_tcp = new ArrayList<>();
         listeners_lock = new Object();
-        queue = new ArrayDeque<>();
-        queue_lock = new Object();
+        queue = new ThreadSafeMessageQueue<>();
         lobbies = new HashMap<>();
         lobbies_lock = new Object();
         saved = new HashMap<>();
@@ -98,24 +96,13 @@ public class MainServerController extends Thread implements RemoteServer {
         if(!this.init) throw new NotYetConnectedException();
         this.server.start();
 		while (true) {
-			synchronized (queue_lock) {
-				while(this.queue.isEmpty()){
-					try {
-						queue_lock.wait();
-					} catch (InterruptedException e) {
-						System.out.println("Shutting down...");
-					}
-				}
-				while (!queue.isEmpty()) {
-					ServerMessage message = this.queue.poll();
-					try {
-						message.receive(this);
-					} catch (ForbiddenCallException e) {
-						System.out.println(e.getMessage());
-					}
-				}
-				queue_lock.notifyAll();
-			}
+            try {
+                queue.poll().receive(this);
+            } catch (ForbiddenCallException e) {
+                System.out.println(e.getMessage());
+            } catch (InterruptedException e) {
+                System.out.println("Force shutdown of main server thread!");
+            }
 		}
 	}
 
@@ -126,10 +113,8 @@ public class MainServerController extends Thread implements RemoteServer {
 			return;
 		}
         if (message.getDescriptor().getId() == -1 ) {
-            synchronized (queue_lock) {
-                this.queue.add(message);
-                queue_lock.notifyAll();
-            }
+            AsyncInsertTask<ServerMessage> t = new AsyncInsertTask<>(this.queue, message);
+            t.start();
             return;
         }	
         var target = this.lobbies.get(message.getDescriptor().getId());
@@ -316,7 +301,7 @@ public class MainServerController extends Thread implements RemoteServer {
     private TimerTask timeoutTask(MainServerController controller, ClientDescriptor client) {
 		return new TimerTask() {
 			public void run() {
-				synchronized (queue_lock) {
+				synchronized (listeners_lock) {
 					System.out.println("Client '" + client.getUsername() + "' failed to ping in between timeout!");
 					controller.disconnect(client);
 				}
