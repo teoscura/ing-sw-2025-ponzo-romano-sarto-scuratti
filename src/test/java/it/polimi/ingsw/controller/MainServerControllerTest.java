@@ -134,6 +134,7 @@ public class MainServerControllerTest {
         assertEquals(1, t.getLobbyList().size());
         t.disconnect(p2);
         Thread.sleep(200);
+        //FIXME
         assertEquals(0, t.getLobbyList().size());
     }
 
