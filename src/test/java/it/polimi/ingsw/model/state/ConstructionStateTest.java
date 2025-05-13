@@ -111,10 +111,10 @@ public class ConstructionStateTest {
     @Test
     void LevelTwoConstruction() throws InterruptedException, ForbiddenCallException{
         ArrayList<Player> players = new ArrayList<>(Arrays.asList(new Player[]{player1, player2}));
-        LevelTwoConstructionState state = new LevelTwoConstructionState(model, GameModeType.TEST, PlayerCount.TWO, players, 5);
+        LevelTwoConstructionState state = new LevelTwoConstructionState(model, GameModeType.TEST, PlayerCount.TWO, players, 1);
         model.setState(state);
         ServerMessage mess = null;
-        Thread.sleep(5500);
+        Thread.sleep(1500);
         mess = new TakeComponentMessage();
         mess.setDescriptor(p1desc);
         model.validate(mess);
@@ -168,11 +168,11 @@ public class ConstructionStateTest {
         mess = new ToggleHourglassMessage();
         mess.setDescriptor(p1desc);
         model.validate(mess);
-        Thread.sleep(5500);
+        Thread.sleep(1500);
         mess = new ToggleHourglassMessage();
         mess.setDescriptor(p2desc);
         model.validate(mess);
-        Thread.sleep(5500);
+        Thread.sleep(1500);
         test = state.getHoarded(player1).getLast().getID(); 
         mess = new TakeComponentMessage();
         mess.setDescriptor(p1desc);

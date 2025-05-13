@@ -98,7 +98,7 @@ public class MainServerController extends Thread implements RemoteServer {
 					try {
 						queue_lock.wait();
 					} catch (InterruptedException e) {
-						e.printStackTrace();
+						System.out.println("Shutting down...");
 					}
 				}
 				while (!queue.isEmpty()) {
