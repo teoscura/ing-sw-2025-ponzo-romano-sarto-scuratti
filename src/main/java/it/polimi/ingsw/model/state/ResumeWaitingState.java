@@ -24,7 +24,6 @@ public class ResumeWaitingState extends GameState {
     private final GameState next;
     private final HashMap<String, ClientDescriptor> awaiting;
     private final PlayerCount count;
-    private boolean done = false;
 
     public ResumeWaitingState(ModelInstance model, GameModeType type, PlayerCount count, GameState state) {
         super(model, type, count, null);
@@ -46,7 +45,16 @@ public class ResumeWaitingState extends GameState {
     @Override
     public void validate(ServerMessage message) throws ForbiddenCallException {
         message.receive(this);
-        if(!this.done){
+        int here = 0;
+        for(String username : this.next.players.stream().map(p->p.getUsername()).toList()){
+            if(this.awaiting.get(username)==null) return;
+            here++;
+        }
+        if(here==0){
+            this.model.endGame();
+            return;
+        }
+        if(here <= this.next.getCount().getNumber()){
             this.broadcastMessage(new NotifyStateUpdateMessage(this.getClientState()));
             return;
         }
@@ -95,10 +103,6 @@ public class ResumeWaitingState extends GameState {
         System.out.println("Client '"+client.getUsername()+"' connected!");
         this.broadcastMessage(new ViewMessage("Client '"+client.getUsername()+"' connected!"));  
         this.awaiting.put(client.getUsername(), client);
-        for(String username : this.next.players.stream().map(p->p.getUsername()).toList()){
-            if(this.awaiting.get(username)==null) return;
-        }
-        this.done = true;
     }
 
     public void disconnect(ClientDescriptor client) throws ForbiddenCallException {

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.controller.server;
 
 import java.io.IOException;
+import java.lang.reflect.InaccessibleObjectException;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.nio.channels.AlreadyConnectedException;
@@ -51,6 +52,8 @@ public class Server extends Thread implements RMISkeletonProvider {
 			UnicastRemoteObject.exportObject(this, this.rmiport);
 		} catch (RemoteException e) {
 			throw new RuntimeException("Failed to setup the rmi registry and remote object, terminating.");
+		} catch (InaccessibleObjectException e) {
+			System.out.println("Couldn't bind RMI! Are you testing?");
 		}
 		System.out.println("Successfully set up RMI.");
 		System.out.println("Starting server on: \'"+ip+"\'.");

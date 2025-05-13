@@ -25,9 +25,6 @@ public class MainServerControllerTest {
 
     @BeforeEach 
     void setUp(){
-        t = MainServerController.getInstance();
-        t.init("localhost", 0);
-        t.start();
         p1 = new ClientDescriptor("p1", new DummyConnection());
         p2 = new ClientDescriptor("p2", new DummyConnection());
         p3 = new ClientDescriptor("p3", new DummyConnection());
@@ -42,6 +39,9 @@ public class MainServerControllerTest {
 
     @Test
     void connectionTest() throws ForbiddenCallException, InterruptedException{
+        t = MainServerController.getInstance();
+        t.init("localhost", 0);
+        t.start();
         ServerMessage mess = null;
         t.connect(p1);
         t.connect(p2);
@@ -108,6 +108,33 @@ public class MainServerControllerTest {
         Thread.sleep(100);
         t.connect(p1);
         assertEquals(-1, p1.getId());
+        assertEquals(1, t.getLobbyList().size());
+
+    }
+
+    @Test
+    void openUnfinishedSuccess() throws ForbiddenCallException, InterruptedException{
+        t = MainServerController.getInstance();
+        t.init("localhost", 0);
+        t.start();
+        ServerMessage mess = null;
+        t.connect(p2);
+        t.connect(p3);
+        t.connect(p4);
+        t.connect(p5);
+        assertEquals(0, t.getLobbyList().size());
+        mess = new EnterSetupMessage();
+        mess.setDescriptor(p2);
+        t.receiveMessage(mess);
+        mess = new OpenUnfinishedMessage(2);
+        mess.setDescriptor(p2);
+        t.receiveMessage(mess);
+        Thread.sleep(100);
+        assertEquals(2, p2.getId());
+        assertEquals(1, t.getLobbyList().size());
+        t.disconnect(p2);
+        Thread.sleep(200);
+        assertEquals(0, t.getLobbyList().size());
     }
 
 

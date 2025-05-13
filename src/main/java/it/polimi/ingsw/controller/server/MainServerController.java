@@ -452,7 +452,6 @@ public class MainServerController extends Thread implements RemoteServer {
             if(!saved.containsKey(id)){
                 System.out.println("Client '"+client.getUsername()+"' attempted to open a non-existant saved game!");
                 reset = true;
-                return;
             }
             loaded = this.saved.get(id);
             if(!loaded.getEntry().getPlayers().contains(client.getUsername())){
@@ -465,6 +464,7 @@ public class MainServerController extends Thread implements RemoteServer {
                 this.stp_listeners.remove(client.getUsername());
                 this.lob_listeners.put(client.getUsername(), client);
             }
+            return;
         }
         this.updateUnfinishedList();
         LobbyController new_lobby = new LobbyController(id);
@@ -473,8 +473,7 @@ public class MainServerController extends Thread implements RemoteServer {
         new_lobby.setModel(loaded);
         new_lobby.start();
         synchronized(lobbies_lock){
-            this.lobbies.put(this.next_id, new_lobby);
-            this.next_id++;
+            this.lobbies.put(new_lobby.getID(), new_lobby);
         }
         client.setID(new_lobby.getID());
         new_lobby.connect(client);

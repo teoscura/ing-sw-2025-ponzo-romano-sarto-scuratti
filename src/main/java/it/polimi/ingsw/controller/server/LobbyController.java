@@ -197,8 +197,8 @@ public class LobbyController extends Thread implements RemoteServer {
 				this.model.disconnect(client.getPlayer());
 			} else if (!this.model.getStarted()) {
 				this.model.disconnect(client);
-			}			
-			if(this.model.getState() == null){
+			} if(this.model.getState() == null){
+				System.out.println("Babbo");
 				return;
 			}
 			if (this.disconnected_usernames.size() >= this.model.getState().getCount().getNumber() - 1) {
