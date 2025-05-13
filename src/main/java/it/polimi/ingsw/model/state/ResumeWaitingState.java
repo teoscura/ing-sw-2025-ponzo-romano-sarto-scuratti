@@ -50,7 +50,6 @@ public class ResumeWaitingState extends GameState {
             if(this.awaiting.get(username)==null) continue;
             here++;
         }
-        System.out.println(here);
         if(here==0){
             System.out.println("Everyone left the room, closing it!");
             this.model.endGame();
@@ -61,9 +60,13 @@ public class ResumeWaitingState extends GameState {
             return;
         }
         for(Player p : this.next.players){
-            p.bindDescriptor(this.awaiting.get(p.getUsername()));
+            this.awaiting.get(p.getUsername()).bindPlayer(p);
         }
-        this.transition();
+        this.resumeState();
+    }
+
+    private void resumeState() {
+        this.model.setState(next);
     }
 
     @Override

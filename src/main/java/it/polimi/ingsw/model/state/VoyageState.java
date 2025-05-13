@@ -38,13 +38,14 @@ public class VoyageState extends GameState {
 		this.to_give_up = new ArrayList<>();
 		this.planche = planche;
 		this.voyage_deck = deck;
+		this.card = null;
 	}
 
 	@Override
 	public void init() {
 		super.init();
 		System.out.println("New Game State -> Voyage State");
-		this.setCardState(null);
+		if (this.card == null) this.setCardState(null);
 		this.broadcastMessage(new NotifyStateUpdateMessage(this.getClientState()));
 	}
 
@@ -177,6 +178,7 @@ public class VoyageState extends GameState {
 			this.card = this.voyage_deck.pullCard();
 			if (this.card == null) {
 				this.transition();
+				return;
 			}
 			this.state = card.getState(this);
 			this.model.serialize();
@@ -195,6 +197,7 @@ public class VoyageState extends GameState {
 		return res;
 	}
 
+	//XXX remove player arg requirement, not needed anymore
 	@Override
 	public CardState getCardState(Player p){
 		return this.state;

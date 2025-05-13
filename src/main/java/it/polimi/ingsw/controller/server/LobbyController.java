@@ -65,7 +65,6 @@ public class LobbyController extends Thread implements RemoteServer {
 					ServerMessage message = this.queue.poll();
 					try {
 						message.receive(this);
-						System.out.println(model.getState());
 					} catch (ForbiddenCallException e) {
 						System.out.println(e.getMessage());
 					}
@@ -73,7 +72,6 @@ public class LobbyController extends Thread implements RemoteServer {
 				queue_lock.notifyAll();
 			}
 		}
-		System.out.println("AAA");
         this.endGame();
 	}
 
@@ -122,7 +120,6 @@ public class LobbyController extends Thread implements RemoteServer {
 	}
 
     public void endGame(){
-		this.queue_lock.notifyAll();
 		System.out.println("Game id: "+this.id+" finished!");
 		if(this.model.getState() == null){
 			File f = new File(this.serializer_path);

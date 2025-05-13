@@ -88,7 +88,7 @@ public class OpenSpaceState extends CardState {
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to progress the turn while already having done so!"));
 			return;
 		}
-		System.out.println("Player '" + p.getUsername() + "' motioned to progress! ("+(this.state.getCount().getNumber()-this.awaiting.size())+").");
+		System.out.println("Player '" + p.getUsername() + "' motioned to progress! ("+(this.awaiting.size()-1)+" missing).");
 		this.awaiting.remove(p);
 	}
 

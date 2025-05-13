@@ -67,6 +67,16 @@ public class ModelInstance implements Serializable {
 		next.init();
 	}
 
+	public void resumeState(GameState next) {
+		this.state = next;
+		if (this.state == null) {
+			return;
+		}
+		if (this.state.toSerialize()) {
+			this.serialize();
+		}
+	}
+
 	public void connect(ClientDescriptor client) {
 		try {
 			ServerMessage mess = new ServerConnectMessage(client);
