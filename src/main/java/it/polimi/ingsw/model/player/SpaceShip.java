@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.player;
 
+import java.io.Serializable;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,7 +30,7 @@ import it.polimi.ingsw.model.components.visitors.EnergyVisitor;
 import it.polimi.ingsw.model.player.exceptions.IllegalComponentAdd;
 
 
-public class SpaceShip{
+public class SpaceShip implements Serializable {
 
 	private final Player player;
 

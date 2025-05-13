@@ -1,6 +1,8 @@
 //Done.
 package it.polimi.ingsw.model.components;
 
+import java.io.Serializable;
+
 import it.polimi.ingsw.model.client.components.ClientComponent;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ConnectorType;
@@ -9,7 +11,7 @@ import it.polimi.ingsw.model.components.visitors.*;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.player.SpaceShip;
 
-public abstract class BaseComponent implements iVisitable {
+public abstract class BaseComponent implements iVisitable, Serializable {
 
 	private final int id;
 	private final ConnectorType[] connectors;

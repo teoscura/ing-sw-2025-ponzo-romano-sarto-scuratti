@@ -112,6 +112,7 @@ public class LobbyController extends Thread implements RemoteServer {
 				oos.writeObject(this.model);
 				oos.reset();
 			} catch (IOException e) {
+				e.printStackTrace();
 				System.out.println("Failed to serialize the current modelinstance, closing server!");
 				this.endGame();
 			}
@@ -119,6 +120,7 @@ public class LobbyController extends Thread implements RemoteServer {
 	}
 
     protected void endGame(){
+		System.out.println("Game id: "+this.id+" finished!");
 		if(this.model.getState() == null){
 			File f = new File(this.serializer_path);
         	f.delete();
@@ -147,13 +149,11 @@ public class LobbyController extends Thread implements RemoteServer {
 		synchronized (queue_lock) {
 			if (!model.getStarted()) {
 				System.out.println("Client '" + client.getUsername() + "' connected to waiting room!");
-				this.broadcast(new ViewMessage("Client '" + client.getUsername() + "' connected to waiting room!"));
 				this.model.connect(client);
 				return;
 			}
 			if (this.listeners.containsKey(client.getUsername())) {
 				System.out.println("Client '" + client.getUsername() + "' attempted to connect twice!");
-				this.broadcast(new ViewMessage("Client '" + client.getUsername() + "' attempted to connect twice!"));
 				return;
 			} else if (this.disconnected_usernames.containsKey(client.getUsername())) {
 				this.listeners.put(client.getUsername(), client);
@@ -163,6 +163,7 @@ public class LobbyController extends Thread implements RemoteServer {
 				this.dsctimer.cancel();
 				this.dsctimer = null;
 			} else {
+				System.out.println("Client '" + client.getUsername() + "' started spectating!");
 				this.listeners.put(client.getUsername(), client);
 			}
 		}
@@ -171,7 +172,8 @@ public class LobbyController extends Thread implements RemoteServer {
 	public void disconnect(ClientDescriptor client) {
 		MainServerController s = MainServerController.getInstance();
 		synchronized (queue_lock) {
-			if (!listeners.containsValue(client)) {
+			if (!listeners.containsKey(client.getUsername())) {
+				System.out.println("Client '"+client.getUsername()+"' tried disconnecting from a lobby he was never connected to!");
 				return;
 			}
 			client.getConnection().close();
@@ -179,6 +181,8 @@ public class LobbyController extends Thread implements RemoteServer {
 				this.model.disconnect(client.getPlayer());
 				this.disconnected_usernames.put(client.getUsername(), client.getPlayer());
 				s.addDisconnected(client.getUsername(), this.id);
+			} else if (!this.model.getStarted()) {
+				this.model.disconnect(client);
 			}
 			this.listeners.remove(client.getUsername());
 			System.out.println("Client '" + client.getUsername() + "' disconnected.");

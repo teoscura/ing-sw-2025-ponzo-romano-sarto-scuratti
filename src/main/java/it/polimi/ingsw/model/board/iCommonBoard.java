@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import it.polimi.ingsw.model.components.BaseComponent;
 
 public interface iCommonBoard extends Serializable {
+	
 	int getCoveredSize();
 
 	BaseComponent pullComponent();

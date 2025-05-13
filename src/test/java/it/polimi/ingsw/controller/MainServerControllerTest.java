@@ -6,9 +6,12 @@ import org.junit.jupiter.api.BeforeEach;
 
 import it.polimi.ingsw.controller.server.ClientDescriptor;
 import it.polimi.ingsw.controller.server.MainServerController;
+import it.polimi.ingsw.message.server.EnterLobbyMessage;
 import it.polimi.ingsw.message.server.EnterSetupMessage;
 import it.polimi.ingsw.message.server.LeaveSetupMessage;
 import it.polimi.ingsw.message.server.OpenLobbyMessage;
+import it.polimi.ingsw.message.server.OpenUnfinishedMessage;
+import it.polimi.ingsw.message.server.ServerDisconnectMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.PlayerCount;
@@ -47,6 +50,10 @@ public class MainServerControllerTest {
         t.connect(p2);
         t.connect(p4);
         t.connect(p5);
+        t.connect(s1);
+        t.connect(s2);
+        t.connect(s3);
+        int id = t.getNext();
         mess = new EnterSetupMessage();
         mess.setDescriptor(p1);
         t.receiveMessage(mess);
@@ -64,8 +71,42 @@ public class MainServerControllerTest {
         mess.setDescriptor(p1);
         t.receiveMessage(mess);
         Thread.sleep(100);
-        assertEquals(1, p1.getId());
+        assertEquals(id, p1.getId());
         assertEquals(1, t.getLobbyList().size());
+        mess = new EnterSetupMessage();
+        mess.setDescriptor(p2);
+        t.receiveMessage(mess);
+        mess = new OpenLobbyMessage(GameModeType.LVL2, PlayerCount.FOUR);
+        mess.setDescriptor(p2);
+        t.receiveMessage(mess);
+        Thread.sleep(100);
+        assertEquals(id + 1, p2.getId());
+        assertEquals(2, t.getLobbyList().size());
+        mess = new EnterLobbyMessage(id +1);
+        mess.setDescriptor(p3);
+        t.receiveMessage(mess);
+        mess = new EnterLobbyMessage(id +1);
+        mess.setDescriptor(p4);
+        t.receiveMessage(mess);
+        mess = new EnterLobbyMessage(id +1);
+        mess.setDescriptor(p5);
+        t.receiveMessage(mess);
+        //Spectator joins.
+        mess = new EnterLobbyMessage(id +1);
+        mess.setDescriptor(s1);
+        t.receiveMessage(mess);
+        Thread.sleep(100);
+        //A dude opens a new Lobby from unfinished;
+        mess = new EnterSetupMessage();
+        mess.setDescriptor(s2);
+        t.receiveMessage(mess);
+        Thread.sleep(100);
+        mess = new OpenUnfinishedMessage(id-1);
+        mess.setDescriptor(s2);
+        t.receiveMessage(mess);
+        Thread.sleep(100);
+        System.out.println(id+" p1: "+p1.getId());
+        t.disconnect(p1);
         //XXX aggiungere che se waiting list rimane vuota allora gioco si chiude.
         //E che verify e construction prendono e serializzano ogni mossa.
     }

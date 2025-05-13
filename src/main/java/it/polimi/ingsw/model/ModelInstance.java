@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model;
 
+import java.io.Serializable;
+
 import it.polimi.ingsw.controller.server.ClientDescriptor;
 import it.polimi.ingsw.controller.server.LobbyController;
 import it.polimi.ingsw.message.client.ClientMessage;
@@ -13,10 +15,10 @@ import it.polimi.ingsw.model.state.GameState;
 import it.polimi.ingsw.model.state.ResumeWaitingState;
 import it.polimi.ingsw.model.state.WaitingState;
 
-public class ModelInstance {
+public class ModelInstance implements Serializable {
 
-	protected final int id;
 	protected transient LobbyController controller;
+	protected final int id;
 	protected boolean started;
 	protected boolean ended;
 	protected GameState state;
@@ -43,7 +45,6 @@ public class ModelInstance {
 	}
 
 	public void startGame() {
-		System.out.println("Game Started.");
 		this.started = true;
 	}
 

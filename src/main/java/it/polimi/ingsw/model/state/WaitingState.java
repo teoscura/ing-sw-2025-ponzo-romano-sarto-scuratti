@@ -30,6 +30,7 @@ public class WaitingState extends GameState {
 
 	@Override
 	public void init() {
+		System.out.println("New Game State -> Waiting Room State!");
 		this.broadcastMessage(new NotifyStateUpdateMessage(this.getClientState()));
 	}
 
@@ -102,6 +103,9 @@ public class WaitingState extends GameState {
 		System.out.println("Client '" + client.getUsername() + "' disconnected!");
 		this.broadcastMessage(new ViewMessage("Client '" + client.getUsername() + "' disconnected!"));
 		this.connected.remove(client);
+		if(connected.size()==0){
+			this.model.setState(null);
+		}
 	}
 
 	@Override
