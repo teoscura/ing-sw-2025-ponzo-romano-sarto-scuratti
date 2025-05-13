@@ -75,7 +75,12 @@ public class MainServerController extends Thread implements RemoteServer {
     }
 
     static public MainServerController getInstance(){
+        if(instance == null) instance = new MainServerController();
         return instance;
+    }
+
+    static public void reset(){
+        instance = null;
     }
 
     public void init(String address, int rmiport){

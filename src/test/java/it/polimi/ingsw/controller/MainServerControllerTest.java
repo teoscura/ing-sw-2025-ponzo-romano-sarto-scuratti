@@ -49,6 +49,7 @@ public class MainServerControllerTest {
         s1 = new ClientDescriptor("s1", new DummyConnection());
         s2 = new ClientDescriptor("s2", new DummyConnection());
         s3 = new ClientDescriptor("s3", new DummyConnection());
+        MainServerController.reset();
     }
 
     @Test
