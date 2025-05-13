@@ -48,7 +48,7 @@ public abstract class GameState implements Serializable {
 
 	public abstract String toString();
 
-	public abstract ClientGameListEntry getOngoingEntry(ModelInstance model);
+	public abstract ClientGameListEntry getOngoingEntry(int id);
 
 	public void init() {
 	}

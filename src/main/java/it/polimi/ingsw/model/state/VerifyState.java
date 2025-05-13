@@ -71,6 +71,7 @@ public class VerifyState extends GameState {
 		}
 		if (this.awaiting.size()-disconnected>0) {
 			this.broadcastMessage(new NotifyStateUpdateMessage(this.getClientState()));
+			this.model.serialize();
 			return;
 		}
 		this.transition();
@@ -223,8 +224,8 @@ public class VerifyState extends GameState {
 	}
 
 	@Override
-	public ClientGameListEntry getOngoingEntry(ModelInstance model){
-		return new ClientGameListEntry(type, this.toString(), this.players.stream().map(p->p.getUsername()).toList(), model.getID());
+	public ClientGameListEntry getOngoingEntry(int id){
+		return new ClientGameListEntry(type, this.toString(), this.players.stream().map(p->p.getUsername()).toList(), id);
 	}
 
 }

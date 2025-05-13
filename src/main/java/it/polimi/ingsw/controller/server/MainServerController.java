@@ -236,7 +236,7 @@ public class MainServerController extends Thread implements RemoteServer {
                 System.out.println("Client '"+client.getUsername()+"' tried to connect twice!");
                 return;
             }
-            this.all_listeners.put(client.getUsername(), client);
+            this.all_listeners.put(client.getUsername(), client);;
             if (this.disconnected.containsKey(client.getUsername())) {
                 id = this.disconnected.get(client.getUsername());
                 client.setID(id);
@@ -244,11 +244,16 @@ public class MainServerController extends Thread implements RemoteServer {
                 disconnected = true;
             } else {
                 this.lob_listeners.put(client.getUsername(), client);
+                client.setID(-1);
                 System.out.println("Client '"+client.getUsername()+"' connected!");
             }
         }
         if (disconnected) {
             synchronized(lobbies_lock){
+                if(this.lobbies.get(id)==null){
+                    client.setID(-1);
+                    return;
+                }
                 this.lobbies.get(id).connect(client);
                 System.out.println("Client '"+client.getUsername()+"' reconnected!");
             }
@@ -259,6 +264,7 @@ public class MainServerController extends Thread implements RemoteServer {
         int id = client.getId();
         synchronized(listeners_lock){
             this.all_listeners.remove(client.getUsername());
+            client.getConnection().close();
             if (id == -1) {
                 this.lob_listeners.remove(client.getUsername());
                 return;
@@ -482,8 +488,8 @@ public class MainServerController extends Thread implements RemoteServer {
             if(l == null) throw new RuntimeException();
             this.lobbies.remove(id);
             try {
-                l.join();
-            } catch (InterruptedException e){
+                l.interrupt();
+            } catch (SecurityException e){
                 e.printStackTrace();
             }
             System.out.println("Game ["+id+"] ended, closing its controller!");

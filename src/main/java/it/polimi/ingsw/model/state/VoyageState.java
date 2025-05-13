@@ -201,8 +201,8 @@ public class VoyageState extends GameState {
 	}
 
 	@Override
-	public ClientGameListEntry getOngoingEntry(ModelInstance model){
-		return new ClientGameListEntry(type, this.toString(), this.players.stream().map(p->p.getUsername()).toList(), model.getID());
+	public ClientGameListEntry getOngoingEntry(int id){
+		return new ClientGameListEntry(type, this.toString(), this.players.stream().map(p->p.getUsername()).toList(), id);
 	}
 
 }

@@ -10,7 +10,7 @@ public class DummyController extends LobbyController {
     }
 
     @Override
-    protected void endGame(){
+    public void endGame(){
         return;
     }
 

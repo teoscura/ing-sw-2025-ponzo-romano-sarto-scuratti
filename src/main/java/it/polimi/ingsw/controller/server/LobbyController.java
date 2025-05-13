@@ -58,13 +58,14 @@ public class LobbyController extends Thread implements RemoteServer {
 					try {
 						queue_lock.wait();
 					} catch (InterruptedException e) {
-						e.printStackTrace();
+						System.out.println("Force closing run thread!");
 					}
 				}
 				while (!queue.isEmpty()) {
 					ServerMessage message = this.queue.poll();
 					try {
 						message.receive(this);
+						System.out.println(model.getState());
 					} catch (ForbiddenCallException e) {
 						System.out.println(e.getMessage());
 					}
@@ -72,6 +73,7 @@ public class LobbyController extends Thread implements RemoteServer {
 				queue_lock.notifyAll();
 			}
 		}
+		System.out.println("AAA");
         this.endGame();
 	}
 
@@ -119,7 +121,8 @@ public class LobbyController extends Thread implements RemoteServer {
 		}
 	}
 
-    protected void endGame(){
+    public void endGame(){
+		this.queue_lock.notifyAll();
 		System.out.println("Game id: "+this.id+" finished!");
 		if(this.model.getState() == null){
 			File f = new File(this.serializer_path);
@@ -177,23 +180,27 @@ public class LobbyController extends Thread implements RemoteServer {
 
 	public void disconnect(ClientDescriptor client) {
 		MainServerController s = MainServerController.getInstance();
-		//XXX todo riscrivere.
-		synchronized (queue_lock) {
+		synchronized (listeners_lock){
 			if (!listeners.containsKey(client.getUsername())) {
 				System.out.println("Client '"+client.getUsername()+"' tried disconnecting from a lobby he was never connected to!");
 				return;
 			}
-			client.getConnection().close();
+			System.out.println("Client '" + client.getUsername() + "' disconnected.");
+			this.listeners.remove(client.getUsername());
 			if (client.getPlayer() != null) {
-				this.model.disconnect(client.getPlayer());
 				this.disconnected_usernames.put(client.getUsername(), client.getPlayer());
 				s.addDisconnected(client.getUsername(), this.id);
+			}
+		}
+		synchronized (queue_lock) {
+			if (client.getPlayer() != null) {
+				this.model.disconnect(client.getPlayer());
 			} else if (!this.model.getStarted()) {
 				this.model.disconnect(client);
+			}			
+			if(this.model.getState() == null){
+				return;
 			}
-			this.listeners.remove(client.getUsername());
-			System.out.println("Client '" + client.getUsername() + "' disconnected.");
-			this.broadcast(new ViewMessage("Client '" + client.getUsername() + "' disconnected."));
 			if (this.disconnected_usernames.size() >= this.model.getState().getCount().getNumber() - 1) {
 				this.dsctimer = new Timer(true);
 				this.dsctimer.schedule(this.getEndMatchTask(this), 60000L);

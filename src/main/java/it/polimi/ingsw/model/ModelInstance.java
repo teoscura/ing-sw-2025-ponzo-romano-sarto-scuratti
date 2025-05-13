@@ -125,7 +125,11 @@ public class ModelInstance implements Serializable {
 	}
 
 	public ClientGameListEntry getEntry(){
-		return this.state.getOngoingEntry(this);
+		return this.state.getOngoingEntry(this.id);
+	}
+
+	public void endGame() {
+		this.controller.endGame();
 	}
 
 }

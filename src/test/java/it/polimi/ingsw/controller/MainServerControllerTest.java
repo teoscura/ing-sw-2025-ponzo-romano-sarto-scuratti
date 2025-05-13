@@ -11,7 +11,6 @@ import it.polimi.ingsw.message.server.EnterSetupMessage;
 import it.polimi.ingsw.message.server.LeaveSetupMessage;
 import it.polimi.ingsw.message.server.OpenLobbyMessage;
 import it.polimi.ingsw.message.server.OpenUnfinishedMessage;
-import it.polimi.ingsw.message.server.ServerDisconnectMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.PlayerCount;
@@ -96,7 +95,7 @@ public class MainServerControllerTest {
         mess.setDescriptor(s1);
         t.receiveMessage(mess);
         Thread.sleep(100);
-        //A dude opens a new Lobby from unfinished;
+        //A dude opens a new Lobby from unfinished, but he cant.
         mess = new EnterSetupMessage();
         mess.setDescriptor(s2);
         t.receiveMessage(mess);
@@ -105,10 +104,16 @@ public class MainServerControllerTest {
         mess.setDescriptor(s2);
         t.receiveMessage(mess);
         Thread.sleep(100);
-        System.out.println(id+" p1: "+p1.getId());
         t.disconnect(p1);
-        //XXX aggiungere che se waiting list rimane vuota allora gioco si chiude.
-        //E che verify e construction prendono e serializzano ogni mossa.
+        Thread.sleep(100);
+        t.connect(p1);
+        assertEquals(-1, p1.getId());
+    }
+
+
+    @Test
+    void lobbyClose(){
+        //XXX testare che EndingState poi chiude in modo pulito
     }
 }
 

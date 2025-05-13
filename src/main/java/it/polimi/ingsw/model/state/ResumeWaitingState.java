@@ -121,8 +121,8 @@ public class ResumeWaitingState extends GameState {
     }
 
     @Override
-    public ClientGameListEntry getOngoingEntry(ModelInstance model){
-		return new ClientGameListEntry(type, this.toString(), awaiting.keySet().stream().toList(), model.getID());
+    public ClientGameListEntry getOngoingEntry(int id){
+		return new ClientGameListEntry(type, this.toString(), awaiting.keySet().stream().toList(), id);
 	}
 
 }
