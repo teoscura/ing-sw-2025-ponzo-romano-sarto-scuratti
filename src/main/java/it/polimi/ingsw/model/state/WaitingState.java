@@ -37,7 +37,7 @@ public class WaitingState extends GameState {
 	@Override
 	public void validate(ServerMessage message) throws ForbiddenCallException {
 		message.receive(this);
-		if (this.connected.size() < count.getNumber()) {
+		if (this.connected.size() < count.getNumber() && this.connected.size() > 0) {
 			System.out.println("Missing "+(this.count.getNumber()-this.connected.size())+" players to start the game!");
 			this.broadcastMessage(new NotifyStateUpdateMessage(this.getClientState()));
 			return;
@@ -47,6 +47,7 @@ public class WaitingState extends GameState {
 
 	@Override
 	public GameState getNext() {
+		if (this.connected.size() <= 0) return null;
 		ArrayList<Player> playerlist = new ArrayList<>();
 		for (PlayerColor c : PlayerColor.values()) {
 			if (c.getOrder() < 0) continue;
@@ -103,9 +104,6 @@ public class WaitingState extends GameState {
 		System.out.println("Client '" + client.getUsername() + "' disconnected!");
 		this.broadcastMessage(new ViewMessage("Client '" + client.getUsername() + "' disconnected!"));
 		this.connected.remove(client);
-		if(connected.size()==0){
-			this.model.setState(null);
-		}
 	}
 
 	@Override

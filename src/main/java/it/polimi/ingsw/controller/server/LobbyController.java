@@ -146,19 +146,25 @@ public class LobbyController extends Thread implements RemoteServer {
 
 	//Connections and disconnections
 	public void connect(ClientDescriptor client) throws ForbiddenCallException {
+		boolean reconnect = false;
+		synchronized(listeners_lock){
+			if (this.listeners.containsKey(client.getUsername())) {
+				System.out.println("Client '" + client.getUsername() + "' attempted to connect twice!");
+				return;
+			} else if (this.disconnected_usernames.containsKey(client.getUsername())) {
+				this.disconnected_usernames.remove(client.getUsername());
+				client.bindPlayer(this.disconnected_usernames.get(client.getUsername()));
+				reconnect = true;
+		    } else {
+				this.listeners.put(client.getUsername(), client);
+			}
+		}
 		synchronized (queue_lock) {
 			if (!model.getStarted()) {
 				System.out.println("Client '" + client.getUsername() + "' connected to waiting room!");
 				this.model.connect(client);
 				return;
-			}
-			if (this.listeners.containsKey(client.getUsername())) {
-				System.out.println("Client '" + client.getUsername() + "' attempted to connect twice!");
-				return;
-			} else if (this.disconnected_usernames.containsKey(client.getUsername())) {
-				this.listeners.put(client.getUsername(), client);
-				this.disconnected_usernames.remove(client.getUsername());
-				client.bindPlayer(this.disconnected_usernames.get(client.getUsername()));
+			} else if (reconnect){
 				this.model.connect(client.getPlayer());
 				this.dsctimer.cancel();
 				this.dsctimer = null;
@@ -171,6 +177,7 @@ public class LobbyController extends Thread implements RemoteServer {
 
 	public void disconnect(ClientDescriptor client) {
 		MainServerController s = MainServerController.getInstance();
+		//XXX todo riscrivere.
 		synchronized (queue_lock) {
 			if (!listeners.containsKey(client.getUsername())) {
 				System.out.println("Client '"+client.getUsername()+"' tried disconnecting from a lobby he was never connected to!");
