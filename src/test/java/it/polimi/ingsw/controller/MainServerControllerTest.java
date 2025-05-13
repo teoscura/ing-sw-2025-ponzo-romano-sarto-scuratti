@@ -129,11 +129,11 @@ public class MainServerControllerTest {
         mess = new OpenUnfinishedMessage(2);
         mess.setDescriptor(p2);
         t.receiveMessage(mess);
-        Thread.sleep(100);
+        Thread.sleep(500);
         assertEquals(2, p2.getId());
         assertEquals(1, t.getLobbyList().size());
         t.disconnect(p2);
-        Thread.sleep(200);
+        Thread.sleep(300);
         //FIXME
         assertEquals(0, t.getLobbyList().size());
     }

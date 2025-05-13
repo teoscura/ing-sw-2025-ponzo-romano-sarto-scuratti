@@ -47,14 +47,16 @@ public class ResumeWaitingState extends GameState {
         message.receive(this);
         int here = 0;
         for(String username : this.next.players.stream().map(p->p.getUsername()).toList()){
-            if(this.awaiting.get(username)==null) return;
+            if(this.awaiting.get(username)==null) continue;
             here++;
         }
+        System.out.println(here);
         if(here==0){
+            System.out.println("Everyone left the room, closing it!");
             this.model.endGame();
             return;
         }
-        if(here <= this.next.getCount().getNumber()){
+        if(here < this.next.getCount().getNumber()){
             this.broadcastMessage(new NotifyStateUpdateMessage(this.getClientState()));
             return;
         }
@@ -116,6 +118,7 @@ public class ResumeWaitingState extends GameState {
             this.broadcastMessage(new ViewMessage("Client '"+client.getUsername()+"' attempted to disconnect from a connection that isn't connected!"));
             return;
         }
+        System.out.println("Client '"+client.getUsername()+"' disconnected!");
         this.awaiting.put(client.getUsername(), null);
     }
 
