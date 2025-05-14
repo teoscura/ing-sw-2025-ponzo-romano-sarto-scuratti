@@ -7,6 +7,7 @@ import java.net.ServerSocket;
 import java.nio.channels.AlreadyConnectedException;
 import java.nio.channels.NotYetConnectedException;
 import java.rmi.AccessException;
+import java.rmi.AlreadyBoundException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -38,16 +39,19 @@ public class NetworkServer extends Thread implements RMISkeletonProvider {
         if(this.init) throw new AlreadyConnectedException();
 		this.ip = address;
 		this.rmiport = rmiport;
+		this.init = true;
 		System.out.println("Setting up RMI.");
 		Registry registry = null;
 		try {
 			registry = LocateRegistry.createRegistry(this.rmiport);
-			registry.rebind("galaxy_truckers", this);
+			registry.bind("galaxy_truckers", this);
 			UnicastRemoteObject.exportObject(this, this.rmiport);
 		} catch (RemoteException e) {
-			throw new RuntimeException("Failed to setup the rmi registry and remote object, terminating.");
+			System.out.println("Failed to setup the rmi registry and remote object, terminating.");
 		} catch (InaccessibleObjectException e) {
 			System.out.println("Couldn't bind RMI! Are you testing?");
+		} catch (AlreadyBoundException e) {
+			System.out.println("Already bound!");
 		}
 		System.out.println("Successfully set up RMI.");
 		System.out.println("Starting server on: \'"+ip+"\'.");
@@ -60,7 +64,7 @@ public class NetworkServer extends Thread implements RMISkeletonProvider {
 			throw new RuntimeException("Failed to setup the server socket, terminating.");
 		}
 		System.out.println("Successfully started server on: \'"+ip+"\':\'"+this.server.getLocalPort()+"\''.");
-		this.init = true;
+		
     }
 
 	@Override

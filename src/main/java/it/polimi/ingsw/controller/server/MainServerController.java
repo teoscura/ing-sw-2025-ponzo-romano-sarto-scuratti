@@ -317,7 +317,7 @@ public class MainServerController extends Thread implements VirtualServer {
         return this.next_id;
     }
 
-    private void updateUnfinishedList(){
+    public void updateUnfinishedList(){
         Pattern saved_game_pattern = Pattern.compile("^gtunfinished-[0-9]+\\.gtuf$");
 		File current_directory = new File(".");
 		File[] files = current_directory.listFiles();
@@ -443,11 +443,6 @@ public class MainServerController extends Thread implements VirtualServer {
                 System.out.println("Client '"+client.getUsername()+"' attempted to open a non-existant saved game!");
                 reset = true;
             }
-            loaded = this.saved.get(id);
-            if(!loaded.getEntry().getPlayers().contains(client.getUsername())){
-                System.out.println("Client '"+client.getUsername()+"' attempted resume a game, but he wasn't playing in it before!");
-                return;
-            }
         }
         if(reset){
             synchronized(listeners_lock){
@@ -455,6 +450,13 @@ public class MainServerController extends Thread implements VirtualServer {
                 this.lob_listeners.put(client.getUsername(), client);
             }
             return;
+        }
+        synchronized(saved_lock){
+            loaded = this.saved.get(id);
+            if(!loaded.getEntry().getPlayers().contains(client.getUsername())){
+                System.out.println("Client '"+client.getUsername()+"' attempted resume a game, but he wasn't playing in it before!");
+                return;
+            }
         }
         this.updateUnfinishedList();
         LobbyController new_lobby = new LobbyController(id);
