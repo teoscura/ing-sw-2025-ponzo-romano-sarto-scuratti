@@ -109,8 +109,7 @@ public class Server extends Thread implements RMISkeletonProvider {
 		try {
 			return MainServerController.getInstance().getStub(new_client);
 		} catch (RemoteException e) {
-			MainServerController.getInstance().disconnect(new_client);
-			throw e;
+			return null;
 		}
 	}
 
