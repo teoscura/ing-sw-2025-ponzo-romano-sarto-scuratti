@@ -22,7 +22,7 @@ import it.polimi.ingsw.controller.server.connections.RMISkeletonProvider;
 import it.polimi.ingsw.controller.server.connections.RemoteServer;
 import it.polimi.ingsw.controller.server.connections.SocketClient;
 
-public class Server extends Thread implements RMISkeletonProvider {
+public class NetworkServer extends Thread implements RMISkeletonProvider {
 
 	private final ExecutorService serverPool;
 	private String ip = "localhost";
@@ -30,7 +30,7 @@ public class Server extends Thread implements RMISkeletonProvider {
 	private boolean init = false;
 	private ServerSocket server;
 
-	public Server() {
+	public NetworkServer() {
 		this.serverPool = new ThreadPoolExecutor(20, 120, Long.MAX_VALUE, TimeUnit.MILLISECONDS, new SynchronousQueue<>(true));
 	}
 
@@ -38,12 +38,6 @@ public class Server extends Thread implements RMISkeletonProvider {
         if(this.init) throw new AlreadyConnectedException();
 		this.ip = address;
 		this.rmiport = rmiport;
-        this.init = true;
-    }
-
-	@Override
-	public void run() {
-		if(!this.init) throw new NotYetConnectedException();
 		System.out.println("Setting up RMI.");
 		Registry registry = null;
 		try {
@@ -66,6 +60,12 @@ public class Server extends Thread implements RMISkeletonProvider {
 			throw new RuntimeException("Failed to setup the server socket, terminating.");
 		}
 		System.out.println("Successfully started server on: \'"+ip+"\':\'"+this.server.getLocalPort()+"\''.");
+		this.init = true;
+    }
+
+	@Override
+	public void run() {
+		if(!this.init) throw new NotYetConnectedException();
 		try {
 			while (true) {
 				SocketClient new_connection = new SocketClient(server.accept());
@@ -93,7 +93,7 @@ public class Server extends Thread implements RMISkeletonProvider {
 
 	private void cleanUp(){
 		try {
-			Registry registry = LocateRegistry.createRegistry(9999);
+			Registry registry = LocateRegistry.getRegistry();
 			registry.unbind("galaxy_truckers");
 			this.server.close();
 			//Exceptions dont matter in a shutdown hook.

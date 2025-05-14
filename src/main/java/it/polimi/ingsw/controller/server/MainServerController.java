@@ -37,7 +37,7 @@ public class MainServerController extends Thread implements RemoteServer {
     
     static private MainServerController instance = new MainServerController();
 
-    private final Server server;
+    private final NetworkServer server;
     private boolean init = false;
 
     private final HashMap<String, ClientDescriptor> all_listeners;
@@ -69,7 +69,7 @@ public class MainServerController extends Thread implements RemoteServer {
         saved_lock = new Object();
         this.updateUnfinishedList();
         this.next_id = this.saved.keySet().stream().max(Integer::compare).orElse(0) + 1;
-        server = new Server();
+        server = new NetworkServer();
     }
 
     static public MainServerController getInstance(){
