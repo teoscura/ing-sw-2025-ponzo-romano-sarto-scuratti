@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 
 import it.polimi.ingsw.controller.client.connections.RMIClientStub;
 import it.polimi.ingsw.controller.server.connections.RMISkeletonProvider;
-import it.polimi.ingsw.controller.server.connections.RemoteServer;
+import it.polimi.ingsw.controller.server.connections.VirtualServer;
 import it.polimi.ingsw.controller.server.connections.SocketClient;
 
 public class NetworkServer extends Thread implements RMISkeletonProvider {
@@ -104,7 +104,7 @@ public class NetworkServer extends Thread implements RMISkeletonProvider {
 		}
 	}
 
-	public RemoteServer accept(RMIClientStub client) throws RemoteException {
+	public VirtualServer accept(RMIClientStub client) throws RemoteException {
 		ClientDescriptor new_client = MainServerController.getInstance().connectListener(client);
 		try {
 			return MainServerController.getInstance().getStub(new_client);

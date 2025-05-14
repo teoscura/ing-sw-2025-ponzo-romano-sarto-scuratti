@@ -19,7 +19,7 @@ import it.polimi.ingsw.controller.AsyncInsertTask;
 import it.polimi.ingsw.controller.ThreadSafeMessageQueue;
 import it.polimi.ingsw.controller.client.connections.RMIClientStub;
 import it.polimi.ingsw.controller.server.connections.RMIServerStubImpl;
-import it.polimi.ingsw.controller.server.connections.RemoteServer;
+import it.polimi.ingsw.controller.server.connections.VirtualServer;
 import it.polimi.ingsw.controller.server.connections.SocketClient;
 import it.polimi.ingsw.message.client.ClientMessage;
 import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
@@ -33,7 +33,7 @@ import it.polimi.ingsw.model.client.ClientGameListEntry;
 import it.polimi.ingsw.model.client.state.ClientLobbySelectState;
 import it.polimi.ingsw.model.client.state.ClientSetupState;
 
-public class MainServerController extends Thread implements RemoteServer {
+public class MainServerController extends Thread implements VirtualServer {
     
     static private MainServerController instance = new MainServerController();
 
@@ -208,8 +208,8 @@ public class MainServerController extends Thread implements RemoteServer {
 		}
 	}
 
-    public RemoteServer getStub(ClientDescriptor new_client) throws RemoteException {
-		return (RemoteServer) new RMIServerStubImpl(this, new_client);
+    public VirtualServer getStub(ClientDescriptor new_client) throws RemoteException {
+		return (VirtualServer) new RMIServerStubImpl(this, new_client);
 	}
 
     private boolean validateUsername(String username) {

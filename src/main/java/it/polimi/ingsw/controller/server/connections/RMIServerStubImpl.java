@@ -7,7 +7,7 @@ import it.polimi.ingsw.controller.server.ClientDescriptor;
 import it.polimi.ingsw.controller.server.MainServerController;
 import it.polimi.ingsw.message.server.ServerMessage;
 
-public class RMIServerStubImpl extends UnicastRemoteObject implements RemoteServer {
+public class RMIServerStubImpl extends UnicastRemoteObject implements VirtualServer {
 
 	private transient final MainServerController controller;
 	private transient final ClientDescriptor client;

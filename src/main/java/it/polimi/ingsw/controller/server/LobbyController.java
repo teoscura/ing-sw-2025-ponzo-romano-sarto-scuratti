@@ -10,7 +10,7 @@ import java.util.TimerTask;
 
 import it.polimi.ingsw.controller.AsyncInsertTask;
 import it.polimi.ingsw.controller.ThreadSafeMessageQueue;
-import it.polimi.ingsw.controller.server.connections.RemoteServer;
+import it.polimi.ingsw.controller.server.connections.VirtualServer;
 import it.polimi.ingsw.message.client.ClientMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
@@ -19,7 +19,7 @@ import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.client.ClientGameListEntry;
 import it.polimi.ingsw.model.player.Player;
 
-public class LobbyController extends Thread implements RemoteServer {
+public class LobbyController extends Thread implements VirtualServer {
 
     private final int id;
 
