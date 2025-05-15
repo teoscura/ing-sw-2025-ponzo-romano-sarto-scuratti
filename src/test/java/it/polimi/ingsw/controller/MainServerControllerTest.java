@@ -154,10 +154,12 @@ public class MainServerControllerTest {
         mess = new LeaveSetupMessage();
         mess.setDescriptor(p1);
         t.receiveMessage(mess);
+        Thread.sleep(100);
         mess = new EnterSetupMessage();
         mess.setDescriptor(p1);
         t.receiveMessage(mess);
         assertEquals(0, t.getLobbyList().size());
+        Thread.sleep(100);
         mess = new OpenLobbyMessage(GameModeType.TEST, PlayerCount.TWO);
         mess.setDescriptor(p1);
         t.receiveMessage(mess);
@@ -167,6 +169,7 @@ public class MainServerControllerTest {
         mess = new EnterSetupMessage();
         mess.setDescriptor(p2);
         t.receiveMessage(mess);
+        Thread.sleep(100);
         mess = new OpenLobbyMessage(GameModeType.LVL2, PlayerCount.FOUR);
         mess.setDescriptor(p2);
         t.receiveMessage(mess);

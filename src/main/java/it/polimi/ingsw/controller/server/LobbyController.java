@@ -38,7 +38,7 @@ public class LobbyController extends Thread implements VirtualServer {
 		this.listeners = new HashMap<>();
 		this.disconnected_usernames = new HashMap<>();
 		this.listeners_lock = new Object();
-		this.queue = new ThreadSafeMessageQueue<>();
+		this.queue = new ThreadSafeMessageQueue<>(100);
         this.id = id;
 		this.model_lock = new Object();
         this.serializer_path = "gtunfinished-" + this.id + ".gtuf";

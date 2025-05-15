@@ -42,7 +42,7 @@ public class ConnectingState extends ClientControllerState {
     }
 
     public void connect(String address, int port, ConnectionType type){
-        this.inqueue = new ThreadSafeMessageQueue<>();
+        this.inqueue = new ThreadSafeMessageQueue<>(100);
         switch(type){
             case ConnectionType.RMI: {
                 try {
@@ -59,6 +59,7 @@ public class ConnectingState extends ClientControllerState {
                 SocketConnection tmp = null;
                 try {
                     tmp = new SocketConnection(inqueue, address, port);
+                    System.out.print("A\n");
                     tmp.start();
                     tmp.sendMessage(new UsernameSetupMessage(this.username));
                     connection = tmp;

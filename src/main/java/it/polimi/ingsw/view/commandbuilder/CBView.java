@@ -160,14 +160,9 @@ public class CBView implements ClientView {
 
     @Override
     public void show(ClientLobbySelectState state) {
-        try {
-            System.out.println("Connected!");
-            this.cbt = new InputCommandTask(cc);
-            this.cbt.start();
-            this.cbt.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        System.out.println("Connected!");
+        this.cbt = new InputCommandTask(cc);
+        this.cbt.start();
     }
 
     

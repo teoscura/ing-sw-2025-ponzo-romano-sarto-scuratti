@@ -62,7 +62,7 @@ public class MainServerController extends Thread implements VirtualServer {
         disconnected = new HashMap<>();
         to_setup_tcp = new ArrayList<>();
         listeners_lock = new Object();
-        queue = new ThreadSafeMessageQueue<>();
+        queue = new ThreadSafeMessageQueue<>(1000);
         lobbies = new HashMap<>();
         lobbies_lock = new Object();
         saved = new HashMap<>();
