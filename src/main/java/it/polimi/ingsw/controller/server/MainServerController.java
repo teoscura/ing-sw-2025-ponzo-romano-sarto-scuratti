@@ -15,7 +15,6 @@ import java.util.TimerTask;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import it.polimi.ingsw.controller.AsyncInsertTask;
 import it.polimi.ingsw.controller.ThreadSafeMessageQueue;
 import it.polimi.ingsw.controller.client.connections.RMIClientStub;
 import it.polimi.ingsw.controller.server.connections.NetworkServer;
@@ -114,9 +113,7 @@ public class MainServerController extends Thread implements VirtualServer {
 			return;
 		}
         if (message.getDescriptor().getId() == -1 ) {
-            AsyncInsertTask<ServerMessage> t = new AsyncInsertTask<>(this.queue, message);
-            t.start();
-            return;
+            this.queue.insert(message);
         }	
         var target = this.lobbies.get(message.getDescriptor().getId());
         if (target == null) {

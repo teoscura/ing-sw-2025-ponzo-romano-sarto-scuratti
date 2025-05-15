@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import it.polimi.ingsw.controller.AsyncInsertTask;
 import it.polimi.ingsw.controller.ThreadSafeMessageQueue;
 import it.polimi.ingsw.controller.server.connections.VirtualServer;
 import it.polimi.ingsw.message.client.ClientMessage;
@@ -79,8 +78,7 @@ public class LobbyController extends Thread implements VirtualServer {
 			this.broadcast(new ViewMessage("Recieved a message from a client not properly connected!"));
 			return;
 		}
-		AsyncInsertTask<ServerMessage> t = new AsyncInsertTask<>(this.queue, message);
-		t.start();
+		this.queue.insert(message);
 		return;
 	}
 
