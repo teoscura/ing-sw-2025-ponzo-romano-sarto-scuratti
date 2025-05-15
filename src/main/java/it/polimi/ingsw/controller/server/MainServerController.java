@@ -263,6 +263,10 @@ public class MainServerController extends Thread implements VirtualServer {
         System.out.println("Client: '"+client.getUsername()+"' disconnected.");
         client.getPingTimerTask().cancel();
         synchronized(listeners_lock){
+            if(!all_listeners.containsKey(client.getUsername())){
+                System.out.println("Client: '"+client.getUsername()+"' disconnected, but was never connected!");
+                return;
+            }
             this.all_listeners.remove(client.getUsername());
             if (id == -1) {
                 this.lob_listeners.remove(client.getUsername());
