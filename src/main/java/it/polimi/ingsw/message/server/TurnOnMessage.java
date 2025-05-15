@@ -21,7 +21,7 @@ public class TurnOnMessage extends ServerMessage {
 
 	@Override
     public void receive(MainServerController server) throws ForbiddenCallException {
-        return;
+        throw new ForbiddenCallException("Client: '"+this.descriptor.getUsername()+"' sent a turn on message while in lobby select");
     }
 
 	@Override

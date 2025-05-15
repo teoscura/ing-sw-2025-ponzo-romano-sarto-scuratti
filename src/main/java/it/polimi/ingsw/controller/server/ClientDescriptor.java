@@ -13,12 +13,14 @@ public class ClientDescriptor {
     private static final long TIMEOUT_DURATION = 15000L;
     private final String username;
     private transient int id;
-    private transient TimerTask pingtimer;
+    private transient final Timer timer;
+    private transient TimerTask task;
     private transient Player player = null;
     private transient final Connection connection;
 
     public ClientDescriptor(String username, Connection connection){
         if(username==null || connection == null) throw new NullPointerException();
+        this.timer = new Timer(true);
         this.username = username;
         this.connection = connection;
         this.id = -1;
@@ -33,10 +35,9 @@ public class ClientDescriptor {
         this.connection.sendMessage(m);
     }
 
-    public void setPingTimerTask(TimerTask task){
-        this.pingtimer = task;
-        Timer t = new Timer(true);
-        t.schedule(task, TIMEOUT_DURATION);
+    public void setPingTimerTask(TimerTask task){;
+        this.task = task;
+        timer.schedule(task, TIMEOUT_DURATION);
     }
 
     public String getUsername(){
@@ -57,7 +58,7 @@ public class ClientDescriptor {
     }
 
     public TimerTask getPingTimerTask(){
-        return this.pingtimer;
+        return this.task;
     }
 
 	public Connection getConnection() {

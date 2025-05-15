@@ -107,11 +107,18 @@ public class MainServerController extends Thread implements VirtualServer {
 	}
 
     public void receiveMessage(ServerMessage message) {
-		if (message.getDescriptor() == null || !this.all_listeners.containsKey(message.getDescriptor().getUsername())) {
+        if (message.getDescriptor() == null) {
 			System.out.println("Received a message from a client not properly connected!");
 			this.broadcast(new ViewMessage("Received a message from a client not properly connected!"));
 			return;
 		}
+        synchronized(listeners_lock){
+            if (!this.all_listeners.containsKey(message.getDescriptor().getUsername())) {
+                System.out.println("Received a message from a client not properly connected!");
+                this.broadcast(new ViewMessage("Received a message from a client not properly connected!"));
+                return;
+		    }
+        }
         if (message.getDescriptor().getId() == -1 ) {
             this.queue.insert(message);
         }	
@@ -180,6 +187,7 @@ public class MainServerController extends Thread implements VirtualServer {
 			System.out.println("A client attempted to connect with an invalid name!");
 			return;
 		}
+        System.out.println("Client: '" + username + "' connected from '"+client.getSocket().getInetAddress()+"'!");
 		ClientDescriptor new_listener = new ClientDescriptor(username, client);
 		try {
 			this.connect(new_listener);
@@ -234,6 +242,7 @@ public class MainServerController extends Thread implements VirtualServer {
                 this.lob_listeners.put(client.getUsername(), client);
                 client.setID(-1);
                 System.out.println("Client '"+client.getUsername()+"' connected!");
+                this.sendMessage(client, new NotifyStateUpdateMessage(new ClientLobbySelectState(this.getLobbyList())));
             }
         }
         if (disconnected) {
@@ -250,6 +259,7 @@ public class MainServerController extends Thread implements VirtualServer {
 
     public void disconnect(ClientDescriptor client){
         int id = client.getId();
+        System.out.println("Client: '"+client.getUsername()+"' disconnected.");
         synchronized(listeners_lock){
             this.all_listeners.remove(client.getUsername());
             client.getConnection().close();
@@ -282,6 +292,7 @@ public class MainServerController extends Thread implements VirtualServer {
     // -------------------------------------------------------------
 
     public void ping(ClientDescriptor client) {
+        client.getPingTimerTask().cancel();
 		client.setPingTimerTask(this.timeoutTask(this, client));
 	}
 

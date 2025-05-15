@@ -59,7 +59,6 @@ public class ConnectingState extends ClientControllerState {
                 SocketConnection tmp = null;
                 try {
                     tmp = new SocketConnection(inqueue, address, port);
-                    System.out.print("A\n");
                     tmp.start();
                     tmp.sendMessage(new UsernameSetupMessage(this.username));
                     connection = tmp;

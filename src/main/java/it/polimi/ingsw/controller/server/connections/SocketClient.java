@@ -64,7 +64,7 @@ public class SocketClient implements Connection {
 			try {
 				setup = (UsernameSetupMessage) message;
 			} catch (ClassCastException e) {
-				System.out.println("Recieved non-setup message from tcp socket: " + socket.getInetAddress());
+				System.out.println("Received non-setup message from tcp socket: " + socket.getInetAddress());
 				e.printStackTrace();
 			}
 			this.username = setup.getUsername();

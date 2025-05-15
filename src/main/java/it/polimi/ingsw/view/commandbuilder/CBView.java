@@ -1,6 +1,5 @@
 package it.polimi.ingsw.view.commandbuilder;
 
-import it.polimi.ingsw.controller.client.ClientController;
 import it.polimi.ingsw.controller.client.state.ConnectingState;
 import it.polimi.ingsw.controller.client.state.TitleScreenState;
 import it.polimi.ingsw.model.client.card.*;
@@ -10,8 +9,7 @@ import it.polimi.ingsw.view.ClientView;
 
 public class CBView implements ClientView {
 
-    private ClientController cc;
-    private Thread cbt, ct, tst;
+    private Thread ct, tst;
 
     @Override
     public void show(ClientSetupState state) {
@@ -152,7 +150,6 @@ public class CBView implements ClientView {
             this.ct = new ConnectTask(state);
             this.ct.start();
             this.ct.join();
-            this.cc = state.getController();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -161,8 +158,6 @@ public class CBView implements ClientView {
     @Override
     public void show(ClientLobbySelectState state) {
         System.out.println("Connected!");
-        this.cbt = new InputCommandTask(cc);
-        this.cbt.start();
     }
 
     

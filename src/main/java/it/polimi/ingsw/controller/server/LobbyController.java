@@ -210,4 +210,8 @@ public class LobbyController extends Thread implements VirtualServer {
 		return entry;
 	}
 
+	public void ping(ClientDescriptor descriptor) {
+		MainServerController.getInstance().ping(descriptor);
+	}
+
 }

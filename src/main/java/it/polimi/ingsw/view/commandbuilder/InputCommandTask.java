@@ -4,13 +4,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import it.polimi.ingsw.controller.client.ClientController;
+import it.polimi.ingsw.controller.client.state.ConnectedState;
 
 public class InputCommandTask extends Thread {
 
-    private final ClientController cc;
+    private final ConnectedState cc;
 
-    public InputCommandTask(ClientController cc){
+    public InputCommandTask(ConnectedState cc){
         this.cc = cc;
     }
     
@@ -21,8 +21,11 @@ public class InputCommandTask extends Thread {
             try {
                 while(!r.ready()){};
                 String s = r.readLine();
-                cc.getState().sendMessage(cb.build(s));
+                if(s.equals("exit")) break;
+                cc.sendMessage(cb.build(s));
             } catch (IOException e) {
+                e.printStackTrace();
+            } catch (NullPointerException | IllegalArgumentException e){
                 e.printStackTrace();
             }
         }
