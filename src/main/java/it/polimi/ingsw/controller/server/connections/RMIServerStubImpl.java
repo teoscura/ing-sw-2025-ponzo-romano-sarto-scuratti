@@ -13,9 +13,9 @@ public class RMIServerStubImpl extends UnicastRemoteObject implements VirtualSer
 	private transient final ClientDescriptor client;
 
 	public RMIServerStubImpl(MainServerController controller, ClientDescriptor client) throws RemoteException {
+		super();
 		this.controller = controller;
 		this.client = client;
-		UnicastRemoteObject.exportObject(this, 0);
 	}
 
 	public void receiveMessage(ServerMessage message) throws RemoteException {
