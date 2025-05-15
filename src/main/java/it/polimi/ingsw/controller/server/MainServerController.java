@@ -81,9 +81,9 @@ public class MainServerController extends Thread implements VirtualServer {
         instance = null;
     }
 
-    public void init(String address, int rmiport){
+    public void init(String address, int tcpport, int rmiport){
         if(this.init) throw new AlreadyConnectedException();
-        this.server.init(address, rmiport);
+        this.server.init(address, tcpport, rmiport);
         this.init = true;
     }
 

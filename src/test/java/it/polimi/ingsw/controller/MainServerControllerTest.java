@@ -67,7 +67,7 @@ public class MainServerControllerTest {
         s3 = new ClientDescriptor("s3", new DummyConnection());
         MainServerController.reset();
         t = MainServerController.getInstance();
-        t.init("localhost", 0);
+        t.init("localhost",0, 10000);
         t.start();
     }
 

@@ -7,20 +7,17 @@ import it.polimi.ingsw.utils.LoggerLevel;
 public class ServerMain {
 
 	public static void main(String[] args) {
-		if(args.length != 2){
-            System.out.println("Jar must be launched with \"*jar name* [tcp address] [rmiport]\"!");
+		if(args.length < 2 && args.length > 3){
+            System.out.println("Jar must be launched with \"<jar name> <tcp address> [tcp port] <rmi port>\" !");
             System.exit(-1);
         }
-		//Setup the logger.
-		//XXX change logger detail level to NOTIF when turning it project.
 		Logger l = Logger.getInstance();
 		l.setLevel(LoggerLevel.DEBUG);
-
 		String address = args[0];
-		int rmiport = Integer.parseInt(args[1]);
-
+		int tcpport = args.length == 3 ? Integer.parseInt(args[1]) : 0;
+		int rmiport = Integer.parseInt(args[args.length == 3? 2 : 1]);
 		MainServerController controller = MainServerController.getInstance();
-		controller.init(address, rmiport);
+		controller.init(address, tcpport, rmiport);
 		controller.start();
 		String line = null;
 		do {
