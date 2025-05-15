@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 import it.polimi.ingsw.controller.client.state.ConnectedState;
+import it.polimi.ingsw.message.server.ServerMessage;
 
 public class InputCommandTask extends Thread {
 
@@ -22,7 +23,9 @@ public class InputCommandTask extends Thread {
                 while(!r.ready()){};
                 String s = r.readLine();
                 if(s.equals("exit")) break;
-                cc.sendMessage(cb.build(s));
+                ServerMessage mess = cb.build(s);
+                if(mess==null) continue;
+                cc.sendMessage(mess);
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (NullPointerException | IllegalArgumentException e){

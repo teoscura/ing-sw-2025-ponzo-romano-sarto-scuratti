@@ -26,6 +26,7 @@ import it.polimi.ingsw.model.player.ShipCoords;
 public class CommandBuilder {
     
     public ServerMessage build(String command){
+		
         ServerMessage mess = null;
         boolean valid = false;
         String[] parts = command.split(" ", 16);
