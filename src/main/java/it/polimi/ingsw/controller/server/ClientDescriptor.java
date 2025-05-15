@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import it.polimi.ingsw.controller.server.connections.Connection;
+import it.polimi.ingsw.controller.server.connections.ClientConnection;
 import it.polimi.ingsw.message.client.ClientMessage;
 import it.polimi.ingsw.model.player.Player;
 
@@ -16,9 +16,9 @@ public class ClientDescriptor {
     private transient final Timer timer;
     private transient TimerTask task;
     private transient Player player = null;
-    private transient final Connection connection;
+    private transient final ClientConnection connection;
 
-    public ClientDescriptor(String username, Connection connection){
+    public ClientDescriptor(String username, ClientConnection connection){
         if(username==null || connection == null) throw new NullPointerException();
         this.timer = new Timer(true);
         this.username = username;
@@ -61,7 +61,7 @@ public class ClientDescriptor {
         return this.task;
     }
 
-	public Connection getConnection() {
+	public ClientConnection getConnection() {
 		return this.connection;
 	}
 

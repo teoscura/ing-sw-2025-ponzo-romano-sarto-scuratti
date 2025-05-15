@@ -11,7 +11,7 @@ import it.polimi.ingsw.message.client.ClientMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.message.server.UsernameSetupMessage;
 
-public class SocketClient implements Connection {
+public class SocketClient implements ClientConnection {
 
 	private final Socket socket;
 	private TimerTask setup_timeout;

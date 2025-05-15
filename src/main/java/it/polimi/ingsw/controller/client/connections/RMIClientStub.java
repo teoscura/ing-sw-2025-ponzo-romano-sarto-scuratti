@@ -5,10 +5,10 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
 import it.polimi.ingsw.controller.ThreadSafeMessageQueue;
-import it.polimi.ingsw.controller.server.connections.Connection;
+import it.polimi.ingsw.controller.server.connections.RMIClientConnection;
 import it.polimi.ingsw.message.client.ClientMessage;
 
-public class RMIClientStub extends UnicastRemoteObject implements Connection {
+public class RMIClientStub extends UnicastRemoteObject implements RMIClientConnection {
 
 	private transient final ThreadSafeMessageQueue<ClientMessage> inqueue;
 	private final String username;

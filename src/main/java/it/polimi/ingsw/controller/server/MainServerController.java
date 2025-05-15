@@ -16,8 +16,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import it.polimi.ingsw.controller.ThreadSafeMessageQueue;
-import it.polimi.ingsw.controller.client.connections.RMIClientStub;
 import it.polimi.ingsw.controller.server.connections.NetworkServer;
+import it.polimi.ingsw.controller.server.connections.RMIClientConnection;
 import it.polimi.ingsw.controller.server.connections.RMIServerStubImpl;
 import it.polimi.ingsw.controller.server.connections.VirtualServer;
 import it.polimi.ingsw.controller.server.connections.SocketClient;
@@ -134,12 +134,7 @@ public class MainServerController extends Thread implements VirtualServer {
 		synchronized (listeners_lock) {
 			for (ClientDescriptor c : this.lob_listeners.values()) {
                 if(stp_listeners.containsKey(c.getUsername())) continue;
-				try {
-					c.sendMessage(message);
-				} catch (IOException e) {
-					c.getConnection().close();
-					this.disconnect(c);
-				}
+				this.sendMessage(c, message);
 			}
 		}
 	}
@@ -148,7 +143,6 @@ public class MainServerController extends Thread implements VirtualServer {
         try {
             client.sendMessage(message);
         } catch (IOException e) {
-            client.getConnection().close();
             this.disconnect(client);
         }
     }
@@ -198,15 +192,22 @@ public class MainServerController extends Thread implements VirtualServer {
 		new_listener.setPingTimerTask(this.timeoutTask(this, new_listener));
 	}
 
-	public ClientDescriptor connectListener(RMIClientStub client) {
+	public ClientDescriptor connectListener(RMIClientConnection client) throws RemoteException {
+        String name;
+        try {
+            name = client.getUsername();
+        } catch (RemoteException e) {
+            throw new RemoteException("Failed to retrieve username from stub");
+        }
+        ClientDescriptor new_listener = new ClientDescriptor(name, client);
 		synchronized (listeners_lock) {
-			ClientDescriptor new_listener = new ClientDescriptor(client.getUsername(), client);
-			if (this.all_listeners.containsKey(client.getUsername()) || !validateUsername(client.getUsername()))
+			
+			if (this.all_listeners.containsKey(name) || !validateUsername(name))
 				return null;
 			try {
 				this.connect(new_listener);
 			} catch (ForbiddenCallException e) {
-				System.out.println("Client '" + client.getUsername() + "' failed to connect properly!");
+				System.out.println("Client '" + name + "' failed to connect properly!");
 				return null;
 			}
 			new_listener.setPingTimerTask(this.timeoutTask(this, new_listener));
@@ -262,12 +263,16 @@ public class MainServerController extends Thread implements VirtualServer {
         System.out.println("Client: '"+client.getUsername()+"' disconnected.");
         synchronized(listeners_lock){
             this.all_listeners.remove(client.getUsername());
-            client.getConnection().close();
             if (id == -1) {
                 this.lob_listeners.remove(client.getUsername());
-                return;
             }
         }
+        try {
+            client.getConnection().close();
+        } catch (IOException e) {
+            System.out.println("Client '"+client.getUsername()+"' connection closed.");
+        }
+        if(id==-1) return;
         synchronized(lobbies_lock){
             var l = this.lobbies.get(id);
             if(l == null) return;
@@ -492,9 +497,6 @@ public class MainServerController extends Thread implements VirtualServer {
                 l.interrupt();
             } catch (SecurityException e){
                 e.printStackTrace();
-            }
-            for(StackTraceElement e : Thread.currentThread().getStackTrace()){
-                System.out.println(e);
             }
             System.out.println("Game ["+id+"] ended, closing its controller!");
         }

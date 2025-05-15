@@ -1,6 +1,7 @@
 package it.polimi.ingsw.controller.server.connections;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.lang.reflect.InaccessibleObjectException;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
@@ -18,11 +19,10 @@ import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import it.polimi.ingsw.controller.client.connections.RMIClientStub;
 import it.polimi.ingsw.controller.server.ClientDescriptor;
 import it.polimi.ingsw.controller.server.MainServerController;
 
-public class NetworkServer extends Thread implements RMISkeletonProvider {
+public class NetworkServer extends Thread implements RMISkeletonProvider, Serializable {
 
 	private final ExecutorService serverPool;
 	private String ip = "localhost";
@@ -107,11 +107,12 @@ public class NetworkServer extends Thread implements RMISkeletonProvider {
 		}
 	}
 
-	public VirtualServer accept(RMIClientStub client) throws RemoteException {
+	public VirtualServer accept(RMIClientConnection client) throws RemoteException {
 		ClientDescriptor new_client = MainServerController.getInstance().connectListener(client);
 		try {
 			return MainServerController.getInstance().getStub(new_client);
 		} catch (RemoteException e) {
+			System.out.println(e.getMessage());
 			return null;
 		}
 	}

@@ -85,15 +85,18 @@ public class LobbyController extends Thread implements VirtualServer {
 	public void broadcast(ClientMessage message) {
 		synchronized (listeners_lock) {
 			for (ClientDescriptor listener : this.listeners.values()) {
-				try {
-					listener.sendMessage(message);
-				} catch (IOException e) {
-					listener.getConnection().close();
-					this.disconnect(listener);
-				}
+				this.sendMessage(listener, message);
 			}
 		}
 	}
+
+	public void sendMessage(ClientDescriptor client, ClientMessage message){
+        try {
+            client.sendMessage(message);
+        } catch (IOException e) {
+            MainServerController.getInstance().disconnect(client);
+        }
+    }
 
     public ModelInstance getModel() throws ForbiddenCallException {
 		return this.model;
