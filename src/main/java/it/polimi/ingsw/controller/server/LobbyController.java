@@ -179,11 +179,19 @@ public class LobbyController extends Thread implements VirtualServer {
 				System.out.println("Client '"+client.getUsername()+"' tried disconnecting from a lobby he was never connected to!");
 				return;
 			}
-			System.out.println("Client '" + client.getUsername() + "' disconnected.");
 			this.listeners.remove(client.getUsername());
 			if (client.getPlayer() != null) {
 				this.disconnected_usernames.put(client.getUsername(), client.getPlayer());
 				s.addDisconnected(client.getUsername(), this.id);
+			}
+			if (this.disconnected_usernames.size() == this.model.getState().getCount().getNumber()) {
+				this.dsctimer.cancel();
+				this.endGame();
+				return;
+			}
+			if (this.disconnected_usernames.size() >= this.model.getState().getCount().getNumber() - 1) {
+				this.dsctimer = new Timer(true);
+				this.dsctimer.schedule(this.getEndMatchTask(this), 60000L);
 			}
 		}
 		synchronized (model_lock) {
@@ -194,13 +202,6 @@ public class LobbyController extends Thread implements VirtualServer {
 			} if(this.model.getState() == null){
 				System.out.println("Babbo");
 				return;
-			}
-			if (this.disconnected_usernames.size() >= this.model.getState().getCount().getNumber() - 1) {
-				this.dsctimer = new Timer(true);
-				this.dsctimer.schedule(this.getEndMatchTask(this), 60000L);
-			} else if (this.disconnected_usernames.size() == this.model.getState().getCount().getNumber()) {
-				this.dsctimer.cancel();
-				this.endGame();
 			}
 		}
 	}
