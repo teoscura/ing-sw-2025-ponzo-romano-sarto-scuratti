@@ -87,7 +87,7 @@ public class DummyVoyageState extends VoyageState {
 	public void connect(Player p) throws ForbiddenCallException {
 		if (p == null) throw new NullPointerException();
 		if (!p.getDisconnected()) throw new ForbiddenCallException();
-		System.out.println("Player '" + p.getUsername() + "' reconnected!");
+		/*XXX*/System.out.println("Player '" + p.getUsername() + "' reconnected!");
 		this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' reconnected!"));
 		p.reconnect();
 		if (!p.getRetired() && p.getSpaceShip().getBlobsSize() > 1) {
@@ -109,7 +109,7 @@ public class DummyVoyageState extends VoyageState {
 	public void giveUp(Player p) throws ForbiddenCallException {
 		if (p == null) return;
 		if (p.getRetired()) {
-			System.out.println("Player '" + p.getUsername() + "' attempted to give up, but they already aren't playing!");
+			/*XXX*/System.out.println("Player '" + p.getUsername() + "' attempted to give up, but they already aren't playing!");
 			this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' attempted to give up, but they already aren't playing!"));
 			return;
 		}

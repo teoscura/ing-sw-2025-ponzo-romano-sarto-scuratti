@@ -63,11 +63,11 @@ public class SocketClient extends Thread implements ClientConnection {
 			//XXX logger message
 		} catch (IOException e) {
 			//XXX logger
-			System.out.println("Failed to read object from: " + socket.getInetAddress() + ", closing socket.");
+			/*XXX*/System.out.println("Failed to read object from: " + socket.getInetAddress() + ", closing socket.");
 			this.close();
 		} catch (ClassCastException e) {
 			//XXX logger
-			System.out.println("Received non-setup message from tcp socket: " + socket.getInetAddress());
+			/*XXX*/System.out.println("Received non-setup message from tcp socket: " + socket.getInetAddress());
 		}
 		this.username = setup.getUsername();
 		MainServerController.getInstance().setupSocketListener(this, this.username);
@@ -82,7 +82,7 @@ public class SocketClient extends Thread implements ClientConnection {
 			//XXX logger message
 		} catch (IOException e) {
 			//XXX logger
-			System.out.println("Failed to read object from: " + socket.getInetAddress() + ", closing socket.");
+			/*XXX*/System.out.println("Failed to read object from: " + socket.getInetAddress() + ", closing socket.");
 			this.close();
 		}
 		message.setDescriptor(controller.getDescriptor(this.username));

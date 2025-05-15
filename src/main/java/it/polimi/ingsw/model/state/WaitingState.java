@@ -30,7 +30,7 @@ public class WaitingState extends GameState {
 
 	@Override
 	public void init() {
-		System.out.println("New Game State -> Waiting Room State!");
+		/*XXX*/System.out.println("New Game State -> Waiting Room State!");
 		this.broadcastMessage(new NotifyStateUpdateMessage(this.getClientState()));
 	}
 
@@ -42,7 +42,7 @@ public class WaitingState extends GameState {
 			return;
 		}
 		if (this.connected.size() < count.getNumber()) {
-			System.out.println("Missing " + (this.count.getNumber() - this.connected.size()) + " players to start the game!");
+			/*XXX*/System.out.println("Missing " + (this.count.getNumber() - this.connected.size()) + " players to start the game!");
 			this.broadcastMessage(new NotifyStateUpdateMessage(this.getClientState()));
 			return;
 		}
@@ -90,22 +90,22 @@ public class WaitingState extends GameState {
 
 	public void connect(ClientDescriptor client) throws ForbiddenCallException {
 		if (this.connected.contains(client)) {
-			System.out.println("Client '" + client.getUsername() + "' attempted to connect from an already connected connection!");
+			/*XXX*/System.out.println("Client '" + client.getUsername() + "' attempted to connect from an already connected connection!");
 			this.broadcastMessage(new ViewMessage("Client '" + client.getUsername() + "' attempted to connect from an already connected connection!"));
 			return;
 		}
-		System.out.println("Client '" + client.getUsername() + "' connected!");
+		/*XXX*/System.out.println("Client '" + client.getUsername() + "' connected!");
 		this.broadcastMessage(new ViewMessage("Client '" + client.getUsername() + "' connected!"));
 		this.connected.add(client);
 	}
 
 	public void disconnect(ClientDescriptor client) throws ForbiddenCallException {
 		if (!this.connected.contains(client)) {
-			System.out.println("Client '" + client.getUsername() + "' attempted to disconnect from a connection that isn't connected!");
+			/*XXX*/System.out.println("Client '" + client.getUsername() + "' attempted to disconnect from a connection that isn't connected!");
 			this.broadcastMessage(new ViewMessage("Client '" + client.getUsername() + "' attempted to disconnect from a connection that isn't connected!"));
 			return;
 		}
-		System.out.println("Client '" + client.getUsername() + "' disconnected!");
+		/*XXX*/System.out.println("Client '" + client.getUsername() + "' disconnected!");
 		this.broadcastMessage(new ViewMessage("Client '" + client.getUsername() + "' disconnected!"));
 		this.connected.remove(client);
 	}

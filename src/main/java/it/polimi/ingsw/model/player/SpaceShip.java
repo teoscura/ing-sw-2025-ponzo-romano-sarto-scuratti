@@ -126,7 +126,7 @@ public class SpaceShip implements Serializable {
 			for (var c : blob) {
 				System.out.print(c + " ");
 			}
-			System.out.println();
+			/*XXX*/System.out.println();
 		}
 	}
 
@@ -209,7 +209,7 @@ public class SpaceShip implements Serializable {
 
 	public void removeComponent(ShipCoords coords) {
 		if (coords == null) throw new NullPointerException();
-		System.out.println("Removed component on coords: " + coords + " for player '" + this.player.getUsername() + "'.");
+		/*XXX*/System.out.println("Removed component on coords: " + coords + " for player '" + this.player.getUsername() + "'.");
 		BaseComponent tmp = this.getComponent(coords);
 		if (this.components[coords.y][coords.x] == this.empty) throw new IllegalTargetException();
 		this.components[coords.y][coords.x] = this.empty;

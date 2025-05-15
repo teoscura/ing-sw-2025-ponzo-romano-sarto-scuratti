@@ -38,10 +38,10 @@ public class SmugglersAnnounceState extends CardState {
 	public void init(ClientState new_state) {
 		super.init(new_state);
 		if (list.size() == this.state.getCount().getNumber())
-			System.out.println("New CardState -> Smugglers Announce State!");
-		else System.out.println("    CardState -> Smugglers Announce State!");
+			/*XXX*/System.out.println("New CardState -> Smugglers Announce State!");
+		else /*XXX*/System.out.println("    CardState -> Smugglers Announce State!");
 		for (Player p : this.list) {
-			System.out.println("	 - " + p.getUsername());
+			/*XXX*/System.out.println("	 - " + p.getUsername());
 		}
 	}
 
@@ -67,29 +67,29 @@ public class SmugglersAnnounceState extends CardState {
 		if (this.list.getFirst().getDisconnected()) {
 			this.list.removeFirst();
 			if (!this.list.isEmpty()) return new SmugglersAnnounceState(state, card, list);
-			System.out.println("Card exhausted, moving to a new one!");
+			/*XXX*/System.out.println("Card exhausted, moving to a new one!");
 			return null;
 		}
 		if (!result) return new SmugglersLoseState(state, card, list);
 		if (this.card.getExhausted()) return new SmugglersRewardState(state, card, list);
 		this.list.removeFirst();
 		if (!this.list.isEmpty()) return new SmugglersAnnounceState(state, card, list);
-		System.out.println("Card exhausted, moving to a new one!");
+		/*XXX*/System.out.println("Card exhausted, moving to a new one!");
 		return null;
 	}
 
 	@Override
 	public void turnOn(Player p, ShipCoords target_coords, ShipCoords battery_coords) {
 		if (p != this.list.getFirst()) {
-			System.out.println("Player '" + p.getUsername() + "' attempted to turn on a component during another player's turn!");
+			/*XXX*/System.out.println("Player '" + p.getUsername() + "' attempted to turn on a component during another player's turn!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to turn on a component during another player's turn!"));
 			return;
 		}
 		try {
 			p.getSpaceShip().turnOn(target_coords, battery_coords);
-			System.out.println("Player '" + p.getUsername() + "' turned on component at" + target_coords + " using battery from " + battery_coords + "!");
+			/*XXX*/System.out.println("Player '" + p.getUsername() + "' turned on component at" + target_coords + " using battery from " + battery_coords + "!");
 		} catch (IllegalTargetException e) {
-			System.out.println("Player '" + p.getUsername() + "' attempted to turn on a component with invalid coordinates!");
+			/*XXX*/System.out.println("Player '" + p.getUsername() + "' attempted to turn on a component with invalid coordinates!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to turn on a component with invalid coordinates!"));
 		}
 	}
@@ -97,11 +97,11 @@ public class SmugglersAnnounceState extends CardState {
 	@Override
 	public void progressTurn(Player p) {
 		if (p != this.list.getFirst()) {
-			System.out.println("Player '" + p.getUsername() + "' attempted to progress during another player's turn!");
+			/*XXX*/System.out.println("Player '" + p.getUsername() + "' attempted to progress during another player's turn!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to progress during another player's turn!"));
 			return;
 		}
-		System.out.println("Player '" + p.getUsername() + "' motioned to progress!");
+		/*XXX*/System.out.println("Player '" + p.getUsername() + "' motioned to progress!");
 		this.responded = true;
 	}
 

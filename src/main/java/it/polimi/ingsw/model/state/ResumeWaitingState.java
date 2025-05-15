@@ -38,7 +38,7 @@ public class ResumeWaitingState extends GameState {
 
 	@Override
 	public void init() {
-		System.out.println("New Game State -> Resume Waiting Room State");
+		/*XXX*/System.out.println("New Game State -> Resume Waiting Room State");
 		this.broadcastMessage(new NotifyStateUpdateMessage(this.getClientState()));
 	}
 
@@ -51,7 +51,7 @@ public class ResumeWaitingState extends GameState {
 			here++;
 		}
 		if (here == 0) {
-			System.out.println("Everyone left the room, closing it!");
+			/*XXX*/System.out.println("Everyone left the room, closing it!");
 			this.model.endGame();
 			return;
 		}
@@ -96,32 +96,32 @@ public class ResumeWaitingState extends GameState {
 
 	public void connect(ClientDescriptor client) throws ForbiddenCallException {
 		if (!this.awaiting.containsKey(client.getUsername())) {
-			System.out.println("Client '" + client.getUsername() + "' attempted to connect to a resuming game, but he wasn't playing in it before!");
+			/*XXX*/System.out.println("Client '" + client.getUsername() + "' attempted to connect to a resuming game, but he wasn't playing in it before!");
 			this.broadcastMessage(new ViewMessage("Client '" + client.getUsername() + "' attempted to connect to a resuming game, but he wasn't playing in it before!"));
 			return;
 		}
 		if (this.awaiting.get(client.getUsername()) != null) {
-			System.out.println("Client '" + client.getUsername() + "' attempted to connect to a resuming game, but someone already took that username's place!");
+			/*XXX*/System.out.println("Client '" + client.getUsername() + "' attempted to connect to a resuming game, but someone already took that username's place!");
 			this.broadcastMessage(new ViewMessage("Client '" + client.getUsername() + "' attempted to connect to a resuming game, but someone already took that username's place!"));
 			return;
 		}
-		System.out.println("Client '" + client.getUsername() + "' connected!");
+		/*XXX*/System.out.println("Client '" + client.getUsername() + "' connected!");
 		this.broadcastMessage(new ViewMessage("Client '" + client.getUsername() + "' connected!"));
 		this.awaiting.put(client.getUsername(), client);
 	}
 
 	public void disconnect(ClientDescriptor client) throws ForbiddenCallException {
 		if (!this.awaiting.containsKey(client.getUsername())) {
-			System.out.println("Client '" + client.getUsername() + "' attempted to disconnect from a connection that isn't connected!");
+			/*XXX*/System.out.println("Client '" + client.getUsername() + "' attempted to disconnect from a connection that isn't connected!");
 			this.broadcastMessage(new ViewMessage("Client '" + client.getUsername() + "' attempted to disconnect from a connection that isn't connected!"));
 			return;
 		}
 		if (this.awaiting.get(client.getUsername()) == null) {
-			System.out.println("Client '" + client.getUsername() + "' attempted to disconnect from a connection that isn't connected!");
+			/*XXX*/System.out.println("Client '" + client.getUsername() + "' attempted to disconnect from a connection that isn't connected!");
 			this.broadcastMessage(new ViewMessage("Client '" + client.getUsername() + "' attempted to disconnect from a connection that isn't connected!"));
 			return;
 		}
-		System.out.println("Client '" + client.getUsername() + "' disconnected!");
+		/*XXX*/System.out.println("Client '" + client.getUsername() + "' disconnected!");
 		this.awaiting.put(client.getUsername(), null);
 	}
 

@@ -31,9 +31,9 @@ public class StardustState extends CardState {
 	@Override
 	public void init(ClientState new_state) {
 		super.init(new_state);
-		System.out.println("New CardState -> Stardust State!");
+		/*XXX*/System.out.println("New CardState -> Stardust State!");
 		for (Player p : this.state.getOrder(CardOrder.NORMAL)) {
-			System.out.println("	 - " + p.getUsername());
+			/*XXX*/System.out.println("	 - " + p.getUsername());
 		}
 	}
 
@@ -61,17 +61,17 @@ public class StardustState extends CardState {
 	@Override
 	public void progressTurn(Player p) {
 		if (!this.awaiting.contains(p)) {
-			System.out.println("Player '" + p.getUsername() + "' attempted to progress the turn while already having done so!");
+			/*XXX*/System.out.println("Player '" + p.getUsername() + "' attempted to progress the turn while already having done so!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to progress the turn while already having done so!"));
 			return;
 		}
-		System.out.println("Player '" + p.getUsername() + "' motioned to progress!");
+		/*XXX*/System.out.println("Player '" + p.getUsername() + "' motioned to progress!");
 		this.awaiting.remove(p);
 	}
 
 	@Override
 	public CardState getNext() {
-		System.out.println("Card exhausted, moving to a new one!");
+		/*XXX*/System.out.println("Card exhausted, moving to a new one!");
 		return null;
 	}
 

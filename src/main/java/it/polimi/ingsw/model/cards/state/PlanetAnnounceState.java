@@ -34,10 +34,10 @@ public class PlanetAnnounceState extends CardState {
 	public void init(ClientState new_state) {
 		super.init(new_state);
 		if (list.size() == this.state.getCount().getNumber())
-			System.out.println("New CardState -> Planet Announce State!");
-		else System.out.println("    CardState -> Planet Announce State!");
+			/*XXX*/System.out.println("New CardState -> Planet Announce State!");
+		else /*XXX*/System.out.println("    CardState -> Planet Announce State!");
 		for (Player p : this.list) {
-			System.out.println("	 - " + p.getUsername());
+			/*XXX*/System.out.println("	 - " + p.getUsername());
 		}
 	}
 
@@ -50,7 +50,7 @@ public class PlanetAnnounceState extends CardState {
 		}
 		if (this.id >= 0) {
 			this.card.apply(this.list.getFirst(), id);
-			System.out.println("Player '" + this.list.getFirst().getUsername() + "' moved back " + card.getDays());
+			/*XXX*/System.out.println("Player '" + this.list.getFirst().getUsername() + "' moved back " + card.getDays());
 			this.state.getPlanche().movePlayer(state, list.getFirst(), -card.getDays());
 		}
 		this.transition();
@@ -71,32 +71,32 @@ public class PlanetAnnounceState extends CardState {
 		if (id != -1) return new PlanetRewardState(state, card, id, list);
 		this.list.removeFirst();
 		if (!this.list.isEmpty()) return new PlanetAnnounceState(state, card, list);
-		System.out.println("Moving to a new state!");
+		/*XXX*/System.out.println("Moving to a new state!");
 		return null;
 	}
 
 	@Override
 	public void selectLanding(Player p, int planet) {
 		if (!p.equals(this.list.getFirst())) {
-			System.out.println("Player '" + p.getUsername() + "' attempted to land during another player's turn!");
+			/*XXX*/System.out.println("Player '" + p.getUsername() + "' attempted to land during another player's turn!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to land during another player's turn!"));
 			return;
 		} else if (planet < -1 || planet >= this.card.getSize()) {
-			System.out.println("Player '" + p.getUsername() + "' attempted to land on an invalid id!");
+			/*XXX*/System.out.println("Player '" + p.getUsername() + "' attempted to land on an invalid id!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to land on an invalid id!"));
 			return;
 		}
 		if (planet == -1) {
-			System.out.println("Player '" + p.getUsername() + "' chose to not land!");
+			/*XXX*/System.out.println("Player '" + p.getUsername() + "' chose to not land!");
 			this.id = planet;
 			this.responded = true;
 			return;
 		} else if (this.card.getPlanet(planet).getVisited()) {
-			System.out.println("Player '" + p.getUsername() + "' attempted to land on a planet that was already visited!");
+			/*XXX*/System.out.println("Player '" + p.getUsername() + "' attempted to land on a planet that was already visited!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to land on a planet that was already visited!"));
 			return;
 		}
-		System.out.println("Player '" + p.getUsername() + "' landed on: " + planet);
+		/*XXX*/System.out.println("Player '" + p.getUsername() + "' landed on: " + planet);
 		this.id = planet;
 		this.responded = true;
 	}

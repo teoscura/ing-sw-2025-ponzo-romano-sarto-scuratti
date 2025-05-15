@@ -82,7 +82,7 @@ public class ModelInstance implements Serializable {
 			ServerMessage mess = new ServerConnectMessage(client);
 			this.state.validate(mess);
 		} catch (ForbiddenCallException e) {
-			System.out.println("Client: '" + client.getUsername() + "' tried connecting when the current state doesn't support it anymore!");
+			/*XXX*/System.out.println("Client: '" + client.getUsername() + "' tried connecting when the current state doesn't support it anymore!");
 		}
 	}
 
@@ -92,7 +92,7 @@ public class ModelInstance implements Serializable {
 			mess.setDescriptor(client);
 			this.state.validate(mess);
 		} catch (ForbiddenCallException e) {
-			System.out.println("Client: '" + client.getUsername() + "' tried disconnecting when the current state doesn't support it anymore!");
+			/*XXX*/System.out.println("Client: '" + client.getUsername() + "' tried disconnecting when the current state doesn't support it anymore!");
 		}
 	}
 
@@ -100,7 +100,7 @@ public class ModelInstance implements Serializable {
 		try {
 			this.state.connect(p);
 		} catch (ForbiddenCallException e) {
-			System.out.println("Client: '" + p.getUsername() + "' tried reconnecting when the current state doesn't support it anymore!");
+			/*XXX*/System.out.println("Client: '" + p.getUsername() + "' tried reconnecting when the current state doesn't support it anymore!");
 		}
 	}
 
@@ -112,7 +112,7 @@ public class ModelInstance implements Serializable {
 			disc.setDescriptor(p.getDescriptor());
 			this.state.validate(disc);
 		} catch (ForbiddenCallException e) {
-			System.out.println("Client: '" + p.getUsername() + "' tried disconnecting when the current state doesn't support it anymore!");
+			/*XXX*/System.out.println("Client: '" + p.getUsername() + "' tried disconnecting when the current state doesn't support it anymore!");
 		}
 	}
 

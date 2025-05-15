@@ -59,9 +59,9 @@ public class LobbyController extends Thread implements VirtualServer {
 					running = this.model.getState() != null;
 				}
 			} catch (ForbiddenCallException e) {
-				System.out.println(e.getMessage());
+				/*XXX*/System.out.println(e.getMessage());
 			} catch (InterruptedException e) {
-				System.out.println("Shutting down lobby " + this.id + " thread!");
+				/*XXX*/System.out.println("Shutting down lobby " + this.id + " thread!");
 			}
 		}
 		this.endGame();
@@ -69,7 +69,7 @@ public class LobbyController extends Thread implements VirtualServer {
 
 	public void receiveMessage(ServerMessage message) {
 		if (message.getDescriptor() == null || !this.listeners.containsKey(message.getDescriptor().getUsername())) {
-			System.out.println("Recieved a message from a client not properly connected!");
+			/*XXX*/System.out.println("Recieved a message from a client not properly connected!");
 			this.broadcast(new ViewMessage("Recieved a message from a client not properly connected!"));
 			return;
 		}
@@ -109,14 +109,14 @@ public class LobbyController extends Thread implements VirtualServer {
 				oos.reset();
 			} catch (IOException e) {
 				e.printStackTrace();
-				System.out.println("Failed to serialize the current modelinstance, closing server!");
+				/*XXX*/System.out.println("Failed to serialize the current modelinstance, closing server!");
 				this.endGame();
 			}
 		}
 	}
 
 	public void endGame() {
-		System.out.println("Game id: [" + this.id + "] finished!");
+		/*XXX*/System.out.println("Game id: [" + this.id + "] finished!");
 		if (this.model.getState() == null) {
 			File f = new File(this.serializer_path);
 			f.delete();
@@ -134,7 +134,7 @@ public class LobbyController extends Thread implements VirtualServer {
 	private TimerTask getEndMatchTask(LobbyController controller) {
 		return new TimerTask() {
 			public void run() {
-				System.out.println("Only one player was left for too long, closing the match!");
+				/*XXX*/System.out.println("Only one player was left for too long, closing the match!");
 				controller.endGame();
 			}
 		};
@@ -145,7 +145,7 @@ public class LobbyController extends Thread implements VirtualServer {
 		boolean reconnect = false;
 		synchronized (listeners_lock) {
 			if (this.listeners.containsKey(client.getUsername())) {
-				System.out.println("Client '" + client.getUsername() + "' attempted to connect twice!");
+				/*XXX*/System.out.println("Client '" + client.getUsername() + "' attempted to connect twice!");
 				return;
 			} else if (this.disconnected_usernames.containsKey(client.getUsername())) {
 				this.disconnected_usernames.remove(client.getUsername());
@@ -157,14 +157,14 @@ public class LobbyController extends Thread implements VirtualServer {
 		}
 		synchronized (model_lock) {
 			if (!model.getStarted()) {
-				System.out.println("Client '" + client.getUsername() + "' connected to waiting room!");
+				/*XXX*/System.out.println("Client '" + client.getUsername() + "' connected to waiting room!");
 				this.model.connect(client);
 			} else if (reconnect) {
 				this.model.connect(client.getPlayer());
 				this.dsctimer.cancel();
 				this.dsctimer = null;
 			} else {
-				System.out.println("Client '" + client.getUsername() + "' started spectating!");
+				/*XXX*/System.out.println("Client '" + client.getUsername() + "' started spectating!");
 			}
 		}
 	}
@@ -173,7 +173,7 @@ public class LobbyController extends Thread implements VirtualServer {
 		MainServerController s = MainServerController.getInstance();
 		synchronized (listeners_lock) {
 			if (!listeners.containsKey(client.getUsername())) {
-				System.out.println("Client '" + client.getUsername() + "' tried disconnecting from a lobby he was never connected to!");
+				/*XXX*/System.out.println("Client '" + client.getUsername() + "' tried disconnecting from a lobby he was never connected to!");
 				return;
 			}
 			this.listeners.remove(client.getUsername());
@@ -198,7 +198,7 @@ public class LobbyController extends Thread implements VirtualServer {
 				this.model.disconnect(client);
 			}
 			if (this.model.getState() == null) {
-				System.out.println("Babbo");
+				/*XXX*/System.out.println("Babbo");
 			}
 		}
 	}

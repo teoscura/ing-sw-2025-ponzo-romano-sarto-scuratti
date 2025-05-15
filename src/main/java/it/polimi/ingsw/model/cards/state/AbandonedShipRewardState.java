@@ -36,9 +36,9 @@ public class AbandonedShipRewardState extends CardState {
 	@Override
 	public void init(ClientState new_state) {
 		super.init(new_state);
-		System.out.println("    CardState -> Abandoned Ship Reward State!");
+		/*XXX*/System.out.println("    CardState -> Abandoned Ship Reward State!");
 		for (Player p : this.list) {
-			System.out.println("	 - " + p.getUsername());
+			/*XXX*/System.out.println("	 - " + p.getUsername());
 		}
 	}
 
@@ -63,14 +63,14 @@ public class AbandonedShipRewardState extends CardState {
 
 	@Override
 	public CardState getNext() {
-		System.out.println("Card exhausted, moving to a new one!");
+		/*XXX*/System.out.println("Card exhausted, moving to a new one!");
 		return null;
 	}
 
 	@Override
 	public void removeCrew(Player p, ShipCoords cabin_coords) throws ForbiddenCallException {
 		if (p != this.list.getFirst()) {
-			System.out.println("Player '" + p.getUsername() + "' attempted to remove the crew during another player's turn!");
+			/*XXX*/System.out.println("Player '" + p.getUsername() + "' attempted to remove the crew during another player's turn!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to remove the crew during another player's turn!"));
 			return;
 		}
@@ -78,7 +78,7 @@ public class AbandonedShipRewardState extends CardState {
 		try {
 			p.getSpaceShip().getComponent(cabin_coords).check(v);
 		} catch (IllegalTargetException e) {
-			System.out.println("Player '" + p.getUsername() + "' attempted to remove the crew from a invalid coordinate!");
+			/*XXX*/System.out.println("Player '" + p.getUsername() + "' attempted to remove the crew from a invalid coordinate!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to remove the crew from a invalid coordinate!"));
 			return;
 		}

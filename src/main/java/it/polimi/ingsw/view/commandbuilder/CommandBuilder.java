@@ -147,11 +147,11 @@ public class CommandBuilder {
 				mess = new TurnOnMessage(targetCoords, batteryCoords);
 				break;
 			default:
-				System.out.println("Command not recognized: '" + command + "'");
+				/*XXX*/System.out.println("Command not recognized: '" + command + "'");
 				break;
 		}
 		if (!valid) {
-			System.out.println("Command not valid");
+			/*XXX*/System.out.println("Command not valid");
 		}
 
 		return mess;

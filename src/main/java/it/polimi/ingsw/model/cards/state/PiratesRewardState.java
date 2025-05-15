@@ -33,9 +33,9 @@ class PiratesRewardState extends CardState {
 	@Override
 	public void init(ClientState new_state) {
 		super.init(new_state);
-		System.out.println("    CardState -> Pirates Reward State!");
+		/*XXX*/System.out.println("    CardState -> Pirates Reward State!");
 		for (Player p : this.list) {
-			System.out.println("	 - " + p.getUsername());
+			/*XXX*/System.out.println("	 - " + p.getUsername());
 		}
 	}
 
@@ -64,18 +64,18 @@ class PiratesRewardState extends CardState {
 
 	@Override
 	public CardState getNext() {
-		System.out.println("Card exhausted, moving to a new one!");
+		/*XXX*/System.out.println("Card exhausted, moving to a new one!");
 		return null;
 	}
 
 	@Override
 	public void setTakeReward(Player p, boolean take) {
 		if (!this.list.getFirst().equals(p)) {
-			System.out.println("Player '" + p.getUsername() + "' attempted to accept a reward during another player's turn!");
+			/*XXX*/System.out.println("Player '" + p.getUsername() + "' attempted to accept a reward during another player's turn!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to accept a reward during another player's turn!"));
 			return;
 		}
-		System.out.println("Player '" + p.getUsername() + "' took the reward? " + take);
+		/*XXX*/System.out.println("Player '" + p.getUsername() + "' took the reward? " + take);
 		this.took_reward = take;
 		this.responded = true;
 	}

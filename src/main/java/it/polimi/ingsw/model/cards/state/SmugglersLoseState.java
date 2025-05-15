@@ -45,10 +45,10 @@ public class SmugglersLoseState extends CardState {
 	@Override
 	public void init(ClientState new_state) {
 		super.init(new_state);
-		System.out.println("    CardState -> Smugglers Lose State!");
-		System.out.println("    Bat: " + required[0] + " Blu: " + required[1] + " Grn: " + required[2] + " Ylw: " + required[3] + " Red: " + required[4]);
+		/*XXX*/System.out.println("    CardState -> Smugglers Lose State!");
+		/*XXX*/System.out.println("    Bat: " + required[0] + " Blu: " + required[1] + " Grn: " + required[2] + " Ylw: " + required[3] + " Red: " + required[4]);
 		for (Player p : this.list) {
-			System.out.println("	 - " + p.getUsername());
+			/*XXX*/System.out.println("	 - " + p.getUsername());
 		}
 	}
 
@@ -76,24 +76,24 @@ public class SmugglersLoseState extends CardState {
 		if (this.list.getFirst().getDisconnected()) {
 			this.list.removeFirst();
 			if (!this.list.isEmpty()) return new SmugglersAnnounceState(state, card, list);
-			System.out.println("Card exhausted, moving to a new one!");
+			/*XXX*/System.out.println("Card exhausted, moving to a new one!");
 			return null;
 		}
 		this.list.removeFirst();
 		if (!list.isEmpty()) return new SmugglersAnnounceState(state, card, list);
-		System.out.println("Card exhausted, moving to a new one!");
+		/*XXX*/System.out.println("Card exhausted, moving to a new one!");
 		return null;
 	}
 
 	@Override
 	public void discardCargo(Player p, ShipmentType type, ShipCoords coords) {
 		if (!p.equals(this.list.getFirst())) {
-			System.out.println("Player '" + p.getUsername() + "' attempted to discard cargo during another player's turn!");
+			/*XXX*/System.out.println("Player '" + p.getUsername() + "' attempted to discard cargo during another player's turn!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to discard cargo during another player's turn!"));
 			return;
 		}
 		if (p.getSpaceShip().getContains()[type.getValue()] <= 0) {
-			System.out.println("Player '" + p.getUsername() + "' attempted to discard cargo that he doesn't own!");
+			/*XXX*/System.out.println("Player '" + p.getUsername() + "' attempted to discard cargo that he doesn't own!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to discard cargo that he doesn't own!"));
 			return;
 		}
@@ -104,7 +104,7 @@ public class SmugglersLoseState extends CardState {
 				continue;
 			}
 			if (type.getValue() != idx) {
-				System.out.println("Player '" + p.getUsername() + "' attempted to discard cargo that's not their most valuable!");
+				/*XXX*/System.out.println("Player '" + p.getUsername() + "' attempted to discard cargo that's not their most valuable!");
 				this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to discard cargo that's not their most valuable!"));
 				return;
 			}
@@ -113,24 +113,24 @@ public class SmugglersLoseState extends CardState {
 				p.getSpaceShip().getComponent(coords).check(v);
 				this.required[idx]--;
 				if (type != ShipmentType.EMPTY)
-					System.out.println("Player '" + p.getUsername() + "' removed cargo type: " + type + " from " + coords);
-				else System.out.println("Player '" + p.getUsername() + "' removed battery from " + coords);
+					/*XXX*/System.out.println("Player '" + p.getUsername() + "' removed cargo type: " + type + " from " + coords);
+				else /*XXX*/System.out.println("Player '" + p.getUsername() + "' removed battery from " + coords);
 				break;
 			} catch (ContainerEmptyException e) {
 				if (type != ShipmentType.EMPTY) {
-					System.out.println("Player '" + p.getUsername() + "' attempted to discard cargo from a storage that doesn't contain it!");
+					/*XXX*/System.out.println("Player '" + p.getUsername() + "' attempted to discard cargo from a storage that doesn't contain it!");
 					this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to discard cargo from a storage that doesn't contain it!"));
 				} else {
-					System.out.println("Player '" + p.getUsername() + "' attempted to discard a battery from a storage that doesn't contain it!");
+					/*XXX*/System.out.println("Player '" + p.getUsername() + "' attempted to discard a battery from a storage that doesn't contain it!");
 					this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to discard a battery from a storage that doesn't contain it!"));
 				}
 				return;
 			} catch (IllegalArgumentException e) {
 				if (type != ShipmentType.EMPTY) {
-					System.out.println("Player '" + p.getUsername() + "' attempted to discard cargo from illegal coordinates!");
+					/*XXX*/System.out.println("Player '" + p.getUsername() + "' attempted to discard cargo from illegal coordinates!");
 					this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to discard cargo from illegal coordinates!"));
 				} else {
-					System.out.println("Player '" + p.getUsername() + "' attempted to discard a battery from illegal coordinates!");
+					/*XXX*/System.out.println("Player '" + p.getUsername() + "' attempted to discard a battery from illegal coordinates!");
 					this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to discard a battery from illegal coordinates!"));
 				}
 			}

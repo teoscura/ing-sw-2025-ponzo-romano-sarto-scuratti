@@ -39,19 +39,19 @@ public class SlaversCard extends Card {
 	public boolean apply(VoyageState state, Player p) {
 		if (state == null || p == null) throw new NullPointerException();
 		if (p.getSpaceShip().getCannonPower() > this.min_power) {
-			System.out.println("Player '" + p.getUsername() + "' beat the slavers!");
+			/*XXX*/System.out.println("Player '" + p.getUsername() + "' beat the slavers!");
 			this.exhaust();
 			return true;
 		} else if (p.getSpaceShip().getCannonPower() == this.min_power) {
-			System.out.println("Player '" + p.getUsername() + "' tied the slavers!");
+			/*XXX*/System.out.println("Player '" + p.getUsername() + "' tied the slavers!");
 			return true;
 		}
 		if (p.getSpaceShip().getTotalCrew() <= this.crew_penalty) {
-			System.out.println("Player '" + p.getUsername() + "' lost and the whole crew got captured by slavers!");
+			/*XXX*/System.out.println("Player '" + p.getUsername() + "' lost and the whole crew got captured by slavers!");
 			state.loseGame(p);
 			return false;
 		}
-		System.out.println("Player '" + p.getUsername() + "' lost to the slavers!");
+		/*XXX*/System.out.println("Player '" + p.getUsername() + "' lost to the slavers!");
 		return false;
 	}
 

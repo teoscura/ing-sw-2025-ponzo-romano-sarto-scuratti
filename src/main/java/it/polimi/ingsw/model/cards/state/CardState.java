@@ -42,67 +42,67 @@ public abstract class CardState implements Serializable {
 
 	public void selectBlob(Player p, ShipCoords blob_coord) throws ForbiddenCallException {
 		this.state.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' tried to set a new center in a state that doesn't allow it!"));
-		System.out.println("Player: '" + p.getUsername() + "' tried to connect in a state that doesn't allow it!");
+		/*XXX*/System.out.println("Player: '" + p.getUsername() + "' tried to connect in a state that doesn't allow it!");
 		throw new ForbiddenCallException("This state doesn't support this function.");
 	}
 
 	public void turnOn(Player p, ShipCoords target_coords, ShipCoords battery_coords) throws ForbiddenCallException {
 		this.state.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' tried to set a new center in a state that doesn't allow it!"));
-		System.out.println("Player: '" + p.getUsername() + "' tried to connect in a state that doesn't allow it!");
+		/*XXX*/System.out.println("Player: '" + p.getUsername() + "' tried to connect in a state that doesn't allow it!");
 		throw new ForbiddenCallException("This state doesn't support this function.");
 	}
 
 	public void removeCrew(Player p, ShipCoords cabin_coords) throws ForbiddenCallException {
 		this.state.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' tried to remove crew in a state that doesn't allow it!"));
-		System.out.println("Player: '" + p.getUsername() + "' tried to connect in a state that doesn't allow it!");
+		/*XXX*/System.out.println("Player: '" + p.getUsername() + "' tried to connect in a state that doesn't allow it!");
 		throw new ForbiddenCallException("This state doesn't support this function.");
 	}
 
 	public void moveCargo(Player p, ShipmentType shipment, ShipCoords target_coords, ShipCoords source_coords) throws ForbiddenCallException {
 		this.state.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' tried to remove crew in a state that doesn't allow it!"));
-		System.out.println("Player: '" + p.getUsername() + "' tried to connect in a state that doesn't allow it!");
+		/*XXX*/System.out.println("Player: '" + p.getUsername() + "' tried to connect in a state that doesn't allow it!");
 		throw new ForbiddenCallException("This state doesn't support this function.");
 	}
 
 	public void takeCargo(Player p, ShipmentType type, ShipCoords storage_coords) throws ForbiddenCallException {
 		this.state.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' tried to take cargo in a state that doesn't allow it!"));
-		System.out.println("Player: '" + p.getUsername() + "' tried to take cargo in a state that doesn't allow it!");
+		/*XXX*/System.out.println("Player: '" + p.getUsername() + "' tried to take cargo in a state that doesn't allow it!");
 		throw new ForbiddenCallException("This state doesn't support this function.");
 	}
 
 	public void discardCargo(Player p, ShipmentType type, ShipCoords target_coords) throws ForbiddenCallException {
 		this.state.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' tried to discard cargo in a state that doesn't allow it!"));
-		System.out.println("Player: '" + p.getUsername() + "' tried to discard cargo in a state that doesn't allow it!");
+		/*XXX*/System.out.println("Player: '" + p.getUsername() + "' tried to discard cargo in a state that doesn't allow it!");
 		throw new ForbiddenCallException("This state doesn't support this function.");
 	}
 
 	public void selectLanding(Player p, int planet) throws ForbiddenCallException {
 		this.state.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' tried to select landing in a state that doesn't allow it!"));
-		System.out.println("Player: '" + p.getUsername() + "' tried to select landing in a state that doesn't allow it!");
+		/*XXX*/System.out.println("Player: '" + p.getUsername() + "' tried to select landing in a state that doesn't allow it!");
 		throw new ForbiddenCallException("This state doesn't support this function.");
 	}
 
 	public void progressTurn(Player p) throws ForbiddenCallException {
 		this.state.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' tried to progress in a state that doesn't allow it!"));
-		System.out.println("Player: '" + p.getUsername() + "' tried to progress in a state that doesn't allow it!");
+		/*XXX*/System.out.println("Player: '" + p.getUsername() + "' tried to progress in a state that doesn't allow it!");
 		throw new ForbiddenCallException("This state doesn't support this function.");
 	}
 
 	public void setTakeReward(Player p, boolean take) throws ForbiddenCallException {
 		this.state.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' tried to take the reward in a state that doesn't allow it!"));
-		System.out.println("Player: '" + p.getUsername() + "' tried to take the reward in a state that doesn't allow it!");
+		/*XXX*/System.out.println("Player: '" + p.getUsername() + "' tried to take the reward in a state that doesn't allow it!");
 		throw new ForbiddenCallException("This state doesn't support this function.");
 	}
 
 	public void connect(Player p) throws ForbiddenCallException {
 		this.state.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' tried to connect in a state that doesn't allow it!"));
-		System.out.println("Player: '" + p.getUsername() + "' tried to connect in a state that doesn't allow it!");
+		/*XXX*/System.out.println("Player: '" + p.getUsername() + "' tried to connect in a state that doesn't allow it!");
 		throw new ForbiddenCallException("This state doesn't support this function.");
 	}
 
 	public void disconnect(Player p) throws ForbiddenCallException {
 		this.state.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' tried to disconnect in a state that doesn't allow it!"));
-		System.out.println("Player: '" + p.getUsername() + "' tried to disconnect in a state that doesn't allow it!");
+		/*XXX*/System.out.println("Player: '" + p.getUsername() + "' tried to disconnect in a state that doesn't allow it!");
 		throw new ForbiddenCallException("This state doesn't support this function.");
 	}
 

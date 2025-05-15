@@ -40,7 +40,7 @@ public class EndscreenState extends GameState {
 			if (this.order_arrival.contains(p)) p.addScore(4 - order_arrival.indexOf(p));
 			p.finalScore();
 		}
-		System.out.println("New Game State -> Endscreen State");
+		/*XXX*/System.out.println("New Game State -> Endscreen State");
 		this.broadcastMessage(new NotifyStateUpdateMessage(this.getClientState()));
 	}
 

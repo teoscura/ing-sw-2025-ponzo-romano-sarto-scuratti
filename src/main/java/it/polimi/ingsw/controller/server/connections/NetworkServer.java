@@ -55,27 +55,27 @@ public class NetworkServer extends Thread implements RMISkeletonProvider, Serial
 			registry = LocateRegistry.createRegistry(this.rmiport);
 			registry.bind("galaxy_truckers", this);
 			UnicastRemoteObject.exportObject(this, this.rmiport);
-			System.out.println("Set up RMI on address: '" + this.ip + ":" + this.rmiport + "'...");
+			/*XXX*/System.out.println("Set up RMI on address: '" + this.ip + ":" + this.rmiport + "'...");
 			Runtime.getRuntime().addShutdownHook(this.RMICleanup());
 		} catch (RemoteException e) {
-			System.out.println("Failed to setup the rmi registry and remote object.");
+			/*XXX*/System.out.println("Failed to setup the rmi registry and remote object.");
 		} catch (InaccessibleObjectException e) {
-			System.out.println("Couldn't bind RMI due to access permissions! Is this running inside a sandboxed JUnit test?");
+			/*XXX*/System.out.println("Couldn't bind RMI due to access permissions! Is this running inside a sandboxed JUnit test?");
 		} catch (AlreadyBoundException e) {
-			System.out.println("Name is already bound, terminating.");
+			/*XXX*/System.out.println("Name is already bound, terminating.");
 			System.exit(-1);
 		}
 		try {
 			this.server = new ServerSocket();
 			this.server.bind(new InetSocketAddress(this.ip, this.tcpport));
-			System.out.println("Started server on: '" + ip + ":" + this.server.getLocalPort() + "'...");
+			/*XXX*/System.out.println("Started server on: '" + ip + ":" + this.server.getLocalPort() + "'...");
 			Runtime.getRuntime().addShutdownHook(this.TCPCleanup());
 		} catch (IOException e) {
-			System.out.println("Couldn't start server on the specified address and port, terminating.");
+			/*XXX*/System.out.println("Couldn't start server on the specified address and port, terminating.");
 			System.exit(-1);
 
 		}
-		System.out.println("Successfully started server.");
+		/*XXX*/System.out.println("Successfully started server.");
 	}
 
 	@Override
@@ -108,7 +108,7 @@ public class NetworkServer extends Thread implements RMISkeletonProvider, Serial
 					registry.unbind("galaxy_truckers");
 				} catch (RemoteException | NotBoundException e) {
 				}
-				System.out.println("Cleaned up RMI connection.");
+				/*XXX*/System.out.println("Cleaned up RMI connection.");
 			}
 		};
 	}
@@ -121,7 +121,7 @@ public class NetworkServer extends Thread implements RMISkeletonProvider, Serial
 					server.close();
 				} catch (IOException e) {
 				}
-				System.out.println("Cleaned up TCP connection.");
+				/*XXX*/System.out.println("Cleaned up TCP connection.");
 			}
 		};
 	}
@@ -131,7 +131,7 @@ public class NetworkServer extends Thread implements RMISkeletonProvider, Serial
 		try {
 			return MainServerController.getInstance().getStub(new_client);
 		} catch (RemoteException e) {
-			System.out.println(e.getMessage());
+			/*XXX*/System.out.println(e.getMessage());
 			return null;
 		}
 	}

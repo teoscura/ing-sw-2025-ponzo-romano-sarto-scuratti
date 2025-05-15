@@ -44,9 +44,9 @@ public class AbandonedStationRewardState extends CardState {
 	@Override
 	public void init(ClientState new_state) {
 		super.init(new_state);
-		System.out.println("    CardState -> Abandoned Station Announce State!");
+		/*XXX*/System.out.println("    CardState -> Abandoned Station Announce State!");
 		for (Player p : this.list) {
-			System.out.println("	 - " + p.getUsername());
+			/*XXX*/System.out.println("	 - " + p.getUsername());
 		}
 	}
 
@@ -69,7 +69,7 @@ public class AbandonedStationRewardState extends CardState {
 
 	@Override
 	public CardState getNext() {
-		System.out.println("...Card exhausted, moving to a new one!");
+		/*XXX*/System.out.println("...Card exhausted, moving to a new one!");
 		return null;
 	}
 
@@ -77,17 +77,17 @@ public class AbandonedStationRewardState extends CardState {
 	@Override
 	public void takeCargo(Player p, ShipmentType type, ShipCoords target_coords) {
 		if (p != this.list.getFirst()) {
-			System.out.println("Player '" + p.getUsername() + "' attempted to take cargo during another player's turn!");
+			/*XXX*/System.out.println("Player '" + p.getUsername() + "' attempted to take cargo during another player's turn!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to take cargo during another player's turn!"));
 			return;
 		}
 		if (type.getValue() < 0) {
-			System.out.println("Player '" + p.getUsername() + "' attempted to take cargo with an illegal shipment type!");
+			/*XXX*/System.out.println("Player '" + p.getUsername() + "' attempted to take cargo with an illegal shipment type!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "'  attempted to take cargo with an illegal shipment type!"));
 			return;
 		}
 		if (this.card.getPlanet().getContains()[type.getValue() - 1] <= 0) {
-			System.out.println("Player '" + p.getUsername() + "' attempted to take cargo the card doesn't have!");
+			/*XXX*/System.out.println("Player '" + p.getUsername() + "' attempted to take cargo the card doesn't have!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "'  attempted to take cargo the card doesn't have!"));
 			return;
 		}
@@ -96,17 +96,17 @@ public class AbandonedStationRewardState extends CardState {
 			p.getSpaceShip().getComponent(target_coords).check(v);
 			this.card.getPlanet().getContains()[type.getValue() - 1]--;
 			this.left--;
-			System.out.println("Player '" + p.getUsername() + "' took cargo type: " + type + ", placed it at " + target_coords);
+			/*XXX*/System.out.println("Player '" + p.getUsername() + "' took cargo type: " + type + ", placed it at " + target_coords);
 		} catch (IllegalTargetException e) {
-			System.out.println("Player '" + p.getUsername() + "' attempted to position cargo in illegal coordinates!");
+			/*XXX*/System.out.println("Player '" + p.getUsername() + "' attempted to position cargo in illegal coordinates!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to position cargo in illegal coordinates!"));
 			return;
 		} catch (ContainerFullException e) {
-			System.out.println("Player '" + p.getUsername() + "' attempted to position cargo in a storage that's full!");
+			/*XXX*/System.out.println("Player '" + p.getUsername() + "' attempted to position cargo in a storage that's full!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to position cargo in a storage that's full!"));
 			return;
 		} catch (ContainerNotSpecialException e) {
-			System.out.println("Player '" + p.getUsername() + "' attempted to position cargo in a storage that doesn't support it!");
+			/*XXX*/System.out.println("Player '" + p.getUsername() + "' attempted to position cargo in a storage that doesn't support it!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to position cargo in a storage that doesn't support it!"));
 			return;
 		}
@@ -119,12 +119,12 @@ public class AbandonedStationRewardState extends CardState {
 	@Override
 	public void moveCargo(Player p, ShipmentType type, ShipCoords target_coords, ShipCoords source_coords) {
 		if (p != this.list.getFirst()) {
-			System.out.println("Player '" + p.getUsername() + "' attempted to move cargo during another player's turn!");
+			/*XXX*/System.out.println("Player '" + p.getUsername() + "' attempted to move cargo during another player's turn!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to move cargo during another player's turn!"));
 			return;
 		}
 		if (type.getValue() <= 0) {
-			System.out.println("Player '" + p.getUsername() + "' attempted to move an invalid shipment type!");
+			/*XXX*/System.out.println("Player '" + p.getUsername() + "' attempted to move an invalid shipment type!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to move an invalid shipment type!"));
 			return;
 		}
@@ -132,14 +132,14 @@ public class AbandonedStationRewardState extends CardState {
 		try {
 			p.getSpaceShip().getComponent(source_coords).check(v);
 		} catch (IllegalTargetException e) {
-			System.out.println("Player '" + p.getUsername() + "' attempted to move cargo from an invalid source!");
+			/*XXX*/System.out.println("Player '" + p.getUsername() + "' attempted to move cargo from an invalid source!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to move cargo from an invalid source!"));
 			return;
 		}
 		try {
 			p.getSpaceShip().getComponent(target_coords).check(v);
 		} catch (IllegalTargetException e) {
-			System.out.println("Player '" + p.getUsername() + "' attempted to move cargo to coords that can't contain the shipment!");
+			/*XXX*/System.out.println("Player '" + p.getUsername() + "' attempted to move cargo to coords that can't contain the shipment!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to move cargo to coords that can't contain the shipment!"));
 			return;
 		}
@@ -147,30 +147,30 @@ public class AbandonedStationRewardState extends CardState {
 		ContainsLoaderVisitor vl = new ContainsLoaderVisitor(p.getSpaceShip(), type);
 		p.getSpaceShip().getComponent(source_coords).check(vr);
 		p.getSpaceShip().getComponent(target_coords).check(vl);
-		System.out.println("Player '" + p.getUsername() + "' moved cargo type: " + type + ", from " + source_coords + " to " + target_coords);
+		/*XXX*/System.out.println("Player '" + p.getUsername() + "' moved cargo type: " + type + ", from " + source_coords + " to " + target_coords);
 	}
 
 	@Override
 	public void discardCargo(Player p, ShipmentType type, ShipCoords target_coords) {
 		if (p != this.list.getFirst()) {
-			System.out.println("Player '" + p.getUsername() + "' attempted to discard cargo during another player's turn!");
+			/*XXX*/System.out.println("Player '" + p.getUsername() + "' attempted to discard cargo during another player's turn!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to discard cargo during another player's turn!"));
 			return;
 		}
 		if (type.getValue() <= 0) {
-			System.out.println("Player '" + p.getUsername() + "' attempted to discard cargo with an invalid type!");
+			/*XXX*/System.out.println("Player '" + p.getUsername() + "' attempted to discard cargo with an invalid type!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to discard cargo with an invalid type!"));
 			return;
 		}
 		ContainsRemoveVisitor v = new ContainsRemoveVisitor(p.getSpaceShip(), type);
 		try {
 			p.getSpaceShip().getComponent(target_coords).check(v);
-			System.out.println("Player '" + p.getUsername() + "' removed cargo type: " + type + " from " + target_coords);
+			/*XXX*/System.out.println("Player '" + p.getUsername() + "' removed cargo type: " + type + " from " + target_coords);
 		} catch (IllegalTargetException e) {
-			System.out.println("Player '" + p.getUsername() + "' attempted to discard cargo from illegal coordinates!");
+			/*XXX*/System.out.println("Player '" + p.getUsername() + "' attempted to discard cargo from illegal coordinates!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to discard cargo from illegal coordinates!"));
 		} catch (ContainerEmptyException e) {
-			System.out.println("Player '" + p.getUsername() + "' attempted to discard cargo from an empty storage component!");
+			/*XXX*/System.out.println("Player '" + p.getUsername() + "' attempted to discard cargo from an empty storage component!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to discard cargo from an empty storage component!"));
 		}
 	}
@@ -178,7 +178,7 @@ public class AbandonedStationRewardState extends CardState {
 	@Override
 	public void progressTurn(Player p) {
 		if (p != this.list.getFirst()) {
-			System.out.println("Player '" + p.getUsername() + "' attempted to progress during another player's turn!");
+			/*XXX*/System.out.println("Player '" + p.getUsername() + "' attempted to progress during another player's turn!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to progress during another player's turn!"));
 			return;
 		}

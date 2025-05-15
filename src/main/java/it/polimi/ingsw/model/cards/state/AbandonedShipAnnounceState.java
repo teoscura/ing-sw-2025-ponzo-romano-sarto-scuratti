@@ -35,10 +35,10 @@ public class AbandonedShipAnnounceState extends CardState {
 	public void init(ClientState new_state) {
 		super.init(new_state);
 		if (list.size() == this.state.getCount().getNumber())
-			System.out.println("New CardState -> Abandoned Ship Announce State!");
-		else System.out.println("    CardState -> Abandoned Ship Announce State!");
+			/*XXX*/System.out.println("New CardState -> Abandoned Ship Announce State!");
+		else /*XXX*/System.out.println("    CardState -> Abandoned Ship Announce State!");
 		for (Player p : this.list) {
-			System.out.println("	 - " + p.getUsername());
+			/*XXX*/System.out.println("	 - " + p.getUsername());
 		}
 	}
 
@@ -52,7 +52,7 @@ public class AbandonedShipAnnounceState extends CardState {
 		try {
 			this.card.apply(state, this.list.getFirst(), id);
 		} catch (IllegalArgumentException e) {
-			System.out.println("Player '" + this.list.getFirst().getUsername() + "' attempted to land without enough crew!");
+			/*XXX*/System.out.println("Player '" + this.list.getFirst().getUsername() + "' attempted to land without enough crew!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + this.list.getFirst().getUsername() + "' attempted to land without enough crew!"));
 			this.responded = false;
 			return;
@@ -79,18 +79,18 @@ public class AbandonedShipAnnounceState extends CardState {
 		if (this.card.getExhausted()) return new AbandonedShipRewardState(state, card, list);
 		this.list.removeFirst();
 		if (!this.list.isEmpty()) return new AbandonedShipAnnounceState(state, card, list);
-		System.out.println("...Card exhausted, moving to a new one!");
+		/*XXX*/System.out.println("...Card exhausted, moving to a new one!");
 		return null;
 	}
 
 	@Override
 	public void selectLanding(Player p, int planet) {
 		if (!p.equals(this.list.getFirst())) {
-			System.out.println("Player '" + p.getUsername() + "' attempted to land during another player's turn!");
+			/*XXX*/System.out.println("Player '" + p.getUsername() + "' attempted to land during another player's turn!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to land during another player's turn!"));
 			return;
 		} else if (planet != -1 && planet != 0) {
-			System.out.println("Player '" + p.getUsername() + "' attempted to land on an invalid id!");
+			/*XXX*/System.out.println("Player '" + p.getUsername() + "' attempted to land on an invalid id!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to land on an invalid id!"));
 			return;
 		}

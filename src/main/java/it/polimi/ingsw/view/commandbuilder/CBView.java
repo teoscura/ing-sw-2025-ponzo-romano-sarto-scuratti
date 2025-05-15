@@ -13,32 +13,32 @@ public class CBView implements ClientView {
 
 	@Override
 	public void show(ClientSetupState state) {
-		System.out.println("Lobby setup state");
+		/*XXX*/System.out.println("Lobby setup state");
 	}
 
 	@Override
 	public void show(ClientWaitingRoomState state) {
-		System.out.println("Waiting room state");
+		/*XXX*/System.out.println("Waiting room state");
 	}
 
 	@Override
 	public void show(ClientConstructionState state) {
-		System.out.println("Construction state");
+		/*XXX*/System.out.println("Construction state");
 	}
 
 	@Override
 	public void show(ClientVerifyState state) {
-		System.out.println("Verify state");
+		/*XXX*/System.out.println("Verify state");
 	}
 
 	@Override
 	public void show(ClientVoyageState state) {
-		System.out.println("Voyage state");
+		/*XXX*/System.out.println("Voyage state");
 	}
 
 	@Override
 	public void show(ClientEndgameState state) {
-		System.out.println("Endgame state");
+		/*XXX*/System.out.println("Endgame state");
 	}
 
 	@Override
@@ -111,14 +111,14 @@ public class CBView implements ClientView {
 
 	@Override
 	public void showTextMessage(String message) {
-		System.out.println(message);
+		/*XXX*/System.out.println(message);
 	}
 
 	@Override
 	public void showTitleScreen(TitleScreenState state) {
 		try {
 			this.tst = new TitleScreenTask(state);
-			System.out.println("Title screen");
+			/*XXX*/System.out.println("Title screen");
 			this.tst.start();
 			this.tst.join();
 		} catch (InterruptedException e) {
@@ -129,7 +129,7 @@ public class CBView implements ClientView {
 	@Override
 	public void showConnectionScreen(ConnectingState state) {
 		try {
-			System.out.println("Connection screen");
+			/*XXX*/System.out.println("Connection screen");
 			this.ct = new ConnectTask(state);
 			this.ct.start();
 			this.ct.join();
@@ -140,7 +140,7 @@ public class CBView implements ClientView {
 
 	@Override
 	public void show(ClientLobbySelectState state) {
-		System.out.println("Connected!");
+		/*XXX*/System.out.println("Connected!");
 	}
 
 
