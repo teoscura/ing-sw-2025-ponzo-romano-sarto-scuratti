@@ -7,6 +7,7 @@ import java.net.Socket;
 
 import it.polimi.ingsw.controller.ThreadSafeMessageQueue;
 import it.polimi.ingsw.message.client.ClientMessage;
+import it.polimi.ingsw.message.server.ServerDisconnectMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
 
 public class SocketConnection extends Thread implements ServerConnection {
@@ -57,5 +58,23 @@ public class SocketConnection extends Thread implements ServerConnection {
 			e.printStackTrace();
 		}
 	}
+
+	@Override
+	public Thread getShutdownHook() {
+		SocketConnection caller = this;
+		return new Thread(){
+			public void run(){
+				caller.interrupt();
+				try {
+					sendMessage(new ServerDisconnectMessage());
+				} catch (IOException e) {
+					System.out.println("Ran Shutdown Hook on SocketConnection");
+				}
+				close();
+			}
+		};
+	}
+
+	
 
 }

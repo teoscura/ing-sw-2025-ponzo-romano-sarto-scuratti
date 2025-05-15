@@ -50,11 +50,11 @@ public class SocketClient implements ClientConnection {
 		try {
 			message = (ServerMessage) in.readObject();
 		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
+			//XXX logger message
 		} catch (IOException e) {
+			//XXX logger
 			System.out.println("Failed to read object from: " + socket.getInetAddress() + ", closing socket.");
 			this.close();
-			e.printStackTrace();
 		}
 		if (message.getDescriptor() != null) {
 			message.setDescriptor(null);
@@ -64,8 +64,8 @@ public class SocketClient implements ClientConnection {
 			try {
 				setup = (UsernameSetupMessage) message;
 			} catch (ClassCastException e) {
+				//XXX logger
 				System.out.println("Received non-setup message from tcp socket: " + socket.getInetAddress());
-				e.printStackTrace();
 			}
 			this.username = setup.getUsername();
 			controller.setupSocketListener(this, this.username);
@@ -80,7 +80,7 @@ public class SocketClient implements ClientConnection {
 		try {
 			socket.close();
 		} catch (IOException e) {
-			e.printStackTrace();
+			//XXX logger message
 		}
 	}
 

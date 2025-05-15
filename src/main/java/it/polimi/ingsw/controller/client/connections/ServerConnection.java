@@ -9,4 +9,6 @@ public interface ServerConnection {
 	void sendMessage(ServerMessage message) throws IOException;
 
 	void close();
+
+	Thread getShutdownHook();
 }

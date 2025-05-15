@@ -18,13 +18,14 @@ import it.polimi.ingsw.view.ClientView;
 import it.polimi.ingsw.view.commandbuilder.InputCommandTask;
 
 public class ConnectedState extends ClientControllerState {
-    
+
     private final ServerConnection connection;
+	private final ThreadSafeMessageQueue<ServerMessage> outqueue;
 	private final String username;
 	private final Thread consumer_thread;
-	private final ThreadSafeMessageQueue<ServerMessage> outqueue;
 	private final Thread sender_thread;
 	private final Thread commandbuilder_thread;
+	private final Thread shutdown_hook;
 
 	public ConnectedState(ClientController controller, ClientView view, String username, ServerConnection connection, ThreadSafeMessageQueue<ClientMessage> inqueue){
 		super(controller, view);
@@ -34,10 +35,12 @@ public class ConnectedState extends ClientControllerState {
 		this.outqueue = new ThreadSafeMessageQueue<>(100);
 		this.sender_thread = new SenderThread(this.outqueue, this.connection);
 		this.commandbuilder_thread = new InputCommandTask(this);
+		this.shutdown_hook = this.getShutdownHook();
 	}
 
 	@Override
 	public void init(){
+		Runtime.getRuntime().addShutdownHook(this.shutdown_hook);
 		this.startPingTask();
 		consumer_thread.start();
 		sender_thread.start();
@@ -51,6 +54,7 @@ public class ConnectedState extends ClientControllerState {
 
 	@Override
 	public void onClose() {
+		Runtime.getRuntime().removeShutdownHook(this.shutdown_hook);
 		this.disconnect();
 	}
 
@@ -69,11 +73,11 @@ public class ConnectedState extends ClientControllerState {
             this.connection.close();
 			this.sender_thread.interrupt();
 			this.consumer_thread.interrupt();
-            this.transition();
+            this.controller.reset();
 		} catch (RemoteException e) {
-			this.transition();
+			this.controller.reset();
 		} catch (IOException e) {
-			this.transition();
+			this.controller.reset();
 		}
 	}
 
@@ -112,6 +116,10 @@ public class ConnectedState extends ClientControllerState {
 
 	private void ping() {
 		this.sendMessage(new PingMessage());
+	}
+
+	private Thread getShutdownHook(){
+		return this.connection.getShutdownHook();
 	}
 
 }
