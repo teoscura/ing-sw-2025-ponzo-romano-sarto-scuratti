@@ -32,7 +32,7 @@ public class SelectShipReconnectState extends CardState {
 	@Override
 	public void init(ClientState new_state) {
 		super.init(new_state);
-		/*XXX*/System.out.println("    CardState -> Reconnect New Cabin State for Player '" + awaiting.getUsername() + "'!");
+		/*XXX*/System.out.println("CardState -> Reconnect New Cabin State for Player '" + awaiting.getUsername() + "'!");
 
 	}
 
@@ -80,7 +80,7 @@ public class SelectShipReconnectState extends CardState {
 
 	@Override
 	public void disconnect(Player p) {
-
+		return;
 	}
 
 }

@@ -13,6 +13,8 @@ import it.polimi.ingsw.model.client.state.ClientState;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.state.VoyageState;
+import it.polimi.ingsw.utils.Logger;
+import it.polimi.ingsw.utils.LoggerLevel;
 
 import java.util.ArrayList;
 
@@ -33,7 +35,7 @@ public class StardustState extends CardState {
 		super.init(new_state);
 		/*XXX*/System.out.println("New CardState -> Stardust State!");
 		for (Player p : this.state.getOrder(CardOrder.NORMAL)) {
-			/*XXX*/System.out.println("	 - " + p.getUsername());
+			Logger.getInstance().print(LoggerLevel.LOBBY, "[Lobby id:"+this.state.getModelID()+"] "+p.voyageInfo(this.state.getPlanche()));
 		}
 	}
 
@@ -78,7 +80,6 @@ public class StardustState extends CardState {
 	@Override
 	public void disconnect(Player p) throws ForbiddenCallException {
 		this.awaiting.remove(p);
-
 	}
 
 }

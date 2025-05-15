@@ -57,10 +57,10 @@ class CombatZonePenaltyState extends CardState {
 	@Override
 	public void init(ClientState new_state) {
 		super.init(new_state);
-		/*XXX*/System.out.println("    CardState -> Combat Zone Penalty State!: [" + (3 - sections.size()) + " - " + this.sections.getFirst().getPenalty() + "].");
-		/*XXX*/System.out.println("    Targeting: '" + this.target.getUsername() + "'.");
+		/*XXX*/System.out.println("CardState -> Combat Zone Penalty State!: [" + (3 - sections.size()) + " - " + this.sections.getFirst().getPenalty() + "].");
+		/*XXX*/System.out.println("Targeting: '" + this.target.getUsername() + "'.");
 		if (sections.getFirst().getPenalty() == CombatZonePenalty.CARGO)
-			/*XXX*/System.out.println("    Bat: " + required[0] + " Blu: " + required[1] + " Grn: " + required[2] + " Ylw: " + required[3] + " Red: " + required[4]);
+			/*XXX*/System.out.println("Bat: " + required[0] + " Blu: " + required[1] + " Grn: " + required[2] + " Ylw: " + required[3] + " Red: " + required[4]);
 		if (sections.getFirst().getPenalty() != CombatZonePenalty.DAYS) return;
 		this.state.getPlanche().movePlayer(state, target, -sections.getFirst().getAmount());
 		this.transition();

@@ -16,6 +16,8 @@ import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.VoyageState;
+import it.polimi.ingsw.utils.Logger;
+import it.polimi.ingsw.utils.LoggerLevel;
 
 import java.util.ArrayList;
 
@@ -41,16 +43,16 @@ public class CombatZoneAnnounceState extends CardState {
 	public void init(ClientState new_state) {
 		super.init(new_state);
 		if (this.state.getOrder(CardOrder.NORMAL).size() <= 1) {
-			/*XXX*/System.out.println("    Only one player left playing, skipping state!");
+			/*XXX*/System.out.println("Only one player left playing, skipping state!");
 			this.transition();
 			return;
 		}
 		if (sections.size() == 3)
 			/*XXX*/System.out.println("New CardState -> Combat Zone Announce State! [Section " + (3 - sections.size()) + " - " + this.sections.getFirst().getCriteria() + " - " + this.sections.getFirst().getPenalty() + "].");
 		else
-			/*XXX*/System.out.println("    CardState -> Combat Zone Announce State! [Section " + (3 - sections.size()) + " - " + this.sections.getFirst().getCriteria() + " - " + this.sections.getFirst().getPenalty() + "].");
+			/*XXX*/System.out.println("CardState -> Combat Zone Announce State! [Section " + (3 - sections.size()) + " - " + this.sections.getFirst().getCriteria() + " - " + this.sections.getFirst().getPenalty() + "].");
 		for (Player p : this.state.getOrder(CardOrder.NORMAL)) {
-			/*XXX*/System.out.println("	 - " + p.getUsername());
+			Logger.getInstance().print(LoggerLevel.LOBBY, "[Lobby id:"+this.state.getModelID()+"] "+p.voyageInfo(this.state.getPlanche()));
 		}
 	}
 

@@ -31,7 +31,7 @@ public class Logger {
 		this.out = stream;
 	}
 
-	public void print(String message, LoggerLevel level) {
+	public void print(LoggerLevel level, String message) {
 		if (level.status() > this.level.status()) return;
 		synchronized (stream_lock) {
 			out.println(level + message);

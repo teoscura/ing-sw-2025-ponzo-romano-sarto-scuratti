@@ -16,6 +16,8 @@ import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.VoyageState;
+import it.polimi.ingsw.utils.Logger;
+import it.polimi.ingsw.utils.LoggerLevel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +44,7 @@ public class MeteorAnnounceState extends CardState {
 		super.init(new_state);
 		/*XXX*/System.out.println("New CardState -> Meteor Swarm Announce State! [Left " + left.getProjectiles().size() + "].");
 		for (Player p : this.state.getOrder(CardOrder.NORMAL)) {
-			/*XXX*/System.out.println("	 - " + p.getUsername());
+			Logger.getInstance().print(LoggerLevel.LOBBY, "[Lobby id:"+this.state.getModelID()+"] "+p.voyageInfo(this.state.getPlanche()));
 		}
 	}
 

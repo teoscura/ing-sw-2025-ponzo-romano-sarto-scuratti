@@ -41,8 +41,8 @@ public class CombatZoneSelectShipState extends CardState {
 	@Override
 	public void init(ClientState new_state) {
 		super.init(new_state);
-		/*XXX*/System.out.println("    CardState -> Combat Zone Select Ship State!: [" + (3 - sections.size()) + " - " + this.sections.getFirst().getPenalty() + "].");
-		/*XXX*/System.out.println("    Awaiting: '" + this.target.getUsername() + "'.");
+		/*XXX*/System.out.println("CardState -> Combat Zone Select Ship State!: [" + (3 - sections.size()) + " - " + this.sections.getFirst().getPenalty() + "].");
+		/*XXX*/System.out.println("Awaiting: '" + this.target.getUsername() + "'.");
 	}
 
 	@Override

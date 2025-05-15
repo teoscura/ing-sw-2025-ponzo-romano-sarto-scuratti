@@ -11,6 +11,8 @@ import it.polimi.ingsw.model.client.card.ClientCreditsRewardCardStateDecorator;
 import it.polimi.ingsw.model.client.state.ClientState;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.state.VoyageState;
+import it.polimi.ingsw.utils.Logger;
+import it.polimi.ingsw.utils.LoggerLevel;
 
 import java.util.ArrayList;
 
@@ -33,9 +35,9 @@ class SlaversRewardState extends CardState {
 	@Override
 	public void init(ClientState new_state) {
 		super.init(new_state);
-		/*XXX*/System.out.println("    CardState -> Slavers Reward State!");
+		/*XXX*/System.out.println("CardState -> Slavers Reward State!");
 		for (Player p : this.list) {
-			/*XXX*/System.out.println("	 - " + p.getUsername());
+			Logger.getInstance().print(LoggerLevel.LOBBY, "[Lobby id:"+this.state.getModelID()+"] "+p.voyageInfo(this.state.getPlanche()));
 		}
 	}
 

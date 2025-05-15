@@ -20,6 +20,8 @@ import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.VoyageState;
+import it.polimi.ingsw.utils.Logger;
+import it.polimi.ingsw.utils.LoggerLevel;
 
 import java.util.ArrayList;
 
@@ -43,11 +45,11 @@ public class SmugglersRewardState extends CardState {
 	@Override
 	public void init(ClientState new_state) {
 		super.init(new_state);
-		/*XXX*/System.out.println("    CardState -> Smugglers Reward State!");
+		/*XXX*/System.out.println("CardState -> Smugglers Reward State!");
 		int[] prize = this.card.getReward().getContains();
-		/*XXX*/System.out.println("    Reward => Blu: " + prize[0] + " Grn: " + prize[1] + " Ylw: " + prize[2] + " Red: " + prize[3]);
+		/*XXX*/System.out.println("Reward => Blu: " + prize[0] + " Grn: " + prize[1] + " Ylw: " + prize[2] + " Red: " + prize[3]);
 		for (Player p : this.list) {
-			/*XXX*/System.out.println("	 - " + p.getUsername());
+			Logger.getInstance().print(LoggerLevel.LOBBY, "[Lobby id:"+this.state.getModelID()+"] "+p.voyageInfo(this.state.getPlanche()));
 		}
 	}
 

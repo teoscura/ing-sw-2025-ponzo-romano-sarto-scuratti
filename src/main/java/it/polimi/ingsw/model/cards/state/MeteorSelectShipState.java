@@ -35,7 +35,7 @@ class MeteorSelectShipState extends CardState {
 	@Override
 	public void init(ClientState new_state) {
 		super.init(new_state);
-		/*XXX*/System.out.println("    CardState -> Meteor Swarm Select Ship State!");
+		/*XXX*/System.out.println("CardState -> Meteor Swarm Select Ship State!");
 	}
 
 	@Override

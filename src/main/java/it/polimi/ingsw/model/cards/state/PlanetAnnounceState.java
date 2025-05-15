@@ -11,6 +11,8 @@ import it.polimi.ingsw.model.client.card.ClientLandingCardStateDecorator;
 import it.polimi.ingsw.model.client.state.ClientState;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.state.VoyageState;
+import it.polimi.ingsw.utils.Logger;
+import it.polimi.ingsw.utils.LoggerLevel;
 
 import java.util.ArrayList;
 
@@ -35,9 +37,9 @@ public class PlanetAnnounceState extends CardState {
 		super.init(new_state);
 		if (list.size() == this.state.getCount().getNumber())
 			/*XXX*/System.out.println("New CardState -> Planet Announce State!");
-		else /*XXX*/System.out.println("    CardState -> Planet Announce State!");
+		else /*XXX*/System.out.println("CardState -> Planet Announce State!");
 		for (Player p : this.list) {
-			/*XXX*/System.out.println("	 - " + p.getUsername());
+			Logger.getInstance().print(LoggerLevel.LOBBY, "[Lobby id:"+this.state.getModelID()+"] "+p.voyageInfo(this.state.getPlanche()));
 		}
 	}
 

@@ -75,6 +75,10 @@ public abstract class GameState implements Serializable {
 		return this.type;
 	}
 
+	public int getModelID(){
+		return this.model.getID();
+	}
+
 	//Methods that can be called and overridden by subclasses.
 	public void connect(ClientDescriptor client) throws ForbiddenCallException {
 		this.broadcastMessage(new ViewMessage("Client: '" + client.getUsername() + "' tried to disconnect in a state that doesn't allow it!"));

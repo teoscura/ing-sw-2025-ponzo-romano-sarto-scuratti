@@ -37,8 +37,8 @@ public class PiratesSelectShipState extends CardState {
 	@Override
 	public void init(ClientState new_state) {
 		super.init(new_state);
-		/*XXX*/System.out.println("    CardState -> Pirates Select Ship State!");
-		/*XXX*/System.out.println("    Awaiting: '" + this.list.getFirst().getUsername() + "'.");
+		/*XXX*/System.out.println("CardState -> Pirates Select Ship State!");
+		/*XXX*/System.out.println("Awaiting: '" + this.list.getFirst().getUsername() + "'.");
 	}
 
 	@Override
