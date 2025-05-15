@@ -1,6 +1,5 @@
 package it.polimi.ingsw.controller;
 
-import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.SynchronousQueue;
@@ -14,15 +13,15 @@ import it.polimi.ingsw.message.Message;
 public class ThreadSafeMessageQueue<T extends Message> {
     
     private final ExecutorService threadpool;
-    private final Queue<T> queue;
+    private final ArrayBlockingQueue<T> queue;
 
     public ThreadSafeMessageQueue(int size){
         threadpool = new ThreadPoolExecutor(1, 120, Long.MAX_VALUE, TimeUnit.MILLISECONDS, new SynchronousQueue<>());
         queue = new ArrayBlockingQueue<>(size, true);
     }
 
-    public T poll() throws InterruptedException{
-        return queue.poll();
+    public T take() throws InterruptedException{
+        return queue.take();
     }
 
     public void insert(T item) {

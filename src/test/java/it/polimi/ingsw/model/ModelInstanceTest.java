@@ -58,7 +58,6 @@ public class ModelInstanceTest {
         model.validate(mess);
         mess = new ServerConnectMessage(p1descagain);
         model.validate(mess);
-        System.out.println(model.getState().getClass().getSimpleName());
         assertTrue(model.getState() instanceof DummyVoyageState);
     }
 

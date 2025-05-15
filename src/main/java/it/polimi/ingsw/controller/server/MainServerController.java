@@ -97,7 +97,7 @@ public class MainServerController extends Thread implements VirtualServer {
         this.server.start();
 		while (true) {
             try {
-                queue.poll().receive(this);
+                queue.take().receive(this);
             } catch (ForbiddenCallException e) {
                 System.out.println(e.getMessage());
             } catch (InterruptedException e) {

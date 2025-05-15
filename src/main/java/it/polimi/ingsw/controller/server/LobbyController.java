@@ -58,7 +58,7 @@ public class LobbyController extends Thread implements VirtualServer {
 		boolean running = true;
 		while (running) {
 			try {
-				ServerMessage mess = queue.poll();
+				ServerMessage mess = queue.take();
 				synchronized(model){
 					mess.receive(this);
 					running = this.model.getState() == null;

@@ -19,7 +19,7 @@ public class ConsumerThread extends Thread {
     public void run(){
         while (true) {
             try {
-                inqueue.poll().receive(state);
+                inqueue.take().receive(state);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
