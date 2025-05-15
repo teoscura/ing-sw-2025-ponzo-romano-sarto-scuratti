@@ -1,20 +1,20 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.controller.DummyController;
 import it.polimi.ingsw.controller.server.ClientDescriptor;
-import it.polimi.ingsw.controller.server.ServerController;
 import it.polimi.ingsw.message.client.ClientMessage;
 import it.polimi.ingsw.message.server.ServerConnectMessage;
 import it.polimi.ingsw.message.server.ServerDisconnectMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
-import it.polimi.ingsw.model.player.*;
+import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.state.GameState;
 import it.polimi.ingsw.model.state.ResumeWaitingState;
 
 public class DummyModelInstance extends ModelInstance {
 
-	public DummyModelInstance(int id, ServerController server, GameModeType type, PlayerCount count) {
-		super(id, server, type, count);
+	public DummyModelInstance(int id, GameModeType type, PlayerCount count) {
+		super(id, new DummyController(id), type, count);
 	}
 
 	public String toString() {
@@ -30,7 +30,6 @@ public class DummyModelInstance extends ModelInstance {
 	}
 
 	public void serialize() {
-		return;
 	}
 
 	public void startGame() {
@@ -44,7 +43,6 @@ public class DummyModelInstance extends ModelInstance {
 
 	public void endGame() {
 		if (!this.started) throw new RuntimeException();
-		return;
 	}
 
 	public GameState getState() {
@@ -98,18 +96,13 @@ public class DummyModelInstance extends ModelInstance {
 		}
 	}
 
-	public ServerController getController() {
-		return null;
-	}
-
 	public void afterSerialRestart() {
 		ResumeWaitingState next = new ResumeWaitingState(this, this.state.getType(), this.state.getCount(), this.state);
 		this.setState(next);
 	}
 
 	public void broadcast(ClientMessage message) {
-		return;
 	}
-	
+
 
 }

@@ -1,8 +1,6 @@
 //Done.
 package it.polimi.ingsw.model.cards;
 
-import java.util.ArrayList;
-
 import it.polimi.ingsw.exceptions.PlayerNotFoundException;
 import it.polimi.ingsw.model.cards.state.CardState;
 import it.polimi.ingsw.model.cards.state.EpidemicState;
@@ -11,6 +9,8 @@ import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.VoyageState;
+
+import java.util.ArrayList;
 
 public class EpidemicCard extends Card {
 

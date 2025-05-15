@@ -1,8 +1,5 @@
 package it.polimi.ingsw.model.cards.state;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
@@ -12,12 +9,15 @@ import it.polimi.ingsw.model.cards.utils.CardOrder;
 import it.polimi.ingsw.model.client.card.ClientAwaitConfirmCardStateDecorator;
 import it.polimi.ingsw.model.client.card.ClientBaseCardState;
 import it.polimi.ingsw.model.client.card.ClientCardState;
-import it.polimi.ingsw.model.client.state.ClientModelState;
+import it.polimi.ingsw.model.client.state.ClientState;
 import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.VoyageState;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class OpenSpaceState extends CardState {
 
@@ -32,11 +32,11 @@ public class OpenSpaceState extends CardState {
 	}
 
 	@Override
-	public void init(ClientModelState new_state) {
+	public void init(ClientState new_state) {
 		super.init(new_state);
 		System.out.println("New CardState -> Open Space State!");
-		for(Player p : this.state.getOrder(CardOrder.NORMAL)){
-			System.out.println("	 - "+p.getUsername());
+		for (Player p : this.state.getOrder(CardOrder.NORMAL)) {
+			System.out.println("	 - " + p.getUsername());
 		}
 	}
 
@@ -60,7 +60,7 @@ public class OpenSpaceState extends CardState {
 	}
 
 	@Override
-    public CardState getNext() {
+	public CardState getNext() {
 		System.out.println("Card exhausted, moving to a new one!");
 		return null;
 	}
@@ -74,7 +74,7 @@ public class OpenSpaceState extends CardState {
 		}
 		try {
 			p.getSpaceShip().turnOn(target_coords, battery_coords);
-			System.out.println("Player '" + p.getUsername() + "' turned on component at"+target_coords+" using battery from "+battery_coords+"!");
+			System.out.println("Player '" + p.getUsername() + "' turned on component at" + target_coords + " using battery from " + battery_coords + "!");
 		} catch (IllegalTargetException e) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to turn on a component with invalid coordinates!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to turn on a component with invalid coordinates!"));
@@ -88,14 +88,14 @@ public class OpenSpaceState extends CardState {
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to progress the turn while already having done so!"));
 			return;
 		}
-		System.out.println("Player '" + p.getUsername() + "' motioned to progress! ("+(this.state.getCount().getNumber()-this.awaiting.size())+").");
+		System.out.println("Player '" + p.getUsername() + "' motioned to progress! (" + (this.awaiting.size() - 1) + " missing).");
 		this.awaiting.remove(p);
 	}
 
 	@Override
 	public void disconnect(Player p) throws ForbiddenCallException {
 		this.awaiting.remove(p);
-		System.out.println("Player '" + p.getUsername() + "' disconnected!");
+
 	}
 
 }

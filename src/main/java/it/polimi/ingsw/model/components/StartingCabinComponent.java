@@ -15,68 +15,69 @@ import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.player.SpaceShip;
 
 public class StartingCabinComponent extends BaseComponent {
-    
-    private final PlayerColor color;
-    private int crew_number;
 
-    public StartingCabinComponent(int id, 
-                          ConnectorType[] connectors, 
-                          ComponentRotation rotation,
-                          PlayerColor color){
-        super(id, connectors, rotation);
-        if(color.getOrder()<0) throw new IllegalArgumentException("Color can't be \"NONE\".");
-        this.color = color;
-        this.crew_number = 2;
-    }
+	private final PlayerColor color;
+	private int crew_number;
 
-    public StartingCabinComponent(int id, 
-                          ConnectorType[] connectors, 
-                          ComponentRotation rotation,
-                          PlayerColor color,
-                          ShipCoords coords){
-        super(id, connectors, rotation, coords);
-        if(color.getOrder()<0) throw new IllegalArgumentException("Color can't be \"NONE\".");
-        this.color = color;
-        this.crew_number = 2;
-    }
+	public StartingCabinComponent(int id,
+								  ConnectorType[] connectors,
+								  ComponentRotation rotation,
+								  PlayerColor color) {
+		super(id, connectors, rotation);
+		if (color.getOrder() < 0) throw new IllegalArgumentException("Color can't be \"NONE\".");
+		this.color = color;
+		this.crew_number = 2;
+	}
 
-    @Override
-    public void check(iVisitor v){
-        v.visit(this);
-    }
+	public StartingCabinComponent(int id,
+								  ConnectorType[] connectors,
+								  ComponentRotation rotation,
+								  PlayerColor color,
+								  ShipCoords coords) {
+		super(id, connectors, rotation, coords);
+		if (color.getOrder() < 0) throw new IllegalArgumentException("Color can't be \"NONE\".");
+		this.color = color;
+		this.crew_number = 2;
+	}
 
-    public int getCrew(){
-        return crew_number;
-    }
+	@Override
+	public void check(iVisitor v) {
+		v.visit(this);
+	}
 
-    public AlienType getCrewType(){
-        return AlienType.HUMAN;
-    }
+	public int getCrew() {
+		return crew_number;
+	}
 
-    public PlayerColor getColor(){
-        return this.color;
-    }
+	public AlienType getCrewType() {
+		return AlienType.HUMAN;
+	}
 
-    public void setCrew(SpaceShip ship, int new_crew, AlienType type){
-        if(new_crew<0) throw new NegativeArgumentException("Crew size can't be zero or negative");
-        if(type!=AlienType.HUMAN) throw new IllegalArgumentException("Central cabin can only contain humans");
-        if(new_crew>AlienType.HUMAN.getMaxCapacity()) throw new ArgumentTooBigException("Crew size exceeds type's max capacity");
-        crew_number = new_crew;
-    }
+	public PlayerColor getColor() {
+		return this.color;
+	}
 
-    @Override
-    public void onCreation(SpaceShip ship, ShipCoords coords) {
-        this.coords = coords;
-        ship.addCabinCoords(this.coords);
-    }
+	public void setCrew(SpaceShip ship, int new_crew, AlienType type) {
+		if (new_crew < 0) throw new NegativeArgumentException("Crew size can't be zero or negative");
+		if (type != AlienType.HUMAN) throw new IllegalArgumentException("Central cabin can only contain humans");
+		if (new_crew > AlienType.HUMAN.getMaxCapacity())
+			throw new ArgumentTooBigException("Crew size exceeds type's max capacity");
+		crew_number = new_crew;
+	}
 
-    @Override
-    public void onDelete(SpaceShip ship) {
-        ship.delCabinCoords(this.coords);
-    }
+	@Override
+	public void onCreation(SpaceShip ship, ShipCoords coords) {
+		this.coords = coords;
+		ship.addCabinCoords(this.coords);
+	}
 
-    @Override
-    public ClientComponent getClientComponent() {
-        return new ClientCrewComponentDecorator(new ClientBaseComponent(getID(), getRotation()), AlienType.HUMAN, crew_number);
-    }
+	@Override
+	public void onDelete(SpaceShip ship) {
+		ship.delCabinCoords(this.coords);
+	}
+
+	@Override
+	public ClientComponent getClientComponent() {
+		return new ClientCrewComponentDecorator(new ClientBaseComponent(getID(), getRotation()), AlienType.HUMAN, crew_number);
+	}
 }

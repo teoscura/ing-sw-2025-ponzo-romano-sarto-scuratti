@@ -1,9 +1,5 @@
 package it.polimi.ingsw.model.state;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Optional;
-
 import it.polimi.ingsw.exceptions.OutOfBoundsException;
 import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
@@ -11,11 +7,12 @@ import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.ModelInstance;
 import it.polimi.ingsw.model.PlayerCount;
-import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.board.CommonBoard;
 import it.polimi.ingsw.model.board.iCards;
 import it.polimi.ingsw.model.board.iCommonBoard;
-import it.polimi.ingsw.model.client.state.ClientModelState;
+import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
+import it.polimi.ingsw.model.client.ClientGameListEntry;
+import it.polimi.ingsw.model.client.state.ClientState;
 import it.polimi.ingsw.model.components.BaseComponent;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.exceptions.ContainerEmptyException;
@@ -23,6 +20,10 @@ import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.player.exceptions.IllegalComponentAdd;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Optional;
 
 public abstract class ConstructionState extends GameState {
 
@@ -50,7 +51,7 @@ public abstract class ConstructionState extends GameState {
 
 	@Override
 	public void init() {
-        System.out.println("New Game State -> Construction State");
+		System.out.println("New Game State -> Construction State");
 		this.broadcastMessage(new NotifyStateUpdateMessage(this.getClientState()));
 	}
 
@@ -66,6 +67,7 @@ public abstract class ConstructionState extends GameState {
 		}
 		if (this.finished.size() != this.players.size() && !only_disconnected_left) {
 			this.broadcastMessage(new NotifyStateUpdateMessage(this.getClientState()));
+			this.model.serialize();
 			return;
 		}
 		this.transition();
@@ -77,7 +79,7 @@ public abstract class ConstructionState extends GameState {
 	}
 
 	@Override
-	public abstract ClientModelState getClientState();
+	public abstract ClientState getClientState();
 
 	@Override
 	public boolean toSerialize() {
@@ -118,7 +120,7 @@ public abstract class ConstructionState extends GameState {
 		try {
 			this.current_tile.get(p).rotate(rotation);
 			p.getSpaceShip().addComponent(this.current_tile.get(p), coords);
-			System.out.println("Player '" + p.getUsername() + "' placed a component in "+coords);
+			System.out.println("Player '" + p.getUsername() + "' placed a component in " + coords);
 			this.current_tile.put(p, null);
 		} catch (OutOfBoundsException e) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to place a component, but the coordinates are illegal!");
@@ -145,7 +147,7 @@ public abstract class ConstructionState extends GameState {
 			this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' attempted to take a component, but there are no more to take!"));
 			return;
 		}
-		System.out.println("Player '" + p.getUsername() + "' took component "+tmp.getID()+" from the covered pile!");
+		System.out.println("Player '" + p.getUsername() + "' took component " + tmp.getID() + " from the covered pile!");
 		if (this.current_tile.get(p) == null) {
 			this.current_tile.put(p, tmp);
 		} else {
@@ -153,7 +155,7 @@ public abstract class ConstructionState extends GameState {
 			this.current_tile.put(p, tmp);
 			this.hoarded_tile.get(p).addFirst(old_current);
 			while (this.hoarded_tile.get(p).size() >= 3) {
-				System.out.println("Component "+this.hoarded_tile.get(p).getLast().getID()+" added to discarded components.");
+				System.out.println("Component " + this.hoarded_tile.get(p).getLast().getID() + " added to discarded components.");
 				this.board.discardComponent(this.hoarded_tile.get(p).removeLast());
 			}
 		}
@@ -174,9 +176,9 @@ public abstract class ConstructionState extends GameState {
 			this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' attempted to take a discarded component, but there aren't any with that ID!"));
 			return;
 		}
-		System.out.println("Player '" + p.getUsername() + "' took component "+tmp.getID()+" from the uncovered pile!");
+		System.out.println("Player '" + p.getUsername() + "' took component " + tmp.getID() + " from the uncovered pile!");
 		BaseComponent oldcurrent = this.current_tile.get(p);
-		if(oldcurrent==null) this.current_tile.put(p, tmp);
+		if (oldcurrent == null) this.current_tile.put(p, tmp);
 		else {
 			this.current_tile.put(p, tmp);
 			this.hoarded_tile.get(p).addFirst(oldcurrent);
@@ -197,14 +199,14 @@ public abstract class ConstructionState extends GameState {
 			BaseComponent tmp = this.current_tile.get(p);
 			this.current_tile.put(p, null);
 			this.board.discardComponent(tmp);
-			System.out.println("Player '" + p.getUsername() + "' discarded component "+tmp.getID()+"!");
+			System.out.println("Player '" + p.getUsername() + "' discarded component " + tmp.getID() + "!");
 			return;
 		}
 		Optional<BaseComponent> c = this.hoarded_tile.get(p).stream().filter(a -> a.getID() == id).findFirst();
 		if (c.isPresent()) {
 			this.hoarded_tile.get(p).remove(c.get());
 			this.board.discardComponent(c.get());
-			System.out.println("Player '" + p.getUsername() + "' discarded component "+c.get().getID()+"!");
+			System.out.println("Player '" + p.getUsername() + "' discarded component " + c.get().getID() + "!");
 		} else {
 			System.out.println("Player '" + p.getUsername() + "' attempted to discard a component, but they don't own the one with the id provided!");
 			this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' attempted to discard a component, but they don't own the one with the id provided!"));
@@ -227,24 +229,24 @@ public abstract class ConstructionState extends GameState {
 
 	@Override
 	public String toString() {
-		String res = "";
-		res.concat("Construction State - ");
-		for (Player p : this.players) {
-			res.concat(p.getUsername() + ": " + p.getColor().toString() + ", ");
-		}
-		return res;
+		return "Construction State";
 	}
 
-	public BaseComponent getCurrent(Player p){
+	public BaseComponent getCurrent(Player p) {
 		return this.current_tile.get(p);
 	}
 
-	public ArrayList<BaseComponent> getHoarded(Player p){
+	public ArrayList<BaseComponent> getHoarded(Player p) {
 		return this.hoarded_tile.get(p);
 	}
 
-	public ArrayList<Integer> getDiscarded(){
+	public ArrayList<Integer> getDiscarded() {
 		return this.board.getDiscarded();
 	}
+
+	public ClientGameListEntry getOngoingEntry(int id) {
+		return new ClientGameListEntry(type, this.toString(), this.players.stream().map(p -> p.getUsername()).toList(), id);
+	}
+
 
 }

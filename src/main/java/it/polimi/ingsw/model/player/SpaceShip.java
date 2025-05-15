@@ -1,13 +1,7 @@
 package it.polimi.ingsw.model.player;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Queue;
-
-import it.polimi.ingsw.exceptions.NotUniqueException;
 import it.polimi.ingsw.exceptions.NotPresentException;
+import it.polimi.ingsw.exceptions.NotUniqueException;
 import it.polimi.ingsw.exceptions.OutOfBoundsException;
 import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
@@ -17,23 +11,24 @@ import it.polimi.ingsw.model.cards.utils.ProjectileDirection;
 import it.polimi.ingsw.model.cards.visitors.LargeMeteorVisitor;
 import it.polimi.ingsw.model.client.components.ClientComponent;
 import it.polimi.ingsw.model.client.components.ClientSpaceShip;
+import it.polimi.ingsw.model.components.BaseComponent;
 import it.polimi.ingsw.model.components.BatteryComponent;
 import it.polimi.ingsw.model.components.EmptyComponent;
 import it.polimi.ingsw.model.components.StartingCabinComponent;
-import it.polimi.ingsw.model.components.BaseComponent;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ConnectorType;
 import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
-import it.polimi.ingsw.model.components.visitors.SpaceShipUpdateVisitor;
 import it.polimi.ingsw.model.components.visitors.EnergyVisitor;
+import it.polimi.ingsw.model.components.visitors.SpaceShipUpdateVisitor;
 import it.polimi.ingsw.model.player.exceptions.IllegalComponentAdd;
 
+import java.io.Serializable;
+import java.util.*;
 
-public class SpaceShip{
+
+public class SpaceShip implements Serializable {
 
 	private final Player player;
-
-	private ArrayList<ArrayList<ShipCoords>> blobs;
 	private final ArrayList<ShipCoords> storage_coords;
 	private final ArrayList<ShipCoords> cabin_coords;
 	private final ArrayList<ShipCoords> battery_coords;
@@ -41,6 +36,7 @@ public class SpaceShip{
 	private final GameModeType type;
 	private final BaseComponent[][] components;
 	private final BaseComponent empty;
+	private ArrayList<ArrayList<ShipCoords>> blobs;
 	private int[] crew;
 	private ShipCoords center;
 	private int[] containers;
@@ -57,7 +53,7 @@ public class SpaceShip{
 		this.containers = new int[5];
 		this.crew = new int[3];
 		this.empty = new EmptyComponent();
-		this.empty.onCreation(this, new ShipCoords(type, 0,0));
+		this.empty.onCreation(this, new ShipCoords(type, 0, 0));
 		this.storage_coords = new ArrayList<ShipCoords>();
 		this.cabin_coords = new ArrayList<ShipCoords>();
 		this.battery_coords = new ArrayList<ShipCoords>();
@@ -93,14 +89,14 @@ public class SpaceShip{
 
 	public VerifyResult[][] bulkVerify() {
 		VerifyResult[][] res = new VerifyResult[this.type.getHeight()][this.type.getWidth()];
-		for(int y = 0; y < this.type.getHeight(); y++){
-			for(int x = 0; x < this.type.getWidth(); x++){
+		for (int y = 0; y < this.type.getHeight(); y++) {
+			for (int x = 0; x < this.type.getWidth(); x++) {
 				res[y][x] = this.components[y][x] == this.empty ? VerifyResult.UNCHECKED : VerifyResult.NOT_LNKED;
 			}
 		}
-		for(int y = 0; y < this.type.getHeight(); y++){
-			for(int x = 0; x < this.type.getWidth(); x++){
-				if(res[y][x]==VerifyResult.UNCHECKED) continue;
+		for (int y = 0; y < this.type.getHeight(); y++) {
+			for (int x = 0; x < this.type.getWidth(); x++) {
+				if (res[y][x] == VerifyResult.UNCHECKED) continue;
 				BaseComponent tmp = this.components[y][x];
 				if (!tmp.verify(this)) res[y][x] = VerifyResult.BRKN_COMP;
 				else res[y][x] = VerifyResult.GOOD_COMP;
@@ -109,56 +105,56 @@ public class SpaceShip{
 		return res;
 	}
 
-	public boolean bulkVerifyResult(){
+	public boolean bulkVerifyResult() {
 		var t = bulkVerify();
-		for(var row : t){
-			for (var r : row){
-				if(r==VerifyResult.BRKN_COMP) return false;
+		for (var row : t) {
+			for (var r : row) {
+				if (r == VerifyResult.BRKN_COMP) return false;
 			}
 		}
 		return true;
 	}
 
-    public int getBlobsSize(){
-        this.updateShipBlobs();
-        return this.blobs.size();
-    }
-	
-	public void printBlobs(){
+	public int getBlobsSize() {
 		this.updateShipBlobs();
-		for(var blob : this.blobs){
-			for(var c : blob){
-				System.out.print(c+" ");
+		return this.blobs.size();
+	}
+
+	public void printBlobs() {
+		this.updateShipBlobs();
+		for (var blob : this.blobs) {
+			for (var c : blob) {
+				System.out.print(c + " ");
 			}
-			System.out.println("");
+			System.out.println();
 		}
 	}
 
-    public void updateShipBlobs(){
-        ArrayList<ArrayList<ShipCoords>> res = new ArrayList<>();
-        VerifyResult[][] map = new VerifyResult[this.type.getHeight()][this.type.getWidth()];
-        for(int y = 0; y<type.getHeight(); y++){
-            for(int x = 0; x<type.getWidth(); x++){
-                map[y][x] = this.components[y][x] == this.empty ? VerifyResult.UNCHECKED : VerifyResult.NOT_LNKED;
-            }
-        }
-        for(int y = 0; y<type.getHeight(); y++){
-            for(int x = 0; x<type.getWidth(); x++){
-                if(map[y][x]!=VerifyResult.NOT_LNKED) continue;
-                res.add(this.verifyBlob(map, new ShipCoords(this.type, x, y)));
-            }
-        }
-        this.blobs = res;
-    }
+	public void updateShipBlobs() {
+		ArrayList<ArrayList<ShipCoords>> res = new ArrayList<>();
+		VerifyResult[][] map = new VerifyResult[this.type.getHeight()][this.type.getWidth()];
+		for (int y = 0; y < type.getHeight(); y++) {
+			for (int x = 0; x < type.getWidth(); x++) {
+				map[y][x] = this.components[y][x] == this.empty ? VerifyResult.UNCHECKED : VerifyResult.NOT_LNKED;
+			}
+		}
+		for (int y = 0; y < type.getHeight(); y++) {
+			for (int x = 0; x < type.getWidth(); x++) {
+				if (map[y][x] != VerifyResult.NOT_LNKED) continue;
+				res.add(this.verifyBlob(map, new ShipCoords(this.type, x, y)));
+			}
+		}
+		this.blobs = res;
+	}
 
 	private ArrayList<ShipCoords> verifyBlob(VerifyResult[][] map, ShipCoords starting_point) {
-        ArrayList<ShipCoords> res = new ArrayList<>();
+		ArrayList<ShipCoords> res = new ArrayList<>();
 		Queue<ShipCoords> queue = new ArrayDeque<>();
 		queue.add(starting_point);
 		ShipCoords tmp = null;
 		while (!queue.isEmpty()) {
 			tmp = queue.poll();
-            res.add(tmp);
+			res.add(tmp);
 			if (!this.getComponent(tmp).verify(this)) map[tmp.y][tmp.x] = VerifyResult.BRKN_COMP;
 			else map[tmp.y][tmp.x] = VerifyResult.GOOD_COMP;
 			for (BaseComponent c : this.getComponent(tmp).getConnectedComponents(this)) {
@@ -167,23 +163,25 @@ public class SpaceShip{
 				if (map[xy.y][xy.x] == VerifyResult.NOT_LNKED && !queue.contains(xy)) queue.add(c.getCoords());
 			}
 		}
-        return res;
+		return res;
 	}
 
-    public void selectShipBlob(ShipCoords blob_coord) throws ForbiddenCallException{
-		if(this.blobs.size()<=1) throw new ForbiddenCallException();
-        for(ArrayList<ShipCoords> blob : this.blobs){
-            if(!blob.contains(blob_coord)) continue;
+	public void selectShipBlob(ShipCoords blob_coord) throws ForbiddenCallException {
+		if (this.blobs.size() <= 1) throw new ForbiddenCallException();
+		for (ArrayList<ShipCoords> blob : this.blobs) {
+			if (!blob.contains(blob_coord)) continue;
 			ArrayList<ArrayList<ShipCoords>> previous = this.blobs;
-            previous.remove(blob);
-            previous.stream().forEach(b->b.stream().forEach(c->this.removeComponent(c)));
-            this.blobs = new ArrayList<>(){{add(blob);}};
+			previous.remove(blob);
+			previous.stream().forEach(b -> b.stream().forEach(c -> this.removeComponent(c)));
+			this.blobs = new ArrayList<>() {{
+				add(blob);
+			}};
 			this.center = blob_coord;
 			updateShip();
-            return;
-        }
-        throw new IllegalTargetException("Blob coordinate was invalid!");
-    }
+			return;
+		}
+		throw new IllegalTargetException("Blob coordinate was invalid!");
+	}
 
 
 	public void addComponent(BaseComponent component, ShipCoords coords) {
@@ -211,7 +209,7 @@ public class SpaceShip{
 
 	public void removeComponent(ShipCoords coords) {
 		if (coords == null) throw new NullPointerException();
-		System.out.println("Removed component on coords: "+coords+" for player '"+this.player.getUsername()+"'.");
+		System.out.println("Removed component on coords: " + coords + " for player '" + this.player.getUsername() + "'.");
 		BaseComponent tmp = this.getComponent(coords);
 		if (this.components[coords.y][coords.x] == this.empty) throw new IllegalTargetException();
 		this.components[coords.y][coords.x] = this.empty;
@@ -254,7 +252,8 @@ public class SpaceShip{
 		if (coords_target == null) throw new NullPointerException();
 		if (battery_location == null) throw new NullPointerException();
 		if (!this.powerable_coords.contains(coords_target)) throw new IllegalTargetException("Target is not powerable");
-		if (!this.battery_coords.contains(battery_location)) throw new IllegalTargetException("Battery component wasn't present at location");
+		if (!this.battery_coords.contains(battery_location))
+			throw new IllegalTargetException("Battery component wasn't present at location");
 		BatteryComponent c = (BatteryComponent) getComponent(battery_location);
 		EnergyVisitor v = new EnergyVisitor(true);
 		if (c.getContains() == 0) throw new IllegalTargetException("No batteries found at location");
@@ -279,7 +278,7 @@ public class SpaceShip{
 	public int getEnginePower() {
 		return this.engine_power;
 	}
-	
+
 	public int getEnergyPower() {
 		return this.containers[0];
 	}
@@ -305,7 +304,7 @@ public class SpaceShip{
 			throw new NotUniqueException("Coords are already present in storage coords");
 		this.storage_coords.add(coords);
 	}
-	
+
 	public void delStorageCoords(ShipCoords coords) {
 		if (!this.storage_coords.contains(coords))
 			throw new NotPresentException("Coords arent present in storage coords");
@@ -322,7 +321,7 @@ public class SpaceShip{
 		if (!this.cabin_coords.contains(coords)) throw new NotPresentException("Coords arent present in cabin coords");
 		this.cabin_coords.remove(coords);
 	}
-	
+
 	public void addBatteryCoords(ShipCoords coords) {
 		if (this.battery_coords.contains(coords))
 			throw new NotUniqueException("Coords are already present in battery coords");
@@ -334,19 +333,19 @@ public class SpaceShip{
 			throw new NotPresentException("Coords arent present in battery coords");
 		this.battery_coords.remove(coords);
 	}
-	
+
 	public void addPowerableCoords(ShipCoords coords) {
 		if (this.powerable_coords.contains(coords))
 			throw new NotUniqueException("Coords are already present in powerable coords");
 		this.powerable_coords.add(coords);
 	}
-	
+
 	public void delPowerableCoords(ShipCoords coords) {
 		if (!this.powerable_coords.contains(coords))
 			throw new NotPresentException("Coords arent present in powerable coords");
 		this.powerable_coords.remove(coords);
 	}
-	
+
 	public int getTotalCrew() {
 		int sum = 0;
 		for (int i : this.getCrew()) {
@@ -354,7 +353,7 @@ public class SpaceShip{
 		}
 		return sum;
 	}
-	
+
 	public ArrayList<ShipCoords> findConnectedCabins() {
 		ArrayList<ShipCoords> res = new ArrayList<>();
 		for (ShipCoords coords : this.cabin_coords) {
@@ -367,7 +366,7 @@ public class SpaceShip{
 		return res;
 	}
 
-	
+
 	public int countExposedConnectors() {
 		int sum = 0;
 		for (BaseComponent[] col : this.components) {
@@ -391,7 +390,7 @@ public class SpaceShip{
 		return sum;
 	}
 
-	
+
 	public void handleMeteorite(Projectile p) {
 		//Normalize Roll and see if it grazes or is in a possible row.
 		int index = normalizeRoll(p.getDirection(), p.getOffset());
@@ -416,7 +415,7 @@ public class SpaceShip{
 		this.removeComponent(tmp);
 	}
 
-	
+
 	public void handleShot(Projectile p) {
 		//Normalize Roll and see if it grazes or is in a possible row.
 		int index = normalizeRoll(p.getDirection(), p.getOffset());
@@ -482,7 +481,7 @@ public class SpaceShip{
 		}
 		return v.getFoundCannon();
 	}
-	
+
 	public int[] getContains() {
 		return this.containers;
 	}
@@ -495,7 +494,7 @@ public class SpaceShip{
 		if (coords == null) throw new NullPointerException();
 		return this.cabin_coords.contains(coords);
 	}
-	
+
 	public ClientSpaceShip getClientSpaceShip() {
 		ClientComponent[][] res = new ClientComponent[this.type.getHeight()][this.type.getWidth()];
 		for (int x = 0; x < this.type.getWidth(); x++) {

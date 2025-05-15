@@ -1,8 +1,5 @@
 package it.polimi.ingsw.model.cards.state;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
@@ -12,20 +9,17 @@ import it.polimi.ingsw.model.cards.utils.CombatZoneSection;
 import it.polimi.ingsw.model.cards.utils.ProjectileArray;
 import it.polimi.ingsw.model.cards.visitors.ContainsRemoveVisitor;
 import it.polimi.ingsw.model.cards.visitors.CrewRemoveVisitor;
-import it.polimi.ingsw.model.client.card.ClientAwaitConfirmCardStateDecorator;
-import it.polimi.ingsw.model.client.card.ClientBaseCardState;
-import it.polimi.ingsw.model.client.card.ClientCardState;
-import it.polimi.ingsw.model.client.card.ClientCargoPenaltyCardStateDecorator;
-import it.polimi.ingsw.model.client.card.ClientCombatZoneIndexCardStateDecorator;
-import it.polimi.ingsw.model.client.card.ClientCrewPenaltyCardStateDecorator;
-import it.polimi.ingsw.model.client.card.ClientProjectileCardStateDecorator;
-import it.polimi.ingsw.model.client.state.ClientModelState;
+import it.polimi.ingsw.model.client.card.*;
+import it.polimi.ingsw.model.client.state.ClientState;
 import it.polimi.ingsw.model.components.enums.ShipmentType;
 import it.polimi.ingsw.model.components.exceptions.ContainerEmptyException;
 import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.VoyageState;
+
+import java.util.ArrayList;
+import java.util.Collections;
 
 class CombatZonePenaltyState extends CardState {
 
@@ -49,11 +43,11 @@ class CombatZonePenaltyState extends CardState {
 			this.required = null;
 			return;
 		}
-		this.required = new int[]{0,0,0,0,0};
+		this.required = new int[]{0, 0, 0, 0, 0};
 		int pen = this.sections.getFirst().getAmount();
 		int idx = 4;
-		while(pen>=1){
-			if(idx<0) break;
+		while (pen >= 1) {
+			if (idx < 0) break;
 			this.required[idx] = pen - this.target.getSpaceShip().getContains()[idx] >= 0 ? this.target.getSpaceShip().getContains()[idx] : pen;
 			pen -= this.required[idx];
 			idx--;
@@ -61,11 +55,12 @@ class CombatZonePenaltyState extends CardState {
 	}
 
 	@Override
-	public void init(ClientModelState new_state) {
+	public void init(ClientState new_state) {
 		super.init(new_state);
-		System.out.println("    CardState -> Combat Zone Penalty State!: ["+(3-sections.size())+" - "+this.sections.getFirst().getPenalty()+"].");
-		System.out.println("    Targeting: '"+this.target.getUsername()+"'.");
-		if (sections.getFirst().getPenalty() == CombatZonePenalty.CARGO) System.out.println("    Bat: "+required[0]+" Blu: "+required[1]+" Grn: "+required[2]+" Ylw: "+required[3]+" Red: "+required[4]);
+		System.out.println("    CardState -> Combat Zone Penalty State!: [" + (3 - sections.size()) + " - " + this.sections.getFirst().getPenalty() + "].");
+		System.out.println("    Targeting: '" + this.target.getUsername() + "'.");
+		if (sections.getFirst().getPenalty() == CombatZonePenalty.CARGO)
+			System.out.println("    Bat: " + required[0] + " Blu: " + required[1] + " Grn: " + required[2] + " Ylw: " + required[3] + " Red: " + required[4]);
 		if (sections.getFirst().getPenalty() != CombatZonePenalty.DAYS) return;
 		this.state.getPlanche().movePlayer(state, target, -sections.getFirst().getAmount());
 		this.transition();
@@ -80,7 +75,7 @@ class CombatZonePenaltyState extends CardState {
 		}
 		if (this.sections.getFirst().getPenalty() == CombatZonePenalty.SHOTS) {
 			this.target.getSpaceShip().handleShot(this.shots.getProjectiles().getFirst());
-			if(this.target.getSpaceShip().getBlobsSize() <= 0) this.state.loseGame(target);
+			if (this.target.getSpaceShip().getBlobsSize() <= 0) this.state.loseGame(target);
 		}
 		this.transition();
 	}
@@ -108,7 +103,7 @@ class CombatZonePenaltyState extends CardState {
 								new ClientCombatZoneIndexCardStateDecorator(
 										new ClientBaseCardState(card_id),
 										3 - this.sections.size()),
-								new ArrayList<>(Arrays.asList(this.target.getColor()))),
+								new ArrayList<>(Collections.singletonList(this.target.getColor()))),
 						this.shots.getProjectiles().getFirst());
 			default:
 				return new ClientCombatZoneIndexCardStateDecorator(
@@ -118,14 +113,14 @@ class CombatZonePenaltyState extends CardState {
 	}
 
 	@Override
-    public CardState getNext() {
+	public CardState getNext() {
 		if (this.target.getRetired() || this.target.getDisconnected()) {
 			this.sections.removeFirst();
 			if (!this.sections.isEmpty()) return new CombatZoneAnnounceState(state, card_id, sections, shots);
 			System.out.println("...Card exhausted, moving to a new one!");
 			return null;
 		}
-		if(this.sections.getFirst().getPenalty()==CombatZonePenalty.SHOTS) this.shots.getProjectiles().removeFirst();
+		if (this.sections.getFirst().getPenalty() == CombatZonePenalty.SHOTS) this.shots.getProjectiles().removeFirst();
 		if (this.target.getSpaceShip().getBlobsSize() > 1)
 			return new CombatZoneSelectShipState(state, card_id, sections, shots, target);
 		if (this.sections.getFirst().getPenalty() == CombatZonePenalty.SHOTS && !this.shots.getProjectiles().isEmpty()) {
@@ -151,7 +146,7 @@ class CombatZonePenaltyState extends CardState {
 		}
 		try {
 			p.getSpaceShip().turnOn(target_coords, battery_coords);
-			System.out.println("Player '" + p.getUsername() + "' turned on component at"+target_coords+" using battery from "+battery_coords+"!");
+			System.out.println("Player '" + p.getUsername() + "' turned on component at" + target_coords + " using battery from " + battery_coords + "!");
 		} catch (IllegalTargetException e) {
 			System.out.println(e.getMessage());
 			System.out.println("Player '" + p.getUsername() + "' attempted to turn on a component with invalid coordinates!");
@@ -190,7 +185,7 @@ class CombatZonePenaltyState extends CardState {
 		try {
 			p.getSpaceShip().getComponent(cabin_coords).check(v);
 			this.amount++;
-			System.out.println("Player '" + p.getUsername() + "' removed a crewmate from "+cabin_coords+"!");
+			System.out.println("Player '" + p.getUsername() + "' removed a crewmate from " + cabin_coords + "!");
 		} catch (IllegalTargetException e) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to remove a crew member from invalid coordinates!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to remove a crew member from invalid coordinates!"));
@@ -219,12 +214,12 @@ class CombatZonePenaltyState extends CardState {
 			throw new ForbiddenCallException();
 		}
 		int idx = 4;
-		while(idx>=0){
-			if(this.required[idx]<=0){
+		while (idx >= 0) {
+			if (this.required[idx] <= 0) {
 				idx--;
 				continue;
-			};
-			if(type.getValue()!=idx){
+			}
+			if (type.getValue() != idx) {
 				System.out.println("Player '" + p.getUsername() + "' attempted to discard cargo that's not his most valuable!");
 				this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to discard cargo that's not his most valuable!"));
 				return;
@@ -233,11 +228,12 @@ class CombatZonePenaltyState extends CardState {
 			try {
 				p.getSpaceShip().getComponent(coords).check(v);
 				this.required[idx]--;
-				if(type!=ShipmentType.EMPTY) System.out.println("Player '"+p.getUsername()+"' removed cargo type: "+type+" from "+coords);
-				else System.out.println("Player '"+p.getUsername()+"' removed battery from "+coords);
+				if (type != ShipmentType.EMPTY)
+					System.out.println("Player '" + p.getUsername() + "' removed cargo type: " + type + " from " + coords);
+				else System.out.println("Player '" + p.getUsername() + "' removed battery from " + coords);
 				break;
 			} catch (ContainerEmptyException e) {
-				if(type!=ShipmentType.EMPTY){
+				if (type != ShipmentType.EMPTY) {
 					System.out.println("Player '" + p.getUsername() + "' attempted to discard cargo from a storage that doesn't contain it!");
 					this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to discard cargo from a storage that doesn't contain it!"));
 				} else {
@@ -246,7 +242,7 @@ class CombatZonePenaltyState extends CardState {
 				}
 				return;
 			} catch (IllegalTargetException e) {
-				if(type!=ShipmentType.EMPTY){
+				if (type != ShipmentType.EMPTY) {
 					System.out.println("Player '" + p.getUsername() + "' attempted to discard cargo from illegal coordinates!");
 					this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to discard cargo from illegal coordinates!"));
 				} else {
@@ -256,8 +252,8 @@ class CombatZonePenaltyState extends CardState {
 				return;
 			}
 		}
-		for(int i = 4;i>=0;i--){
-			if(required[i]>0) return;
+		for (int i = 4; i >= 0; i--) {
+			if (required[i] > 0) return;
 		}
 		this.responded = true;
 	}
@@ -267,7 +263,7 @@ class CombatZonePenaltyState extends CardState {
 		if (this.target.equals(p)) {
 			this.responded = true;
 		}
-		System.out.println("Player '" + p.getUsername() + "' disconnected!");
+
 	}
 
 }

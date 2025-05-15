@@ -1,22 +1,23 @@
 package it.polimi.ingsw.controller;
 
-import it.polimi.ingsw.controller.server.ServerController;
+import it.polimi.ingsw.controller.server.LobbyController;
 import it.polimi.ingsw.message.client.ClientMessage;
 
-public class DummyController extends ServerController {
-    
-    @Override
-    public void endGame(){
-        return;
-    }
+public class DummyController extends LobbyController {
 
-    @Override
-    public void serializeCurrentGame(){
-        return;
-    }
+	public DummyController(int id) {
+		super(id);
+	}
 
-    @Override
-    public void broadcast(ClientMessage message){
-        return;
-    }
+	@Override
+	public void endGame() {
+	}
+
+	@Override
+	public void serializeCurrentGame() {
+	}
+
+	@Override
+	public void broadcast(ClientMessage message) {
+	}
 }

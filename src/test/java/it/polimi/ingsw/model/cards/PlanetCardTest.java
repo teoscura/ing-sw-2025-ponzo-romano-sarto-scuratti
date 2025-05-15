@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model.cards;
 
+import it.polimi.ingsw.controller.DummyConnection;
+import it.polimi.ingsw.controller.DummyController;
 import it.polimi.ingsw.controller.server.ClientDescriptor;
 import it.polimi.ingsw.message.server.*;
 import it.polimi.ingsw.model.DummyModelInstance;
@@ -8,11 +10,11 @@ import it.polimi.ingsw.model.PlayerCount;
 import it.polimi.ingsw.model.board.Planche;
 import it.polimi.ingsw.model.board.TestFlightCards;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
+import it.polimi.ingsw.model.components.BaseComponent;
 import it.polimi.ingsw.model.components.ComponentFactory;
 import it.polimi.ingsw.model.components.StorageComponent;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ShipmentType;
-import it.polimi.ingsw.model.components.BaseComponent;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.ShipCoords;
@@ -27,12 +29,6 @@ import java.util.Arrays;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class PlanetCardTest {
-	
-	private DummyModelInstance model;
-	private DummyVoyageState state;
-	private TestFlightCards cards;
-	private Planche planche;
-	private PlanetCard card;
 
 	Player player1;
 	ClientDescriptor p1desc;
@@ -41,7 +37,11 @@ public class PlanetCardTest {
 	Player player3;
 	ClientDescriptor p3desc;
 	ArrayList<Player> order, players;
-	
+	private DummyModelInstance model;
+	private DummyVoyageState state;
+	private TestFlightCards cards;
+	private Planche planche;
+	private PlanetCard card;
 
 	@BeforeEach
 	void setUp() throws IOException {
@@ -55,7 +55,7 @@ public class PlanetCardTest {
 		c = f.getComponent(62); //Single special
 		c.rotate(ComponentRotation.U000);
 		player1.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 4, 2));
-		p1desc = new ClientDescriptor(player1.getUsername(), null);
+		p1desc = new ClientDescriptor(player1.getUsername(), new DummyConnection());
 		p1desc.bindPlayer(player1);
 
 		player2 = new Player(GameModeType.TEST, "p2", PlayerColor.RED);
@@ -65,7 +65,7 @@ public class PlanetCardTest {
 		c = f.getComponent(63); //Single special
 		c.rotate(ComponentRotation.U000);
 		player2.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 4, 2));
-		p2desc = new ClientDescriptor(player2.getUsername(), null);
+		p2desc = new ClientDescriptor(player2.getUsername(), new DummyConnection());
 		p2desc.bindPlayer(player2);
 
 		player3 = new Player(GameModeType.TEST, "p3", PlayerColor.RED);
@@ -75,13 +75,16 @@ public class PlanetCardTest {
 		c = f.getComponent(68); //Double special
 		c.rotate(ComponentRotation.U000);
 		player3.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 4, 2));
-		p3desc = new ClientDescriptor(player3.getUsername(), null);
+		p3desc = new ClientDescriptor(player3.getUsername(), new DummyConnection());
 		p3desc.bindPlayer(player3);
 
 		LevelOneCardFactory factory = new LevelOneCardFactory();
 		order = new ArrayList<>(Arrays.asList(player1, player2, player3));
 		players = new ArrayList<>(Arrays.asList(player1, player2, player3));
-		model = new DummyModelInstance(1, null, GameModeType.LVL2, PlayerCount.THREE);
+
+		model = new DummyModelInstance(1, GameModeType.LVL2, PlayerCount.THREE);
+		model.setController(new DummyController(model.getID()));
+
 		planche = new Planche(GameModeType.LVL2, order);
 		cards = new TestFlightCards();
 		state = new DummyVoyageState(model, GameModeType.LVL2, PlayerCount.THREE, players, cards, planche);

@@ -1,12 +1,11 @@
 package it.polimi.ingsw.model.components;
 
-import org.junit.jupiter.api.Test;
-
 import it.polimi.ingsw.model.components.enums.AlienType;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ConnectorType;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class AlienLifeSupportComponentTest {
 

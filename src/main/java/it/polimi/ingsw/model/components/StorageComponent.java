@@ -1,8 +1,6 @@
 //Done.
 package it.polimi.ingsw.model.components;
 
-import java.util.Arrays;
-
 import it.polimi.ingsw.model.client.components.ClientBaseComponent;
 import it.polimi.ingsw.model.client.components.ClientComponent;
 import it.polimi.ingsw.model.client.components.ClientShipmentsComponentDecorator;
@@ -16,6 +14,8 @@ import it.polimi.ingsw.model.components.exceptions.ContainerNotSpecialException;
 import it.polimi.ingsw.model.components.visitors.iVisitor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.player.SpaceShip;
+
+import java.util.Arrays;
 
 public class StorageComponent extends BaseComponent {
 
@@ -50,7 +50,7 @@ public class StorageComponent extends BaseComponent {
 		if (this.currently_full == this.type.getCapacity()) throw new ContainerFullException();
 		this.shipments[shipment.getValue() - 1]++;
 		this.currently_full++;
-		System.out.println("Added a shipment " + shipment.toString() + " to container at " + this.getCoords().toString() + "!");
+		System.out.println("Added a shipment " + shipment + " to container at " + this.getCoords().toString() + "!");
 	}
 
 	public boolean takeOut(ShipmentType shipment) {
@@ -79,11 +79,11 @@ public class StorageComponent extends BaseComponent {
 		return this.type.getCapacity();
 	}
 
-    @Override
-    public void onCreation(SpaceShip ship, ShipCoords coords) {
-        this.coords = coords;
-        ship.addStorageCoords(this.coords);
-    }
+	@Override
+	public void onCreation(SpaceShip ship, ShipCoords coords) {
+		this.coords = coords;
+		ship.addStorageCoords(this.coords);
+	}
 
 	@Override
 	public void onDelete(SpaceShip ship) {

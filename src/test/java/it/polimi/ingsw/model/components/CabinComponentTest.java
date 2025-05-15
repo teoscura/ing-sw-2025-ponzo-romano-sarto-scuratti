@@ -11,16 +11,16 @@ import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.player.SpaceShip;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class CabinComponentTest {
 
-	private ShipCoords coords;
 	ShipCoords coords2;
+	private ShipCoords coords;
 	private CabinComponent component_both;
 	private CabinComponent component_human;
 	private SpaceShip ship;
@@ -40,23 +40,6 @@ class CabinComponentTest {
 	@Test
 	void check() {
 	}
-
-	//TODO
-	/*@Test
-	void getCrew() {
-		assertEquals(2, component_both.getCrew());
-		assertEquals(0, component_brown.getCrew());
-		assertEquals(0, component_purple.getCrew());
-		assertEquals(0, component_human.getCrew());
-
-		ShipCoords coords = new ShipCoords(GameModeType.LVL2, 3, 3);
-		ship.addComponent(component_human, coords);
-		component_human.setCrew(ship, 2, AlienType.HUMAN);
-		assertEquals(2, component_human.getCrew());
-
-		/*component_brown.setCrew(ship, 1, AlienType.BROWN);
-		assertEquals(1, component_brown.getCrew());*/
-	//}
 
 	@Test
 	void getCrewType() {

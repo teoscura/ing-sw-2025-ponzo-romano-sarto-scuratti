@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model.cards;
 
+import it.polimi.ingsw.controller.DummyConnection;
+import it.polimi.ingsw.controller.DummyController;
 import it.polimi.ingsw.controller.server.ClientDescriptor;
 import it.polimi.ingsw.message.server.*;
 import it.polimi.ingsw.model.DummyModelInstance;
@@ -12,10 +14,10 @@ import it.polimi.ingsw.model.cards.state.CardState;
 import it.polimi.ingsw.model.cards.utils.Projectile;
 import it.polimi.ingsw.model.cards.visitors.ContainsLoaderVisitor;
 import it.polimi.ingsw.model.cards.visitors.CrewRemoveVisitor;
+import it.polimi.ingsw.model.components.BaseComponent;
 import it.polimi.ingsw.model.components.ComponentFactory;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ShipmentType;
-import it.polimi.ingsw.model.components.BaseComponent;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.ShipCoords;
@@ -63,7 +65,7 @@ public class CombatZoneCardTest {
 		player1.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 4, 3));
 		CrewRemoveVisitor v = new CrewRemoveVisitor(player1.getSpaceShip());
 		player1.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 3, 2)).check(v);
-		p1desc = new ClientDescriptor(player1.getUsername(), null);
+		p1desc = new ClientDescriptor(player1.getUsername(), new DummyConnection());
 		p1desc.bindPlayer(player1);
 
 		//Ha tanta tanta crew. minor cannone e motore
@@ -83,7 +85,7 @@ public class CombatZoneCardTest {
 		c = f.getComponent(49);
 		c.rotate(ComponentRotation.U000);
 		player2.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 5, 3));
-		p2desc = new ClientDescriptor(player2.getUsername(), null);
+		p2desc = new ClientDescriptor(player2.getUsername(), new DummyConnection());
 		p2desc.bindPlayer(player2);
 
 		//Ha tanti cannoni, zero motori.
@@ -97,13 +99,14 @@ public class CombatZoneCardTest {
 		c = f.getComponent(120);
 		c.rotate(ComponentRotation.U090);
 		player3.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 4, 2));
-		p3desc = new ClientDescriptor(player3.getUsername(), null);
+		p3desc = new ClientDescriptor(player3.getUsername(), new DummyConnection());
 		p3desc.bindPlayer(player3);
 
 
 		order = new ArrayList<>(Arrays.asList(player1, player2, player3));
 		players = new ArrayList<>(Arrays.asList(player1, player2, player3));
-		model = new DummyModelInstance(1, null, GameModeType.LVL2, PlayerCount.THREE);
+		model = new DummyModelInstance(1, GameModeType.LVL2, PlayerCount.THREE);
+		model.setController(new DummyController(model.getID()));
 		planche = new Planche(GameModeType.LVL2, order);
 		cards = new TestFlightCards();
 		state = new DummyVoyageState(model, GameModeType.LVL2, PlayerCount.THREE, players, cards, planche);
@@ -202,7 +205,7 @@ public class CombatZoneCardTest {
 		message.setDescriptor(p1desc);
 		state.validate(message);
 		//Over.
-		assertTrue(player1.getSpaceShip().getBlobsSize()==1 && player1.getRetired());
+		assertTrue(player1.getSpaceShip().getBlobsSize() == 1 && player1.getRetired());
 		assertEquals(0, player1.getSpaceShip().getTotalCrew());
 		assertNull(this.state.getCardState((player1)));
 	}
@@ -281,7 +284,7 @@ public class CombatZoneCardTest {
 		state.validate(message);
 		//Over.
 		assertSame(player1.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 4, 3)), player1.getSpaceShip().getEmpty());
-		assertTrue(!player1.getRetired());
+		assertFalse(player1.getRetired());
 		assertEquals(1, player1.getSpaceShip().getEnginePower());
 		assertEquals(1, player1.getSpaceShip().getTotalCrew());
 		assertNull(this.state.getCardState((player1)));
@@ -516,7 +519,7 @@ public class CombatZoneCardTest {
 	}
 
 	@Test
-	void newCabinTest() throws ForbiddenCallException{
+	void newCabinTest() throws ForbiddenCallException {
 		LevelOneCardFactory factory = new LevelOneCardFactory();
 		card = (CombatZoneCard) factory.getCard(16);
 		model.setState(state);
@@ -553,7 +556,7 @@ public class CombatZoneCardTest {
 		message = new SendContinueMessage();
 		message.setDescriptor(p3desc);
 		state.validate(message);
-		assertTrue(this.planche.getPlayerPosition(player3) == x-3);
+		assertEquals(this.planche.getPlayerPosition(player3), x - 3);
 		//Phase 2 perde p2
 		x = player2.getSpaceShip().getTotalCrew();
 		message = new SendContinueMessage();
@@ -599,12 +602,12 @@ public class CombatZoneCardTest {
 		message = new SendContinueMessage();
 		message.setDescriptor(p1desc);
 		state.validate(message);
-		assertTrue(player1.getSpaceShip().getBlobsSize()>1);
+		assertTrue(player1.getSpaceShip().getBlobsSize() > 1);
 		//selects the last cabin, enough to survive.
 		message = new SelectBlobMessage(new ShipCoords(GameModeType.TEST, 3, 1));
 		message.setDescriptor(p1desc);
 		state.validate(message);
-		assertTrue(player1.getSpaceShip().getBlobsSize()==1);
+		assertEquals(1, player1.getSpaceShip().getBlobsSize());
 		// //Over.
 		assertSame(player1.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 3, 3)), player1.getSpaceShip().getEmpty());
 		assertSame(player1.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 4, 3)), player1.getSpaceShip().getEmpty());
@@ -643,20 +646,20 @@ public class CombatZoneCardTest {
 		message = new SendContinueMessage();
 		message.setDescriptor(p3desc);
 		state.validate(message);
-		assertTrue(x-4 == planche.getPlayerPosition(player1));
+		assertEquals(x - 4, planche.getPlayerPosition(player1));
 		//Phase 2
 		message = new SendContinueMessage();
 		message.setDescriptor(p1desc);
 		state.validate(message);
 		//P2 disconnects. therefore is not considered.
 		message = new ServerDisconnectMessage();
-        message.setDescriptor(p2desc);
-        model.validate(message);
+		message.setDescriptor(p2desc);
+		model.validate(message);
 		//p2 disconnects, its p3's penalty. and he gets killed.
 		message = new SendContinueMessage();
 		message.setDescriptor(p3desc);
 		state.validate(message);
-        //P3 gives up two crew in coords
+		//P3 gives up two crew in coords
 		message = new RemoveCrewMessage(new ShipCoords(GameModeType.TEST, 3, 2));
 		message.setDescriptor(p3desc);
 		state.validate(message);
@@ -698,7 +701,7 @@ public class CombatZoneCardTest {
 		message = new SendContinueMessage();
 		message.setDescriptor(p3desc);
 		state.validate(message);
-		assertTrue(x-4 == planche.getPlayerPosition(player1));
+		assertEquals(x - 4, planche.getPlayerPosition(player1));
 		//Phase 2
 		message = new SendContinueMessage();
 		message.setDescriptor(p1desc);
@@ -709,10 +712,10 @@ public class CombatZoneCardTest {
 		message = new SendContinueMessage();
 		message.setDescriptor(p3desc);
 		state.validate(message);
-        //P2 disconnects. abd escapes penalty.
+		//P2 disconnects. abd escapes penalty.
 		message = new ServerDisconnectMessage();
-        message.setDescriptor(p2desc);
-        model.validate(message);
+		message.setDescriptor(p2desc);
+		model.validate(message);
 		//Phase 3
 		message = new SendContinueMessage();
 		message.setDescriptor(p1desc);
@@ -730,13 +733,13 @@ public class CombatZoneCardTest {
 		message = new SelectBlobMessage(new ShipCoords(GameModeType.TEST, 5, 2));
 		message.setDescriptor(p1desc);
 		state.validate(message);
-		assertTrue(player1.getSpaceShip().getBlobsSize()==2);
+		assertEquals(2, player1.getSpaceShip().getBlobsSize());
 		//then he chooses right
 		message = new SelectBlobMessage(new ShipCoords(GameModeType.TEST, 3, 2));
 		message.setDescriptor(p1desc);
 		state.validate(message);
-		assertTrue(player1.getSpaceShip().getBlobsSize()==1);
-		assertTrue(!player1.getRetired());
+		assertEquals(1, player1.getSpaceShip().getBlobsSize());
+		assertFalse(player1.getRetired());
 		//Takes last
 		message = new SendContinueMessage();
 		message.setDescriptor(p1desc);

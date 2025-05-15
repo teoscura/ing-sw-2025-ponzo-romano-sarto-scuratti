@@ -1,22 +1,9 @@
 package it.polimi.ingsw.model.cards;
 
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
+import it.polimi.ingsw.controller.DummyConnection;
+import it.polimi.ingsw.controller.DummyController;
 import it.polimi.ingsw.controller.server.ClientDescriptor;
-import it.polimi.ingsw.message.server.SelectBlobMessage;
-import it.polimi.ingsw.message.server.SendContinueMessage;
-import it.polimi.ingsw.message.server.ServerConnectMessage;
-import it.polimi.ingsw.message.server.ServerMessage;
-import it.polimi.ingsw.message.server.TakeRewardMessage;
-import it.polimi.ingsw.message.server.TurnOnMessage;
+import it.polimi.ingsw.message.server.*;
 import it.polimi.ingsw.model.DummyModelInstance;
 import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.PlayerCount;
@@ -26,21 +13,23 @@ import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.cards.state.PiratesSelectShipState;
 import it.polimi.ingsw.model.cards.state.SelectShipReconnectState;
 import it.polimi.ingsw.model.cards.utils.Projectile;
-import it.polimi.ingsw.model.components.ComponentFactory;
 import it.polimi.ingsw.model.components.BaseComponent;
+import it.polimi.ingsw.model.components.ComponentFactory;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.DummyVoyageState;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class PiratesCardTest {
-
-    private DummyModelInstance model;
-	private DummyVoyageState state;
-	private TestFlightCards cards;
-	private Planche planche;
-	private PiratesCard card;
 
 	Player player1;
 	ClientDescriptor p1desc;
@@ -48,9 +37,13 @@ public class PiratesCardTest {
 	ClientDescriptor p2desc;
 	Player player3;
 	ClientDescriptor p3desc;
-
 	ArrayList<Player> order, players;
-	
+	private DummyModelInstance model;
+	private DummyVoyageState state;
+	private TestFlightCards cards;
+	private Planche planche;
+	private PiratesCard card;
+
 	@BeforeEach
 	void setUp() throws IOException {
 		BaseComponent c = null;
@@ -65,7 +58,7 @@ public class PiratesCardTest {
 		player1.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 3, 3));
 		c = f1.getComponent(44);
 		c.rotate(ComponentRotation.U270);
-		player1.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 4,3));
+		player1.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 4, 3));
 		c = f1.getComponent(126);
 		c.rotate(ComponentRotation.U000);
 		player1.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 3, 1));
@@ -78,7 +71,7 @@ public class PiratesCardTest {
 		c = f1.getComponent(118);
 		c.rotate(ComponentRotation.U000);
 		player1.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 5, 2));
-		p1desc = new ClientDescriptor(player1.getUsername(), null);
+		p1desc = new ClientDescriptor(player1.getUsername(), new DummyConnection());
 		p1desc.bindPlayer(player1);
 
 		//P2 accende e vince
@@ -98,7 +91,7 @@ public class PiratesCardTest {
 		c = f2.getComponent(118);
 		c.rotate(ComponentRotation.U000);
 		player2.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 5, 2));
-		p2desc = new ClientDescriptor(player2.getUsername(), null);
+		p2desc = new ClientDescriptor(player2.getUsername(), new DummyConnection());
 		p2desc.bindPlayer(player2);
 
 		player3 = new Player(GameModeType.TEST, "p3", PlayerColor.RED);
@@ -114,13 +107,16 @@ public class PiratesCardTest {
 		c = f3.getComponent(128);
 		c.rotate(ComponentRotation.U000);
 		player3.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 2, 2));
-		p3desc = new ClientDescriptor(player3.getUsername(), null);
+		p3desc = new ClientDescriptor(player3.getUsername(), new DummyConnection());
 		p3desc.bindPlayer(player3);
 
 		LevelOneCardFactory factory = new LevelOneCardFactory();
 		order = new ArrayList<>(Arrays.asList(player1, player2, player3));
 		players = new ArrayList<>(Arrays.asList(player1, player2, player3));
-		model = new DummyModelInstance(1, null, GameModeType.LVL2, PlayerCount.THREE);
+
+		model = new DummyModelInstance(1, GameModeType.LVL2, PlayerCount.THREE);
+		model.setController(new DummyController(model.getID()));
+
 		planche = new Planche(GameModeType.LVL2, order);
 		cards = new TestFlightCards();
 		state = new DummyVoyageState(model, GameModeType.LVL2, PlayerCount.THREE, players, cards, planche);
@@ -139,7 +135,7 @@ public class PiratesCardTest {
 
 	@Test
 	void behaviourUnshielded() throws ForbiddenCallException {
-	    ServerMessage message = null;
+		ServerMessage message = null;
 		for (Player p : this.order) {
 			System.out.println(p.getUsername() + " - e:" + p.getSpaceShip().getEnginePower() + " - cr:" + p.getSpaceShip().getTotalCrew() + " - c:" + p.getSpaceShip().getCannonPower());
 		}
@@ -156,19 +152,19 @@ public class PiratesCardTest {
 		message = new SendContinueMessage();
 		message.setDescriptor(p1desc);
 		state.validate(message);
-		assertTrue(x-1 == player1.getScore());
+		assertEquals(x - 1, player1.getScore());
 		//Third hits center.
 		message = new SendContinueMessage();
 		message.setDescriptor(p1desc);
 		state.validate(message);
 		//Should remove 
 		x = player1.getScore();
-		assertTrue(player1.getSpaceShip().getBlobsSize()>1);
-		assertTrue(state.getCardState(player1) instanceof PiratesSelectShipState);
+		assertTrue(player1.getSpaceShip().getBlobsSize() > 1);
+		assertInstanceOf(PiratesSelectShipState.class, state.getCardState(player1));
 		message = new SelectBlobMessage(new ShipCoords(GameModeType.TEST, 4, 2));
 		message.setDescriptor(p1desc);
 		state.validate(message);
-		assertTrue(x-3 == player1.getScore());
+		assertEquals(x - 3, player1.getScore());
 		assertTrue(player1.getRetired());
 		//P2 accende e vince
 		x = player2.getCredits();
@@ -189,8 +185,8 @@ public class PiratesCardTest {
 		message.setDescriptor(p2desc);
 		state.validate(message);
 		planche.printOrder();
-		assertTrue(player2.getCredits()== x + this.card.getCredits());
-		assertTrue(pos-this.card.getDays()==planche.getPlayerPosition(player2));
+		assertEquals(player2.getCredits(), x + this.card.getCredits());
+		assertEquals(pos - this.card.getDays(), planche.getPlayerPosition(player2));
 		assertTrue(card.getExhausted());
 		assertNull(state.getCardState(player1));
 	}
@@ -214,14 +210,14 @@ public class PiratesCardTest {
 		message = new SendContinueMessage();
 		message.setDescriptor(p1desc);
 		state.validate(message);
-		assertTrue(x-1 == player1.getScore());
+		assertEquals(x - 1, player1.getScore());
 		//Third hits center.
 		message = new SendContinueMessage();
 		message.setDescriptor(p1desc);
 		state.validate(message);
 		//dude disconnects instead of setting cabin.
 		state.disconnect(player1);
-		assertTrue(!player1.getRetired());
+		assertFalse(player1.getRetired());
 		//P2 accende e vince
 		x = player2.getCredits();
 		int pos = planche.getPlayerPosition(player2);
@@ -240,7 +236,7 @@ public class PiratesCardTest {
 		//P1 reconnects, does his thing, then p2 continues;
 		message = new ServerConnectMessage(p1desc);
 		state.validate(message);
-		assertTrue(state.getCardState(player1) instanceof SelectShipReconnectState);
+		assertInstanceOf(SelectShipReconnectState.class, state.getCardState(player1));
 		message = new SelectBlobMessage(new ShipCoords(GameModeType.TEST, 4, 2));
 		message.setDescriptor(p1desc);
 		state.validate(message);
@@ -248,8 +244,8 @@ public class PiratesCardTest {
 		message = new TakeRewardMessage(true);
 		message.setDescriptor(p2desc);
 		state.validate(message);
-		assertTrue(player2.getCredits()== x + this.card.getCredits());
-		assertTrue(pos-this.card.getDays()==planche.getPlayerPosition(player2));
+		assertEquals(player2.getCredits(), x + this.card.getCredits());
+		assertEquals(pos - this.card.getDays(), planche.getPlayerPosition(player2));
 		assertTrue(card.getExhausted());
 		assertNull(state.getCardState(player1));
 	}
@@ -273,9 +269,9 @@ public class PiratesCardTest {
 		message = new SendContinueMessage();
 		message.setDescriptor(p1desc);
 		model.validate(message);
-		assertTrue(x-1 == player1.getScore());
+		assertEquals(x - 1, player1.getScore());
 		model.disconnect(player1);
-		assertTrue(!player1.getRetired());
+		assertFalse(player1.getRetired());
 		//P2 accende e vince
 		x = player2.getCredits();
 		int pos = planche.getPlayerPosition(player2);
@@ -294,8 +290,8 @@ public class PiratesCardTest {
 		message = new TakeRewardMessage(true);
 		message.setDescriptor(p2desc);
 		model.validate(message);
-		assertTrue(player2.getCredits()== x + this.card.getCredits());
-		assertTrue(pos-this.card.getDays()==planche.getPlayerPosition(player2));
+		assertEquals(player2.getCredits(), x + this.card.getCredits());
+		assertEquals(pos - this.card.getDays(), planche.getPlayerPosition(player2));
 		assertTrue(card.getExhausted());
 		assertNull(state.getCardState(player1));
 	}

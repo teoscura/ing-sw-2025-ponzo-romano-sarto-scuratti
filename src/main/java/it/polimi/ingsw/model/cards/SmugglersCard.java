@@ -1,14 +1,15 @@
 //Done.
 package it.polimi.ingsw.model.cards;
 
-import java.util.ArrayList;
-
 import it.polimi.ingsw.exceptions.NegativeArgumentException;
 import it.polimi.ingsw.model.cards.state.CardState;
 import it.polimi.ingsw.model.cards.state.SmugglersAnnounceState;
-import it.polimi.ingsw.model.cards.utils.*;
+import it.polimi.ingsw.model.cards.utils.CardOrder;
+import it.polimi.ingsw.model.cards.utils.Planet;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.state.VoyageState;
+
+import java.util.ArrayList;
 
 public class SmugglersCard extends Card {
 
@@ -41,14 +42,14 @@ public class SmugglersCard extends Card {
 	public boolean apply(Player p) {
 		if (p == null) throw new NullPointerException();
 		if (p.getSpaceShip().getCannonPower() > this.min_power) {
-			System.out.println("Player '"+p.getUsername()+"' beat the smugglers!");
+			System.out.println("Player '" + p.getUsername() + "' beat the smugglers!");
 			this.exhaust();
 			return true;
-		} else if (p.getSpaceShip().getCannonPower() == this.min_power){
-			System.out.println("Player '"+p.getUsername()+"' tied the smugglers!");
+		} else if (p.getSpaceShip().getCannonPower() == this.min_power) {
+			System.out.println("Player '" + p.getUsername() + "' tied the smugglers!");
 			return true;
 		}
-		System.out.println("Player '"+p.getUsername()+"' lost to the smugglers!");
+		System.out.println("Player '" + p.getUsername() + "' lost to the smugglers!");
 		return p.getSpaceShip().getCannonPower() == this.min_power;
 	}
 

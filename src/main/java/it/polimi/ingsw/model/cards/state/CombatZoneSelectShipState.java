@@ -1,9 +1,5 @@
 package it.polimi.ingsw.model.cards.state;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
@@ -14,12 +10,16 @@ import it.polimi.ingsw.model.client.card.ClientBaseCardState;
 import it.polimi.ingsw.model.client.card.ClientCardState;
 import it.polimi.ingsw.model.client.card.ClientCombatZoneIndexCardStateDecorator;
 import it.polimi.ingsw.model.client.card.ClientNewCenterCardStateDecorator;
-import it.polimi.ingsw.model.client.state.ClientModelState;
+import it.polimi.ingsw.model.client.state.ClientState;
 import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.VoyageState;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class CombatZoneSelectShipState extends CardState {
 
@@ -39,10 +39,10 @@ public class CombatZoneSelectShipState extends CardState {
 	}
 
 	@Override
-	public void init(ClientModelState new_state) {
+	public void init(ClientState new_state) {
 		super.init(new_state);
-		System.out.println("    CardState -> Combat Zone Select Ship State!: ["+(3-sections.size())+" - "+this.sections.getFirst().getPenalty()+"].");
-		System.out.println("    Awaiting: '"+this.target.getUsername()+"'.");
+		System.out.println("    CardState -> Combat Zone Select Ship State!: [" + (3 - sections.size()) + " - " + this.sections.getFirst().getPenalty() + "].");
+		System.out.println("    Awaiting: '" + this.target.getUsername() + "'.");
 	}
 
 	@Override
@@ -52,13 +52,13 @@ public class CombatZoneSelectShipState extends CardState {
 			this.state.broadcastMessage(new NotifyStateUpdateMessage(this.state.getClientState()));
 			return;
 		}
-		if(this.target.getSpaceShip().getCrew()[0]<=0) this.state.loseGame(target);
+		if (this.target.getSpaceShip().getCrew()[0] <= 0) this.state.loseGame(target);
 		this.transition();
 	}
 
 	@Override
 	public ClientCardState getClientCardState() {
-		List<PlayerColor> awaiting = Arrays.asList(target.getColor());
+		List<PlayerColor> awaiting = Collections.singletonList(target.getColor());
 		return new ClientNewCenterCardStateDecorator(
 				new ClientCombatZoneIndexCardStateDecorator(
 						new ClientBaseCardState(this.card_id), 3 - this.sections.size()),
@@ -66,7 +66,7 @@ public class CombatZoneSelectShipState extends CardState {
 	}
 
 	@Override
-    public CardState getNext() {
+	public CardState getNext() {
 		if (this.target.getRetired()) {
 			this.sections.removeFirst();
 			if (!this.sections.isEmpty()) return new CombatZoneAnnounceState(state, card_id, sections, shots);
@@ -90,7 +90,7 @@ public class CombatZoneSelectShipState extends CardState {
 		}
 		try {
 			p.getSpaceShip().selectShipBlob(blob_coord);
-			System.out.println("Player '"+p.getUsername()+"' selected blob that contains coords "+blob_coord+".");
+			System.out.println("Player '" + p.getUsername() + "' selected blob that contains coords " + blob_coord + ".");
 		} catch (IllegalTargetException e) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to set his new center on an empty space!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to set his new center on an empty space!"));
@@ -104,7 +104,7 @@ public class CombatZoneSelectShipState extends CardState {
 
 	@Override
 	public void disconnect(Player p) throws ForbiddenCallException {
-		System.out.println("Player '" + p.getUsername() + "' disconnected!");
+
 	}
 
 }

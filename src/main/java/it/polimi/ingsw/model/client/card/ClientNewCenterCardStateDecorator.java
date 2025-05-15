@@ -1,9 +1,9 @@
 package it.polimi.ingsw.model.client.card;
 
-import java.util.ArrayList;
-
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.view.ClientView;
+
+import java.util.ArrayList;
 
 public class ClientNewCenterCardStateDecorator implements ClientCardState {
 

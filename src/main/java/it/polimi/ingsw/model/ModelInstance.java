@@ -1,34 +1,34 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.controller.server.ClientDescriptor;
-import it.polimi.ingsw.controller.server.ServerController;
+import it.polimi.ingsw.controller.server.LobbyController;
 import it.polimi.ingsw.message.client.ClientMessage;
 import it.polimi.ingsw.message.server.ServerConnectMessage;
 import it.polimi.ingsw.message.server.ServerDisconnectMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
-import it.polimi.ingsw.model.player.*;
+import it.polimi.ingsw.model.client.ClientGameListEntry;
+import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.state.GameState;
 import it.polimi.ingsw.model.state.ResumeWaitingState;
 import it.polimi.ingsw.model.state.WaitingState;
 
-public class ModelInstance {
+import java.io.Serializable;
+
+public class ModelInstance implements Serializable {
 
 	protected final int id;
-	protected transient ServerController controller;
+	protected transient LobbyController controller;
 	protected boolean started;
+	protected boolean ended;
 	protected GameState state;
 
-	public ModelInstance(int id, ServerController server, GameModeType type, PlayerCount count) {
+	public ModelInstance(int id, LobbyController controller, GameModeType type, PlayerCount count) {
 		if (id < 0) throw new IllegalArgumentException();
 		this.id = id;
-		this.controller = server;
 		this.state = new WaitingState(this, type, count);
+		this.controller = controller;
 		this.state.init();
-	}
-
-	public String toString() {
-		return id + " - " + this.state.toString();
 	}
 
 	public int getID() {
@@ -40,11 +40,11 @@ public class ModelInstance {
 	}
 
 	public void serialize() {
+		if (!this.state.toSerialize()) return;
 		this.controller.serializeCurrentGame();
 	}
 
 	public void startGame() {
-		System.out.println("Game Started.");
 		this.started = true;
 	}
 
@@ -52,24 +52,29 @@ public class ModelInstance {
 		return this.started;
 	}
 
-	public void endGame() {
-		if (!this.started) throw new RuntimeException();
-		this.controller.endGame();
-	}
-
 	public GameState getState() {
 		return this.state;
 	}
 
 	public void setState(GameState next) {
-		if (next == null) {
-			this.endGame();
-		}
 		this.state = next;
+		if (this.state == null) {
+			return;
+		}
 		if (this.state.toSerialize()) {
 			this.serialize();
 		}
 		next.init();
+	}
+
+	public void resumeState(GameState next) {
+		this.state = next;
+		if (this.state == null) {
+			return;
+		}
+		if (this.state.toSerialize()) {
+			this.serialize();
+		}
 	}
 
 	public void connect(ClientDescriptor client) {
@@ -111,12 +116,12 @@ public class ModelInstance {
 		}
 	}
 
-	public void setController(ServerController controller) {
-		this.controller = controller;
+	public LobbyController getController() {
+		return this.controller;
 	}
 
-	public ServerController getController() {
-		return this.controller;
+	public void setController(LobbyController controller) {
+		this.controller = controller;
 	}
 
 	public void afterSerialRestart() {
@@ -127,6 +132,14 @@ public class ModelInstance {
 
 	public void broadcast(ClientMessage message) {
 		this.controller.broadcast(message);
+	}
+
+	public ClientGameListEntry getEntry() {
+		return this.state.getOngoingEntry(this.id);
+	}
+
+	public void endGame() {
+		this.controller.endGame();
 	}
 
 }

@@ -15,15 +15,15 @@ public enum ShipmentType {
 		this.value = value;
 	}
 
+	static public ShipmentType[] getTypes() {
+		return new ShipmentType[]{ShipmentType.BLUE, ShipmentType.GREEN, ShipmentType.YELLOW, ShipmentType.RED};
+	}
+
 	public boolean getSpecial() {
 		return this.special;
 	}
 
 	public int getValue() {
 		return this.value;
-	}
-
-	static public ShipmentType[] getTypes() {
-		return new ShipmentType[]{ShipmentType.BLUE, ShipmentType.GREEN, ShipmentType.YELLOW, ShipmentType.RED};
 	}
 }

@@ -1,7 +1,5 @@
 package it.polimi.ingsw.model.cards.state;
 
-import java.util.ArrayList;
-
 import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
@@ -13,11 +11,13 @@ import it.polimi.ingsw.model.client.card.ClientAwaitConfirmCardStateDecorator;
 import it.polimi.ingsw.model.client.card.ClientBaseCardState;
 import it.polimi.ingsw.model.client.card.ClientCardState;
 import it.polimi.ingsw.model.client.card.ClientCombatZoneIndexCardStateDecorator;
-import it.polimi.ingsw.model.client.state.ClientModelState;
+import it.polimi.ingsw.model.client.state.ClientState;
 import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.VoyageState;
+
+import java.util.ArrayList;
 
 public class CombatZoneAnnounceState extends CardState {
 
@@ -38,17 +38,19 @@ public class CombatZoneAnnounceState extends CardState {
 	}
 
 	@Override
-	public void init(ClientModelState new_state) {
+	public void init(ClientState new_state) {
 		super.init(new_state);
-		if (this.state.getOrder(CardOrder.NORMAL).size() <= 1){
+		if (this.state.getOrder(CardOrder.NORMAL).size() <= 1) {
 			System.out.println("    Only one player left playing, skipping state!");
 			this.transition();
 			return;
-		} 
-		if (sections.size()==3) System.out.println("New CardState -> Combat Zone Announce State! [Section "+(3-sections.size())+" - "+this.sections.getFirst().getCriteria()+" - "+this.sections.getFirst().getPenalty()+"].");
-		else System.out.println("    CardState -> Combat Zone Announce State! [Section "+(3-sections.size())+" - "+this.sections.getFirst().getCriteria()+" - "+this.sections.getFirst().getPenalty()+"].");
-		for(Player p : this.state.getOrder(CardOrder.NORMAL)){
-			System.out.println("	 - "+p.getUsername());
+		}
+		if (sections.size() == 3)
+			System.out.println("New CardState -> Combat Zone Announce State! [Section " + (3 - sections.size()) + " - " + this.sections.getFirst().getCriteria() + " - " + this.sections.getFirst().getPenalty() + "].");
+		else
+			System.out.println("    CardState -> Combat Zone Announce State! [Section " + (3 - sections.size()) + " - " + this.sections.getFirst().getCriteria() + " - " + this.sections.getFirst().getPenalty() + "].");
+		for (Player p : this.state.getOrder(CardOrder.NORMAL)) {
+			System.out.println("	 - " + p.getUsername());
 		}
 	}
 
@@ -60,7 +62,7 @@ public class CombatZoneAnnounceState extends CardState {
 			return;
 		}
 		this.target = this.state.findCriteria(this.sections.getFirst().getCriteria());
-		System.out.println("Applying penalty to player: '"+target.getUsername()+"'");
+		System.out.println("Applying penalty to player: '" + target.getUsername() + "'");
 		this.transition();
 	}
 
@@ -74,8 +76,9 @@ public class CombatZoneAnnounceState extends CardState {
 	}
 
 	@Override
-    public CardState getNext() {
-		if (this.state.getOrder(CardOrder.NORMAL).size() > 1) return new CombatZonePenaltyState(state, card_id, sections, shots, target);
+	public CardState getNext() {
+		if (this.state.getOrder(CardOrder.NORMAL).size() > 1)
+			return new CombatZonePenaltyState(state, card_id, sections, shots, target);
 		System.out.println("...Card exhausted, moving to a new one!");
 		return null;
 	}
@@ -89,7 +92,7 @@ public class CombatZoneAnnounceState extends CardState {
 		}
 		try {
 			p.getSpaceShip().turnOn(target_coords, battery_coords);
-			System.out.println("Player '" + p.getUsername() + "' turned on component at"+target_coords+" using battery from "+battery_coords+"!");
+			System.out.println("Player '" + p.getUsername() + "' turned on component at" + target_coords + " using battery from " + battery_coords + "!");
 		} catch (IllegalTargetException e) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to turn on a component with invalid coordinates!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to turn on a component with invalid coordinates!"));
@@ -104,15 +107,15 @@ public class CombatZoneAnnounceState extends CardState {
 			return;
 		}
 		this.awaiting.remove(p);
-		System.out.println("Player '" + p.getUsername() + "' motioned to progress! ("+(this.state.getCount().getNumber()-this.awaiting.size())+").");
+		System.out.println("Player '" + p.getUsername() + "' motioned to progress! (" + (this.state.getCount().getNumber() - this.awaiting.size()) + ").");
 	}
 
 	@Override
 	public void disconnect(Player p) throws ForbiddenCallException {
-		if(awaiting.contains(p)){
+		if (awaiting.contains(p)) {
 			this.awaiting.remove(p);
 		}
-		System.out.println("Player '" + p.getUsername() + "' disconnected!");
+
 	}
 
 }

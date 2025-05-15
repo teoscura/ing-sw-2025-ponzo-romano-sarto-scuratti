@@ -1,27 +1,27 @@
 package it.polimi.ingsw.model.client.state;
 
-import java.util.ArrayList;
-
 import it.polimi.ingsw.model.client.player.ClientVerifyPlayer;
 import it.polimi.ingsw.view.ClientView;
 
-public class ClientVerifyState implements ClientModelState {
+import java.util.ArrayList;
 
-    private final ArrayList<ClientVerifyPlayer> players;
+public class ClientVerifyState implements ClientState {
 
-    public ClientVerifyState(ArrayList<ClientVerifyPlayer> playerlist) {
-        if(playerlist==null) throw new NullPointerException();
-        if(playerlist.size()>4) throw new IllegalArgumentException();
-        this.players = playerlist;
-    }
+	private final ArrayList<ClientVerifyPlayer> players;
 
-    public ArrayList<ClientVerifyPlayer> getPlayers() {
-        return players;
-    }
+	public ClientVerifyState(ArrayList<ClientVerifyPlayer> playerlist) {
+		if (playerlist == null) throw new NullPointerException();
+		if (playerlist.size() > 4) throw new IllegalArgumentException();
+		this.players = playerlist;
+	}
 
-    @Override
-    public void sendToView(ClientView view) {
-        view.show(this);
-    }
-    
+	public ArrayList<ClientVerifyPlayer> getPlayers() {
+		return players;
+	}
+
+	@Override
+	public void sendToView(ClientView view) {
+		view.show(this);
+	}
+
 }

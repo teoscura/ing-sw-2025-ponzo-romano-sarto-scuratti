@@ -15,84 +15,87 @@ import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.player.SpaceShip;
 
 public class EngineComponent extends BaseComponent {
-    
-    private final int max_power;
-    private final boolean powerable;
-    private boolean powered = false;
 
-    public EngineComponent(int id, 
-                           ConnectorType[] components,
-                           ComponentRotation rotation,
-                           EngineType type){
-        super(id, components, rotation);
-        if(components[2]!=ConnectorType.EMPTY) throw new ComponentNotEmptyException("Bottom of engine must be empty!");
-        this.max_power = type.getMaxPower();
-        this.powerable = type.getPowerable();        
-    }
+	private final int max_power;
+	private final boolean powerable;
+	private boolean powered = false;
 
-    public EngineComponent(int id, 
-                           ConnectorType[] components,
-                           ComponentRotation rotation,
-                           EngineType type,
-                           ShipCoords coords){
-        super(id, components, rotation, coords);
-        if(components[2]!=ConnectorType.EMPTY) throw new ComponentNotEmptyException("Bottom of engine must be empty!");
-        this.max_power = type.getMaxPower();
-        this.powerable = type.getPowerable();        
-    }
+	public EngineComponent(int id,
+						   ConnectorType[] components,
+						   ComponentRotation rotation,
+						   EngineType type) {
+		super(id, components, rotation);
+		if (components[2] != ConnectorType.EMPTY)
+			throw new ComponentNotEmptyException("Bottom of engine must be empty!");
+		this.max_power = type.getMaxPower();
+		this.powerable = type.getPowerable();
+	}
 
-    @Override
-    public boolean verify(SpaceShip ship){
-        if(this.getRotation()!=ComponentRotation.U000||ship.getComponent(this.coords.down())!=ship.getEmpty()) return false; 
-        return super.verify(ship);
-    }
+	public EngineComponent(int id,
+						   ConnectorType[] components,
+						   ComponentRotation rotation,
+						   EngineType type,
+						   ShipCoords coords) {
+		super(id, components, rotation, coords);
+		if (components[2] != ConnectorType.EMPTY)
+			throw new ComponentNotEmptyException("Bottom of engine must be empty!");
+		this.max_power = type.getMaxPower();
+		this.powerable = type.getPowerable();
+	}
 
-    @Override
-    public void check(iVisitor v){
-        v.visit(this);
-    }
+	@Override
+	public boolean verify(SpaceShip ship) {
+		if (this.getRotation() != ComponentRotation.U000 || ship.getComponent(this.coords.down()) != ship.getEmpty())
+			return false;
+		return super.verify(ship);
+	}
 
-    public void turnOn(){
-        if(this.powered) throw new AlreadyPoweredException();
-        if(!this.powerable) throw new UnpowerableException();
-        this.powered = true;
-    }
+	@Override
+	public void check(iVisitor v) {
+		v.visit(this);
+	}
 
-    public void turnOff(){
-        this.powered = false;
-    }
+	public void turnOn() {
+		if (this.powered) throw new AlreadyPoweredException();
+		if (!this.powerable) throw new UnpowerableException();
+		this.powered = true;
+	}
 
-    public int getCurrentPower(){
-        if(this.getRotation() != ComponentRotation.U000){
-            return 0;
-        }
-        return this.getPower();
-    }
-            
-    private int getPower(){
-        if(this.powerable) return this.powered ? max_power : 0;
-        return this.max_power;
-    } 
-    
-    @Override
-    public boolean powerable(){
-        return true;
-    } //redundant
+	public void turnOff() {
+		this.powered = false;
+	}
 
-    @Override
-    public void onCreation(SpaceShip ship, ShipCoords coords){
-        this.coords = coords;
-        if(powerable) ship.addPowerableCoords(this.coords);
-    }
+	public int getCurrentPower() {
+		if (this.getRotation() != ComponentRotation.U000) {
+			return 0;
+		}
+		return this.getPower();
+	}
 
-    @Override
-    public void onDelete(SpaceShip ship){
-        if(powerable) ship.delPowerableCoords(this.coords);
-    }
+	private int getPower() {
+		if (this.powerable) return this.powered ? max_power : 0;
+		return this.max_power;
+	}
 
-    @Override
-    public ClientComponent getClientComponent() {
-        return new ClientPoweredComponentDecorator(new ClientBaseComponent(getID(), getRotation()), powered);
-    }
+	@Override
+	public boolean powerable() {
+		return true;
+	} //redundant
+
+	@Override
+	public void onCreation(SpaceShip ship, ShipCoords coords) {
+		this.coords = coords;
+		if (powerable) ship.addPowerableCoords(this.coords);
+	}
+
+	@Override
+	public void onDelete(SpaceShip ship) {
+		if (powerable) ship.delPowerableCoords(this.coords);
+	}
+
+	@Override
+	public ClientComponent getClientComponent() {
+		return new ClientPoweredComponentDecorator(new ClientBaseComponent(getID(), getRotation()), powered);
+	}
 
 }

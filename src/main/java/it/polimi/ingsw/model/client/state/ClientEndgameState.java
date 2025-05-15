@@ -1,25 +1,25 @@
 package it.polimi.ingsw.model.client.state;
 
-import java.util.ArrayList;
-
 import it.polimi.ingsw.model.client.player.ClientEndgamePlayer;
 import it.polimi.ingsw.view.ClientView;
 
-public class ClientEndgameState implements ClientModelState {
+import java.util.ArrayList;
 
-    private final ArrayList<ClientEndgamePlayer> playerlist;
+public class ClientEndgameState implements ClientState {
 
-    public ClientEndgameState(ArrayList<ClientEndgamePlayer> playerlist) {
-        this.playerlist = playerlist;
-    }
+	private final ArrayList<ClientEndgamePlayer> playerlist;
 
-    public ArrayList<ClientEndgamePlayer> getPlayerList(){
-        return this.playerlist;
-    }
+	public ClientEndgameState(ArrayList<ClientEndgamePlayer> playerlist) {
+		this.playerlist = playerlist;
+	}
 
-    @Override
-    public void sendToView(ClientView view) {
-        view.show(this);
-    }
-    
+	public ArrayList<ClientEndgamePlayer> getPlayerList() {
+		return this.playerlist;
+	}
+
+	@Override
+	public void sendToView(ClientView view) {
+		view.show(this);
+	}
+
 }

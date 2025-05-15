@@ -1,11 +1,13 @@
 package it.polimi.ingsw.model.cards;
 
-import java.util.ArrayList;
-
 import it.polimi.ingsw.model.cards.state.CardState;
 import it.polimi.ingsw.model.cards.state.CombatZoneAnnounceState;
-import it.polimi.ingsw.model.cards.utils.*;
+import it.polimi.ingsw.model.cards.utils.CombatZoneSection;
+import it.polimi.ingsw.model.cards.utils.Projectile;
+import it.polimi.ingsw.model.cards.utils.ProjectileArray;
 import it.polimi.ingsw.model.state.VoyageState;
+
+import java.util.ArrayList;
 
 public class CombatZoneCard extends Card {
 
@@ -25,7 +27,7 @@ public class CombatZoneCard extends Card {
 	}
 
 	//Used only to fix offsets to ensure same results during tests.
-	public ArrayList<Projectile> getShots(){
+	public ArrayList<Projectile> getShots() {
 		return this.shots.getProjectiles();
 	}
 

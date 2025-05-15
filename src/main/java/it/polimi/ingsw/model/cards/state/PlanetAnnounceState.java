@@ -1,7 +1,5 @@
 package it.polimi.ingsw.model.cards.state;
 
-import java.util.ArrayList;
-
 import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
@@ -10,9 +8,11 @@ import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.client.card.ClientBaseCardState;
 import it.polimi.ingsw.model.client.card.ClientCardState;
 import it.polimi.ingsw.model.client.card.ClientLandingCardStateDecorator;
-import it.polimi.ingsw.model.client.state.ClientModelState;
+import it.polimi.ingsw.model.client.state.ClientState;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.state.VoyageState;
+
+import java.util.ArrayList;
 
 public class PlanetAnnounceState extends CardState {
 
@@ -31,12 +31,13 @@ public class PlanetAnnounceState extends CardState {
 	}
 
 	@Override
-	public void init(ClientModelState new_state) {
+	public void init(ClientState new_state) {
 		super.init(new_state);
-		if(list.size()==this.state.getCount().getNumber()) System.out.println("New CardState -> Planet Announce State!");
+		if (list.size() == this.state.getCount().getNumber())
+			System.out.println("New CardState -> Planet Announce State!");
 		else System.out.println("    CardState -> Planet Announce State!");
-		for(Player p : this.list){
-			System.out.println("	 - "+p.getUsername());
+		for (Player p : this.list) {
+			System.out.println("	 - " + p.getUsername());
 		}
 	}
 
@@ -47,9 +48,9 @@ public class PlanetAnnounceState extends CardState {
 			this.state.broadcastMessage(new NotifyStateUpdateMessage(this.state.getClientState()));
 			return;
 		}
-		if(this.id>=0){
+		if (this.id >= 0) {
 			this.card.apply(this.list.getFirst(), id);
-			System.out.println("Player '" + this.list.getFirst().getUsername() + "' moved back "+card.getDays());
+			System.out.println("Player '" + this.list.getFirst().getUsername() + "' moved back " + card.getDays());
 			this.state.getPlanche().movePlayer(state, list.getFirst(), -card.getDays());
 		}
 		this.transition();
@@ -66,7 +67,7 @@ public class PlanetAnnounceState extends CardState {
 	}
 
 	@Override
-    public CardState getNext() {
+	public CardState getNext() {
 		if (id != -1) return new PlanetRewardState(state, card, id, list);
 		this.list.removeFirst();
 		if (!this.list.isEmpty()) return new PlanetAnnounceState(state, card, list);
@@ -85,18 +86,17 @@ public class PlanetAnnounceState extends CardState {
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to land on an invalid id!"));
 			return;
 		}
-		if (planet==-1){
+		if (planet == -1) {
 			System.out.println("Player '" + p.getUsername() + "' chose to not land!");
 			this.id = planet;
 			this.responded = true;
 			return;
-		}
-		else if (this.card.getPlanet(planet).getVisited()) {
+		} else if (this.card.getPlanet(planet).getVisited()) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to land on a planet that was already visited!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to land on a planet that was already visited!"));
 			return;
 		}
-		System.out.println("Player '" + p.getUsername() + "' landed on: "+planet);
+		System.out.println("Player '" + p.getUsername() + "' landed on: " + planet);
 		this.id = planet;
 		this.responded = true;
 	}
@@ -104,15 +104,13 @@ public class PlanetAnnounceState extends CardState {
 	@Override
 	public void disconnect(Player p) throws ForbiddenCallException {
 		if (this.list.getFirst() == p) {
-			System.out.println("Player '" + p.getUsername() + "' disconnected!");
+
 			this.responded = true;
 			this.id = -1;
 			return;
 		}
-		if (this.list.contains(p)) {
-			this.list.remove(p);
-		}
-		System.out.println("Player '" + p.getUsername() + "' disconnected!");
+		this.list.remove(p);
+
 	}
 
 }

@@ -1,13 +1,13 @@
 package it.polimi.ingsw.model.client.state;
 
-import java.util.ArrayList;
-
 import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.client.card.ClientCardState;
 import it.polimi.ingsw.model.client.player.ClientVoyagePlayer;
 import it.polimi.ingsw.view.ClientView;
 
-public class ClientVoyageState implements ClientModelState {
+import java.util.ArrayList;
+
+public class ClientVoyageState implements ClientState {
 
 	private final GameModeType type;
 	private final ArrayList<ClientVoyagePlayer> playerlist;

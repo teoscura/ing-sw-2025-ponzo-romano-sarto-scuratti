@@ -1,10 +1,10 @@
 package it.polimi.ingsw.model.state;
 
+import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
+
 import java.io.Serializable;
 import java.time.Duration;
 import java.time.Instant;
-
-import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 
 public class ConstructionStateHourglass implements Serializable {
 
@@ -18,27 +18,27 @@ public class ConstructionStateHourglass implements Serializable {
 		this.period = Duration.ofSeconds(seconds);
 	}
 
-	public int timesLeft(){
+	public int timesLeft() {
 		return this.times;
 	}
 
-	public void start(){
+	public void start() {
 		this.toggled = Instant.now();
 		this.times--;
 	}
 
-	public void toggle() throws ForbiddenCallException{
-		if(isRunning() || times<=0) throw new ForbiddenCallException();
+	public void toggle() throws ForbiddenCallException {
+		if (isRunning() || times <= 0) throw new ForbiddenCallException();
 		this.times--;
 		this.toggled = Instant.now();
 	}
 
-	public boolean canAct(){
+	public boolean canAct() {
 		return Duration.between(Instant.now(), toggled).compareTo(period) >= 0 || this.times >= 1;
 	}
 
 	public boolean isRunning() {
-		if(this.toggled==null) return true;
+		if (this.toggled == null) return true;
 		return Duration.between(Instant.now(), toggled).compareTo(period) >= 0;
 	}
 

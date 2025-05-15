@@ -7,14 +7,10 @@ import it.polimi.ingsw.model.components.exceptions.AlreadyPoweredException;
 import it.polimi.ingsw.model.components.exceptions.UnpowerableException;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 class EngineComponentTest {
-
-	@Test
-	void verify() {
-		//TODO
-	}
 
 	@Test
 	void check() {
@@ -26,14 +22,16 @@ class EngineComponentTest {
 		EngineComponent turnon_test_component1 = new EngineComponent(1, connectors, ComponentRotation.U000, EngineType.SINGLE);
 		EngineComponent turnon_test_component2 = new EngineComponent(1, connectors, ComponentRotation.U000, EngineType.DOUBLE);
 		turnon_test_component2.turnOn();
-		try{
+		try {
 			turnon_test_component2.turnOn();
 			fail("AlreadyPoweredException did not occur");
-		} catch (AlreadyPoweredException e1){}
-		try{
+		} catch (AlreadyPoweredException e1) {
+		}
+		try {
 			turnon_test_component1.turnOn();
 			fail("UnpoweredException did not occur");
-		}catch (UnpowerableException e2){}
+		} catch (UnpowerableException e2) {
+		}
 	}
 
 	@Test
@@ -42,10 +40,10 @@ class EngineComponentTest {
 		EngineComponent turnoff_engine_component = new EngineComponent(1, connectors, ComponentRotation.U000, EngineType.DOUBLE);
 		turnoff_engine_component.turnOn();
 		turnoff_engine_component.turnOff();
-		try{
+		try {
 			turnoff_engine_component.turnOn();
 
-		}catch(AlreadyPoweredException e){
+		} catch (AlreadyPoweredException e) {
 			fail("Component didn't turn off properly");
 		}
 	}

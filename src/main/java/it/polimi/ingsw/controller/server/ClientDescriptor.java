@@ -1,54 +1,67 @@
 package it.polimi.ingsw.controller.server;
 
+import it.polimi.ingsw.controller.server.connections.ClientConnection;
+import it.polimi.ingsw.message.client.ClientMessage;
+import it.polimi.ingsw.model.player.Player;
+
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import it.polimi.ingsw.message.client.ClientMessage;
-import it.polimi.ingsw.model.player.Player;
-
 public class ClientDescriptor {
-    
-    protected static final long TIMEOUT_DURATION = 15000L;
-    private final String username;
-    private transient final Connection connection;
-    private transient TimerTask pingtimer;
-    private transient Player player = null;
 
-    public ClientDescriptor(String username, Connection connection){
-        if(username==null/*XXX rimetti connection == null*/) throw new NullPointerException();
-        this.username = username;
-        this.connection = connection;
-    }
+	private static final long TIMEOUT_DURATION = 15000L;
+	private final String username;
+	private transient final Timer timer;
+	private transient final ClientConnection connection;
+	private transient int id;
+	private transient TimerTask task;
+	private transient Player player = null;
 
-    public void bindPlayer(Player p){
-        p.bindDescriptor(this);
-        this.player = p;
-    }
+	public ClientDescriptor(String username, ClientConnection connection) {
+		if (username == null || connection == null) throw new NullPointerException();
+		this.timer = new Timer(true);
+		this.username = username;
+		this.connection = connection;
+		this.id = -1;
+	}
 
-    public void sendMessage(ClientMessage m) throws IOException {
-        this.connection.sendMessage(m);
-    }
+	public void bindPlayer(Player p) {
+		p.bindDescriptor(this);
+		this.player = p;
+	}
 
-    public void setPingTimerTask(TimerTask task){
-        this.pingtimer = task;
-        Timer t = new Timer(true);
-        t.schedule(task, TIMEOUT_DURATION);
-    }
+	public void sendMessage(ClientMessage m) throws IOException {
+		this.connection.sendMessage(m);
+	}
 
-    public String getUsername(){
-        return this.username;
-    }
+	public String getUsername() {
+		return this.username;
+	}
 
-    public Player getPlayer(){
-        return this.player;
-    }
+	public int getId() {
+		return this.id;
+	}
 
-    public TimerTask getPingTimerTask(){
-        return this.pingtimer;
-    }
+	public void setID(int id) {
+		if (id < -1) throw new IllegalArgumentException();
+		this.id = id;
+	}
 
-	public Connection getConnection() {
+	public Player getPlayer() {
+		return this.player;
+	}
+
+	public TimerTask getPingTimerTask() {
+		return this.task;
+	}
+
+	public void setPingTimerTask(TimerTask task) {
+		this.task = task;
+		timer.schedule(task, TIMEOUT_DURATION);
+	}
+
+	public ClientConnection getConnection() {
 		return this.connection;
 	}
 

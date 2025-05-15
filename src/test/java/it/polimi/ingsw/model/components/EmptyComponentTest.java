@@ -2,11 +2,11 @@ package it.polimi.ingsw.model.components;
 
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ConnectorType;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class EmptyComponentTest {
 
@@ -21,7 +21,7 @@ class EmptyComponentTest {
 	}
 
 	@Test
-	void check(){
+	void check() {
 
 	}
 
@@ -35,7 +35,6 @@ class EmptyComponentTest {
 		ConnectorType[] expected = {ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY};
 		assertArrayEquals(expected, empty.getConnectors());
 	}
-
 
 
 }

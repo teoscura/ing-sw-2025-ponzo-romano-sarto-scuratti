@@ -1,9 +1,5 @@
 package it.polimi.ingsw.model.cards.state;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
@@ -13,12 +9,16 @@ import it.polimi.ingsw.model.cards.utils.ProjectileArray;
 import it.polimi.ingsw.model.client.card.ClientBaseCardState;
 import it.polimi.ingsw.model.client.card.ClientCardState;
 import it.polimi.ingsw.model.client.card.ClientNewCenterCardStateDecorator;
-import it.polimi.ingsw.model.client.state.ClientModelState;
+import it.polimi.ingsw.model.client.state.ClientState;
 import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.VoyageState;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class PiratesSelectShipState extends CardState {
 
@@ -35,31 +35,31 @@ public class PiratesSelectShipState extends CardState {
 	}
 
 	@Override
-	public void init(ClientModelState new_state) {
+	public void init(ClientState new_state) {
 		super.init(new_state);
 		System.out.println("    CardState -> Pirates Select Ship State!");
-		System.out.println("    Awaiting: '"+this.list.getFirst().getUsername()+"'.");
+		System.out.println("    Awaiting: '" + this.list.getFirst().getUsername() + "'.");
 	}
 
 	@Override
 	public void validate(ServerMessage message) throws ForbiddenCallException {
 		message.receive(this);
-		if (this.list.getFirst().getSpaceShip().getBlobsSize()>1&&!this.list.getFirst().getDisconnected()) {
+		if (this.list.getFirst().getSpaceShip().getBlobsSize() > 1 && !this.list.getFirst().getDisconnected()) {
 			this.state.broadcastMessage(new NotifyStateUpdateMessage(this.state.getClientState()));
 			return;
 		}
-		if(this.list.getFirst().getSpaceShip().getCrew()[0]<=0) this.state.loseGame(this.list.getFirst());
+		if (this.list.getFirst().getSpaceShip().getCrew()[0] <= 0) this.state.loseGame(this.list.getFirst());
 		this.transition();
 	}
 
 	@Override
 	public ClientCardState getClientCardState() {
-		List<PlayerColor> awaiting = Arrays.asList(this.list.getFirst().getColor());
+		List<PlayerColor> awaiting = Collections.singletonList(this.list.getFirst().getColor());
 		return new ClientNewCenterCardStateDecorator(new ClientBaseCardState(this.card.getId()), new ArrayList<>(awaiting));
 	}
 
 	@Override
-    public CardState getNext() {
+	public CardState getNext() {
 		if (this.list.getFirst().getRetired()) {
 			this.list.removeFirst();
 			if (!this.list.isEmpty()) return new PiratesAnnounceState(state, card, list);
@@ -85,7 +85,7 @@ public class PiratesSelectShipState extends CardState {
 		}
 		try {
 			p.getSpaceShip().selectShipBlob(blob_coord);
-			System.out.println("Player '"+p.getUsername()+"' selected blob that contains coords "+blob_coord+".");
+			System.out.println("Player '" + p.getUsername() + "' selected blob that contains coords " + blob_coord + ".");
 		} catch (IllegalTargetException e) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to set his new center on an empty space!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to set his new center on an empty space!"));
@@ -101,7 +101,7 @@ public class PiratesSelectShipState extends CardState {
 		if (!this.list.getFirst().equals(p)) {
 			this.list.remove(p);
 		}
-		System.out.println("Player '" + p.getUsername() + "' disconnected!");
+
 	}
 
 }

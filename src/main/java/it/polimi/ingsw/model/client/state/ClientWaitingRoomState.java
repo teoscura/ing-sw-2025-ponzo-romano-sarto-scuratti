@@ -1,33 +1,33 @@
 package it.polimi.ingsw.model.client.state;
 
-import java.util.ArrayList;
-
 import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.client.player.ClientWaitingPlayer;
 import it.polimi.ingsw.view.ClientView;
 
-public class ClientWaitingRoomState implements ClientModelState {
+import java.util.ArrayList;
 
-    private final GameModeType type;
-    private final ArrayList<ClientWaitingPlayer> playerlist;
+public class ClientWaitingRoomState implements ClientState {
 
-    public ClientWaitingRoomState(GameModeType type, ArrayList<ClientWaitingPlayer> playerlist) {
-        if(playerlist==null) throw new NullPointerException();
-        this.playerlist = playerlist;
-        this.type = type;
-    }
+	private final GameModeType type;
+	private final ArrayList<ClientWaitingPlayer> playerlist;
 
-    public GameModeType getType(){
-        return this.type;
-    }
+	public ClientWaitingRoomState(GameModeType type, ArrayList<ClientWaitingPlayer> playerlist) {
+		if (playerlist == null) throw new NullPointerException();
+		this.playerlist = playerlist;
+		this.type = type;
+	}
 
-    public ArrayList<ClientWaitingPlayer> getPlayerList(){
-        return this.playerlist;
-    }
+	public GameModeType getType() {
+		return this.type;
+	}
 
-    @Override
-    public void sendToView(ClientView view) {
-        view.show(this);
-    }
-    
+	public ArrayList<ClientWaitingPlayer> getPlayerList() {
+		return this.playerlist;
+	}
+
+	@Override
+	public void sendToView(ClientView view) {
+		view.show(this);
+	}
+
 }

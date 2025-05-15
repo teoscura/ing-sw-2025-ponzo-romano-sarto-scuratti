@@ -1,8 +1,5 @@
 package it.polimi.ingsw.model.cards.state;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
@@ -11,12 +8,15 @@ import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.client.card.ClientAwaitConfirmCardStateDecorator;
 import it.polimi.ingsw.model.client.card.ClientBaseCardState;
 import it.polimi.ingsw.model.client.card.ClientCardState;
-import it.polimi.ingsw.model.client.state.ClientModelState;
+import it.polimi.ingsw.model.client.state.ClientState;
 import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.VoyageState;
+
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class SlaversAnnounceState extends CardState {
 
@@ -35,12 +35,13 @@ public class SlaversAnnounceState extends CardState {
 	}
 
 	@Override
-	public void init(ClientModelState new_state) {
+	public void init(ClientState new_state) {
 		super.init(new_state);
-		if(list.size()==this.state.getCount().getNumber()) System.out.println("New CardState -> Slavers Announce State!");
+		if (list.size() == this.state.getCount().getNumber())
+			System.out.println("New CardState -> Slavers Announce State!");
 		else System.out.println("    CardState -> Slavers Announce State!");
-		for(Player p : this.list){
-			System.out.println("	 - "+p.getUsername());
+		for (Player p : this.list) {
+			System.out.println("	 - " + p.getUsername());
 		}
 	}
 
@@ -57,12 +58,12 @@ public class SlaversAnnounceState extends CardState {
 
 	@Override
 	public ClientCardState getClientCardState() {
-		ArrayList<PlayerColor> awaiting = new ArrayList<>(Arrays.asList(this.list.getFirst().getColor()));
+		ArrayList<PlayerColor> awaiting = new ArrayList<>(Collections.singletonList(this.list.getFirst().getColor()));
 		return new ClientAwaitConfirmCardStateDecorator(new ClientBaseCardState(this.card.getId()), awaiting);
 	}
 
 	@Override
-    public CardState getNext() {
+	public CardState getNext() {
 		if (this.list.getFirst().getDisconnected() || this.list.getFirst().getRetired()) {
 			this.list.removeFirst();
 			if (!this.list.isEmpty()) return new SlaversAnnounceState(state, card, list);
@@ -86,7 +87,7 @@ public class SlaversAnnounceState extends CardState {
 		}
 		try {
 			p.getSpaceShip().turnOn(target_coords, battery_coords);
-			System.out.println("Player '" + p.getUsername() + "' turned on component at"+target_coords+" using battery from "+battery_coords+"!");
+			System.out.println("Player '" + p.getUsername() + "' turned on component at" + target_coords + " using battery from " + battery_coords + "!");
 		} catch (IllegalTargetException e) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to turn on a component with invalid coordinates!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to turn on a component with invalid coordinates!"));
@@ -107,11 +108,11 @@ public class SlaversAnnounceState extends CardState {
 	@Override
 	public void disconnect(Player p) throws ForbiddenCallException {
 		if (this.list.getFirst() == p) {
-			System.out.println("Player '" + p.getUsername() + "' disconnected!");
+
 			this.responded = true;
 		}
 		this.list.remove(p);
-		System.out.println("Player '" + p.getUsername() + "' disconnected!");
+
 	}
 
 

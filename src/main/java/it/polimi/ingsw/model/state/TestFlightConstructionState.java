@@ -1,24 +1,24 @@
 package it.polimi.ingsw.model.state;
 
-import java.util.ArrayList;
-
 import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.ModelInstance;
 import it.polimi.ingsw.model.PlayerCount;
 import it.polimi.ingsw.model.board.TestFlightCards;
 import it.polimi.ingsw.model.client.player.ClientConstructionPlayer;
 import it.polimi.ingsw.model.client.state.ClientConstructionState;
-import it.polimi.ingsw.model.client.state.ClientModelState;
+import it.polimi.ingsw.model.client.state.ClientState;
 import it.polimi.ingsw.model.player.Player;
+
+import java.util.ArrayList;
 
 public class TestFlightConstructionState extends ConstructionState {
 
-    public TestFlightConstructionState(ModelInstance model, GameModeType type, PlayerCount count, ArrayList<Player> players) {
-        super(model, type, count, players, new TestFlightCards());
-    }
+	public TestFlightConstructionState(ModelInstance model, GameModeType type, PlayerCount count, ArrayList<Player> players) {
+		super(model, type, count, players, new TestFlightCards());
+	}
 
-    @Override
-    public ClientModelState getClientState() {
+	@Override
+	public ClientState getClientState() {
 		ArrayList<ClientConstructionPlayer> tmp = new ArrayList<>();
 		ArrayList<Integer> discarded = new ArrayList<>(this.board.getDiscarded());
 		for (Player p : this.players) {
@@ -33,5 +33,5 @@ public class TestFlightConstructionState extends ConstructionState {
 		}
 		return new ClientConstructionState(this.type, tmp, null, discarded, this.board.getCoveredSize(), null);
 	}
-    
+
 }

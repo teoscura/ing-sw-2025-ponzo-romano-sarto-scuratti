@@ -1,9 +1,5 @@
 package it.polimi.ingsw.model.cards.state;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
@@ -14,12 +10,16 @@ import it.polimi.ingsw.model.client.card.ClientAwaitConfirmCardStateDecorator;
 import it.polimi.ingsw.model.client.card.ClientBaseCardState;
 import it.polimi.ingsw.model.client.card.ClientCardState;
 import it.polimi.ingsw.model.client.card.ClientProjectileCardStateDecorator;
-import it.polimi.ingsw.model.client.state.ClientModelState;
+import it.polimi.ingsw.model.client.state.ClientState;
 import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.VoyageState;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class PiratesPenaltyState extends CardState {
 
@@ -39,11 +39,11 @@ public class PiratesPenaltyState extends CardState {
 	}
 
 	@Override
-	public void init(ClientModelState new_state) {
+	public void init(ClientState new_state) {
 		super.init(new_state);
 		System.out.println("    CardState -> Pirates Penalty State!");
-		for(Player p : this.list){
-			System.out.println("	 - "+p.getUsername());
+		for (Player p : this.list) {
+			System.out.println("	 - " + p.getUsername());
 		}
 	}
 
@@ -54,16 +54,16 @@ public class PiratesPenaltyState extends CardState {
 			this.state.broadcastMessage(new NotifyStateUpdateMessage(this.state.getClientState()));
 			return;
 		}
-		if(!this.list.getFirst().getDisconnected()) {
+		if (!this.list.getFirst().getDisconnected()) {
 			this.list.getFirst().getSpaceShip().handleShot(this.shots.getProjectiles().getFirst());
-			if(this.list.getFirst().getSpaceShip().getBlobsSize() <= 0) this.state.loseGame(this.list.getFirst());
+			if (this.list.getFirst().getSpaceShip().getBlobsSize() <= 0) this.state.loseGame(this.list.getFirst());
 		}
 		this.transition();
 	}
 
 	@Override
 	public ClientCardState getClientCardState() {
-		List<PlayerColor> awaiting = Arrays.asList(this.list.getFirst().getColor());
+		List<PlayerColor> awaiting = Collections.singletonList(this.list.getFirst().getColor());
 		return new ClientProjectileCardStateDecorator(
 				new ClientAwaitConfirmCardStateDecorator(
 						new ClientBaseCardState(this.card.getId()),
@@ -72,7 +72,7 @@ public class PiratesPenaltyState extends CardState {
 	}
 
 	@Override
-    public CardState getNext() {
+	public CardState getNext() {
 		if (this.list.getFirst().getRetired() || this.list.getFirst().getDisconnected()) {
 			this.list.removeFirst();
 			if (!this.list.isEmpty()) return new PiratesAnnounceState(state, card, list);
@@ -80,7 +80,8 @@ public class PiratesPenaltyState extends CardState {
 			return null;
 		}
 		this.shots.getProjectiles().removeFirst();
-		if (this.list.getFirst().getSpaceShip().getBlobsSize()>1) return new PiratesSelectShipState(state, card, list, shots);
+		if (this.list.getFirst().getSpaceShip().getBlobsSize() > 1)
+			return new PiratesSelectShipState(state, card, list, shots);
 		if (!this.shots.getProjectiles().isEmpty()) return new PiratesPenaltyState(state, card, list, shots);
 		this.list.removeFirst();
 		if (!this.list.isEmpty()) return new PiratesAnnounceState(state, card, list);
@@ -97,7 +98,7 @@ public class PiratesPenaltyState extends CardState {
 		}
 		try {
 			p.getSpaceShip().turnOn(target_coords, battery_coords);
-			System.out.println("Player '" + p.getUsername() + "' turned on component at"+target_coords+" using battery from "+battery_coords+"!");
+			System.out.println("Player '" + p.getUsername() + "' turned on component at" + target_coords + " using battery from " + battery_coords + "!");
 		} catch (IllegalTargetException e) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to turn on a component with invalid coordinates!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to turn on a component with invalid coordinates!"));
@@ -118,12 +119,10 @@ public class PiratesPenaltyState extends CardState {
 	@Override
 	public void disconnect(Player p) throws ForbiddenCallException {
 		if (this.list.getFirst().equals(p)) {
-			System.out.println("Player '" + p.getUsername() + "' disconnected!");
 			this.responded = true;
 			return;
 		}
 		this.list.remove(p);
-		System.out.println("Player '" + p.getUsername() + "' disconnected!");
 	}
 
 }

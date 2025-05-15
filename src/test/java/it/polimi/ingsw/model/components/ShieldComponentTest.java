@@ -9,10 +9,8 @@ import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.player.SpaceShip;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -30,7 +28,7 @@ public class ShieldComponentTest {
 	}
 
 	@Test
-	void check(){
+	void check() {
 
 	}
 
@@ -40,6 +38,7 @@ public class ShieldComponentTest {
 		shield.turnOn();
 		assertTrue(shield.getPowered());
 	}
+
 	@Test
 	void TurnOff() {
 		shield.turnOn();
@@ -63,6 +62,7 @@ public class ShieldComponentTest {
 		assertThrows(NotUniqueException.class, () -> shieldWithCoords.onCreation(ship, coords));
 
 	}
+
 	@Test
 	void OnDelete() {
 		SpaceShip ship = new SpaceShip(GameModeType.LVL2, new Player(GameModeType.LVL2, "tizio", PlayerColor.RED));

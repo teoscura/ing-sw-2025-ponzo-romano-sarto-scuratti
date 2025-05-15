@@ -1,8 +1,5 @@
 package it.polimi.ingsw.model.cards.state;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
@@ -12,11 +9,14 @@ import it.polimi.ingsw.model.cards.visitors.CrewRemoveVisitor;
 import it.polimi.ingsw.model.client.card.ClientBaseCardState;
 import it.polimi.ingsw.model.client.card.ClientCardState;
 import it.polimi.ingsw.model.client.card.ClientCrewPenaltyCardStateDecorator;
-import it.polimi.ingsw.model.client.state.ClientModelState;
+import it.polimi.ingsw.model.client.state.ClientState;
 import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.VoyageState;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AbandonedShipRewardState extends CardState {
 
@@ -34,11 +34,11 @@ public class AbandonedShipRewardState extends CardState {
 	}
 
 	@Override
-	public void init(ClientModelState new_state) {
+	public void init(ClientState new_state) {
 		super.init(new_state);
 		System.out.println("    CardState -> Abandoned Ship Reward State!");
-		for(Player p : this.list){
-			System.out.println("	 - "+p.getUsername());
+		for (Player p : this.list) {
+			System.out.println("	 - " + p.getUsername());
 		}
 	}
 
@@ -62,7 +62,7 @@ public class AbandonedShipRewardState extends CardState {
 	}
 
 	@Override
-    public CardState getNext() {
+	public CardState getNext() {
 		System.out.println("Card exhausted, moving to a new one!");
 		return null;
 	}
@@ -95,7 +95,6 @@ public class AbandonedShipRewardState extends CardState {
 	@Override
 	public void disconnect(Player p) throws ForbiddenCallException {
 		if (this.list.getFirst() == p) this.transition();
-		System.out.println("Player '" + p.getUsername() + "' disconnected!");
 	}
 
 }

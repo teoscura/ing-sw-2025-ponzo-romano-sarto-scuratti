@@ -1,6 +1,8 @@
 package it.polimi.ingsw.model.cards;
 
 
+import it.polimi.ingsw.controller.DummyConnection;
+import it.polimi.ingsw.controller.DummyController;
 import it.polimi.ingsw.controller.server.ClientDescriptor;
 import it.polimi.ingsw.message.server.SendContinueMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
@@ -12,10 +14,10 @@ import it.polimi.ingsw.model.board.Planche;
 import it.polimi.ingsw.model.board.TestFlightCards;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.cards.state.CardState;
+import it.polimi.ingsw.model.components.BaseComponent;
 import it.polimi.ingsw.model.components.CabinComponent;
 import it.polimi.ingsw.model.components.ComponentFactory;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
-import it.polimi.ingsw.model.components.BaseComponent;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.ShipCoords;
@@ -66,14 +68,15 @@ class EpidemicCardTest {
 		c = f.getComponent(49);
 		c.rotate(ComponentRotation.U000);
 		player1.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 5, 3));
-		p1desc = new ClientDescriptor(player1.getUsername(), null);
+		p1desc = new ClientDescriptor(player1.getUsername(), new DummyConnection());
 		p1desc.bindPlayer(player1);
-		p2desc = new ClientDescriptor(player2.getUsername(), null);
+		p2desc = new ClientDescriptor(player2.getUsername(), new DummyConnection());
 		p2desc.bindPlayer(player2);
 
 		ArrayList<Player> order = new ArrayList<>(Arrays.asList(player1, player2));
 		ArrayList<Player> players = new ArrayList<>(Arrays.asList(player1, player2));
-		model = new DummyModelInstance(1, null, GameModeType.LVL2, PlayerCount.TWO);
+		model = new DummyModelInstance(1, GameModeType.LVL2, PlayerCount.TWO);
+		model.setController(new DummyController(model.getID()));
 		TestFlightCards cards = new TestFlightCards();
 		planche = new Planche(GameModeType.LVL2, order);
 		state = new DummyVoyageState(model, GameModeType.LVL2, PlayerCount.TWO, players, cards, planche);

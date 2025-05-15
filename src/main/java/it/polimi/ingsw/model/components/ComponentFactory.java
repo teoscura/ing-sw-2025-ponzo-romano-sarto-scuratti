@@ -1,22 +1,13 @@
 package it.polimi.ingsw.model.components;
 
-import java.util.HashMap;
-
 import it.polimi.ingsw.model.components.enums.*;
 import it.polimi.ingsw.model.player.PlayerColor;
+
+import java.util.HashMap;
 
 public class ComponentFactory {
 
 	private final HashMap<Integer, BaseComponent> components;
-
-	public BaseComponent getComponent(int id) {
-		if (!this.components.containsKey(id)) throw new IllegalArgumentException("Asked for a non-existant component.");
-		return this.components.get(id);
-	}
-
-	public int[] getForbiddenID() {
-		return new int[]{33, 34, 52, 61, 157};
-	}
 
 	public ComponentFactory() {
 		this.components = new HashMap<Integer, BaseComponent>() {{
@@ -1706,5 +1697,14 @@ public class ComponentFactory {
 			);
 			put(157, new EmptyComponent());
 		}};
+	}
+
+	public BaseComponent getComponent(int id) {
+		if (!this.components.containsKey(id)) throw new IllegalArgumentException("Asked for a non-existant component.");
+		return this.components.get(id);
+	}
+
+	public int[] getForbiddenID() {
+		return new int[]{33, 34, 52, 61, 157};
 	}
 }

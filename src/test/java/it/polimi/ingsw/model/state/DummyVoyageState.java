@@ -1,26 +1,26 @@
 package it.polimi.ingsw.model.state;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerDisconnectMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.ModelInstance;
 import it.polimi.ingsw.model.PlayerCount;
-import it.polimi.ingsw.model.cards.iCard;
+import it.polimi.ingsw.model.board.iCards;
+import it.polimi.ingsw.model.board.iPlanche;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
+import it.polimi.ingsw.model.cards.iCard;
 import it.polimi.ingsw.model.cards.state.CardState;
 import it.polimi.ingsw.model.cards.state.SelectShipReconnectState;
 import it.polimi.ingsw.model.cards.utils.CardOrder;
 import it.polimi.ingsw.model.cards.utils.CombatZoneCriteria;
-import it.polimi.ingsw.model.board.iCards;
-import it.polimi.ingsw.model.board.iPlanche;
 import it.polimi.ingsw.model.client.player.ClientVoyagePlayer;
-import it.polimi.ingsw.model.client.state.ClientModelState;
+import it.polimi.ingsw.model.client.state.ClientState;
 import it.polimi.ingsw.model.client.state.ClientVoyageState;
 import it.polimi.ingsw.model.player.Player;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DummyVoyageState extends VoyageState {
 
@@ -40,14 +40,14 @@ public class DummyVoyageState extends VoyageState {
 
 	@Override
 	public void init() {
-	
+
 	}
 
 	@Override
 	public void validate(ServerMessage message) throws ForbiddenCallException {
 		message.receive(this);
 		Player p = message.getDescriptor().getPlayer();
-		if (!p.getRetired() && p.getSpaceShip().getCrew()[0]<=0) this.loseGame(p);
+		if (!p.getRetired() && p.getSpaceShip().getCrew()[0] <= 0) this.loseGame(p);
 		if (this.state != null) return;
 		this.transition();
 	}
@@ -64,7 +64,7 @@ public class DummyVoyageState extends VoyageState {
 	}
 
 	@Override
-	public ClientModelState getClientState() {
+	public ClientState getClientState() {
 		ArrayList<ClientVoyagePlayer> tmp = new ArrayList<>();
 		for (Player p : this.players) {
 			tmp.add(new ClientVoyagePlayer(p.getUsername(),
@@ -88,9 +88,9 @@ public class DummyVoyageState extends VoyageState {
 		if (p == null) throw new NullPointerException();
 		if (!p.getDisconnected()) throw new ForbiddenCallException();
 		System.out.println("Player '" + p.getUsername() + "' reconnected!");
-	    this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' reconnected!"));
+		this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' reconnected!"));
 		p.reconnect();
-		if(!p.getRetired()&&p.getSpaceShip().getBlobsSize()>1){
+		if (!p.getRetired() && p.getSpaceShip().getBlobsSize() > 1) {
 			this.setCardState(new SelectShipReconnectState(this, this.state, p));
 		}
 	}
@@ -128,8 +128,8 @@ public class DummyVoyageState extends VoyageState {
 	}
 
 	public List<Player> getOrder(CardOrder order) {
-		List<Player> tmp = this.players.stream().filter(p->!p.getRetired()&&!p.getDisconnected()).sorted((Player player1, Player player2) -> Integer.compare(planche.getPlayerPosition(player1), planche.getPlayerPosition(player2))).toList();
-		return order!=CardOrder.NORMAL ? tmp : tmp.reversed();
+		List<Player> tmp = this.players.stream().filter(p -> !p.getRetired() && !p.getDisconnected()).sorted((Player player1, Player player2) -> Integer.compare(planche.getPlayerPosition(player1), planche.getPlayerPosition(player2))).toList();
+		return order != CardOrder.NORMAL ? tmp : tmp.reversed();
 	}
 
 	public Player findCriteria(CombatZoneCriteria criteria) {
@@ -163,7 +163,7 @@ public class DummyVoyageState extends VoyageState {
 		return planche;
 	}
 
-	public void setCard(iCard card){
+	public void setCard(iCard card) {
 		this.card = card;
 	}
 
@@ -188,7 +188,7 @@ public class DummyVoyageState extends VoyageState {
 	}
 
 	@Override
-	public CardState getCardState(Player p){
+	public CardState getCardState(Player p) {
 		return this.state;
 	}
 

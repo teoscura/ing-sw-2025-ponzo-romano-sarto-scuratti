@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model.cards;
 
+import it.polimi.ingsw.controller.DummyConnection;
+import it.polimi.ingsw.controller.DummyController;
 import it.polimi.ingsw.controller.server.ClientDescriptor;
 import it.polimi.ingsw.exceptions.PlayerNotFoundException;
 import it.polimi.ingsw.message.server.RemoveCrewMessage;
@@ -12,9 +14,9 @@ import it.polimi.ingsw.model.board.Planche;
 import it.polimi.ingsw.model.board.TestFlightCards;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.cards.state.CardState;
+import it.polimi.ingsw.model.components.BaseComponent;
 import it.polimi.ingsw.model.components.ComponentFactory;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
-import it.polimi.ingsw.model.components.BaseComponent;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.ShipCoords;
@@ -50,26 +52,27 @@ public class AbadonedShipCardTest {
 
 		player1 = new Player(GameModeType.TEST, "p1", PlayerColor.RED);
 		//non ha niente, tenta a salire ma non riesce, ha esattamente il richiesto.
-		p1desc = new ClientDescriptor(player1.getUsername(), null);
+		p1desc = new ClientDescriptor(player1.getUsername(), new DummyConnection());
 		p1desc.bindPlayer(player1);
 
 		player2 = new Player(GameModeType.TEST, "p2", PlayerColor.BLUE);
 		c = f2.getComponent(36);
 		c.rotate(ComponentRotation.U000);
 		player2.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 2, 2));
-		p2desc = new ClientDescriptor(player2.getUsername(), null);
+		p2desc = new ClientDescriptor(player2.getUsername(), new DummyConnection());
 		p2desc.bindPlayer(player2);
 
 		player3 = new Player(GameModeType.TEST, "p3", PlayerColor.GREEN);
 		c = f3.getComponent(36);
 		c.rotate(ComponentRotation.U000);
 		player3.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 2, 2));
-		p3desc = new ClientDescriptor(player3.getUsername(), null);
+		p3desc = new ClientDescriptor(player3.getUsername(), new DummyConnection());
 		p3desc.bindPlayer(player3);
 
 		ArrayList<Player> order = new ArrayList<>(Arrays.asList(player1, player2, player3));
 		ArrayList<Player> players = new ArrayList<>(Arrays.asList(player1, player2, player3));
-		model = new DummyModelInstance(1, null, GameModeType.TEST, PlayerCount.THREE);
+		model = new DummyModelInstance(1, GameModeType.TEST, PlayerCount.THREE);
+		model.setController(new DummyController(model.getID()));
 		TestFlightCards cards = new TestFlightCards();
 		planche = new Planche(GameModeType.TEST, order);
 		state = new DummyVoyageState(model, GameModeType.TEST, PlayerCount.THREE, players, cards, planche);
