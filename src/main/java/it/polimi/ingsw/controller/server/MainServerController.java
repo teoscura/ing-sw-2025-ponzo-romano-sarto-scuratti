@@ -261,6 +261,7 @@ public class MainServerController extends Thread implements VirtualServer {
     public void disconnect(ClientDescriptor client){
         int id = client.getId();
         System.out.println("Client: '"+client.getUsername()+"' disconnected.");
+        client.getPingTimerTask().cancel();
         synchronized(listeners_lock){
             this.all_listeners.remove(client.getUsername());
             if (id == -1) {
