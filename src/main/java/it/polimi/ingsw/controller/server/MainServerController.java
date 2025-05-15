@@ -101,7 +101,7 @@ public class MainServerController extends Thread implements VirtualServer {
             } catch (ForbiddenCallException e) {
                 System.out.println(e.getMessage());
             } catch (InterruptedException e) {
-                System.out.println("Force shutdown of main server thread!");
+                System.out.println("Shutting down server!");
             }
 		}
 	}

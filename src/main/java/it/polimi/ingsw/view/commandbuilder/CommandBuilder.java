@@ -4,7 +4,12 @@ import java.util.regex.Pattern;
 
 import it.polimi.ingsw.message.server.DiscardCargoMessage;
 import it.polimi.ingsw.message.server.DiscardComponentMessage;
+import it.polimi.ingsw.message.server.EnterLobbyMessage;
+import it.polimi.ingsw.message.server.EnterSetupMessage;
+import it.polimi.ingsw.message.server.LeaveSetupMessage;
 import it.polimi.ingsw.message.server.MoveCargoMessage;
+import it.polimi.ingsw.message.server.OpenLobbyMessage;
+import it.polimi.ingsw.message.server.OpenUnfinishedMessage;
 import it.polimi.ingsw.message.server.PutComponentMessage;
 import it.polimi.ingsw.message.server.RemoveComponentMessage;
 import it.polimi.ingsw.message.server.RemoveCrewMessage;
@@ -16,8 +21,8 @@ import it.polimi.ingsw.message.server.TakeCargoMessage;
 import it.polimi.ingsw.message.server.TakeDiscardedComponentMessage;
 import it.polimi.ingsw.message.server.TakeRewardMessage;
 import it.polimi.ingsw.message.server.TurnOnMessage;
-import it.polimi.ingsw.message.server.UsernameSetupMessage;
 import it.polimi.ingsw.model.GameModeType;
+import it.polimi.ingsw.model.PlayerCount;
 import it.polimi.ingsw.model.components.enums.AlienType;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ShipmentType;
@@ -32,6 +37,34 @@ public class CommandBuilder {
         String[] parts = command.split(" ", 16);
 
         switch (parts[0]) {
+			case "entersetup":
+				valid = Pattern.matches("^entersetup$", command);
+				if (!valid) break;
+				mess = new EnterSetupMessage();
+				break;
+			case "leavesetup":
+				valid = Pattern.matches("^leavesetup$", command);
+				if (!valid) break;
+				mess = new LeaveSetupMessage();
+				break;
+			case "openlobby":
+				valid = Pattern.matches("^openlobby [1-2]+ [2-4]$", command);
+				if (!valid) break;
+				GameModeType t = Integer.parseInt(parts[1]) == 1 ? GameModeType.TEST : GameModeType.LVL2;
+				int tmp = Integer.parseInt(parts[2]);
+				PlayerCount c = tmp != 2 ? tmp != 3 ? PlayerCount.FOUR : PlayerCount.THREE : PlayerCount.TWO;
+				mess = new OpenLobbyMessage(t, c);
+				break;
+			case "openunfinished":
+				valid = Pattern.matches("^openunfinished [0-9]+$", command);
+				if (!valid) break;
+				mess = new OpenUnfinishedMessage(Integer.parseInt(parts[1]));
+				break;
+			case "enterlobby":
+				valid = Pattern.matches("^enterlobby [0-9]+$", command);
+				if (!valid) break;
+				mess = new EnterLobbyMessage(Integer.parseInt(parts[1]));
+				break;
 			case "blobselect":
 				valid = Pattern.matches("^blobselect [0-9] [0-9]$", command);
 				if (!valid) break;
@@ -130,12 +163,6 @@ public class CommandBuilder {
 				ShipCoords batteryCoords = new ShipCoords(GameModeType.TEST, Integer.parseInt(parts[3]),
 						Integer.parseInt(parts[4]));
 				mess = new TurnOnMessage(targetCoords, batteryCoords);
-				break;
-			case "usernamesetup":
-				valid = Pattern.matches("^usernamesetup [a-zA-Z0-9_]+$", command);
-				if (!valid) break;
-				String username = parts[1];
-				mess = new UsernameSetupMessage(username);
 				break;
 			default:
 				System.out.println("Command not recognized: '" + command + "'");

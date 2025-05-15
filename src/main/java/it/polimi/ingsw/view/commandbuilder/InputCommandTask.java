@@ -25,6 +25,7 @@ public class InputCommandTask extends Thread {
                 if(s.equals("exit")) break;
                 ServerMessage mess = cb.build(s);
                 if(mess==null) continue;
+                System.out.println("Sent message!: "+mess.getClass().getSimpleName());
                 cc.sendMessage(mess);
             } catch (IOException e) {
                 e.printStackTrace();

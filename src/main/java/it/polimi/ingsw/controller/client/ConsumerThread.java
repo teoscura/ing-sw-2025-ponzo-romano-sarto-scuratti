@@ -20,6 +20,7 @@ public class ConsumerThread extends Thread {
         while (true) {
             try {
                 inqueue.take().receive(state);
+                System.out.println("received message!");
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

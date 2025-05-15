@@ -66,7 +66,7 @@ public class LobbyController extends Thread implements VirtualServer {
             } catch (ForbiddenCallException e) {
                 System.out.println(e.getMessage());
             } catch (InterruptedException e) {
-                System.out.println("Force shutdown of lobby "+this.id+" thread!");
+                System.out.println("Shutting down lobby "+this.id+" thread!");
             }
 		}
         this.endGame();

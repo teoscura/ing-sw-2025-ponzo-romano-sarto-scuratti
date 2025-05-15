@@ -24,8 +24,7 @@ public class ConnectedState extends ClientControllerState {
 	private final Thread consumer_thread;
 	private final ThreadSafeMessageQueue<ServerMessage> outqueue;
 	private final Thread sender_thread;
-
-	private Thread cbt;
+	private final Thread commandbuilder_thread;
 
 	public ConnectedState(ClientController controller, ClientView view, String username, ServerConnection connection, ThreadSafeMessageQueue<ClientMessage> inqueue){
 		super(controller, view);
@@ -34,14 +33,15 @@ public class ConnectedState extends ClientControllerState {
 		this.consumer_thread = new ConsumerThread(this, inqueue);
 		this.outqueue = new ThreadSafeMessageQueue<>(100);
 		this.sender_thread = new SenderThread(this.outqueue, this.connection);
+		this.commandbuilder_thread = new InputCommandTask(this);
 	}
 
 	@Override
 	public void init(){
 		this.startPingTask();
 		consumer_thread.start();
-		this.cbt = new InputCommandTask(this);
-        this.cbt.start();
+		sender_thread.start();
+        commandbuilder_thread.start();
 	}
 
 	@Override
