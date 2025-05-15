@@ -8,7 +8,7 @@ public class ServerMain {
 
 	public static void main(String[] args) {
 		if (args.length < 2 || args.length > 3) {
-			System.out.println("Jar must be launched with \"<jar name> <tcp address> [tcp port] <rmi port>\" !");
+			System.out.println("Usage: java -jar <jar name> <tcp address> [tcp port] <rmi port>");
 			System.exit(-1);
 		}
 		Logger l = Logger.getInstance();
