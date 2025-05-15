@@ -61,7 +61,7 @@ public class LobbyController extends Thread implements VirtualServer {
 				ServerMessage mess = queue.take();
 				synchronized(model){
 					mess.receive(this);
-					running = this.model.getState() == null;
+					running = this.model.getState() != null;
 				}
             } catch (ForbiddenCallException e) {
                 System.out.println(e.getMessage());
@@ -115,7 +115,7 @@ public class LobbyController extends Thread implements VirtualServer {
 	}
 
     public void endGame(){
-		System.out.println("Game id: "+this.id+" finished!");
+		System.out.println("Game id: ["+this.id+"] finished!");
 		if(this.model.getState() == null){
 			File f = new File(this.serializer_path);
         	f.delete();

@@ -401,6 +401,7 @@ public class MainServerController extends Thread implements VirtualServer {
             }
             this.stp_listeners.remove(client.getUsername());
         }
+        System.out.println("Client: '"+client.getUsername()+"' has left setup state!");
         this.notifyLobbyListeners();
     }
 
@@ -417,6 +418,7 @@ public class MainServerController extends Thread implements VirtualServer {
             this.stp_listeners.remove(client.getUsername());
             this.lob_listeners.remove(client.getUsername());
         }
+        System.out.println("Client: '"+client.getUsername()+"' opened a new lobby! [Type: "+type+" | Size: "+count+"]");
         LobbyController new_lobby = new LobbyController(this.next_id);
         ModelInstance model = new ModelInstance(this.next_id, new_lobby, type, count);
         new_lobby.setModel(model);
@@ -427,7 +429,6 @@ public class MainServerController extends Thread implements VirtualServer {
         }
         client.setID(new_lobby.getID());
         new_lobby.connect(client);
-        System.out.println("Client: '"+client.getUsername()+"' opened a new lobby! [Type: "+model.getState().getType()+" | Size: "+model.getState().getCount()+"]");
         this.notifyLobbyListeners();
 	}
 
@@ -468,6 +469,7 @@ public class MainServerController extends Thread implements VirtualServer {
             }
         }
         this.updateUnfinishedList();
+        System.out.println("Client: '"+client.getUsername()+"' opened a new lobby! [Type: "+loaded.getState().getType()+" | Size: "+loaded.getState().getCount()+"]");
         LobbyController new_lobby = new LobbyController(id);
         loaded.setController(new_lobby);
         loaded.afterSerialRestart();
@@ -478,7 +480,6 @@ public class MainServerController extends Thread implements VirtualServer {
         }
         client.setID(new_lobby.getID());
         new_lobby.connect(client);
-        System.out.println("Client: '"+client.getUsername()+"' opened a new lobby! [Type: "+loaded.getState().getType()+" | Size: "+loaded.getState().getCount()+"]");
         this.notifyLobbyListeners();
 	}
 
@@ -491,6 +492,9 @@ public class MainServerController extends Thread implements VirtualServer {
                 l.interrupt();
             } catch (SecurityException e){
                 e.printStackTrace();
+            }
+            for(StackTraceElement e : Thread.currentThread().getStackTrace()){
+                System.out.println(e);
             }
             System.out.println("Game ["+id+"] ended, closing its controller!");
         }
