@@ -1,51 +1,51 @@
 package it.polimi.ingsw.model.client.player;
 
-import java.io.Serializable;
-
 import it.polimi.ingsw.model.player.PlayerColor;
 
+import java.io.Serializable;
+
 public class ClientEndgamePlayer implements Serializable {
-    
-    private final String username;
-    private final PlayerColor color;
-    private final int planche_slot;
-    private final int credits;
-    private final int[] shipments;
-    private final int score; 
 
-    public ClientEndgamePlayer(String username, PlayerColor color, int planche_slot, int credits, int[] shipments, int score){
-        if(username == null || shipments==null || color == PlayerColor.NONE) throw new NullPointerException();
-        if(shipments.length!=5) throw new IllegalArgumentException(); 
-        this.username = username;
-        this.color = color;
-        this.planche_slot = planche_slot;
-        this.credits = credits;
-        this.shipments = shipments;
-        this.score = score;
-    }
+	private final String username;
+	private final PlayerColor color;
+	private final int planche_slot;
+	private final int credits;
+	private final int[] shipments;
+	private final int score;
 
-    public String getUsername() {
-        return this.username;
-    }
+	public ClientEndgamePlayer(String username, PlayerColor color, int planche_slot, int credits, int[] shipments, int score) {
+		if (username == null || shipments == null || color == PlayerColor.NONE) throw new NullPointerException();
+		if (shipments.length != 5) throw new IllegalArgumentException();
+		this.username = username;
+		this.color = color;
+		this.planche_slot = planche_slot;
+		this.credits = credits;
+		this.shipments = shipments;
+		this.score = score;
+	}
 
-    public PlayerColor getColor() {
-        return this.color;
-    }
+	public String getUsername() {
+		return this.username;
+	}
 
-    public int getPlanche_slot() {
-        return this.planche_slot;
-    }
+	public PlayerColor getColor() {
+		return this.color;
+	}
 
-    public int getCredits() {
-        return this.credits;
-    }
+	public int getPlanche_slot() {
+		return this.planche_slot;
+	}
 
-    public int[] getShipments() {
-        return this.shipments;
-    }
+	public int getCredits() {
+		return this.credits;
+	}
 
-    public int getScore() {
-        return this.score;
-    }
+	public int[] getShipments() {
+		return this.shipments;
+	}
+
+	public int getScore() {
+		return this.score;
+	}
 
 }

@@ -5,9 +5,9 @@ import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 
 public class LeaveSetupMessage extends ServerMessage {
 
-    @Override
-    public void receive(MainServerController server) throws ForbiddenCallException {
-        server.leaveSetup(descriptor);
-    }
-    
+	@Override
+	public void receive(MainServerController server) throws ForbiddenCallException {
+		server.leaveSetup(descriptor);
+	}
+
 }

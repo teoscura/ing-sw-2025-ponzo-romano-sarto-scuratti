@@ -338,7 +338,7 @@ class SpaceShipTest {
 	void handleMeteorite() {
 		Projectile missed_meteor = new Projectile(ProjectileDirection.U180, ProjectileDimension.SMALL, 2);
 		ship.handleMeteorite(missed_meteor);
-		assertTrue(1==ship.getBlobsSize());
+		assertEquals(1, ship.getBlobsSize());
 		ConnectorType[] connectors = {ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.UNIVERSAL, ConnectorType.EMPTY};
 		ShipCoords coords = new ShipCoords(GameModeType.LVL2, 2, 2);
 		CannonComponent cannon = new CannonComponent(1, connectors, ComponentRotation.U000, CannonType.SINGLE, coords);
@@ -352,7 +352,7 @@ class SpaceShipTest {
 	void handleShot() {
 		Projectile missed_shot = new Projectile(ProjectileDirection.U180, ProjectileDimension.SMALL, 2);
 		ship.handleShot(missed_shot);
-		assertTrue(1==ship.getBlobsSize());
+		assertEquals(1, ship.getBlobsSize());
 
 		ConnectorType[] connectors = {ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.UNIVERSAL, ConnectorType.EMPTY};
 		ShipCoords coords = new ShipCoords(GameModeType.LVL2, 2, 2);

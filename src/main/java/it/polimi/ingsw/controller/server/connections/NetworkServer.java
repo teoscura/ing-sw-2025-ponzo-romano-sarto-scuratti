@@ -1,5 +1,8 @@
 package it.polimi.ingsw.controller.server.connections;
 
+import it.polimi.ingsw.controller.server.ClientDescriptor;
+import it.polimi.ingsw.controller.server.MainServerController;
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.lang.reflect.InaccessibleObjectException;
@@ -18,9 +21,6 @@ import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import it.polimi.ingsw.controller.server.ClientDescriptor;
-import it.polimi.ingsw.controller.server.MainServerController;
-
 public class NetworkServer extends Thread implements RMISkeletonProvider, Serializable {
 
 	private final ExecutorService serverPool;
@@ -33,29 +33,29 @@ public class NetworkServer extends Thread implements RMISkeletonProvider, Serial
 		this.serverPool = new ThreadPoolExecutor(20, 120, Long.MAX_VALUE, TimeUnit.MILLISECONDS, new SynchronousQueue<>(true));
 	}
 
-	public void init(String address, int tcpport, int rmiport){
-        if(this.init) throw new AlreadyConnectedException();
+	public void init(String address, int tcpport, int rmiport) {
+		if (this.init) throw new AlreadyConnectedException();
 		this.ip = address;
 		this.tcpport = tcpport;
 		this.rmiport = rmiport;
 		this.init = true;
-    }
+	}
 
-	public void init(String address, int rmiport){
-        if(this.init) throw new AlreadyConnectedException();
+	public void init(String address, int rmiport) {
+		if (this.init) throw new AlreadyConnectedException();
 		this.ip = address;
 		this.tcpport = 0;
 		this.rmiport = rmiport;
 		this.init = true;
-    }
+	}
 
-	private void startServer(){
+	private void startServer() {
 		Registry registry = null;
 		try {
 			registry = LocateRegistry.createRegistry(this.rmiport);
 			registry.bind("galaxy_truckers", this);
 			UnicastRemoteObject.exportObject(this, this.rmiport);
-			System.out.println("Set up RMI on address: '"+this.ip+":"+this.rmiport+"'...");
+			System.out.println("Set up RMI on address: '" + this.ip + ":" + this.rmiport + "'...");
 			Runtime.getRuntime().addShutdownHook(this.RMICleanup());
 		} catch (RemoteException e) {
 			System.out.println("Failed to setup the rmi registry and remote object.");
@@ -68,7 +68,7 @@ public class NetworkServer extends Thread implements RMISkeletonProvider, Serial
 		try {
 			this.server = new ServerSocket();
 			this.server.bind(new InetSocketAddress(this.ip, this.tcpport));
-			System.out.println("Started server on: '"+ip+":"+this.server.getLocalPort()+"'...");
+			System.out.println("Started server on: '" + ip + ":" + this.server.getLocalPort() + "'...");
 			Runtime.getRuntime().addShutdownHook(this.TCPCleanup());
 		} catch (IOException e) {
 			System.out.println("Couldn't start server on the specified address and port, terminating.");
@@ -80,8 +80,8 @@ public class NetworkServer extends Thread implements RMISkeletonProvider, Serial
 
 	@Override
 	public void run() {
-		if(!this.init) throw new NotYetConnectedException();
-		this.startServer();	
+		if (!this.init) throw new NotYetConnectedException();
+		this.startServer();
 		try {
 			while (true) {
 				SocketClient new_connection = new SocketClient(server.accept());
@@ -99,26 +99,28 @@ public class NetworkServer extends Thread implements RMISkeletonProvider, Serial
 		}
 	}
 
-	private Thread RMICleanup(){
-		return new Thread(){
-			public void run(){
+	private Thread RMICleanup() {
+		return new Thread() {
+			public void run() {
 				try {
 					this.interrupt();
 					Registry registry = LocateRegistry.getRegistry();
 					registry.unbind("galaxy_truckers");
-				} catch (RemoteException | NotBoundException e) {}
+				} catch (RemoteException | NotBoundException e) {
+				}
 				System.out.println("Cleaned up RMI connection.");
 			}
 		};
 	}
 
-	private Thread TCPCleanup(){
-		return new Thread(){
-			public void run(){
+	private Thread TCPCleanup() {
+		return new Thread() {
+			public void run() {
 				try {
 					this.interrupt();
 					server.close();
-				} catch (IOException e) {}
+				} catch (IOException e) {
+				}
 				System.out.println("Cleaned up TCP connection.");
 			}
 		};

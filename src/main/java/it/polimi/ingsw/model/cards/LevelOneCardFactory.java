@@ -1,20 +1,14 @@
 package it.polimi.ingsw.model.cards;
 
+import it.polimi.ingsw.model.cards.utils.*;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import it.polimi.ingsw.model.cards.utils.*;
-
 public class LevelOneCardFactory implements iCardFactory {
 
 	private final HashMap<Integer, iCard> cards;
-
-	@Override
-	public iCard getCard(int id) {
-		if (!this.cards.containsKey(id)) throw new IllegalArgumentException("Non valid card id.");
-		return this.cards.get(id);
-	}
 
 	public LevelOneCardFactory() {
 		this.cards = new HashMap<Integer, iCard>() {{
@@ -109,6 +103,12 @@ public class LevelOneCardFactory implements iCardFactory {
 					6)
 			);
 		}};
+	}
+
+	@Override
+	public iCard getCard(int id) {
+		if (!this.cards.containsKey(id)) throw new IllegalArgumentException("Non valid card id.");
+		return this.cards.get(id);
 	}
 
 }

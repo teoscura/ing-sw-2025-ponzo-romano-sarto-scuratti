@@ -15,9 +15,9 @@ public class ServerConnectMessage extends ServerMessage {
 	}
 
 	@Override
-    public void receive(MainServerController server) throws ForbiddenCallException {
-        server.connect(this.descriptor);
-    }
+	public void receive(MainServerController server) throws ForbiddenCallException {
+		server.connect(this.descriptor);
+	}
 
 	@Override
 	public void receive(LobbyController server) throws ForbiddenCallException {
@@ -26,12 +26,13 @@ public class ServerConnectMessage extends ServerMessage {
 
 	@Override
 	public void receive(ModelInstance model) throws ForbiddenCallException {
-		if(descriptor.getPlayer()==null) model.connect(descriptor);
+		if (descriptor.getPlayer() == null) model.connect(descriptor);
 		else model.connect(this.descriptor.getPlayer());
 	}
+
 	@Override
 	public void receive(GameState state) throws ForbiddenCallException {
-		if(this.descriptor.getPlayer()==null) state.connect(descriptor);
+		if (this.descriptor.getPlayer() == null) state.connect(descriptor);
 		else state.connect(this.descriptor.getPlayer());
 	}
 

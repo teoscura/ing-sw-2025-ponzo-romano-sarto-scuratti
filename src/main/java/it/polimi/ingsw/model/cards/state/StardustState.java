@@ -1,7 +1,5 @@
 package it.polimi.ingsw.model.cards.state;
 
-import java.util.ArrayList;
-
 import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
@@ -15,6 +13,8 @@ import it.polimi.ingsw.model.client.state.ClientState;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.state.VoyageState;
+
+import java.util.ArrayList;
 
 public class StardustState extends CardState {
 
@@ -32,8 +32,8 @@ public class StardustState extends CardState {
 	public void init(ClientState new_state) {
 		super.init(new_state);
 		System.out.println("New CardState -> Stardust State!");
-		for(Player p : this.state.getOrder(CardOrder.NORMAL)){
-			System.out.println("	 - "+p.getUsername());
+		for (Player p : this.state.getOrder(CardOrder.NORMAL)) {
+			System.out.println("	 - " + p.getUsername());
 		}
 	}
 
@@ -70,17 +70,15 @@ public class StardustState extends CardState {
 	}
 
 	@Override
-    public CardState getNext() {
+	public CardState getNext() {
 		System.out.println("Card exhausted, moving to a new one!");
 		return null;
 	}
 
 	@Override
 	public void disconnect(Player p) throws ForbiddenCallException {
-		if (this.awaiting.contains(p)) {
-			this.awaiting.remove(p);
-		}
-		
+		this.awaiting.remove(p);
+
 	}
 
 }

@@ -1,10 +1,5 @@
 package it.polimi.ingsw.controller.client.state;
 
-import java.io.IOException;
-import java.rmi.RemoteException;
-import java.util.Timer;
-import java.util.TimerTask;
-
 import it.polimi.ingsw.controller.ThreadSafeMessageQueue;
 import it.polimi.ingsw.controller.client.ClientController;
 import it.polimi.ingsw.controller.client.ConsumerThread;
@@ -17,9 +12,14 @@ import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.view.ClientView;
 import it.polimi.ingsw.view.commandbuilder.InputCommandTask;
 
+import java.io.IOException;
+import java.rmi.RemoteException;
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class ConnectedState extends ClientControllerState {
 
-    private final ServerConnection connection;
+	private final ServerConnection connection;
 	private final ThreadSafeMessageQueue<ServerMessage> outqueue;
 	private final String username;
 	private final Thread consumer_thread;
@@ -27,7 +27,7 @@ public class ConnectedState extends ClientControllerState {
 	private final Thread commandbuilder_thread;
 	private final Thread shutdown_hook;
 
-	public ConnectedState(ClientController controller, ClientView view, String username, ServerConnection connection, ThreadSafeMessageQueue<ClientMessage> inqueue){
+	public ConnectedState(ClientController controller, ClientView view, String username, ServerConnection connection, ThreadSafeMessageQueue<ClientMessage> inqueue) {
 		super(controller, view);
 		this.username = username;
 		this.connection = connection;
@@ -39,16 +39,16 @@ public class ConnectedState extends ClientControllerState {
 	}
 
 	@Override
-	public void init(){
+	public void init() {
 		Runtime.getRuntime().addShutdownHook(this.shutdown_hook);
 		this.startPingTask();
 		consumer_thread.start();
 		sender_thread.start();
-        commandbuilder_thread.start();
+		commandbuilder_thread.start();
 	}
 
 	@Override
-	public ClientControllerState getNext(){
+	public ClientControllerState getNext() {
 		return new TitleScreenState(controller, view);
 	}
 
@@ -59,21 +59,21 @@ public class ConnectedState extends ClientControllerState {
 	}
 
 	// -------------------------------------------------------------
-    // Communication methods
-    // -------------------------------------------------------------
+	// Communication methods
+	// -------------------------------------------------------------
 
 	@Override
 	public void sendMessage(ServerMessage message) {
 		this.outqueue.insert(message);
 	}
 
-    public void disconnect() {
+	public void disconnect() {
 		try {
 			this.connection.sendMessage(new ServerDisconnectMessage());
-            this.connection.close();
+			this.connection.close();
 			this.sender_thread.interrupt();
 			this.consumer_thread.interrupt();
-            this.controller.reset();
+			this.controller.reset();
 		} catch (RemoteException e) {
 			this.controller.reset();
 		} catch (IOException e) {
@@ -82,14 +82,14 @@ public class ConnectedState extends ClientControllerState {
 	}
 
 	// -------------------------------------------------------------
-    // View methods
-    // -------------------------------------------------------------
+	// View methods
+	// -------------------------------------------------------------
 
-	public ClientView getView(){
+	public ClientView getView() {
 		return this.view;
 	}
 
-	public String getUsername(){
+	public String getUsername() {
 		return username;
 	}
 
@@ -98,8 +98,8 @@ public class ConnectedState extends ClientControllerState {
 	}
 
 	// -------------------------------------------------------------
-    // Ping and disconnection resilience methods.
-    // -------------------------------------------------------------
+	// Ping and disconnection resilience methods.
+	// -------------------------------------------------------------
 
 	private void startPingTask() {
 		Timer t = new Timer(true);
@@ -118,7 +118,7 @@ public class ConnectedState extends ClientControllerState {
 		this.sendMessage(new PingMessage());
 	}
 
-	private Thread getShutdownHook(){
+	private Thread getShutdownHook() {
 		return this.connection.getShutdownHook();
 	}
 

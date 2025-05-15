@@ -1,11 +1,11 @@
 package it.polimi.ingsw.controller.server.connections;
 
-import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
-
 import it.polimi.ingsw.controller.server.ClientDescriptor;
 import it.polimi.ingsw.controller.server.MainServerController;
 import it.polimi.ingsw.message.server.ServerMessage;
+
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 
 public class RMIServerStubImpl extends UnicastRemoteObject implements VirtualServer {
 

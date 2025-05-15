@@ -8,7 +8,8 @@ import it.polimi.ingsw.model.components.exceptions.ContainerFullException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class BatteryComponentTest {
 
@@ -17,8 +18,8 @@ class BatteryComponentTest {
 
 	@BeforeEach
 	void setup() {
-		ConnectorType[] connectors = { ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL,
-				ConnectorType.UNIVERSAL };
+		ConnectorType[] connectors = {ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL,
+				ConnectorType.UNIVERSAL};
 		component2 = new BatteryComponent(1, connectors, ComponentRotation.U000, BatteryType.DOUBLE);
 		component3 = new BatteryComponent(1, connectors, ComponentRotation.U000, BatteryType.TRIPLE);
 
@@ -41,7 +42,7 @@ class BatteryComponentTest {
 	}
 
 	@Test
-	void takeOne(){
+	void takeOne() {
 		component2.takeOne();
 		assertEquals(1, component2.getContains());
 		component2.takeOne();
@@ -49,7 +50,7 @@ class BatteryComponentTest {
 	}
 
 	@Test
-	void putOne(){
+	void putOne() {
 		assertThrows(ContainerFullException.class, () -> component2.putOne());
 		component2.takeOne();
 		component2.takeOne();

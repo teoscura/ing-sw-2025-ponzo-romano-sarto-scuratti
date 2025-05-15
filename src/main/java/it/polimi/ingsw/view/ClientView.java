@@ -1,10 +1,10 @@
 package it.polimi.ingsw.view;
 
-import it.polimi.ingsw.model.client.state.*;
 import it.polimi.ingsw.controller.client.state.ConnectingState;
 import it.polimi.ingsw.controller.client.state.TitleScreenState;
 import it.polimi.ingsw.model.client.card.*;
 import it.polimi.ingsw.model.client.components.*;
+import it.polimi.ingsw.model.client.state.*;
 
 public interface ClientView {
 	//Game states
@@ -61,8 +61,8 @@ public interface ClientView {
 	//Misc and debug
 	void showTextMessage(String message);
 
-    void showTitleScreen(TitleScreenState titlesScreenState);
+	void showTitleScreen(TitleScreenState titlesScreenState);
 
-    void showConnectionScreen(ConnectingState connectingState);
+	void showConnectionScreen(ConnectingState connectingState);
 
 }

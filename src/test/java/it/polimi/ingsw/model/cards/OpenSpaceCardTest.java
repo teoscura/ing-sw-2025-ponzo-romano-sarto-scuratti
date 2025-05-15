@@ -13,8 +13,9 @@ import it.polimi.ingsw.model.board.Planche;
 import it.polimi.ingsw.model.board.TestFlightCards;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.cards.state.CardState;
-import it.polimi.ingsw.model.components.*;
-import it.polimi.ingsw.model.components.enums.*;
+import it.polimi.ingsw.model.components.BaseComponent;
+import it.polimi.ingsw.model.components.ComponentFactory;
+import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.ShipCoords;
@@ -29,15 +30,14 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class OpenSpaceCardTest {
 
+	Player dummy3;
+	Player dummy4;
+	Player dummy5;
 	private DummyModelInstance model;
 	private DummyVoyageState state;
 	private Planche planche;
 	private OpenSpaceCard card;
 	private CardState cstate;
-
-	Player dummy3;
-	Player dummy4;
-	Player dummy5;
 
 	@BeforeEach
 	void setUp() {
@@ -65,12 +65,12 @@ class OpenSpaceCardTest {
 		c.rotate(ComponentRotation.U000);
 		dummy5.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 4, 3));
 
-		ArrayList<Player> order = new ArrayList<>(Arrays.asList(new Player[]{dummy3, dummy4, dummy5}));
-		ArrayList<Player> players = new ArrayList<>(Arrays.asList(new Player[]{dummy3, dummy4, dummy5}));
+		ArrayList<Player> order = new ArrayList<>(Arrays.asList(dummy3, dummy4, dummy5));
+		ArrayList<Player> players = new ArrayList<>(Arrays.asList(dummy3, dummy4, dummy5));
 
 		model = new DummyModelInstance(1, GameModeType.LVL2, PlayerCount.THREE);
 		model.setController(new DummyController(model.getID()));
-		
+
 		TestFlightCards cards = new TestFlightCards();
 		planche = new Planche(GameModeType.LVL2, order);
 		state = new DummyVoyageState(model, GameModeType.LVL2, PlayerCount.THREE, players, cards, planche);
@@ -105,19 +105,27 @@ class OpenSpaceCardTest {
 				new ShipCoords(GameModeType.TEST, 4, 3),  // se metto 3 3 da il giusto errore cercando di accendere un motore singolo
 				new ShipCoords(GameModeType.TEST, 2, 2)
 		);
-		turnOnDummy5.setDescriptor(new ClientDescriptor(dummy5.getUsername(), new DummyConnection()) {{ bindPlayer(dummy5); }});
+		turnOnDummy5.setDescriptor(new ClientDescriptor(dummy5.getUsername(), new DummyConnection()) {{
+			bindPlayer(dummy5);
+		}});
 		state.validate(turnOnDummy5);
 
 		ServerMessage continueDummy3 = new SendContinueMessage();
-		continueDummy3.setDescriptor(new ClientDescriptor(dummy3.getUsername(), new DummyConnection()) {{ bindPlayer(dummy3); }});
+		continueDummy3.setDescriptor(new ClientDescriptor(dummy3.getUsername(), new DummyConnection()) {{
+			bindPlayer(dummy3);
+		}});
 		state.validate(continueDummy3);
 
 		ServerMessage continueDummy4 = new SendContinueMessage();
-		continueDummy4.setDescriptor(new ClientDescriptor(dummy4.getUsername(), new DummyConnection()) {{ bindPlayer(dummy4); }});
+		continueDummy4.setDescriptor(new ClientDescriptor(dummy4.getUsername(), new DummyConnection()) {{
+			bindPlayer(dummy4);
+		}});
 		state.validate(continueDummy4);
 
 		ServerMessage continueDummy5 = new SendContinueMessage();
-		continueDummy5.setDescriptor(new ClientDescriptor(dummy5.getUsername(), new DummyConnection()) {{ bindPlayer(dummy5); }});
+		continueDummy5.setDescriptor(new ClientDescriptor(dummy5.getUsername(), new DummyConnection()) {{
+			bindPlayer(dummy5);
+		}});
 		state.validate(continueDummy5);
 
 		assertTrue(dummy3.getRetired());

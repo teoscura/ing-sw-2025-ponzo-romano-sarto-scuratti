@@ -5,16 +5,16 @@ import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 
 public class OpenUnfinishedMessage extends ServerMessage {
 
-    private final int id;
+	private final int id;
 
-    public OpenUnfinishedMessage(int id){
-        if(id<-1) throw new IllegalArgumentException();
-        this.id = id;
-    }
+	public OpenUnfinishedMessage(int id) {
+		if (id < -1) throw new IllegalArgumentException();
+		this.id = id;
+	}
 
-    @Override
-    public void receive(MainServerController server) throws ForbiddenCallException {
-        server.openUnfinished(descriptor, id);
-    }
-    
+	@Override
+	public void receive(MainServerController server) throws ForbiddenCallException {
+		server.openUnfinished(descriptor, id);
+	}
+
 }

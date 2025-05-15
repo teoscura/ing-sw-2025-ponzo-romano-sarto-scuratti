@@ -7,36 +7,36 @@ import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.state.GameState;
 
 public class DiscardComponentMessage extends ServerMessage {
-    
-    private final int id;
 
-    public DiscardComponentMessage(int id){
-        if(id <= 0 || id > 156) throw new IllegalArgumentException();
-        this.id = id;
-    }
+	private final int id;
 
-    @Override
-    public void receive(MainServerController server) throws ForbiddenCallException {
-        return;
-    }
+	public DiscardComponentMessage(int id) {
+		if (id <= 0 || id > 156) throw new IllegalArgumentException();
+		this.id = id;
+	}
 
-    @Override
-    public void receive(LobbyController server) throws ForbiddenCallException {
-        if(this.descriptor.getPlayer()==null) throw new ForbiddenCallException("Descriptor associated to message isn't bound to player");
-        server.getModel().validate(this);
-    }
+	@Override
+	public void receive(MainServerController server) throws ForbiddenCallException {
+	}
 
-    @Override
-    public void receive(ModelInstance instance) throws ForbiddenCallException {
-        instance.getState().validate(this);
-    }
+	@Override
+	public void receive(LobbyController server) throws ForbiddenCallException {
+		if (this.descriptor.getPlayer() == null)
+			throw new ForbiddenCallException("Descriptor associated to message isn't bound to player");
+		server.getModel().validate(this);
+	}
 
-    @Override
-    public void receive(GameState state) throws ForbiddenCallException {
-        state.discardComponent(this.descriptor.getPlayer(), id);
-    }
+	@Override
+	public void receive(ModelInstance instance) throws ForbiddenCallException {
+		instance.getState().validate(this);
+	}
 
-    public int getId(){
+	@Override
+	public void receive(GameState state) throws ForbiddenCallException {
+		state.discardComponent(this.descriptor.getPlayer(), id);
+	}
+
+	public int getId() {
 		return id;
 	}
 

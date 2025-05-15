@@ -1,12 +1,12 @@
 package it.polimi.ingsw.model.board;
 
+import it.polimi.ingsw.model.components.BaseComponent;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import it.polimi.ingsw.model.components.BaseComponent;
-
 public interface iCommonBoard extends Serializable {
-	
+
 	int getCoveredSize();
 
 	BaseComponent pullComponent();

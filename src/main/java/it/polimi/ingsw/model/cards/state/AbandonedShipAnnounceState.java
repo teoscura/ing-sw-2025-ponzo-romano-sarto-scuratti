@@ -1,9 +1,5 @@
 package it.polimi.ingsw.model.cards.state;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
@@ -15,6 +11,9 @@ import it.polimi.ingsw.model.client.card.ClientLandingCardStateDecorator;
 import it.polimi.ingsw.model.client.state.ClientState;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.state.VoyageState;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AbandonedShipAnnounceState extends CardState {
 
@@ -35,10 +34,11 @@ public class AbandonedShipAnnounceState extends CardState {
 	@Override
 	public void init(ClientState new_state) {
 		super.init(new_state);
-		if(list.size()==this.state.getCount().getNumber()) System.out.println("New CardState -> Abandoned Ship Announce State!");
+		if (list.size() == this.state.getCount().getNumber())
+			System.out.println("New CardState -> Abandoned Ship Announce State!");
 		else System.out.println("    CardState -> Abandoned Ship Announce State!");
-		for(Player p : this.list){
-			System.out.println("	 - "+p.getUsername());
+		for (Player p : this.list) {
+			System.out.println("	 - " + p.getUsername());
 		}
 	}
 
@@ -49,9 +49,9 @@ public class AbandonedShipAnnounceState extends CardState {
 			this.state.broadcastMessage(new NotifyStateUpdateMessage(this.state.getClientState()));
 			return;
 		}
-		try{
+		try {
 			this.card.apply(state, this.list.getFirst(), id);
-		} catch (IllegalArgumentException e){
+		} catch (IllegalArgumentException e) {
 			System.out.println("Player '" + this.list.getFirst().getUsername() + "' attempted to land without enough crew!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + this.list.getFirst().getUsername() + "' attempted to land without enough crew!"));
 			this.responded = false;
@@ -62,7 +62,7 @@ public class AbandonedShipAnnounceState extends CardState {
 
 	@Override
 	public ClientCardState getClientCardState() {
-		ArrayList<Boolean> tmp = new ArrayList<>(Arrays.asList(true));
+		ArrayList<Boolean> tmp = new ArrayList<>(List.of(true));
 		return new ClientLandingCardStateDecorator(new ClientBaseCardState(this.card.getId()),
 				this.list.getFirst().getColor(),
 				this.card.getDays(),
@@ -71,8 +71,8 @@ public class AbandonedShipAnnounceState extends CardState {
 	}
 
 	@Override
-    public CardState getNext() {
-		if (this.list.getFirst().getDisconnected()){
+	public CardState getNext() {
+		if (this.list.getFirst().getDisconnected()) {
 			this.list.removeFirst();
 			return new AbandonedShipAnnounceState(state, card, list);
 		}
@@ -103,10 +103,7 @@ public class AbandonedShipAnnounceState extends CardState {
 		if (this.list.getFirst().equals(p)) {
 			this.responded = true;
 			this.id = -1;
-		}
-		else if (this.list.contains(p)) {
-			this.list.remove(p);
-		}
+		} else this.list.remove(p);
 	}
 
 }

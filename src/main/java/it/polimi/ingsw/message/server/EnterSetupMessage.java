@@ -5,9 +5,9 @@ import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 
 public class EnterSetupMessage extends ServerMessage {
 
-    @Override
-    public void receive(MainServerController server) throws ForbiddenCallException {
-        server.enterSetup(descriptor);
-    }
-    
+	@Override
+	public void receive(MainServerController server) throws ForbiddenCallException {
+		server.enterSetup(descriptor);
+	}
+
 }

@@ -1,13 +1,5 @@
 package it.polimi.ingsw.controller.server;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.util.HashMap;
-import java.util.Timer;
-import java.util.TimerTask;
-
 import it.polimi.ingsw.controller.ThreadSafeMessageQueue;
 import it.polimi.ingsw.controller.server.connections.VirtualServer;
 import it.polimi.ingsw.message.client.ClientMessage;
@@ -18,58 +10,61 @@ import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.client.ClientGameListEntry;
 import it.polimi.ingsw.model.player.Player;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class LobbyController extends Thread implements VirtualServer {
 
-    private final int id;
+	private final int id;
 
-    private final HashMap<String, ClientDescriptor> listeners;
-    private final HashMap<String, Player> disconnected_usernames;
+	private final HashMap<String, ClientDescriptor> listeners;
+	private final HashMap<String, Player> disconnected_usernames;
 	private final Object listeners_lock;
-    private final ThreadSafeMessageQueue<ServerMessage> queue;
-    private final String serializer_path;
-
-    private ModelInstance model;
+	private final ThreadSafeMessageQueue<ServerMessage> queue;
+	private final String serializer_path;
 	private final Object model_lock;
+	private ModelInstance model;
 	private Timer dsctimer = null;
 
 
-    public LobbyController(int id){
-        if(id<0) throw new IllegalArgumentException();
+	public LobbyController(int id) {
+		if (id < 0) throw new IllegalArgumentException();
 		this.listeners = new HashMap<>();
 		this.disconnected_usernames = new HashMap<>();
 		this.listeners_lock = new Object();
 		this.queue = new ThreadSafeMessageQueue<>(100);
-        this.id = id;
+		this.id = id;
 		this.model_lock = new Object();
-        this.serializer_path = "gtunfinished-" + this.id + ".gtuf";
-    }
+		this.serializer_path = "gtunfinished-" + this.id + ".gtuf";
+	}
 
-	public int getID(){
+	public int getID() {
 		return this.id;
 	}
 
-	public void setModel(ModelInstance model){
-		this.model = model;
-	}
-
-    @Override
+	@Override
 	public void run() {
-		if(model == null) throw new NullPointerException();
+		if (model == null) throw new NullPointerException();
 		boolean running = true;
 		while (running) {
 			try {
 				ServerMessage mess = queue.take();
-				synchronized(model){
+				synchronized (model) {
 					mess.receive(this);
 					running = this.model.getState() != null;
 				}
-            } catch (ForbiddenCallException e) {
-                System.out.println(e.getMessage());
-            } catch (InterruptedException e) {
-                System.out.println("Shutting down lobby "+this.id+" thread!");
-            }
+			} catch (ForbiddenCallException e) {
+				System.out.println(e.getMessage());
+			} catch (InterruptedException e) {
+				System.out.println("Shutting down lobby " + this.id + " thread!");
+			}
 		}
-        this.endGame();
+		this.endGame();
 	}
 
 	public void receiveMessage(ServerMessage message) {
@@ -79,7 +74,6 @@ public class LobbyController extends Thread implements VirtualServer {
 			return;
 		}
 		this.queue.insert(message);
-		return;
 	}
 
 	public void broadcast(ClientMessage message) {
@@ -90,22 +84,26 @@ public class LobbyController extends Thread implements VirtualServer {
 		}
 	}
 
-	public void sendMessage(ClientDescriptor client, ClientMessage message){
-        try {
-            client.sendMessage(message);
-        } catch (IOException e) {
-            MainServerController.getInstance().disconnect(client);
-        }
-    }
+	public void sendMessage(ClientDescriptor client, ClientMessage message) {
+		try {
+			client.sendMessage(message);
+		} catch (IOException e) {
+			MainServerController.getInstance().disconnect(client);
+		}
+	}
 
-    public ModelInstance getModel() throws ForbiddenCallException {
+	public ModelInstance getModel() throws ForbiddenCallException {
 		return this.model;
 	}
 
-    public void serializeCurrentGame() {
-		synchronized(model_lock){
+	public void setModel(ModelInstance model) {
+		this.model = model;
+	}
+
+	public void serializeCurrentGame() {
+		synchronized (model_lock) {
 			try (FileOutputStream file = new FileOutputStream(this.serializer_path);
-			ObjectOutputStream oos = new ObjectOutputStream(file)) {
+				 ObjectOutputStream oos = new ObjectOutputStream(file)) {
 				oos.reset();
 				oos.writeObject(this.model);
 				oos.reset();
@@ -117,21 +115,21 @@ public class LobbyController extends Thread implements VirtualServer {
 		}
 	}
 
-    public void endGame(){
-		System.out.println("Game id: ["+this.id+"] finished!");
-		if(this.model.getState() == null){
+	public void endGame() {
+		System.out.println("Game id: [" + this.id + "] finished!");
+		if (this.model.getState() == null) {
 			File f = new File(this.serializer_path);
-        	f.delete();
+			f.delete();
 		}
-        MainServerController s = MainServerController.getInstance();
-        for(var e : this.listeners.values()){
+		MainServerController s = MainServerController.getInstance();
+		for (var e : this.listeners.values()) {
 			s.joinFromEndedGame(e);
-        }
-        for(var e : this.disconnected_usernames.keySet()){
-            s.removeDisconnected(e);
-        }
+		}
+		for (var e : this.disconnected_usernames.keySet()) {
+			s.removeDisconnected(e);
+		}
 		s.gameFinishCleanup(this.id);
-    }
+	}
 
 	private TimerTask getEndMatchTask(LobbyController controller) {
 		return new TimerTask() {
@@ -145,7 +143,7 @@ public class LobbyController extends Thread implements VirtualServer {
 	//Connections and disconnections
 	public void connect(ClientDescriptor client) throws ForbiddenCallException {
 		boolean reconnect = false;
-		synchronized(listeners_lock){
+		synchronized (listeners_lock) {
 			if (this.listeners.containsKey(client.getUsername())) {
 				System.out.println("Client '" + client.getUsername() + "' attempted to connect twice!");
 				return;
@@ -153,7 +151,7 @@ public class LobbyController extends Thread implements VirtualServer {
 				this.disconnected_usernames.remove(client.getUsername());
 				client.bindPlayer(this.disconnected_usernames.get(client.getUsername()));
 				reconnect = true;
-		    } else {
+			} else {
 				this.listeners.put(client.getUsername(), client);
 			}
 		}
@@ -161,8 +159,7 @@ public class LobbyController extends Thread implements VirtualServer {
 			if (!model.getStarted()) {
 				System.out.println("Client '" + client.getUsername() + "' connected to waiting room!");
 				this.model.connect(client);
-				return;
-			} else if (reconnect){
+			} else if (reconnect) {
 				this.model.connect(client.getPlayer());
 				this.dsctimer.cancel();
 				this.dsctimer = null;
@@ -174,9 +171,9 @@ public class LobbyController extends Thread implements VirtualServer {
 
 	public void disconnect(ClientDescriptor client) {
 		MainServerController s = MainServerController.getInstance();
-		synchronized (listeners_lock){
+		synchronized (listeners_lock) {
 			if (!listeners.containsKey(client.getUsername())) {
-				System.out.println("Client '"+client.getUsername()+"' tried disconnecting from a lobby he was never connected to!");
+				System.out.println("Client '" + client.getUsername() + "' tried disconnecting from a lobby he was never connected to!");
 				return;
 			}
 			this.listeners.remove(client.getUsername());
@@ -199,16 +196,16 @@ public class LobbyController extends Thread implements VirtualServer {
 				this.model.disconnect(client.getPlayer());
 			} else if (!this.model.getStarted()) {
 				this.model.disconnect(client);
-			} if(this.model.getState() == null){
+			}
+			if (this.model.getState() == null) {
 				System.out.println("Babbo");
-				return;
 			}
 		}
 	}
 
 	public ClientGameListEntry getClientInfo() {
 		ClientGameListEntry entry = null;
-		synchronized(model_lock){
+		synchronized (model_lock) {
 			entry = this.model.getEntry();
 		}
 		return entry;

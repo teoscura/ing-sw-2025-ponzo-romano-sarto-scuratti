@@ -1,22 +1,22 @@
 package it.polimi.ingsw.model.cards.state;
 
-import java.util.ArrayList;
-
 import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.cards.SmugglersCard;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.cards.visitors.ContainsRemoveVisitor;
+import it.polimi.ingsw.model.client.card.ClientBaseCardState;
 import it.polimi.ingsw.model.client.card.ClientCardState;
 import it.polimi.ingsw.model.client.card.ClientCargoPenaltyCardStateDecorator;
 import it.polimi.ingsw.model.client.state.ClientState;
-import it.polimi.ingsw.model.client.card.ClientBaseCardState;
 import it.polimi.ingsw.model.components.enums.ShipmentType;
 import it.polimi.ingsw.model.components.exceptions.ContainerEmptyException;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.VoyageState;
+
+import java.util.ArrayList;
 
 public class SmugglersLoseState extends CardState {
 
@@ -31,11 +31,11 @@ public class SmugglersLoseState extends CardState {
 			throw new IllegalArgumentException("Created unsatisfyable state");
 		this.card = card;
 		this.list = list;
-		this.required = new int[]{0,0,0,0,0};
+		this.required = new int[]{0, 0, 0, 0, 0};
 		int pen = this.card.getCargoPenalty();
 		int idx = 4;
-		while(pen>=1){
-			if(idx<0) break;
+		while (pen >= 1) {
+			if (idx < 0) break;
 			this.required[idx] = pen - this.list.getFirst().getSpaceShip().getContains()[idx] >= 0 ? this.list.getFirst().getSpaceShip().getContains()[idx] : pen;
 			pen -= this.required[idx];
 			idx--;
@@ -46,9 +46,9 @@ public class SmugglersLoseState extends CardState {
 	public void init(ClientState new_state) {
 		super.init(new_state);
 		System.out.println("    CardState -> Smugglers Lose State!");
-		System.out.println("    Bat: "+required[0]+" Blu: "+required[1]+" Grn: "+required[2]+" Ylw: "+required[3]+" Red: "+required[4]);
-		for(Player p : this.list){
-			System.out.println("	 - "+p.getUsername());
+		System.out.println("    Bat: " + required[0] + " Blu: " + required[1] + " Grn: " + required[2] + " Ylw: " + required[3] + " Red: " + required[4]);
+		for (Player p : this.list) {
+			System.out.println("	 - " + p.getUsername());
 		}
 	}
 
@@ -72,7 +72,7 @@ public class SmugglersLoseState extends CardState {
 	}
 
 	@Override
-    public CardState getNext() {
+	public CardState getNext() {
 		if (this.list.getFirst().getDisconnected()) {
 			this.list.removeFirst();
 			if (!this.list.isEmpty()) return new SmugglersAnnounceState(state, card, list);
@@ -92,18 +92,18 @@ public class SmugglersLoseState extends CardState {
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to discard cargo during another player's turn!"));
 			return;
 		}
-		if(p.getSpaceShip().getContains()[type.getValue()]<=0){
+		if (p.getSpaceShip().getContains()[type.getValue()] <= 0) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to discard cargo that he doesn't own!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to discard cargo that he doesn't own!"));
 			return;
 		}
 		int idx = 4;
-		while(idx>=0){
-			if(this.required[idx]<=0){
+		while (idx >= 0) {
+			if (this.required[idx] <= 0) {
 				idx--;
 				continue;
-			};
-			if(type.getValue()!=idx){
+			}
+			if (type.getValue() != idx) {
 				System.out.println("Player '" + p.getUsername() + "' attempted to discard cargo that's not their most valuable!");
 				this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to discard cargo that's not their most valuable!"));
 				return;
@@ -112,11 +112,12 @@ public class SmugglersLoseState extends CardState {
 			try {
 				p.getSpaceShip().getComponent(coords).check(v);
 				this.required[idx]--;
-				if(type!=ShipmentType.EMPTY) System.out.println("Player '"+p.getUsername()+"' removed cargo type: "+type+" from "+coords);
-				else System.out.println("Player '"+p.getUsername()+"' removed battery from "+coords);
+				if (type != ShipmentType.EMPTY)
+					System.out.println("Player '" + p.getUsername() + "' removed cargo type: " + type + " from " + coords);
+				else System.out.println("Player '" + p.getUsername() + "' removed battery from " + coords);
 				break;
 			} catch (ContainerEmptyException e) {
-				if(type!=ShipmentType.EMPTY){
+				if (type != ShipmentType.EMPTY) {
 					System.out.println("Player '" + p.getUsername() + "' attempted to discard cargo from a storage that doesn't contain it!");
 					this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to discard cargo from a storage that doesn't contain it!"));
 				} else {
@@ -125,7 +126,7 @@ public class SmugglersLoseState extends CardState {
 				}
 				return;
 			} catch (IllegalArgumentException e) {
-				if(type!=ShipmentType.EMPTY){
+				if (type != ShipmentType.EMPTY) {
 					System.out.println("Player '" + p.getUsername() + "' attempted to discard cargo from illegal coordinates!");
 					this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to discard cargo from illegal coordinates!"));
 				} else {
@@ -134,8 +135,8 @@ public class SmugglersLoseState extends CardState {
 				}
 			}
 		}
-		for(int i = 4;i>=0;i--){
-			if(required[i]>0) return;
+		for (int i = 4; i >= 0; i--) {
+			if (required[i] > 0) return;
 		}
 		this.responded = true;
 	}
@@ -147,7 +148,7 @@ public class SmugglersLoseState extends CardState {
 			return;
 		}
 		this.list.remove(p);
-		
+
 	}
 
 }

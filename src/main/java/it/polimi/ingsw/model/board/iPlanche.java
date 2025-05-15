@@ -1,9 +1,9 @@
 package it.polimi.ingsw.model.board;
 
-import java.io.Serializable;
-
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.state.VoyageState;
+
+import java.io.Serializable;
 
 public interface iPlanche extends Serializable {
 

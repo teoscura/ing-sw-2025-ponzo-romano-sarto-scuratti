@@ -25,9 +25,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 class StardustCardTest {
 
@@ -77,10 +75,10 @@ class StardustCardTest {
 
 		ArrayList<Player> order = new ArrayList<>(Arrays.asList(player1, player2, player3));
 		ArrayList<Player> players = new ArrayList<>(Arrays.asList(player1, player2, player3));
-		
+
 		model = new DummyModelInstance(1, GameModeType.LVL2, PlayerCount.THREE);
 		model.setController(new DummyController(model.getID()));
-		
+
 		TestFlightCards cards = new TestFlightCards();
 		planche = new Planche(GameModeType.LVL2, order);
 		state = new DummyVoyageState(model, GameModeType.LVL2, PlayerCount.THREE, players, cards, planche);

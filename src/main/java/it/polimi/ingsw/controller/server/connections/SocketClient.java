@@ -1,23 +1,23 @@
 package it.polimi.ingsw.controller.server.connections;
 
+import it.polimi.ingsw.controller.server.MainServerController;
+import it.polimi.ingsw.message.client.ClientMessage;
+import it.polimi.ingsw.message.server.ServerMessage;
+import it.polimi.ingsw.message.server.UsernameSetupMessage;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.TimerTask;
 
-import it.polimi.ingsw.controller.server.MainServerController;
-import it.polimi.ingsw.message.client.ClientMessage;
-import it.polimi.ingsw.message.server.ServerMessage;
-import it.polimi.ingsw.message.server.UsernameSetupMessage;
-
 public class SocketClient extends Thread implements ClientConnection {
 
 	private final Socket socket;
-	private TimerTask setup_timeout;
-	private String username;
 	private final ObjectOutputStream out;
 	private final ObjectInputStream in;
+	private TimerTask setup_timeout;
+	private String username;
 
 	public SocketClient(Socket socket) throws IOException {
 		if (socket == null) throw new NullPointerException();
@@ -26,11 +26,11 @@ public class SocketClient extends Thread implements ClientConnection {
 		this.in = new ObjectInputStream(socket.getInputStream());
 	}
 
-	public void setTimeout(TimerTask task){
+	public void setTimeout(TimerTask task) {
 		this.setup_timeout = task;
 	}
 
-	public void cancelTimeout(){
+	public void cancelTimeout() {
 		this.setup_timeout.cancel();
 	}
 
@@ -39,11 +39,11 @@ public class SocketClient extends Thread implements ClientConnection {
 	}
 
 	@Override
-	public void run(){
+	public void run() {
 		while (!this.socket.isClosed() && this.username == null) {
 			this.readSetup();
 		}
-		while(!this.socket.isClosed()){
+		while (!this.socket.isClosed()) {
 			this.read();
 		}
 	}
@@ -55,7 +55,7 @@ public class SocketClient extends Thread implements ClientConnection {
 		this.out.flush();
 	}
 
-	private void readSetup(){
+	private void readSetup() {
 		UsernameSetupMessage setup = null;
 		try {
 			setup = (UsernameSetupMessage) in.readObject();
@@ -71,7 +71,6 @@ public class SocketClient extends Thread implements ClientConnection {
 		}
 		this.username = setup.getUsername();
 		MainServerController.getInstance().setupSocketListener(this, this.username);
-		return;
 	}
 
 	private void read() {

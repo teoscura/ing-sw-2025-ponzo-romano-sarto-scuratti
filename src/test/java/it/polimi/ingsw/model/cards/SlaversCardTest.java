@@ -13,9 +13,9 @@ import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.cards.state.SlaversAnnounceState;
 import it.polimi.ingsw.model.cards.state.SlaversLoseState;
 import it.polimi.ingsw.model.cards.visitors.CrewRemoveVisitor;
+import it.polimi.ingsw.model.components.BaseComponent;
 import it.polimi.ingsw.model.components.ComponentFactory;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
-import it.polimi.ingsw.model.components.BaseComponent;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.ShipCoords;
@@ -31,21 +31,18 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class SlaversCardTest {
 
-	private DummyModelInstance model;
-	private DummyVoyageState state;
-	private TestFlightCards cards;
-	private Planche planche;
-	private SlaversCard card;
-
 	Player player1;
 	ClientDescriptor p1desc;
 	Player player2;
 	ClientDescriptor p2desc;
 	Player player3;
 	ClientDescriptor p3desc;
-	
 	ArrayList<Player> order, players;
-	
+	private DummyModelInstance model;
+	private DummyVoyageState state;
+	private TestFlightCards cards;
+	private Planche planche;
+	private SlaversCard card;
 
 	@BeforeEach
 	void setUp() throws IOException {

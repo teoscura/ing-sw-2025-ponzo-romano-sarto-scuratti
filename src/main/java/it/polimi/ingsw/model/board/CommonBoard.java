@@ -1,14 +1,14 @@
 //Done.
 package it.polimi.ingsw.model.board;
 
+import it.polimi.ingsw.model.components.BaseComponent;
+import it.polimi.ingsw.model.components.ComponentFactory;
+import it.polimi.ingsw.model.components.exceptions.ContainerEmptyException;
+
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-
-import it.polimi.ingsw.model.components.ComponentFactory;
-import it.polimi.ingsw.model.components.BaseComponent;
-import it.polimi.ingsw.model.components.exceptions.ContainerEmptyException;
 
 public class CommonBoard implements iCommonBoard {
 

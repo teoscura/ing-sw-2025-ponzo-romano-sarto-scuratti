@@ -1,7 +1,5 @@
 package it.polimi.ingsw.model.state;
 
-import java.util.ArrayList;
-
 import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.GameModeType;
@@ -13,6 +11,8 @@ import it.polimi.ingsw.model.client.player.ClientEndgamePlayer;
 import it.polimi.ingsw.model.client.state.ClientEndgameState;
 import it.polimi.ingsw.model.client.state.ClientState;
 import it.polimi.ingsw.model.player.Player;
+
+import java.util.ArrayList;
 
 public class EndscreenState extends GameState {
 
@@ -97,8 +97,8 @@ public class EndscreenState extends GameState {
 		return "Endscreen State";
 	}
 
-	public ClientGameListEntry getOngoingEntry(int id){
-		return new ClientGameListEntry(type, this.toString(), this.players.stream().map(p->p.getUsername()).toList(), id);
+	public ClientGameListEntry getOngoingEntry(int id) {
+		return new ClientGameListEntry(type, this.toString(), this.players.stream().map(p -> p.getUsername()).toList(), id);
 	}
 
 }

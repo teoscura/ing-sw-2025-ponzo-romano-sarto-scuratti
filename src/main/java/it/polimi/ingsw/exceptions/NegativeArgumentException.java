@@ -1,10 +1,11 @@
 package it.polimi.ingsw.exceptions;
 
-public class NegativeArgumentException extends RuntimeException{
-        
-    public NegativeArgumentException(){}
+public class NegativeArgumentException extends RuntimeException {
 
-    public NegativeArgumentException(String message){
-        super(message);
-    }
+	public NegativeArgumentException() {
+	}
+
+	public NegativeArgumentException(String message) {
+		super(message);
+	}
 }

@@ -5,16 +5,16 @@ import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 
 public class EnterLobbyMessage extends ServerMessage {
 
-    private final int id;
+	private final int id;
 
-    public EnterLobbyMessage(int id){
-        if (id <= 0) throw new IllegalArgumentException();
-        this.id = id;
-    }
+	public EnterLobbyMessage(int id) {
+		if (id <= 0) throw new IllegalArgumentException();
+		this.id = id;
+	}
 
-    @Override
-    public void receive(MainServerController server) throws ForbiddenCallException {
-        server.connectToLobby(descriptor, id);
-    }
-    
+	@Override
+	public void receive(MainServerController server) throws ForbiddenCallException {
+		server.connectToLobby(descriptor, id);
+	}
+
 }

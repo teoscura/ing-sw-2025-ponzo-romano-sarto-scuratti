@@ -1,7 +1,5 @@
 package it.polimi.ingsw.model.cards.state;
 
-import java.util.ArrayList;
-
 import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
@@ -13,6 +11,8 @@ import it.polimi.ingsw.model.client.card.ClientCreditsRewardCardStateDecorator;
 import it.polimi.ingsw.model.client.state.ClientState;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.state.VoyageState;
+
+import java.util.ArrayList;
 
 class PiratesRewardState extends CardState {
 
@@ -34,8 +34,8 @@ class PiratesRewardState extends CardState {
 	public void init(ClientState new_state) {
 		super.init(new_state);
 		System.out.println("    CardState -> Pirates Reward State!");
-		for(Player p : this.list){
-			System.out.println("	 - "+p.getUsername());
+		for (Player p : this.list) {
+			System.out.println("	 - " + p.getUsername());
 		}
 	}
 
@@ -63,7 +63,7 @@ class PiratesRewardState extends CardState {
 	}
 
 	@Override
-    public CardState getNext() {
+	public CardState getNext() {
 		System.out.println("Card exhausted, moving to a new one!");
 		return null;
 	}
@@ -75,7 +75,7 @@ class PiratesRewardState extends CardState {
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to accept a reward during another player's turn!"));
 			return;
 		}
-		System.out.println("Player '"+p.getUsername()+"' took the reward? "+take);
+		System.out.println("Player '" + p.getUsername() + "' took the reward? " + take);
 		this.took_reward = take;
 		this.responded = true;
 	}
@@ -86,7 +86,7 @@ class PiratesRewardState extends CardState {
 			this.responded = true;
 			this.took_reward = false;
 		}
-		
+
 	}
 
 }

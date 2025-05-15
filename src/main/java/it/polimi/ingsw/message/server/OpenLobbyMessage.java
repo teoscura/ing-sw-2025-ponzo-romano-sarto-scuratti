@@ -7,17 +7,17 @@ import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 
 public class OpenLobbyMessage extends ServerMessage {
 
-    private final PlayerCount count;
-    private final GameModeType type;
+	private final PlayerCount count;
+	private final GameModeType type;
 
-    public OpenLobbyMessage(GameModeType type, PlayerCount count){
-        this.count = count;
-        this.type = type;
-    }
+	public OpenLobbyMessage(GameModeType type, PlayerCount count) {
+		this.count = count;
+		this.type = type;
+	}
 
-    @Override
-    public void receive(MainServerController server) throws ForbiddenCallException {
-        server.openNewRoom(descriptor, type, count);
-    }
-    
+	@Override
+	public void receive(MainServerController server) throws ForbiddenCallException {
+		server.openNewRoom(descriptor, type, count);
+	}
+
 }

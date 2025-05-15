@@ -1,12 +1,12 @@
 package it.polimi.ingsw.model.board;
 
+import it.polimi.ingsw.model.cards.LevelOneCardFactory;
+import it.polimi.ingsw.model.cards.iCard;
+
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import it.polimi.ingsw.model.cards.LevelOneCardFactory;
-import it.polimi.ingsw.model.cards.iCard;
 
 public class TestFlightCards implements iCards {
 

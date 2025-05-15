@@ -13,67 +13,72 @@ import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.player.SpaceShip;
 
 public class ShieldComponent extends BaseComponent {
-    
-    private boolean powered = false;
 
-    public ShieldComponent(int id, ConnectorType[] connectors, 
-                           ComponentRotation rotation){
-        super(id, connectors, rotation);
-    }
+	private boolean powered = false;
 
-    public ShieldComponent(int id, ConnectorType[] connectors, 
-                           ComponentRotation rotation,
-                           ShipCoords coords){
-        super(id, connectors, rotation, coords);
-    }
+	public ShieldComponent(int id, ConnectorType[] connectors,
+						   ComponentRotation rotation) {
+		super(id, connectors, rotation);
+	}
 
-    @Override
-    public void check(iVisitor v){
-        v.visit(this);
-    }
+	public ShieldComponent(int id, ConnectorType[] connectors,
+						   ComponentRotation rotation,
+						   ShipCoords coords) {
+		super(id, connectors, rotation, coords);
+	}
 
-    public void turnOn(){
-        if(this.powered) throw new AlreadyPoweredException();
-        this.powered = true;
-    }
+	@Override
+	public void check(iVisitor v) {
+		v.visit(this);
+	}
 
-    public void turnOff(){
-        this.powered = false;
-    }
+	public void turnOn() {
+		if (this.powered) throw new AlreadyPoweredException();
+		this.powered = true;
+	}
 
-    public boolean getPowered(){
-        return this.powered;
-    }
-    @Override
-    public boolean powerable(){
-        return true;
-    }
+	public void turnOff() {
+		this.powered = false;
+	}
 
-    @Override
-    public void onCreation(SpaceShip ship, ShipCoords coords){
-        this.coords = coords;
-        ship.addPowerableCoords(this.coords);
-    }
+	public boolean getPowered() {
+		return this.powered;
+	}
 
-    @Override
-    public void onDelete(SpaceShip ship){
-        ship.delPowerableCoords(this.coords);
-    }
+	@Override
+	public boolean powerable() {
+		return true;
+	}
 
-    public ShieldType getShield(){
-        if(!this.powered) return ShieldType.NONE;
-        switch(this.getRotation().getShift()){
-            case 0: return ShieldType.NE;
-            case 1: return ShieldType.SE;
-            case 2: return ShieldType.SW;
-            case 3: return ShieldType.NW;
-        }
-        return ShieldType.NE;
-    }
+	@Override
+	public void onCreation(SpaceShip ship, ShipCoords coords) {
+		this.coords = coords;
+		ship.addPowerableCoords(this.coords);
+	}
 
-    @Override
-    public ClientComponent getClientComponent() {
-        return new ClientPoweredComponentDecorator(new ClientBaseComponent(getID(), getRotation()), powered);
-    }
-    
+	@Override
+	public void onDelete(SpaceShip ship) {
+		ship.delPowerableCoords(this.coords);
+	}
+
+	public ShieldType getShield() {
+		if (!this.powered) return ShieldType.NONE;
+		switch (this.getRotation().getShift()) {
+			case 0:
+				return ShieldType.NE;
+			case 1:
+				return ShieldType.SE;
+			case 2:
+				return ShieldType.SW;
+			case 3:
+				return ShieldType.NW;
+		}
+		return ShieldType.NE;
+	}
+
+	@Override
+	public ClientComponent getClientComponent() {
+		return new ClientPoweredComponentDecorator(new ClientBaseComponent(getID(), getRotation()), powered);
+	}
+
 }

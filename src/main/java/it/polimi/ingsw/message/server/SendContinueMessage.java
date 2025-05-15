@@ -11,9 +11,8 @@ import it.polimi.ingsw.model.state.VoyageState;
 public class SendContinueMessage extends ServerMessage {
 
 	@Override
-    public void receive(MainServerController server) throws ForbiddenCallException {
-        return;
-    }
+	public void receive(MainServerController server) throws ForbiddenCallException {
+	}
 
 	@Override
 	public void receive(LobbyController server) throws ForbiddenCallException {

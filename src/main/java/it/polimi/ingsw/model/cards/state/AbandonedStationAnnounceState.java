@@ -1,9 +1,5 @@
 package it.polimi.ingsw.model.cards.state;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
@@ -16,6 +12,9 @@ import it.polimi.ingsw.model.client.card.ClientLandingCardStateDecorator;
 import it.polimi.ingsw.model.client.state.ClientState;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.state.VoyageState;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AbandonedStationAnnounceState extends CardState {
 
@@ -37,8 +36,8 @@ public class AbandonedStationAnnounceState extends CardState {
 	public void init(ClientState new_state) {
 		super.init(new_state);
 		System.out.println("New CardState -> Abandoned Station Announce State!");
-		for(Player p : this.list){
-			System.out.println("	 - "+p.getUsername());
+		for (Player p : this.list) {
+			System.out.println("	 - " + p.getUsername());
 		}
 	}
 
@@ -49,7 +48,7 @@ public class AbandonedStationAnnounceState extends CardState {
 			this.state.broadcastMessage(new NotifyStateUpdateMessage(this.state.getClientState()));
 			return;
 		}
-		try{
+		try {
 			this.card.apply(state, this.list.getFirst(), id);
 		} catch (CrewSizeException e) {
 			System.out.println("Player '" + this.list.getFirst().getUsername() + "' attempted to land with not enough crew!");
@@ -61,7 +60,7 @@ public class AbandonedStationAnnounceState extends CardState {
 
 	@Override
 	public ClientCardState getClientCardState() {
-		ArrayList<Boolean> tmp = new ArrayList<>(Arrays.asList(true));
+		ArrayList<Boolean> tmp = new ArrayList<>(List.of(true));
 		return new ClientLandingCardStateDecorator(new ClientBaseCardState(this.card.getId()),
 				this.list.getFirst().getColor(),
 				this.card.getDays(),
@@ -70,7 +69,7 @@ public class AbandonedStationAnnounceState extends CardState {
 	}
 
 	@Override
-    public CardState getNext() {
+	public CardState getNext() {
 		if (this.card.getExhausted()) return new AbandonedStationRewardState(state, card, list);
 		this.list.removeFirst();
 		if (!this.list.isEmpty()) return new AbandonedStationAnnounceState(state, card, list);

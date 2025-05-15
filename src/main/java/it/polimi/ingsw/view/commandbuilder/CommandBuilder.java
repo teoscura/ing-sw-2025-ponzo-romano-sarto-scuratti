@@ -1,26 +1,6 @@
 package it.polimi.ingsw.view.commandbuilder;
 
-import java.util.regex.Pattern;
-
-import it.polimi.ingsw.message.server.DiscardCargoMessage;
-import it.polimi.ingsw.message.server.DiscardComponentMessage;
-import it.polimi.ingsw.message.server.EnterLobbyMessage;
-import it.polimi.ingsw.message.server.EnterSetupMessage;
-import it.polimi.ingsw.message.server.LeaveSetupMessage;
-import it.polimi.ingsw.message.server.MoveCargoMessage;
-import it.polimi.ingsw.message.server.OpenLobbyMessage;
-import it.polimi.ingsw.message.server.OpenUnfinishedMessage;
-import it.polimi.ingsw.message.server.PutComponentMessage;
-import it.polimi.ingsw.message.server.RemoveComponentMessage;
-import it.polimi.ingsw.message.server.RemoveCrewMessage;
-import it.polimi.ingsw.message.server.SelectBlobMessage;
-import it.polimi.ingsw.message.server.SelectLandingMessage;
-import it.polimi.ingsw.message.server.ServerMessage;
-import it.polimi.ingsw.message.server.SetCrewMessage;
-import it.polimi.ingsw.message.server.TakeCargoMessage;
-import it.polimi.ingsw.message.server.TakeDiscardedComponentMessage;
-import it.polimi.ingsw.message.server.TakeRewardMessage;
-import it.polimi.ingsw.message.server.TurnOnMessage;
+import it.polimi.ingsw.message.server.*;
 import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.PlayerCount;
 import it.polimi.ingsw.model.components.enums.AlienType;
@@ -28,15 +8,17 @@ import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ShipmentType;
 import it.polimi.ingsw.model.player.ShipCoords;
 
-public class CommandBuilder {
-    
-    public ServerMessage build(String command){
-		
-        ServerMessage mess = null;
-        boolean valid = false;
-        String[] parts = command.split(" ", 16);
+import java.util.regex.Pattern;
 
-        switch (parts[0]) {
+public class CommandBuilder {
+
+	public ServerMessage build(String command) {
+
+		ServerMessage mess = null;
+		boolean valid = false;
+		String[] parts = command.split(" ", 16);
+
+		switch (parts[0]) {
 			case "entersetup":
 				valid = Pattern.matches("^entersetup$", command);
 				if (!valid) break;
@@ -85,7 +67,7 @@ public class CommandBuilder {
 				if (!valid)
 					break;
 				int discardId = Integer.parseInt(parts[1]);
-				mess  = new DiscardComponentMessage(discardId);
+				mess = new DiscardComponentMessage(discardId);
 				break;
 			case "movecargo":
 				valid = Pattern.matches("^movecargo [0-9] [0-9] [0-4] [0-9] [0-9]$", command);
@@ -95,7 +77,7 @@ public class CommandBuilder {
 				ShipCoords cargoSource = new ShipCoords(GameModeType.TEST, Integer.parseInt(parts[4]),
 						Integer.parseInt(parts[5]));
 				ShipmentType cargoType = ShipmentType.values()[4 - Integer.parseInt(parts[3])];
-				mess  = new MoveCargoMessage(cargoTarget, cargoSource, cargoType);
+				mess = new MoveCargoMessage(cargoTarget, cargoSource, cargoType);
 				break;
 			case "putcomponent":
 				valid = Pattern.matches("^putcomponent [0-9] [0-9] [0-3]$", command);
@@ -118,7 +100,7 @@ public class CommandBuilder {
 				if (!valid) break;
 				ShipCoords crewCoords = new ShipCoords(GameModeType.TEST, Integer.parseInt(parts[1]),
 						Integer.parseInt(parts[2]));
-				mess  = new RemoveCrewMessage(crewCoords);
+				mess = new RemoveCrewMessage(crewCoords);
 				break;
 			case "selectlanding":
 				valid = Pattern.matches("^selectlanding [0-9]+$", command);
@@ -140,7 +122,7 @@ public class CommandBuilder {
 				ShipCoords cargCoords = new ShipCoords(GameModeType.TEST, Integer.parseInt(parts[1]),
 						Integer.parseInt(parts[2]));
 				ShipmentType cargoType1 = ShipmentType.values()[4 - Integer.parseInt(parts[3])];
-				mess= new TakeCargoMessage(cargCoords, cargoType1);
+				mess = new TakeCargoMessage(cargCoords, cargoType1);
 				break;
 			case "takediscarded":
 				valid = Pattern.matches("^takediscarded [0-9]+", command);
@@ -173,6 +155,6 @@ public class CommandBuilder {
 		}
 
 		return mess;
-    }
+	}
 
 }

@@ -1,8 +1,5 @@
 package it.polimi.ingsw.model.cards.state;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import it.polimi.ingsw.exceptions.PlayerNotFoundException;
 import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
@@ -17,6 +14,9 @@ import it.polimi.ingsw.model.client.state.ClientState;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.state.VoyageState;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class EpidemicState extends CardState {
 
@@ -34,8 +34,8 @@ public class EpidemicState extends CardState {
 	public void init(ClientState new_state) {
 		super.init(new_state);
 		System.out.println("New CardState -> Epidemic State!");
-		for(Player p : this.state.getOrder(CardOrder.NORMAL)){
-			System.out.println("	 - "+p.getUsername());
+		for (Player p : this.state.getOrder(CardOrder.NORMAL)) {
+			System.out.println("	 - " + p.getUsername());
 		}
 	}
 
@@ -73,21 +73,19 @@ public class EpidemicState extends CardState {
 			return;
 		}
 		this.awaiting.remove(p);
-		System.out.println("Player '" + p.getUsername() + "' motioned to progress! ("+this.awaiting.size()+" missing).");
+		System.out.println("Player '" + p.getUsername() + "' motioned to progress! (" + this.awaiting.size() + " missing).");
 	}
 
 	@Override
-    public CardState getNext() {
+	public CardState getNext() {
 		System.out.println("Card exhausted, moving to a new one!");
 		return null;
 	}
 
 	@Override
 	public void disconnect(Player p) throws ForbiddenCallException {
-		if (this.awaiting.contains(p)) {
-			this.awaiting.remove(p);
-		}
-		
+		this.awaiting.remove(p);
+
 	}
 
 }

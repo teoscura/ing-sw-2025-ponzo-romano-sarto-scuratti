@@ -21,9 +21,8 @@ public class TakeCargoMessage extends ServerMessage {
 	}
 
 	@Override
-    public void receive(MainServerController server) throws ForbiddenCallException {
-        return;
-    }
+	public void receive(MainServerController server) throws ForbiddenCallException {
+	}
 
 	@Override
 	public void receive(LobbyController server) throws ForbiddenCallException {

@@ -1,10 +1,9 @@
 package it.polimi.ingsw.model.components.enums;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
-
-import org.junit.jupiter.api.BeforeEach;
 
 public class ShieldTypeTest {
 
@@ -15,15 +14,14 @@ public class ShieldTypeTest {
 	private ShieldType none;
 
 	@BeforeEach
-	void setup(){
+	void setup() {
 		north_east = ShieldType.NE;
 		north_west = ShieldType.NW;
 		south_east = ShieldType.SE;
 		south_west = ShieldType.SW;
 		none = ShieldType.NONE;
 	}
-		
-	
+
 
 	@Test
 	void getNorth() {

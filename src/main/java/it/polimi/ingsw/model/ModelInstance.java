@@ -1,7 +1,5 @@
 package it.polimi.ingsw.model;
 
-import java.io.Serializable;
-
 import it.polimi.ingsw.controller.server.ClientDescriptor;
 import it.polimi.ingsw.controller.server.LobbyController;
 import it.polimi.ingsw.message.client.ClientMessage;
@@ -10,15 +8,17 @@ import it.polimi.ingsw.message.server.ServerDisconnectMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.client.ClientGameListEntry;
-import it.polimi.ingsw.model.player.*;
+import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.state.GameState;
 import it.polimi.ingsw.model.state.ResumeWaitingState;
 import it.polimi.ingsw.model.state.WaitingState;
 
+import java.io.Serializable;
+
 public class ModelInstance implements Serializable {
 
-	protected transient LobbyController controller;
 	protected final int id;
+	protected transient LobbyController controller;
 	protected boolean started;
 	protected boolean ended;
 	protected GameState state;
@@ -40,7 +40,7 @@ public class ModelInstance implements Serializable {
 	}
 
 	public void serialize() {
-		if(!this.state.toSerialize()) return;
+		if (!this.state.toSerialize()) return;
 		this.controller.serializeCurrentGame();
 	}
 
@@ -116,12 +116,12 @@ public class ModelInstance implements Serializable {
 		}
 	}
 
-	public void setController(LobbyController controller) {
-		this.controller = controller;
-	}
-
 	public LobbyController getController() {
 		return this.controller;
+	}
+
+	public void setController(LobbyController controller) {
+		this.controller = controller;
 	}
 
 	public void afterSerialRestart() {
@@ -134,7 +134,7 @@ public class ModelInstance implements Serializable {
 		this.controller.broadcast(message);
 	}
 
-	public ClientGameListEntry getEntry(){
+	public ClientGameListEntry getEntry() {
 		return this.state.getOngoingEntry(this.id);
 	}
 

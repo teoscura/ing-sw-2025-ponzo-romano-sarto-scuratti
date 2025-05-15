@@ -11,7 +11,6 @@ import it.polimi.ingsw.model.components.exceptions.ContainerNotSpecialException;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.ShipCoords;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -67,14 +66,14 @@ public class StorageComponentTest {
 	void takeOut() {
 		ConnectorType[] connectors = {ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL};
 		StorageComponent takeout_storage_component1 = new StorageComponent(1, connectors, ComponentRotation.U000, StorageType.DOUBLENORMAL);
-		takeout_storage_component1.onCreation(player1.getSpaceShip(),coords);
+		takeout_storage_component1.onCreation(player1.getSpaceShip(), coords);
 		ShipmentType shipment1 = ShipmentType.BLUE;
 		ShipmentType shipment2 = ShipmentType.GREEN;
 		assertThrows(NullPointerException.class, () -> takeout_storage_component1.takeOut(null));
 		takeout_storage_component1.putIn(shipment1);
 		assertEquals(1, takeout_storage_component1.howMany(shipment1));
 		assertTrue(takeout_storage_component1.takeOut(shipment1));
-		assertThrows(ContainerEmptyException.class, ()->takeout_storage_component1.takeOut(shipment2));
+		assertThrows(ContainerEmptyException.class, () -> takeout_storage_component1.takeOut(shipment2));
 	}
 
 	@Test

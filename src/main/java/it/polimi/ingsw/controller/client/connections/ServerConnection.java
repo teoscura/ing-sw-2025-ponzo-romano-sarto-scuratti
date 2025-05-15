@@ -1,8 +1,8 @@
 package it.polimi.ingsw.controller.client.connections;
 
-import java.io.IOException;
-
 import it.polimi.ingsw.message.server.ServerMessage;
+
+import java.io.IOException;
 
 public interface ServerConnection {
 

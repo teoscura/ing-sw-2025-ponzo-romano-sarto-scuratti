@@ -4,6 +4,6 @@ import java.rmi.RemoteException;
 
 public interface RMIClientConnection extends ClientConnection {
 
-    public String getUsername() throws RemoteException;
-    
+	String getUsername() throws RemoteException;
+
 }

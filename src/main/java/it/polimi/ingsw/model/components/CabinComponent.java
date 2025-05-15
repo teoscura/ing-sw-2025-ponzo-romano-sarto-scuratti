@@ -17,65 +17,69 @@ import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.player.SpaceShip;
 
 public class CabinComponent extends BaseComponent {
-    
-    private int crew_number = 2;
-    private AlienType crew_type = AlienType.HUMAN;
 
-    public CabinComponent(int id, 
-                          ConnectorType[] connectors, 
-                          ComponentRotation rotation){
-        super(id, connectors, rotation);
-    }
+	private int crew_number = 2;
+	private AlienType crew_type = AlienType.HUMAN;
 
-    public CabinComponent(int id, 
-                          ConnectorType[] connectors, 
-                          ComponentRotation rotation,
-                          ShipCoords coords){
-        super(id, connectors, rotation, coords);
-    }
+	public CabinComponent(int id,
+						  ConnectorType[] connectors,
+						  ComponentRotation rotation) {
+		super(id, connectors, rotation);
+	}
 
-    @Override
-    public void check(iVisitor v){
-        v.visit(this);
-    }
+	public CabinComponent(int id,
+						  ConnectorType[] connectors,
+						  ComponentRotation rotation,
+						  ShipCoords coords) {
+		super(id, connectors, rotation, coords);
+	}
 
-    public int getCrew(){
-        return crew_number;
-    }
+	@Override
+	public void check(iVisitor v) {
+		v.visit(this);
+	}
 
-    public AlienType getCrewType(){
-        return this.crew_type;
-    }
+	public int getCrew() {
+		return crew_number;
+	}
 
-    public void setCrew(SpaceShip ship, int new_crew, AlienType type){
-        if(new_crew<0) throw new NegativeArgumentException("Crew size can't be negative");
-        if(type.getArraypos()<0) throw new IllegalArgumentException("Type must be a single alien type, not a collector");
-        if(new_crew>type.getMaxCapacity()) throw new ArgumentTooBigException("Crew size exceeds type's max capacity");
-        if(type.getLifeSupportExists()&&ship.getCrew()[type.getArraypos()]>0) throw new AlienTypeAlreadyPresentException("Spaceship already has one alien of this type.");
-        CabinVisitor v = new CabinVisitor();
-        for(BaseComponent c : this.getConnectedComponents(ship)){
-            c.check(v);
-        }
-        if(!v.getSupportedType().compatible(type)) throw new UnsupportedAlienCabinException("Tried to insert crew type in cabin that doesn't support it.");
-        crew_number = new_crew;
-        crew_type = type;
-        ship.updateShip();
-    }
+	public AlienType getCrewType() {
+		return this.crew_type;
+	}
 
-    @Override
-    public void onCreation(SpaceShip ship, ShipCoords coords) {
-        this.coords = coords;
-        ship.addCabinCoords(this.coords);
-    }
+	public void setCrew(SpaceShip ship, int new_crew, AlienType type) {
+		if (new_crew < 0) throw new NegativeArgumentException("Crew size can't be negative");
+		if (type.getArraypos() < 0)
+			throw new IllegalArgumentException("Type must be a single alien type, not a collector");
+		if (new_crew > type.getMaxCapacity())
+			throw new ArgumentTooBigException("Crew size exceeds type's max capacity");
+		if (type.getLifeSupportExists() && ship.getCrew()[type.getArraypos()] > 0)
+			throw new AlienTypeAlreadyPresentException("Spaceship already has one alien of this type.");
+		CabinVisitor v = new CabinVisitor();
+		for (BaseComponent c : this.getConnectedComponents(ship)) {
+			c.check(v);
+		}
+		if (!v.getSupportedType().compatible(type))
+			throw new UnsupportedAlienCabinException("Tried to insert crew type in cabin that doesn't support it.");
+		crew_number = new_crew;
+		crew_type = type;
+		ship.updateShip();
+	}
 
-    @Override
-    public void onDelete(SpaceShip ship) {
-        ship.delCabinCoords(this.coords);
-    }
+	@Override
+	public void onCreation(SpaceShip ship, ShipCoords coords) {
+		this.coords = coords;
+		ship.addCabinCoords(this.coords);
+	}
 
-    @Override
-    public ClientComponent getClientComponent() {
-        return new ClientCrewComponentDecorator(new ClientBaseComponent(getID(), getRotation()), crew_type, crew_number);
-    }
+	@Override
+	public void onDelete(SpaceShip ship) {
+		ship.delCabinCoords(this.coords);
+	}
+
+	@Override
+	public ClientComponent getClientComponent() {
+		return new ClientCrewComponentDecorator(new ClientBaseComponent(getID(), getRotation()), crew_type, crew_number);
+	}
 }
 

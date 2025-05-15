@@ -7,7 +7,7 @@ import it.polimi.ingsw.message.server.ServerConnectMessage;
 import it.polimi.ingsw.message.server.ServerDisconnectMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
-import it.polimi.ingsw.model.player.*;
+import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.state.GameState;
 import it.polimi.ingsw.model.state.ResumeWaitingState;
 
@@ -30,7 +30,6 @@ public class DummyModelInstance extends ModelInstance {
 	}
 
 	public void serialize() {
-		return;
 	}
 
 	public void startGame() {
@@ -44,7 +43,6 @@ public class DummyModelInstance extends ModelInstance {
 
 	public void endGame() {
 		if (!this.started) throw new RuntimeException();
-		return;
 	}
 
 	public GameState getState() {
@@ -104,8 +102,7 @@ public class DummyModelInstance extends ModelInstance {
 	}
 
 	public void broadcast(ClientMessage message) {
-		return;
 	}
-	
+
 
 }

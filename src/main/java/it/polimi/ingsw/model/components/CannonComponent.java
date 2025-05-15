@@ -17,8 +17,8 @@ import it.polimi.ingsw.model.player.SpaceShip;
 public class CannonComponent extends BaseComponent {
 
 	private final double max_power;
-	private boolean powered = false;
 	private final boolean powerable;
+	private boolean powered = false;
 
 	public CannonComponent(int id,
 						   ConnectorType[] components,
@@ -82,14 +82,14 @@ public class CannonComponent extends BaseComponent {
 
 	public double getCurrentPower() {
 		if (this.getRotation() != ComponentRotation.U000) {
-			return this.getPower()/2;
+			return this.getPower() / 2;
 		}
 		return this.getPower();
 	}
 
 	private double getPower() {
-		if(this.powerable) return this.powered ? max_power : 0;
-        return this.max_power;
+		if (this.powerable) return this.powered ? max_power : 0;
+		return this.max_power;
 	}
 
 	@Override
@@ -100,7 +100,7 @@ public class CannonComponent extends BaseComponent {
 	@Override
 	public void onCreation(SpaceShip ship, ShipCoords coords) {
 		this.coords = coords;
-		if(this.powerable) ship.addPowerableCoords(coords);
+		if (this.powerable) ship.addPowerableCoords(coords);
 	}
 
 	@Override

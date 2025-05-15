@@ -27,7 +27,7 @@ public class LifeSupportUpdateVisitor implements iVisitor {
 
 	@Override
 	public void visit(AlienLifeSupportComponent c) {
-		if (c.getType() == this.type) still_alive = still_alive || true;
+		if (c.getType() == this.type) still_alive = true;
 	}
 
 	@Override

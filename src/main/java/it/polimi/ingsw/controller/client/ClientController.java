@@ -15,24 +15,24 @@ public class ClientController {
 		this.setState(new TitleScreenState(this, view));
 	}
 
-	public ClientControllerState getState(){
+	public ClientControllerState getState() {
 		return this.state;
 	}
 
-    public void setState(ClientControllerState next) {
-        this.state = next;
+	public void setState(ClientControllerState next) {
+		this.state = next;
 		this.state.init();
-    }
+	}
 
-	public void close(){
+	public void close() {
 		this.closed = true;
 	}
 
-	public boolean getClosed(){
+	public boolean getClosed() {
 		return this.closed;
 	}
 
-	public void reset(){
+	public void reset() {
 		this.state.onClose();
 		this.setState(new TitleScreenState(this, view));
 	}

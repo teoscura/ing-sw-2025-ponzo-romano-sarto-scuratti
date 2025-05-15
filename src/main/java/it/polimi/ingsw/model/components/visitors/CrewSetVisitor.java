@@ -7,65 +7,65 @@ import it.polimi.ingsw.model.player.SpaceShip;
 
 public class CrewSetVisitor implements iVisitor {
 
-    private final SpaceShip ship;
-    private final AlienType type;
+	private final SpaceShip ship;
+	private final AlienType type;
 
-    public CrewSetVisitor(SpaceShip ship, AlienType type){
-        if(ship==null) throw new NullPointerException();
-        if(type.getArraypos()<0&&type.getMaxCapacity()>0) throw new IllegalArgumentException();
-        this.ship = ship;
-        this.type = type;
-    }
+	public CrewSetVisitor(SpaceShip ship, AlienType type) {
+		if (ship == null) throw new NullPointerException();
+		if (type.getArraypos() < 0 && type.getMaxCapacity() > 0) throw new IllegalArgumentException();
+		this.ship = ship;
+		this.type = type;
+	}
 
-    @Override
-    public void visit(CabinComponent c) {
-        c.setCrew(ship, type.getMaxCapacity(), type);
-        ship.updateShip();
-    }
+	@Override
+	public void visit(CabinComponent c) {
+		c.setCrew(ship, type.getMaxCapacity(), type);
+		ship.updateShip();
+	}
 
-    @Override
-    public void visit(EngineComponent c) {
-        throw new IllegalTargetException();
-    }
+	@Override
+	public void visit(EngineComponent c) {
+		throw new IllegalTargetException();
+	}
 
-    @Override
-    public void visit(AlienLifeSupportComponent c) {
-        throw new IllegalTargetException();
-    }
+	@Override
+	public void visit(AlienLifeSupportComponent c) {
+		throw new IllegalTargetException();
+	}
 
-    @Override
-    public void visit(CannonComponent c) {
-        throw new IllegalTargetException();
-    }
+	@Override
+	public void visit(CannonComponent c) {
+		throw new IllegalTargetException();
+	}
 
-    @Override
-    public void visit(StorageComponent c) {
-        throw new IllegalTargetException();
-    }
+	@Override
+	public void visit(StorageComponent c) {
+		throw new IllegalTargetException();
+	}
 
-    @Override
-    public void visit(BatteryComponent c) {
-        throw new IllegalTargetException();
-    }
+	@Override
+	public void visit(BatteryComponent c) {
+		throw new IllegalTargetException();
+	}
 
-    @Override
-    public void visit(ShieldComponent c) {
-        throw new IllegalTargetException();
-    }
+	@Override
+	public void visit(ShieldComponent c) {
+		throw new IllegalTargetException();
+	}
 
-    @Override
-    public void visit(EmptyComponent c) {
-        throw new IllegalTargetException();
-    }
+	@Override
+	public void visit(EmptyComponent c) {
+		throw new IllegalTargetException();
+	}
 
-    @Override
-    public void visit(StructuralComponent c) {
-        throw new IllegalTargetException();
-    }
+	@Override
+	public void visit(StructuralComponent c) {
+		throw new IllegalTargetException();
+	}
 
-    @Override
-    public void visit(StartingCabinComponent c) {
-        throw new IllegalTargetException();
-    }
-    
+	@Override
+	public void visit(StartingCabinComponent c) {
+		throw new IllegalTargetException();
+	}
+
 }

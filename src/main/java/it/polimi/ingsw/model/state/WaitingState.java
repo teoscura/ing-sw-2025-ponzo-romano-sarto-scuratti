@@ -1,7 +1,5 @@
 package it.polimi.ingsw.model.state;
 
-import java.util.ArrayList;
-
 import it.polimi.ingsw.controller.server.ClientDescriptor;
 import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
@@ -16,6 +14,8 @@ import it.polimi.ingsw.model.client.state.ClientState;
 import it.polimi.ingsw.model.client.state.ClientWaitingRoomState;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
+
+import java.util.ArrayList;
 
 public class WaitingState extends GameState {
 
@@ -37,12 +37,12 @@ public class WaitingState extends GameState {
 	@Override
 	public void validate(ServerMessage message) throws ForbiddenCallException {
 		message.receive(this);
-		if(this.connected.size()==0){
+		if (this.connected.size() == 0) {
 			this.model.endGame();
 			return;
 		}
 		if (this.connected.size() < count.getNumber()) {
-			System.out.println("Missing "+(this.count.getNumber()-this.connected.size())+" players to start the game!");
+			System.out.println("Missing " + (this.count.getNumber() - this.connected.size()) + " players to start the game!");
 			this.broadcastMessage(new NotifyStateUpdateMessage(this.getClientState()));
 			return;
 		}
@@ -55,7 +55,7 @@ public class WaitingState extends GameState {
 		ArrayList<Player> playerlist = new ArrayList<>();
 		for (PlayerColor c : PlayerColor.values()) {
 			if (c.getOrder() < 0) continue;
-			if(c.getOrder() >= this.count.getNumber()) continue;
+			if (c.getOrder() >= this.count.getNumber()) continue;
 			String username = this.connected.get(c.getOrder()).getUsername();
 			playerlist.addLast(new Player(this.type, username, c));
 			try {
@@ -66,7 +66,7 @@ public class WaitingState extends GameState {
 			}
 		}
 		this.model.startGame();
-		if(type.getLevel()>1) return new LevelTwoConstructionState(model, type, count, playerlist, 90);
+		if (type.getLevel() > 1) return new LevelTwoConstructionState(model, type, count, playerlist, 90);
 		return new TestFlightConstructionState(model, type, count, playerlist);
 	}
 
@@ -116,8 +116,8 @@ public class WaitingState extends GameState {
 	}
 
 	@Override
-    public ClientGameListEntry getOngoingEntry(int id){
-		return new ClientGameListEntry(type, this.toString(), connected.stream().map(c->c.getUsername()).toList(), id);
+	public ClientGameListEntry getOngoingEntry(int id) {
+		return new ClientGameListEntry(type, this.toString(), connected.stream().map(c -> c.getUsername()).toList(), id);
 	}
 
 }

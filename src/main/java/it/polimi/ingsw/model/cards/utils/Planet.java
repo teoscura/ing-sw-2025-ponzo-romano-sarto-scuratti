@@ -1,10 +1,10 @@
 //Done.
 package it.polimi.ingsw.model.cards.utils;
 
-import java.io.Serializable;
-
 import it.polimi.ingsw.exceptions.NegativeArgumentException;
 import it.polimi.ingsw.model.cards.exceptions.AlreadyVisitedException;
+
+import java.io.Serializable;
 
 public class Planet implements Serializable {
 
@@ -33,12 +33,12 @@ public class Planet implements Serializable {
 		return this.visited;
 	}
 
-    public int getTotalContains() {
-        int sum = 0;
-		for(int i : this.contains){
-			sum+=i;
+	public int getTotalContains() {
+		int sum = 0;
+		for (int i : this.contains) {
+			sum += i;
 		}
 		return sum;
-    }
+	}
 
 }

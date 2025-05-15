@@ -1,10 +1,9 @@
 package it.polimi.ingsw.model.components.enums;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
-
-import org.junit.jupiter.api.BeforeEach;
 
 public class AlienTypeTest {
 
@@ -14,9 +13,9 @@ public class AlienTypeTest {
 	private AlienType both_cabin;
 	private AlienType none_cabin;
 
-	
+
 	@BeforeEach
-	void setup(){
+	void setup() {
 		human_cabin = AlienType.HUMAN;
 		brown_cabin = AlienType.BROWN;
 		purple_cabin = AlienType.PURPLE;
@@ -50,7 +49,7 @@ public class AlienTypeTest {
 	}
 
 	@Test
-	void compatible(){
+	void compatible() {
 		assertFalse(none_cabin.compatible(AlienType.PURPLE));
 		assertFalse(none_cabin.compatible(AlienType.BROWN));
 		assertFalse(none_cabin.compatible(AlienType.NONE));

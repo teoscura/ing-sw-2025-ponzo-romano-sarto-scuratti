@@ -1,8 +1,5 @@
 package it.polimi.ingsw.model.cards.state;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
@@ -18,6 +15,9 @@ import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.VoyageState;
+
+import java.util.ArrayList;
+import java.util.List;
 
 class MeteorSelectShipState extends CardState {
 
@@ -49,8 +49,8 @@ class MeteorSelectShipState extends CardState {
 			this.state.broadcastMessage(new NotifyStateUpdateMessage(this.state.getClientState()));
 			return;
 		}
-		for(Player p : this.state.getOrder(CardOrder.NORMAL)){
-			if(p.getSpaceShip().getBlobsSize() == 1 && p.getSpaceShip().getCrew()[0]<=0) this.state.loseGame(p);
+		for (Player p : this.state.getOrder(CardOrder.NORMAL)) {
+			if (p.getSpaceShip().getBlobsSize() == 1 && p.getSpaceShip().getCrew()[0] <= 0) this.state.loseGame(p);
 		}
 		this.transition();
 	}
@@ -59,13 +59,13 @@ class MeteorSelectShipState extends CardState {
 	public ClientCardState getClientCardState() {
 		List<PlayerColor> tmp = new ArrayList<>();
 		for (Player p : this.state.getOrder(CardOrder.NORMAL)) {
-			if (p.getSpaceShip().getBlobsSize()>1) tmp.add(p.getColor());
+			if (p.getSpaceShip().getBlobsSize() > 1) tmp.add(p.getColor());
 		}
 		return new ClientNewCenterCardStateDecorator(new ClientBaseCardState(card_id), new ArrayList<>(tmp));
 	}
 
 	@Override
-    public CardState getNext() {
+	public CardState getNext() {
 		this.left.getProjectiles().removeFirst();
 		if (!this.left.getProjectiles().isEmpty()) return new MeteorAnnounceState(state, card_id, left);
 		System.out.println("Card exhausted, moving to a new one!");
@@ -76,7 +76,7 @@ class MeteorSelectShipState extends CardState {
 	public void selectBlob(Player p, ShipCoords blob_coord) {
 		try {
 			p.getSpaceShip().selectShipBlob(blob_coord);
-			System.out.println("Player '"+p.getUsername()+"' selected blob that contains coords "+blob_coord+".");
+			System.out.println("Player '" + p.getUsername() + "' selected blob that contains coords " + blob_coord + ".");
 		} catch (IllegalTargetException e) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to set his new center on an empty space!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to set his new center on an empty space!"));
@@ -88,7 +88,7 @@ class MeteorSelectShipState extends CardState {
 
 	@Override
 	public void disconnect(Player p) throws ForbiddenCallException {
-		
+
 	}
 
 }

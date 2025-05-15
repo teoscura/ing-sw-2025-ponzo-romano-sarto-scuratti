@@ -1,8 +1,5 @@
 package it.polimi.ingsw.model.state;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-
 import it.polimi.ingsw.controller.server.ClientDescriptor;
 import it.polimi.ingsw.exceptions.PlayerNotFoundException;
 import it.polimi.ingsw.message.client.ClientMessage;
@@ -20,6 +17,9 @@ import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.ShipCoords;
+
+import java.io.Serializable;
+import java.util.ArrayList;
 
 public abstract class GameState implements Serializable {
 

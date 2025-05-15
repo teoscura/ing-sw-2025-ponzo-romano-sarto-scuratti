@@ -9,66 +9,66 @@ import it.polimi.ingsw.model.player.SpaceShip;
 
 public class CrewRemoveVisitor implements iVisitor {
 
-    private final SpaceShip ship;
+	private final SpaceShip ship;
 
-    public CrewRemoveVisitor(SpaceShip ship){
-        if(ship==null) throw new NullPointerException();
-        this.ship = ship;
-    }
+	public CrewRemoveVisitor(SpaceShip ship) {
+		if (ship == null) throw new NullPointerException();
+		this.ship = ship;
+	}
 
-    @Override
-    public void visit(CabinComponent c) {
-        if(c.getCrew()==0) throw new IllegalTargetException("Coords don't correspond to a inhabited cabin");
-        if(!c.getCrewType().getLifeSupportExists()) c.setCrew(this.ship, c.getCrew()-1, AlienType.HUMAN);
-        else c.setCrew(this.ship, 0, AlienType.HUMAN);
-        ship.updateShip();
-    }
+	@Override
+	public void visit(CabinComponent c) {
+		if (c.getCrew() == 0) throw new IllegalTargetException("Coords don't correspond to a inhabited cabin");
+		if (!c.getCrewType().getLifeSupportExists()) c.setCrew(this.ship, c.getCrew() - 1, AlienType.HUMAN);
+		else c.setCrew(this.ship, 0, AlienType.HUMAN);
+		ship.updateShip();
+	}
 
-    @Override
-    public void visit(EngineComponent c) {
-        throw new IllegalTargetException("Coords don't correspond to a cabin");
-    }
+	@Override
+	public void visit(EngineComponent c) {
+		throw new IllegalTargetException("Coords don't correspond to a cabin");
+	}
 
-    @Override
-    public void visit(AlienLifeSupportComponent c) {
-        throw new IllegalTargetException("Coords don't correspond to a cabin");
-    }
+	@Override
+	public void visit(AlienLifeSupportComponent c) {
+		throw new IllegalTargetException("Coords don't correspond to a cabin");
+	}
 
-    @Override
-    public void visit(CannonComponent c) {
-        throw new IllegalTargetException("Coords don't correspond to a cabin");
-    }
+	@Override
+	public void visit(CannonComponent c) {
+		throw new IllegalTargetException("Coords don't correspond to a cabin");
+	}
 
-    @Override
-    public void visit(StorageComponent c) {
-        throw new IllegalTargetException("Coords don't correspond to a cabin");
-    }
+	@Override
+	public void visit(StorageComponent c) {
+		throw new IllegalTargetException("Coords don't correspond to a cabin");
+	}
 
-    @Override
-    public void visit(BatteryComponent c) {
-        throw new IllegalTargetException("Coords don't correspond to a cabin");
-    }
+	@Override
+	public void visit(BatteryComponent c) {
+		throw new IllegalTargetException("Coords don't correspond to a cabin");
+	}
 
-    @Override
-    public void visit(ShieldComponent c) {
-        throw new IllegalTargetException("Coords don't correspond to a cabin");
-    }
+	@Override
+	public void visit(ShieldComponent c) {
+		throw new IllegalTargetException("Coords don't correspond to a cabin");
+	}
 
-    @Override
-    public void visit(EmptyComponent c) {
-        throw new IllegalTargetException("Coords don't correspond to a cabin");
-    }
+	@Override
+	public void visit(EmptyComponent c) {
+		throw new IllegalTargetException("Coords don't correspond to a cabin");
+	}
 
-    @Override
-    public void visit(StructuralComponent c) {
-        throw new IllegalTargetException("Coords don't correspond to a cabin");
-    }
+	@Override
+	public void visit(StructuralComponent c) {
+		throw new IllegalTargetException("Coords don't correspond to a cabin");
+	}
 
-    @Override
-    public void visit(StartingCabinComponent c) {
-        if(c.getCrew()==0) throw new IllegalTargetException("Coords don't correspond to a inhabited cabin");
-        c.setCrew(this.ship, c.getCrew()-1, AlienType.HUMAN);
-        ship.updateShip();
-    }
-    
+	@Override
+	public void visit(StartingCabinComponent c) {
+		if (c.getCrew() == 0) throw new IllegalTargetException("Coords don't correspond to a inhabited cabin");
+		c.setCrew(this.ship, c.getCrew() - 1, AlienType.HUMAN);
+		ship.updateShip();
+	}
+
 }

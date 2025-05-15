@@ -1,7 +1,5 @@
 package it.polimi.ingsw.model.cards.state;
 
-import java.util.ArrayList;
-
 import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
@@ -22,6 +20,8 @@ import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.VoyageState;
+
+import java.util.ArrayList;
 
 public class SmugglersRewardState extends CardState {
 
@@ -45,9 +45,9 @@ public class SmugglersRewardState extends CardState {
 		super.init(new_state);
 		System.out.println("    CardState -> Smugglers Reward State!");
 		int[] prize = this.card.getReward().getContains();
-		System.out.println("    Reward => Blu: "+prize[0]+" Grn: "+prize[1]+" Ylw: "+prize[2]+" Red: "+prize[3]);
-		for(Player p : this.list){
-			System.out.println("	 - "+p.getUsername());
+		System.out.println("    Reward => Blu: " + prize[0] + " Grn: " + prize[1] + " Ylw: " + prize[2] + " Red: " + prize[3]);
+		for (Player p : this.list) {
+			System.out.println("	 - " + p.getUsername());
 		}
 	}
 
@@ -74,7 +74,7 @@ public class SmugglersRewardState extends CardState {
 	}
 
 	@Override
-    public CardState getNext() {
+	public CardState getNext() {
 		return null;
 	}
 
@@ -95,12 +95,12 @@ public class SmugglersRewardState extends CardState {
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "'  attempted to take cargo the card doesn't have!"));
 			return;
 		}
-		ContainsLoaderVisitor v = new ContainsLoaderVisitor(p.getSpaceShip(),type);
+		ContainsLoaderVisitor v = new ContainsLoaderVisitor(p.getSpaceShip(), type);
 		try {
 			p.getSpaceShip().getComponent(target_coords).check(v);
 			this.card.getReward().getContains()[type.getValue() - 1]--;
 			this.left--;
-			System.out.println("Player '"+p.getUsername()+"' took cargo type: "+type+", placed it at "+target_coords);
+			System.out.println("Player '" + p.getUsername() + "' took cargo type: " + type + ", placed it at " + target_coords);
 		} catch (IllegalTargetException e) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to position cargo in illegal coordinates!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to position cargo in illegal coordinates!"));
@@ -114,7 +114,7 @@ public class SmugglersRewardState extends CardState {
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to position cargo in a storage that doesn't support it!"));
 			return;
 		}
-		if(this.left==0) this.responded = true;
+		if (this.left == 0) this.responded = true;
 	}
 
 	@Override
@@ -144,11 +144,11 @@ public class SmugglersRewardState extends CardState {
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to load cargo from coords that dont contain the shipment!"));
 			return;
 		}
-		ContainsRemoveVisitor vr = new ContainsRemoveVisitor(p.getSpaceShip(),type);
-		ContainsLoaderVisitor vl = new ContainsLoaderVisitor(p.getSpaceShip(),type);
+		ContainsRemoveVisitor vr = new ContainsRemoveVisitor(p.getSpaceShip(), type);
+		ContainsLoaderVisitor vl = new ContainsLoaderVisitor(p.getSpaceShip(), type);
 		p.getSpaceShip().getComponent(source_coords).check(vr);
 		p.getSpaceShip().getComponent(target_coords).check(vl);
-		System.out.println("Player '"+p.getUsername()+"' moved cargo type: "+type+", from "+source_coords+" to "+target_coords);
+		System.out.println("Player '" + p.getUsername() + "' moved cargo type: " + type + ", from " + source_coords + " to " + target_coords);
 	}
 
 	@Override
@@ -163,10 +163,10 @@ public class SmugglersRewardState extends CardState {
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to discard cargo with an invalid type!"));
 			return;
 		}
-		ContainsRemoveVisitor v = new ContainsRemoveVisitor(p.getSpaceShip(),type);
+		ContainsRemoveVisitor v = new ContainsRemoveVisitor(p.getSpaceShip(), type);
 		try {
 			p.getSpaceShip().getComponent(target_coords).check(v);
-			System.out.println("Player '"+p.getUsername()+"' removed cargo type: "+type+" from "+target_coords);
+			System.out.println("Player '" + p.getUsername() + "' removed cargo type: " + type + " from " + target_coords);
 		} catch (IllegalTargetException e) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to discard cargo from illegal coordinates!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to discard cargo from illegal coordinates!"));
@@ -193,7 +193,7 @@ public class SmugglersRewardState extends CardState {
 			this.responded = true;
 			this.took_reward = false;
 		}
-		
+
 	}
 
 }

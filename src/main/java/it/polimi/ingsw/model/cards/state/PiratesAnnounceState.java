@@ -1,9 +1,5 @@
 package it.polimi.ingsw.model.cards.state;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
@@ -18,6 +14,10 @@ import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.VoyageState;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class PiratesAnnounceState extends CardState {
 
@@ -38,10 +38,11 @@ public class PiratesAnnounceState extends CardState {
 	@Override
 	public void init(ClientState new_state) {
 		super.init(new_state);
-		if(list.size()==this.state.getCount().getNumber()) System.out.println("New CardState -> Pirates Announce State!");
+		if (list.size() == this.state.getCount().getNumber())
+			System.out.println("New CardState -> Pirates Announce State!");
 		else System.out.println("    CardState -> Pirates Announce State!");
-		for(Player p : this.list){
-			System.out.println("	 - "+p.getUsername());
+		for (Player p : this.list) {
+			System.out.println("	 - " + p.getUsername());
 		}
 	}
 
@@ -58,12 +59,12 @@ public class PiratesAnnounceState extends CardState {
 
 	@Override
 	public ClientCardState getClientCardState() {
-		List<PlayerColor> awaiting = Arrays.asList(this.list.getFirst().getColor());
+		List<PlayerColor> awaiting = Collections.singletonList(this.list.getFirst().getColor());
 		return new ClientAwaitConfirmCardStateDecorator(new ClientBaseCardState(this.card.getId()), new ArrayList<>(awaiting));
 	}
 
 	@Override
-    public CardState getNext() {
+	public CardState getNext() {
 		if (this.list.getFirst().getDisconnected()) {
 			this.list.removeFirst();
 			if (!this.list.isEmpty()) return new PiratesAnnounceState(state, card, list);
@@ -87,7 +88,7 @@ public class PiratesAnnounceState extends CardState {
 		}
 		try {
 			p.getSpaceShip().turnOn(target_coords, battery_coords);
-			System.out.println("Player '" + p.getUsername() + "' turned on component at"+target_coords+" using battery from "+battery_coords+"!");
+			System.out.println("Player '" + p.getUsername() + "' turned on component at" + target_coords + " using battery from " + battery_coords + "!");
 		} catch (IllegalTargetException e) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to turn on a component with invalid coordinates!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to turn on a component with invalid coordinates!"));
@@ -108,12 +109,12 @@ public class PiratesAnnounceState extends CardState {
 	@Override
 	public void disconnect(Player p) throws ForbiddenCallException {
 		if (this.list.getFirst().equals(p)) {
-			
+
 			this.responded = true;
 			return;
 		}
 		this.list.remove(p);
-		
+
 	}
 
 }

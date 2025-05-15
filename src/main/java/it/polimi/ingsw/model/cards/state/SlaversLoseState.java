@@ -1,7 +1,5 @@
 package it.polimi.ingsw.model.cards.state;
 
-import java.util.ArrayList;
-
 import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
@@ -16,6 +14,8 @@ import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.VoyageState;
+
+import java.util.ArrayList;
 
 public class SlaversLoseState extends CardState {
 
@@ -37,8 +37,8 @@ public class SlaversLoseState extends CardState {
 	public void init(ClientState new_state) {
 		super.init(new_state);
 		System.out.println("    CardState -> Slavers Lose State!");
-		for(Player p : this.list){
-			System.out.println("	 - "+p.getUsername());
+		for (Player p : this.list) {
+			System.out.println("	 - " + p.getUsername());
 		}
 	}
 
@@ -61,7 +61,7 @@ public class SlaversLoseState extends CardState {
 	}
 
 	@Override
-    public CardState getNext() {
+	public CardState getNext() {
 		if (this.list.getFirst().getRetired() || this.list.getFirst().getDisconnected()) {
 			this.list.removeFirst();
 			if (!this.list.isEmpty()) return new SlaversAnnounceState(state, card, list);
@@ -85,7 +85,7 @@ public class SlaversLoseState extends CardState {
 		try {
 			p.getSpaceShip().getComponent(cabin_coords).check(v);
 			this.done++;
-			System.out.println("Player '" + p.getUsername() + "' removed a crewmate from "+cabin_coords+"!");
+			System.out.println("Player '" + p.getUsername() + "' removed a crewmate from " + cabin_coords + "!");
 		} catch (IllegalTargetException e) {
 			System.out.println("Player '" + p.getUsername() + "' attempted to remove a crew member from invalid coordinates!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to remove a crew member from invalid coordinates!"));
@@ -103,12 +103,12 @@ public class SlaversLoseState extends CardState {
 	@Override
 	public void disconnect(Player p) throws ForbiddenCallException {
 		if (this.list.getFirst() == p) {
-			
+
 			this.responded = true;
 			return;
 		}
 		this.list.remove(p);
-		
+
 	}
 
 }

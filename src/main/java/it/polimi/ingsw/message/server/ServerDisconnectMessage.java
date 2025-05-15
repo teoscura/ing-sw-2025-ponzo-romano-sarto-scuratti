@@ -10,9 +10,9 @@ import it.polimi.ingsw.model.state.GameState;
 public class ServerDisconnectMessage extends ServerMessage {
 
 	@Override
-    public void receive(MainServerController server) throws ForbiddenCallException {
-        server.disconnect(descriptor);
-    }
+	public void receive(MainServerController server) throws ForbiddenCallException {
+		server.disconnect(descriptor);
+	}
 
 	@Override
 	public void receive(LobbyController server) throws ForbiddenCallException {
@@ -21,19 +21,19 @@ public class ServerDisconnectMessage extends ServerMessage {
 
 	@Override
 	public void receive(ModelInstance model) throws ForbiddenCallException {
-		if(descriptor.getPlayer()==null) model.disconnect(descriptor);
+		if (descriptor.getPlayer() == null) model.disconnect(descriptor);
 		else model.disconnect(this.descriptor.getPlayer());
 	}
 
 	@Override
 	public void receive(GameState state) throws ForbiddenCallException {
-		if(this.descriptor.getPlayer()==null) state.disconnect(this.descriptor);
+		if (this.descriptor.getPlayer() == null) state.disconnect(this.descriptor);
 		else state.disconnect(this.descriptor.getPlayer());
 	}
 
 	@Override
-    public void receive(CardState state) throws ForbiddenCallException {
-        state.disconnect(this.descriptor.getPlayer());
-    }
+	public void receive(CardState state) throws ForbiddenCallException {
+		state.disconnect(this.descriptor.getPlayer());
+	}
 
 }

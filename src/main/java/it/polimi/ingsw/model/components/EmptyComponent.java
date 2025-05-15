@@ -1,8 +1,6 @@
 //Done.
 package it.polimi.ingsw.model.components;
 
-import java.util.Arrays;
-
 import it.polimi.ingsw.model.client.components.ClientBaseComponent;
 import it.polimi.ingsw.model.client.components.ClientComponent;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
@@ -10,6 +8,8 @@ import it.polimi.ingsw.model.components.enums.ConnectorType;
 import it.polimi.ingsw.model.components.visitors.iVisitor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.player.SpaceShip;
+
+import java.util.Arrays;
 
 public class EmptyComponent extends BaseComponent {
 
@@ -41,7 +41,7 @@ public class EmptyComponent extends BaseComponent {
 	@Override
 	public void onCreation(SpaceShip ship, ShipCoords coords) {
 		this.coords = coords;
-	}	
+	}
 
 	@Override
 	public void onDelete(SpaceShip ship) {
