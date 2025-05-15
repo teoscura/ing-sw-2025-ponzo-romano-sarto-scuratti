@@ -6,10 +6,12 @@ import it.polimi.ingsw.view.ClientView;
 
 public class ClientController {
 
+	private final ClientView view;
 	private ClientControllerState state;
 	private boolean closed = false;
 
 	public ClientController(ClientView view) {
+		this.view = view;
 		this.setState(new TitleScreenState(this, view));
 	}
 
@@ -28,6 +30,11 @@ public class ClientController {
 
 	public boolean getClosed(){
 		return this.closed;
+	}
+
+	public void reset(){
+		this.state.onClose();
+		this.setState(new TitleScreenState(this, view));
 	}
 
 }

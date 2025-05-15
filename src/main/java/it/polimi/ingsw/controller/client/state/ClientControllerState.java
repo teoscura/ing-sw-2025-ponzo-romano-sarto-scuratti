@@ -43,4 +43,6 @@ public abstract class ClientControllerState {
         throw new RuntimeException();
     }
 
+    public abstract void onClose();
+
 }

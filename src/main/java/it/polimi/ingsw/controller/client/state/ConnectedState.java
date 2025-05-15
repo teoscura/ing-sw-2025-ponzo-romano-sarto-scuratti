@@ -49,6 +49,11 @@ public class ConnectedState extends ClientControllerState {
 		return new TitleScreenState(controller, view);
 	}
 
+	@Override
+	public void onClose() {
+		this.disconnect();
+	}
+
 	// -------------------------------------------------------------
     // Communication methods
     // -------------------------------------------------------------

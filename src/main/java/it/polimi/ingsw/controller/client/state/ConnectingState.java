@@ -37,9 +37,13 @@ public class ConnectingState extends ClientControllerState {
 
     @Override
     public ClientControllerState getNext() {
-        if (this.connection == null) return new TitleScreenState(controller, view);
-        else return new ConnectedState(controller, view, username, connection, this.inqueue);
+        return new ConnectedState(controller, view, username, connection, this.inqueue);
     }
+
+    @Override
+	public void onClose() {
+		return;
+	}
 
     public void connect(String address, int port, ConnectionType type){
         this.inqueue = new ThreadSafeMessageQueue<>(100);
@@ -69,7 +73,8 @@ public class ConnectingState extends ClientControllerState {
             }; break;
             default: throw new UnsupportedOperationException();
         }
-        this.transition();
+        if (connection==null) this.controller.reset();
+        else this.transition();
     }
     
 }

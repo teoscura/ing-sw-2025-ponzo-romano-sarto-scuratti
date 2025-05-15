@@ -22,6 +22,10 @@ public class ConnectTask extends Thread {
             while(!r.ready()){};
             String s = r.readLine();
             var arr = s.split(" ");
+            if(arr.length!=3){
+                this.state.getController().reset();
+                return;
+            }
             ConnectionType t = arr[2].equals("rmi") ?  ConnectionType.RMI : ConnectionType.SOCKET;
             state.connect(arr[0], Integer.parseInt(arr[1]), t);
         } catch (IOException e) {
