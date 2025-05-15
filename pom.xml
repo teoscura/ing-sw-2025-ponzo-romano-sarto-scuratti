@@ -90,6 +90,11 @@
                                     <mainClass>it.polimi.ingsw.ServerMain</mainClass>
                                 </transformer>
                             </transformers>
+                                <artifactSet>
+                                    <excludes>
+                                        <exclude>org.openjfx:javafx-*</exclude>
+                                    </excludes>
+                                </artifactSet>
                         </configuration>
                     </execution>
                     <execution>
