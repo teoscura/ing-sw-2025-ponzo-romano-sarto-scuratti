@@ -1,4 +1,4 @@
-package it.polimi.ingsw.controller.server;
+package it.polimi.ingsw.controller.server.connections;
 
 import java.io.IOException;
 import java.lang.reflect.InaccessibleObjectException;
@@ -19,9 +19,8 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import it.polimi.ingsw.controller.client.connections.RMIClientStub;
-import it.polimi.ingsw.controller.server.connections.RMISkeletonProvider;
-import it.polimi.ingsw.controller.server.connections.VirtualServer;
-import it.polimi.ingsw.controller.server.connections.SocketClient;
+import it.polimi.ingsw.controller.server.ClientDescriptor;
+import it.polimi.ingsw.controller.server.MainServerController;
 
 public class NetworkServer extends Thread implements RMISkeletonProvider {
 

@@ -18,6 +18,7 @@ import java.util.regex.Pattern;
 import it.polimi.ingsw.controller.AsyncInsertTask;
 import it.polimi.ingsw.controller.ThreadSafeMessageQueue;
 import it.polimi.ingsw.controller.client.connections.RMIClientStub;
+import it.polimi.ingsw.controller.server.connections.NetworkServer;
 import it.polimi.ingsw.controller.server.connections.RMIServerStubImpl;
 import it.polimi.ingsw.controller.server.connections.VirtualServer;
 import it.polimi.ingsw.controller.server.connections.SocketClient;

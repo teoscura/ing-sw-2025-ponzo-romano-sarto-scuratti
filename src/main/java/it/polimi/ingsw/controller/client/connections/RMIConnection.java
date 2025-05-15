@@ -14,11 +14,11 @@ import it.polimi.ingsw.message.server.ServerMessage;
 public class RMIConnection implements ServerConnection {
 
 	private final RMIClientStub stub;
-	private VirtualServer server = null;
+	private final VirtualServer server;
 
 	public RMIConnection(ThreadSafeMessageQueue<ClientMessage>  queue, String server_ip, String username, int port) throws RemoteException, NotBoundException {
+		Registry registry = LocateRegistry.getRegistry(server_ip, port);
 		this.stub = new RMIClientStub(queue, username, port);
-		Registry registry = LocateRegistry.getRegistry("localhost", port);
 		this.server = ((RMISkeletonProvider) registry.lookup("galaxy_truckers")).accept(stub);
 	}
 
