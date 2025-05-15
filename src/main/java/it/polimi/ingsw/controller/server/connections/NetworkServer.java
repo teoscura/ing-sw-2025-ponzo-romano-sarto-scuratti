@@ -102,13 +102,12 @@ public class NetworkServer extends Thread implements RMISkeletonProvider, Serial
 	private Thread RMICleanup(){
 		return new Thread(){
 			public void run(){
-				Registry registry;
 				try {
-					registry = LocateRegistry.getRegistry();
+					this.interrupt();
+					Registry registry = LocateRegistry.getRegistry();
 					registry.unbind("galaxy_truckers");
-				} catch (RemoteException | NotBoundException e) {
-					System.out.println("Cleaned up RMI connection.");
-				}
+				} catch (RemoteException | NotBoundException e) {}
+				System.out.println("Cleaned up RMI connection.");
 			}
 		};
 	}
@@ -117,10 +116,10 @@ public class NetworkServer extends Thread implements RMISkeletonProvider, Serial
 		return new Thread(){
 			public void run(){
 				try {
+					this.interrupt();
 					server.close();
-				} catch (IOException e) {
-					System.out.println("Cleaned up RMI connection.");
-				}
+				} catch (IOException e) {}
+				System.out.println("Cleaned up TCP connection.");
 			}
 		};
 	}
