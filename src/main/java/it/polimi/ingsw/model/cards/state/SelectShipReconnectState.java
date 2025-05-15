@@ -80,7 +80,7 @@ public class SelectShipReconnectState extends CardState {
 
     @Override
     public void disconnect(Player p){
-        System.out.println("Player '" + p.getUsername() + "' disconnected!");
+        
     }
     
 }

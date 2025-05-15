@@ -267,7 +267,7 @@ class CombatZonePenaltyState extends CardState {
 		if (this.target.equals(p)) {
 			this.responded = true;
 		}
-		System.out.println("Player '" + p.getUsername() + "' disconnected!");
+		
 	}
 
 }

@@ -101,7 +101,6 @@ public class AbandonedStationAnnounceState extends CardState {
 			return;
 		}
 		this.list.remove(p);
-		System.out.println("Player '" + p.getUsername() + "' disconnected!");
 	}
 
 }

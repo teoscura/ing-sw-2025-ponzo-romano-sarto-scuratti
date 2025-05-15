@@ -110,7 +110,7 @@ public class SmugglersAnnounceState extends CardState {
 			this.responded = true;
 		}
 		this.list.remove(p);
-		System.out.println("Player '" + p.getUsername() + "' disconnected!");
+		
 	}
 
 }

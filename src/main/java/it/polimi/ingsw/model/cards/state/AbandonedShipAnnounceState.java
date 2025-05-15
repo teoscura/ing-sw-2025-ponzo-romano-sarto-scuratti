@@ -96,7 +96,6 @@ public class AbandonedShipAnnounceState extends CardState {
 		}
 		this.id = planet;
 		this.responded = true;
-		System.out.println("Player '" + p.getUsername() + "' landed on id: "+this.id+".");
 	}
 
 	@Override
@@ -108,7 +107,6 @@ public class AbandonedShipAnnounceState extends CardState {
 		else if (this.list.contains(p)) {
 			this.list.remove(p);
 		}
-		System.out.println("Player '" + p.getUsername() + "' disconnected!");
 	}
 
 }

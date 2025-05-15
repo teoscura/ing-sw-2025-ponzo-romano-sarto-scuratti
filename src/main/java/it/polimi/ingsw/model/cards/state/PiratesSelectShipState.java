@@ -101,7 +101,7 @@ public class PiratesSelectShipState extends CardState {
 		if (!this.list.getFirst().equals(p)) {
 			this.list.remove(p);
 		}
-		System.out.println("Player '" + p.getUsername() + "' disconnected!");
+		
 	}
 
 }

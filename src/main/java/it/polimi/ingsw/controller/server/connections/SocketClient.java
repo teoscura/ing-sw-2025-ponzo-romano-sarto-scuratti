@@ -11,7 +11,7 @@ import it.polimi.ingsw.message.client.ClientMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.message.server.UsernameSetupMessage;
 
-public class SocketClient implements ClientConnection {
+public class SocketClient extends Thread implements ClientConnection {
 
 	private final Socket socket;
 	private TimerTask setup_timeout;
@@ -39,13 +39,43 @@ public class SocketClient implements ClientConnection {
 	}
 
 	@Override
+	public void run(){
+		while (!this.socket.isClosed() && this.username == null) {
+			this.readSetup();
+		}
+		while(!this.socket.isClosed()){
+			this.read();
+		}
+	}
+
+	@Override
 	public void sendMessage(ClientMessage message) throws IOException {
 		this.out.reset();
 		this.out.writeObject(message);
 		this.out.flush();
 	}
 
-	public void read(MainServerController controller) {
+	private void readSetup(){
+		UsernameSetupMessage setup = null;
+		try {
+			setup = (UsernameSetupMessage) in.readObject();
+		} catch (ClassNotFoundException e) {
+			//XXX logger message
+		} catch (IOException e) {
+			//XXX logger
+			System.out.println("Failed to read object from: " + socket.getInetAddress() + ", closing socket.");
+			this.close();
+		} catch (ClassCastException e) {
+			//XXX logger
+			System.out.println("Received non-setup message from tcp socket: " + socket.getInetAddress());
+		}
+		this.username = setup.getUsername();
+		MainServerController.getInstance().setupSocketListener(this, this.username);
+		return;
+	}
+
+	private void read() {
+		MainServerController controller = MainServerController.getInstance();
 		ServerMessage message = null;
 		try {
 			message = (ServerMessage) in.readObject();
@@ -56,21 +86,6 @@ public class SocketClient implements ClientConnection {
 			System.out.println("Failed to read object from: " + socket.getInetAddress() + ", closing socket.");
 			this.close();
 		}
-		if (message.getDescriptor() != null) {
-			message.setDescriptor(null);
-		}
-		if (username == null) {
-			UsernameSetupMessage setup = null;
-			try {
-				setup = (UsernameSetupMessage) message;
-			} catch (ClassCastException e) {
-				//XXX logger
-				System.out.println("Received non-setup message from tcp socket: " + socket.getInetAddress());
-			}
-			this.username = setup.getUsername();
-			controller.setupSocketListener(this, this.username);
-			return;
-		}
 		message.setDescriptor(controller.getDescriptor(this.username));
 		controller.receiveMessage(message);
 	}
@@ -78,6 +93,7 @@ public class SocketClient implements ClientConnection {
 	@Override
 	public void close() {
 		try {
+			this.interrupt();
 			socket.close();
 		} catch (IOException e) {
 			//XXX logger message

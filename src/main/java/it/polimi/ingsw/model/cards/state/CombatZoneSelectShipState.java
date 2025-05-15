@@ -104,7 +104,7 @@ public class CombatZoneSelectShipState extends CardState {
 
 	@Override
 	public void disconnect(Player p) throws ForbiddenCallException {
-		System.out.println("Player '" + p.getUsername() + "' disconnected!");
+		
 	}
 
 }

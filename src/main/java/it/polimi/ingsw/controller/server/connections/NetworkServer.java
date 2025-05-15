@@ -55,7 +55,7 @@ public class NetworkServer extends Thread implements RMISkeletonProvider, Serial
 			registry = LocateRegistry.createRegistry(this.rmiport);
 			registry.bind("galaxy_truckers", this);
 			UnicastRemoteObject.exportObject(this, this.rmiport);
-			System.out.println("Set up RMI on address: '"+this.ip+"' and port: '"+this.rmiport+"'...");
+			System.out.println("Set up RMI on address: '"+this.ip+":"+this.rmiport+"'...");
 			Runtime.getRuntime().addShutdownHook(this.RMICleanup());
 		} catch (RemoteException e) {
 			System.out.println("Failed to setup the rmi registry and remote object.");
@@ -68,7 +68,7 @@ public class NetworkServer extends Thread implements RMISkeletonProvider, Serial
 		try {
 			this.server = new ServerSocket();
 			this.server.bind(new InetSocketAddress(this.ip, this.tcpport));
-			System.out.println("Started server on: \'"+ip+"\':\'"+this.server.getLocalPort()+"\''...");
+			System.out.println("Started server on: '"+ip+":"+this.server.getLocalPort()+"'...");
 			Runtime.getRuntime().addShutdownHook(this.TCPCleanup());
 		} catch (IOException e) {
 			System.out.println("Couldn't start server on the specified address and port, terminating.");
@@ -86,16 +86,7 @@ public class NetworkServer extends Thread implements RMISkeletonProvider, Serial
 			while (true) {
 				SocketClient new_connection = new SocketClient(server.accept());
 				MainServerController.getInstance().connectListener(new_connection);
-				this.serverPool.submit(
-					() -> {
-						while (true) {
-							if (new_connection.getSocket().isClosed()) {
-								return;
-							}
-							new_connection.read(MainServerController.getInstance());
-						}
-					}
-				);
+				this.serverPool.submit(new_connection);
 			}
 		} catch (IOException e) {
 			try {

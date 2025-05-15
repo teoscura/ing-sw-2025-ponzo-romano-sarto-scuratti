@@ -53,9 +53,10 @@ public class SocketConnection extends Thread implements ServerConnection {
 	@Override
 	public void close() {
 		try {
+			this.interrupt();
 			socket.close();
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.out.println("getName()");
 		}
 	}
 
