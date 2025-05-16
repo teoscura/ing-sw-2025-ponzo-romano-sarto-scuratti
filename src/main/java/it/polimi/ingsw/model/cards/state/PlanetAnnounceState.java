@@ -36,10 +36,10 @@ public class PlanetAnnounceState extends CardState {
 	public void init(ClientState new_state) {
 		super.init(new_state);
 		if (list.size() == this.state.getCount().getNumber())
-			/*XXX*/System.out.println("New CardState -> Planet Announce State!");
-		else /*XXX*/System.out.println("CardState -> Planet Announce State!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"New CardState -> Planet Announce State!");
+		else Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"CardState -> Planet Announce State!");
 		for (Player p : this.list) {
-			Logger.getInstance().print(LoggerLevel.LOBBY, "[Lobby id:"+this.state.getModelID()+"] "+p.voyageInfo(this.state.getPlanche()));
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+p.voyageInfo(this.state.getPlanche()));
 		}
 	}
 
@@ -52,7 +52,7 @@ public class PlanetAnnounceState extends CardState {
 		}
 		if (this.id >= 0) {
 			this.card.apply(this.list.getFirst(), id);
-			/*XXX*/System.out.println("Player '" + this.list.getFirst().getUsername() + "' moved back " + card.getDays());
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player '" + this.list.getFirst().getUsername() + "' moved back " + card.getDays());
 			this.state.getPlanche().movePlayer(state, list.getFirst(), -card.getDays());
 		}
 		this.transition();
@@ -73,32 +73,32 @@ public class PlanetAnnounceState extends CardState {
 		if (id != -1) return new PlanetRewardState(state, card, id, list);
 		this.list.removeFirst();
 		if (!this.list.isEmpty()) return new PlanetAnnounceState(state, card, list);
-		/*XXX*/System.out.println("Moving to a new state!");
+		Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Moving to a new state!");
 		return null;
 	}
 
 	@Override
 	public void selectLanding(Player p, int planet) {
 		if (!p.equals(this.list.getFirst())) {
-			/*XXX*/System.out.println("Player '" + p.getUsername() + "' attempted to land during another player's turn!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player '" + p.getUsername() + "' attempted to land during another player's turn!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to land during another player's turn!"));
 			return;
 		} else if (planet < -1 || planet >= this.card.getSize()) {
-			/*XXX*/System.out.println("Player '" + p.getUsername() + "' attempted to land on an invalid id!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player '" + p.getUsername() + "' attempted to land on an invalid id!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to land on an invalid id!"));
 			return;
 		}
 		if (planet == -1) {
-			/*XXX*/System.out.println("Player '" + p.getUsername() + "' chose to not land!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player '" + p.getUsername() + "' chose to not land!");
 			this.id = planet;
 			this.responded = true;
 			return;
 		} else if (this.card.getPlanet(planet).getVisited()) {
-			/*XXX*/System.out.println("Player '" + p.getUsername() + "' attempted to land on a planet that was already visited!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player '" + p.getUsername() + "' attempted to land on a planet that was already visited!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to land on a planet that was already visited!"));
 			return;
 		}
-		/*XXX*/System.out.println("Player '" + p.getUsername() + "' landed on: " + planet);
+		Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player '" + p.getUsername() + "' landed on: " + planet);
 		this.id = planet;
 		this.responded = true;
 	}

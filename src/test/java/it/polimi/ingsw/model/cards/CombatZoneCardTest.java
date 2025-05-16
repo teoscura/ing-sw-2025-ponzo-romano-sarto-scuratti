@@ -195,7 +195,7 @@ public class CombatZoneCardTest {
 		message = new SendContinueMessage();
 		message.setDescriptor(p1desc);
 		state.validate(message);
-		player1.getSpaceShip().printBlobs();
+		
 		//He needs to choose the ship first, then take second
 		message = new SelectBlobMessage(new ShipCoords(GameModeType.TEST, 3, 2));
 		message.setDescriptor(p1desc);
@@ -361,7 +361,7 @@ public class CombatZoneCardTest {
 		message.setDescriptor(p3desc);
 		state.validate(message);
 		//Turn on shield and take first shot.
-		player1.getSpaceShip().printBlobs();
+		
 		message = new TurnOnMessage(new ShipCoords(GameModeType.TEST, 5, 3), new ShipCoords(GameModeType.TEST, 2, 2));
 		message.setDescriptor(p1desc);
 		state.validate(message);
@@ -380,7 +380,7 @@ public class CombatZoneCardTest {
 		message.setDescriptor(p1desc);
 		state.validate(message);
 		//Over.
-		player1.getSpaceShip().printBlobs();
+		
 		assertSame(player1.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 3, 3)), player1.getSpaceShip().getEmpty());
 		assertSame(player1.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 4, 3)), player1.getSpaceShip().getEmpty());
 		assertSame(player1.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 5, 3)), player1.getSpaceShip().getEmpty());
@@ -510,7 +510,7 @@ public class CombatZoneCardTest {
 		message.setDescriptor(p1desc);
 		state.validate(message);
 		//End test
-		player1.getSpaceShip().printBlobs();
+		
 		assertSame(player1.getSpaceShip().getEmpty(), player1.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 3, 3)));
 		assertSame(player1.getSpaceShip().getEmpty(), player1.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 4, 3)));
 		assertSame(player1.getSpaceShip().getEmpty(), player1.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 5, 3)));
@@ -594,7 +594,7 @@ public class CombatZoneCardTest {
 		message.setDescriptor(p1desc);
 		state.validate(message);
 		//P1 has to choose new ship;
-		player1.getSpaceShip().printBlobs();
+		
 		message = new SelectBlobMessage(new ShipCoords(GameModeType.TEST, 3, 2));
 		message.setDescriptor(p1desc);
 		state.validate(message);
@@ -728,7 +728,7 @@ public class CombatZoneCardTest {
 		message.setDescriptor(p1desc);
 		state.validate(message);
 		//Player1 chooses ship piece
-		player1.getSpaceShip().printBlobs();
+		
 		//Player1 chooses wrong coords, nothing happens;
 		message = new SelectBlobMessage(new ShipCoords(GameModeType.TEST, 5, 2));
 		message.setDescriptor(p1desc);

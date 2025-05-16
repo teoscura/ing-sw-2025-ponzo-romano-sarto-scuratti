@@ -18,6 +18,8 @@ import it.polimi.ingsw.model.client.player.ClientVoyagePlayer;
 import it.polimi.ingsw.model.client.state.ClientState;
 import it.polimi.ingsw.model.client.state.ClientVoyageState;
 import it.polimi.ingsw.model.player.Player;
+import it.polimi.ingsw.utils.Logger;
+import it.polimi.ingsw.utils.LoggerLevel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,7 +89,7 @@ public class DummyVoyageState extends VoyageState {
 	public void connect(Player p) throws ForbiddenCallException {
 		if (p == null) throw new NullPointerException();
 		if (!p.getDisconnected()) throw new ForbiddenCallException();
-		/*XXX*/System.out.println("Player '" + p.getUsername() + "' reconnected!");
+		Logger.getInstance().print(LoggerLevel.MODEL, "["+model.getID()+"] "+"Player '" + p.getUsername() + "' reconnected!");
 		this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' reconnected!"));
 		p.reconnect();
 		if (!p.getRetired() && p.getSpaceShip().getBlobsSize() > 1) {
@@ -109,7 +111,7 @@ public class DummyVoyageState extends VoyageState {
 	public void giveUp(Player p) throws ForbiddenCallException {
 		if (p == null) return;
 		if (p.getRetired()) {
-			/*XXX*/System.out.println("Player '" + p.getUsername() + "' attempted to give up, but they already aren't playing!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+model.getID()+"] "+"Player '" + p.getUsername() + "' attempted to give up, but they already aren't playing!");
 			this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' attempted to give up, but they already aren't playing!"));
 			return;
 		}

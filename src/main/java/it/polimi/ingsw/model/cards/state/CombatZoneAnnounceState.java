@@ -43,16 +43,16 @@ public class CombatZoneAnnounceState extends CardState {
 	public void init(ClientState new_state) {
 		super.init(new_state);
 		if (this.state.getOrder(CardOrder.NORMAL).size() <= 1) {
-			/*XXX*/System.out.println("Only one player left playing, skipping state!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Only one player left playing, skipping state!");
 			this.transition();
 			return;
 		}
 		if (sections.size() == 3)
-			/*XXX*/System.out.println("New CardState -> Combat Zone Announce State! [Section " + (3 - sections.size()) + " - " + this.sections.getFirst().getCriteria() + " - " + this.sections.getFirst().getPenalty() + "].");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"New CardState -> Combat Zone Announce State! [Section " + (3 - sections.size()) + " - " + this.sections.getFirst().getCriteria() + " - " + this.sections.getFirst().getPenalty() + "].");
 		else
-			/*XXX*/System.out.println("CardState -> Combat Zone Announce State! [Section " + (3 - sections.size()) + " - " + this.sections.getFirst().getCriteria() + " - " + this.sections.getFirst().getPenalty() + "].");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"CardState -> Combat Zone Announce State! [Section " + (3 - sections.size()) + " - " + this.sections.getFirst().getCriteria() + " - " + this.sections.getFirst().getPenalty() + "].");
 		for (Player p : this.state.getOrder(CardOrder.NORMAL)) {
-			Logger.getInstance().print(LoggerLevel.LOBBY, "[Lobby id:"+this.state.getModelID()+"] "+p.voyageInfo(this.state.getPlanche()));
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+p.voyageInfo(this.state.getPlanche()));
 		}
 	}
 
@@ -64,7 +64,7 @@ public class CombatZoneAnnounceState extends CardState {
 			return;
 		}
 		this.target = this.state.findCriteria(this.sections.getFirst().getCriteria());
-		/*XXX*/System.out.println("Applying penalty to player: '" + target.getUsername() + "'");
+		Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Applying penalty to player: '" + target.getUsername() + "'");
 		this.transition();
 	}
 
@@ -81,22 +81,22 @@ public class CombatZoneAnnounceState extends CardState {
 	public CardState getNext() {
 		if (this.state.getOrder(CardOrder.NORMAL).size() > 1)
 			return new CombatZonePenaltyState(state, card_id, sections, shots, target);
-		/*XXX*/System.out.println("...Card exhausted, moving to a new one!");
+		Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"...Card exhausted, moving to a new one!");
 		return null;
 	}
 
 	@Override
 	public void turnOn(Player p, ShipCoords target_coords, ShipCoords battery_coords) {
 		if (!this.awaiting.contains(p)) {
-			/*XXX*/System.out.println("Player '" + p.getUsername() + "' attempted to turn on a component after motioning to progress!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player '" + p.getUsername() + "' attempted to turn on a component after motioning to progress!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to turn on a component after motioning to progress!"));
 			return;
 		}
 		try {
 			p.getSpaceShip().turnOn(target_coords, battery_coords);
-			/*XXX*/System.out.println("Player '" + p.getUsername() + "' turned on component at" + target_coords + " using battery from " + battery_coords + "!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player '" + p.getUsername() + "' turned on component at" + target_coords + " using battery from " + battery_coords + "!");
 		} catch (IllegalTargetException e) {
-			/*XXX*/System.out.println("Player '" + p.getUsername() + "' attempted to turn on a component with invalid coordinates!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player '" + p.getUsername() + "' attempted to turn on a component with invalid coordinates!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to turn on a component with invalid coordinates!"));
 		}
 	}
@@ -104,12 +104,12 @@ public class CombatZoneAnnounceState extends CardState {
 	@Override
 	public void progressTurn(Player p) {
 		if (!this.awaiting.contains(p)) {
-			/*XXX*/System.out.println("Player '" + p.getUsername() + "' attempted to progress the turn while already having done so!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player '" + p.getUsername() + "' attempted to progress the turn while already having done so!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to progress the turn while already having done so!"));
 			return;
 		}
 		this.awaiting.remove(p);
-		/*XXX*/System.out.println("Player '" + p.getUsername() + "' motioned to progress! (" + (this.state.getCount().getNumber() - this.awaiting.size()) + ").");
+		Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player '" + p.getUsername() + "' motioned to progress! (" + (this.state.getCount().getNumber() - this.awaiting.size()) + ").");
 	}
 
 	@Override

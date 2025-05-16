@@ -61,7 +61,7 @@ public class LobbyController extends Thread implements VirtualServer {
 					running = this.model.getState() != null;
 				}
 			} catch (ForbiddenCallException e) {
-				Logger.getInstance().print(LoggerLevel.WARNING, e.getMessage());
+				Logger.getInstance().print(LoggerLevel.WARN, e.getMessage());
 			} catch (InterruptedException e) {
 				Logger.getInstance().print(LoggerLevel.NOTIF, "Shutting down lobby " + this.id + " thread!");
 			}
@@ -71,7 +71,7 @@ public class LobbyController extends Thread implements VirtualServer {
 
 	public void receiveMessage(ServerMessage message) {
 		if (message.getDescriptor() == null || !this.listeners.containsKey(message.getDescriptor().getUsername())) {
-			Logger.getInstance().print(LoggerLevel.WARNING, "Recieved a message from a client not properly connected!");
+			Logger.getInstance().print(LoggerLevel.WARN, "Recieved a message from a client not properly connected!");
 			this.broadcast(new ViewMessage("Recieved a message from a client not properly connected!"));
 			return;
 		}
@@ -136,7 +136,7 @@ public class LobbyController extends Thread implements VirtualServer {
 	private TimerTask getEndMatchTask(LobbyController controller) {
 		return new TimerTask() {
 			public void run() {
-				Logger.getInstance().print(LoggerLevel.LOBBY, "Only one player was left for too long, closing the match!");
+				Logger.getInstance().print(LoggerLevel.LOBCN, "["+id+"] "+"Only one player was left for too long, closing the match!");
 				controller.endGame();
 			}
 		};
@@ -147,7 +147,7 @@ public class LobbyController extends Thread implements VirtualServer {
 		boolean reconnect = false;
 		synchronized (listeners_lock) {
 			if (this.listeners.containsKey(client.getUsername())) {
-				Logger.getInstance().print(LoggerLevel.LOBBY, "Client '" + client.getUsername() + "' attempted to connect twice!");
+				Logger.getInstance().print(LoggerLevel.LOBCN, "["+this.id+"] " + "Client '" + client.getUsername() + "' attempted to connect twice!");
 				return;
 			} else if (this.disconnected_usernames.containsKey(client.getUsername())) {
 				this.disconnected_usernames.remove(client.getUsername());
@@ -159,14 +159,14 @@ public class LobbyController extends Thread implements VirtualServer {
 		}
 		synchronized (model_lock) {
 			if (!model.getStarted()) {
-				Logger.getInstance().print(LoggerLevel.LOBBY, "Client '" + client.getUsername() + "' connected to waiting room!");
+				Logger.getInstance().print(LoggerLevel.LOBCN, "["+this.id+"] " + "Client '" + client.getUsername() + "' connected to waiting room!");
 				this.model.connect(client);
 			} else if (reconnect) {
 				this.model.connect(client.getPlayer());
 				this.dsctimer.cancel();
 				this.dsctimer = null;
 			} else {
-			Logger.getInstance().print(LoggerLevel.LOBBY, "Client '" + client.getUsername() + "' started spectating!");
+			Logger.getInstance().print(LoggerLevel.LOBCN, "["+this.id+"] " + "Client '" + client.getUsername() + "' started spectating!");
 			}
 		}
 	}
@@ -175,7 +175,7 @@ public class LobbyController extends Thread implements VirtualServer {
 		MainServerController s = MainServerController.getInstance();
 		synchronized (listeners_lock) {
 			if (!listeners.containsKey(client.getUsername())) {
-				Logger.getInstance().print(LoggerLevel.WARNING, "Client '" + client.getUsername() + "' tried disconnecting from a lobby he was never connected to!");
+				Logger.getInstance().print(LoggerLevel.WARN, "Client '" + client.getUsername() + "' tried disconnecting from a lobby he was never connected to!");
 				return;
 			}
 			this.listeners.remove(client.getUsername());

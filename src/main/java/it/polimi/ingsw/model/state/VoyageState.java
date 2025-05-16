@@ -20,6 +20,8 @@ import it.polimi.ingsw.model.client.player.ClientVoyagePlayer;
 import it.polimi.ingsw.model.client.state.ClientState;
 import it.polimi.ingsw.model.client.state.ClientVoyageState;
 import it.polimi.ingsw.model.player.Player;
+import it.polimi.ingsw.utils.Logger;
+import it.polimi.ingsw.utils.LoggerLevel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +46,7 @@ public class VoyageState extends GameState {
 	@Override
 	public void init() {
 		super.init();
-		/*XXX*/System.out.println("New Game State -> Voyage State");
+		Logger.getInstance().print(LoggerLevel.MODEL, "["+model.getID()+"] "+"New Game State -> Voyage State");
 		if (this.card == null) this.setCardState(null);
 		this.broadcastMessage(new NotifyStateUpdateMessage(this.getClientState()));
 	}
@@ -93,7 +95,7 @@ public class VoyageState extends GameState {
 	public void connect(Player p) throws ForbiddenCallException {
 		if (p == null) throw new NullPointerException();
 		if (!p.getDisconnected()) throw new ForbiddenCallException();
-		/*XXX*/System.out.println("Player '" + p.getUsername() + "' reconnected!");
+		Logger.getInstance().print(LoggerLevel.MODEL, "["+model.getID()+"] "+"Player '" + p.getUsername() + "' reconnected!");
 		this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' reconnected!"));
 		p.reconnect();
 		if (!p.getRetired() && p.getSpaceShip().getBlobsSize() > 1) {
@@ -115,7 +117,7 @@ public class VoyageState extends GameState {
 	public void giveUp(Player p) throws ForbiddenCallException {
 		if (p == null) return;
 		if (p.getRetired()) {
-			/*XXX*/System.out.println("Player '" + p.getUsername() + "' attempted to give up, but they already aren't playing!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+model.getID()+"] "+"Player '" + p.getUsername() + "' attempted to give up, but they already aren't playing!");
 			this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' attempted to give up, but they already aren't playing!"));
 			return;
 		}
@@ -197,7 +199,6 @@ public class VoyageState extends GameState {
 		return res;
 	}
 
-	//XXX remove player arg requirement, not needed anymore
 	@Override
 	public CardState getCardState(Player p) {
 		return this.state;

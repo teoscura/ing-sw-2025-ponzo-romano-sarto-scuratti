@@ -60,11 +60,11 @@ public class MainServerControllerTest {
 		MainServerController.reset();
 		t = MainServerController.getInstance();
 		t.init("localhost", 0, 10000);
-		t.start();
 	}
 
 	@Test
 	void lobbyClose() throws ForbiddenCallException, InterruptedException {
+		t.start();
 		//Create two ships with only one engine.
 		ComponentFactory f1 = new ComponentFactory();
 		ComponentFactory f2 = new ComponentFactory();
@@ -122,10 +122,12 @@ public class MainServerControllerTest {
 		t.receiveMessage(mess);
 		Thread.sleep(200);
 		assertEquals(0, t.getLobbyList().size());
+		
 	}
 
 	@Test
 	void connectionTest() throws ForbiddenCallException, InterruptedException {
+		t.start();
 		ServerMessage mess = null;
 		t.connect(p1);
 		t.connect(p2);
@@ -200,6 +202,7 @@ public class MainServerControllerTest {
 
 	@Test
 	void openUnfinishedSuccess() throws ForbiddenCallException, InterruptedException {
+		t.start();
 		ServerMessage mess = null;
 		t.connect(p2);
 		t.connect(p3);

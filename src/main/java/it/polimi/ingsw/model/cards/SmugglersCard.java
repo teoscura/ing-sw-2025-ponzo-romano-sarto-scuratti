@@ -8,6 +8,8 @@ import it.polimi.ingsw.model.cards.utils.CardOrder;
 import it.polimi.ingsw.model.cards.utils.Planet;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.state.VoyageState;
+import it.polimi.ingsw.utils.Logger;
+import it.polimi.ingsw.utils.LoggerLevel;
 
 import java.util.ArrayList;
 
@@ -39,17 +41,17 @@ public class SmugglersCard extends Card {
 		return this.cargo_taken;
 	}
 
-	public boolean apply(Player p) {
+	public boolean apply(VoyageState state, Player p) {
 		if (p == null) throw new NullPointerException();
 		if (p.getSpaceShip().getCannonPower() > this.min_power) {
-			/*XXX*/System.out.println("Player '" + p.getUsername() + "' beat the smugglers!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player '" + p.getUsername() + "' beat the smugglers!");
 			this.exhaust();
 			return true;
 		} else if (p.getSpaceShip().getCannonPower() == this.min_power) {
-			/*XXX*/System.out.println("Player '" + p.getUsername() + "' tied the smugglers!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player '" + p.getUsername() + "' tied the smugglers!");
 			return true;
 		}
-		/*XXX*/System.out.println("Player '" + p.getUsername() + "' lost to the smugglers!");
+		Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player '" + p.getUsername() + "' lost to the smugglers!");
 		return p.getSpaceShip().getCannonPower() == this.min_power;
 	}
 

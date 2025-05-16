@@ -8,7 +8,7 @@ public class ClientMain {
 
 	public static void main(String[] args) {
 		if (args.length != 1) {
-			/*XXX*/System.out.println("Jar must be launched with [gui|tui|cb] as arguments only!");
+			System.out.println("Jar must be launched with [gui|tui|cb] as arguments only!");
 			System.exit(-1);
 		}
 		ClientView v = null;

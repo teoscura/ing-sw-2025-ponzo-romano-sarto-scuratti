@@ -1,14 +1,16 @@
 package it.polimi.ingsw.utils;
 
 public enum LoggerLevel {
-	OFF(7), //No messages are ever shown
-	ERROR(6), //Only errors are shown
-	WARNING(5), //Only warnings and up are shown
-	NOTIF(4), //Only status changes and upare shown
-	SERVER(3), //Only info from the server and up is shown
-	LOBBY(2), //Only info from every lobby and up is shown
+	OFF  (8), //No messages are ever shown
+	ERROR(7), //Only errors are shown
+	WARN (6), //Only warnings and up are shown
+	NOTIF(5), //Only status changes and upare shown
+	SERVR(4), //Only info from the network and up is shown
+	LOBSL(3), //Only info from lobby select and up is shown
+	LOBCN(3), //Only info from lobby select and up is shown
+	MODEL(2), //Only info from the model instances and up is shown
 	DEBUG(1), //Only debug info and up is shown
-	ALL(0); //Every message is shown.
+	ALL  (0); //Every message is shown.
 
 	private final int status;
 
@@ -27,16 +29,20 @@ public enum LoggerLevel {
 				return "[ALL--] ";
 			case DEBUG:
 				return "[DEBUG] ";
-			case LOBBY:
-				return "[LOBBY] ";
-			case SERVER:
+			case MODEL:
+				return "[MODEL] ";
+			case LOBCN:
+				return "[LOBCN] ";
+			case LOBSL:
+				return "[LOBSL] ";
+			case SERVR:
 				return "[SERVR] ";
 			case NOTIF:
 				return "[NOTIF] ";
+			case WARN:
+				return "[WARN-] ";
 			case ERROR:
 				return "[ERROR] ";
-			case WARNING:
-				return "[WARN-] ";
 			default:
 				return null;
 		}

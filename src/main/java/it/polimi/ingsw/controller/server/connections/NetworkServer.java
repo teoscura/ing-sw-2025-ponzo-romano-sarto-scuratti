@@ -57,13 +57,12 @@ public class NetworkServer extends Thread implements RMISkeletonProvider, Serial
 			registry = LocateRegistry.createRegistry(this.rmiport);
 			registry.bind("galaxy_truckers", this);
 			UnicastRemoteObject.exportObject(this, this.rmiport);
-			Logger.getInstance().print(LoggerLevel.SERVER, "Set up RMI on address: '" + this.ip + ":" + this.rmiport + "'...");
+			Logger.getInstance().print(LoggerLevel.SERVR, "Set up RMI on address: '" + this.ip + ":" + this.rmiport + "'...");
 			Runtime.getRuntime().addShutdownHook(this.RMICleanup());
 		} catch (RemoteException e) {
-			Logger.getInstance().print(LoggerLevel.ERROR, "Failed to setup the rmi registry and remote object, terminating.");
-			System.exit(-1);
+			Logger.getInstance().print(LoggerLevel.ERROR, "Failed to setup the rmi registry and remote object, server may still run in TCP Mode.");
 		} catch (InaccessibleObjectException e) {
-			Logger.getInstance().print(LoggerLevel.WARNING, "Couldn't bind RMI due to access permissions! Is this running inside a sandboxed JUnit test?");
+			Logger.getInstance().print(LoggerLevel.WARN, "Couldn't bind RMI due to access permissions! Is this running inside a sandboxed JUnit test?");
 		} catch (AlreadyBoundException e) {
 			Logger.getInstance().print(LoggerLevel.ERROR, "Name is already bound, terminating.");
 			System.exit(-1);
@@ -71,14 +70,14 @@ public class NetworkServer extends Thread implements RMISkeletonProvider, Serial
 		try {
 			this.server = new ServerSocket();
 			this.server.bind(new InetSocketAddress(this.ip, this.tcpport));
-			Logger.getInstance().print(LoggerLevel.SERVER, "Started server on: '" + ip + ":" + this.server.getLocalPort() + "'...");
+			Logger.getInstance().print(LoggerLevel.SERVR, "Started server on: '" + ip + ":" + this.server.getLocalPort() + "'...");
 			Runtime.getRuntime().addShutdownHook(this.TCPCleanup());
 		} catch (IOException e) {
 			Logger.getInstance().print(LoggerLevel.ERROR, "Couldn't start server on the specified address and port, terminating.");
 			System.exit(-1);
 
 		}
-		Logger.getInstance().print(LoggerLevel.SERVER, "Successfully started server.");
+		Logger.getInstance().print(LoggerLevel.SERVR, "Successfully started server.");
 	}
 
 	@Override
@@ -111,7 +110,7 @@ public class NetworkServer extends Thread implements RMISkeletonProvider, Serial
 					registry.unbind("galaxy_truckers");
 				} catch (RemoteException | NotBoundException e) {
 				}
-				Logger.getInstance().print(LoggerLevel.SERVER, "Cleaned up RMI connection.");
+				Logger.getInstance().print(LoggerLevel.SERVR, "Cleaned up RMI connection.");
 			}
 		};
 	}
@@ -124,7 +123,7 @@ public class NetworkServer extends Thread implements RMISkeletonProvider, Serial
 					server.close();
 				} catch (IOException e) {
 				}
-				Logger.getInstance().print(LoggerLevel.SERVER, "Cleaned up TCP connection.");
+				Logger.getInstance().print(LoggerLevel.SERVR, "Cleaned up TCP connection.");
 			}
 		};
 	}

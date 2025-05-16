@@ -20,6 +20,8 @@ import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.player.exceptions.IllegalComponentAdd;
+import it.polimi.ingsw.utils.Logger;
+import it.polimi.ingsw.utils.LoggerLevel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -51,7 +53,7 @@ public abstract class ConstructionState extends GameState {
 
 	@Override
 	public void init() {
-		/*XXX*/System.out.println("New Game State -> Construction State");
+		Logger.getInstance().print(LoggerLevel.MODEL, "["+model.getID()+"] "+"New Game State -> Construction State");
 		this.broadcastMessage(new NotifyStateUpdateMessage(this.getClientState()));
 	}
 
@@ -89,7 +91,7 @@ public abstract class ConstructionState extends GameState {
 	@Override
 	public void sendContinue(Player p) throws ForbiddenCallException {
 		if (!this.building.contains(p)) {
-			/*XXX*/System.out.println("Player '" + p.getUsername() + "' attempted to confirm his ship again, but it's already confirmed!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+model.getID()+"] "+"Player '" + p.getUsername() + "' attempted to confirm his ship again, but it's already confirmed!");
 			this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' attempted to confirm his ship again, but it's already confirmed!"));
 			return;
 		}
@@ -108,28 +110,28 @@ public abstract class ConstructionState extends GameState {
 	@Override
 	public void putComponent(Player p, ShipCoords coords, ComponentRotation rotation) throws ForbiddenCallException {
 		if (!this.building.contains(p)) {
-			/*XXX*/System.out.println("Player '" + p.getUsername() + "' attempted to place a component, but their ship is already confirmed!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+model.getID()+"] "+"Player '" + p.getUsername() + "' attempted to place a component, but their ship is already confirmed!");
 			this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' attempted to place a component, but their ship is already confirmed!"));
 			return;
 		}
 		if (this.current_tile.get(p) == null) {
-			/*XXX*/System.out.println("Player '" + p.getUsername() + "' attempted to place a component, but they dont have a current one!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+model.getID()+"] "+"Player '" + p.getUsername() + "' attempted to place a component, but they dont have a current one!");
 			this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' attempted to place a component, but they dont have a current one!"));
 			return;
 		}
 		try {
 			this.current_tile.get(p).rotate(rotation);
 			p.getSpaceShip().addComponent(this.current_tile.get(p), coords);
-			/*XXX*/System.out.println("Player '" + p.getUsername() + "' placed a component in " + coords);
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+model.getID()+"] "+"Player '" + p.getUsername() + "' placed a component in " + coords);
 			this.current_tile.put(p, null);
 		} catch (OutOfBoundsException e) {
-			/*XXX*/System.out.println("Player '" + p.getUsername() + "' attempted to place a component, but the coordinates are illegal!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+model.getID()+"] "+"Player '" + p.getUsername() + "' attempted to place a component, but the coordinates are illegal!");
 			this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' attempted to place a component, but the coordinates are illegal!"));
 		} catch (IllegalComponentAdd e) {
-			/*XXX*/System.out.println("Player '" + p.getUsername() + "' attempted to place a component, but the coordinates are already occupied!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+model.getID()+"] "+"Player '" + p.getUsername() + "' attempted to place a component, but the coordinates are already occupied!");
 			this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' attempted to place a component, but the coordinates are already occupied!"));
 		} catch (IllegalTargetException e) {
-			/*XXX*/System.out.println("Player '" + p.getUsername() + "' attempted to place a component, but the coordinates are not connected to the rest of the ship!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+model.getID()+"] "+"Player '" + p.getUsername() + "' attempted to place a component, but the coordinates are not connected to the rest of the ship!");
 			this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' attempted to place a component, but the coordinates are not connected to the rest of the ship!"));
 		}
 	}
@@ -137,17 +139,17 @@ public abstract class ConstructionState extends GameState {
 	@Override
 	public void takeComponent(Player p) throws ForbiddenCallException {
 		if (!this.building.contains(p)) {
-			/*XXX*/System.out.println("Player '" + p.getUsername() + "' attempted to take a component, but their ship is already confirmed!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+model.getID()+"] "+"Player '" + p.getUsername() + "' attempted to take a component, but their ship is already confirmed!");
 			this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' attempted to take a component, but their ship is already confirmed!"));
 			return;
 		}
 		BaseComponent tmp = this.board.pullComponent();
 		if (tmp == null) {
-			/*XXX*/System.out.println("Player '" + p.getUsername() + "' attempted to take a component, but there are no more to take!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+model.getID()+"] "+"Player '" + p.getUsername() + "' attempted to take a component, but there are no more to take!");
 			this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' attempted to take a component, but there are no more to take!"));
 			return;
 		}
-		/*XXX*/System.out.println("Player '" + p.getUsername() + "' took component " + tmp.getID() + " from the covered pile!");
+		Logger.getInstance().print(LoggerLevel.MODEL, "["+model.getID()+"] "+"Player '" + p.getUsername() + "' took component " + tmp.getID() + " from the covered pile!");
 		if (this.current_tile.get(p) == null) {
 			this.current_tile.put(p, tmp);
 		} else {
@@ -155,7 +157,7 @@ public abstract class ConstructionState extends GameState {
 			this.current_tile.put(p, tmp);
 			this.hoarded_tile.get(p).addFirst(old_current);
 			while (this.hoarded_tile.get(p).size() >= 3) {
-				/*XXX*/System.out.println("Component " + this.hoarded_tile.get(p).getLast().getID() + " added to discarded components.");
+				Logger.getInstance().print(LoggerLevel.MODEL, "["+model.getID()+"] "+"Component " + this.hoarded_tile.get(p).getLast().getID() + " added to discarded components.");
 				this.board.discardComponent(this.hoarded_tile.get(p).removeLast());
 			}
 		}
@@ -164,7 +166,7 @@ public abstract class ConstructionState extends GameState {
 	@Override
 	public void takeDiscarded(Player p, int id) throws ForbiddenCallException {
 		if (!this.building.contains(p)) {
-			/*XXX*/System.out.println("Player '" + p.getUsername() + "' attempted to take a discarded component, but their ship is already confirmed!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+model.getID()+"] "+"Player '" + p.getUsername() + "' attempted to take a discarded component, but their ship is already confirmed!");
 			this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' attempted to take a discarded component, but their ship is already confirmed!"));
 			return;
 		}
@@ -172,11 +174,11 @@ public abstract class ConstructionState extends GameState {
 		try {
 			tmp = this.board.pullDiscarded(id);
 		} catch (ContainerEmptyException e) {
-			/*XXX*/System.out.println("Player '" + p.getUsername() + "' attempted to take a discarded component, but there aren't any with that ID!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+model.getID()+"] "+"Player '" + p.getUsername() + "' attempted to take a discarded component, but there aren't any with that ID!");
 			this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' attempted to take a discarded component, but there aren't any with that ID!"));
 			return;
 		}
-		/*XXX*/System.out.println("Player '" + p.getUsername() + "' took component " + tmp.getID() + " from the uncovered pile!");
+		Logger.getInstance().print(LoggerLevel.MODEL, "["+model.getID()+"] "+"Player '" + p.getUsername() + "' took component " + tmp.getID() + " from the uncovered pile!");
 		BaseComponent oldcurrent = this.current_tile.get(p);
 		if (oldcurrent == null) this.current_tile.put(p, tmp);
 		else {
@@ -191,7 +193,7 @@ public abstract class ConstructionState extends GameState {
 	@Override
 	public void discardComponent(Player p, int id) throws ForbiddenCallException {
 		if (!this.building.contains(p)) {
-			/*XXX*/System.out.println("Player '" + p.getUsername() + "' attempted to discard a component, but their ship is already confirmed!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+model.getID()+"] "+"Player '" + p.getUsername() + "' attempted to discard a component, but their ship is already confirmed!");
 			this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' attempted to discard a component, but their ship is already confirmed!"));
 			return;
 		}
@@ -199,16 +201,16 @@ public abstract class ConstructionState extends GameState {
 			BaseComponent tmp = this.current_tile.get(p);
 			this.current_tile.put(p, null);
 			this.board.discardComponent(tmp);
-			/*XXX*/System.out.println("Player '" + p.getUsername() + "' discarded component " + tmp.getID() + "!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+model.getID()+"] "+"Player '" + p.getUsername() + "' discarded component " + tmp.getID() + "!");
 			return;
 		}
 		Optional<BaseComponent> c = this.hoarded_tile.get(p).stream().filter(a -> a.getID() == id).findFirst();
 		if (c.isPresent()) {
 			this.hoarded_tile.get(p).remove(c.get());
 			this.board.discardComponent(c.get());
-			/*XXX*/System.out.println("Player '" + p.getUsername() + "' discarded component " + c.get().getID() + "!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+model.getID()+"] "+"Player '" + p.getUsername() + "' discarded component " + c.get().getID() + "!");
 		} else {
-			/*XXX*/System.out.println("Player '" + p.getUsername() + "' attempted to discard a component, but they don't own the one with the id provided!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+model.getID()+"] "+"Player '" + p.getUsername() + "' attempted to discard a component, but they don't own the one with the id provided!");
 			this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' attempted to discard a component, but they don't own the one with the id provided!"));
 		}
 	}

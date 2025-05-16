@@ -20,6 +20,8 @@ import it.polimi.ingsw.model.components.exceptions.UnsupportedAlienCabinExceptio
 import it.polimi.ingsw.model.components.visitors.CrewSetVisitor;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.ShipCoords;
+import it.polimi.ingsw.utils.Logger;
+import it.polimi.ingsw.utils.LoggerLevel;
 
 import java.util.ArrayList;
 
@@ -57,7 +59,7 @@ public class VerifyState extends GameState {
 		for (Player p : this.to_remove_broken) {
 			finish_order.remove(p);
 		}
-		/*XXX*/System.out.println("New Game State -> Verify State");
+		Logger.getInstance().print(LoggerLevel.MODEL, "["+model.getID()+"] "+"New Game State -> Verify State");
 		this.broadcastMessage(new NotifyStateUpdateMessage(this.getClientState()));
 
 	}
@@ -115,30 +117,30 @@ public class VerifyState extends GameState {
 	@Override
 	public void sendContinue(Player p) throws ForbiddenCallException {
 		if (!this.awaiting.contains(p)) {
-			/*XXX*/System.out.println("Player '" + p.getUsername() + "' already finished validating!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+model.getID()+"] "+"Player '" + p.getUsername() + "' already finished validating!");
 			this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' already finished validating!"));
 			return;
 		}
 		if (this.to_choose_blob.contains(p) || this.to_remove_broken.contains(p)) {
-			/*XXX*/System.out.println("Player '" + p.getUsername() + "' motioned to progress without validating and finalizing his ship!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+model.getID()+"] "+"Player '" + p.getUsername() + "' motioned to progress without validating and finalizing his ship!");
 			this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' motioned to progress without validating and finalizing his ship!"));
 			return;
 		}
 		this.awaiting.remove(p);
-		/*XXX*/System.out.println("Player '" + p.getUsername() + "' motioned to progress! (" + (this.awaiting.size()) + " missing).");
+		Logger.getInstance().print(LoggerLevel.MODEL, "["+model.getID()+"] "+"Player '" + p.getUsername() + "' motioned to progress! (" + (this.awaiting.size()) + " missing).");
 	}
 
 	@Override
 	public void removeComponent(Player p, ShipCoords coords) throws ForbiddenCallException {
 		if (!this.to_remove_broken.contains(p)) {
-			/*XXX*/System.out.println("Player '" + p.getUsername() + "' attempted to act on the ship after cleaning it!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+model.getID()+"] "+"Player '" + p.getUsername() + "' attempted to act on the ship after cleaning it!");
 			this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' attempted to act on the ship after cleaning it!"));
 			return;
 		}
 		try {
 			p.getSpaceShip().removeComponent(coords);
 		} catch (IllegalTargetException e) {
-			/*XXX*/System.out.println("Player '" + p.getUsername() + "' tried to remove an empty component!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+model.getID()+"] "+"Player '" + p.getUsername() + "' tried to remove an empty component!");
 			this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' tried to remove an empty component!"));
 			return;
 		}
@@ -151,22 +153,22 @@ public class VerifyState extends GameState {
 	@Override
 	public void selectBlob(Player p, ShipCoords blob_coord) {
 		if (!this.to_choose_blob.contains(p)) {
-			/*XXX*/System.out.println("Player '" + p.getUsername() + "' attempted to set a new center during another player's turn!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+model.getID()+"] "+"Player '" + p.getUsername() + "' attempted to set a new center during another player's turn!");
 			this.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to set a new center during another player's turn!"));
 			return;
 		}
 		try {
 			p.getSpaceShip().selectShipBlob(blob_coord);
-			/*XXX*/System.out.println("Player '" + p.getUsername() + "' selected blob that contains coords " + blob_coord + ".");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+model.getID()+"] "+"Player '" + p.getUsername() + "' selected blob that contains coords " + blob_coord + ".");
 			if (p.getSpaceShip().getCrew()[0] <= 0) this.starts_losing.add(p);
 			this.to_choose_blob.remove(p);
 			this.finish_order.addLast(p);
 		} catch (IllegalTargetException e) {
-			/*XXX*/System.out.println("Player '" + p.getUsername() + "' attempted to select a nonexistant blob!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+model.getID()+"] "+"Player '" + p.getUsername() + "' attempted to select a nonexistant blob!");
 			this.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to select a nonexistant blob!"));
 		} catch (ForbiddenCallException e) {
 			//Should be unreachable.
-			/*XXX*/System.out.println("Player '" + p.getUsername() + "' attempted to set his new center while having a unbroken ship!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+model.getID()+"] "+"Player '" + p.getUsername() + "' attempted to set his new center while having a unbroken ship!");
 			this.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to set his new center while having a unbroken ship!"));
 		}
 	}
@@ -175,31 +177,31 @@ public class VerifyState extends GameState {
 	@Override
 	public void setCrewType(Player p, ShipCoords coords, AlienType type) throws ForbiddenCallException {
 		if (this.to_choose_blob.contains(p) || this.to_remove_broken.contains(p)) {
-			/*XXX*/System.out.println("Player '" + p.getUsername() + "' tried to set crew type before having a valid ship!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+model.getID()+"] "+"Player '" + p.getUsername() + "' tried to set crew type before having a valid ship!");
 			this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' tried to set crew type before having a valid ship!"));
 			return;
 		}
 		if (!this.awaiting.contains(p)) {
-			/*XXX*/System.out.println("Player '" + p.getUsername() + "' tried to set crew type after finishing!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+model.getID()+"] "+"Player '" + p.getUsername() + "' tried to set crew type after finishing!");
 			this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' tried to set crew type after finishing!"));
 			return;
 		}
 		try {
 			CrewSetVisitor v = new CrewSetVisitor(p.getSpaceShip(), type);
 			p.getSpaceShip().getComponent(coords).check(v);
-			/*XXX*/System.out.println("Player '" + p.getUsername() + "' set crew type " + type + " on coords " + coords + "!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+model.getID()+"] "+"Player '" + p.getUsername() + "' set crew type " + type + " on coords " + coords + "!");
 			this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' set crew type " + type + " on coords " + coords + "!"));
 		} catch (IllegalTargetException e) {
-			/*XXX*/System.out.println("Player '" + p.getUsername() + "' attempted to set crew on a invalid coordinate!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+model.getID()+"] "+"Player '" + p.getUsername() + "' attempted to set crew on a invalid coordinate!");
 			this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' attempted to set crew on a invalid coordinate!"));
 		} catch (IllegalArgumentException e) {
-			/*XXX*/System.out.println("Player '" + p.getUsername() + "' attempted to set crew with an invalid alien type!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+model.getID()+"] "+"Player '" + p.getUsername() + "' attempted to set crew with an invalid alien type!");
 			this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' attempted to set crew with an invalid alien type!"));
 		} catch (UnsupportedAlienCabinException e) {
-			/*XXX*/System.out.println("Player '" + p.getUsername() + "' attempted to set crew on a cabin that doesn't support the type: '" + type.toString() + "'!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+model.getID()+"] "+"Player '" + p.getUsername() + "' attempted to set crew on a cabin that doesn't support the type: '" + type.toString() + "'!");
 			this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' attempted to set crew on a cabin that doesn't support the type: '" + type + "'!"));
 		} catch (AlienTypeAlreadyPresentException e) {
-			/*XXX*/System.out.println("Player '" + p.getUsername() + "' attempted to set the type: '" + type.toString() + "' but it's already present, can only have one!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+model.getID()+"] "+"Player '" + p.getUsername() + "' attempted to set the type: '" + type.toString() + "' but it's already present, can only have one!");
 			this.broadcastMessage(new ViewMessage("Player '" + p.getUsername() + "' attempted to set the type: '" + type + "' but it's already present, can only have one!"));
 		}
 	}

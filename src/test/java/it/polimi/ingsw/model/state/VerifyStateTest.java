@@ -193,7 +193,6 @@ class VerifyStateTest {
 		message = new RemoveComponentMessage(new ShipCoords(GameModeType.LVL2, 4, 2));
 		message.setDescriptor(p3desc);
 		model.validate(message);
-		player3.getSpaceShip().printBlobs();
 		message = new SelectBlobMessage(new ShipCoords(GameModeType.LVL2, 5, 2));
 		message.setDescriptor(p3desc);
 		model.validate(message);
@@ -254,7 +253,6 @@ class VerifyStateTest {
 		message = new RemoveComponentMessage(new ShipCoords(GameModeType.LVL2, 4, 2));
 		message.setDescriptor(p3desc);
 		model.validate(message);
-		player3.getSpaceShip().printBlobs();
 		message = new SelectBlobMessage(new ShipCoords(GameModeType.LVL2, 5, 2));
 		message.setDescriptor(p3desc);
 		model.validate(message);

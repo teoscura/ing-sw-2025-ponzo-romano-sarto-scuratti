@@ -36,9 +36,9 @@ public class OpenSpaceState extends CardState {
 	@Override
 	public void init(ClientState new_state) {
 		super.init(new_state);
-		/*XXX*/System.out.println("New CardState -> Open Space State!");
+		Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"New CardState -> Open Space State!");
 		for (Player p : this.state.getOrder(CardOrder.NORMAL)) {
-			Logger.getInstance().print(LoggerLevel.LOBBY, "[Lobby id:"+this.state.getModelID()+"] "+p.voyageInfo(this.state.getPlanche()));
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+p.voyageInfo(this.state.getPlanche()));
 		}
 	}
 
@@ -63,22 +63,22 @@ public class OpenSpaceState extends CardState {
 
 	@Override
 	public CardState getNext() {
-		/*XXX*/System.out.println("Card exhausted, moving to a new one!");
+		Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Card exhausted, moving to a new one!");
 		return null;
 	}
 
 	@Override
 	public void turnOn(Player p, ShipCoords target_coords, ShipCoords battery_coords) {
 		if (!this.awaiting.contains(p)) {
-			/*XXX*/System.out.println("Player '" + p.getUsername() + "' attempted to turn on a component after motioning to progress!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player '" + p.getUsername() + "' attempted to turn on a component after motioning to progress!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to turn on a component after motioning to progress!"));
 			return;
 		}
 		try {
 			p.getSpaceShip().turnOn(target_coords, battery_coords);
-			/*XXX*/System.out.println("Player '" + p.getUsername() + "' turned on component at" + target_coords + " using battery from " + battery_coords + "!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player '" + p.getUsername() + "' turned on component at" + target_coords + " using battery from " + battery_coords + "!");
 		} catch (IllegalTargetException e) {
-			/*XXX*/System.out.println("Player '" + p.getUsername() + "' attempted to turn on a component with invalid coordinates!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player '" + p.getUsername() + "' attempted to turn on a component with invalid coordinates!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to turn on a component with invalid coordinates!"));
 		}
 	}
@@ -86,11 +86,11 @@ public class OpenSpaceState extends CardState {
 	@Override
 	public void progressTurn(Player p) {
 		if (!this.awaiting.contains(p)) {
-			/*XXX*/System.out.println("Player '" + p.getUsername() + "' attempted to progress the turn while already having done so!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player '" + p.getUsername() + "' attempted to progress the turn while already having done so!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to progress the turn while already having done so!"));
 			return;
 		}
-		/*XXX*/System.out.println("Player '" + p.getUsername() + "' motioned to progress! (" + (this.awaiting.size() - 1) + " missing).");
+		Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player '" + p.getUsername() + "' motioned to progress! (" + (this.awaiting.size() - 1) + " missing).");
 		this.awaiting.remove(p);
 	}
 

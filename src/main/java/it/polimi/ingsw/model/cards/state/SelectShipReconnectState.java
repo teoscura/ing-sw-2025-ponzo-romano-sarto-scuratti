@@ -12,6 +12,8 @@ import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.VoyageState;
+import it.polimi.ingsw.utils.Logger;
+import it.polimi.ingsw.utils.LoggerLevel;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,7 +34,7 @@ public class SelectShipReconnectState extends CardState {
 	@Override
 	public void init(ClientState new_state) {
 		super.init(new_state);
-		/*XXX*/System.out.println("CardState -> Reconnect New Cabin State for Player '" + awaiting.getUsername() + "'!");
+		Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"CardState -> Reconnect New Cabin State for Player '" + awaiting.getUsername() + "'!");
 
 	}
 
@@ -61,19 +63,19 @@ public class SelectShipReconnectState extends CardState {
 	@Override
 	public void selectBlob(Player p, ShipCoords blob_coord) {
 		if (!p.equals(awaiting)) {
-			/*XXX*/System.out.println("Player '" + p.getUsername() + "' attempted to set a new center during another player's turn!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player '" + p.getUsername() + "' attempted to set a new center during another player's turn!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to set a new center during another player's turn!"));
 			return;
 		}
 		try {
 			p.getSpaceShip().selectShipBlob(blob_coord);
-			/*XXX*/System.out.println("Player '" + p.getUsername() + "' selected blob that contains coords " + blob_coord + ".");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player '" + p.getUsername() + "' selected blob that contains coords " + blob_coord + ".");
 		} catch (IllegalTargetException e) {
-			/*XXX*/System.out.println("Player '" + p.getUsername() + "' attempted to set his new center on an empty space!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player '" + p.getUsername() + "' attempted to set his new center on an empty space!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to set his new center on an empty space!"));
 		} catch (ForbiddenCallException e) {
 			//Should be unreachable.
-			/*XXX*/System.out.println("Player '" + p.getUsername() + "' attempted to set his new center while having a unbroken ship!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player '" + p.getUsername() + "' attempted to set his new center while having a unbroken ship!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to set his new center while having a unbroken ship!"));
 		}
 	}
