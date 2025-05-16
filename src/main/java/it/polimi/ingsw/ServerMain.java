@@ -8,7 +8,7 @@ public class ServerMain {
 
 	public static void main(String[] args) {
 		if (args.length < 2 || args.length > 3) {
-			/*XXX*/System.out.println("Usage: java -jar <jar name> <tcp address> [tcp port] <rmi port>");
+			System.out.println("Usage: java -jar <jar name> <tcp address> [tcp port] <rmi port>");
 			System.exit(-1);
 		}
 		Logger l = Logger.getInstance();
