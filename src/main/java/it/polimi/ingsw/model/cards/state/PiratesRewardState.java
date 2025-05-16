@@ -11,6 +11,8 @@ import it.polimi.ingsw.model.client.card.ClientCreditsRewardCardStateDecorator;
 import it.polimi.ingsw.model.client.state.ClientState;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.state.VoyageState;
+import it.polimi.ingsw.utils.Logger;
+import it.polimi.ingsw.utils.LoggerLevel;
 
 import java.util.ArrayList;
 
@@ -33,9 +35,9 @@ class PiratesRewardState extends CardState {
 	@Override
 	public void init(ClientState new_state) {
 		super.init(new_state);
-		System.out.println("    CardState -> Pirates Reward State!");
+		Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "CardState -> Pirates Reward State!");
 		for (Player p : this.list) {
-			System.out.println("	 - " + p.getUsername());
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + p.voyageInfo(this.state.getPlanche()));
 		}
 	}
 
@@ -64,18 +66,18 @@ class PiratesRewardState extends CardState {
 
 	@Override
 	public CardState getNext() {
-		System.out.println("Card exhausted, moving to a new one!");
+		Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Card exhausted, moving to a new one!");
 		return null;
 	}
 
 	@Override
 	public void setTakeReward(Player p, boolean take) {
 		if (!this.list.getFirst().equals(p)) {
-			System.out.println("Player '" + p.getUsername() + "' attempted to accept a reward during another player's turn!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Player: '" + p.getUsername() + "' attempted to accept a reward during another player's turn!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to accept a reward during another player's turn!"));
 			return;
 		}
-		System.out.println("Player '" + p.getUsername() + "' took the reward? " + take);
+		Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Player: '" + p.getUsername() + "' took the reward? " + take);
 		this.took_reward = take;
 		this.responded = true;
 	}

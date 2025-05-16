@@ -5,9 +5,11 @@ import java.io.PrintStream;
 public class Logger {
 	static private Logger instance = null;
 
+	//Add extra file printing support, a threadpool so theyre async.
+
 	private final Object stream_lock;
 	private PrintStream out;
-	private LoggerLevel level = LoggerLevel.NOTIF;
+	private LoggerLevel level = LoggerLevel.MODEL;
 
 	private Logger() {
 		this.out = System.out;
@@ -31,10 +33,10 @@ public class Logger {
 		this.out = stream;
 	}
 
-	public void print(String message, LoggerLevel level) {
-		if (level.status() > this.level.status()) return;
+	public void print(LoggerLevel level, String message) {
+		if (level.status() < this.level.status()) return;
 		synchronized (stream_lock) {
-			out.println(level + message);
+			out.println(level.color() + level + message + LoggerLevel.reset());
 		}
 	}
 

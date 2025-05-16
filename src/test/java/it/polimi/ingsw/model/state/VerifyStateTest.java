@@ -193,7 +193,6 @@ class VerifyStateTest {
 		message = new RemoveComponentMessage(new ShipCoords(GameModeType.LVL2, 4, 2));
 		message.setDescriptor(p3desc);
 		model.validate(message);
-		player3.getSpaceShip().printBlobs();
 		message = new SelectBlobMessage(new ShipCoords(GameModeType.LVL2, 5, 2));
 		message.setDescriptor(p3desc);
 		model.validate(message);
@@ -207,7 +206,6 @@ class VerifyStateTest {
 		model.validate(message);
 		//State should be voyage.
 		assertInstanceOf(VoyageState.class, model.getState());
-		((VoyageState) model.getState()).getPlanche().printOrder();
 		assertEquals(((VoyageState) model.getState()).getPlanche().getPlayerPosition(player1), GameModeType.LVL2.getLength() + 6);
 		assertEquals(((VoyageState) model.getState()).getPlanche().getPlayerPosition(player2), GameModeType.LVL2.getLength() + 3);
 		assertTrue(player3.getRetired());
@@ -215,13 +213,6 @@ class VerifyStateTest {
 
 	@Test
 	public void alienSetTest() throws ForbiddenCallException {
-		var tmp = player1.getSpaceShip().bulkVerify();
-		for (int i = 0; i < GameModeType.LVL2.getHeight(); i++) {
-			for (int y = 0; y < GameModeType.LVL2.getWidth(); y++) {
-				System.out.print(tmp[i][y] + " - " + new ShipCoords(GameModeType.LVL2, y, i) + " |");
-			}
-			System.out.println();
-		}
 		//Adding life support component to p1;
 		BaseComponent c;
 		ComponentFactory f1 = new ComponentFactory();
@@ -255,7 +246,6 @@ class VerifyStateTest {
 		message = new RemoveComponentMessage(new ShipCoords(GameModeType.LVL2, 4, 2));
 		message.setDescriptor(p3desc);
 		model.validate(message);
-		player3.getSpaceShip().printBlobs();
 		message = new SelectBlobMessage(new ShipCoords(GameModeType.LVL2, 5, 2));
 		message.setDescriptor(p3desc);
 		model.validate(message);
@@ -281,7 +271,6 @@ class VerifyStateTest {
 		model.validate(message);
 		//State should be voyage.
 		assertInstanceOf(VoyageState.class, model.getState());
-		((VoyageState) model.getState()).getPlanche().printOrder();
 		assertEquals(x - 1, player1.getSpaceShip().getTotalCrew());
 		assertEquals(((VoyageState) model.getState()).getPlanche().getPlayerPosition(player1), GameModeType.LVL2.getLength() + 6);
 		assertEquals(((VoyageState) model.getState()).getPlanche().getPlayerPosition(player2), GameModeType.LVL2.getLength() + 3);

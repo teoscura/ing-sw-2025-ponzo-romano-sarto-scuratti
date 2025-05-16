@@ -13,6 +13,8 @@ import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.client.ClientGameListEntry;
 import it.polimi.ingsw.model.client.state.ClientLobbySelectState;
 import it.polimi.ingsw.model.client.state.ClientSetupState;
+import it.polimi.ingsw.utils.Logger;
+import it.polimi.ingsw.utils.LoggerLevel;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -39,10 +41,10 @@ public class MainServerController extends Thread implements VirtualServer {
 	private final ThreadSafeMessageQueue<ServerMessage> queue;
 	private final Object lobbies_lock;
 	private final Object saved_lock;
-	private boolean init = false;
-	private int next_id;
 	private final HashMap<Integer, LobbyController> lobbies;
 	private final HashMap<Integer, ModelInstance> saved;
+	private boolean init = false;
+	private int next_id;
 
 	private MainServerController() {
 		all_listeners = new HashMap<>();
@@ -67,6 +69,7 @@ public class MainServerController extends Thread implements VirtualServer {
 	}
 
 	static public void reset() {
+		Logger.getInstance().print(LoggerLevel.DEBUG, "Reset MainServerController.");
 		instance = null;
 	}
 
@@ -88,27 +91,28 @@ public class MainServerController extends Thread implements VirtualServer {
 			try {
 				queue.take().receive(this);
 			} catch (ForbiddenCallException e) {
-				System.out.println(e.getMessage());
+				Logger.getInstance().print(LoggerLevel.WARN, e.getMessage());
 			} catch (InterruptedException e) {
-				System.out.println("Shutting down server!");
+				Logger.getInstance().print(LoggerLevel.NOTIF, "Shutting down server.");
 			}
 		}
 	}
 
 	public void receiveMessage(ServerMessage message) {
 		if (message.getDescriptor() == null) {
-			System.out.println("Received a message from a Client: not properly connected!");
+			Logger.getInstance().print(LoggerLevel.WARN, "Received a message from a Client: not properly connected!");
 			this.broadcast(new ViewMessage("Received a message from a Client: not properly connected!"));
 			return;
 		}
 		synchronized (listeners_lock) {
 			if (!this.all_listeners.containsKey(message.getDescriptor().getUsername())) {
-				System.out.println("Received a message from a Client: not properly connected!");
+				Logger.getInstance().print(LoggerLevel.WARN, "Received a message from a Client: not properly connected!");
 				this.broadcast(new ViewMessage("Received a message from a Client: not properly connected!"));
 				return;
 			}
 		}
 		if (message.getDescriptor().getId() == -1) {
+			Logger.getInstance().print(LoggerLevel.DEBUG, "Received message from Client: '" + message.getDescriptor().getUsername() + "' of class: " + message.getClass().getSimpleName() + ".");
 			this.queue.insert(message);
 		}
 		var target = this.lobbies.get(message.getDescriptor().getId());
@@ -121,6 +125,7 @@ public class MainServerController extends Thread implements VirtualServer {
 
 	public void broadcast(ClientMessage message) {
 		synchronized (listeners_lock) {
+			Logger.getInstance().print(LoggerLevel.DEBUG, "Broadcasting message of class: " + message.getClass().getSimpleName() + ".");
 			for (ClientDescriptor c : this.lob_listeners.values()) {
 				if (stp_listeners.containsKey(c.getUsername())) continue;
 				this.sendMessage(c, message);
@@ -130,6 +135,7 @@ public class MainServerController extends Thread implements VirtualServer {
 
 	public void sendMessage(ClientDescriptor client, ClientMessage message) {
 		try {
+			Logger.getInstance().print(LoggerLevel.DEBUG, "Sent message to Client: '" + client.getUsername() + "'.");
 			client.sendMessage(message);
 		} catch (IOException e) {
 			this.disconnect(client);
@@ -148,9 +154,10 @@ public class MainServerController extends Thread implements VirtualServer {
 	public void connectListener(SocketClient client) {
 		synchronized (listeners_lock) {
 			if (this.to_setup_tcp.contains(client)) {
-				System.out.println("A Client: attempted to connect while already connecting!");
+				Logger.getInstance().print(LoggerLevel.WARN, "TCP connection: '" + client.getSocket().getInetAddress() + "'' attempted to connect twice!");
 				return;
 			}
+			Logger.getInstance().print(LoggerLevel.LOBSL, "TCP connection: '" + client.getSocket().getInetAddress() + "'' connected, awaiting username.");
 			this.to_setup_tcp.add(client);
 			TimerTask task = this.TCPTimeoutTask(instance, client);
 			Timer t = new Timer(true);
@@ -161,21 +168,21 @@ public class MainServerController extends Thread implements VirtualServer {
 
 	public void setupSocketListener(SocketClient client, String username) {
 		if (!this.to_setup_tcp.contains(client)) {
-			System.out.println("A Client: attempted to change his username after connecting!");
+			Logger.getInstance().print(LoggerLevel.WARN, "A Client: attempted to change his username after connecting!");
 			return;
 		}
 		this.to_setup_tcp.remove(client);
 		client.cancelTimeout();
 		if (!this.validateUsername(username)) {
-			System.out.println("A Client: attempted to connect with an invalid name!");
+			Logger.getInstance().print(LoggerLevel.WARN, "A Client: attempted to connect with an invalid name!");
 			return;
 		}
-		System.out.println("Client: '" + username + "' connected from '" + client.getSocket().getInetAddress() + "'!");
+		Logger.getInstance().print(LoggerLevel.LOBSL, "Client: '" + username + "' connected from '" + client.getSocket().getInetAddress() + "'.");
 		ClientDescriptor new_listener = new ClientDescriptor(username, client);
 		try {
 			this.connect(new_listener);
 		} catch (ForbiddenCallException e) {
-			System.out.println("Client: '" + username + "' failed to connect!");
+			Logger.getInstance().print(LoggerLevel.WARN, "Client: '" + username + "' failed to connect!");
 			return;
 		}
 		new_listener.setPingTimerTask(this.timeoutTask(this, new_listener));
@@ -194,9 +201,10 @@ public class MainServerController extends Thread implements VirtualServer {
 			if (this.all_listeners.containsKey(name) || !validateUsername(name))
 				return null;
 			try {
+				Logger.getInstance().print(LoggerLevel.LOBSL, "Client: '" + client.getUsername() + "' connected with RMI.");
 				this.connect(new_listener);
 			} catch (ForbiddenCallException e) {
-				System.out.println("Client: '" + name + "' failed to connect properly!");
+				Logger.getInstance().print(LoggerLevel.WARN, "Client: '" + name + "' failed to connect properly!");
 				return null;
 			}
 			new_listener.setPingTimerTask(this.timeoutTask(this, new_listener));
@@ -220,7 +228,7 @@ public class MainServerController extends Thread implements VirtualServer {
 		boolean disconnected = false;
 		synchronized (listeners_lock) {
 			if (all_listeners.containsKey(client.getUsername())) {
-				System.out.println("Client: '" + client.getUsername() + "' tried to connect twice!");
+				Logger.getInstance().print(LoggerLevel.WARN, "Client: '" + client.getUsername() + "' tried to connect twice!");
 				return;
 			}
 			this.all_listeners.put(client.getUsername(), client);
@@ -232,7 +240,7 @@ public class MainServerController extends Thread implements VirtualServer {
 			} else {
 				this.lob_listeners.put(client.getUsername(), client);
 				client.setID(-1);
-				System.out.println("Client: '" + client.getUsername() + "' connected!");
+				Logger.getInstance().print(LoggerLevel.LOBSL, "Client: '" + client.getUsername() + "' finished connecting.");
 				this.sendMessage(client, new NotifyStateUpdateMessage(new ClientLobbySelectState(this.getLobbyList())));
 			}
 		}
@@ -240,23 +248,24 @@ public class MainServerController extends Thread implements VirtualServer {
 			synchronized (lobbies_lock) {
 				if (this.lobbies.get(id) == null) {
 					client.setID(-1);
+					Logger.getInstance().print(LoggerLevel.LOBSL, "Client: '" + client.getUsername() + "' tried reconnecting to lobby: [" + id + "] but it had closed, sending him to lobby select.");
 					return;
 				}
 				this.lobbies.get(id).connect(client);
-				System.out.println("Client: '" + client.getUsername() + "' reconnected!");
+				Logger.getInstance().print(LoggerLevel.LOBSL, "Client: '" + client.getUsername() + "' reconnected to lobby: [" + id + "].");
 			}
 		}
 	}
 
 	public void disconnect(ClientDescriptor client) {
 		int id = client.getId();
-		System.out.println("Client: '" + client.getUsername() + "' disconnected.");
 		if (client.getPingTimerTask() != null) client.getPingTimerTask().cancel();
 		synchronized (listeners_lock) {
 			if (!all_listeners.containsKey(client.getUsername())) {
-				System.out.println("Client: '" + client.getUsername() + "' disconnected, but was never connected!");
+				Logger.getInstance().print(LoggerLevel.WARN, "Client: '" + client.getUsername() + "' disconnected, but was never connected!");
 				return;
 			}
+			Logger.getInstance().print(LoggerLevel.LOBSL, "Client: '" + client.getUsername() + "' disconnected.");
 			this.all_listeners.remove(client.getUsername());
 			if (id == -1) {
 				this.lob_listeners.remove(client.getUsername());
@@ -266,7 +275,7 @@ public class MainServerController extends Thread implements VirtualServer {
 			client.getConnection().close();
 		} catch (IOException e) {
 			e.printStackTrace();
-			System.out.println("Client: '" + client.getUsername() + "' connection closed.");
+			Logger.getInstance().print(LoggerLevel.DEBUG, "Client: '" + client.getUsername() + "' connection closed.");
 		}
 		if (id == -1) return;
 		synchronized (lobbies_lock) {
@@ -278,12 +287,14 @@ public class MainServerController extends Thread implements VirtualServer {
 
 	public void addDisconnected(String username, int id) {
 		synchronized (listeners_lock) {
+			Logger.getInstance().print(LoggerLevel.DEBUG, "Added username: '" + username + "' to disconnected list with id: [" + id + "].");
 			this.disconnected.put(username, id);
 		}
 	}
 
 	public void removeDisconnected(String username) {
 		synchronized (listeners_lock) {
+			Logger.getInstance().print(LoggerLevel.DEBUG, "Removed username: '" + username + "' to disconnected list, had id: [" + disconnected.get(username) + "].");
 			this.disconnected.remove(username);
 		}
 	}
@@ -294,6 +305,7 @@ public class MainServerController extends Thread implements VirtualServer {
 
 	public void ping(ClientDescriptor client) {
 		client.getPingTimerTask().cancel();
+		Logger.getInstance().print(LoggerLevel.DEBUG, "Received ping from client: '" + client.getUsername() + "'.");
 		client.setPingTimerTask(this.timeoutTask(this, client));
 	}
 
@@ -301,7 +313,7 @@ public class MainServerController extends Thread implements VirtualServer {
 		return new TimerTask() {
 			public void run() {
 				synchronized (listeners_lock) {
-					System.out.println("Socket '" + client.getSocket().getInetAddress() + "' didn't setup before timing out!");
+					Logger.getInstance().print(LoggerLevel.NOTIF, "Socket '" + client.getSocket().getInetAddress() + "' didn't setup before timing out!");
 					to_setup_tcp.remove(client);
 				}
 			}
@@ -312,7 +324,7 @@ public class MainServerController extends Thread implements VirtualServer {
 		return new TimerTask() {
 			public void run() {
 				synchronized (listeners_lock) {
-					System.out.println("Client: '" + client.getUsername() + "' failed to ping in between timeout!");
+					Logger.getInstance().print(LoggerLevel.NOTIF, "Client: '" + client.getUsername() + "' failed to ping in between timeout!");
 					controller.disconnect(client);
 				}
 			}
@@ -346,10 +358,14 @@ public class MainServerController extends Thread implements VirtualServer {
 				if (this.lobbies.get(loaded.getID()) != null) continue;
 				saved_tmp.add(loaded);
 			} catch (IOException e) {
-				System.out.println("Read error during loading of File: '" + f.getName());
+				Logger.getInstance().print(LoggerLevel.NOTIF, "Read error during loading of File: '" + f.getName() + ", cleaning it up.");
+				f.delete();
+				Logger.getInstance().print(LoggerLevel.DEBUG, "Deleted file: '" + f.getName() + "'.");
 				e.printStackTrace();
 			} catch (ClassNotFoundException e) {
-				System.out.println("File: '" + f.getName() + "' is not a valid savefile!");
+				Logger.getInstance().print(LoggerLevel.NOTIF, "File: '" + f.getName() + "' is not a valid savefile, cleaning it up.");
+				f.delete();
+				Logger.getInstance().print(LoggerLevel.DEBUG, "Deleted file: '" + f.getName() + "'.");
 				e.printStackTrace();
 			}
 		}
@@ -369,10 +385,10 @@ public class MainServerController extends Thread implements VirtualServer {
 	public void enterSetup(ClientDescriptor client) throws ForbiddenCallException {
 		synchronized (listeners_lock) {
 			if (!lob_listeners.containsKey(client.getUsername())) {
-				System.out.println("Client: '" + client.getUsername() + "' started setting up a lobby, but he's already playing!");
+				Logger.getInstance().print(LoggerLevel.WARN, "Client: '" + client.getUsername() + "' started setting up a lobby, but he's already playing!");
 				return;
 			} else if (stp_listeners.containsKey(client.getUsername())) {
-				System.out.println("Client: '" + client.getUsername() + "' started setting up a lobby, but he's already doing that!");
+				Logger.getInstance().print(LoggerLevel.WARN, "Client: '" + client.getUsername() + "' started setting up a lobby, but he's already doing that!");
 				return;
 			}
 			this.stp_listeners.put(client.getUsername(), client);
@@ -385,44 +401,45 @@ public class MainServerController extends Thread implements VirtualServer {
 			}
 		}
 		state = new ClientSetupState(client.getUsername(), tmp);
-		System.out.println("Client: '" + client.getUsername() + "' has entered setup state!");
+		Logger.getInstance().print(LoggerLevel.LOBSL, "Client: '" + client.getUsername() + "' has entered setup state.");
 		this.sendMessage(client, new NotifyStateUpdateMessage(state));
 	}
 
 	public void leaveSetup(ClientDescriptor client) {
 		synchronized (listeners_lock) {
 			if (!lob_listeners.containsKey(client.getUsername())) {
-				System.out.println("Client: '" + client.getUsername() + "' tried to leave setup, but he's already playing!");
+				Logger.getInstance().print(LoggerLevel.WARN, "Client: '" + client.getUsername() + "' tried to leave setup, but he's already playing!");
 				return;
 			} else if (!stp_listeners.containsKey(client.getUsername())) {
-				System.out.println("Client: '" + client.getUsername() + "' tried to leave setup, but he wasn't never setupping!");
+				Logger.getInstance().print(LoggerLevel.WARN, "Client: '" + client.getUsername() + "' tried to leave setup, but he wasn't never setupping!");
 				return;
 			}
 			this.stp_listeners.remove(client.getUsername());
 		}
-		System.out.println("Client: '" + client.getUsername() + "' has left setup state!");
+		Logger.getInstance().print(LoggerLevel.LOBSL, "Client: '" + client.getUsername() + "' has left setup state.");
 		this.notifyLobbyListeners();
 	}
 
 	public void openNewRoom(ClientDescriptor client, GameModeType type, PlayerCount count) throws ForbiddenCallException {
 		synchronized (listeners_lock) {
 			if (!this.stp_listeners.containsKey(client.getUsername()) && this.lob_listeners.containsKey(client.getUsername())) {
-				System.out.println("Client: '" + client.getUsername() + "' tried opening a lobby, but he's not setupping!");
+				Logger.getInstance().print(LoggerLevel.WARN, "Client: '" + client.getUsername() + "' tried opening a lobby, but he's not setupping!");
 				return;
 			}
 			if (!this.lob_listeners.containsKey(client.getUsername())) {
-				System.out.println("Client: '" + client.getUsername() + "' tried opening a lobby, but he's already playing!");
+				Logger.getInstance().print(LoggerLevel.WARN, "Client: '" + client.getUsername() + "' tried opening a lobby, but he's already playing!");
 				return;
 			}
 			this.stp_listeners.remove(client.getUsername());
 			this.lob_listeners.remove(client.getUsername());
 		}
-		System.out.println("Client: '" + client.getUsername() + "' opened a new lobby! [Type: " + type + " | Size: " + count + "]");
+		Logger.getInstance().print(LoggerLevel.LOBSL, "Client: '" + client.getUsername() + "' opened a new lobby: [Type: " + type + " | Size: " + count + "].");
 		LobbyController new_lobby = new LobbyController(this.next_id);
 		ModelInstance model = new ModelInstance(this.next_id, new_lobby, type, count);
 		new_lobby.setModel(model);
 		new_lobby.start();
 		synchronized (lobbies_lock) {
+			Logger.getInstance().print(LoggerLevel.DEBUG, "Added lobby [" + new_lobby.getID() + "] to lobbies list.");
 			this.lobbies.put(this.next_id, new_lobby);
 			this.next_id++;
 		}
@@ -435,11 +452,11 @@ public class MainServerController extends Thread implements VirtualServer {
 	public void openUnfinished(ClientDescriptor client, int id) throws ForbiddenCallException {
 		synchronized (listeners_lock) {
 			if (!this.stp_listeners.containsKey(client.getUsername()) && this.lob_listeners.containsKey(client.getUsername())) {
-				System.out.println("Client: '" + client.getUsername() + "' tried opening a lobby, but he's not setupping!");
+				Logger.getInstance().print(LoggerLevel.WARN, "Client: '" + client.getUsername() + "' tried opening a lobby, but he's not setupping!");
 				return;
 			}
 			if (!this.lob_listeners.containsKey(client.getUsername())) {
-				System.out.println("Client: '" + client.getUsername() + "' tried opening a lobby, but he's already playing!");
+				Logger.getInstance().print(LoggerLevel.WARN, "Client: '" + client.getUsername() + "' tried opening a lobby, but he's already playing!");
 				return;
 			}
 			this.stp_listeners.remove(client.getUsername());
@@ -449,7 +466,7 @@ public class MainServerController extends Thread implements VirtualServer {
 		boolean reset = false;
 		synchronized (saved_lock) {
 			if (!saved.containsKey(id)) {
-				System.out.println("Client: '" + client.getUsername() + "' attempted to open a non-existant saved game!");
+				Logger.getInstance().print(LoggerLevel.WARN, "Client: '" + client.getUsername() + "' attempted to open a non-existant saved game!");
 				reset = true;
 			}
 		}
@@ -461,20 +478,22 @@ public class MainServerController extends Thread implements VirtualServer {
 			return;
 		}
 		synchronized (saved_lock) {
+			Logger.getInstance().print(LoggerLevel.DEBUG, "Opening unfinished lobby [" + id + "].");
 			loaded = this.saved.get(id);
 			if (!loaded.getEntry().getPlayers().contains(client.getUsername())) {
-				System.out.println("Client: '" + client.getUsername() + "' attempted resume a game, but he wasn't playing in it before!");
+				Logger.getInstance().print(LoggerLevel.NOTIF, "Client: '" + client.getUsername() + "' attempted to resume a game, but he wasn't playing in it before!");
 				return;
 			}
 		}
 		this.updateUnfinishedList();
-		System.out.println("Client: '" + client.getUsername() + "' opened a new lobby! [Type: " + loaded.getState().getType() + " | Size: " + loaded.getState().getCount() + "]");
+		Logger.getInstance().print(LoggerLevel.LOBSL, "Client: '" + client.getUsername() + "' opened a new lobby from unfinished: [Type: " + loaded.getState().getType() + " | Size: " + loaded.getState().getCount() + "].");
 		LobbyController new_lobby = new LobbyController(id);
 		loaded.setController(new_lobby);
 		loaded.afterSerialRestart();
 		new_lobby.setModel(loaded);
 		new_lobby.start();
 		synchronized (lobbies_lock) {
+			Logger.getInstance().print(LoggerLevel.DEBUG, "Added lobby [" + new_lobby.getID() + "] to lobbies list.");
 			this.lobbies.put(new_lobby.getID(), new_lobby);
 		}
 		client.setID(new_lobby.getID());
@@ -492,7 +511,7 @@ public class MainServerController extends Thread implements VirtualServer {
 			} catch (SecurityException e) {
 				e.printStackTrace();
 			}
-			System.out.println("Game [" + id + "] ended, closing its controller!");
+			Logger.getInstance().print(LoggerLevel.LOBSL, "Game [" + id + "] ended, closing its controller!");
 		}
 		this.updateUnfinishedList();
 		this.notifyLobbyListeners();
@@ -501,10 +520,10 @@ public class MainServerController extends Thread implements VirtualServer {
 	public void connectToLobby(ClientDescriptor client, int id) throws ForbiddenCallException {
 		synchronized (listeners_lock) {
 			if (!all_listeners.containsKey(client.getUsername())) {
-				System.out.println("Client: '" + client.getUsername() + "' attempted to join a lobby, but was never connected!");
+				Logger.getInstance().print(LoggerLevel.WARN, "Client: '" + client.getUsername() + "' attempted to join a lobby, but was never connected!");
 				return;
 			} else if (client.getId() != -1) {
-				System.out.println("Client: '" + client.getUsername() + "' attempted to join a lobby, but is already playing!");
+				Logger.getInstance().print(LoggerLevel.WARN, "Client: '" + client.getUsername() + "' attempted to join a lobby, but is already playing!");
 				return;
 			}
 			this.lob_listeners.remove(client.getUsername());
@@ -514,7 +533,7 @@ public class MainServerController extends Thread implements VirtualServer {
 				client.setID(id);
 				this.lobbies.get(id).connect(client);
 			} else {
-				System.out.println("Client: '" + client.getUsername() + "' tried to connect to a non existant lobby! [ID:" + id + "]");
+				Logger.getInstance().print(LoggerLevel.WARN, "Client: '" + client.getUsername() + "' tried to connect to a non existant lobby! [ID:" + id + "]");
 			}
 		}
 		this.notifyLobbyListeners();
@@ -539,9 +558,10 @@ public class MainServerController extends Thread implements VirtualServer {
 	public void joinFromEndedGame(ClientDescriptor client) {
 		synchronized (listeners_lock) {
 			if (this.lob_listeners.containsKey(client.getUsername())) {
-				System.out.println("Client: '" + client.getUsername() + "' is already in lobby!");
+				Logger.getInstance().print(LoggerLevel.WARN, "Client: '" + client.getUsername() + "' is already in lobby!");
 				return;
 			}
+			Logger.getInstance().print(LoggerLevel.DEBUG, "Rejoining Client: '" + client.getUsername() + "' to lobby select");
 			this.lob_listeners.put(client.getUsername(), client);
 		}
 		client.setID(-1);

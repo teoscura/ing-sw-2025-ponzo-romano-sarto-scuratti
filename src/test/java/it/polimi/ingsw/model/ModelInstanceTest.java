@@ -22,6 +22,26 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 public class ModelInstanceTest {
 
+	private static ModelInstance getModelInstance() {
+		ModelInstance model = new ModelInstance(0, new DummyController(0), GameModeType.TEST, PlayerCount.THREE);
+		model.setController(new DummyController(model.getID()));
+		Player player1 = new Player(GameModeType.TEST, "bibo1", PlayerColor.RED);
+		ClientDescriptor p1desc = new ClientDescriptor("bibo1", new DummyConnection());
+		p1desc.bindPlayer(player1);
+		Player player2 = new Player(GameModeType.TEST, "bibo2", PlayerColor.BLUE);
+		ClientDescriptor p2desc = new ClientDescriptor("bibo2", new DummyConnection());
+		p2desc.bindPlayer(player2);
+		Player player3 = new Player(GameModeType.TEST, "bibo3", PlayerColor.GREEN);
+		ClientDescriptor p3desc = new ClientDescriptor("bibo3", new DummyConnection());
+		p3desc.bindPlayer(player3);
+		ArrayList<Player> order = new ArrayList<>(Arrays.asList(player1, player2, player3));
+		Planche planche = new Planche(GameModeType.TEST, order);
+		iCards deck = new TestFlightCards();
+		DummyVoyageState state = new DummyVoyageState(model, GameModeType.TEST, PlayerCount.THREE, order, deck, planche);
+		model.setState(state);
+		return model;
+	}
+
 	@Test
 	void resumeFromSerial() throws ForbiddenCallException {
 		ServerMessage mess = null;
@@ -43,26 +63,6 @@ public class ModelInstanceTest {
 		mess = new ServerConnectMessage(p1descagain);
 		model.validate(mess);
 		assertInstanceOf(DummyVoyageState.class, model.getState());
-	}
-
-	private static ModelInstance getModelInstance() {
-		ModelInstance model = new ModelInstance(0, new DummyController(0), GameModeType.TEST, PlayerCount.THREE);
-		model.setController(new DummyController(model.getID()));
-		Player player1 = new Player(GameModeType.TEST, "bibo1", PlayerColor.RED);
-		ClientDescriptor p1desc = new ClientDescriptor("bibo1", new DummyConnection());
-		p1desc.bindPlayer(player1);
-		Player player2 = new Player(GameModeType.TEST, "bibo2", PlayerColor.BLUE);
-		ClientDescriptor p2desc = new ClientDescriptor("bibo2", new DummyConnection());
-		p2desc.bindPlayer(player2);
-		Player player3 = new Player(GameModeType.TEST, "bibo3", PlayerColor.GREEN);
-		ClientDescriptor p3desc = new ClientDescriptor("bibo3", new DummyConnection());
-		p3desc.bindPlayer(player3);
-		ArrayList<Player> order = new ArrayList<>(Arrays.asList(player1, player2, player3));
-		Planche planche = new Planche(GameModeType.TEST, order);
-		iCards deck = new TestFlightCards();
-		DummyVoyageState state = new DummyVoyageState(model, GameModeType.TEST, PlayerCount.THREE, order, deck, planche);
-		model.setState(state);
-		return model;
 	}
 
 }

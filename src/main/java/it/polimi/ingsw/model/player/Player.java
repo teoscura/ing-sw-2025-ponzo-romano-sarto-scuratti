@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.player;
 
 import it.polimi.ingsw.controller.server.ClientDescriptor;
 import it.polimi.ingsw.model.GameModeType;
+import it.polimi.ingsw.model.board.iPlanche;
 import it.polimi.ingsw.model.components.enums.ShipmentType;
 import it.polimi.ingsw.model.components.exceptions.AlreadyPoweredException;
 
@@ -35,7 +36,7 @@ public class Player implements Serializable {
 	}
 
 	public void retire() {
-		if (this.retired) throw new AlreadyPoweredException("Player has alredy retired.");
+		if (this.retired) throw new AlreadyPoweredException("Player: has alredy retired.");
 		this.retired = true;
 		this.score += credits;
 		int sum = 0;
@@ -51,12 +52,12 @@ public class Player implements Serializable {
 	}
 
 	public void reconnect() {
-		if (!this.disconnected) throw new AlreadyPoweredException("Player is alread y connected.");
+		if (!this.disconnected) throw new AlreadyPoweredException("Player: is alread y connected.");
 		this.disconnected = false;
 	}
 
 	public void disconnect() {
-		if (this.disconnected) throw new AlreadyPoweredException("Player has already disconnected.");
+		if (this.disconnected) throw new AlreadyPoweredException("Player: has already disconnected.");
 		this.disconnected = true;
 	}
 
@@ -105,6 +106,10 @@ public class Player implements Serializable {
 
 	public ClientDescriptor getDescriptor() {
 		return this.descriptor;
+	}
+
+	public String voyageInfo(iPlanche planche) {
+		return "[Player: '" + username + "'] Planche position: " + planche.getPlayerPosition(this) + " | Score: " + score + " | Credits: " + credits + " | Engine: " + ship.getEnginePower() + " | Cannon: " + ship.getCannonPower() + " | Crew: " + ship.getTotalCrew() + " | Battery: " + ship.getEnergyPower();
 	}
 
 	@Override

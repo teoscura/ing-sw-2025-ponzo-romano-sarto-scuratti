@@ -10,6 +10,8 @@ import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.state.GameState;
 import it.polimi.ingsw.model.state.ResumeWaitingState;
+import it.polimi.ingsw.utils.Logger;
+import it.polimi.ingsw.utils.LoggerLevel;
 
 public class DummyModelInstance extends ModelInstance {
 
@@ -33,7 +35,7 @@ public class DummyModelInstance extends ModelInstance {
 	}
 
 	public void startGame() {
-		System.out.println("Game Started. Dummy");
+		Logger.getInstance().print(LoggerLevel.MODEL, "[" + this.id + "] " + "Game Started. Dummy");
 		this.started = true;
 	}
 
@@ -62,7 +64,7 @@ public class DummyModelInstance extends ModelInstance {
 			ServerMessage mess = new ServerConnectMessage(client);
 			this.state.validate(mess);
 		} catch (ForbiddenCallException e) {
-			System.out.println("Client: '" + client.getUsername() + "' tried connecting when the current state doesn't support it anymore!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + this.id + "] " + "Client: '" + client.getUsername() + "' tried connecting when the current state doesn't support it anymore!");
 		}
 	}
 
@@ -72,7 +74,7 @@ public class DummyModelInstance extends ModelInstance {
 			mess.setDescriptor(client);
 			this.state.validate(mess);
 		} catch (ForbiddenCallException e) {
-			System.out.println("Client: '" + client.getUsername() + "' tried disconnecting when the current state doesn't support it anymore!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + this.id + "] " + "Client: '" + client.getUsername() + "' tried disconnecting when the current state doesn't support it anymore!");
 		}
 	}
 
@@ -80,7 +82,7 @@ public class DummyModelInstance extends ModelInstance {
 		try {
 			this.state.connect(p);
 		} catch (ForbiddenCallException e) {
-			System.out.println("Client: '" + p.getUsername() + "' tried reconnecting when the current state doesn't support it anymore!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + this.id + "] " + "Client: '" + p.getUsername() + "' tried reconnecting when the current state doesn't support it anymore!");
 		}
 	}
 
@@ -92,7 +94,7 @@ public class DummyModelInstance extends ModelInstance {
 			disc.setDescriptor(p.getDescriptor());
 			this.state.validate(disc);
 		} catch (ForbiddenCallException e) {
-			System.out.println("Client: '" + p.getUsername() + "' tried disconnecting when the current state doesn't support it anymore!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + this.id + "] " + "Client: '" + p.getUsername() + "' tried disconnecting when the current state doesn't support it anymore!");
 		}
 	}
 

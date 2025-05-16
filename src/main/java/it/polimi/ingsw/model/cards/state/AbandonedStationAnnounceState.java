@@ -12,6 +12,8 @@ import it.polimi.ingsw.model.client.card.ClientLandingCardStateDecorator;
 import it.polimi.ingsw.model.client.state.ClientState;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.state.VoyageState;
+import it.polimi.ingsw.utils.Logger;
+import it.polimi.ingsw.utils.LoggerLevel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,9 +37,9 @@ public class AbandonedStationAnnounceState extends CardState {
 	@Override
 	public void init(ClientState new_state) {
 		super.init(new_state);
-		System.out.println("New CardState -> Abandoned Station Announce State!");
+		Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "New CardState -> Abandoned Station Announce State!");
 		for (Player p : this.list) {
-			System.out.println("	 - " + p.getUsername());
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + p.voyageInfo(this.state.getPlanche()));
 		}
 	}
 
@@ -51,7 +53,7 @@ public class AbandonedStationAnnounceState extends CardState {
 		try {
 			this.card.apply(state, this.list.getFirst(), id);
 		} catch (CrewSizeException e) {
-			System.out.println("Player '" + this.list.getFirst().getUsername() + "' attempted to land with not enough crew!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Player: '" + this.list.getFirst().getUsername() + "' attempted to land with not enough crew!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + this.list.getFirst().getUsername() + "' attempted to land with not enough crew!"));
 			return;
 		}
@@ -73,18 +75,18 @@ public class AbandonedStationAnnounceState extends CardState {
 		if (this.card.getExhausted()) return new AbandonedStationRewardState(state, card, list);
 		this.list.removeFirst();
 		if (!this.list.isEmpty()) return new AbandonedStationAnnounceState(state, card, list);
-		System.out.println("Card exhausted, moving to a new one!");
+		Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Card exhausted, moving to a new one!");
 		return null;
 	}
 
 	@Override
 	public void selectLanding(Player p, int planet) {
 		if (p != this.list.getFirst()) {
-			System.out.println("Player '" + p.getUsername() + "' attempted to land during another player's turn!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Player: '" + p.getUsername() + "' attempted to land during another player's turn!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to land during another player's turn!"));
 			return;
 		} else if (planet != -1 && planet != 0) {
-			System.out.println("Player '" + p.getUsername() + "' attempted to land on an invalid id!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Player: '" + p.getUsername() + "' attempted to land on an invalid id!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to land on an invalid id!"));
 			return;
 		}

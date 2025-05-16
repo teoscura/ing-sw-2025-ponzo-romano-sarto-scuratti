@@ -90,7 +90,6 @@ public class AbadonedShipCardTest {
 		assertEquals(0, player1.getCredits());
 		assertEquals(0, player2.getCredits());
 		assertEquals(0, player3.getCredits());
-		planche.printOrder();
 		//Non e' il suo turno
 		mess = new SelectLandingMessage(0);
 		mess.setDescriptor(p2desc);

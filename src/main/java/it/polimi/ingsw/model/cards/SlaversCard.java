@@ -6,6 +6,8 @@ import it.polimi.ingsw.model.cards.state.SlaversAnnounceState;
 import it.polimi.ingsw.model.cards.utils.CardOrder;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.state.VoyageState;
+import it.polimi.ingsw.utils.Logger;
+import it.polimi.ingsw.utils.LoggerLevel;
 
 import java.util.ArrayList;
 
@@ -39,19 +41,19 @@ public class SlaversCard extends Card {
 	public boolean apply(VoyageState state, Player p) {
 		if (state == null || p == null) throw new NullPointerException();
 		if (p.getSpaceShip().getCannonPower() > this.min_power) {
-			System.out.println("Player '" + p.getUsername() + "' beat the slavers!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Player: '" + p.getUsername() + "' beat the slavers!");
 			this.exhaust();
 			return true;
 		} else if (p.getSpaceShip().getCannonPower() == this.min_power) {
-			System.out.println("Player '" + p.getUsername() + "' tied the slavers!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Player: '" + p.getUsername() + "' tied the slavers!");
 			return true;
 		}
 		if (p.getSpaceShip().getTotalCrew() <= this.crew_penalty) {
-			System.out.println("Player '" + p.getUsername() + "' lost and the whole crew got captured by slavers!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Player: '" + p.getUsername() + "' lost and the whole crew got captured by slavers!");
 			state.loseGame(p);
 			return false;
 		}
-		System.out.println("Player '" + p.getUsername() + "' lost to the slavers!");
+		Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Player: '" + p.getUsername() + "' lost to the slavers!");
 		return false;
 	}
 

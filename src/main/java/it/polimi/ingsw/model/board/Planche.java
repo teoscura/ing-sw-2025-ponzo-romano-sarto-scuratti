@@ -79,13 +79,5 @@ public class Planche implements iPlanche {
 		this.planche.remove(p);
 	}
 
-	@Override
-	public void printOrder() {
-		List<Player> tmp = this.planche.keySet().stream().sorted((p1, p2) -> this.planche.get(p1) < this.planche.get(p2) ? 1 : -1).toList();
-		for (Player p : tmp) {
-			System.out.println(p.getUsername() + " : " + this.getPlayerPosition(p));
-		}
-	}
-
 }
 

@@ -33,7 +33,7 @@ public class ConnectedState extends ClientControllerState {
 		this.connection = connection;
 		this.consumer_thread = new ConsumerThread(this, inqueue);
 		this.outqueue = new ThreadSafeMessageQueue<>(100);
-		this.sender_thread = new SenderThread(this.outqueue, this.connection);
+		this.sender_thread = new SenderThread(this, this.outqueue, this.connection);
 		this.commandbuilder_thread = new InputCommandTask(this);
 		this.shutdown_hook = this.getShutdownHook();
 	}
@@ -52,7 +52,6 @@ public class ConnectedState extends ClientControllerState {
 		return new TitleScreenState(controller, view);
 	}
 
-	@Override
 	public void onClose() {
 		Runtime.getRuntime().removeShutdownHook(this.shutdown_hook);
 		this.disconnect();

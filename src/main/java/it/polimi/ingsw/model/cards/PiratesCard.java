@@ -8,6 +8,8 @@ import it.polimi.ingsw.model.cards.utils.CardOrder;
 import it.polimi.ingsw.model.cards.utils.ProjectileArray;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.state.VoyageState;
+import it.polimi.ingsw.utils.Logger;
+import it.polimi.ingsw.utils.LoggerLevel;
 
 
 public class PiratesCard extends Card {
@@ -42,14 +44,14 @@ public class PiratesCard extends Card {
 	public boolean apply(VoyageState state, Player p) {
 		if (state == null || p == null) throw new NullPointerException();
 		if (p.getSpaceShip().getCannonPower() > this.min_power) {
-			System.out.println("Player '" + p.getUsername() + "' beat the pirates!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Player: '" + p.getUsername() + "' beat the pirates!");
 			this.exhaust();
 			return true;
 		} else if (p.getSpaceShip().getCannonPower() == this.min_power) {
-			System.out.println("Player '" + p.getUsername() + "' tied the pirates!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Player: '" + p.getUsername() + "' tied the pirates!");
 			return true;
 		}
-		System.out.println("Player '" + p.getUsername() + "' lost to the pirates!");
+		Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Player: '" + p.getUsername() + "' lost to the pirates!");
 		return p.getSpaceShip().getCannonPower() == this.min_power;
 	}
 

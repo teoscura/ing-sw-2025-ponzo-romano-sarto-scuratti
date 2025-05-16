@@ -136,10 +136,7 @@ public class PiratesCardTest {
 	@Test
 	void behaviourUnshielded() throws ForbiddenCallException {
 		ServerMessage message = null;
-		for (Player p : this.order) {
-			System.out.println(p.getUsername() + " - e:" + p.getSpaceShip().getEnginePower() + " - cr:" + p.getSpaceShip().getTotalCrew() + " - c:" + p.getSpaceShip().getCannonPower());
-		}
-		planche.printOrder();
+
 		message = new SendContinueMessage();
 		message.setDescriptor(p1desc);
 		state.validate(message);
@@ -184,7 +181,6 @@ public class PiratesCardTest {
 		message = new TakeRewardMessage(true);
 		message.setDescriptor(p2desc);
 		state.validate(message);
-		planche.printOrder();
 		assertEquals(player2.getCredits(), x + this.card.getCredits());
 		assertEquals(pos - this.card.getDays(), planche.getPlayerPosition(player2));
 		assertTrue(card.getExhausted());
@@ -194,10 +190,7 @@ public class PiratesCardTest {
 	@Test
 	void behaviour2() throws ForbiddenCallException {
 		ServerMessage message = null;
-		for (Player p : this.order) {
-			System.out.println(p.getUsername() + " - e:" + p.getSpaceShip().getEnginePower() + " - cr:" + p.getSpaceShip().getTotalCrew() + " - c:" + p.getSpaceShip().getCannonPower());
-		}
-		planche.printOrder();
+
 		message = new SendContinueMessage();
 		message.setDescriptor(p1desc);
 		state.validate(message);
@@ -253,10 +246,7 @@ public class PiratesCardTest {
 	@Test
 	void disconnectionResilienceDuringShots() throws ForbiddenCallException {
 		ServerMessage message = null;
-		for (Player p : this.order) {
-			System.out.println(p.getUsername() + " - e:" + p.getSpaceShip().getEnginePower() + " - cr:" + p.getSpaceShip().getTotalCrew() + " - c:" + p.getSpaceShip().getCannonPower());
-		}
-		planche.printOrder();
+
 		message = new SendContinueMessage();
 		message.setDescriptor(p1desc);
 		model.validate(message);

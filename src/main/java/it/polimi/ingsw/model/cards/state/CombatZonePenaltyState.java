@@ -17,6 +17,8 @@ import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.VoyageState;
+import it.polimi.ingsw.utils.Logger;
+import it.polimi.ingsw.utils.LoggerLevel;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -57,10 +59,10 @@ class CombatZonePenaltyState extends CardState {
 	@Override
 	public void init(ClientState new_state) {
 		super.init(new_state);
-		System.out.println("    CardState -> Combat Zone Penalty State!: [" + (3 - sections.size()) + " - " + this.sections.getFirst().getPenalty() + "].");
-		System.out.println("    Targeting: '" + this.target.getUsername() + "'.");
+		Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "CardState -> Combat Zone Penalty State!: [" + (3 - sections.size()) + " - " + this.sections.getFirst().getPenalty() + "].");
+		Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Targeting: '" + this.target.getUsername() + "'.");
 		if (sections.getFirst().getPenalty() == CombatZonePenalty.CARGO)
-			System.out.println("    Bat: " + required[0] + " Blu: " + required[1] + " Grn: " + required[2] + " Ylw: " + required[3] + " Red: " + required[4]);
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Bat: " + required[0] + " Blu: " + required[1] + " Grn: " + required[2] + " Ylw: " + required[3] + " Red: " + required[4]);
 		if (sections.getFirst().getPenalty() != CombatZonePenalty.DAYS) return;
 		this.state.getPlanche().movePlayer(state, target, -sections.getFirst().getAmount());
 		this.transition();
@@ -117,7 +119,7 @@ class CombatZonePenaltyState extends CardState {
 		if (this.target.getRetired() || this.target.getDisconnected()) {
 			this.sections.removeFirst();
 			if (!this.sections.isEmpty()) return new CombatZoneAnnounceState(state, card_id, sections, shots);
-			System.out.println("...Card exhausted, moving to a new one!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "...Card exhausted, moving to a new one!");
 			return null;
 		}
 		if (this.sections.getFirst().getPenalty() == CombatZonePenalty.SHOTS) this.shots.getProjectiles().removeFirst();
@@ -128,28 +130,28 @@ class CombatZonePenaltyState extends CardState {
 		}
 		this.sections.removeFirst();
 		if (!this.sections.isEmpty()) return new CombatZoneAnnounceState(state, card_id, sections, shots);
-		System.out.println("...Card exhausted, moving to a new one!");
+		Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "...Card exhausted, moving to a new one!");
 		return null;
 	}
 
 	@Override
 	public void turnOn(Player p, ShipCoords target_coords, ShipCoords battery_coords) throws ForbiddenCallException {
 		if (!p.equals(this.target)) {
-			System.out.println("Player '" + p.getUsername() + "' attempted to turn on a component during another player's turn!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Player: '" + p.getUsername() + "' attempted to turn on a component during another player's turn!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to turn on a component during another player's turn!"));
 			return;
 		}
 		if (this.sections.getFirst().getPenalty() != CombatZonePenalty.SHOTS) {
-			System.out.println("Player '" + p.getUsername() + "' attempted to turn on a component when the penalty doesn't allow it!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Player: '" + p.getUsername() + "' attempted to turn on a component when the penalty doesn't allow it!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to turn on a component when the penalty doesn't allow it!"));
 			throw new ForbiddenCallException();
 		}
 		try {
 			p.getSpaceShip().turnOn(target_coords, battery_coords);
-			System.out.println("Player '" + p.getUsername() + "' turned on component at" + target_coords + " using battery from " + battery_coords + "!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Player: '" + p.getUsername() + "' turned on component at" + target_coords + " using battery from " + battery_coords + "!");
 		} catch (IllegalTargetException e) {
-			System.out.println(e.getMessage());
-			System.out.println("Player '" + p.getUsername() + "' attempted to turn on a component with invalid coordinates!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + e.getMessage());
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Player: '" + p.getUsername() + "' attempted to turn on a component with invalid coordinates!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to turn on a component with invalid coordinates!"));
 		}
 	}
@@ -157,12 +159,12 @@ class CombatZonePenaltyState extends CardState {
 	@Override
 	public void progressTurn(Player p) throws ForbiddenCallException {
 		if (!p.equals(this.target)) {
-			System.out.println("Player '" + p.getUsername() + "' attempted to progress during another player's turn!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Player: '" + p.getUsername() + "' attempted to progress during another player's turn!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to progress during another player's turn!"));
 			return;
 		}
 		if (this.sections.getFirst().getPenalty() != CombatZonePenalty.SHOTS) {
-			System.out.println("Player '" + p.getUsername() + "' attempted to progress when the penalty doesn't allow it!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Player: '" + p.getUsername() + "' attempted to progress when the penalty doesn't allow it!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to progress when the penalty doesn't allow it!"));
 			throw new ForbiddenCallException();
 		}
@@ -172,12 +174,12 @@ class CombatZonePenaltyState extends CardState {
 	@Override
 	public void removeCrew(Player p, ShipCoords cabin_coords) throws ForbiddenCallException {
 		if (!p.equals(this.target)) {
-			System.out.println("Player '" + p.getUsername() + "' attempted to remove a crew member during another player's turn!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Player: '" + p.getUsername() + "' attempted to remove a crew member during another player's turn!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to remove a crew member during another player's turn!"));
 			return;
 		}
 		if (this.sections.getFirst().getPenalty() != CombatZonePenalty.CREW) {
-			System.out.println("Player '" + p.getUsername() + "' attempted to remove a crew member when the penalty doesn't allow it!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Player: '" + p.getUsername() + "' attempted to remove a crew member when the penalty doesn't allow it!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to remove a crew member when the penalty doesn't allow it!"));
 			throw new ForbiddenCallException();
 		}
@@ -185,9 +187,9 @@ class CombatZonePenaltyState extends CardState {
 		try {
 			p.getSpaceShip().getComponent(cabin_coords).check(v);
 			this.amount++;
-			System.out.println("Player '" + p.getUsername() + "' removed a crewmate from " + cabin_coords + "!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Player: '" + p.getUsername() + "' removed a crewmate from " + cabin_coords + "!");
 		} catch (IllegalTargetException e) {
-			System.out.println("Player '" + p.getUsername() + "' attempted to remove a crew member from invalid coordinates!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Player: '" + p.getUsername() + "' attempted to remove a crew member from invalid coordinates!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to remove a crew member from invalid coordinates!"));
 			return;
 		}
@@ -204,12 +206,12 @@ class CombatZonePenaltyState extends CardState {
 	@Override
 	public void discardCargo(Player p, ShipmentType type, ShipCoords coords) throws ForbiddenCallException {
 		if (!p.equals(this.target)) {
-			System.out.println("Player '" + p.getUsername() + "' attempted to discard cargo during another player's turn!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Player: '" + p.getUsername() + "' attempted to discard cargo during another player's turn!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to discard cargo during another player's turn!"));
 			return;
 		}
 		if (this.sections.getFirst().getPenalty() != CombatZonePenalty.CARGO) {
-			System.out.println("Player '" + p.getUsername() + "' attempted to discard cargo when the penalty doesn't allow it!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Player: '" + p.getUsername() + "' attempted to discard cargo when the penalty doesn't allow it!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to discard cargo when the penalty doesn't allow it!"));
 			throw new ForbiddenCallException();
 		}
@@ -220,7 +222,7 @@ class CombatZonePenaltyState extends CardState {
 				continue;
 			}
 			if (type.getValue() != idx) {
-				System.out.println("Player '" + p.getUsername() + "' attempted to discard cargo that's not his most valuable!");
+				Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Player: '" + p.getUsername() + "' attempted to discard cargo that's not his most valuable!");
 				this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to discard cargo that's not his most valuable!"));
 				return;
 			}
@@ -229,24 +231,25 @@ class CombatZonePenaltyState extends CardState {
 				p.getSpaceShip().getComponent(coords).check(v);
 				this.required[idx]--;
 				if (type != ShipmentType.EMPTY)
-					System.out.println("Player '" + p.getUsername() + "' removed cargo type: " + type + " from " + coords);
-				else System.out.println("Player '" + p.getUsername() + "' removed battery from " + coords);
+					Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Player: '" + p.getUsername() + "' removed cargo type: " + type + " from " + coords);
+				else
+					Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Player: '" + p.getUsername() + "' removed battery from " + coords);
 				break;
 			} catch (ContainerEmptyException e) {
 				if (type != ShipmentType.EMPTY) {
-					System.out.println("Player '" + p.getUsername() + "' attempted to discard cargo from a storage that doesn't contain it!");
+					Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Player: '" + p.getUsername() + "' attempted to discard cargo from a storage that doesn't contain it!");
 					this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to discard cargo from a storage that doesn't contain it!"));
 				} else {
-					System.out.println("Player '" + p.getUsername() + "' attempted to discard a battery from a storage that doesn't contain it!");
+					Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Player: '" + p.getUsername() + "' attempted to discard a battery from a storage that doesn't contain it!");
 					this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to discard a battery from a storage that doesn't contain it!"));
 				}
 				return;
 			} catch (IllegalTargetException e) {
 				if (type != ShipmentType.EMPTY) {
-					System.out.println("Player '" + p.getUsername() + "' attempted to discard cargo from illegal coordinates!");
+					Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Player: '" + p.getUsername() + "' attempted to discard cargo from illegal coordinates!");
 					this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to discard cargo from illegal coordinates!"));
 				} else {
-					System.out.println("Player '" + p.getUsername() + "' attempted to discard a battery from illegal coordinates!");
+					Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Player: '" + p.getUsername() + "' attempted to discard a battery from illegal coordinates!");
 					this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to discard a battery from illegal coordinates!"));
 				}
 				return;

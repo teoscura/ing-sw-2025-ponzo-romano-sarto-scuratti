@@ -33,11 +33,10 @@ public class SocketConnection extends Thread implements ServerConnection {
 			try {
 				message = (ClientMessage) in.readObject();
 			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
+				System.out.println("Received an invalid object via TCP, discarding it.");
 			} catch (IOException e) {
 				System.out.println("Failed to read object from: " + socket.getInetAddress() + ", closing socket.");
 				this.close();
-				e.printStackTrace();
 			}
 			inqueue.insert(message);
 		}
@@ -56,7 +55,7 @@ public class SocketConnection extends Thread implements ServerConnection {
 			this.interrupt();
 			socket.close();
 		} catch (IOException e) {
-			System.out.println("getName()");
+			System.out.println("Closing socket connection.");
 		}
 	}
 

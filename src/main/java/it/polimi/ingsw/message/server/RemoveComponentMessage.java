@@ -18,6 +18,7 @@ public class RemoveComponentMessage extends ServerMessage {
 
 	@Override
 	public void receive(MainServerController server) throws ForbiddenCallException {
+		throw new ForbiddenCallException("Client: '" + this.descriptor.getUsername() + "' sent a " + this.getClass().getSimpleName() + " message while in lobby select");
 	}
 
 	@Override

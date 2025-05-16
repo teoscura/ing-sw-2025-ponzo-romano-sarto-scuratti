@@ -21,6 +21,8 @@ import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
 import it.polimi.ingsw.model.components.visitors.EnergyVisitor;
 import it.polimi.ingsw.model.components.visitors.SpaceShipUpdateVisitor;
 import it.polimi.ingsw.model.player.exceptions.IllegalComponentAdd;
+import it.polimi.ingsw.utils.Logger;
+import it.polimi.ingsw.utils.LoggerLevel;
 
 import java.io.Serializable;
 import java.util.*;
@@ -120,16 +122,6 @@ public class SpaceShip implements Serializable {
 		return this.blobs.size();
 	}
 
-	public void printBlobs() {
-		this.updateShipBlobs();
-		for (var blob : this.blobs) {
-			for (var c : blob) {
-				System.out.print(c + " ");
-			}
-			System.out.println();
-		}
-	}
-
 	public void updateShipBlobs() {
 		ArrayList<ArrayList<ShipCoords>> res = new ArrayList<>();
 		VerifyResult[][] map = new VerifyResult[this.type.getHeight()][this.type.getWidth()];
@@ -209,7 +201,8 @@ public class SpaceShip implements Serializable {
 
 	public void removeComponent(ShipCoords coords) {
 		if (coords == null) throw new NullPointerException();
-		System.out.println("Removed component on coords: " + coords + " for player '" + this.player.getUsername() + "'.");
+		if (player.getDescriptor() != null)
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + this.player.getDescriptor().getId() + "] " + "[Player: '" + this.player.getUsername() + "'] " + "Removed component on coords: " + coords + ".");
 		BaseComponent tmp = this.getComponent(coords);
 		if (this.components[coords.y][coords.x] == this.empty) throw new IllegalTargetException();
 		this.components[coords.y][coords.x] = this.empty;

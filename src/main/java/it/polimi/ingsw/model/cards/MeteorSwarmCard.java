@@ -26,10 +26,5 @@ public class MeteorSwarmCard extends Card {
 		return this.meteorites.getProjectiles();
 	}
 
-	// public boolean apply(Player p, Projectile meteorite){
-	//     if(p==null) throw new NullPointerException();
-	//     return p.getSpaceShip().handleMeteorite(meteorite);
-	// }
-
 }
 

@@ -11,6 +11,8 @@ import it.polimi.ingsw.model.client.player.ClientEndgamePlayer;
 import it.polimi.ingsw.model.client.state.ClientEndgameState;
 import it.polimi.ingsw.model.client.state.ClientState;
 import it.polimi.ingsw.model.player.Player;
+import it.polimi.ingsw.utils.Logger;
+import it.polimi.ingsw.utils.LoggerLevel;
 
 import java.util.ArrayList;
 
@@ -40,7 +42,7 @@ public class EndscreenState extends GameState {
 			if (this.order_arrival.contains(p)) p.addScore(4 - order_arrival.indexOf(p));
 			p.finalScore();
 		}
-		System.out.println("New Game State -> Endscreen State");
+		Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "New Game State -> Endscreen State");
 		this.broadcastMessage(new NotifyStateUpdateMessage(this.getClientState()));
 	}
 
