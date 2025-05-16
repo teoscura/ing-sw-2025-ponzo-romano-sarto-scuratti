@@ -2,7 +2,7 @@ package it.polimi.ingsw.utils;
 
 public enum LoggerLevel {
 	OFF  (8, "\033[0m"),              //No messages are ever shown
-	ERROR(7, "\u001B[43m\033[1;91m"), //Only errors are shown
+	ERROR(7, "\033[0;101m\033[0;93m"), //Only errors are shown
 	WARN (6, "\033[1;33m"), 		   //Only warnings and up are shown
 	NOTIF(5, "\033[1;36m"), 		   //Only status changes and upare shown
 	SERVR(4, "\033[0;33m"), 		   //Only info from the network and up is shown
