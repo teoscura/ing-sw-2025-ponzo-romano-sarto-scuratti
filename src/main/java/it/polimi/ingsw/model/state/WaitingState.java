@@ -14,6 +14,8 @@ import it.polimi.ingsw.model.client.state.ClientState;
 import it.polimi.ingsw.model.client.state.ClientWaitingRoomState;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.utils.Logger;
+import it.polimi.ingsw.utils.LoggerLevel;
 
 import java.util.ArrayList;
 
@@ -30,7 +32,7 @@ public class WaitingState extends GameState {
 
 	@Override
 	public void init() {
-		/*XXX*/System.out.println("New Game State -> Waiting Room State!");
+		Logger.getInstance().print(LoggerLevel.LOBB, "New Game State -> Waiting Room State!");
 		this.broadcastMessage(new NotifyStateUpdateMessage(this.getClientState()));
 	}
 
@@ -90,23 +92,18 @@ public class WaitingState extends GameState {
 
 	public void connect(ClientDescriptor client) throws ForbiddenCallException {
 		if (this.connected.contains(client)) {
-			/*XXX*/System.out.println("Client '" + client.getUsername() + "' attempted to connect from an already connected connection!");
 			this.broadcastMessage(new ViewMessage("Client '" + client.getUsername() + "' attempted to connect from an already connected connection!"));
 			return;
 		}
-		/*XXX*/System.out.println("Client '" + client.getUsername() + "' connected!");
 		this.broadcastMessage(new ViewMessage("Client '" + client.getUsername() + "' connected!"));
 		this.connected.add(client);
 	}
 
 	public void disconnect(ClientDescriptor client) throws ForbiddenCallException {
 		if (!this.connected.contains(client)) {
-			/*XXX*/System.out.println("Client '" + client.getUsername() + "' attempted to disconnect from a connection that isn't connected!");
 			this.broadcastMessage(new ViewMessage("Client '" + client.getUsername() + "' attempted to disconnect from a connection that isn't connected!"));
 			return;
 		}
-		/*XXX*/System.out.println("Client '" + client.getUsername() + "' disconnected!");
-		this.broadcastMessage(new ViewMessage("Client '" + client.getUsername() + "' disconnected!"));
 		this.connected.remove(client);
 	}
 

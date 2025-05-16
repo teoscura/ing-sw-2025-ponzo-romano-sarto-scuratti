@@ -2,7 +2,6 @@ package it.polimi.ingsw.message.client;
 
 import it.polimi.ingsw.controller.client.state.ConnectedState;
 
-//XXX remove this one.
 public class ViewMessage extends ClientMessage {
 
 	private final String message;

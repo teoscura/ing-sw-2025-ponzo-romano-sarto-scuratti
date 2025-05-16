@@ -207,7 +207,6 @@ class VerifyStateTest {
 		model.validate(message);
 		//State should be voyage.
 		assertInstanceOf(VoyageState.class, model.getState());
-		((VoyageState) model.getState()).getPlanche().printOrder();
 		assertEquals(((VoyageState) model.getState()).getPlanche().getPlayerPosition(player1), GameModeType.LVL2.getLength() + 6);
 		assertEquals(((VoyageState) model.getState()).getPlanche().getPlayerPosition(player2), GameModeType.LVL2.getLength() + 3);
 		assertTrue(player3.getRetired());
@@ -281,7 +280,6 @@ class VerifyStateTest {
 		model.validate(message);
 		//State should be voyage.
 		assertInstanceOf(VoyageState.class, model.getState());
-		((VoyageState) model.getState()).getPlanche().printOrder();
 		assertEquals(x - 1, player1.getSpaceShip().getTotalCrew());
 		assertEquals(((VoyageState) model.getState()).getPlanche().getPlayerPosition(player1), GameModeType.LVL2.getLength() + 6);
 		assertEquals(((VoyageState) model.getState()).getPlanche().getPlayerPosition(player2), GameModeType.LVL2.getLength() + 3);

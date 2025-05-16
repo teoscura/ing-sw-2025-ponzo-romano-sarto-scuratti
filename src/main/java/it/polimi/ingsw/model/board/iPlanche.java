@@ -15,5 +15,4 @@ public interface iPlanche extends Serializable {
 
 	void loseGame(Player p);
 
-	void printOrder();
 }
