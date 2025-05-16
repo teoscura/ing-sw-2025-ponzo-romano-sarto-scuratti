@@ -40,10 +40,6 @@ public class ConnectingState extends ClientControllerState {
 		return new ConnectedState(controller, view, username, connection, this.inqueue);
 	}
 
-	@Override
-	public void onClose() {
-	}
-
 	public void connect(String address, int port, ConnectionType type) {
 		this.inqueue = new ThreadSafeMessageQueue<>(100);
 		switch (type) {

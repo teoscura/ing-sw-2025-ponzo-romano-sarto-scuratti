@@ -28,10 +28,6 @@ public class TitleScreenState extends ClientControllerState {
 		return new ConnectingState(this.controller, this.view, this.username);
 	}
 
-	@Override
-	public void onClose() {
-	}
-
 	public void setUsername(String username) {
 		this.username = username;
 		this.transition();
