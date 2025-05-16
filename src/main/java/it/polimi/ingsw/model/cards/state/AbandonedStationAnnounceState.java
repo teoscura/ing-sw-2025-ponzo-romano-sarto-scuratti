@@ -53,7 +53,7 @@ public class AbandonedStationAnnounceState extends CardState {
 		try {
 			this.card.apply(state, this.list.getFirst(), id);
 		} catch (CrewSizeException e) {
-			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player '" + this.list.getFirst().getUsername() + "' attempted to land with not enough crew!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player: '" + this.list.getFirst().getUsername() + "' attempted to land with not enough crew!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + this.list.getFirst().getUsername() + "' attempted to land with not enough crew!"));
 			return;
 		}
@@ -82,11 +82,11 @@ public class AbandonedStationAnnounceState extends CardState {
 	@Override
 	public void selectLanding(Player p, int planet) {
 		if (p != this.list.getFirst()) {
-			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player '" + p.getUsername() + "' attempted to land during another player's turn!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player: '" + p.getUsername() + "' attempted to land during another player's turn!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to land during another player's turn!"));
 			return;
 		} else if (planet != -1 && planet != 0) {
-			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player '" + p.getUsername() + "' attempted to land on an invalid id!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player: '" + p.getUsername() + "' attempted to land on an invalid id!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to land on an invalid id!"));
 			return;
 		}

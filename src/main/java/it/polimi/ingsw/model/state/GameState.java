@@ -69,7 +69,7 @@ public abstract class GameState implements Serializable {
 
 	public Player getPlayer(PlayerColor c) throws PlayerNotFoundException {
 		if (this.players == null || c.getOrder() >= players.size())
-			throw new PlayerNotFoundException("Player color is not present in this match");
+			throw new PlayerNotFoundException("Player: color is not present in this match");
 		return this.players.get(c.getOrder());
 	}
 

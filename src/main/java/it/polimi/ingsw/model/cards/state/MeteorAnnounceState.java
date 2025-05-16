@@ -85,15 +85,15 @@ public class MeteorAnnounceState extends CardState {
 	@Override
 	public void turnOn(Player p, ShipCoords target_coords, ShipCoords battery_coords) {
 		if (!this.awaiting.contains(p)) {
-			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player '" + p.getUsername() + "' attempted to turn on a component after motioning to progress!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player: '" + p.getUsername() + "' attempted to turn on a component after motioning to progress!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to turn on a component after motioning to progress!"));
 			return;
 		}
 		try {
 			p.getSpaceShip().turnOn(target_coords, battery_coords);
-			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player '" + p.getUsername() + "' turned on component at" + target_coords + " using battery from " + battery_coords + "!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player: '" + p.getUsername() + "' turned on component at" + target_coords + " using battery from " + battery_coords + "!");
 		} catch (IllegalTargetException e) {
-			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player '" + p.getUsername() + "' attempted to turn on a component with invalid coordinates!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player: '" + p.getUsername() + "' attempted to turn on a component with invalid coordinates!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to turn on a component with invalid coordinates!"));
 		}
 	}
@@ -101,12 +101,12 @@ public class MeteorAnnounceState extends CardState {
 	@Override
 	public void progressTurn(Player p) {
 		if (!this.awaiting.contains(p)) {
-			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player '" + p.getUsername() + "' attempted to progress the turn while already having done so!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player: '" + p.getUsername() + "' attempted to progress the turn while already having done so!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to progress the turn while already having done so!"));
 			return;
 		}
 		this.awaiting.remove(p);
-		Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player '" + p.getUsername() + "' motioned to progress! (" + (this.state.getCount().getNumber() - this.awaiting.size()) + ").");
+		Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player: '" + p.getUsername() + "' motioned to progress! (" + (this.state.getCount().getNumber() - this.awaiting.size()) + ").");
 	}
 
 	@Override

@@ -70,12 +70,12 @@ public class EpidemicState extends CardState {
 	@Override
 	public void progressTurn(Player p) {
 		if (!this.awaiting.contains(p)) {
-			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player '" + p.getUsername() + "' attempted to progress the turn while already having done so!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player: '" + p.getUsername() + "' attempted to progress the turn while already having done so!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to progress the turn while already having done so!"));
 			return;
 		}
 		this.awaiting.remove(p);
-		Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player '" + p.getUsername() + "' motioned to progress! (" + this.awaiting.size() + " missing).");
+		Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player: '" + p.getUsername() + "' motioned to progress! (" + this.awaiting.size() + " missing).");
 	}
 
 	@Override

@@ -63,11 +63,11 @@ public class StardustState extends CardState {
 	@Override
 	public void progressTurn(Player p) {
 		if (!this.awaiting.contains(p)) {
-			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player '" + p.getUsername() + "' attempted to progress the turn while already having done so!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player: '" + p.getUsername() + "' attempted to progress the turn while already having done so!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to progress the turn while already having done so!"));
 			return;
 		}
-		Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player '" + p.getUsername() + "' motioned to progress!");
+		Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player: '" + p.getUsername() + "' motioned to progress!");
 		this.awaiting.remove(p);
 	}
 

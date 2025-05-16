@@ -7,7 +7,7 @@ public class Logger {
 
 	private final Object stream_lock;
 	private PrintStream out;
-	private LoggerLevel level = LoggerLevel.NOTIF;
+	private LoggerLevel level = LoggerLevel.MODEL;
 
 	private Logger() {
 		this.out = System.out;
@@ -32,7 +32,7 @@ public class Logger {
 	}
 
 	public void print(LoggerLevel level, String message) {
-		if (level.status() > this.level.status()) return;
+		if (level.status() < this.level.status()) return;
 		synchronized (stream_lock) {
 			out.println(level + message);
 		}

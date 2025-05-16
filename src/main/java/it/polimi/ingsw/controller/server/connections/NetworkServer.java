@@ -7,6 +7,7 @@ import it.polimi.ingsw.utils.LoggerLevel;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.lang.ref.Cleaner;
 import java.lang.reflect.InaccessibleObjectException;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
@@ -53,25 +54,32 @@ public class NetworkServer extends Thread implements RMISkeletonProvider, Serial
 
 	private void startServer() {
 		Registry registry = null;
-		try {
-			registry = LocateRegistry.createRegistry(this.rmiport);
-			registry.bind("galaxy_truckers", this);
-			UnicastRemoteObject.exportObject(this, this.rmiport);
-			Logger.getInstance().print(LoggerLevel.SERVR, "Set up RMI on address: '" + this.ip + ":" + this.rmiport + "'...");
-			Runtime.getRuntime().addShutdownHook(this.RMICleanup());
-		} catch (RemoteException e) {
-			Logger.getInstance().print(LoggerLevel.ERROR, "Failed to setup the rmi registry and remote object, server may still run in TCP Mode.");
-		} catch (InaccessibleObjectException e) {
-			Logger.getInstance().print(LoggerLevel.WARN, "Couldn't bind RMI due to access permissions! Is this running inside a sandboxed JUnit test?");
-		} catch (AlreadyBoundException e) {
-			Logger.getInstance().print(LoggerLevel.ERROR, "Name is already bound, terminating.");
-			System.exit(-1);
+		Cleaner c = Cleaner.create();
+		//Rmi ports less than zero are not allowed in argument parsing at launch, but are used by tests to get around
+		//Certain JVM limitations, as only one rmi registry per JVM may be launched, breaking JUnit tests that don't 
+		//rely on Network functionality.12
+		if(rmiport>=0){
+            try {
+				registry = LocateRegistry.createRegistry(this.rmiport);
+				registry.bind("galaxy_truckers", this);
+				UnicastRemoteObject.exportObject(this, this.rmiport);
+				Logger.getInstance().print(LoggerLevel.SERVR, "Set up RMI on address: '" + this.ip + ":" + this.rmiport + "'...");
+				c.register(this, this.RMICleanup());
+			} catch (RemoteException e) {
+				Logger.getInstance().print(LoggerLevel.ERROR, "Failed to setup the rmi registry and remote object, terminating.");
+				System.exit(-1);
+			} catch (InaccessibleObjectException e) {
+				Logger.getInstance().print(LoggerLevel.WARN, "Couldn't bind RMI due to access permissions! Is this running inside a sandboxed JUnit test?");
+			} catch (AlreadyBoundException e) {
+				Logger.getInstance().print(LoggerLevel.ERROR, "Name is already bound, terminating.");
+				System.exit(-1);
+			}
 		}
 		try {
 			this.server = new ServerSocket();
 			this.server.bind(new InetSocketAddress(this.ip, this.tcpport));
 			Logger.getInstance().print(LoggerLevel.SERVR, "Started server on: '" + ip + ":" + this.server.getLocalPort() + "'...");
-			Runtime.getRuntime().addShutdownHook(this.TCPCleanup());
+			c.register(this, this.TCPCleanup());
 		} catch (IOException e) {
 			Logger.getInstance().print(LoggerLevel.ERROR, "Couldn't start server on the specified address and port, terminating.");
 			System.exit(-1);
@@ -101,6 +109,7 @@ public class NetworkServer extends Thread implements RMISkeletonProvider, Serial
 		}
 	}
 
+
 	private Thread RMICleanup() {
 		return new Thread() {
 			public void run() {
@@ -108,6 +117,7 @@ public class NetworkServer extends Thread implements RMISkeletonProvider, Serial
 					this.interrupt();
 					Registry registry = LocateRegistry.getRegistry();
 					registry.unbind("galaxy_truckers");
+				    UnicastRemoteObject.unexportObject(registry, true);
 				} catch (RemoteException | NotBoundException e) {
 				}
 				Logger.getInstance().print(LoggerLevel.SERVR, "Cleaned up RMI connection.");

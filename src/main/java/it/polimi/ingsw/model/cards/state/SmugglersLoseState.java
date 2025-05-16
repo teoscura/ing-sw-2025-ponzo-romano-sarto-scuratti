@@ -90,12 +90,12 @@ public class SmugglersLoseState extends CardState {
 	@Override
 	public void discardCargo(Player p, ShipmentType type, ShipCoords coords) {
 		if (!p.equals(this.list.getFirst())) {
-			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player '" + p.getUsername() + "' attempted to discard cargo during another player's turn!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player: '" + p.getUsername() + "' attempted to discard cargo during another player's turn!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to discard cargo during another player's turn!"));
 			return;
 		}
 		if (p.getSpaceShip().getContains()[type.getValue()] <= 0) {
-			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player '" + p.getUsername() + "' attempted to discard cargo that he doesn't own!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player: '" + p.getUsername() + "' attempted to discard cargo that he doesn't own!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to discard cargo that he doesn't own!"));
 			return;
 		}
@@ -106,7 +106,7 @@ public class SmugglersLoseState extends CardState {
 				continue;
 			}
 			if (type.getValue() != idx) {
-				Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player '" + p.getUsername() + "' attempted to discard cargo that's not their most valuable!");
+				Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player: '" + p.getUsername() + "' attempted to discard cargo that's not their most valuable!");
 				this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to discard cargo that's not their most valuable!"));
 				return;
 			}
@@ -115,24 +115,24 @@ public class SmugglersLoseState extends CardState {
 				p.getSpaceShip().getComponent(coords).check(v);
 				this.required[idx]--;
 				if (type != ShipmentType.EMPTY)
-					Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player '" + p.getUsername() + "' removed cargo type: " + type + " from " + coords);
-				else Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player '" + p.getUsername() + "' removed battery from " + coords);
+					Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player: '" + p.getUsername() + "' removed cargo type: " + type + " from " + coords);
+				else Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player: '" + p.getUsername() + "' removed battery from " + coords);
 				break;
 			} catch (ContainerEmptyException e) {
 				if (type != ShipmentType.EMPTY) {
-					Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player '" + p.getUsername() + "' attempted to discard cargo from a storage that doesn't contain it!");
+					Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player: '" + p.getUsername() + "' attempted to discard cargo from a storage that doesn't contain it!");
 					this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to discard cargo from a storage that doesn't contain it!"));
 				} else {
-					Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player '" + p.getUsername() + "' attempted to discard a battery from a storage that doesn't contain it!");
+					Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player: '" + p.getUsername() + "' attempted to discard a battery from a storage that doesn't contain it!");
 					this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to discard a battery from a storage that doesn't contain it!"));
 				}
 				return;
 			} catch (IllegalArgumentException e) {
 				if (type != ShipmentType.EMPTY) {
-					Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player '" + p.getUsername() + "' attempted to discard cargo from illegal coordinates!");
+					Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player: '" + p.getUsername() + "' attempted to discard cargo from illegal coordinates!");
 					this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to discard cargo from illegal coordinates!"));
 				} else {
-					Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player '" + p.getUsername() + "' attempted to discard a battery from illegal coordinates!");
+					Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player: '" + p.getUsername() + "' attempted to discard a battery from illegal coordinates!");
 					this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to discard a battery from illegal coordinates!"));
 				}
 			}

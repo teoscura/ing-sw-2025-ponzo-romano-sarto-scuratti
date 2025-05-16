@@ -73,11 +73,11 @@ class SlaversRewardState extends CardState {
 	@Override
 	public void setTakeReward(Player p, boolean take) {
 		if (p != this.list.getFirst()) {
-			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player '" + p.getUsername() + "' attempted to accept a reward during another player's turn!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player: '" + p.getUsername() + "' attempted to accept a reward during another player's turn!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to accept a reward during another player's turn!"));
 			return;
 		}
-		Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player '" + p.getUsername() + "' took the reward? " + take);
+		Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player: '" + p.getUsername() + "' took the reward? " + take);
 		this.took_reward = take;
 		this.responded = true;
 	}

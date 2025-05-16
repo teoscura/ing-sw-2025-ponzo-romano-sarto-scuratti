@@ -142,9 +142,7 @@ public class CombatZoneCardTest {
 		shots.set(1, new Projectile(pr.getDirection(), pr.getDimension(), 7));
 		//Test start
 		ServerMessage message = null;
-		for (Player p : this.order) {
-			System.out.println(p.getUsername() + " - e:" + p.getSpaceShip().getEnginePower() + " - cr:" + p.getSpaceShip().getTotalCrew() + " - c:" + p.getSpaceShip().getCannonPower());
-		}
+		
 		cstate = card.getState(state);
 		state.setCardState(cstate);
 		int x = this.planche.getPlayerPosition(player1);
@@ -225,9 +223,7 @@ public class CombatZoneCardTest {
 		shots.set(1, new Projectile(pr.getDirection(), pr.getDimension(), 8));
 		//Test start
 		ServerMessage message = null;
-		for (Player p : this.order) {
-			System.out.println(p.getUsername() + " - e:" + p.getSpaceShip().getEnginePower() + " - cr:" + p.getSpaceShip().getTotalCrew() + " - c:" + p.getSpaceShip().getCannonPower());
-		}
+		
 		cstate = card.getState(state);
 		state.setCardState(cstate);
 		int x = this.planche.getPlayerPosition(player1);
@@ -311,9 +307,7 @@ public class CombatZoneCardTest {
 		player1.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 5, 3));
 		//Test start
 		ServerMessage message = null;
-		for (Player p : this.order) {
-			System.out.println(p.getUsername() + " - e:" + p.getSpaceShip().getEnginePower() + " - cr:" + p.getSpaceShip().getTotalCrew() + " - c:" + p.getSpaceShip().getCannonPower());
-		}
+		
 		cstate = card.getState(state);
 		state.setCardState(cstate);
 		int x = this.planche.getPlayerPosition(player1);
@@ -421,9 +415,7 @@ public class CombatZoneCardTest {
 		player2.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 2, 2)).check(v);
 		player2.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 2, 2)).check(v);
 		ServerMessage message = null;
-		for (Player p : this.order) {
-			System.out.println(p.getUsername() + " - e:" + p.getSpaceShip().getEnginePower() + " - cr:" + p.getSpaceShip().getTotalCrew() + " - c:" + p.getSpaceShip().getCannonPower());
-		}
+		
 		cstate = card.getState(state);
 		state.setCardState(cstate);
 		//Phase 1, perde p1, Tutti vanno avanti
@@ -539,9 +531,7 @@ public class CombatZoneCardTest {
 		player1.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 3, 1));
 		//Test start
 		ServerMessage message = null;
-		for (Player p : this.order) {
-			System.out.println(p.getUsername() + " - e:" + p.getSpaceShip().getEnginePower() + " - cr:" + p.getSpaceShip().getTotalCrew() + " - c:" + p.getSpaceShip().getCannonPower());
-		}
+		
 		cstate = card.getState(state);
 		state.setCardState(cstate);
 		int x = this.planche.getPlayerPosition(player3);
@@ -630,9 +620,7 @@ public class CombatZoneCardTest {
 		pr = shots.get(1);
 		shots.set(1, new Projectile(pr.getDirection(), pr.getDimension(), 7));
 		ServerMessage message = null;
-		for (Player p : this.order) {
-			System.out.println(p.getUsername() + " - e:" + p.getSpaceShip().getEnginePower() + " - cr:" + p.getSpaceShip().getTotalCrew() + " - c:" + p.getSpaceShip().getCannonPower());
-		}
+		
 		int x = planche.getPlayerPosition(player1);
 		cstate = card.getState(state);
 		state.setCardState(cstate);
@@ -685,9 +673,7 @@ public class CombatZoneCardTest {
 		pr = shots.get(1);
 		shots.set(1, new Projectile(pr.getDirection(), pr.getDimension(), 7));
 		ServerMessage message = null;
-		for (Player p : this.order) {
-			System.out.println(p.getUsername() + " - e:" + p.getSpaceShip().getEnginePower() + " - cr:" + p.getSpaceShip().getTotalCrew() + " - c:" + p.getSpaceShip().getCannonPower());
-		}
+		
 		int x = planche.getPlayerPosition(player1);
 		cstate = card.getState(state);
 		state.setCardState(cstate);

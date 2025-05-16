@@ -79,7 +79,7 @@ public class SlaversLoseState extends CardState {
 	@Override
 	public void removeCrew(Player p, ShipCoords cabin_coords) throws ForbiddenCallException {
 		if (p != this.list.getFirst()) {
-			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player '" + p.getUsername() + "' attempted to remove a crew member during another player's turn!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player: '" + p.getUsername() + "' attempted to remove a crew member during another player's turn!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to remove a crew member during another player's turn!"));
 			return;
 		}
@@ -87,9 +87,9 @@ public class SlaversLoseState extends CardState {
 		try {
 			p.getSpaceShip().getComponent(cabin_coords).check(v);
 			this.done++;
-			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player '" + p.getUsername() + "' removed a crewmate from " + cabin_coords + "!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player: '" + p.getUsername() + "' removed a crewmate from " + cabin_coords + "!");
 		} catch (IllegalTargetException e) {
-			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player '" + p.getUsername() + "' attempted to remove a crew member from invalid coordinates!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player: '" + p.getUsername() + "' attempted to remove a crew member from invalid coordinates!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to remove a crew member from invalid coordinates!"));
 			return;
 		}

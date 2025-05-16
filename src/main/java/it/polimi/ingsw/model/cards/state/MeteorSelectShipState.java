@@ -78,12 +78,12 @@ class MeteorSelectShipState extends CardState {
 	public void selectBlob(Player p, ShipCoords blob_coord) {
 		try {
 			p.getSpaceShip().selectShipBlob(blob_coord);
-			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player '" + p.getUsername() + "' selected blob that contains coords " + blob_coord + ".");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player: '" + p.getUsername() + "' selected blob that contains coords " + blob_coord + ".");
 		} catch (IllegalTargetException e) {
-			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player '" + p.getUsername() + "' attempted to set his new center on an empty space!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player: '" + p.getUsername() + "' attempted to set his new center on an empty space!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to set his new center on an empty space!"));
 		} catch (ForbiddenCallException e) {
-			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player '" + p.getUsername() + "' attempted to set his new center while having a unbroken ship!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player: '" + p.getUsername() + "' attempted to set his new center while having a unbroken ship!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to set his new center while having a unbroken ship!"));
 		}
 	}

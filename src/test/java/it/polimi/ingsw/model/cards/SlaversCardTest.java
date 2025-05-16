@@ -131,9 +131,7 @@ public class SlaversCardTest {
 		CrewRemoveVisitor v = new CrewRemoveVisitor(player1.getSpaceShip());
 		player1.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 3, 2)).check(v);
 		ServerMessage message = null;
-		for (Player p : this.order) {
-			System.out.println(p.getUsername() + " - e:" + p.getSpaceShip().getEnginePower() + " - cr:" + p.getSpaceShip().getTotalCrew() + " - c:" + p.getSpaceShip().getCannonPower());
-		}
+		
 		assertEquals(3, player1.getSpaceShip().getTotalCrew());
 		assertEquals(2, player2.getSpaceShip().getTotalCrew());
 		assertEquals(2, player3.getSpaceShip().getTotalCrew());
@@ -194,9 +192,7 @@ public class SlaversCardTest {
 		CrewRemoveVisitor v = new CrewRemoveVisitor(player1.getSpaceShip());
 		player1.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 3, 2)).check(v);
 		ServerMessage message = null;
-		for (Player p : this.order) {
-			System.out.println(p.getUsername() + " - e:" + p.getSpaceShip().getEnginePower() + " - cr:" + p.getSpaceShip().getTotalCrew() + " - c:" + p.getSpaceShip().getCannonPower());
-		}
+		
 		assertEquals(3, player1.getSpaceShip().getTotalCrew());
 		assertEquals(2, player2.getSpaceShip().getTotalCrew());
 		assertEquals(2, player3.getSpaceShip().getTotalCrew());
@@ -255,9 +251,7 @@ public class SlaversCardTest {
 	@Test
 	void behaviour3() throws ForbiddenCallException {
 		ServerMessage message = null;
-		for (Player p : this.order) {
-			System.out.println(p.getUsername() + " - e:" + p.getSpaceShip().getEnginePower() + " - cr:" + p.getSpaceShip().getTotalCrew() + " - c:" + p.getSpaceShip().getCannonPower());
-		}
+		
 		assertEquals(4, player1.getSpaceShip().getTotalCrew());
 		assertEquals(2, player2.getSpaceShip().getTotalCrew());
 		assertEquals(2, player3.getSpaceShip().getTotalCrew());
@@ -332,9 +326,7 @@ public class SlaversCardTest {
 	@Test
 	void disconnectionResilience() throws ForbiddenCallException {
 		ServerMessage message = null;
-		for (Player p : this.order) {
-			System.out.println(p.getUsername() + " - e:" + p.getSpaceShip().getEnginePower() + " - cr:" + p.getSpaceShip().getTotalCrew() + " - c:" + p.getSpaceShip().getCannonPower());
-		}
+		
 		assertEquals(4, player1.getSpaceShip().getTotalCrew());
 		assertEquals(2, player2.getSpaceShip().getTotalCrew());
 		assertEquals(2, player3.getSpaceShip().getTotalCrew());

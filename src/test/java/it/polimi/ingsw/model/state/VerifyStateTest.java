@@ -213,13 +213,6 @@ class VerifyStateTest {
 
 	@Test
 	public void alienSetTest() throws ForbiddenCallException {
-		var tmp = player1.getSpaceShip().bulkVerify();
-		for (int i = 0; i < GameModeType.LVL2.getHeight(); i++) {
-			for (int y = 0; y < GameModeType.LVL2.getWidth(); y++) {
-				System.out.print(tmp[i][y] + " - " + new ShipCoords(GameModeType.LVL2, y, i) + " |");
-			}
-			System.out.println();
-		}
 		//Adding life support component to p1;
 		BaseComponent c;
 		ComponentFactory f1 = new ComponentFactory();

@@ -83,15 +83,15 @@ public class SlaversAnnounceState extends CardState {
 	@Override
 	public void turnOn(Player p, ShipCoords target_coords, ShipCoords battery_coords) {
 		if (p != this.list.getFirst()) {
-			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player '" + p.getUsername() + "' attempted to turn on a component during another player's turn!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player: '" + p.getUsername() + "' attempted to turn on a component during another player's turn!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to turn on a component during another player's turn!"));
 			return;
 		}
 		try {
 			p.getSpaceShip().turnOn(target_coords, battery_coords);
-			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player '" + p.getUsername() + "' turned on component at" + target_coords + " using battery from " + battery_coords + "!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player: '" + p.getUsername() + "' turned on component at" + target_coords + " using battery from " + battery_coords + "!");
 		} catch (IllegalTargetException e) {
-			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player '" + p.getUsername() + "' attempted to turn on a component with invalid coordinates!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player: '" + p.getUsername() + "' attempted to turn on a component with invalid coordinates!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to turn on a component with invalid coordinates!"));
 		}
 	}
@@ -99,11 +99,11 @@ public class SlaversAnnounceState extends CardState {
 	@Override
 	public void progressTurn(Player p) {
 		if (p != this.list.getFirst()) {
-			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player '" + p.getUsername() + "' attempted to progress during another player's turn!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player: '" + p.getUsername() + "' attempted to progress during another player's turn!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to progress during another player's turn!"));
 			return;
 		}
-		Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player '" + p.getUsername() + "' motioned to progress!");
+		Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player: '" + p.getUsername() + "' motioned to progress!");
 		this.responded = true;
 	}
 
