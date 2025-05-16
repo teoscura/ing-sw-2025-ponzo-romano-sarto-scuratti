@@ -8,6 +8,10 @@ import it.polimi.ingsw.model.client.state.*;
 
 public interface ClientView {
 	//Game states
+	void show(TitleScreenState titlesScreenState);
+
+	void show(ConnectingState connectingState);
+
 	void show(ClientLobbySelectState state);
 
 	void show(ClientSetupState state);
@@ -60,9 +64,5 @@ public interface ClientView {
 
 	//Misc and debug
 	void showTextMessage(String message);
-
-	void showTitleScreen(TitleScreenState titlesScreenState);
-
-	void showConnectionScreen(ConnectingState connectingState);
 
 }

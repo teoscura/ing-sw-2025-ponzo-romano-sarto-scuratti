@@ -1,12 +1,15 @@
 package it.polimi.ingsw;
 
+import java.io.IOException;
+
 import it.polimi.ingsw.controller.client.ClientController;
 import it.polimi.ingsw.view.ClientView;
 import it.polimi.ingsw.view.commandbuilder.CBView;
+import it.polimi.ingsw.view.tui.TUIView;
 
 public class ClientMain {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		if (args.length != 1) {
 			System.out.println("Jar must be launched with [gui|tui|cb] as arguments only!");
 			System.exit(-1);
@@ -15,7 +18,9 @@ public class ClientMain {
 		switch (args[0]) {
 			case "gui": /*Start GUI*/
 				break;
-			case "tui": /*start TUI*/
+			case "tui": 
+				System.out.println("TUI LAUNCH.");
+				v = new TUIView();
 				break;
 			case "cb":
 				v = new CBView();

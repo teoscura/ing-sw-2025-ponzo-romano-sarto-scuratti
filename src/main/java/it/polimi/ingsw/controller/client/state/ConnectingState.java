@@ -28,7 +28,7 @@ public class ConnectingState extends ClientControllerState {
 
 	@Override
 	public void init() {
-		view.showConnectionScreen(this);
+		view.show(this);
 	}
 
 	public ClientController getController() {

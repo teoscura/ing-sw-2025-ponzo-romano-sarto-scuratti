@@ -109,11 +109,11 @@ public class DummyView implements ClientView {
 	}
 
 	@Override
-	public void showTitleScreen(TitleScreenState titlesScreenState) {
+	public void show(TitleScreenState titlesScreenState) {
 	}
 
 	@Override
-	public void showConnectionScreen(ConnectingState connectingState) {
+	public void show(ConnectingState connectingState) {
 	}
 
 }

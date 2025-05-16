@@ -12,6 +12,35 @@ public class CBView implements ClientView {
 	private Thread ct, tst;
 
 	@Override
+	public void show(TitleScreenState state) {
+		try {
+			this.tst = new TitleScreenTask(state);
+			System.out.println("Title screen");
+			this.tst.start();
+			this.tst.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void show(ConnectingState state) {
+		try {
+			System.out.println("Connection screen");
+			this.ct = new ConnectTask(state);
+			this.ct.start();
+			this.ct.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void show(ClientLobbySelectState state) {
+		System.out.println("Connected!");
+	}
+
+	@Override
 	public void show(ClientSetupState state) {
 		System.out.println("Lobby setup state");
 	}
@@ -113,35 +142,5 @@ public class CBView implements ClientView {
 	public void showTextMessage(String message) {
 		System.out.println(message);
 	}
-
-	@Override
-	public void showTitleScreen(TitleScreenState state) {
-		try {
-			this.tst = new TitleScreenTask(state);
-			System.out.println("Title screen");
-			this.tst.start();
-			this.tst.join();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-	}
-
-	@Override
-	public void showConnectionScreen(ConnectingState state) {
-		try {
-			System.out.println("Connection screen");
-			this.ct = new ConnectTask(state);
-			this.ct.start();
-			this.ct.join();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-	}
-
-	@Override
-	public void show(ClientLobbySelectState state) {
-		System.out.println("Connected!");
-	}
-
 
 }

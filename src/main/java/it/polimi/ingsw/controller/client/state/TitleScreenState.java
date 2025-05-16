@@ -16,7 +16,7 @@ public class TitleScreenState extends ClientControllerState {
 
 	@Override
 	public void init() {
-		view.showTitleScreen(this);
+		view.show(this);
 	}
 
 	@Override
