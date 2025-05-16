@@ -1,25 +1,35 @@
 package it.polimi.ingsw.utils;
 
 public enum LoggerLevel {
-	OFF  (8), //No messages are ever shown
-	ERROR(7), //Only errors are shown
-	WARN (6), //Only warnings and up are shown
-	NOTIF(5), //Only status changes and upare shown
-	SERVR(4), //Only info from the network and up is shown
-	LOBSL(3), //Only info from lobby select and up is shown
-	LOBCN(3), //Only info from lobby select and up is shown
-	MODEL(2), //Only info from the model instances and up is shown
-	DEBUG(1), //Only debug info and up is shown
-	ALL  (0); //Every message is shown.
+	OFF  (8, "\033[0m"),              //No messages are ever shown
+	ERROR(7, "\u001B[43m\033[1;91m"), //Only errors are shown
+	WARN (6, "\033[1;33m"), 		   //Only warnings and up are shown
+	NOTIF(5, "\033[1;36m"), 		   //Only status changes and upare shown
+	SERVR(4, "\033[0;33m"), 		   //Only info from the network and up is shown
+	LOBSL(3, "\033[1;94m"), 		   //Only info from lobby select and up is shown
+	LOBCN(3, "\033[0;34m"), 		   //Only info from lobby select and up is shown
+	MODEL(2, "\033[0;37m"), 		   //Only info from the model instances and up is shown
+	DEBUG(1, "\033[0;37m"),		   //Only debug info and up is shown
+	ALL  (0, "\033[0m"); 			   //Every message is shown.
 
 	private final int status;
+	private final String color;
 
-	LoggerLevel(int status) {
+	LoggerLevel(int status, String color) {
 		this.status = status;
+		this.color = color;
+	}
+
+	static String reset(){
+		return "\033[0m";
 	}
 
 	public int status() {
 		return this.status;
+	}
+
+	public String color(){
+		return this.color;
 	}
 
 	@Override
