@@ -4,6 +4,8 @@ import it.polimi.ingsw.controller.ThreadSafeMessageQueue;
 import it.polimi.ingsw.controller.server.connections.RMIClientConnection;
 import it.polimi.ingsw.message.client.ClientDisconnectMessage;
 import it.polimi.ingsw.message.client.ClientMessage;
+import it.polimi.ingsw.utils.Logger;
+import it.polimi.ingsw.utils.LoggerLevel;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -32,6 +34,7 @@ public class RMIClientStub extends UnicastRemoteObject implements RMIClientConne
 	@Override
 	public void close() {
 		this.sendMessage(new ClientDisconnectMessage());
+		Logger.getInstance().print(LoggerLevel.NOTIF, "Finalized closing procedure for RMI User: '"+username+"'.");
 	}
 
 }
