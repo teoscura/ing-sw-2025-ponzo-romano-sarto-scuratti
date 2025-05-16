@@ -4,6 +4,8 @@ import it.polimi.ingsw.controller.server.MainServerController;
 import it.polimi.ingsw.message.client.ClientMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.message.server.UsernameSetupMessage;
+import it.polimi.ingsw.utils.Logger;
+import it.polimi.ingsw.utils.LoggerLevel;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -60,14 +62,12 @@ public class SocketClient extends Thread implements ClientConnection {
 		try {
 			setup = (UsernameSetupMessage) in.readObject();
 		} catch (ClassNotFoundException e) {
-			//XXX logger message
+			Logger.getInstance().print(LoggerLevel.NOTIF, "Failed to read class object from tcp socket: " + socket.getInetAddress());
 		} catch (IOException e) {
-			//XXX logger
-			/*XXX*/System.out.println("Failed to read object from: " + socket.getInetAddress() + ", closing socket.");
+			Logger.getInstance().print(LoggerLevel.ERROR, "Failed to read object from: " + socket.getInetAddress() + ", closing socket.");
 			this.close();
 		} catch (ClassCastException e) {
-			//XXX logger
-			/*XXX*/System.out.println("Received non-setup message from tcp socket: " + socket.getInetAddress());
+			Logger.getInstance().print(LoggerLevel.NOTIF, "Received non-setup message from tcp socket: " + socket.getInetAddress());
 		}
 		this.username = setup.getUsername();
 		MainServerController.getInstance().setupSocketListener(this, this.username);
@@ -79,10 +79,9 @@ public class SocketClient extends Thread implements ClientConnection {
 		try {
 			message = (ServerMessage) in.readObject();
 		} catch (ClassNotFoundException e) {
-			//XXX logger message
+			Logger.getInstance().print(LoggerLevel.NOTIF, "Failed to read class object from tcp socket: " + socket.getInetAddress());
 		} catch (IOException e) {
-			//XXX logger
-			/*XXX*/System.out.println("Failed to read object from: " + socket.getInetAddress() + ", closing socket.");
+			Logger.getInstance().print(LoggerLevel.ERROR, "Failed to read object from: " + socket.getInetAddress() + ", closing socket.");
 			this.close();
 		}
 		message.setDescriptor(controller.getDescriptor(this.username));
@@ -95,7 +94,7 @@ public class SocketClient extends Thread implements ClientConnection {
 			this.interrupt();
 			socket.close();
 		} catch (IOException e) {
-			//XXX logger message
+			Logger.getInstance().print(LoggerLevel.NOTIF, "Finalized closing procedure for socket: '"+socket.getInetAddress()+"'.");
 		}
 	}
 
