@@ -69,6 +69,7 @@ public class MainServerController extends Thread implements VirtualServer {
 	}
 
 	static public void reset() {
+		Logger.getInstance().print(LoggerLevel.DEBUG, "Reset MainServerController.");
 		instance = null;
 	}
 
@@ -304,6 +305,7 @@ public class MainServerController extends Thread implements VirtualServer {
 
 	public void ping(ClientDescriptor client) {
 		client.getPingTimerTask().cancel();
+		Logger.getInstance().print(LoggerLevel.DEBUG, "Received ping from client: '"+client.getUsername()+"'.");
 		client.setPingTimerTask(this.timeoutTask(this, client));
 	}
 
