@@ -41,10 +41,10 @@ public class MainServerController extends Thread implements VirtualServer {
 	private final ThreadSafeMessageQueue<ServerMessage> queue;
 	private final Object lobbies_lock;
 	private final Object saved_lock;
-	private boolean init = false;
-	private int next_id;
 	private final HashMap<Integer, LobbyController> lobbies;
 	private final HashMap<Integer, ModelInstance> saved;
+	private boolean init = false;
+	private int next_id;
 
 	private MainServerController() {
 		all_listeners = new HashMap<>();
@@ -112,7 +112,7 @@ public class MainServerController extends Thread implements VirtualServer {
 			}
 		}
 		if (message.getDescriptor().getId() == -1) {
-			Logger.getInstance().print(LoggerLevel.DEBUG, "Received message from Client: '"+message.getDescriptor().getUsername()+"' of class: "+message.getClass().getSimpleName()+"."); 
+			Logger.getInstance().print(LoggerLevel.DEBUG, "Received message from Client: '" + message.getDescriptor().getUsername() + "' of class: " + message.getClass().getSimpleName() + ".");
 			this.queue.insert(message);
 		}
 		var target = this.lobbies.get(message.getDescriptor().getId());
@@ -125,7 +125,7 @@ public class MainServerController extends Thread implements VirtualServer {
 
 	public void broadcast(ClientMessage message) {
 		synchronized (listeners_lock) {
-			Logger.getInstance().print(LoggerLevel.DEBUG, "Broadcasting message of class: "+message.getClass().getSimpleName()+".");
+			Logger.getInstance().print(LoggerLevel.DEBUG, "Broadcasting message of class: " + message.getClass().getSimpleName() + ".");
 			for (ClientDescriptor c : this.lob_listeners.values()) {
 				if (stp_listeners.containsKey(c.getUsername())) continue;
 				this.sendMessage(c, message);
@@ -135,7 +135,7 @@ public class MainServerController extends Thread implements VirtualServer {
 
 	public void sendMessage(ClientDescriptor client, ClientMessage message) {
 		try {
-			Logger.getInstance().print(LoggerLevel.DEBUG, "Sent message to Client: '"+client.getUsername()+"'.");
+			Logger.getInstance().print(LoggerLevel.DEBUG, "Sent message to Client: '" + client.getUsername() + "'.");
 			client.sendMessage(message);
 		} catch (IOException e) {
 			this.disconnect(client);
@@ -154,10 +154,10 @@ public class MainServerController extends Thread implements VirtualServer {
 	public void connectListener(SocketClient client) {
 		synchronized (listeners_lock) {
 			if (this.to_setup_tcp.contains(client)) {
-				Logger.getInstance().print(LoggerLevel.WARN, "TCP connection: '"+client.getSocket().getInetAddress()+"'' attempted to connect twice!");
+				Logger.getInstance().print(LoggerLevel.WARN, "TCP connection: '" + client.getSocket().getInetAddress() + "'' attempted to connect twice!");
 				return;
 			}
-			Logger.getInstance().print(LoggerLevel.LOBSL, "TCP connection: '"+client.getSocket().getInetAddress()+"'' connected, awaiting username.");
+			Logger.getInstance().print(LoggerLevel.LOBSL, "TCP connection: '" + client.getSocket().getInetAddress() + "'' connected, awaiting username.");
 			this.to_setup_tcp.add(client);
 			TimerTask task = this.TCPTimeoutTask(instance, client);
 			Timer t = new Timer(true);
@@ -201,7 +201,7 @@ public class MainServerController extends Thread implements VirtualServer {
 			if (this.all_listeners.containsKey(name) || !validateUsername(name))
 				return null;
 			try {
-				Logger.getInstance().print(LoggerLevel.LOBSL, "Client: '"+client.getUsername()+"' connected with RMI."); 
+				Logger.getInstance().print(LoggerLevel.LOBSL, "Client: '" + client.getUsername() + "' connected with RMI.");
 				this.connect(new_listener);
 			} catch (ForbiddenCallException e) {
 				Logger.getInstance().print(LoggerLevel.WARN, "Client: '" + name + "' failed to connect properly!");
@@ -248,11 +248,11 @@ public class MainServerController extends Thread implements VirtualServer {
 			synchronized (lobbies_lock) {
 				if (this.lobbies.get(id) == null) {
 					client.setID(-1);
-					Logger.getInstance().print(LoggerLevel.LOBSL, "Client: '" + client.getUsername() + "' tried reconnecting to lobby: ["+id+"] but it had closed, sending him to lobby select.");
+					Logger.getInstance().print(LoggerLevel.LOBSL, "Client: '" + client.getUsername() + "' tried reconnecting to lobby: [" + id + "] but it had closed, sending him to lobby select.");
 					return;
 				}
 				this.lobbies.get(id).connect(client);
-				Logger.getInstance().print(LoggerLevel.LOBSL, "Client: '" + client.getUsername() + "' reconnected to lobby: ["+id+"].");
+				Logger.getInstance().print(LoggerLevel.LOBSL, "Client: '" + client.getUsername() + "' reconnected to lobby: [" + id + "].");
 			}
 		}
 	}
@@ -287,14 +287,14 @@ public class MainServerController extends Thread implements VirtualServer {
 
 	public void addDisconnected(String username, int id) {
 		synchronized (listeners_lock) {
-			Logger.getInstance().print(LoggerLevel.DEBUG, "Added username: '"+username+"' to disconnected list with id: ["+id+"].");
+			Logger.getInstance().print(LoggerLevel.DEBUG, "Added username: '" + username + "' to disconnected list with id: [" + id + "].");
 			this.disconnected.put(username, id);
 		}
 	}
 
 	public void removeDisconnected(String username) {
 		synchronized (listeners_lock) {
-			Logger.getInstance().print(LoggerLevel.DEBUG, "Removed username: '"+username+"' to disconnected list, had id: ["+disconnected.get(username)+"].");
+			Logger.getInstance().print(LoggerLevel.DEBUG, "Removed username: '" + username + "' to disconnected list, had id: [" + disconnected.get(username) + "].");
 			this.disconnected.remove(username);
 		}
 	}
@@ -305,7 +305,7 @@ public class MainServerController extends Thread implements VirtualServer {
 
 	public void ping(ClientDescriptor client) {
 		client.getPingTimerTask().cancel();
-		Logger.getInstance().print(LoggerLevel.DEBUG, "Received ping from client: '"+client.getUsername()+"'.");
+		Logger.getInstance().print(LoggerLevel.DEBUG, "Received ping from client: '" + client.getUsername() + "'.");
 		client.setPingTimerTask(this.timeoutTask(this, client));
 	}
 
@@ -358,14 +358,14 @@ public class MainServerController extends Thread implements VirtualServer {
 				if (this.lobbies.get(loaded.getID()) != null) continue;
 				saved_tmp.add(loaded);
 			} catch (IOException e) {
-				Logger.getInstance().print(LoggerLevel.NOTIF, "Read error during loading of File: '"+f.getName()+", cleaning it up.");
+				Logger.getInstance().print(LoggerLevel.NOTIF, "Read error during loading of File: '" + f.getName() + ", cleaning it up.");
 				f.delete();
-				Logger.getInstance().print(LoggerLevel.DEBUG, "Deleted file: '"+f.getName()+"'.");
+				Logger.getInstance().print(LoggerLevel.DEBUG, "Deleted file: '" + f.getName() + "'.");
 				e.printStackTrace();
 			} catch (ClassNotFoundException e) {
 				Logger.getInstance().print(LoggerLevel.NOTIF, "File: '" + f.getName() + "' is not a valid savefile, cleaning it up.");
 				f.delete();
-				Logger.getInstance().print(LoggerLevel.DEBUG, "Deleted file: '"+f.getName()+"'.");
+				Logger.getInstance().print(LoggerLevel.DEBUG, "Deleted file: '" + f.getName() + "'.");
 				e.printStackTrace();
 			}
 		}
@@ -439,7 +439,7 @@ public class MainServerController extends Thread implements VirtualServer {
 		new_lobby.setModel(model);
 		new_lobby.start();
 		synchronized (lobbies_lock) {
-			Logger.getInstance().print(LoggerLevel.DEBUG, "Added lobby ["+new_lobby.getID()+"] to lobbies list.");
+			Logger.getInstance().print(LoggerLevel.DEBUG, "Added lobby [" + new_lobby.getID() + "] to lobbies list.");
 			this.lobbies.put(this.next_id, new_lobby);
 			this.next_id++;
 		}
@@ -478,7 +478,7 @@ public class MainServerController extends Thread implements VirtualServer {
 			return;
 		}
 		synchronized (saved_lock) {
-			Logger.getInstance().print(LoggerLevel.DEBUG, "Opening unfinished lobby ["+id+"].");
+			Logger.getInstance().print(LoggerLevel.DEBUG, "Opening unfinished lobby [" + id + "].");
 			loaded = this.saved.get(id);
 			if (!loaded.getEntry().getPlayers().contains(client.getUsername())) {
 				Logger.getInstance().print(LoggerLevel.NOTIF, "Client: '" + client.getUsername() + "' attempted to resume a game, but he wasn't playing in it before!");
@@ -493,7 +493,7 @@ public class MainServerController extends Thread implements VirtualServer {
 		new_lobby.setModel(loaded);
 		new_lobby.start();
 		synchronized (lobbies_lock) {
-			Logger.getInstance().print(LoggerLevel.DEBUG, "Added lobby ["+new_lobby.getID()+"] to lobbies list.");
+			Logger.getInstance().print(LoggerLevel.DEBUG, "Added lobby [" + new_lobby.getID() + "] to lobbies list.");
 			this.lobbies.put(new_lobby.getID(), new_lobby);
 		}
 		client.setID(new_lobby.getID());
@@ -561,7 +561,7 @@ public class MainServerController extends Thread implements VirtualServer {
 				Logger.getInstance().print(LoggerLevel.WARN, "Client: '" + client.getUsername() + "' is already in lobby!");
 				return;
 			}
-			Logger.getInstance().print(LoggerLevel.DEBUG, "Rejoining Client: '"+client.getUsername()+"' to lobby select");
+			Logger.getInstance().print(LoggerLevel.DEBUG, "Rejoining Client: '" + client.getUsername() + "' to lobby select");
 			this.lob_listeners.put(client.getUsername(), client);
 		}
 		client.setID(-1);

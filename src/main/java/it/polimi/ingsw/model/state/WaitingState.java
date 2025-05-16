@@ -32,7 +32,7 @@ public class WaitingState extends GameState {
 
 	@Override
 	public void init() {
-		Logger.getInstance().print(LoggerLevel.MODEL, "["+model.getID()+"] "+"New Game State -> Waiting Room State!");
+		Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "New Game State -> Waiting Room State!");
 		this.broadcastMessage(new NotifyStateUpdateMessage(this.getClientState()));
 	}
 
@@ -44,7 +44,7 @@ public class WaitingState extends GameState {
 			return;
 		}
 		if (this.connected.size() < count.getNumber()) {
-			Logger.getInstance().print(LoggerLevel.MODEL, "["+model.getID()+"] "+"Missing " + (this.count.getNumber() - this.connected.size()) + " players to start the game!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Missing " + (this.count.getNumber() - this.connected.size()) + " players to start the game!");
 			this.broadcastMessage(new NotifyStateUpdateMessage(this.getClientState()));
 			return;
 		}

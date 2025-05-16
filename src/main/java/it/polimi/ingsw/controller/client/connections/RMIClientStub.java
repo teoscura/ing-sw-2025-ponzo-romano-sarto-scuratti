@@ -34,7 +34,7 @@ public class RMIClientStub extends UnicastRemoteObject implements RMIClientConne
 	@Override
 	public void close() {
 		this.sendMessage(new ClientDisconnectMessage());
-		Logger.getInstance().print(LoggerLevel.NOTIF, "Finalized closing procedure for RMI User: '"+username+"'.");
+		Logger.getInstance().print(LoggerLevel.NOTIF, "Finalized closing procedure for RMI User: '" + username + "'.");
 	}
 
 }

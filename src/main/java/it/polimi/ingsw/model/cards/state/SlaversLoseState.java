@@ -38,9 +38,9 @@ public class SlaversLoseState extends CardState {
 	@Override
 	public void init(ClientState new_state) {
 		super.init(new_state);
-		Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"CardState -> Slavers Lose State!");
+		Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "CardState -> Slavers Lose State!");
 		for (Player p : this.list) {
-			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+p.voyageInfo(this.state.getPlanche()));
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + p.voyageInfo(this.state.getPlanche()));
 		}
 	}
 
@@ -67,19 +67,19 @@ public class SlaversLoseState extends CardState {
 		if (this.list.getFirst().getRetired() || this.list.getFirst().getDisconnected()) {
 			this.list.removeFirst();
 			if (!this.list.isEmpty()) return new SlaversAnnounceState(state, card, list);
-			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"...Card exhausted, moving to a new one!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "...Card exhausted, moving to a new one!");
 			return null;
 		}
 		this.list.removeFirst();
 		if (!list.isEmpty()) return new SlaversAnnounceState(state, card, list);
-		Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"...Card exhausted, moving to a new one!");
+		Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "...Card exhausted, moving to a new one!");
 		return null;
 	}
 
 	@Override
 	public void removeCrew(Player p, ShipCoords cabin_coords) throws ForbiddenCallException {
 		if (p != this.list.getFirst()) {
-			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player: '" + p.getUsername() + "' attempted to remove a crew member during another player's turn!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Player: '" + p.getUsername() + "' attempted to remove a crew member during another player's turn!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to remove a crew member during another player's turn!"));
 			return;
 		}
@@ -87,9 +87,9 @@ public class SlaversLoseState extends CardState {
 		try {
 			p.getSpaceShip().getComponent(cabin_coords).check(v);
 			this.done++;
-			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player: '" + p.getUsername() + "' removed a crewmate from " + cabin_coords + "!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Player: '" + p.getUsername() + "' removed a crewmate from " + cabin_coords + "!");
 		} catch (IllegalTargetException e) {
-			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player: '" + p.getUsername() + "' attempted to remove a crew member from invalid coordinates!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Player: '" + p.getUsername() + "' attempted to remove a crew member from invalid coordinates!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to remove a crew member from invalid coordinates!"));
 			return;
 		}

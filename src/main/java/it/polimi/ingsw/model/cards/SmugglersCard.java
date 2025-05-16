@@ -44,14 +44,14 @@ public class SmugglersCard extends Card {
 	public boolean apply(VoyageState state, Player p) {
 		if (p == null) throw new NullPointerException();
 		if (p.getSpaceShip().getCannonPower() > this.min_power) {
-			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player: '" + p.getUsername() + "' beat the smugglers!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Player: '" + p.getUsername() + "' beat the smugglers!");
 			this.exhaust();
 			return true;
 		} else if (p.getSpaceShip().getCannonPower() == this.min_power) {
-			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player: '" + p.getUsername() + "' tied the smugglers!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Player: '" + p.getUsername() + "' tied the smugglers!");
 			return true;
 		}
-		Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player: '" + p.getUsername() + "' lost to the smugglers!");
+		Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Player: '" + p.getUsername() + "' lost to the smugglers!");
 		return p.getSpaceShip().getCannonPower() == this.min_power;
 	}
 

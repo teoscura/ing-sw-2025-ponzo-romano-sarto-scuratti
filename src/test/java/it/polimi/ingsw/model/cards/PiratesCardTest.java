@@ -136,7 +136,7 @@ public class PiratesCardTest {
 	@Test
 	void behaviourUnshielded() throws ForbiddenCallException {
 		ServerMessage message = null;
-		
+
 		message = new SendContinueMessage();
 		message.setDescriptor(p1desc);
 		state.validate(message);
@@ -190,7 +190,7 @@ public class PiratesCardTest {
 	@Test
 	void behaviour2() throws ForbiddenCallException {
 		ServerMessage message = null;
-		
+
 		message = new SendContinueMessage();
 		message.setDescriptor(p1desc);
 		state.validate(message);
@@ -246,7 +246,7 @@ public class PiratesCardTest {
 	@Test
 	void disconnectionResilienceDuringShots() throws ForbiddenCallException {
 		ServerMessage message = null;
-		
+
 		message = new SendContinueMessage();
 		message.setDescriptor(p1desc);
 		model.validate(message);

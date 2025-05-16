@@ -41,19 +41,19 @@ public class SlaversCard extends Card {
 	public boolean apply(VoyageState state, Player p) {
 		if (state == null || p == null) throw new NullPointerException();
 		if (p.getSpaceShip().getCannonPower() > this.min_power) {
-			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player: '" + p.getUsername() + "' beat the slavers!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Player: '" + p.getUsername() + "' beat the slavers!");
 			this.exhaust();
 			return true;
 		} else if (p.getSpaceShip().getCannonPower() == this.min_power) {
-			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player: '" + p.getUsername() + "' tied the slavers!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Player: '" + p.getUsername() + "' tied the slavers!");
 			return true;
 		}
 		if (p.getSpaceShip().getTotalCrew() <= this.crew_penalty) {
-			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player: '" + p.getUsername() + "' lost and the whole crew got captured by slavers!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Player: '" + p.getUsername() + "' lost and the whole crew got captured by slavers!");
 			state.loseGame(p);
 			return false;
 		}
-		Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player: '" + p.getUsername() + "' lost to the slavers!");
+		Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Player: '" + p.getUsername() + "' lost to the slavers!");
 		return false;
 	}
 

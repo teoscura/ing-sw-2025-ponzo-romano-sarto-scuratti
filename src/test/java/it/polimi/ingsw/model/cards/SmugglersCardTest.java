@@ -132,7 +132,7 @@ public class SmugglersCardTest {
 		player1.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 2, 2)).check(v);
 		player1.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 2, 2)).check(v);
 		assertArrayEquals(new int[]{3, 2, 0, 0, 0}, player1.getSpaceShip().getContains());
-		
+
 		//p2 prova a partire, non puo'
 		message = new SendContinueMessage();
 		message.setDescriptor(p2desc);
@@ -221,7 +221,7 @@ public class SmugglersCardTest {
 		ContainsLoaderVisitor v = new ContainsLoaderVisitor(player1.getSpaceShip(), ShipmentType.BLUE);
 		player1.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 2, 2)).check(v);
 		assertArrayEquals(new int[]{3, 1, 0, 0, 0}, player1.getSpaceShip().getContains());
-		
+
 		//p2 prova a partire, non puo'
 		message = new SendContinueMessage();
 		message.setDescriptor(p2desc);
@@ -311,7 +311,7 @@ public class SmugglersCardTest {
 		player1.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 3, 3)).check(v);
 		player1.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 3, 3)).check(v);
 		assertArrayEquals(new int[]{1, 0, 0, 0, 0}, player1.getSpaceShip().getContains());
-		
+
 		//p2 prova a partire, non puo'
 		message = new SendContinueMessage();
 		message.setDescriptor(p2desc);
@@ -388,7 +388,7 @@ public class SmugglersCardTest {
 		ContainsLoaderVisitor v = new ContainsLoaderVisitor(player1.getSpaceShip(), ShipmentType.BLUE);
 		player1.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 2, 2)).check(v);
 		assertArrayEquals(new int[]{3, 1, 0, 0, 0}, player1.getSpaceShip().getContains());
-		
+
 		//p2 prova a partire, non puo'
 		message = new SendContinueMessage();
 		message.setDescriptor(p2desc);

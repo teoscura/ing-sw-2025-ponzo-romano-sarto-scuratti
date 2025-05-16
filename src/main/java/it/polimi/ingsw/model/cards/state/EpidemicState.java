@@ -35,9 +35,9 @@ public class EpidemicState extends CardState {
 	@Override
 	public void init(ClientState new_state) {
 		super.init(new_state);
-		Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"New CardState -> Epidemic State!");
+		Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "New CardState -> Epidemic State!");
 		for (Player p : this.state.getOrder(CardOrder.NORMAL)) {
-			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+p.voyageInfo(this.state.getPlanche()));
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + p.voyageInfo(this.state.getPlanche()));
 		}
 	}
 
@@ -70,17 +70,17 @@ public class EpidemicState extends CardState {
 	@Override
 	public void progressTurn(Player p) {
 		if (!this.awaiting.contains(p)) {
-			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player: '" + p.getUsername() + "' attempted to progress the turn while already having done so!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Player: '" + p.getUsername() + "' attempted to progress the turn while already having done so!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to progress the turn while already having done so!"));
 			return;
 		}
 		this.awaiting.remove(p);
-		Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player: '" + p.getUsername() + "' motioned to progress! (" + this.awaiting.size() + " missing).");
+		Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Player: '" + p.getUsername() + "' motioned to progress! (" + this.awaiting.size() + " missing).");
 	}
 
 	@Override
 	public CardState getNext() {
-		Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Card exhausted, moving to a new one!");
+		Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Card exhausted, moving to a new one!");
 		return null;
 	}
 

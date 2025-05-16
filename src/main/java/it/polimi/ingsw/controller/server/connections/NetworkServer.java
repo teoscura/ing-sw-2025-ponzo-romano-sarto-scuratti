@@ -58,8 +58,8 @@ public class NetworkServer extends Thread implements RMISkeletonProvider, Serial
 		//Rmi ports less than zero are not allowed in argument parsing at launch, but are used by tests to get around
 		//Certain JVM limitations, as only one rmi registry per JVM may be launched, breaking JUnit tests that don't 
 		//rely on Network functionality.
-		if(rmiport>=0){
-            try {
+		if (rmiport >= 0) {
+			try {
 				registry = LocateRegistry.createRegistry(this.rmiport);
 				registry.bind("galaxy_truckers", this);
 				UnicastRemoteObject.exportObject(this, this.rmiport);
@@ -117,7 +117,7 @@ public class NetworkServer extends Thread implements RMISkeletonProvider, Serial
 					this.interrupt();
 					Registry registry = LocateRegistry.getRegistry();
 					registry.unbind("galaxy_truckers");
-				    UnicastRemoteObject.unexportObject(registry, true);
+					UnicastRemoteObject.unexportObject(registry, true);
 				} catch (RemoteException | NotBoundException e) {
 				}
 				Logger.getInstance().print(LoggerLevel.SERVR, "Cleaned up RMI connection.");

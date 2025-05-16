@@ -131,7 +131,7 @@ public class SlaversCardTest {
 		CrewRemoveVisitor v = new CrewRemoveVisitor(player1.getSpaceShip());
 		player1.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 3, 2)).check(v);
 		ServerMessage message = null;
-		
+
 		assertEquals(3, player1.getSpaceShip().getTotalCrew());
 		assertEquals(2, player2.getSpaceShip().getTotalCrew());
 		assertEquals(2, player3.getSpaceShip().getTotalCrew());
@@ -192,7 +192,7 @@ public class SlaversCardTest {
 		CrewRemoveVisitor v = new CrewRemoveVisitor(player1.getSpaceShip());
 		player1.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 3, 2)).check(v);
 		ServerMessage message = null;
-		
+
 		assertEquals(3, player1.getSpaceShip().getTotalCrew());
 		assertEquals(2, player2.getSpaceShip().getTotalCrew());
 		assertEquals(2, player3.getSpaceShip().getTotalCrew());
@@ -251,7 +251,7 @@ public class SlaversCardTest {
 	@Test
 	void behaviour3() throws ForbiddenCallException {
 		ServerMessage message = null;
-		
+
 		assertEquals(4, player1.getSpaceShip().getTotalCrew());
 		assertEquals(2, player2.getSpaceShip().getTotalCrew());
 		assertEquals(2, player3.getSpaceShip().getTotalCrew());
@@ -326,7 +326,7 @@ public class SlaversCardTest {
 	@Test
 	void disconnectionResilience() throws ForbiddenCallException {
 		ServerMessage message = null;
-		
+
 		assertEquals(4, player1.getSpaceShip().getTotalCrew());
 		assertEquals(2, player2.getSpaceShip().getTotalCrew());
 		assertEquals(2, player3.getSpaceShip().getTotalCrew());

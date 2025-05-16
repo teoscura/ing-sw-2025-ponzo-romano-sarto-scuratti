@@ -39,8 +39,8 @@ public class PiratesSelectShipState extends CardState {
 	@Override
 	public void init(ClientState new_state) {
 		super.init(new_state);
-		Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"CardState -> Pirates Select Ship State!");
-		Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Awaiting: '" + this.list.getFirst().getUsername() + "'.");
+		Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "CardState -> Pirates Select Ship State!");
+		Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Awaiting: '" + this.list.getFirst().getUsername() + "'.");
 	}
 
 	@Override
@@ -65,7 +65,7 @@ public class PiratesSelectShipState extends CardState {
 		if (this.list.getFirst().getRetired()) {
 			this.list.removeFirst();
 			if (!this.list.isEmpty()) return new PiratesAnnounceState(state, card, list);
-			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Card exhausted, moving to a new one!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Card exhausted, moving to a new one!");
 			return null;
 		}
 		if (!this.shots.getProjectiles().isEmpty()) {
@@ -74,26 +74,26 @@ public class PiratesSelectShipState extends CardState {
 		}
 		this.list.removeFirst();
 		if (!this.list.isEmpty()) return new PiratesAnnounceState(state, card, list);
-		Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Card exhausted, moving to a new one!");
+		Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Card exhausted, moving to a new one!");
 		return null;
 	}
 
 	@Override
 	public void selectBlob(Player p, ShipCoords blob_coord) {
 		if (p != this.list.getFirst()) {
-			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player: '" + p.getUsername() + "' attempted to set a new center during another player's turn!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Player: '" + p.getUsername() + "' attempted to set a new center during another player's turn!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to set a new center during another player's turn!"));
 			return;
 		}
 		try {
 			p.getSpaceShip().selectShipBlob(blob_coord);
-			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player: '" + p.getUsername() + "' selected blob that contains coords " + blob_coord + ".");
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Player: '" + p.getUsername() + "' selected blob that contains coords " + blob_coord + ".");
 		} catch (IllegalTargetException e) {
-			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player: '" + p.getUsername() + "' attempted to set his new center on an empty space!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Player: '" + p.getUsername() + "' attempted to set his new center on an empty space!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to set his new center on an empty space!"));
 		} catch (ForbiddenCallException e) {
 			//Should be unreachable.
-			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player: '" + p.getUsername() + "' attempted to set his new center while having a unbroken ship!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Player: '" + p.getUsername() + "' attempted to set his new center while having a unbroken ship!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to set his new center while having a unbroken ship!"));
 		}
 	}

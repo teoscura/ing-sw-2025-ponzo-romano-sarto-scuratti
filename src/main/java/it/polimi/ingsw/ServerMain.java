@@ -17,7 +17,7 @@ public class ServerMain {
 		String address = args[0];
 		int tcpport = args.length == 3 ? Integer.parseInt(args[1]) : 0;
 		int rmiport = Integer.parseInt(args[args.length == 3 ? 2 : 1]);
-		if(rmiport <= 0 || tcpport < 0){
+		if (rmiport <= 0 || tcpport < 0) {
 			System.out.println("If ports are specified they must be larger than zero!");
 			System.exit(-1);
 		}

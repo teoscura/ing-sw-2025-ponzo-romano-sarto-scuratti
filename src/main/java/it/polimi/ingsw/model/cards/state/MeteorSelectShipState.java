@@ -37,7 +37,7 @@ class MeteorSelectShipState extends CardState {
 	@Override
 	public void init(ClientState new_state) {
 		super.init(new_state);
-		Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"CardState -> Meteor Swarm Select Ship State!");
+		Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "CardState -> Meteor Swarm Select Ship State!");
 	}
 
 	@Override
@@ -70,7 +70,7 @@ class MeteorSelectShipState extends CardState {
 	public CardState getNext() {
 		this.left.getProjectiles().removeFirst();
 		if (!this.left.getProjectiles().isEmpty()) return new MeteorAnnounceState(state, card_id, left);
-		Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Card exhausted, moving to a new one!");
+		Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Card exhausted, moving to a new one!");
 		return null;
 	}
 
@@ -78,12 +78,12 @@ class MeteorSelectShipState extends CardState {
 	public void selectBlob(Player p, ShipCoords blob_coord) {
 		try {
 			p.getSpaceShip().selectShipBlob(blob_coord);
-			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player: '" + p.getUsername() + "' selected blob that contains coords " + blob_coord + ".");
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Player: '" + p.getUsername() + "' selected blob that contains coords " + blob_coord + ".");
 		} catch (IllegalTargetException e) {
-			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player: '" + p.getUsername() + "' attempted to set his new center on an empty space!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Player: '" + p.getUsername() + "' attempted to set his new center on an empty space!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to set his new center on an empty space!"));
 		} catch (ForbiddenCallException e) {
-			Logger.getInstance().print(LoggerLevel.MODEL, "["+state.getModelID()+"] "+"Player: '" + p.getUsername() + "' attempted to set his new center while having a unbroken ship!");
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Player: '" + p.getUsername() + "' attempted to set his new center while having a unbroken ship!");
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to set his new center while having a unbroken ship!"));
 		}
 	}

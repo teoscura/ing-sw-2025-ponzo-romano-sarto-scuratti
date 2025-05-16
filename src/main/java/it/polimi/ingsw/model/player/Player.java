@@ -108,8 +108,8 @@ public class Player implements Serializable {
 		return this.descriptor;
 	}
 
-	public String voyageInfo(iPlanche planche){
-		return "[Player: '"+username+"'] Planche position: "+planche.getPlayerPosition(this)+" | Score: "+score+" | Credits: "+credits+" | Engine: "+ship.getEnginePower()+" | Cannon: "+ship.getCannonPower()+" | Crew: "+ship.getTotalCrew()+" | Battery: "+ship.getEnergyPower();
+	public String voyageInfo(iPlanche planche) {
+		return "[Player: '" + username + "'] Planche position: " + planche.getPlayerPosition(this) + " | Score: " + score + " | Credits: " + credits + " | Engine: " + ship.getEnginePower() + " | Cannon: " + ship.getCannonPower() + " | Crew: " + ship.getTotalCrew() + " | Battery: " + ship.getEnergyPower();
 	}
 
 	@Override

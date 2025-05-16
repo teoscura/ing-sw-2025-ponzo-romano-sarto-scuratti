@@ -77,98 +77,98 @@ public abstract class GameState implements Serializable {
 		return this.type;
 	}
 
-	public int getModelID(){
+	public int getModelID() {
 		return this.model.getID();
 	}
 
 	//Methods that can be called and overridden by subclasses.
 	public void connect(ClientDescriptor client) throws ForbiddenCallException {
 		this.broadcastMessage(new ViewMessage("Client: '" + client.getUsername() + "' tried to disconnect in a state that doesn't allow it!"));
-		Logger.getInstance().print(LoggerLevel.MODEL, "["+model.getID()+"] "+"Client: '" + client.getUsername() + "' tried to connect in a state that doesn't allow it!");
+		Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Client: '" + client.getUsername() + "' tried to connect in a state that doesn't allow it!");
 		throw new ForbiddenCallException("This state doesn't support this function.");
 	}
 
 	public void disconnect(ClientDescriptor client) throws ForbiddenCallException {
 		this.broadcastMessage(new ViewMessage("Client: '" + client.getUsername() + "' tried to disconnect in a state that doesn't allow it!"));
-		Logger.getInstance().print(LoggerLevel.MODEL, "["+model.getID()+"] "+"Client: '" + client.getUsername() + "' tried to disconnect in a state that doesn't allow it!");
+		Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Client: '" + client.getUsername() + "' tried to disconnect in a state that doesn't allow it!");
 		throw new ForbiddenCallException("This state doesn't support this function.");
 	}
 
 	public void connect(Player p) throws ForbiddenCallException {
 		this.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' tried to connect in a state that doesn't allow it!"));
-		Logger.getInstance().print(LoggerLevel.MODEL, "["+model.getID()+"] "+"Player: '" + p.getUsername() + "' tried to connect in a state that doesn't allow it!");
+		Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' tried to connect in a state that doesn't allow it!");
 		throw new ForbiddenCallException("This state doesn't support this function.");
 	}
 
 	public void disconnect(Player p) throws ForbiddenCallException {
 		this.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' tried to disconnect in a state that doesn't allow it!"));
-		Logger.getInstance().print(LoggerLevel.MODEL, "["+model.getID()+"] "+"Player: '" + p.getUsername() + "' tried to disconnect in a state that doesn't allow it!");
+		Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' tried to disconnect in a state that doesn't allow it!");
 		throw new ForbiddenCallException("This state doesn't support this function.");
 	}
 
 	public void sendContinue(Player p) throws ForbiddenCallException {
 		this.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' tried to send a continue in a state that doesn't allow it!"));
-		Logger.getInstance().print(LoggerLevel.MODEL, "["+model.getID()+"] "+"Player: '" + p.getUsername() + "' tried to send a continue in a state that doesn't allow it!");
+		Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' tried to send a continue in a state that doesn't allow it!");
 		throw new ForbiddenCallException("This state doesn't support this function.");
 	}
 
 	public void putComponent(Player p, ShipCoords coords, ComponentRotation rotation) throws ForbiddenCallException {
 		this.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' tried to put a component in a state that doesn't allow it!"));
-		Logger.getInstance().print(LoggerLevel.MODEL, "["+model.getID()+"] "+"Player: '" + p.getUsername() + "' tried to put a component in a state that doesn't allow it!");
+		Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' tried to put a component in a state that doesn't allow it!");
 		throw new ForbiddenCallException("This state doesn't support this function.");
 	}
 
 	public void takeComponent(Player p) throws ForbiddenCallException {
 		this.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' tried to pick a component in a state that doesn't allow it!"));
-		Logger.getInstance().print(LoggerLevel.MODEL, "["+model.getID()+"] "+"Player: '" + p.getUsername() + "' tried to pick a component in a state that doesn't allow it!");
+		Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' tried to pick a component in a state that doesn't allow it!");
 		throw new ForbiddenCallException("This state doesn't support this function.");
 	}
 
 	public void takeDiscarded(Player p, int id) throws ForbiddenCallException {
 		this.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' tried to take a discarded component in a state that doesn't allow it!"));
-		Logger.getInstance().print(LoggerLevel.MODEL, "["+model.getID()+"] "+"Player: '" + p.getUsername() + "' tried to take a discarded component in a state that doesn't allow it!");
+		Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' tried to take a discarded component in a state that doesn't allow it!");
 		throw new ForbiddenCallException("This state doesn't support this function.");
 	}
 
 	public void discardComponent(Player p, int id) throws ForbiddenCallException {
 		this.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' tried to discard a component in a state that doesn't allow it!"));
-		Logger.getInstance().print(LoggerLevel.MODEL, "["+model.getID()+"] "+"Player: '" + p.getUsername() + "' tried to discard a component in a state that doesn't allow it!");
+		Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' tried to discard a component in a state that doesn't allow it!");
 		throw new ForbiddenCallException("This state doesn't support this function.");
 	}
 
 	public void toggleHourglass(Player p) throws ForbiddenCallException {
 		this.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' tried to toggle the hourglass in a state that doesn't allow it!"));
-		Logger.getInstance().print(LoggerLevel.MODEL, "["+model.getID()+"] "+"Player: '" + p.getUsername() + "' tried to toggle the hourglass in a state that doesn't allow it!");
+		Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' tried to toggle the hourglass in a state that doesn't allow it!");
 		throw new ForbiddenCallException("This state doesn't support this function.");
 	}
 
 	public void removeComponent(Player p, ShipCoords coords) throws ForbiddenCallException {
 		this.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' tried to remove a component in a state that doesn't allow it!"));
-		Logger.getInstance().print(LoggerLevel.MODEL, "["+model.getID()+"] "+"Player: '" + p.getUsername() + "' tried to remove a component in a state that doesn't allow it!");
+		Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' tried to remove a component in a state that doesn't allow it!");
 		throw new ForbiddenCallException("This state doesn't support this function.");
 	}
 
 	public void setCrewType(Player p, ShipCoords coords, AlienType type) throws ForbiddenCallException {
 		this.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' tried to set the crew type in a state that doesn't allow it!"));
-		Logger.getInstance().print(LoggerLevel.MODEL, "["+model.getID()+"] "+"Player: '" + p.getUsername() + "' tried to set the crew type in a state that doesn't allow it!");
+		Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' tried to set the crew type in a state that doesn't allow it!");
 		throw new ForbiddenCallException("This state doesn't support this function.");
 	}
 
 	public void giveUp(Player p) throws ForbiddenCallException {
 		this.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' tried to give up in a state that doesn't allow it!"));
-		Logger.getInstance().print(LoggerLevel.MODEL, "["+model.getID()+"] "+"Player: '" + p.getUsername() + "' tried to give up in a state that doesn't allow it!");
+		Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' tried to give up in a state that doesn't allow it!");
 		throw new ForbiddenCallException("This state doesn't support this function.");
 	}
 
 	public void selectBlob(Player p, ShipCoords blob_coord) throws ForbiddenCallException {
 		this.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' tried to select a new blob in a state that doesn't allow it!"));
-		Logger.getInstance().print(LoggerLevel.MODEL, "["+model.getID()+"] "+"Player: '" + p.getUsername() + "' tried to select a new blob in a state that doesn't allow it!");
+		Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' tried to select a new blob in a state that doesn't allow it!");
 		throw new ForbiddenCallException("This state doesn't support this function.");
 	}
 
 	public CardState getCardState(Player p) throws ForbiddenCallException {
 		this.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' tried to get the card state in a state that doesn't allow it!"));
-		Logger.getInstance().print(LoggerLevel.MODEL, "["+model.getID()+"] "+"Player: '" + p.getUsername() + "' tried to get the card state in a state that doesn't allow it!");
+		Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' tried to get the card state in a state that doesn't allow it!");
 		throw new ForbiddenCallException("This state doesn't support this function.");
 	}
 

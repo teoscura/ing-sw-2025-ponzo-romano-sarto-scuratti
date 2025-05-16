@@ -94,7 +94,7 @@ public class SocketClient extends Thread implements ClientConnection {
 			this.interrupt();
 			socket.close();
 		} catch (IOException e) {
-			Logger.getInstance().print(LoggerLevel.NOTIF, "Finalized closing procedure for socket: '"+socket.getInetAddress()+"'.");
+			Logger.getInstance().print(LoggerLevel.NOTIF, "Finalized closing procedure for socket: '" + socket.getInetAddress() + "'.");
 		}
 	}
 

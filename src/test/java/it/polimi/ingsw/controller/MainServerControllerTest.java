@@ -122,7 +122,7 @@ public class MainServerControllerTest {
 		t.receiveMessage(mess);
 		Thread.sleep(200);
 		assertEquals(0, t.getLobbyList().size());
-		
+
 	}
 
 	@Test
