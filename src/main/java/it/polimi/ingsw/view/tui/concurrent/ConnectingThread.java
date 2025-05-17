@@ -7,6 +7,7 @@ public class ConnectingThread extends Thread {
     
     private final TerminalWrapper terminal;
     private final ConnectingState state;
+    private final ArrayList<String> screen;
 
     public ConnectingThread(TerminalWrapper terminal, ConnectingState state){
         if (terminal == null || state==null) throw new NullPointerException();
@@ -14,6 +15,6 @@ public class ConnectingThread extends Thread {
         this.state = state;
     }
 
-    
+
 
 }
