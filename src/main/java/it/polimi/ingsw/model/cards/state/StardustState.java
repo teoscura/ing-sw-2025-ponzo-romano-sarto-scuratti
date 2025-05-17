@@ -56,8 +56,10 @@ public class StardustState extends CardState {
 	public ClientCardState getClientCardState() {
 		ArrayList<PlayerColor> tmp = new ArrayList<>(this.awaiting.stream().map(p -> p.getColor()).toList());
 		return new ClientAwaitConfirmCardStateDecorator(
-				new ClientBaseCardState(card.getId()),
-				tmp);
+			new ClientBaseCardState(
+				this.getClass().getSimpleName(),
+				card.getId()),
+			tmp);
 	}
 
 	@Override

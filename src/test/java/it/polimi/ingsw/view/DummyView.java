@@ -2,7 +2,6 @@ package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.controller.client.state.ConnectingState;
 import it.polimi.ingsw.controller.client.state.TitleScreenState;
-import it.polimi.ingsw.model.client.card.*;
 import it.polimi.ingsw.model.client.state.*;
 
 public class DummyView implements ClientView {
@@ -33,50 +32,6 @@ public class DummyView implements ClientView {
 
 	@Override
 	public void show(ClientEndgameState state) {
-	}
-
-	@Override
-	public void show(ClientAwaitConfirmCardStateDecorator state) {
-	}
-
-	@Override
-	public void show(ClientBaseCardState state) {
-	}
-
-	@Override
-	public void show(ClientCargoPenaltyCardStateDecorator state) {
-	}
-
-	@Override
-	public void show(ClientCargoRewardCardStateDecorator state) {
-	}
-
-	@Override
-	public void show(ClientCombatZoneIndexCardStateDecorator state) {
-	}
-
-	@Override
-	public void show(ClientCreditsRewardCardStateDecorator state) {
-	}
-
-	@Override
-	public void show(ClientCrewPenaltyCardStateDecorator state) {
-	}
-
-	@Override
-	public void show(ClientLandingCardStateDecorator state) {
-	}
-
-	@Override
-	public void show(ClientMeteoriteCardStateDecorator state) {
-	}
-
-	@Override
-	public void show(ClientNewCenterCardStateDecorator state) {
-	}
-
-	@Override
-	public void show(ClientProjectileCardStateDecorator state) {
 	}
 
 	@Override

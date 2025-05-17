@@ -63,9 +63,13 @@ public class CombatZoneSelectShipState extends CardState {
 	public ClientCardState getClientCardState() {
 		List<PlayerColor> awaiting = Collections.singletonList(target.getColor());
 		return new ClientNewCenterCardStateDecorator(
-				new ClientCombatZoneIndexCardStateDecorator(
-						new ClientBaseCardState(this.card_id), 3 - this.sections.size()),
-				new ArrayList<>(awaiting));
+			new ClientCombatZoneIndexCardStateDecorator(
+				new ClientBaseCardState(
+					this.getClass().getSimpleName(),	
+					this.card_id), 
+				this.sections.getFirst(),
+				3 - this.sections.size()),
+			new ArrayList<>(awaiting));
 	}
 
 	@Override

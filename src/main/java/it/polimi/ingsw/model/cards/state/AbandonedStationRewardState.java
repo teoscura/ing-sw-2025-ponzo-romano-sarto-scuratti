@@ -64,7 +64,9 @@ public class AbandonedStationRewardState extends CardState {
 
 	@Override
 	public ClientCardState getClientCardState() {
-		return new ClientCargoRewardCardStateDecorator(new ClientBaseCardState(this.card.getId()),
+		return new ClientCargoRewardCardStateDecorator(new ClientBaseCardState(
+					this.getClass().getSimpleName(),
+					this.card.getId()),
 				this.list.getFirst().getColor(),
 				0, this.card.getPlanet().getContains());
 	}

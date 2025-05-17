@@ -63,7 +63,9 @@ public class AbandonedStationAnnounceState extends CardState {
 	@Override
 	public ClientCardState getClientCardState() {
 		ArrayList<Boolean> tmp = new ArrayList<>(List.of(true));
-		return new ClientLandingCardStateDecorator(new ClientBaseCardState(this.card.getId()),
+		return new ClientLandingCardStateDecorator(new ClientBaseCardState(
+					this.getClass().getSimpleName(),
+					this.card.getId()),
 				this.list.getFirst().getColor(),
 				this.card.getDays(),
 				this.card.getCrewLost(),

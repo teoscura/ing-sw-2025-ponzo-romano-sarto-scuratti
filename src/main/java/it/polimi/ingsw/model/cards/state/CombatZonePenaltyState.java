@@ -87,30 +87,42 @@ class CombatZonePenaltyState extends CardState {
 		switch (this.sections.getFirst().getPenalty()) {
 			case CombatZonePenalty.CARGO:
 				return new ClientCargoPenaltyCardStateDecorator(
-						new ClientCombatZoneIndexCardStateDecorator(
-								new ClientBaseCardState(card_id),
-								3 - this.sections.size()),
-						target.getColor(),
-						this.required);
+					new ClientCombatZoneIndexCardStateDecorator(
+						new ClientBaseCardState(
+							this.getClass().getSimpleName(),	
+							card_id),
+						this.sections.getFirst(),
+						3 - this.sections.size()),
+					target.getColor(),
+					this.required);
 			case CombatZonePenalty.CREW:
 				return new ClientCrewPenaltyCardStateDecorator(
-						new ClientCombatZoneIndexCardStateDecorator(
-								new ClientBaseCardState(card_id),
-								3 - this.sections.size()),
-						target.getColor(),
-						this.sections.getFirst().getAmount());
+					new ClientCombatZoneIndexCardStateDecorator(
+						new ClientBaseCardState(
+							this.getClass().getSimpleName(),	
+							card_id),
+						this.sections.getFirst(),
+						3 - this.sections.size()),
+					target.getColor(),
+					this.sections.getFirst().getAmount());
 			case CombatZonePenalty.SHOTS:
 				return new ClientProjectileCardStateDecorator(
-						new ClientAwaitConfirmCardStateDecorator(
-								new ClientCombatZoneIndexCardStateDecorator(
-										new ClientBaseCardState(card_id),
-										3 - this.sections.size()),
-								new ArrayList<>(Collections.singletonList(this.target.getColor()))),
-						this.shots.getProjectiles().getFirst());
+					new ClientAwaitConfirmCardStateDecorator(
+						new ClientCombatZoneIndexCardStateDecorator(
+							new ClientBaseCardState(
+								this.getClass().getSimpleName(),	
+								card_id),
+							this.sections.getFirst(),
+							3 - this.sections.size()),
+						new ArrayList<>(Collections.singletonList(this.target.getColor()))),
+					this.shots.getProjectiles().getFirst());
 			default:
 				return new ClientCombatZoneIndexCardStateDecorator(
-						new ClientBaseCardState(card_id),
-						3 - this.sections.size());
+					new ClientBaseCardState(
+						this.getClass().getSimpleName(),	
+						card_id),
+					this.sections.getFirst(),
+					3 - this.sections.size());
 		}
 	}
 

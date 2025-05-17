@@ -62,7 +62,10 @@ public class SmugglersAnnounceState extends CardState {
 	@Override
 	public ClientCardState getClientCardState() {
 		ArrayList<PlayerColor> awaiting = new ArrayList<>(Collections.singletonList(this.list.getFirst().getColor()));
-		return new ClientAwaitConfirmCardStateDecorator(new ClientBaseCardState(this.card.getId()), awaiting);
+		return new ClientAwaitConfirmCardStateDecorator(new ClientBaseCardState(
+				this.getClass().getSimpleName(),
+				card.getId()), 
+			awaiting);
 	}
 
 	@Override

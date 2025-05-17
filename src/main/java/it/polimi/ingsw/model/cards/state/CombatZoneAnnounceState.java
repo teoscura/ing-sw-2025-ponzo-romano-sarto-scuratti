@@ -71,10 +71,13 @@ public class CombatZoneAnnounceState extends CardState {
 	@Override
 	public ClientCardState getClientCardState() {
 		return new ClientCombatZoneIndexCardStateDecorator(
-				new ClientAwaitConfirmCardStateDecorator(
-						new ClientBaseCardState(card_id),
-						new ArrayList<>(this.awaiting.stream().map(p -> p.getColor()).toList())),
-				3 - this.sections.size());
+			new ClientAwaitConfirmCardStateDecorator(
+				new ClientBaseCardState(
+					this.getClass().getSimpleName(),	
+					card_id),
+				new ArrayList<>(this.awaiting.stream().map(p -> p.getColor()).toList())),
+			this.sections.getFirst(),
+			3 - this.sections.size());
 	}
 
 	@Override

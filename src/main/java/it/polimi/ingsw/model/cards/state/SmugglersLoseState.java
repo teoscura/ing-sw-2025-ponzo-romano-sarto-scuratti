@@ -67,7 +67,8 @@ public class SmugglersLoseState extends CardState {
 	@Override
 	public ClientCardState getClientCardState() {
 		return new ClientCargoPenaltyCardStateDecorator(
-				new ClientBaseCardState(card.getId()),
+				new ClientBaseCardState(this.getClass().getSimpleName(),
+card.getId()),
 				this.list.getFirst().getColor(),
 				required
 		);

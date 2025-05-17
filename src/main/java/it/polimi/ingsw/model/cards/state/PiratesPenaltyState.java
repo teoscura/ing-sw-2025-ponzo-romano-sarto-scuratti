@@ -68,7 +68,9 @@ public class PiratesPenaltyState extends CardState {
 		List<PlayerColor> awaiting = Collections.singletonList(this.list.getFirst().getColor());
 		return new ClientProjectileCardStateDecorator(
 				new ClientAwaitConfirmCardStateDecorator(
-						new ClientBaseCardState(this.card.getId()),
+						new ClientBaseCardState(
+							this.getClass().getSimpleName(),
+							card.getId()),
 						new ArrayList<>(awaiting)),
 				this.shots.getProjectiles().getFirst());
 	}

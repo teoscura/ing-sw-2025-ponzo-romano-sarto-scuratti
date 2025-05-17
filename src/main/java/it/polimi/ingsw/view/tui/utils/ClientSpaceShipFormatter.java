@@ -34,12 +34,12 @@ public class ClientSpaceShipFormatter {
                     tmp.get(i*3+k+1).append(component.get(k));
                 }
             }
+            for(int j = 0; j<3; j++){
+                tmp.get(i*3+1+j).append("│");
+            }
         }
-        //TODO: figure out bottom row.
-        //tmp.add(new StringBuffer(bottom).replace(index, index+displayname.length(), displayname));
-        for(int i = 0; i<15; i++){
-            tmp.get(i+1).append("│ "); 
-        }
+        //FIXME: show ship info on side
+        tmp.add(new StringBuffer(bottom));
         return tmp;
     }
 
@@ -91,6 +91,60 @@ public class ClientSpaceShipFormatter {
         return username.substring(0, trimsize)+"... - "+color.toString();
     }
 
-
+    // private static String bottomInfo(ClientSpaceShip ship, int score, int credits){
+    //     int totalcrew = 0;
+    //     for(int i : ship.getCrew()) totalcrew+=i;
+    //     return new AttributedStringBuilder()
+    //         .style(AttributedStyle.BOLD.foreground(AttributedStyle.WHITE))
+    //         .append("🔫: ")
+    //         .style(AttributedStyle.BOLD.foreground(AttributedStyle.YELLOW))
+    //         .append(String.format("%3s│", ship.getCannonPower()))
+    //         .style(AttributedStyle.BOLD.foreground(AttributedStyle.WHITE))
+    //         .append("🚀: ")
+    //         .style(AttributedStyle.BOLD.foreground(AttributedStyle.RED))
+    //         .append(String.format("%3d│", ship.getEnginePower()))
+    //         .style(AttributedStyle.BOLD.foreground(AttributedStyle.WHITE))
+    //         .append("🔋: ")
+    //         .style(AttributedStyle.BOLD.foreground(AttributedStyle.GREEN))
+    //         .append(String.format("%3d│", ship.getContainers()[0]))
+    //         .style(AttributedStyle.BOLD.foreground(AttributedStyle.WHITE))
+    //         .append("🧍: ")
+    //         .style(AttributedStyle.BOLD.foreground(AttributedStyle.CYAN))
+    //         .append(String.format("%3d", totalcrew))
+    //         .style(AttributedStyle.BOLD.foreground(AttributedStyle.WHITE))
+    //         .append("🟦: ")
+    //         .style(AttributedStyle.BOLD.foreground(AttributedStyle.BLUE))
+    //         .append(String.format("%3d│", ship.getContainers()[1]))
+    //         .style(AttributedStyle.BOLD.foreground(AttributedStyle.WHITE))
+    //         .append("🟩: ")
+    //         .style(AttributedStyle.BOLD.foreground(AttributedStyle.GREEN))
+    //         .append(String.format("%3d│", ship.getContainers()[2]))
+    //         .style(AttributedStyle.BOLD.foreground(AttributedStyle.WHITE))
+    //         .append("🟨: ")
+    //         .style(AttributedStyle.BOLD.foreground(AttributedStyle.YELLOW))
+    //         .append(String.format("%3d│", ship.getContainers()[3]))
+    //         .style(AttributedStyle.BOLD.foreground(AttributedStyle.WHITE))
+    //         .append("🟥: ")
+    //         .style(AttributedStyle.BOLD.foreground(AttributedStyle.RED))
+    //         .append(String.format("%3d│", ship.getContainers()[4]))
+    //         .style(AttributedStyle.BOLD.foreground(AttributedStyle.WHITE))
+    //         .append("💰: ")
+    //         .style(AttributedStyle.BOLD.foreground(AttributedStyle.YELLOW))
+    //         .append(String.format("%3d│", score))
+    //         .style(AttributedStyle.BOLD.foreground(AttributedStyle.WHITE))
+    //         .append("✨: ")
+    //         .style(AttributedStyle.BOLD.foreground(AttributedStyle.YELLOW))
+    //         .append(String.format("%3d│", credits))
+    //         .style(AttributedStyle.BOLD.foreground(AttributedStyle.WHITE))
+    //         .append("🛡️: ")
+    //         .style(AttributedStyle.BOLD.foreground(ship.getShielded()[0] ? AttributedStyle.GREEN : AttributedStyle.BLACK))
+    //         .append("N")
+    //         .style(AttributedStyle.BOLD.foreground(ship.getShielded()[1] ? AttributedStyle.GREEN : AttributedStyle.BLACK))
+    //         .append("E")
+    //         .style(AttributedStyle.BOLD.foreground(ship.getShielded()[2] ? AttributedStyle.GREEN : AttributedStyle.BLACK))
+    //         .append("S")
+    //         .style(AttributedStyle.BOLD.foreground(ship.getShielded()[3] ? AttributedStyle.GREEN : AttributedStyle.BLACK))
+    //         .append("W").toAttributedString().toAnsi();
+    // }
 
 }

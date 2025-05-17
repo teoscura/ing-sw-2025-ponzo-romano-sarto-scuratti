@@ -58,7 +58,8 @@ public class OpenSpaceState extends CardState {
 	@Override
 	public ClientCardState getClientCardState() {
 		List<PlayerColor> tmp = this.awaiting.stream().map(p -> p.getColor()).toList();
-		return new ClientAwaitConfirmCardStateDecorator(new ClientBaseCardState(card.getId()), new ArrayList<>(tmp));
+		return new ClientAwaitConfirmCardStateDecorator(new ClientBaseCardState(this.getClass().getSimpleName(),
+card.getId()), new ArrayList<>(tmp));
 	}
 
 	@Override

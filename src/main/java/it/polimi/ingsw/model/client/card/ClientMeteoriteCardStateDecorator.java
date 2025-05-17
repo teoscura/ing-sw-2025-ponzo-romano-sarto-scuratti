@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model.client.card;
 
 import it.polimi.ingsw.model.cards.utils.Projectile;
-import it.polimi.ingsw.view.ClientView;
 
 public class ClientMeteoriteCardStateDecorator implements ClientCardState {
 
@@ -20,9 +19,9 @@ public class ClientMeteoriteCardStateDecorator implements ClientCardState {
 	}
 
 	@Override
-	public void showCardState(ClientView view) {
-		base.showCardState(view);
-		view.show(this);
+	public void showCardState(ClientCardStateVisitor visitor) {
+		base.showCardState(visitor);
+		visitor.show(this);
 	}
 
 }

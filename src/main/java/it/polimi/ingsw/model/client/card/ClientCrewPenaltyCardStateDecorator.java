@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model.client.card;
 
 import it.polimi.ingsw.model.player.PlayerColor;
-import it.polimi.ingsw.view.ClientView;
 
 public class ClientCrewPenaltyCardStateDecorator implements ClientCardState {
 
@@ -26,9 +25,9 @@ public class ClientCrewPenaltyCardStateDecorator implements ClientCardState {
 	}
 
 	@Override
-	public void showCardState(ClientView view) {
-		base.showCardState(view);
-		view.show(this);
+	public void showCardState(ClientCardStateVisitor visitor) {
+		base.showCardState(visitor);
+		visitor.show(this);
 	}
 
 }

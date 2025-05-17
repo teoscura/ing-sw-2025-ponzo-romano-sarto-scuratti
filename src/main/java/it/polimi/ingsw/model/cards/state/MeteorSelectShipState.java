@@ -63,7 +63,7 @@ class MeteorSelectShipState extends CardState {
 		for (Player p : this.state.getOrder(CardOrder.NORMAL)) {
 			if (p.getSpaceShip().getBlobsSize() > 1) tmp.add(p.getColor());
 		}
-		return new ClientNewCenterCardStateDecorator(new ClientBaseCardState(card_id), new ArrayList<>(tmp));
+		return new ClientNewCenterCardStateDecorator(new ClientBaseCardState(this.getClass().getSimpleName(),card_id), new ArrayList<>(tmp));
 	}
 
 	@Override

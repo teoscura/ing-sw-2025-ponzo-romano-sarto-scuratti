@@ -57,7 +57,10 @@ public class PiratesSelectShipState extends CardState {
 	@Override
 	public ClientCardState getClientCardState() {
 		List<PlayerColor> awaiting = Collections.singletonList(this.list.getFirst().getColor());
-		return new ClientNewCenterCardStateDecorator(new ClientBaseCardState(this.card.getId()), new ArrayList<>(awaiting));
+		return new ClientNewCenterCardStateDecorator(new ClientBaseCardState(
+				this.getClass().getSimpleName(),
+				card.getId()), 
+			new ArrayList<>(awaiting));
 	}
 
 	@Override
