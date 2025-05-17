@@ -3,7 +3,6 @@ package it.polimi.ingsw.view.commandbuilder;
 import it.polimi.ingsw.controller.client.state.ConnectingState;
 import it.polimi.ingsw.controller.client.state.TitleScreenState;
 import it.polimi.ingsw.model.client.card.*;
-import it.polimi.ingsw.model.client.components.*;
 import it.polimi.ingsw.model.client.state.*;
 import it.polimi.ingsw.view.ClientView;
 
@@ -68,30 +67,6 @@ public class CBView implements ClientView {
 	@Override
 	public void show(ClientEndgameState state) {
 		System.out.println("Endgame state");
-	}
-
-	@Override
-	public void show(ClientBaseComponent component) {
-	}
-
-	@Override
-	public void show(ClientPoweredComponentDecorator component) {
-	}
-
-	@Override
-	public void show(ClientShipmentsComponentDecorator component) {
-	}
-
-	@Override
-	public void show(ClientBatteryComponentDecorator component) {
-	}
-
-	@Override
-	public void show(ClientCrewComponentDecorator component) {
-	}
-
-	@Override
-	public void show(ClientBrokenVerifyComponentDecorator component) {
 	}
 
 	@Override

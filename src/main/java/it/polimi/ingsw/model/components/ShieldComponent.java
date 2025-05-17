@@ -4,6 +4,7 @@ package it.polimi.ingsw.model.components;
 import it.polimi.ingsw.model.client.components.ClientBaseComponent;
 import it.polimi.ingsw.model.client.components.ClientComponent;
 import it.polimi.ingsw.model.client.components.ClientPoweredComponentDecorator;
+import it.polimi.ingsw.model.client.components.ClientShieldComponentDecorator;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ConnectorType;
 import it.polimi.ingsw.model.components.enums.ShieldType;
@@ -78,7 +79,10 @@ public class ShieldComponent extends BaseComponent {
 
 	@Override
 	public ClientComponent getClientComponent() {
-		return new ClientPoweredComponentDecorator(new ClientBaseComponent(getID(), getRotation()), powered);
+		return new ClientPoweredComponentDecorator(
+			new ClientShieldComponentDecorator(
+				new ClientBaseComponent(getID(), getRotation(), getConnectors()), getShield()),
+			powered);		
 	}
 
 }

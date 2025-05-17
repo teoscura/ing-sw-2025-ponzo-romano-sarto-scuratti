@@ -3,7 +3,6 @@ package it.polimi.ingsw.view;
 import it.polimi.ingsw.controller.client.state.ConnectingState;
 import it.polimi.ingsw.controller.client.state.TitleScreenState;
 import it.polimi.ingsw.model.client.card.*;
-import it.polimi.ingsw.model.client.components.*;
 import it.polimi.ingsw.model.client.state.*;
 
 public class DummyView implements ClientView {
@@ -34,30 +33,6 @@ public class DummyView implements ClientView {
 
 	@Override
 	public void show(ClientEndgameState state) {
-	}
-
-	@Override
-	public void show(ClientBaseComponent component) {
-	}
-
-	@Override
-	public void show(ClientPoweredComponentDecorator component) {
-	}
-
-	@Override
-	public void show(ClientShipmentsComponentDecorator component) {
-	}
-
-	@Override
-	public void show(ClientBatteryComponentDecorator component) {
-	}
-
-	@Override
-	public void show(ClientCrewComponentDecorator component) {
-	}
-
-	@Override
-	public void show(ClientBrokenVerifyComponentDecorator component) {
 	}
 
 	@Override
@@ -109,11 +84,11 @@ public class DummyView implements ClientView {
 	}
 
 	@Override
-	public void show(TitleScreenState titlesScreenState) {
+	public void show(TitleScreenState state) {
 	}
 
 	@Override
-	public void show(ConnectingState connectingState) {
+	public void show(ConnectingState state) {
 	}
 
 }

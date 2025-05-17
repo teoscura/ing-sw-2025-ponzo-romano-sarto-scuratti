@@ -3,7 +3,9 @@ package it.polimi.ingsw.view.tui;
 import java.io.IOException;
 import java.lang.ref.Cleaner;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.jline.keymap.BindingReader;
 import org.jline.keymap.KeyMap;
@@ -133,12 +135,26 @@ public class TerminalWrapper {
         this.terminal.writer().flush();
     }
 
-    public void printCentered(Collection<String> lines ){
+    public void print(Collection<String> lines, int srow, int scol){
+        for(String line : lines){
+            this.print(line, srow, scol);
+            srow++;
+        }
+    }
+
+    public void printCentered(Collection<String> lines){
         int firstrow = (this.size.getRows()-lines.size())/2;
         for(String line : lines){
             this.print(line, firstrow, (this.size.getColumns()-line.length())/2);
             firstrow++;
         }
+    }
+
+    public void updateCommandBar(){
+        ArrayList<AttributedString> lines = new ArrayList<>();
+        lines.add(new AttributedStringBuilder().style(AttributedStyle.BOLD.foreground(AttributedStyle.YELLOW)).append("━Typed line:━"+"━".repeat(this.size.getColumns()-"━Typed line:━".length())).toAttributedString());
+        lines.add(new AttributedStringBuilder().style(AttributedStyle.BOLD.foreground(AttributedStyle.CYAN)).append(this.line.toString()).toAttributedString());
+        status.update(lines, legal);
     }
 
     public void puts(Capability capability, Object... params){

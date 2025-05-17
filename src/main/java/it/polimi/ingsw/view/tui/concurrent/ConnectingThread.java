@@ -1,5 +1,7 @@
 package it.polimi.ingsw.view.tui.concurrent;
 
+import java.util.ArrayList;
+
 import it.polimi.ingsw.controller.client.state.ConnectingState;
 import it.polimi.ingsw.view.tui.TerminalWrapper;
 
@@ -13,8 +15,7 @@ public class ConnectingThread extends Thread {
         if (terminal == null || state==null) throw new NullPointerException();
         this.terminal = terminal;
         this.state = state;
+        this.screen = new ArrayList<>();
     }
-
-
 
 }

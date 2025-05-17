@@ -77,7 +77,7 @@ public class BatteryComponent extends BaseComponent {
 
 	@Override
 	public ClientComponent getClientComponent() {
-		return new ClientBatteryComponentDecorator(new ClientBaseComponent(this.getID(), getRotation()), this.contains);
+		return new ClientBatteryComponentDecorator(new ClientBaseComponent(this.getID(), getRotation(), getConnectors()), this.contains);
 	}
 }
 

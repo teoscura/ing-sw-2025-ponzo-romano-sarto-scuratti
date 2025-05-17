@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.components;
 
 import it.polimi.ingsw.model.client.components.ClientBaseComponent;
 import it.polimi.ingsw.model.client.components.ClientComponent;
+import it.polimi.ingsw.model.client.components.ClientEngineComponentDecorator;
 import it.polimi.ingsw.model.client.components.ClientPoweredComponentDecorator;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ConnectorType;
@@ -95,7 +96,9 @@ public class EngineComponent extends BaseComponent {
 
 	@Override
 	public ClientComponent getClientComponent() {
-		return new ClientPoweredComponentDecorator(new ClientBaseComponent(getID(), getRotation()), powered);
+		ClientComponent c = new ClientEngineComponentDecorator(new ClientBaseComponent(getID(), getRotation(), getConnectors()), getRotation());
+		if(!powerable) return c;
+		return new ClientPoweredComponentDecorator(c, powered);
 	}
 
 }

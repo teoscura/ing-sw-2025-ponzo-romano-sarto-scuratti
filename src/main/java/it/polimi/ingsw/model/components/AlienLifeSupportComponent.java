@@ -5,6 +5,7 @@ import it.polimi.ingsw.exceptions.IllegalConstructorArgumentException;
 import it.polimi.ingsw.model.cards.visitors.CrewRemoveVisitor;
 import it.polimi.ingsw.model.client.components.ClientBaseComponent;
 import it.polimi.ingsw.model.client.components.ClientComponent;
+import it.polimi.ingsw.model.client.components.ClientLifeSupportComponentDecorator;
 import it.polimi.ingsw.model.components.enums.AlienType;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ConnectorType;
@@ -86,7 +87,9 @@ public class AlienLifeSupportComponent extends BaseComponent {
 
 	@Override
 	public ClientComponent getClientComponent() {
-		return new ClientBaseComponent(this.getID(), this.getRotation());
+		return new ClientLifeSupportComponentDecorator(
+			new ClientBaseComponent(this.getID(), this.getRotation(), getConnectors()), 
+			type);
 	}
 
 }

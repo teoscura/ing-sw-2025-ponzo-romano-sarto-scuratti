@@ -3,7 +3,6 @@ package it.polimi.ingsw.view;
 import it.polimi.ingsw.controller.client.state.ConnectingState;
 import it.polimi.ingsw.controller.client.state.TitleScreenState;
 import it.polimi.ingsw.model.client.card.*;
-import it.polimi.ingsw.model.client.components.*;
 import it.polimi.ingsw.model.client.state.*;
 
 public interface ClientView {
@@ -25,19 +24,6 @@ public interface ClientView {
 	void show(ClientVoyageState state);
 
 	void show(ClientEndgameState state);
-
-	//Components
-	void show(ClientBaseComponent component);
-
-	void show(ClientPoweredComponentDecorator component);
-
-	void show(ClientShipmentsComponentDecorator component);
-
-	void show(ClientBatteryComponentDecorator component);
-
-	void show(ClientCrewComponentDecorator component);
-
-	void show(ClientBrokenVerifyComponentDecorator component);
 
 	//Card states
 	void show(ClientAwaitConfirmCardStateDecorator state);
