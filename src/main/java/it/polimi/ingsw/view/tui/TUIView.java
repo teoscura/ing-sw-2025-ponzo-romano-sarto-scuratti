@@ -7,21 +7,24 @@ import it.polimi.ingsw.model.client.card.*;
 import it.polimi.ingsw.model.client.components.*;
 import it.polimi.ingsw.model.client.state.*;
 import it.polimi.ingsw.view.ClientView;
+import it.polimi.ingsw.view.tui.concurrent.ConnectingThread;
+import it.polimi.ingsw.view.tui.concurrent.TitleScreenThread;
 
 public class TUIView implements ClientView {
 
-    //private final TerminalWrapper terminal;
+    private final TerminalWrapper terminal;
+    private Thread inputthread;
 
     public TUIView() throws IOException {
-    //    this.terminal = new TerminalWrapper();
+        this.terminal = new TerminalWrapper();
     }
 
     void printTinyShip(ClientSpaceShip ship){
         StringBuffer s = new StringBuffer();
         //username and stuff.
         //ship.get
-        // |----TizioSburrosColNomeLungo1982----|
-        // |    <><>  <><>    |EP:00|BP:00|CR:00|2
+        // |----TizioBarboneColNomeLungo1982----|
+        // |    <><>  <><>    |EP:00|BP:00|CR:00|
         // |  <><><><><><><>  |CP:00|RC:00|SC:00|
         // |  <><><><><><><>  |TC:00|YC:00|/---\| 
         // |  <><><><><><><>  |BA:00|GC:00||SHD||
@@ -34,12 +37,15 @@ public class TUIView implements ClientView {
     }
 
     @Override
-    public void show(TitleScreenState titlesScreenState) {
-        //Setup all utility and underlying threads.
+    public void show(TitleScreenState state) {
+        this.inputthread = new TitleScreenThread(state);
+        this.inputthread.start();
     }
 
     @Override
-    public void show(ConnectingState connectingState) {
+    public void show(ConnectingState state) {
+        this.inputthread.interrupt();
+        this.inputthread = new ConnectingThread(state);
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'showConnectionScreen'");
     }

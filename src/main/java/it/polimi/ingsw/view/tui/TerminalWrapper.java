@@ -1,74 +1,85 @@
 package it.polimi.ingsw.view.tui;
 
 import java.io.IOException;
+import java.lang.ref.Cleaner;
 import java.nio.charset.Charset;
-import java.util.Collections;
+import java.util.Collection;
 
 import org.jline.keymap.BindingReader;
 import org.jline.keymap.KeyMap;
 import org.jline.reader.Widget;
+import org.jline.terminal.Attributes;
 import org.jline.terminal.Size;
 import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
+import org.jline.utils.AttributedString;
 import org.jline.utils.AttributedStringBuilder;
 import org.jline.utils.AttributedStyle;
+import org.jline.utils.Display;
 import org.jline.utils.InfoCmp.Capability;
 import org.jline.utils.Status;
 
-public class TerminalWrapper extends Thread {
+public class TerminalWrapper {
 
     private final Terminal terminal;
-    private final Size size;
+    private final KeyMap<Widget> keymap;
     private final BindingReader reader;
     private final Status status;
-    private StringBuffer command;
+
+    private Size size;
+    private boolean legal;
+    private StringBuffer line;
+    private String input;
     
-    private static String bottom_line = "━Typed command:━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━";
+    private static String bottom_line = "━Typed line:━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━";
 
     public TerminalWrapper() throws IOException{
-        //Cleaner c = Cleaner.create();
-        this.command = new StringBuffer();
+        Cleaner c = Cleaner.create();
+        this.line = new StringBuffer();
         this.terminal = TerminalBuilder.builder().name("Galaxy Truckers")
             .system(true)
             .streams(System.in, System.out)
             .encoding(Charset.forName("UTF-8"))
             .build();
-        /*Attributes a = */this.terminal.enterRawMode();
+        Attributes a = this.terminal.enterRawMode();
+        c.register(this, ()->cleanUp(a));
+
         this.reader = new BindingReader(terminal.reader());
         this.status = Status.getStatus(terminal);
-        // TODO cleaner that closes terminal and replaces attributes.
-        // TODO resize hook that resets size to 128 32
-        this.size = new Size(128, 32);
-        terminal.setSize(size);  
-        this.start();
+        this.keymap = setupBindings();
+        this.size = terminal.getSize();
+        if(size.getRows()>=32&&size.getColumns()>=128) legal = true;
+
+        terminal.handle(Terminal.Signal.WINCH, signal -> {
+            Display display = new Display(terminal, true);
+            this.size = terminal.getSize();
+            if(size.getRows()<32 || size.getColumns()<128){
+                showSmallScreen(size);
+                this.legal = false;
+                return;
+            }
+            else display.resize(size.getRows(), size.getColumns());
+            legal = true;
+            //clearBase();
+        });
     }
 
-    @Override
-    public void run(){
-        KeyMap<Widget> km = setupBindings();
-        while(command.length()<100){
-            clearBase();
-            print("WOW "+command.length(), 0, 0);
-            reader.readBinding(km).apply();
-            updateStatus();
-        }
-        System.exit(0);
+    public Widget readBinding(){
+        return reader.readBinding(this.keymap);
     }
 
-    private void clearBase(){
-        for(int i = 0; i<30;i++){
-            this.terminal.puts(Capability.cursor_address, i, 0);
-            this.terminal.puts(Capability.clr_eol);
-        }
-        print(bottom_line, 30, 0);
-
+    public boolean isAvailable(){
+        return this.input != null;
     }
 
-    private void updateStatus(){
-        if (status != null) status.update(Collections.singletonList(new AttributedStringBuilder()
-                                    .style(AttributedStyle.BOLD.foreground(AttributedStyle.GREEN))
-                                    .append(command)
-                                    .toAttributedString()));
+    public String takeInput(){
+        String res = this.input;
+        this.input = null;
+        return res;
+    } 
+
+    public String peekInput(){
+        return this.line.toString();
     }
 
 
@@ -76,48 +87,105 @@ public class TerminalWrapper extends Thread {
         KeyMap<Widget> km = new KeyMap<>();
         for(String s : KeyMap.range("a-z")){
             Widget w = () -> {
-                command.append(s);
+                line.append(s);
                 return true;
             };
             km.bind(w, s);
         }
         for(String s : KeyMap.range("0-9")){
             Widget w = () -> {
-                command.append(s);
+                line.append(s);
                 return true;
             };
             km.bind(w, s);
         }
-        Widget clearcommandw = () -> {
-            command.delete(0, command.length());
+        Widget clearlinew = () -> {
+            line.delete(0, line.length());
             return true;
         };
-        Widget insert_spacew = () -> {
-            command.append(" ");
+        Widget inserspacw = () -> {
+            line.append(" ");
             return true;
         };
         Widget backspacew = () -> {
-            if(command.length()==0) return true;
-            command.deleteCharAt(command.length()-1);
+            if(line.length()==0) return true;
+            line.deleteCharAt(line.length()-1);
             return true;
         };
-        km.bind(insert_spacew, " ");
+        Widget finallinew = () -> {
+            if(line.length()==0) return true;
+            this.input = line.toString();
+            line.delete(0, line.length());
+            return true;
+        };
+        km.bind(inserspacw, " ");
         km.bind(backspacew, KeyMap.del());
         km.bind(backspacew, KeyMap.key(terminal, Capability.key_backspace));
-        /*FIXME*/ km.bind(clearcommandw, KeyMap.esc());
-        km.bind(clearcommandw, "\r");
+        km.bind(finallinew, KeyMap.esc());
+        km.bind(clearlinew, "\r");
         return km;
     }
 
     public void print(String string, int row, int scol){
+        if(!legal) return;
         this.terminal.puts(Capability.cursor_address, row, scol);
         this.terminal.writer().print(string);
         this.terminal.writer().flush();
     }
 
+    public void printCentered(Collection<String> lines ){
+        int firstrow = (this.size.getRows()-lines.size())/2;
+        for(String line : lines){
+            this.print(line, firstrow, (this.size.getColumns()-line.length())/2);
+            firstrow++;
+        }
+    }
+
     public void puts(Capability capability, Object... params){
+        if(!legal) return;
         terminal.puts(Capability.clear_screen);
         terminal.flush();
     }
+
+    private void cleanUp(Attributes a){
+        puts(Capability.clear_screen);
+        terminal.setAttributes(a);
+    }
+
+    private void showSmallScreen(Size s){
+        AttributedString str0 = new AttributedStringBuilder().style(AttributedStyle.BOLD.foreground(AttributedStyle.RED)).append("         WARNING!!         ").toAttributedString();
+        AttributedString str1 = new AttributedStringBuilder().style(AttributedStyle.BOLD.foreground(AttributedStyle.RED)).append("Terminal size is too small!").toAttributedString();
+        AttributedString str2 = new AttributedStringBuilder().style(AttributedStyle.BOLD.foreground(AttributedStyle.RED)).append("  Must be 128x32 minimum!").toAttributedString();
+        AttributedString str3 = new AttributedStringBuilder().style(AttributedStyle.BOLD.foreground(AttributedStyle.RED)).append("     Current one is "+s.getColumns()+"x"+s.getRows()+"!").toAttributedString();
+        
+        puts(Capability.clear_screen);
+        int r = s.getRows()/2;
+        int c = (s.getColumns()-str1.length())/2;
+        print(str0.toAnsi(), r-1, c);
+        print(str1.toAnsi(), r, c);
+        print(str2.toAnsi(), r+1, c);
+        print(str3.toAnsi(), r+2, c);
+    }
+
+
+    // private void clearBase(){
+    //     if(!legal) return;
+    //     for(int i = 0; i<30;i++){
+    //         this.terminal.puts(Capability.cursor_address, i, 0);
+    //         this.terminal.puts(Capability.clr_eol);
+    //     }
+    //     print(bottom_line, 30, 0);
+    //     this.terminal.puts(Capability.cursor_address, 31, 0);
+    //     this.terminal.puts(Capability.clr_eol);
+    //     print(updateStatus().toAnsi(terminal), 31, 0);
+
+    // }
+
+    // private AttributedString updateStatus(){
+    //     return new AttributedStringBuilder()
+    //         .style(AttributedStyle.BOLD.foreground(AttributedStyle.GREEN))
+    //         .append(line)
+    //         .toAttributedString();
+    // }
 
 }
