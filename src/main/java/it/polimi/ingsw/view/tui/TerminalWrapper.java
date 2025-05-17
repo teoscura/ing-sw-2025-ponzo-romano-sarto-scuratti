@@ -121,8 +121,8 @@ public class TerminalWrapper {
         km.bind(inserspacw, " ");
         km.bind(backspacew, KeyMap.del());
         km.bind(backspacew, KeyMap.key(terminal, Capability.key_backspace));
-        km.bind(finallinew, KeyMap.esc());
-        km.bind(clearlinew, "\r");
+        km.bind(clearlinew, KeyMap.esc());
+        km.bind(finallinew, "\r");
         return km;
     }
 

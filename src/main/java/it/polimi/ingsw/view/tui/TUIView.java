@@ -38,14 +38,14 @@ public class TUIView implements ClientView {
 
     @Override
     public void show(TitleScreenState state) {
-        this.inputthread = new TitleScreenThread(state);
+        this.inputthread = new TitleScreenThread(this.terminal, state);
         this.inputthread.start();
     }
 
     @Override
     public void show(ConnectingState state) {
         this.inputthread.interrupt();
-        this.inputthread = new ConnectingThread(state);
+        this.inputthread = new ConnectingThread(this.terminal, state);
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'showConnectionScreen'");
     }

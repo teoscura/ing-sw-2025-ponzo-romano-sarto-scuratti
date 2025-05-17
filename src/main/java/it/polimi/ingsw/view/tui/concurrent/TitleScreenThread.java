@@ -2,6 +2,8 @@ package it.polimi.ingsw.view.tui.concurrent;
 
 import java.util.ArrayList;
 
+import org.jline.utils.InfoCmp.Capability;
+
 import it.polimi.ingsw.controller.client.state.TitleScreenState;
 import it.polimi.ingsw.view.tui.TerminalWrapper;
 
@@ -9,13 +11,13 @@ public class TitleScreenThread extends Thread {
 
     private final TerminalWrapper terminal;
     private final TitleScreenState state;
-    private final ArrayList<String> title;
+    private final ArrayList<String> screen;
 
     public TitleScreenThread(TerminalWrapper terminal, TitleScreenState state){
         if (terminal == null || state==null) throw new NullPointerException();
         this.terminal = terminal;
         this.state = state;
-        this.title = new ArrayList<>(){{
+        this.screen = new ArrayList<>(){{
             add(".·:\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\':·.");
             add(": :    ___      _                    _____                 _                  : :");
             add(": :   / _ \\__ _| | __ ___  ___   _  /__   \\_ __ _   _  ___| | _____ _ __ ___  : :");
@@ -25,6 +27,8 @@ public class TitleScreenThread extends Thread {
             add(": :                          |___/                                            : :");
             add("\'·:...........................................................................:·\'");
             add("");
+            add("");
+            add("");
             add("╭─────── Enter Username ───────╮");
             add("│                              │");
             add("╰──────────────────────────────╯");
@@ -32,18 +36,22 @@ public class TitleScreenThread extends Thread {
     }
 
     public void run(){
-        //Show title screen
         //Show username prompt,
         //Insert prompt when ready.
-        terminal.printCentered(title);
+        screen();
         while(!terminal.isAvailable()){
-            //Draw update
+            screen();
             terminal.readBinding().apply();
         }
         state.setUsername(terminal.takeInput());
     }
 
-    private void title(){
+    private void screen(){
+        terminal.puts(Capability.clear_screen);
+        String current_input = terminal.peekInput();
+        String shown = current_input.length() > 30 ? current_input.substring(current_input.length()-30) : String.format("%1$-30s", current_input);
+        this.screen.set(screen.size()-2,"│"+shown+"│");
+        terminal.printCentered(screen);
         //Ascii art and text box centered.
 
     }
