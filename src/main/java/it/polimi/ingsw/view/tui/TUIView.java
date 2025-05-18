@@ -47,8 +47,7 @@ public class TUIView implements ClientView {
         if(state == null) throw new UnsupportedOperationException();
         this.client_state = state;
         terminal.puts(Capability.clear_screen);
-        if(state.getLobbyList().size()==0) terminal.printCentered(List.of("No lobbies open yet!"));
-        else terminal.printCenteredCorner(ClientLobbyStatesFormatter.format(state));
+        ClientLobbyStatesFormatter.format(terminal, state);
     }
 
     @Override
@@ -56,8 +55,7 @@ public class TUIView implements ClientView {
         if(state == null) throw new UnsupportedOperationException();
         this.client_state = state;
         terminal.puts(Capability.clear_screen);
-        if(state.getUnfinishedList().size()==0) terminal.printCentered(List.of("No unfinished lobbies available!"));
-        else terminal.printCentered(ClientLobbyStatesFormatter.format(state));
+        ClientLobbyStatesFormatter.format(terminal, state);
     }
 
     @Override

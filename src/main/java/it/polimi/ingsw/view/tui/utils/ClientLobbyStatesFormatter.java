@@ -7,12 +7,15 @@ import org.jline.utils.AttributedStyle;
 
 import it.polimi.ingsw.model.client.state.ClientLobbySelectState;
 import it.polimi.ingsw.model.client.state.ClientSetupState;
+import it.polimi.ingsw.view.tui.TerminalWrapper;
 import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.client.ClientGameListEntry;
 
 public class ClientLobbyStatesFormatter {
     
-    public static ArrayList<String> format(ClientLobbySelectState state){
+    private static String bottom_line = "━Typed line:━";
+
+    public static void format(TerminalWrapper terminal, ClientLobbySelectState state){
         ArrayList<String> res = new ArrayList<>();
         res.add("Available lobbies:");
         for(ClientGameListEntry e : state.getLobbyList()){
@@ -33,10 +36,12 @@ public class ClientLobbyStatesFormatter {
             }
             res.add(t.toAttributedString().toAnsi());
         }
-        return res;
+        terminal.printCentered(res);
+        terminal.print(bottom_line+"━".repeat(128-bottom_line.length()), 30, 0);
+        terminal.print(terminal.peekInput(),31,0);
     }
 
-    public static ArrayList<String> format(ClientSetupState state){
+    public static void format(TerminalWrapper terminal, ClientSetupState state){
         ArrayList<String> res = new ArrayList<>();
         res.add("Unfinished games:");
         for(ClientGameListEntry e : state.getUnfinishedList()){
@@ -56,7 +61,9 @@ public class ClientLobbyStatesFormatter {
             }
             res.add(t.toAttributedString().toAnsi());
         }
-        return res;
+        terminal.printCentered(res);
+        terminal.print(bottom_line+"━".repeat(128-bottom_line.length()), 30, 0);
+        terminal.print(terminal.peekInput(),31,0);
     }
 
 }
