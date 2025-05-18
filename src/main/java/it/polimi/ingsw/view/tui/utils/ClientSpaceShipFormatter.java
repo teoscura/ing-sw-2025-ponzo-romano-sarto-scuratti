@@ -182,7 +182,29 @@ public class ClientSpaceShipFormatter {
         return username.substring(0, trimsize)+"... - "+color.toString();
     }
 
-
+    private ArrayList<String> getHelpCorner(){
+        ArrayList<String> res = new ArrayList<>();
+        res.add("┌"+"─".repeat(30)+"┐");
+        res.add("│"+" ".repeat(30)+"│");
+        res.add("│"+" ".repeat(30)+"│");
+        res.add("│"+"  For more help type 'help'!  "+"│");
+        res.add("│"+" ".repeat(30)+"│");
+        res.add("│"+" ".repeat(30)+"│");
+        res.add("└"+"─".repeat(30)+"┘");
+        return res;
+    }
+    
+    private ArrayList<String> getEmptyShip(){
+        ArrayList<String> res = new ArrayList<>();
+        res.add("┌"+"─".repeat(30)+"┐");
+        res.add("│"+" ".repeat(30)+"│");
+        res.add("│"+" ".repeat(30)+"│");
+        res.add("│"+"            No Ship.          "+"│");
+        res.add("│"+" ".repeat(30)+"│");
+        res.add("│"+" ".repeat(30)+"│");
+        res.add("└"+"─".repeat(30)+"┘");
+        return res;
+    }
 
 }
 
