@@ -267,6 +267,8 @@ public class MainServerController extends Thread implements VirtualServer {
 			}
 			Logger.getInstance().print(LoggerLevel.LOBSL, "Client: '" + client.getUsername() + "' disconnected.");
 			this.all_listeners.remove(client.getUsername());
+			this.stp_listeners.remove(client.getUsername());
+			this.lob_listeners.remove(client.getUsername());
 			if (id == -1) {
 				this.lob_listeners.remove(client.getUsername());
 			}

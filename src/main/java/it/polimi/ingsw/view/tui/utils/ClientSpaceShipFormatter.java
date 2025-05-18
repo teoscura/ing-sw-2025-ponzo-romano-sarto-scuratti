@@ -182,7 +182,7 @@ public class ClientSpaceShipFormatter {
         return username.substring(0, trimsize)+"... - "+color.toString();
     }
 
-    private ArrayList<String> getHelpCorner(){
+    static public ArrayList<String> getHelpCorner(){
         ArrayList<String> res = new ArrayList<>();
         res.add("┌"+"─".repeat(30)+"┐");
         res.add("│"+" ".repeat(30)+"│");
@@ -194,7 +194,7 @@ public class ClientSpaceShipFormatter {
         return res;
     }
     
-    private ArrayList<String> getEmptyShip(){
+    static public ArrayList<String> getEmptyShip(){
         ArrayList<String> res = new ArrayList<>();
         res.add("┌"+"─".repeat(30)+"┐");
         res.add("│"+" ".repeat(30)+"│");

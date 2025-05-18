@@ -1,23 +1,14 @@
 package it.polimi.ingsw.view.tui;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
-import org.jline.utils.AttributedString;
 import org.jline.utils.InfoCmp.Capability;
 
 import it.polimi.ingsw.controller.client.state.*;
 import it.polimi.ingsw.message.server.ServerMessage;
-import it.polimi.ingsw.model.GameModeType;
-import it.polimi.ingsw.model.client.card.*;
 import it.polimi.ingsw.model.client.state.*;
-import it.polimi.ingsw.model.components.BaseComponent;
-import it.polimi.ingsw.model.components.ComponentFactory;
-import it.polimi.ingsw.model.components.enums.ComponentRotation;
-import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
-import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.view.ClientView;
 import it.polimi.ingsw.view.tui.concurrent.*;
 import it.polimi.ingsw.view.tui.utils.*;
@@ -26,6 +17,8 @@ public class TUIView implements ClientView {
 
     private final TerminalWrapper terminal;
     private final Object input_lock;
+    private PlayerColor selected_color;
+    private ClientState client_state;
     private ServerMessage input;
     private Thread inputthread;
     private ConnectedState state;
@@ -52,56 +45,59 @@ public class TUIView implements ClientView {
     @Override
     public void show(ClientLobbySelectState state) {
         if(state == null) throw new UnsupportedOperationException();
+        this.client_state = state;
         terminal.puts(Capability.clear_screen);
         if(state.getLobbyList().size()==0) terminal.printCentered(List.of("No lobbies open yet!"));
-        else terminal.printCentered(ClientLobbyStatesFormatter.format(state));
-        terminal.updateStatus();
+        else terminal.printCenteredCorner(ClientLobbyStatesFormatter.format(state));
     }
 
     @Override
     public void show(ClientSetupState state) {
         if(state == null) throw new UnsupportedOperationException();
+        this.client_state = state;
         terminal.puts(Capability.clear_screen);
         if(state.getUnfinishedList().size()==0) terminal.printCentered(List.of("No unfinished lobbies available!"));
         else terminal.printCentered(ClientLobbyStatesFormatter.format(state));
-        terminal.updateStatus();
     }
 
     @Override
     public void show(ClientWaitingRoomState state) {
         if(state == null) throw new UnsupportedOperationException();
+        this.client_state = state;
+        this.selected_color = state.getPlayerList().stream().filter(s->s.getUsername().equals(this.state.getUsername())).map(p->p.getColor()).findFirst().orElse(PlayerColor.NONE);
         terminal.puts(Capability.clear_screen);
         terminal.printCentered(ClientWaitingStateFormatter.format(state));
-        terminal.updateStatus();
     }
 
     @Override
     public void show(ClientConstructionState state) {
         if(state == null) throw new UnsupportedOperationException();
+        this.client_state = state;
         terminal.puts(Capability.clear_screen);
-        //terminal.printCentered(ClientConstructionStateFormatter.format(state));
-        terminal.updateStatus();
+        // terminal.printCenteredCorner(ClientConstructionStateFormatter.format(selected_color, state));
     }
 
     @Override
     public void show(ClientVerifyState state) {
         if(state == null) throw new UnsupportedOperationException();
+        this.client_state = state;
         terminal.puts(Capability.clear_screen);
-        //terminal.printCentered(ClientVerifyStateFormatter.format(state));
-        terminal.updateStatus();
+        // terminal.printCenteredCorner(ClientVerifyStateFormatter.format(selected_color, state));
     }
 
     @Override
     public void show(ClientVoyageState state) {
         if(state == null) throw new UnsupportedOperationException();
+        this.client_state = state;
         terminal.puts(Capability.clear_screen);
-        //terminal.printCentered(ClientVoyageStateFormatter.format(state));
-        terminal.updateStatus();
+        // terminal.printCenteredCorner(ClientVoyageStateFormatter.format(selected_color, state));
+        // terminal.updateStatus(ClientVoyageStateFormatter.getBottom(state));
     }
 
     @Override
     public void show(ClientEndgameState state) {
         if(state == null) throw new UnsupportedOperationException();
+        this.client_state = state;
         terminal.puts(Capability.clear_screen);
         //terminal.printCentered(ClientEndgameStateFormatter.format(state));
         terminal.resetStatus();
@@ -110,6 +106,28 @@ public class TUIView implements ClientView {
     @Override
     public void showTextMessage(String message) {
         if(state == null) throw new UnsupportedOperationException();
+    }
+
+    public ClientState getClientState(){
+        return this.client_state;
+    }
+
+    public void changeShip(String s){
+        switch(s){
+            case "red":
+                this.selected_color = PlayerColor.RED;
+                return;
+            case "blue":
+                this.selected_color = PlayerColor.BLUE;
+                return;
+            case "green":
+                this.selected_color = PlayerColor.GREEN;
+                return;
+            case "yellow":
+                this.selected_color = PlayerColor.YELLOW;
+                return;
+            default: return;
+        }
     }
 
     @Override
@@ -153,49 +171,7 @@ public class TUIView implements ClientView {
     public void disconnect(){
         this.inputthread.interrupt();
         this.state = null;
+        this.client_state = null;
     }
-    
-    private void testShow(){
-        ComponentFactory f1 = new ComponentFactory();
-        BaseComponent c;
-        Player player1 = new Player(GameModeType.TEST, "p1", PlayerColor.RED);
-		c = f1.getComponent(14);
-		c.rotate(ComponentRotation.U000);
-		player1.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 3, 3));
-		c = f1.getComponent(18);
-		c.rotate(ComponentRotation.U000);
-		player1.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 2, 2));
-		c = f1.getComponent(126);
-		c.rotate(ComponentRotation.U000);
-		player1.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 3, 1));
-		c = f1.getComponent(132);
-		c.rotate(ComponentRotation.U000);
-		player1.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 4, 2));
-		c = f1.getComponent(118);
-		c.rotate(ComponentRotation.U000);
-		player1.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 5, 2));
-
-        String name = "tiziobagongo2020";
-        // c.getClientComponent().showComponent(ps);
-        // p.setCenter(ps.getComponentStringSmall());
-        // var cl = p.getComponentStringsLarge();
-        terminal.puts(Capability.clear_screen);
-        var a = ClientSpaceShipFormatter.formatLarge(player1.getSpaceShip().getClientSpaceShip(), name, PlayerColor.GREEN, 69, 100).stream().map(b->b.toString()).toList();
-        terminal.print(a, 0, 0);
-        var c1 = ClientSpaceShipFormatter.formatSmall(player1.getSpaceShip().getClientSpaceShip(), name, PlayerColor.GREEN, 69, 100).stream().map(b->b.toString()).toList();
-        terminal.print(c1, 0, 46);
-        terminal.print(c1, 8, 46);
-        terminal.print(c1, 16, 46);
-
-        var tmp = List.of(PlayerColor.YELLOW);
-        ClientCardState cs = new ClientNewCenterCardStateDecorator(new ClientBaseCardState("WOW",1), new ArrayList<>(tmp));
-        ClientCardStateFormatter cvsf = new ClientCardStateFormatter();
-        cs.showCardState(cvsf);
-        terminal.print(cvsf.getFormatted().toAnsi(), 31, 0);
-        // terminal.print(cl.get(1), 1, 0);
-        // terminal.print(cl.get(2), 2, 0);
-    }
-
-    
 
 }
