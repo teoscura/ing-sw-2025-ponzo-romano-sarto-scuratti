@@ -54,8 +54,7 @@ public class TUIView implements ClientView {
         if(state == null) throw new UnsupportedOperationException();
         terminal.puts(Capability.clear_screen);
         if(state.getLobbyList().size()==0) terminal.printCentered(List.of("No lobbies open yet!"));
-        else terminal.print(ClientLobbyStatesFormatter.format(state), 0, 0);
-        terminal.updateStatusTopLines(new ArrayList<AttributedString>());
+        else terminal.printCentered(ClientLobbyStatesFormatter.format(state));
         terminal.updateStatus();
     }
 
@@ -64,41 +63,53 @@ public class TUIView implements ClientView {
         if(state == null) throw new UnsupportedOperationException();
         terminal.puts(Capability.clear_screen);
         if(state.getUnfinishedList().size()==0) terminal.printCentered(List.of("No unfinished lobbies available!"));
-        else terminal.print(ClientLobbyStatesFormatter.format(state), 0, 0);
-        terminal.updateStatusTopLines(new ArrayList<AttributedString>());
+        else terminal.printCentered(ClientLobbyStatesFormatter.format(state));
         terminal.updateStatus();
     }
 
     @Override
     public void show(ClientWaitingRoomState state) {
         if(state == null) throw new UnsupportedOperationException();
+        terminal.puts(Capability.clear_screen);
+        terminal.printCentered(ClientWaitingStateFormatter.format(state));
+        terminal.updateStatus();
     }
 
     @Override
     public void show(ClientConstructionState state) {
         if(state == null) throw new UnsupportedOperationException();
+        terminal.puts(Capability.clear_screen);
+        terminal.printCentered(ClientConstructionStateFormatter.format(state));
+        terminal.updateStatus();
     }
 
     @Override
     public void show(ClientVerifyState state) {
         if(state == null) throw new UnsupportedOperationException();
+        terminal.puts(Capability.clear_screen);
+        terminal.printCentered(ClientVerifyStateFormatter.format(state));
+        terminal.updateStatus();
     }
 
     @Override
     public void show(ClientVoyageState state) {
         if(state == null) throw new UnsupportedOperationException();
+        terminal.puts(Capability.clear_screen);
+        terminal.printCentered(ClientVoyageStateFormatter.format(state));
+        terminal.updateStatus();
     }
 
     @Override
     public void show(ClientEndgameState state) {
         if(state == null) throw new UnsupportedOperationException();
-
+        terminal.puts(Capability.clear_screen);
+        terminal.printCentered(ClientEndgameStateFormatter.format(state));
+        terminal.resetStatus();
     }
 
     @Override
     public void showTextMessage(String message) {
         if(state == null) throw new UnsupportedOperationException();
-
     }
 
     @Override

@@ -57,7 +57,7 @@ public class NetworkServer extends Thread implements RMISkeletonProvider, Serial
 		Cleaner c = Cleaner.create();
 		//Rmi ports less than zero are not allowed in argument parsing at launch, but are used by tests to get around
 		//Certain JVM limitations, as only one rmi registry per JVM may be launched, breaking JUnit tests that don't 
-		//rely on Network functionality.
+		//rely on Network functionality, but may call the singleton MainServerController, which launches this class.
 		if (rmiport >= 0) {
 			try {
 				registry = LocateRegistry.createRegistry(this.rmiport);

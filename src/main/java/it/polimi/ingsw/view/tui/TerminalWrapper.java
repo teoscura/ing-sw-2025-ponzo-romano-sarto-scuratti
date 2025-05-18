@@ -5,6 +5,7 @@ import java.lang.ref.Cleaner;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.jline.keymap.BindingReader;
 import org.jline.keymap.KeyMap;
@@ -169,6 +170,11 @@ public class TerminalWrapper {
         }
     }
 
+    public void printCenteredCorner(List<String> lines){
+        int firstrow = (this.size.getRows()-lines.size())/2;
+        this.print(lines, firstrow, (this.size.getColumns()-lines.get(0).length())/2);
+    }
+
     public void updateCommandBar(){
         ArrayList<AttributedString> lines = new ArrayList<>();
         lines.add(new AttributedStringBuilder().style(AttributedStyle.BOLD.foreground(AttributedStyle.YELLOW)).append("━Typed line:━"+"━".repeat(this.size.getColumns()-"━Typed line:━".length())).toAttributedString());
@@ -230,7 +236,12 @@ public class TerminalWrapper {
             .style(AttributedStyle.BOLD.foreground(AttributedStyle.GREEN))
             .append(line.toString())
             .toAttributedString());
-        status.update(newstatus);
+        status.update(newstatus, true);
+        status.redraw();
+    }
+
+    public void resetStatus(){
+        this.status.reset();
     }
 
 }

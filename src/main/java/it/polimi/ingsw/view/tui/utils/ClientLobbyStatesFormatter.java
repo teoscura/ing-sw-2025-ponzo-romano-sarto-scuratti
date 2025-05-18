@@ -14,6 +14,7 @@ public class ClientLobbyStatesFormatter {
     
     public static ArrayList<String> format(ClientLobbySelectState state){
         ArrayList<String> res = new ArrayList<>();
+        res.add("Available lobbies:");
         for(ClientGameListEntry e : state.getLobbyList()){
             boolean full = e.getCount().getNumber() == e.getPlayers().size();
             AttributedStringBuilder t = new AttributedStringBuilder()
@@ -37,6 +38,7 @@ public class ClientLobbyStatesFormatter {
 
     public static ArrayList<String> format(ClientSetupState state){
         ArrayList<String> res = new ArrayList<>();
+        res.add("Unfinished games:");
         for(ClientGameListEntry e : state.getUnfinishedList()){
             AttributedStringBuilder t = new AttributedStringBuilder()
                 .style(AttributedStyle.BOLD.foreground(AttributedStyle.BLUE))

@@ -88,7 +88,7 @@ public class ResumeWaitingState extends GameState {
 			if (c.getOrder() < 0) continue;
 			tmp.add(new ClientWaitingPlayer(tmp2.get(c.getOrder()), this.awaiting.get(tmp2.get(c.getOrder())) == null ? PlayerColor.NONE : c));
 		}
-		return new ClientWaitingRoomState(type, tmp);
+		return new ClientWaitingRoomState(type, count, tmp);
 	}
 
 	@Override

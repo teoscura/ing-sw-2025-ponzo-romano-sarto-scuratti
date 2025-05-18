@@ -2,7 +2,6 @@ package it.polimi.ingsw.controller.server.connections;
 
 import it.polimi.ingsw.controller.server.MainServerController;
 import it.polimi.ingsw.message.client.ClientMessage;
-import it.polimi.ingsw.message.server.ServerDisconnectMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.message.server.UsernameSetupMessage;
 import it.polimi.ingsw.utils.Logger;
@@ -65,11 +64,13 @@ public class SocketClient extends Thread implements ClientConnection {
 			setup = (UsernameSetupMessage) in.readObject();
 		} catch (ClassNotFoundException e) {
 			Logger.getInstance().print(LoggerLevel.NOTIF, "Failed to read class object from tcp socket: " + socket.getInetAddress());
+			return;
 		} catch (IOException e) {
 			Logger.getInstance().print(LoggerLevel.ERROR, "Failed to read object from: " + socket.getInetAddress() + ", closing socket.");
 			MainServerController.getInstance().disconnect(controller.getDescriptor(this.username));
 		} catch (ClassCastException e) {
 			Logger.getInstance().print(LoggerLevel.NOTIF, "Received non-setup message from tcp socket: " + socket.getInetAddress());
+			return;
 		}
 		this.username = setup.getUsername();
 		controller.setupSocketListener(this, this.username);
@@ -82,6 +83,7 @@ public class SocketClient extends Thread implements ClientConnection {
 			message = (ServerMessage) in.readObject();
 		} catch (ClassNotFoundException e) {
 			Logger.getInstance().print(LoggerLevel.NOTIF, "Failed to read class object from tcp socket: " + socket.getInetAddress());
+			return;
 		} catch (IOException e) {
 			Logger.getInstance().print(LoggerLevel.ERROR, "Failed to read object from: " + socket.getInetAddress() + ", closing socket.");
 			MainServerController.getInstance().disconnect(controller.getDescriptor(this.username));
