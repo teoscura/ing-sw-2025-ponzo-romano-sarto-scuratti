@@ -1,8 +1,7 @@
 package it.polimi.ingsw.view;
 
-import it.polimi.ingsw.controller.client.state.ConnectingState;
-import it.polimi.ingsw.controller.client.state.TitleScreenState;
-import it.polimi.ingsw.model.client.card.*;
+import it.polimi.ingsw.controller.client.state.*;
+import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.client.state.*;
 
 public interface ClientView {
@@ -25,9 +24,20 @@ public interface ClientView {
 
 	void show(ClientEndgameState state);
 
-	//Card states
+	//Client input
+	void connect(ConnectedState state);
+
+	void disconnect();
+
+	Object getLock();
+
+	boolean inputAvailable();
+
+	void setInput(ServerMessage input);
+
+	ServerMessage getInput();
 
 	//Misc and debug
 	void showTextMessage(String message);
-
+	
 }

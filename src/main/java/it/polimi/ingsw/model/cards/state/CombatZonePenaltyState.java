@@ -21,7 +21,7 @@ import it.polimi.ingsw.utils.Logger;
 import it.polimi.ingsw.utils.LoggerLevel;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.List;
 
 class CombatZonePenaltyState extends CardState {
 
@@ -114,7 +114,7 @@ class CombatZonePenaltyState extends CardState {
 								card_id),
 							this.sections.getFirst(),
 							3 - this.sections.size()),
-						new ArrayList<>(Collections.singletonList(this.target.getColor()))),
+						new ArrayList<>(List.of(this.target.getColor()))),
 					this.shots.getProjectiles().getFirst());
 			default:
 				return new ClientCombatZoneIndexCardStateDecorator(

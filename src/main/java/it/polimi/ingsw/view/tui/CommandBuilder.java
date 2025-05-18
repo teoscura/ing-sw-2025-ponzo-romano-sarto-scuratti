@@ -1,4 +1,4 @@
-package it.polimi.ingsw.view.commandbuilder;
+package it.polimi.ingsw.view.tui;
 
 import it.polimi.ingsw.message.server.*;
 import it.polimi.ingsw.model.GameModeType;

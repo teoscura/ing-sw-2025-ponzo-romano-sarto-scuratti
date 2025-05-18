@@ -69,7 +69,7 @@ public class ConnectingState extends ClientControllerState {
 			}
 			break;
 			default:
-				throw new UnsupportedOperationException();
+				this.connection = null;
 		}
 		if (connection == null) this.controller.reset();
 		else this.transition();

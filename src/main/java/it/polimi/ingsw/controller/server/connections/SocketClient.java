@@ -2,6 +2,7 @@ package it.polimi.ingsw.controller.server.connections;
 
 import it.polimi.ingsw.controller.server.MainServerController;
 import it.polimi.ingsw.message.client.ClientMessage;
+import it.polimi.ingsw.message.server.ServerDisconnectMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.message.server.UsernameSetupMessage;
 import it.polimi.ingsw.utils.Logger;
@@ -58,6 +59,7 @@ public class SocketClient extends Thread implements ClientConnection {
 	}
 
 	private void readSetup() {
+		MainServerController controller = MainServerController.getInstance();
 		UsernameSetupMessage setup = null;
 		try {
 			setup = (UsernameSetupMessage) in.readObject();
@@ -65,12 +67,12 @@ public class SocketClient extends Thread implements ClientConnection {
 			Logger.getInstance().print(LoggerLevel.NOTIF, "Failed to read class object from tcp socket: " + socket.getInetAddress());
 		} catch (IOException e) {
 			Logger.getInstance().print(LoggerLevel.ERROR, "Failed to read object from: " + socket.getInetAddress() + ", closing socket.");
-			this.close();
+			MainServerController.getInstance().disconnect(controller.getDescriptor(this.username));
 		} catch (ClassCastException e) {
 			Logger.getInstance().print(LoggerLevel.NOTIF, "Received non-setup message from tcp socket: " + socket.getInetAddress());
 		}
 		this.username = setup.getUsername();
-		MainServerController.getInstance().setupSocketListener(this, this.username);
+		controller.setupSocketListener(this, this.username);
 	}
 
 	private void read() {
@@ -82,7 +84,8 @@ public class SocketClient extends Thread implements ClientConnection {
 			Logger.getInstance().print(LoggerLevel.NOTIF, "Failed to read class object from tcp socket: " + socket.getInetAddress());
 		} catch (IOException e) {
 			Logger.getInstance().print(LoggerLevel.ERROR, "Failed to read object from: " + socket.getInetAddress() + ", closing socket.");
-			this.close();
+			MainServerController.getInstance().disconnect(controller.getDescriptor(this.username));
+			return;
 		}
 		message.setDescriptor(controller.getDescriptor(this.username));
 		controller.receiveMessage(message);

@@ -274,7 +274,6 @@ public class MainServerController extends Thread implements VirtualServer {
 		try {
 			client.getConnection().close();
 		} catch (IOException e) {
-			e.printStackTrace();
 			Logger.getInstance().print(LoggerLevel.DEBUG, "Client: '" + client.getUsername() + "' connection closed.");
 		}
 		if (id == -1) return;
@@ -475,15 +474,25 @@ public class MainServerController extends Thread implements VirtualServer {
 				this.stp_listeners.remove(client.getUsername());
 				this.lob_listeners.put(client.getUsername(), client);
 			}
+			this.sendMessage(client, new NotifyStateUpdateMessage(new ClientLobbySelectState(this.getLobbyList())));
 			return;
 		}
+		reset = false;
 		synchronized (saved_lock) {
 			Logger.getInstance().print(LoggerLevel.DEBUG, "Opening unfinished lobby [" + id + "].");
 			loaded = this.saved.get(id);
 			if (!loaded.getEntry().getPlayers().contains(client.getUsername())) {
 				Logger.getInstance().print(LoggerLevel.NOTIF, "Client: '" + client.getUsername() + "' attempted to resume a game, but he wasn't playing in it before!");
-				return;
+				reset = true;
 			}
+		}
+		if (reset) {
+			synchronized (listeners_lock) {
+				this.stp_listeners.remove(client.getUsername());
+				this.lob_listeners.put(client.getUsername(), client);
+			}
+			this.sendMessage(client, new NotifyStateUpdateMessage(new ClientLobbySelectState(this.getLobbyList())));
+			return;
 		}
 		this.updateUnfinishedList();
 		Logger.getInstance().print(LoggerLevel.LOBSL, "Client: '" + client.getUsername() + "' opened a new lobby from unfinished: [Type: " + loaded.getState().getType() + " | Size: " + loaded.getState().getCount() + "].");

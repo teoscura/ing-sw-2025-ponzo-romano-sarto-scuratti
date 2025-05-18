@@ -78,7 +78,7 @@ public class NetworkServer extends Thread implements RMISkeletonProvider, Serial
 		try {
 			this.server = new ServerSocket();
 			this.server.bind(new InetSocketAddress(this.ip, this.tcpport));
-			Logger.getInstance().print(LoggerLevel.SERVR, "Started server on: '" + ip + ":" + this.server.getLocalPort() + "'...");
+			Logger.getInstance().print(LoggerLevel.SERVR, "Set up TCP on address: '" + ip + ":" + this.server.getLocalPort() + "'...");
 			c.register(this, this.TCPCleanup());
 		} catch (IOException e) {
 			Logger.getInstance().print(LoggerLevel.ERROR, "Couldn't start server on the specified address and port, terminating.");

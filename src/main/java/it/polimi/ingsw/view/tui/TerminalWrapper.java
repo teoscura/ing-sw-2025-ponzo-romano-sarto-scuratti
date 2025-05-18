@@ -5,7 +5,6 @@ import java.lang.ref.Cleaner;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import org.jline.keymap.BindingReader;
 import org.jline.keymap.KeyMap;
@@ -32,17 +31,22 @@ public class TerminalWrapper {
     private boolean legal;
     private StringBuffer line;
     private String input;
+    private ArrayList<AttributedString> status_info;
     
-    private static String bottom_line = "━Typed line:━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━";
+    private String bottom_line = "━Typed line:━";
 
     public TerminalWrapper() throws IOException{
         Cleaner c = Cleaner.create();
         this.line = new StringBuffer();
+        this.status_info = new ArrayList<>();
         this.terminal = TerminalBuilder.builder().name("Galaxy Truckers")
             .system(true)
             .streams(System.in, System.out)
             .encoding(Charset.forName("UTF-8"))
             .build();
+        
+
+
         Attributes a = this.terminal.enterRawMode();
         c.register(this, ()->cleanUp(a));
 
@@ -109,6 +113,18 @@ public class TerminalWrapper {
             line.append(" ");
             return true;
         };
+        Widget inserdot = () -> {
+            line.append(".");
+            return true;
+        };
+        Widget inserdash = () -> {
+            line.append("-");
+            return true;
+        };
+        Widget inserunderscore = () -> {
+            line.append("_");
+            return true;
+        };
         Widget backspacew = () -> {
             if(line.length()==0) return true;
             line.deleteCharAt(line.length()-1);
@@ -120,6 +136,9 @@ public class TerminalWrapper {
             line.delete(0, line.length());
             return true;
         };
+        km.bind(inserdot, ".");
+        km.bind(inserdash, "-");
+        km.bind(inserunderscore, "_");
         km.bind(inserspacw, " ");
         km.bind(backspacew, KeyMap.del());
         km.bind(backspacew, KeyMap.key(terminal, Capability.key_backspace));
@@ -197,11 +216,21 @@ public class TerminalWrapper {
 
     // }
 
-    // private AttributedString updateStatus(){
-    //     return new AttributedStringBuilder()
-    //         .style(AttributedStyle.BOLD.foreground(AttributedStyle.GREEN))
-    //         .append(line)
-    //         .toAttributedString();
-    // }
+    public void updateStatusTopLines(Collection<AttributedString> extra_lines){
+        this.status_info = new ArrayList<>(extra_lines);
+    }
+
+    public void updateStatus(){
+        ArrayList<AttributedString> newstatus = new ArrayList<>(status_info);
+        newstatus.add(new AttributedStringBuilder()
+            .style(AttributedStyle.BOLD.foreground(AttributedStyle.YELLOW))
+            .append(bottom_line + "━".repeat(size.getColumns()-bottom_line.length()))
+            .toAttributedString());
+        newstatus.add(new AttributedStringBuilder()
+            .style(AttributedStyle.BOLD.foreground(AttributedStyle.GREEN))
+            .append(line.toString())
+            .toAttributedString());
+        status.update(newstatus);
+    }
 
 }

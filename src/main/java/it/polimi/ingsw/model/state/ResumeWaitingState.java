@@ -134,7 +134,7 @@ public class ResumeWaitingState extends GameState {
 
 	@Override
 	public ClientGameListEntry getOngoingEntry(int id) {
-		return new ClientGameListEntry(type, this.toString(), awaiting.keySet().stream().toList(), id);
+		return new ClientGameListEntry(type, count, this.toString(), awaiting.keySet().stream().toList(), id);
 	}
 
 }
