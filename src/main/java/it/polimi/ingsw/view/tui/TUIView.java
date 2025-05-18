@@ -79,7 +79,7 @@ public class TUIView implements ClientView {
     public void show(ClientConstructionState state) {
         if(state == null) throw new UnsupportedOperationException();
         terminal.puts(Capability.clear_screen);
-        terminal.printCentered(ClientConstructionStateFormatter.format(state));
+        //terminal.printCentered(ClientConstructionStateFormatter.format(state));
         terminal.updateStatus();
     }
 
@@ -87,7 +87,7 @@ public class TUIView implements ClientView {
     public void show(ClientVerifyState state) {
         if(state == null) throw new UnsupportedOperationException();
         terminal.puts(Capability.clear_screen);
-        terminal.printCentered(ClientVerifyStateFormatter.format(state));
+        //terminal.printCentered(ClientVerifyStateFormatter.format(state));
         terminal.updateStatus();
     }
 
@@ -95,7 +95,7 @@ public class TUIView implements ClientView {
     public void show(ClientVoyageState state) {
         if(state == null) throw new UnsupportedOperationException();
         terminal.puts(Capability.clear_screen);
-        terminal.printCentered(ClientVoyageStateFormatter.format(state));
+        //terminal.printCentered(ClientVoyageStateFormatter.format(state));
         terminal.updateStatus();
     }
 
@@ -103,7 +103,7 @@ public class TUIView implements ClientView {
     public void show(ClientEndgameState state) {
         if(state == null) throw new UnsupportedOperationException();
         terminal.puts(Capability.clear_screen);
-        terminal.printCentered(ClientEndgameStateFormatter.format(state));
+        //terminal.printCentered(ClientEndgameStateFormatter.format(state));
         terminal.resetStatus();
     }
 
