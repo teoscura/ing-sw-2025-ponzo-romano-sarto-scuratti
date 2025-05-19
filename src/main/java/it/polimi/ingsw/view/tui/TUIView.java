@@ -26,6 +26,7 @@ import it.polimi.ingsw.model.client.card.ClientBaseCardState;
 import it.polimi.ingsw.model.client.card.ClientCardState;
 import it.polimi.ingsw.model.client.card.ClientMeteoriteCardStateDecorator;
 import it.polimi.ingsw.model.client.card.ClientNewCenterCardStateDecorator;
+import it.polimi.ingsw.model.client.player.ClientEndgamePlayer;
 import it.polimi.ingsw.model.client.player.ClientVoyagePlayer;
 import it.polimi.ingsw.model.client.state.*;
 import it.polimi.ingsw.model.components.BaseComponent;
@@ -73,7 +74,7 @@ public class TUIView implements ClientView {
         if(state == null) throw new UnsupportedOperationException();
         this.client_state = state;
         terminal.puts(Capability.clear_screen);
-        testShow();
+        testShowEndscreen();
         // this.client_state = state;
         // terminal.puts(Capability.clear_screen);
         // ClientLobbyStatesFormatter.format(terminal, state);
@@ -199,7 +200,7 @@ public class TUIView implements ClientView {
         this.client_state = null;
     }
 
-    private void testShow(){
+    private void testShowVoyage(){
         LevelTwoCardFactory f2 = new LevelTwoCardFactory();
         ArrayList<ClientVoyagePlayer> players = new ArrayList<>();
 
@@ -243,6 +244,16 @@ public class TUIView implements ClientView {
 				new Projectile(ProjectileDirection.U090, ProjectileDimension.BIG, 4));
         ClientVoyageState s = new ClientVoyageState(GameModeType.TEST, players, st);
         ClientVoyageStateFormatter.format(terminal, s, PlayerColor.RED);
+    }
+
+    private void testShowEndscreen(){
+        ArrayList<ClientEndgamePlayer> players = new ArrayList<>();
+
+        players.add(new ClientEndgamePlayer("bingus", PlayerColor.RED, 11, 12, new int[]{2,1,0,10,0}, 5));
+        players.add(new ClientEndgamePlayer("sbingus", PlayerColor.BLUE, 12, 14, new int[]{1,2,1,4,0}, 10));
+        players.add(new ClientEndgamePlayer("sbongus", PlayerColor.GREEN, -1, 0,new int[]{0,1,1,2,4}, 4));
+        ClientEndgameState cs = new ClientEndgameState(players);
+        ClientEndingStateFormatter.format(terminal, cs);
     }
 
 }
