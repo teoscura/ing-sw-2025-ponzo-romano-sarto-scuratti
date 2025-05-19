@@ -15,7 +15,14 @@ import it.polimi.ingsw.model.components.visitors.CabinVisitor;
 import it.polimi.ingsw.model.components.visitors.iVisitor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.player.SpaceShip;
-
+/**
+ * <h2>CabinComponent</h2>
+ * <p>
+ * This class models a <strong>crew cabin</strong> on a spaceship.
+ * Cabins are used to host human or alien crew members. Each cabin can hold a specific number of crew,
+ * depending on the alien type and its capacity.
+ * </p>
+ */
 public class CabinComponent extends BaseComponent {
 
 	private int crew_number = 2;
@@ -47,6 +54,16 @@ public class CabinComponent extends BaseComponent {
 		return this.crew_type;
 	}
 
+	/**
+	 * This method sets the crew in the SpaceShip
+	 * @param ship {@link SpaceShip} to which you want set the crew.
+	 * @param new_crew the number of crewmates you want to set.
+	 * @param type the type of aliens you want to set.
+	 * @throws NegativeArgumentException if the crew size is zero or negative.
+	 * @throws IllegalArgumentException if {@link AlienType} is a collector and not a single alien type.
+	 * @throws ArgumentTooBigException if the crew size exceeds {@link AlienType}'s max capacity.
+	 * @throws UnsupportedAlienCabinException if the crew type inserted is incompatible with the type in cabin.
+	 */
 	public void setCrew(SpaceShip ship, int new_crew, AlienType type) {
 		if (new_crew < 0) throw new NegativeArgumentException("Crew size can't be negative");
 		if (type.getArraypos() < 0)
@@ -66,12 +83,20 @@ public class CabinComponent extends BaseComponent {
 		ship.updateShip();
 	}
 
+	/**
+	 * This adds the Cabin Component's coordinates to the {@link SpaceShip}
+	 * @param ship  {@link SpaceShip} to which you want to add the cabin component
+	 */
 	@Override
 	public void onCreation(SpaceShip ship, ShipCoords coords) {
 		this.coords = coords;
 		ship.addCabinCoords(this.coords);
 	}
 
+	/**
+	 * This removes the Cabin Component's coordinates from the {@link SpaceShip}
+	 * @param ship  {@link SpaceShip} to which you want to remove the cabin component
+	 */
 	@Override
 	public void onDelete(SpaceShip ship) {
 		ship.delCabinCoords(this.coords);
