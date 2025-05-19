@@ -1,46 +1,13 @@
 package it.polimi.ingsw.view.tui;
 
 import java.io.IOException;
-import java.time.Duration;
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import org.jline.utils.InfoCmp.Capability;
 
 import it.polimi.ingsw.controller.client.state.*;
-import it.polimi.ingsw.controller.server.ClientDescriptor;
 import it.polimi.ingsw.message.server.ServerMessage;
-import it.polimi.ingsw.model.GameModeType;
-import it.polimi.ingsw.model.ModelInstance;
-import it.polimi.ingsw.model.PlayerCount;
-import it.polimi.ingsw.model.board.Planche;
-import it.polimi.ingsw.model.board.TestFlightCards;
-import it.polimi.ingsw.model.cards.LevelTwoCardFactory;
-import it.polimi.ingsw.model.cards.state.PiratesAnnounceState;
-import it.polimi.ingsw.model.cards.utils.Projectile;
-import it.polimi.ingsw.model.cards.utils.ProjectileDimension;
-import it.polimi.ingsw.model.cards.utils.ProjectileDirection;
-import it.polimi.ingsw.model.cards.visitors.CrewRemoveVisitor;
-import it.polimi.ingsw.model.client.card.ClientAwaitConfirmCardStateDecorator;
-import it.polimi.ingsw.model.client.card.ClientBaseCardState;
-import it.polimi.ingsw.model.client.card.ClientCardState;
-import it.polimi.ingsw.model.client.card.ClientMeteoriteCardStateDecorator;
-import it.polimi.ingsw.model.client.card.ClientNewCenterCardStateDecorator;
-import it.polimi.ingsw.model.client.player.ClientConstructionPlayer;
-import it.polimi.ingsw.model.client.player.ClientEndgamePlayer;
-import it.polimi.ingsw.model.client.player.ClientVerifyPlayer;
-import it.polimi.ingsw.model.client.player.ClientVoyagePlayer;
-import it.polimi.ingsw.model.client.player.ClientWaitingPlayer;
 import it.polimi.ingsw.model.client.state.*;
-import it.polimi.ingsw.model.components.BaseComponent;
-import it.polimi.ingsw.model.components.ComponentFactory;
-import it.polimi.ingsw.model.components.enums.ComponentRotation;
-import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
-import it.polimi.ingsw.model.player.ShipCoords;
-import it.polimi.ingsw.model.state.VoyageState;
 import it.polimi.ingsw.view.ClientView;
 import it.polimi.ingsw.view.tui.concurrent.*;
 import it.polimi.ingsw.view.tui.formatters.*;
