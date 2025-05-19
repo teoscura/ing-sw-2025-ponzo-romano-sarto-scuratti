@@ -15,6 +15,14 @@ import it.polimi.ingsw.model.components.visitors.iVisitor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.player.SpaceShip;
 
+/**
+ * <h2>EngineComponent</h2>
+ * <p>
+ * This class represents an <strong>engine</strong> component in a {@link SpaceShip}.
+ * Engines provide propulsion and allow the ship to move forward on the game board.
+ * They can be of different types: either always active (non-powerable) or requiring battery power (powerable).
+ * </p>
+ */
 public class EngineComponent extends BaseComponent {
 
 	private final int max_power;
@@ -44,6 +52,10 @@ public class EngineComponent extends BaseComponent {
 		this.powerable = type.getPowerable();
 	}
 
+	/**Verify that there isn't a component under the Engine Component
+	 * @param ship  {@link SpaceShip}
+	 * @return {@code true} if the cell below is empty, {@code false} otherwise
+	 */
 	@Override
 	public boolean verify(SpaceShip ship) {
 		if (this.getRotation() != ComponentRotation.U000 || ship.getComponent(this.coords.down()) != ship.getEmpty())
@@ -56,6 +68,12 @@ public class EngineComponent extends BaseComponent {
 		v.visit(this);
 	}
 
+	/**
+	 * Turn on the engine component
+	 *
+	 * @throws AlreadyPoweredException if the engine is already powered
+	 * @throws UnpowerableException if the engine is unpowerable
+	 */
 	public void turnOn() {
 		if (this.powered) throw new AlreadyPoweredException();
 		if (!this.powerable) throw new UnpowerableException();
@@ -83,12 +101,20 @@ public class EngineComponent extends BaseComponent {
 		return true;
 	} //redundant
 
+	/**
+	 * This adds the Engine Component's coordinates to the {@link SpaceShip}
+	 * @param ship  {@link SpaceShip} to which you want to add the Engine component
+	 */
 	@Override
 	public void onCreation(SpaceShip ship, ShipCoords coords) {
 		this.coords = coords;
 		if (powerable) ship.addPowerableCoords(this.coords);
 	}
 
+	/**
+	 * This removes the Engine Component's coordinates from the {@link SpaceShip}
+	 * @param ship  {@link SpaceShip} to which you want to remove the Engine component
+	 */
 	@Override
 	public void onDelete(SpaceShip ship) {
 		if (powerable) ship.delPowerableCoords(this.coords);
