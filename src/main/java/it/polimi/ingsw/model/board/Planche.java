@@ -8,6 +8,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
+/**
+ * The planche class handles the movement of the player on the board.
+ * Contains a HashMap that uses player color as a key, and the total steps taken by that player as a value.
+ */
 public class Planche implements iPlanche {
 
 	private final HashMap<Player, Integer> planche;
@@ -23,12 +27,22 @@ public class Planche implements iPlanche {
 		}
 	}
 
+	/**
+	 * Returns the current position of the player
+	 *
+	 * @param p The Player
+	 */
 	@Override
 	public int getPlayerPosition(Player p) {
 		if (!this.planche.containsKey(p)) return -1;
 		return this.planche.get(p);
 	}
 
+	/**
+	 * Given a certain number of steps, finds if there are any players at the corrisponding cell on the board
+	 *
+	 * @param position
+	 */
 	@Override
 	public Player getPlayerAt(int position) {
 		int cell = position % this.length;
@@ -38,6 +52,14 @@ public class Planche implements iPlanche {
 		return null;
 	}
 
+	/**
+	 * either moves the player forward or backwards by a number of steps equal to rel_change,
+	 * if a player is already present on a cell, moves one more step forward of backwards
+	 *
+	 * @param state The Current State
+	 * @param p The Player
+	 * @param rel_change
+	 */
 	@Override
 	public void movePlayer(VoyageState state, Player p, int rel_change) {
 		if (!this.planche.containsKey(p))
