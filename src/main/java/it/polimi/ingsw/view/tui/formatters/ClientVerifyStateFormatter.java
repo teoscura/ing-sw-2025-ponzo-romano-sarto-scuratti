@@ -2,6 +2,10 @@ package it.polimi.ingsw.view.tui.formatters;
 
 import java.util.ArrayList;
 
+import org.jline.utils.AttributedString;
+import org.jline.utils.AttributedStringBuilder;
+import org.jline.utils.AttributedStyle;
+
 import it.polimi.ingsw.model.client.player.ClientVerifyPlayer;
 import it.polimi.ingsw.model.client.state.ClientVerifyState;
 import it.polimi.ingsw.model.player.PlayerColor;
@@ -36,9 +40,43 @@ public class ClientVerifyStateFormatter {
         }
         terminal.print(ClientSpaceShipFormatter.getHelpCorner(), 11, 94);
 
-        //XXX Status row of whos missing.
+        terminal.print(getMissingLine(state).toAnsi(), 29, 0);
         terminal.print(bottom_line+"━".repeat(128-bottom_line.length()), 30, 0);
         terminal.print(terminal.peekInput(),31,0);
+    }
+
+    static private AttributedString getMissingLine(ClientVerifyState state){
+        AttributedStringBuilder res = new AttributedStringBuilder();
+        boolean ongoing = true;
+        res.style(AttributedStyle.BOLD.foreground(AttributedStyle.CYAN))
+                .append("| Current finishing order: ");
+        ArrayList<ClientVerifyPlayer> list = new ArrayList<>(state.getPlayerList());
+        list.stream().sorted((p1,p2)->Integer.compare(p1.getOrder(), p2.getOrder()));
+        for(ClientVerifyPlayer p : list){
+            if(!p.isFinished()) continue;
+            ongoing = false;
+            res.style(AttributedStyle.BOLD.foreground(getColor(p.getColor())))
+                .append(p.getColor().toString())
+                .style(AttributedStyle.BOLD.foreground(AttributedStyle.CYAN))
+                .append(" | ");
+        }
+        if(ongoing) res.append("none yet.");
+        return res.toAttributedString();
+    }
+
+    static private int getColor(PlayerColor color){
+        switch(color){
+            case BLUE:
+                return AttributedStyle.BLUE;
+            case GREEN:
+                return AttributedStyle.GREEN;
+           case RED:
+                return AttributedStyle.RED;
+            case YELLOW:
+                return AttributedStyle.YELLOW;
+            default:
+                return AttributedStyle.WHITE;
+        }
     }
 
 }

@@ -12,7 +12,7 @@ public class ClientWaitingStateFormatter {
     public static void format(TerminalWrapper terminal, ClientWaitingRoomState state){
         ArrayList<String> res = new ArrayList<>();
         res.add("Waiting Room");
-        res.add("Game type: "+state.getType()+" size: "+state.getPlayerList().size());
+        res.add("Game type: "+state.getType()+" | Size: "+state.getCount());
 
         for(var e : state.getPlayerList()){
             res.add(e.getColor()+": "+e.getUsername());

@@ -102,7 +102,6 @@ public class VerifyState extends GameState {
 			tmp.add(new ClientVerifyPlayer(p.getUsername(),
 					p.getColor(),
 					p.getSpaceShip().getClientSpaceShip().getVerifyShip(p.getSpaceShip().bulkVerify()),
-					p.getSpaceShip().bulkVerify(),
 					this.finish_order.contains(p),
 					this.finish_order.indexOf(p)));
 		}

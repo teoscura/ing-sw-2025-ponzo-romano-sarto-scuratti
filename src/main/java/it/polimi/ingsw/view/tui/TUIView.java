@@ -27,7 +27,9 @@ import it.polimi.ingsw.model.client.card.ClientCardState;
 import it.polimi.ingsw.model.client.card.ClientMeteoriteCardStateDecorator;
 import it.polimi.ingsw.model.client.card.ClientNewCenterCardStateDecorator;
 import it.polimi.ingsw.model.client.player.ClientEndgamePlayer;
+import it.polimi.ingsw.model.client.player.ClientVerifyPlayer;
 import it.polimi.ingsw.model.client.player.ClientVoyagePlayer;
+import it.polimi.ingsw.model.client.player.ClientWaitingPlayer;
 import it.polimi.ingsw.model.client.state.*;
 import it.polimi.ingsw.model.components.BaseComponent;
 import it.polimi.ingsw.model.components.ComponentFactory;
@@ -74,7 +76,7 @@ public class TUIView implements ClientView {
         if(state == null) throw new UnsupportedOperationException();
         this.client_state = state;
         terminal.puts(Capability.clear_screen);
-        testShowEndscreen();
+        testShowVerify();
         // this.client_state = state;
         // terminal.puts(Capability.clear_screen);
         // ClientLobbyStatesFormatter.format(terminal, state);
@@ -198,6 +200,70 @@ public class TUIView implements ClientView {
         this.inputthread.interrupt();
         this.state = null;
         this.client_state = null;
+    }
+
+    private void testShowWaiting(){
+        ArrayList<ClientWaitingPlayer> players = new ArrayList<>();
+
+        players.add(new ClientWaitingPlayer("bingus", PlayerColor.RED));
+        players.add(new ClientWaitingPlayer("sbingus", PlayerColor.BLUE));
+        players.add(new ClientWaitingPlayer("sbongus", PlayerColor.GREEN));
+        ClientWaitingRoomState cs = new ClientWaitingRoomState(GameModeType.LVL2, PlayerCount.FOUR, players);
+        ClientWaitingStateFormatter.format(terminal, cs);
+    }
+
+    private void testShowVerify(){
+        ArrayList<ClientVerifyPlayer> players = new ArrayList<>();
+
+        ComponentFactory f1 = new ComponentFactory();
+        ComponentFactory f2 = new ComponentFactory();
+
+        BaseComponent c;
+
+        //player stabile
+		Player player1 = new Player(GameModeType.LVL2, "player1", PlayerColor.RED);
+		c = f1.getComponent(41);
+		c.rotate(ComponentRotation.U000);
+		player1.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.LVL2, 3, 1));
+		c = f1.getComponent(79);
+		c.rotate(ComponentRotation.U000);
+		player1.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.LVL2, 3, 3));
+		c = f1.getComponent(26);
+		c.rotate(ComponentRotation.U180);
+		player1.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.LVL2, 2, 1));
+		c = f1.getComponent(25);
+		c.rotate(ComponentRotation.U000);
+		player1.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.LVL2, 2, 2));
+
+		//player ciambella
+		Player player2 = new Player(GameModeType.LVL2, "player2", PlayerColor.BLUE);
+		c = f2.getComponent(41);
+		c.rotate(ComponentRotation.U000);
+		player2.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.LVL2, 3, 1));
+		c = f2.getComponent(78);
+		c.rotate(ComponentRotation.U000);
+		player2.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.LVL2, 3, 3));
+		c = f2.getComponent(67);
+		c.rotate(ComponentRotation.U000);
+		player2.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.LVL2, 4, 1));
+		c = f2.getComponent(58);
+		c.rotate(ComponentRotation.U000);
+		player2.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.LVL2, 5, 1));
+		c = f2.getComponent(43);
+		c.rotate(ComponentRotation.U000);
+		player2.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.LVL2, 5, 2));
+		c = f2.getComponent(59);
+		c.rotate(ComponentRotation.U000);
+		player2.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.LVL2, 5, 3));
+		c = f2.getComponent(23);
+		c.rotate(ComponentRotation.U090);
+		player2.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.LVL2, 4, 3));
+
+        players.add(new ClientVerifyPlayer(player1.getUsername(), player1.getColor(), player1.getSpaceShip().getClientSpaceShip().getVerifyShip(player1.getSpaceShip().bulkVerify()), true, 0));
+        players.add(new ClientVerifyPlayer(player2.getUsername(), player2.getColor(), player2.getSpaceShip().getClientSpaceShip().getVerifyShip(player2.getSpaceShip().bulkVerify()), false, -1));
+        
+        ClientVerifyState cs = new ClientVerifyState(players);
+        ClientVerifyStateFormatter.format(terminal, cs, PlayerColor.GREEN);
     }
 
     private void testShowVoyage(){

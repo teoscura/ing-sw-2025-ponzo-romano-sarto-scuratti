@@ -205,7 +205,17 @@ public class ClientSpaceShipFormatter {
         res.add("┌"+"─".repeat(52)+"┐");
         res.add("│"+" ".repeat(52)+"│");
         res.add("│"+" ".repeat(52)+"│");
-        res.add("│"+" ".repeat(23)+"No Ship."+" ".repeat(23)+"│");
+        res.add("│"+" ".repeat(52)+"│");
+        res.add("│"+" ".repeat(52)+"│");
+        res.add("│"+" ".repeat(52)+"│");
+        res.add("│"+" ".repeat(52)+"│");
+        res.add("│"+" ".repeat(52)+"│");
+        res.add("│"+" ".repeat(22)+"No Ship."+" ".repeat(22)+"│");
+        res.add("│"+" ".repeat(52)+"│");
+        res.add("│"+" ".repeat(52)+"│");
+        res.add("│"+" ".repeat(52)+"│");
+        res.add("│"+" ".repeat(52)+"│");
+        res.add("│"+" ".repeat(52)+"│");
         res.add("│"+" ".repeat(52)+"│");
         res.add("│"+" ".repeat(52)+"│");
         res.add("└"+"─".repeat(52)+"┘");
