@@ -3,6 +3,8 @@ package it.polimi.ingsw.view.tui.formatters;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jline.utils.AttributedStringBuilder;
+
 import it.polimi.ingsw.model.client.player.ClientVoyagePlayer;
 import it.polimi.ingsw.model.client.state.ClientVoyageState;
 import it.polimi.ingsw.model.player.PlayerColor;
@@ -38,13 +40,14 @@ public class ClientVoyageStateFormatter {
         terminal.print(ClientSpaceShipFormatter.getHelpCorner(), 11, 94);
 
         terminal.print(printPlanche(state, color), 22, 4);
+    }
 
+    public static void formatStatus(TerminalWrapper terminal, ClientVoyageState state){
         ClientCardStateFormatter csf = new ClientCardStateFormatter();
         state.getCardState().showCardState(csf);
-
         terminal.print(csf.getFormatted().toAnsi(), 29, 0);
-        terminal.print(bottom_line+"━".repeat(128-bottom_line.length()), 30, 0);
-        terminal.print(terminal.peekInput(),31,0);
+        terminal.print(new AttributedStringBuilder().append(bottom_line+"━".repeat(128-bottom_line.length())).toAttributedString().toAnsi(), 30, 0);
+        terminal.setStatus(List.of(new AttributedStringBuilder().append(terminal.peekInput()).toAttributedString()));
     }
 
     static private List<String> printPlanche(ClientVoyageState state, PlayerColor color){

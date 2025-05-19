@@ -15,18 +15,28 @@ import it.polimi.ingsw.view.tui.formatters.*;
 public class TUIView implements ClientView {
 
     private final TerminalWrapper terminal;
+    private final Thread statusthread;
     private final Object input_lock;
     private final Object state_lock;
     private PlayerColor selected_color;
     private ClientState client_state;
+    private Runnable status_runnable;
     private ServerMessage input;
     private Thread inputthread;
+    
     private ConnectedState state;
 
     public TUIView() throws IOException {
         this.terminal = new TerminalWrapper();
         this.input_lock = new Object();
         this.state_lock = new Object();
+        this.statusthread = new StatusUpdateThread(this);
+        this.status_runnable = () -> {};
+    }
+
+    public void redraw(){
+        this.client_state.sendToView(this);
+        this.status_runnable.run();
     }
 
     @Override
@@ -46,12 +56,14 @@ public class TUIView implements ClientView {
     @Override
     public void show(ClientLobbySelectState state) {
         if(state == null) throw new UnsupportedOperationException();
+        this.status_runnable = () -> ClientLobbyStatesFormatter.formatStatus(terminal, state);
         ClientLobbyStatesFormatter.format(terminal, state);
     }
 
     @Override
     public void show(ClientSetupState state) {
         if(state == null) throw new UnsupportedOperationException();
+        this.status_runnable = () -> ClientLobbyStatesFormatter.formatStatus(terminal, state);
         ClientLobbyStatesFormatter.format(terminal, state);
     }
 
@@ -59,30 +71,38 @@ public class TUIView implements ClientView {
     public void show(ClientWaitingRoomState state) {
         if(state == null) throw new UnsupportedOperationException();
         this.selected_color = state.getPlayerList().stream().filter(s->s.getUsername().equals(this.state.getUsername())).map(p->p.getColor()).findFirst().orElse(PlayerColor.NONE);
+        this.status_runnable = () -> ClientWaitingStateFormatter.formatStatus(terminal, state);
         ClientWaitingStateFormatter.format(terminal, state);
     }
 
     @Override
     public void show(ClientConstructionState state) {
         if(state == null) throw new UnsupportedOperationException();
+        this.selected_color = state.getPlayerList().stream().filter(s->s.getUsername().equals(this.state.getUsername())).map(p->p.getColor()).findFirst().orElse(PlayerColor.NONE);
+        this.status_runnable = () -> ClientConstructionStateFormatter.formatStatus(terminal, state);
         ClientConstructionStateFormatter.format(terminal, state, selected_color);
     }
 
     @Override
     public void show(ClientVerifyState state) {
         if(state == null) throw new UnsupportedOperationException();
+        this.selected_color = state.getPlayerList().stream().filter(s->s.getUsername().equals(this.state.getUsername())).map(p->p.getColor()).findFirst().orElse(PlayerColor.NONE);
+        this.status_runnable = () -> ClientVerifyStateFormatter.formatStatus(terminal, state);
         ClientVerifyStateFormatter.format(terminal, state, selected_color);
     }
 
     @Override
     public void show(ClientVoyageState state) {
         if(state == null) throw new UnsupportedOperationException();
+        this.selected_color = state.getPlayerList().stream().filter(s->s.getUsername().equals(this.state.getUsername())).map(p->p.getColor()).findFirst().orElse(PlayerColor.NONE);
+        this.status_runnable = () -> ClientVoyageStateFormatter.formatStatus(terminal, state);
         ClientVoyageStateFormatter.format(terminal, state, selected_color);
     }
 
     @Override
     public void show(ClientEndgameState state) {
         if(state == null) throw new UnsupportedOperationException();
+        this.status_runnable = () -> ClientEndingStateFormatter.formatStatus(terminal, state);
         ClientEndingStateFormatter.format(terminal, state);
     }
 
@@ -90,6 +110,10 @@ public class TUIView implements ClientView {
     public void showTextMessage(String message) {
         if(state == null) throw new UnsupportedOperationException();
         ClientTextMessageFormatter.format(terminal, message);
+    }
+
+    public Runnable getStatusRunnable(){
+        return this.status_runnable;
     }
 
     public ClientState getClientState(){
@@ -163,13 +187,15 @@ public class TUIView implements ClientView {
     @Override
     public void connect(ConnectedState state){
         this.inputthread.interrupt();
-        this.inputthread = new ConnectedThread(terminal, this);
+        this.inputthread = new ConnectedInputThread(terminal, this);
         this.inputthread.start();
+        this.statusthread.start();;
         this.state = state;
     }
 
     @Override
     public void disconnect(){
+        this.statusthread.interrupt();
         this.inputthread.interrupt();
         this.state = null;
         this.client_state = null;

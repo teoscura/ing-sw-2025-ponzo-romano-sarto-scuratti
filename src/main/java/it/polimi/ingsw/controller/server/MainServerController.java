@@ -282,7 +282,7 @@ public class MainServerController extends Thread implements VirtualServer {
 		synchronized (lobbies_lock) {
 			var l = this.lobbies.get(id);
 			if (l == null) return;
-			l.disconnect(client);
+			l.disconnectProcedure(client);
 		}
 	}
 

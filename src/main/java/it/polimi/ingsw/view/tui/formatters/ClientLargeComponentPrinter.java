@@ -9,6 +9,7 @@ import org.jline.utils.AttributedStyle;
 import it.polimi.ingsw.model.client.components.*;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ConnectorType;
+import it.polimi.ingsw.model.components.enums.ShieldType;
 
 public class ClientLargeComponentPrinter implements ClientComponentVisitor {
 
@@ -184,12 +185,14 @@ public class ClientLargeComponentPrinter implements ClientComponentVisitor {
 
     @Override
     public void show(ClientShieldComponentDecorator component) {
-        this.component.get(0).get(2).delete(0, this.component.get(0).get(2).length());
-        String s = new AttributedStringBuilder()
-            .style(AttributedStyle.BOLD.foreground(AttributedStyle.GREEN))
-            .append(component.getType().toString())
-            .style(AttributedStyle.DEFAULT).toAttributedString().toAnsi();
-        this.component.get(0).get(2).append(s);
+        if(component.getType()!=ShieldType.NONE){
+            this.component.get(0).get(2).delete(0, this.component.get(0).get(2).length());
+            String s = new AttributedStringBuilder()
+                .style(AttributedStyle.BOLD.foreground(AttributedStyle.GREEN))
+                .append(component.getType().toString())
+                .style(AttributedStyle.DEFAULT).toAttributedString().toAnsi();
+            this.component.get(0).get(2).append(s);
+        } 
     }
 
     @Override
@@ -223,7 +226,7 @@ public class ClientLargeComponentPrinter implements ClientComponentVisitor {
     public List<String> getForbidden(){
         List<String> l = new ArrayList<>();
         for(int i = 0; i<3; i++){
-            l.add("＃＃＃");
+            l.add("🮆🮆🮆🮆🮆🮆");
         }
         return l;
     }
@@ -231,13 +234,13 @@ public class ClientLargeComponentPrinter implements ClientComponentVisitor {
     private String getConnectorSymbol(ConnectorType type, ComponentRotation rotation){
         switch(type){
             case DOUBLE_CONNECTOR:
-                return "２";
+                return "DC";
             case EMPTY:
                 return rotation.getShift()%2==0? "──": rotation.getShift()==3 ? "│ " : " │" ;
             case SINGLE_CONNECTOR:
-                return "１";
+                return "SC";
             case UNIVERSAL:
-                return "３";
+                return "UN";
             default:
                 return null;
         }

@@ -1,12 +1,12 @@
 package it.polimi.ingsw.view.tui.formatters;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.jline.utils.AttributedStringBuilder;
 
 import it.polimi.ingsw.model.client.player.ClientEndgamePlayer;
 import it.polimi.ingsw.model.client.state.ClientEndgameState;
-
 import it.polimi.ingsw.view.tui.TerminalWrapper;
 
 public class ClientEndingStateFormatter {
@@ -33,9 +33,11 @@ public class ClientEndingStateFormatter {
             res.add(b.toAnsi());
         }
         terminal.printCentered(res);
+    }
 
-        terminal.print(bottom_line+"━".repeat(128-bottom_line.length()), 30, 0);
-        terminal.print(terminal.peekInput(),31,0);
+    public static void formatStatus(TerminalWrapper terminal, ClientEndgameState state){
+        terminal.print(new AttributedStringBuilder().append(bottom_line+"━".repeat(128-bottom_line.length())).toAttributedString().toAnsi(), 30, 0);
+        terminal.setStatus(List.of(new AttributedStringBuilder().append(terminal.peekInput()).toAttributedString()));
     }
 
 }

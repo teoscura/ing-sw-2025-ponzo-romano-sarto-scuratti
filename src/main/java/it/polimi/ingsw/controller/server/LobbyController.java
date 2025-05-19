@@ -171,7 +171,11 @@ public class LobbyController extends Thread implements VirtualServer {
 		}
 	}
 
-	public void disconnect(ClientDescriptor client) {
+	public void disconnect(ClientDescriptor client){
+		MainServerController.getInstance().disconnect(client);
+	}
+
+	public void disconnectProcedure(ClientDescriptor client) {
 		MainServerController s = MainServerController.getInstance();
 		synchronized (listeners_lock) {
 			if (!listeners.containsKey(client.getUsername())) {
@@ -189,6 +193,7 @@ public class LobbyController extends Thread implements VirtualServer {
 				return;
 			}
 			if (this.disconnected_usernames.size() >= this.model.getState().getCount().getNumber() - 1) {
+				Logger.getInstance().print(LoggerLevel.LOBCN, "Lobby ["+this.id+"] has only one player left, starting timer, if nobody joins, game's over!");
 				this.dsctimer = new Timer(true);
 				this.dsctimer.schedule(this.getEndMatchTask(this), 60000L);
 			}

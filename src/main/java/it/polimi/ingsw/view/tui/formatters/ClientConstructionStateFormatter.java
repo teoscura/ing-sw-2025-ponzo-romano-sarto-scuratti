@@ -40,17 +40,21 @@ public class ClientConstructionStateFormatter {
         }
         if(list.size()>0) {
             terminal.print(ClientSpaceShipFormatter.formatSmall(list.getFirst().getShip(), list.getFirst().getUsername(), list.getFirst().getColor(), 0, false), 3, 94);    
+            list.removeFirst();
         } else {
             terminal.print(ClientSpaceShipFormatter.getEmptyShipSmall(), 3, 94);
         }
-        terminal.print(ClientSpaceShipFormatter.getHelpCorner(), 11, 94);
-
+        if(color!=PlayerColor.NONE || list.isEmpty())terminal.print(ClientSpaceShipFormatter.getHelpCorner(), 11, 94);
+        else terminal.print(ClientSpaceShipFormatter.formatSmall(list.getFirst().getShip(), list.getFirst().getUsername(), list.getFirst().getColor(), 0, false), 3, 94);    
         terminal.print(getUserComponents(state, color), 19, 6);
 
         terminal.print(getDiscardedBoard(state), 19, 24);
+    }
 
+    public static void formatStatus(TerminalWrapper terminal, ClientConstructionState state){
         terminal.print(getBoardLine(state).toAnsi(), 29, 0);
-        terminal.print(bottom_line+"━".repeat(128-bottom_line.length()), 30, 0);
+        terminal.print(new AttributedStringBuilder().append(bottom_line+"━".repeat(128-bottom_line.length())).toAttributedString().toAnsi(), 30, 0);
+        terminal.setStatus(List.of(new AttributedStringBuilder().append(terminal.peekInput()).toAttributedString()));
     }
 
     static private AttributedString getBoardLine(ClientConstructionState state){
@@ -67,12 +71,14 @@ public class ClientConstructionStateFormatter {
             for(int i = 0; i<state.getTogglesLeft(); i++){
                 res.append("[..] ");
             }
-            Duration elapsed = Duration.between(state.getLastToggle(), Instant.now());
-            Duration time_left = Duration.ofMillis(state.getHourglassDuration().toMillis()-elapsed.toMillis());
-            boolean has_expired = elapsed.compareTo(state.getHourglassDuration()) > 0;
-            String time = has_expired ? "Hourglass expired." : formatTime(time_left)+"s";
-            res.style(AttributedStyle.BOLD.foreground(has_expired ? AttributedStyle.RED : AttributedStyle.GREEN))
-                .append("Time left: "+time+" | ");
+            if(state.getLastToggle()!=null){
+                Duration elapsed = Duration.between(state.getLastToggle(), Instant.now());
+                Duration time_left = Duration.ofMillis(state.getHourglassDuration().toMillis()-elapsed.toMillis());
+                boolean has_expired = elapsed.compareTo(state.getHourglassDuration()) > 0;
+                String time = has_expired ? "Hourglass expired." : formatTime(time_left)+"s";
+                res.style(AttributedStyle.BOLD.foreground(has_expired ? AttributedStyle.RED : AttributedStyle.GREEN))
+                    .append("Time left: "+time+" | ");
+            }
         }
         res.style(AttributedStyle.BOLD.foreground(AttributedStyle.CYAN))
                 .append("Still building: ");
@@ -134,6 +140,7 @@ public class ClientConstructionStateFormatter {
                 res.get(k+1).append("│");
             }
             res.get(4).append("["+String.format("%04d",components.getFirst())+"]┼");
+            components.removeFirst();
         } else {
             var a = pr.getForbidden();
             for(int k = 0; k<3; k++){
@@ -142,7 +149,6 @@ public class ClientConstructionStateFormatter {
             }
             res.get(4).append("──────┼");
         }
-        components.removeFirst();
         if(components.size()>0){
             ClientComponent c = new ComponentFactory().getComponent(components.getFirst()).getClientComponent();
             pr.reset();
@@ -155,6 +161,7 @@ public class ClientConstructionStateFormatter {
                 res.get(k+1).append("│");
             }
             res.get(4).append("["+String.format("%04d",components.getFirst())+"]┤");
+            components.removeFirst();
         } else {
             var a = pr.getForbidden();
             for(int k = 0; k<3; k++){
@@ -163,7 +170,6 @@ public class ClientConstructionStateFormatter {
             }
             res.get(4).append("──────┤");
         }
-        components.removeFirst();
         res.get(5).append("  ^^  │");
         res.get(6).append(" curr │");
         res.get(7).append("      │");

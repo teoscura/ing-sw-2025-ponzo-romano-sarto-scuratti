@@ -108,20 +108,39 @@ public abstract class ConstructionState extends GameState {
 	}
 
 	@Override
-	public void putComponent(Player p, ShipCoords coords, ComponentRotation rotation) throws ForbiddenCallException {
+	public void putComponent(Player p, int id, ShipCoords coords, ComponentRotation rotation) throws ForbiddenCallException {
 		if (!this.building.contains(p)) {
 			Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' attempted to place a component, but their ship is already confirmed!");
 			this.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' attempted to place a component, but their ship is already confirmed!"));
 			return;
 		}
-		if (this.current_tile.get(p) == null) {
-			Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' attempted to place a component, but they dont have a current one!");
-			this.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' attempted to place a component, but they dont have a current one!"));
+		boolean ispresent = false;
+		if(this.current_tile.get(p)!=null){
+			ispresent = ispresent || this.current_tile.get(p).getID() == id;
+		}
+		ispresent = ispresent || this.hoarded_tile.get(p).stream().anyMatch(t -> t.getID() == id);
+		if (!ispresent) {
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' attempted to place a component they don't own!");
+			this.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' attempted to place a component they don't own!"));
 			return;
 		}
+		//Is it the current tile
+		BaseComponent c = null;
+		if(this.current_tile.get(p)!=null && this.current_tile.get(p).getID()==id){
+			c = this.current_tile.get(p);
+			this.current_tile.put(p, null);
+		} else {
+			c = this.hoarded_tile.get(p).stream().filter(cm->cm.getID()==id).findFirst().orElse(null);
+		}
+		if(c==null){
+			Logger.getInstance().print(LoggerLevel.ERROR, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' attempted to place a component, they passed the check, but component is null!");
+			return;
+		} else {
+			this.hoarded_tile.get(p).remove(c);
+		}
 		try {
-			this.current_tile.get(p).rotate(rotation);
-			p.getSpaceShip().addComponent(this.current_tile.get(p), coords);
+			c.rotate(rotation);
+			p.getSpaceShip().addComponent(c, new ShipCoords(type, coords.x, coords.y));
 			Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' placed a component in " + coords);
 			this.current_tile.put(p, null);
 		} catch (OutOfBoundsException e) {

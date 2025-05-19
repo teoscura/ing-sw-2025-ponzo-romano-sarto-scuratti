@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view.tui.formatters;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.jline.utils.AttributedString;
 import org.jline.utils.AttributedStringBuilder;
@@ -39,11 +40,12 @@ public class ClientVerifyStateFormatter {
             terminal.print(ClientSpaceShipFormatter.getEmptyShipSmall(), 3, 94);
         }
         terminal.print(ClientSpaceShipFormatter.getHelpCorner(), 11, 94);
+    }
 
-
+    public static void formatStatus(TerminalWrapper terminal, ClientVerifyState state){
         terminal.print(getMissingLine(state).toAnsi(), 29, 0);
-        terminal.print(bottom_line+"━".repeat(128-bottom_line.length()), 30, 0);
-        terminal.print(terminal.peekInput(),31,0);
+        terminal.print(new AttributedStringBuilder().append(bottom_line+"━".repeat(128-bottom_line.length())).toAttributedString().toAnsi(), 30, 0);
+        terminal.setStatus(List.of(new AttributedStringBuilder().append(terminal.peekInput()).toAttributedString()));
     }
 
     static private AttributedString getMissingLine(ClientVerifyState state){

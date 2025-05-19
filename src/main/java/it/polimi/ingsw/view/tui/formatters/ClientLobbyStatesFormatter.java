@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view.tui.formatters;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.jline.utils.AttributedStringBuilder;
 import org.jline.utils.AttributedStyle;
@@ -37,9 +38,11 @@ public class ClientLobbyStatesFormatter {
             res.add(t.toAttributedString().toAnsi());
         }
         terminal.printCentered(res);
+    }
 
-        terminal.print(bottom_line+"━".repeat(128-bottom_line.length()), 30, 0);
-        terminal.print(terminal.peekInput(),31,0);
+    public static void formatStatus(TerminalWrapper terminal, ClientLobbySelectState state){        
+        terminal.print(new AttributedStringBuilder().append(bottom_line+"━".repeat(128-bottom_line.length())).toAttributedString().toAnsi(), 30, 0);
+        terminal.setStatus(List.of(new AttributedStringBuilder().append(terminal.peekInput()).toAttributedString()));
     }
 
     public static void format(TerminalWrapper terminal, ClientSetupState state){
@@ -63,9 +66,11 @@ public class ClientLobbyStatesFormatter {
             res.add(t.toAttributedString().toAnsi());
         }
         terminal.printCentered(res);
+    }
 
-        terminal.print(bottom_line+"━".repeat(128-bottom_line.length()), 30, 0);
-        terminal.print(terminal.peekInput(),31,0);
+    public static void formatStatus(TerminalWrapper terminal, ClientSetupState state){
+        terminal.print(new AttributedStringBuilder().append(bottom_line+"━".repeat(128-bottom_line.length())).toAttributedString().toAnsi(), 30, 0);
+        terminal.setStatus(List.of(new AttributedStringBuilder().append(terminal.peekInput()).toAttributedString()));
     }
 
 }

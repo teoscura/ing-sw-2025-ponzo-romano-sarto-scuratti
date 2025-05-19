@@ -2,7 +2,7 @@ package it.polimi.ingsw.view.tui;
 
 import java.io.IOException;
 import java.lang.ref.Cleaner;
-import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -17,6 +17,7 @@ import org.jline.utils.AttributedString;
 import org.jline.utils.AttributedStringBuilder;
 import org.jline.utils.AttributedStyle;
 import org.jline.utils.Display;
+import org.jline.utils.Status;
 import org.jline.utils.InfoCmp.Capability;
 
 public class TerminalWrapper {
@@ -24,45 +25,59 @@ public class TerminalWrapper {
     private final Terminal terminal;
     private final KeyMap<Widget> keymap;
     private final BindingReader reader;
+    private final Status status;
+    private final Attributes previous;
 
     private Size size;
-    private boolean legal;
     private StringBuffer line;
     private String input;
 
     public TerminalWrapper() throws IOException{
-        Cleaner c = Cleaner.create();
-        this.line = new StringBuffer();
-        this.terminal = TerminalBuilder.builder().name("Galaxy Truckers")
+        this.terminal = TerminalBuilder.builder()
             .system(true)
-            .streams(System.in, System.out)
-            .encoding(Charset.forName("UTF-8"))
             .build();
             
-        Attributes a = this.terminal.enterRawMode();
-        c.register(this, ()->cleanUp(a));
-
-        this.reader = new BindingReader(terminal.reader());
+        
+        previous = this.terminal.enterRawMode();
+        this.terminal.puts(Capability.enter_ca_mode);
+        this.terminal.puts(Capability.clear_screen);
+        this.terminal.puts(Capability.cursor_invisible);
+        Cleaner c = Cleaner.create();
+        c.register(this, ()->cleanUp(previous));
+        this.status = Status.getStatus(terminal);
+        if(status==null){
+            System.out.println("This terminal type doesn't support the status line, terminating.");
+            System.exit(-1);
+        }
+        this.line = new StringBuffer();
         this.keymap = setupBindings();
+        this.reader = new BindingReader(terminal.reader());
+        setupHooks();
+    }
+
+    private void setupHooks(){
         this.size = terminal.getSize();
-        if(size.getRows()>=32&&size.getColumns()>=128) legal = true;
-        terminal.puts(Capability.cursor_invisible);
+        if(size.getRows()<32||size.getColumns()<128) showSmallScreen(size);
 
         terminal.handle(Terminal.Signal.WINCH, signal -> {
             Display display = new Display(terminal, true);
             this.size = terminal.getSize();
             if(size.getRows()<32 || size.getColumns()<128){
+                this.size = terminal.getSize();
                 showSmallScreen(size);
-                this.legal = false;
                 return;
             }
-            else display.resize(size.getRows(), size.getColumns());
-            legal = true;
-            //clearBase();
+            display.resize(size.getRows(), size.getColumns());
+            puts(Capability.clear_screen);
         });
 
+        //Makes the JVM close gracefully.
         terminal.handle(Terminal.Signal.INT, signal -> {
-            this.cleanUp(a);
+            this.cleanUp(previous);
+            System.exit(0);
+        });
+        terminal.handle(Terminal.Signal.QUIT, signal -> {
+            this.cleanUp(previous);
             System.exit(0);
         });
     }
@@ -150,7 +165,6 @@ public class TerminalWrapper {
     }
 
     public void print(String string, int row, int scol){
-        if(!legal) return;
         this.terminal.puts(Capability.cursor_address, row, scol);
         this.terminal.writer().print(string);
         this.terminal.writer().flush();
@@ -177,8 +191,14 @@ public class TerminalWrapper {
     }
 
     public void puts(Capability capability, Object... params){
-        if(!legal) return;
-        terminal.puts(Capability.clear_screen);
+        terminal.puts(capability, params);
+        terminal.flush();
+    }
+
+    public void setStatus(List<AttributedString> lines){
+        status.update(lines);
+        terminal.flush();
+        status.redraw();
         terminal.flush();
     }
 
@@ -186,21 +206,21 @@ public class TerminalWrapper {
         puts(Capability.clear_screen);
         puts(Capability.cursor_visible);
         terminal.setAttributes(a);
+        try {
+            terminal.close();
+        } catch (IOException e) {
+        }
     }
 
     private void showSmallScreen(Size s){
-        AttributedString str0 = new AttributedStringBuilder().style(AttributedStyle.BOLD.foreground(AttributedStyle.RED)).append("         WARNING!!         ").toAttributedString();
-        AttributedString str1 = new AttributedStringBuilder().style(AttributedStyle.BOLD.foreground(AttributedStyle.RED)).append("Terminal size is too small!").toAttributedString();
-        AttributedString str2 = new AttributedStringBuilder().style(AttributedStyle.BOLD.foreground(AttributedStyle.RED)).append("  Must be 128x32 minimum!").toAttributedString();
-        AttributedString str3 = new AttributedStringBuilder().style(AttributedStyle.BOLD.foreground(AttributedStyle.RED)).append("     Current one is "+s.getColumns()+"x"+s.getRows()+"!").toAttributedString();
-        
+        ArrayList<AttributedString> res = new ArrayList<>();
+        res.add(new AttributedStringBuilder().style(AttributedStyle.BOLD.foreground(AttributedStyle.RED)).append("WARNING!!").toAttributedString());
+        res.add(new AttributedStringBuilder().style(AttributedStyle.BOLD.foreground(AttributedStyle.RED)).append("Terminal size is too small!").toAttributedString());
+        res.add(new AttributedStringBuilder().style(AttributedStyle.BOLD.foreground(AttributedStyle.RED)).append("Must be 128x32 minimum!").toAttributedString());
+        res.add(new AttributedStringBuilder().style(AttributedStyle.BOLD.foreground(AttributedStyle.RED)).append("Current one is "+s.getColumns()+"x"+s.getRows()+"!").toAttributedString());
+        res.add(new AttributedStringBuilder().style(AttributedStyle.BOLD.foreground(AttributedStyle.RED)).append("Press any key when resized.").toAttributedString());    
         puts(Capability.clear_screen);
-        int r = s.getRows()/2;
-        int c = (s.getColumns()-str1.length())/2;
-        print(str0.toAnsi(), r-1, c);
-        print(str1.toAnsi(), r, c);
-        print(str2.toAnsi(), r+1, c);
-        print(str3.toAnsi(), r+2, c);
+        printCentered(res.stream().map(as->as.toAnsi()).toList());
     }
 
 }

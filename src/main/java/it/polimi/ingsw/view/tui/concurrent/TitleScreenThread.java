@@ -2,7 +2,6 @@ package it.polimi.ingsw.view.tui.concurrent;
 
 import java.util.ArrayList;
 
-import org.jline.reader.Widget;
 import org.jline.utils.InfoCmp.Capability;
 
 import it.polimi.ingsw.controller.client.state.TitleScreenState;
@@ -37,13 +36,9 @@ public class TitleScreenThread extends Thread {
     }
 
     public void run(){
-        //Show username prompt,
-        //Insert prompt when ready.
-        screen();
         while(!terminal.isAvailable()){
             screen();
-            Widget s = terminal.readBinding();
-            if(s!=null) s.apply();
+            terminal.readBinding().apply();
         }
         state.setUsername(terminal.takeInput());
     }
@@ -54,8 +49,6 @@ public class TitleScreenThread extends Thread {
         String shown = current_input.length() > 30 ? current_input.substring(current_input.length()-30) : String.format("%1$-30s", current_input);
         this.screen.set(screen.size()-2,"│"+shown+"│");
         terminal.printCentered(screen);
-        //Ascii art and text box centered.
-
     }
 
 

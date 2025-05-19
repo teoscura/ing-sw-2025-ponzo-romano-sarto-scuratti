@@ -2,7 +2,6 @@ package it.polimi.ingsw.view.tui.concurrent;
 
 import java.util.ArrayList;
 
-import org.jline.reader.Widget;
 import org.jline.utils.InfoCmp.Capability;
 
 import it.polimi.ingsw.controller.client.connections.ConnectionType;
@@ -36,29 +35,23 @@ public class ConnectingThread extends Thread {
 
     @Override
     public void run(){
-        screen();
         while(!terminal.isAvailable()){
             screen();
-            Widget s = terminal.readBinding();
-            if(s!=null) s.apply();
+            terminal.readBinding().apply();
         }
         args.add(terminal.takeInput());
-        screen();
         while(!terminal.isAvailable()){
             screen();
-            Widget s = terminal.readBinding();
-            if(s!=null) s.apply();
+            terminal.readBinding().apply();
         }
         args.add(terminal.takeInput());
-        screen();
         while(!terminal.isAvailable()){
             screen();
-            Widget s = terminal.readBinding();
-            if(s!=null) s.apply();
+            terminal.readBinding().apply();
         }
         args.add(terminal.takeInput());
         if(!validate()) state.connect("", 0, ConnectionType.NONE);
-        else state.connect(args.get(0), Integer.parseInt(args.get(1)), args.get(2).equals("rmi") ? ConnectionType.RMI :args.get(2).equals("tcp") ? ConnectionType.SOCKET : null);
+        else state.connect(args.get(0), Integer.parseInt(args.get(1)), args.get(2).equals("rmi") ? ConnectionType.RMI :args.get(2).equals("tcp") ? ConnectionType.SOCKET : ConnectionType.NONE);
     }
 
     private void screen(){

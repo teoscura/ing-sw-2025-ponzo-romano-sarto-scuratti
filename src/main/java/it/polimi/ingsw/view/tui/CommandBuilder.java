@@ -12,6 +12,12 @@ import java.util.regex.Pattern;
 
 public class CommandBuilder {
 
+	private final TUIView view;
+
+	public CommandBuilder(TUIView view){
+		this.view = view;
+	}
+
 	public ServerMessage build(String command) {
 
 		ServerMessage mess = null;
@@ -79,13 +85,18 @@ public class CommandBuilder {
 				ShipmentType cargoType = ShipmentType.values()[4 - Integer.parseInt(parts[3])];
 				mess = new MoveCargoMessage(cargoTarget, cargoSource, cargoType);
 				break;
-			case "putcomponent":
-				valid = Pattern.matches("^putcomponent [0-9] [0-9] [0-3]$", command);
+			case "takecomponent":
+				valid = Pattern.matches("^takecomponent$", command);
 				if (!valid) break;
-				ShipCoords componentCoords = new ShipCoords(GameModeType.TEST, Integer.parseInt(parts[1]),
-						Integer.parseInt(parts[2]));
-				ComponentRotation componentRotation = ComponentRotation.values()[Integer.parseInt(parts[3])];
-				mess = new PutComponentMessage(componentCoords,
+				mess = new TakeComponentMessage();
+				break;
+			case "putcomponent":
+				valid = Pattern.matches("^putcomponent [0-9]+ [0-9] [0-9] [0-3]$", command);
+				if (!valid) break;
+				ShipCoords componentCoords = new ShipCoords(GameModeType.TEST, Integer.parseInt(parts[2]),
+						Integer.parseInt(parts[3]));
+				ComponentRotation componentRotation = ComponentRotation.values()[Integer.parseInt(parts[4])];
+				mess = new PutComponentMessage(Integer.parseInt(parts[1]), componentCoords,
 						componentRotation);
 				break;
 			case "removecomponent":
@@ -146,12 +157,28 @@ public class CommandBuilder {
 						Integer.parseInt(parts[4]));
 				mess = new TurnOnMessage(targetCoords, batteryCoords);
 				break;
+			case "giveup":
+				valid = Pattern.matches("^giveup$", command);
+				if (!valid) break;
+				mess = new PlayerGiveUpMessage();
+				break;
+			case "sendcontinue":
+				valid = Pattern.matches("^sendcontinue$", command);
+				if (!valid) break;
+				mess = new SendContinueMessage();
+				break;
+			case "togglehourglass":
+				valid = Pattern.matches("^togglehourglass$", command);
+				if (!valid) break;
+				mess = new SendContinueMessage();
+				break;
 			default:
-				System.out.println("Command not recognized: '" + command + "'");
+				view.showTextMessage("Command not valid");
 				break;
 		}
+
 		if (!valid) {
-			System.out.println("Command not valid");
+			view.showTextMessage("Command not valid");
 		}
 
 		return mess;

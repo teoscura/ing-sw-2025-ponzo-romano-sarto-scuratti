@@ -1,6 +1,9 @@
 package it.polimi.ingsw.view.tui.formatters;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import org.jline.utils.AttributedStringBuilder;
 
 import it.polimi.ingsw.model.client.state.ClientWaitingRoomState;
 import it.polimi.ingsw.view.tui.TerminalWrapper;
@@ -23,11 +26,11 @@ public class ClientWaitingStateFormatter {
             i--;
         }
         terminal.printCentered(res);
+    }
 
-        terminal.print(bottom_line+"━".repeat(128-bottom_line.length()), 30, 0);
-        String s = terminal.peekInput();
-        s = s.length()<128 ? s.concat(" ".repeat(128-s.length())) : s;
-        terminal.print(s,31,0);
+    public static void formatStatus(TerminalWrapper terminal, ClientWaitingRoomState state){
+        terminal.print(new AttributedStringBuilder().append(bottom_line+"━".repeat(128-bottom_line.length())).toAttributedString().toAnsi(), 30, 0);
+        terminal.setStatus(List.of(new AttributedStringBuilder().append(terminal.peekInput()).toAttributedString()));
     }
 
 }
