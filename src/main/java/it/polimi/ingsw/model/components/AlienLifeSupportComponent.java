@@ -18,6 +18,14 @@ import it.polimi.ingsw.model.player.SpaceShip;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * <h2>AlienLifeSupportComponent</h2>
+ * <p>
+ * This class represents a life support system specifically designed to host alien crew members.
+ * It is a special type of ship component that allows <b>AlienType</b> aliens (e.g., Brown or Purple)
+ * to inhabit cabins connected to it.
+ * </p>
+ */
 public class AlienLifeSupportComponent extends BaseComponent {
 
 	private AlienType type = AlienType.BROWN;
@@ -54,11 +62,19 @@ public class AlienLifeSupportComponent extends BaseComponent {
 		return type;
 	}
 
+	/**
+	 * This adds the AlienLifeSupport Component's coordinates to the {@link SpaceShip}
+	 * @param ship  {@link SpaceShip} to which you want to add the AlienLifeSupport component
+	 */
 	@Override
 	public void onCreation(SpaceShip ship, ShipCoords coords) {
 		this.coords = coords;
 	}
 
+	/**
+	 * This removes the AlienLifeSupport Component's coordinates from the {@link SpaceShip}
+	 * @param ship  {@link SpaceShip} to which you want to remove the AlienLifeSupport component
+	 */
 	@Override
 	public void onDelete(SpaceShip ship) {
 		BaseComponent[] tmp = this.getConnectedComponents(ship);
