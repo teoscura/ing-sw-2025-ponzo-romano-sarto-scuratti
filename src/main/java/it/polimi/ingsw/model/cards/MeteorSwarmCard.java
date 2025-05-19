@@ -8,6 +8,14 @@ import it.polimi.ingsw.model.state.VoyageState;
 
 import java.util.ArrayList;
 
+/**
+ * Represents the "Meteor Swarm" adventure card in the game.
+ * <p>
+ * This card simulates a meteor shower where a specific meteor
+ * hits the player's ship. The card interacts with the ship's defenses and can lead
+ * to structural damage or destruction of key ship parts, including the central cabin.
+ * </p>
+ */
 public class MeteorSwarmCard extends Card {
 
 	private final ProjectileArray meteorites;
