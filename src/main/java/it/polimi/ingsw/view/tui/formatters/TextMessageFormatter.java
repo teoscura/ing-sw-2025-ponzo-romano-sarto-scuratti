@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import it.polimi.ingsw.view.tui.TerminalWrapper;
 
-public class ClientTextMessageFormatter {
+public class TextMessageFormatter {
 
     public static void format(TerminalWrapper terminal, String message){
         ArrayList<String> res = new ArrayList<>();

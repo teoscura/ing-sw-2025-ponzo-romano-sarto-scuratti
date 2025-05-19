@@ -32,7 +32,7 @@ public class TerminalWrapper {
     private StringBuffer line;
     private String input;
 
-    public TerminalWrapper() throws IOException{
+    public TerminalWrapper(TUIView view) throws IOException{
         this.terminal = TerminalBuilder.builder()
             .system(true)
             .build();
@@ -50,12 +50,12 @@ public class TerminalWrapper {
             System.exit(-1);
         }
         this.line = new StringBuffer();
-        this.keymap = setupBindings();
+        this.keymap = setupBindings(view);
         this.reader = new BindingReader(terminal.reader());
-        setupHooks();
+        setupHooks(view);
     }
 
-    private void setupHooks(){
+    private void setupHooks(TUIView view){
         this.size = terminal.getSize();
         if(size.getRows()<32||size.getColumns()<128) showSmallScreen(size);
 
@@ -69,6 +69,7 @@ public class TerminalWrapper {
             }
             display.resize(size.getRows(), size.getColumns());
             puts(Capability.clear_screen);
+            view.redraw();
         });
 
         //Makes the JVM close gracefully.
@@ -82,31 +83,7 @@ public class TerminalWrapper {
         });
     }
 
-    public Widget readBinding(){
-        return reader.readBinding(this.keymap);
-    }
-
-    public Widget readBinding(int timeout){
-        if(reader.peekCharacter(timeout)<0)  return null;
-        return reader.readBinding(this.keymap, this.keymap, false);
-    }
-
-    public boolean isAvailable(){
-        return this.input != null;
-    }
-
-    public String takeInput(){
-        String res = this.input;
-        this.input = null;
-        return res;
-    } 
-
-    public String peekInput(){
-        return this.line.toString();
-    }
-
-
-    private KeyMap<Widget> setupBindings(){
+    private KeyMap<Widget> setupBindings(TUIView view){
         KeyMap<Widget> km = new KeyMap<>();
         for(String s : KeyMap.range("a-z")){
             Widget w = () -> {
@@ -123,6 +100,7 @@ public class TerminalWrapper {
             km.bind(w, s);
         }
         Widget clearlinew = () -> {
+            view.resetOverlay();
             line.delete(0, line.length());
             return true;
         };
@@ -162,6 +140,29 @@ public class TerminalWrapper {
         km.bind(clearlinew, KeyMap.esc());
         km.bind(finallinew, "\r");
         return km;
+    }
+
+    public Widget readBinding(){
+        return reader.readBinding(this.keymap);
+    }
+
+    public Widget readBinding(int timeout){
+        if(reader.peekCharacter(timeout)<0)  return null;
+        return reader.readBinding(this.keymap, this.keymap, false);
+    }
+
+    public boolean isAvailable(){
+        return this.input != null;
+    }
+
+    public String takeInput(){
+        String res = this.input;
+        this.input = null;
+        return res;
+    } 
+
+    public String peekInput(){
+        return this.line.toString();
     }
 
     public void print(String string, int row, int scol){

@@ -1,7 +1,5 @@
 package it.polimi.ingsw.view.tui;
 
-import it.polimi.ingsw.model.player.PlayerColor;
-
 public class CommandPreprocessor {
     
     private final TUIView view;
@@ -14,7 +12,7 @@ public class CommandPreprocessor {
         String[] parts = s.split(" ", 16);
         switch(s){
             case "ship": if(parts.length!=2) forward(s);
-                view.setColor(parseColor(parts[1]));
+                view.changeShip(s);
                 break;
             case "help":
                 view.showHelpScreen();
@@ -26,17 +24,7 @@ public class CommandPreprocessor {
     }
 
     private void forward(String s){
-        new CommandBuilder(view).build(s);
-    }
-
-    private PlayerColor parseColor(String s){
-        switch(s){
-            case "red":    return PlayerColor.RED;
-            case "blue":   return PlayerColor.BLUE;
-            case "green":  return PlayerColor.GREEN;
-            case "yellow": return PlayerColor.YELLOW;
-            default: return PlayerColor.NONE;
-        }
+        view.setInput(new CommandBuilder(view).build(s));
     }
 
 }

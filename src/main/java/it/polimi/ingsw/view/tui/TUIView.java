@@ -24,10 +24,15 @@ public class TUIView implements ClientView {
     private ServerMessage input;
     private Thread inputthread;
     
+    private boolean overlay;
+    private Runnable overlay_runnable;
+
+    //XXX synchronize every object accessed by threads here.
+
     private ConnectedState state;
 
     public TUIView() throws IOException {
-        this.terminal = new TerminalWrapper();
+        this.terminal = new TerminalWrapper(this);
         this.input_lock = new Object();
         this.state_lock = new Object();
         this.statusthread = new StatusUpdateThread(this);
@@ -35,8 +40,10 @@ public class TUIView implements ClientView {
     }
 
     public void redraw(){
+        terminal.puts(Capability.clear_screen);
         this.client_state.sendToView(this);
         this.status_runnable.run();
+        if(overlay) this.overlay_runnable.run();
     }
 
     @Override
@@ -109,7 +116,19 @@ public class TUIView implements ClientView {
     @Override
     public void showTextMessage(String message) {
         if(state == null) throw new UnsupportedOperationException();
-        ClientTextMessageFormatter.format(terminal, message);
+        TextMessageFormatter.format(terminal, message);
+    }
+
+    public void showHelpScreen() {
+        this.overlay = true;
+        this.overlay_runnable = () -> HelpScreenFormatter.format(terminal);
+        HelpScreenFormatter.format(terminal);
+    }
+
+    public void resetOverlay(){
+        this.overlay = false;
+        this.overlay_runnable = null;
+        this.redraw();
     }
 
     public Runnable getStatusRunnable(){
@@ -141,18 +160,15 @@ public class TUIView implements ClientView {
         switch(s){
             case "red":
                 this.selected_color = PlayerColor.RED;
-                return;
             case "blue":
                 this.selected_color = PlayerColor.BLUE;
-                return;
             case "green":
                 this.selected_color = PlayerColor.GREEN;
-                return;
             case "yellow":
                 this.selected_color = PlayerColor.YELLOW;
-                return;
-            default: return;
+            default: this.selected_color = PlayerColor.NONE;
         }
+        this.redraw();
     }
 
     @Override
@@ -187,7 +203,7 @@ public class TUIView implements ClientView {
     @Override
     public void connect(ConnectedState state){
         this.inputthread.interrupt();
-        this.inputthread = new ConnectedInputThread(terminal, this);
+        this.inputthread = new ConnectedKeyboardInputThread(terminal, this);
         this.inputthread.start();
         this.statusthread.start();;
         this.state = state;
@@ -200,5 +216,7 @@ public class TUIView implements ClientView {
         this.state = null;
         this.client_state = null;
     }
+
+    
 
 }

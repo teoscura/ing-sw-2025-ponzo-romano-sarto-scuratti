@@ -62,12 +62,12 @@ public class ClientSmallComponentPrinter implements ClientComponentVisitor {
 
     @Override
     public void show(ClientShieldComponentDecorator component) {
-        this.character_component = "🛡️";
+        this.character_component = "🔒";
     }
 
     @Override
     public void show(ClientShipmentsComponentDecorator component) {
-        this.character_component = "🎁";
+        this.character_component = "📦";
     }
     
 }
