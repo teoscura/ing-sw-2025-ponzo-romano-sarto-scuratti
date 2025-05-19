@@ -13,7 +13,15 @@ import it.polimi.ingsw.model.state.VoyageState;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
+/**
+ * Represents a "Planet" adventure card in the game
+ * this card allows players to land on available planets and collect cargo.
+ * <p>
+ * The player receives a list of available {@link Planet} options and selects one to land on.
+ * If the selected planet has not been visited, the player collects its cargo and loses a number of days.
+ * The card is exhausted once all planets have been visited or skipped.
+ * </p>
+ */
 public class PlanetCard extends Card {
 
 	private final ArrayList<Planet> planets;
@@ -46,6 +54,19 @@ public class PlanetCard extends Card {
 		return new ArrayList<>(this.planets);
 	}
 
+	/**
+	 * Applies the landing effect of this card for the given spaceship and player.
+	 * <p>
+	 * If the planet selected has already been visited, or the response is -1 (skip), nothing happens.
+	 * If a valid and unvisited planet is chosen, it is marked visited, the player receives cargo,
+	 * and the card is exhausted once all planets are resolved.
+	 * </p>
+	 *
+	 * @param p The Player
+	 * @param id The Id
+	 * @throws NullPointerException        if {@code p} is null
+	 * @throws ArgumentTooBigException     if the selected planet index is out of bounds
+	 */
 	public void apply(Player p, int id) {
 		if (p == null) throw new NullPointerException();
 		if (id >= this.planets.size()) throw new ArgumentTooBigException("Sent a planet id larger than the list.");
