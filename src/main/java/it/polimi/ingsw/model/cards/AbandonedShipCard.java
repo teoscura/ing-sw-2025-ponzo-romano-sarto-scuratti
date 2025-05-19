@@ -54,7 +54,7 @@ public class AbandonedShipCard extends Card {
 	 * @param p The Player
 	 * @param id The Id
 	 * @throws IllegalArgumentException if the player does not have enough crew
-	 * @throws NullPointerException    if state or p is null
+	 * @throws NullPointerException    if {@code state} or {@code p} is null
 	 */
 	public void apply(VoyageState state, Player p, int id) {
 		if (state == null || p == null) throw new NullPointerException();
