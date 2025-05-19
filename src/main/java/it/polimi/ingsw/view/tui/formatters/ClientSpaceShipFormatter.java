@@ -1,4 +1,4 @@
-package it.polimi.ingsw.view.tui.utils;
+package it.polimi.ingsw.view.tui.formatters;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +12,7 @@ import it.polimi.ingsw.model.player.ShipCoords;
 
 public class ClientSpaceShipFormatter {
     
-    static public ArrayList<StringBuffer> formatLarge(ClientSpaceShip ship, String username, PlayerColor color, int score, int credits){
+    static public List<String> formatLarge(ClientSpaceShip ship, String username, PlayerColor color, int credits, boolean retired){
         ArrayList<StringBuffer> tmp = new ArrayList<>(); 
         ClientLargeComponentPrinter p = new ClientLargeComponentPrinter();
         ClientSmallComponentPrinter ps = new ClientSmallComponentPrinter();
@@ -112,12 +112,6 @@ public class ClientSpaceShipFormatter {
             .style(AttributedStyle.DEFAULT)
             .append("│").toAnsi());
         tmp.get(12).append(new AttributedStringBuilder()
-            .style(AttributedStyle.BOLD.foreground(AttributedStyle.YELLOW))
-            .append("✨: ")
-            .append(String.format("%3s", score))
-            .style(AttributedStyle.DEFAULT)
-            .append("│").toAnsi());
-        tmp.get(13).append(new AttributedStringBuilder()
             .append("🛡️: ")
             .style(AttributedStyle.BOLD.foreground(ship.getShielded()[0] ? AttributedStyle.GREEN : AttributedStyle.BLACK))
             .append("N")
@@ -129,12 +123,13 @@ public class ClientSpaceShipFormatter {
             .append("W")
             .style(AttributedStyle.DEFAULT)
             .append("│").toAnsi());
+        tmp.get(13).append((retired?"retired":" alive ")+"│");
         tmp.get(14).append("       │");
         tmp.get(15).append("       │");
-        return tmp;
+        return tmp.stream().map(sb->sb.toString()).toList();
     }
 
-    static public ArrayList<StringBuffer> formatSmall(ClientSpaceShip ship, String username, PlayerColor color, int score, int credits){
+    static public List<String> formatSmall(ClientSpaceShip ship, String username, PlayerColor color, int credits, boolean retired){
         ArrayList<StringBuffer> tmp = new ArrayList<>();    
         int finallength = 30;
         String top =    "┌"+"─".repeat(finallength)+"┐";
@@ -168,12 +163,11 @@ public class ClientSpaceShipFormatter {
         tmp.get(3).append(String.format("🟩: %3d", ship.getContainers()[2]));
         tmp.get(4).append(String.format("🟨: %3d│", ship.getContainers()[3]));
         tmp.get(4).append(String.format("🟥: %3d", ship.getContainers()[4]));
-        tmp.get(5).append(String.format("💰: %3d│", score));
-        tmp.get(5).append(String.format("✨: %3d", credits));
+        tmp.get(5).append(String.format("💰: %3d│"+(retired?"retired":" alive "), credits));
         for(int i = 0; i<5; i++){
             tmp.get(i+1).append("│"); 
         }
-        return tmp;
+        return tmp.stream().map(sb->sb.toString()).toList();
     }
 
     private static String trimName(String username, PlayerColor color, int space){
@@ -194,7 +188,7 @@ public class ClientSpaceShipFormatter {
         return res;
     }
     
-    static public ArrayList<String> getEmptyShip(){
+    static public ArrayList<String> getEmptyShipSmall(){
         ArrayList<String> res = new ArrayList<>();
         res.add("┌"+"─".repeat(30)+"┐");
         res.add("│"+" ".repeat(30)+"│");
@@ -203,6 +197,18 @@ public class ClientSpaceShipFormatter {
         res.add("│"+" ".repeat(30)+"│");
         res.add("│"+" ".repeat(30)+"│");
         res.add("└"+"─".repeat(30)+"┘");
+        return res;
+    }
+
+    static public ArrayList<String> getEmptyShipLarge(){
+        ArrayList<String> res = new ArrayList<>();
+        res.add("┌"+"─".repeat(52)+"┐");
+        res.add("│"+" ".repeat(52)+"│");
+        res.add("│"+" ".repeat(52)+"│");
+        res.add("│"+" ".repeat(23)+"No Ship."+" ".repeat(23)+"│");
+        res.add("│"+" ".repeat(52)+"│");
+        res.add("│"+" ".repeat(52)+"│");
+        res.add("└"+"─".repeat(52)+"┘");
         return res;
     }
 

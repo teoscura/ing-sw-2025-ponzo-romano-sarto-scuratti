@@ -1,4 +1,4 @@
-package it.polimi.ingsw.view.tui.utils;
+package it.polimi.ingsw.view.tui.formatters;
 
 import org.jline.utils.AttributedString;
 import org.jline.utils.AttributedStringBuilder;

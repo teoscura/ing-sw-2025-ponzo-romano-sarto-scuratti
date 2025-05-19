@@ -11,7 +11,7 @@ import it.polimi.ingsw.model.client.state.*;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.view.ClientView;
 import it.polimi.ingsw.view.tui.concurrent.*;
-import it.polimi.ingsw.view.tui.utils.*;
+import it.polimi.ingsw.view.tui.formatters.*;
 
 public class TUIView implements ClientView {
 
@@ -64,7 +64,7 @@ public class TUIView implements ClientView {
         this.client_state = state;
         this.selected_color = state.getPlayerList().stream().filter(s->s.getUsername().equals(this.state.getUsername())).map(p->p.getColor()).findFirst().orElse(PlayerColor.NONE);
         terminal.puts(Capability.clear_screen);
-        terminal.printCentered(ClientWaitingStateFormatter.format(state));
+        ClientWaitingStateFormatter.format(terminal, state);
     }
 
     @Override
@@ -72,7 +72,7 @@ public class TUIView implements ClientView {
         if(state == null) throw new UnsupportedOperationException();
         this.client_state = state;
         terminal.puts(Capability.clear_screen);
-        // terminal.printCenteredCorner(ClientConstructionStateFormatter.format(selected_color, state));
+        ClientConstructionStateFormatter.format(terminal, state, selected_color);
     }
 
     @Override
@@ -80,7 +80,7 @@ public class TUIView implements ClientView {
         if(state == null) throw new UnsupportedOperationException();
         this.client_state = state;
         terminal.puts(Capability.clear_screen);
-        // terminal.printCenteredCorner(ClientVerifyStateFormatter.format(selected_color, state));
+        ClientVerifyStateFormatter.format(terminal, state, selected_color);
     }
 
     @Override
@@ -88,8 +88,7 @@ public class TUIView implements ClientView {
         if(state == null) throw new UnsupportedOperationException();
         this.client_state = state;
         terminal.puts(Capability.clear_screen);
-        // terminal.printCenteredCorner(ClientVoyageStateFormatter.format(selected_color, state));
-        // terminal.updateStatus(ClientVoyageStateFormatter.getBottom(state));
+        ClientVoyageStateFormatter.format(terminal, state, selected_color);
     }
 
     @Override
@@ -97,8 +96,7 @@ public class TUIView implements ClientView {
         if(state == null) throw new UnsupportedOperationException();
         this.client_state = state;
         terminal.puts(Capability.clear_screen);
-        //terminal.printCentered(ClientEndgameStateFormatter.format(state));
-        terminal.resetStatus();
+        ClientEndingStateFormatter(terminal, state);
     }
 
     @Override

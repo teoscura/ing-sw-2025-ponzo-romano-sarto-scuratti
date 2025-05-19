@@ -1,12 +1,15 @@
-package it.polimi.ingsw.view.tui.utils;
+package it.polimi.ingsw.view.tui.formatters;
 
 import java.util.ArrayList;
 
 import it.polimi.ingsw.model.client.state.ClientWaitingRoomState;
+import it.polimi.ingsw.view.tui.TerminalWrapper;
 
 public class ClientWaitingStateFormatter {
 
-    public static ArrayList<String> format(ClientWaitingRoomState state){
+    private static String bottom_line = "━Typed line:━";
+
+    public static void format(TerminalWrapper terminal, ClientWaitingRoomState state){
         ArrayList<String> res = new ArrayList<>();
         res.add("Waiting Room");
         res.add("Game type: "+state.getType()+" size: "+state.getPlayerList().size());
@@ -19,7 +22,9 @@ public class ClientWaitingStateFormatter {
             res.add("..");
             i--;
         }
-        return res;
+        terminal.printCentered(res);
+        terminal.print(bottom_line+"━".repeat(128-bottom_line.length()), 30, 0);
+        terminal.print(terminal.peekInput(),31,0);
     }
 
 }

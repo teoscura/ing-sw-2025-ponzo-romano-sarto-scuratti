@@ -1,4 +1,4 @@
-package it.polimi.ingsw.view.tui.utils;
+package it.polimi.ingsw.view.tui.formatters;
 
 import it.polimi.ingsw.model.client.components.*;
 import it.polimi.ingsw.model.components.enums.AlienType;

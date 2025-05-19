@@ -23,9 +23,9 @@ public class ConnectedThread extends Thread {
                 view.getClientState().sendToView(view);
             }
             String s = terminal.takeInput();
-            if(s.equals("help")) //terminal.showHelpScreen();
-            /*else*/ if(s.equals("help")) view.changeShip(s);
-            else view.setInput(cb.build(s));
+            //if(s.equals("help")) terminal.showHelpScreen();
+            /*else*/ //if(s.equals("help")) view.changeShip(s);
+            view.setInput(cb.build(s));
         }
     }
 
