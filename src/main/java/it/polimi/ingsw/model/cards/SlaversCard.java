@@ -11,6 +11,14 @@ import it.polimi.ingsw.utils.LoggerLevel;
 
 import java.util.ArrayList;
 
+/**
+ * Represents the "Slavers" adventure card in the game.
+ * <p>
+ * This card challenges players based on their cannon power. If the player
+ * has sufficient firepower, they gain a reward. If not, they may suffer a
+ * crew loss or even lose the game if their crew is too small.
+ * </p>
+ */
 public class SlaversCard extends Card {
 
 	private final double min_power;
@@ -42,6 +50,18 @@ public class SlaversCard extends Card {
 		return this.crew_penalty;
 	}
 
+	/**
+	 * Applies the effect of the Slavers card based on the ship's cannon power.
+	 * <p>
+	 * - If cannon power is greater than {@code min_power}, the player wins and gains credits.<br>
+	 * - If equal, nothing happens.<br>
+	 * - If less, the player loses crew or the game.
+	 * </p>
+	 *
+	 * @param state The Current State
+	 * @param p The Player
+	 * @throws NullPointerException    if {@code state} or {@code p} is null
+	 */
 	public boolean apply(VoyageState state, Player p) {
 		if (state == null || p == null) throw new NullPointerException();
 		if (p.getSpaceShip().getCannonPower() > this.min_power) {
