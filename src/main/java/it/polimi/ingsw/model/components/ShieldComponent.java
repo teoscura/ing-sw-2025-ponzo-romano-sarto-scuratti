@@ -13,6 +13,13 @@ import it.polimi.ingsw.model.components.visitors.iVisitor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.player.SpaceShip;
 
+/**
+ * <h2>ShieldComponent</h2>
+ * <p>
+ * Represents a <strong>shield generator</strong> component in a spaceship. Shields are used to defend the ship
+ * from incoming projectiles, protecting a directional arc of the ship depending on the component's rotation.
+ * </p>
+ */
 public class ShieldComponent extends BaseComponent {
 
 	private boolean powered = false;
@@ -33,6 +40,11 @@ public class ShieldComponent extends BaseComponent {
 		v.visit(this);
 	}
 
+	/**
+	 * turn on the shield component
+	 *
+	 * @throws AlreadyPoweredException if the shield is already powered.
+	 */
 	public void turnOn() {
 		if (this.powered) throw new AlreadyPoweredException();
 		this.powered = true;
@@ -51,17 +63,29 @@ public class ShieldComponent extends BaseComponent {
 		return true;
 	}
 
+	/**
+	 * This adds the Shield Component's coordinates to the {@link SpaceShip}
+	 * @param ship  {@link SpaceShip} to which you want to add the shield component
+	 */
 	@Override
 	public void onCreation(SpaceShip ship, ShipCoords coords) {
 		this.coords = coords;
 		ship.addPowerableCoords(this.coords);
 	}
 
+	/**
+	 * This removes the Shield Component's coordinates from the {@link SpaceShip}
+	 * @param ship  {@link SpaceShip} to which you want to remove the shield component
+	 */
 	@Override
 	public void onDelete(SpaceShip ship) {
 		ship.delPowerableCoords(this.coords);
 	}
 
+	/**
+	 * Returns the shield type based on rotation
+	 * if the shield is on. If off, returns {@link ShieldType#NONE}.
+	 */
 	public ShieldType getShield() {
 		if (!this.powered) return ShieldType.NONE;
 		return ShieldType.values()[this.getRotation().getShift()];
