@@ -44,16 +44,30 @@ public abstract class BaseComponent implements iVisitable, Serializable {
 	}
 
 
+	/**
+	 * Returns the unique id of the card
+	 *
+	 * @return id
+	 */
 	public int getID() {
 		return this.id;
 	}
 
-
+	/**
+	 * Return an array of 4 elements, representing the connectors clockwise starting from above the component
+	 *
+	 * @return connectors
+	 */
 	public ConnectorType[] getConnectors() {
 		return connectors;
 	}
 
 
+	/**
+	 * Returns the rotation of the component, given as the clockwise angle from the up position
+	 *
+	 * @return rotation
+	 */
 	public ComponentRotation getRotation() {
 		return rotation;
 	}
@@ -64,6 +78,12 @@ public abstract class BaseComponent implements iVisitable, Serializable {
 	}
 
 
+	/**
+	 * Checks each adjacent component in the 4 directions, verifies if the connectors on the adjacent sides are compatible with each other
+	 *
+	 * @param ship
+	 * @return true if no errors are found, false if at least one component is not connected correctly
+	 */
 	public boolean verify(SpaceShip ship) {
 		if (this.coords == null) throw new NullPointerException("Coords are not set");
 		BaseComponent up = ship.getComponent(this.coords.up());
@@ -88,17 +108,29 @@ public abstract class BaseComponent implements iVisitable, Serializable {
 	}
 
 
+	/**
+	 * Returns the connector at a specific direction of the component, given the rotation of the component inside the ship
+	 *
+	 * @param direction
+	 * @return connector
+	 */
 	public ConnectorType getConnector(ComponentRotation direction) {
 		int shift = direction.getShift() + (4 - this.rotation.getShift());
 		shift = shift % 4;
 		return connectors[shift];
 	}
 
-
+	/**
+	 * @return coords of the component inside the ship
+	 */
 	public ShipCoords getCoords() {
 		return this.coords;
 	}
 
+
+	/**
+	 * @return if component is powerable, false unless specified otherwise
+	 */
 
 	public boolean powerable() {
 		return false;
@@ -113,9 +145,19 @@ public abstract class BaseComponent implements iVisitable, Serializable {
 
 	public abstract ClientComponent getClientComponent();
 
-
+	/**
+	 * Calls the visitor on the component, action depends on the component found
+	 *
+	 * @param v
+	 */
 	public abstract void check(iVisitor v);
 
+	/**
+	 * Checks if adjacent components have compatible connectors, if true adds component to an array
+	 *
+	 * @param ship
+	 * @return res: array of components
+	 */
 	public BaseComponent[] getConnectedComponents(SpaceShip ship) {
 		BaseComponent[] res = new BaseComponent[]{ship.getEmpty(), ship.getEmpty(), ship.getEmpty(), ship.getEmpty()};
 		if (ship.getComponent(this.getCoords().up()) != ship.getEmpty()) {
