@@ -17,7 +17,7 @@ public class ClientLobbyStatesFormatter {
 
     public static void format(TerminalWrapper terminal, ClientLobbySelectState state){
         ArrayList<String> res = new ArrayList<>();
-        res.add("Available lobbies:");
+        res.add(state.getLobbyList().size()>0?"Available lobbies:":"No lobbies open.");
         for(ClientGameListEntry e : state.getLobbyList()){
             boolean full = e.getCount().getNumber() == e.getPlayers().size();
             AttributedStringBuilder t = new AttributedStringBuilder()
@@ -44,7 +44,7 @@ public class ClientLobbyStatesFormatter {
 
     public static void format(TerminalWrapper terminal, ClientSetupState state){
         ArrayList<String> res = new ArrayList<>();
-        res.add("Unfinished games:");
+        res.add(state.getUnfinishedList().size()>0?"Unfinished games available:":"No unfinished games available.");
         for(ClientGameListEntry e : state.getUnfinishedList()){
             AttributedStringBuilder t = new AttributedStringBuilder()
                 .style(AttributedStyle.BOLD.foreground(AttributedStyle.BLUE))
