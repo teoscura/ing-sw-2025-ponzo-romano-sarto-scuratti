@@ -301,7 +301,6 @@ public class ClientConstructionStateFormatter {
             res.get(7).append(" more │");
             res.get(8).append("──────╯");
         }
-        //XXX handle last in line.
         return res.stream().map(p->p.toString()).toList();
     }
 
