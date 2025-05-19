@@ -19,6 +19,15 @@ public class CabinVisitor implements iVisitor {
 	public void visit(EngineComponent c) {
 	}
 
+	/**
+	 * Visit an Alien Life Support Component and update the visitor's internal status
+	 * based on the alien type.<br>
+	 * - If the visitor's current type is BOTH, no change is made. <br>
+	 * - If the current type is HUMAN, it is overwritten with the type of the visited component. <br>
+	 * - If the current type is different from the component's type, it is set to BOTH to indicate that <br>
+	 *
+	 * @param c
+	 */
 	@Override
 	public void visit(AlienLifeSupportComponent c) {
 		if (this.type == AlienType.BOTH) return;
