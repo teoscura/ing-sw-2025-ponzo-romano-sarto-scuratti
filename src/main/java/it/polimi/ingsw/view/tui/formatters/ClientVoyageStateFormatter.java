@@ -37,7 +37,8 @@ public class ClientVoyageStateFormatter {
         } else {
             terminal.print(ClientSpaceShipFormatter.getEmptyShipSmall(), 3, 94);
         }
-        terminal.print(ClientSpaceShipFormatter.getHelpCorner(), 11, 94);
+        if(color!=PlayerColor.NONE || list.isEmpty())terminal.print(ClientSpaceShipFormatter.getHelpCorner(), 11, 94);
+        else terminal.print(ClientSpaceShipFormatter.formatSmall(list.getFirst().getShip(), list.getFirst().getUsername(), list.getFirst().getColor(), 0, false), 11, 94);    
 
         terminal.print(printPlanche(state, color), 22, 4);
     }
