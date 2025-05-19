@@ -8,7 +8,18 @@ import it.polimi.ingsw.model.components.enums.ShipmentType;
 import it.polimi.ingsw.model.components.exceptions.AlreadyPoweredException;
 
 import java.io.Serializable;
-
+/**
+ * <h2>Player</h2>
+ * <p>
+ * Represents a player im the game.
+ * Each player has a username, color, a spaceship, credits, score,
+ * and state flags for retirement and disconnection.
+ * </p>
+ *
+ * <p>The player is responsible for managing their own spaceship,
+ * accumulating credits and score, and interacting with the game server
+ * through a {@link ClientDescriptor}.</p>
+ */
 public class Player implements Serializable {
 	private final String username;
 	private final PlayerColor color;
@@ -26,14 +37,27 @@ public class Player implements Serializable {
 		ship = new SpaceShip(gamemode, this);
 	}
 
+	/**
+	 * Returns the username of the player.
+	 * @return the player's username
+	 */
 	public String getUsername() {
 		return this.username;
 	}
 
+	/**
+	 * Returns the color assigned to the player.
+	 * @return the player's color
+	 */
 	public PlayerColor getColor() {
 		return this.color;
 	}
 
+	/**
+	 * Marks the player as retired.
+	 * Adds all current credits to the score, and half the value of stored cargo.
+	 * @throws AlreadyPoweredException if the player is already retired
+	 */
 	public void retire() {
 		if (this.retired) throw new AlreadyPoweredException("Player: has alredy retired.");
 		this.retired = true;
@@ -45,32 +69,69 @@ public class Player implements Serializable {
 		this.credits += (sum/2 + sum % 2);
 	}
 
+	/**
+	 * Checks whether the player has retired.
+	 * @return {@code true} if retired, {@code false} otherwise
+	 */
 	public boolean getRetired() {
 		return this.retired;
 	}
 
+	/**
+	 * Reconnects the player to the game.
+	 * @throws AlreadyPoweredException if the player is already connected
+	 */
 	public void reconnect() {
 		if (!this.disconnected) throw new AlreadyPoweredException("Player: is alread y connected.");
 		this.disconnected = false;
 	}
 
+	/**
+	 * Disconnects the player from the game.
+	 * @throws AlreadyPoweredException if already disconnected
+	 */
 	public void disconnect() {
 		if (this.disconnected) throw new AlreadyPoweredException("Player: has already disconnected.");
 		this.disconnected = true;
 	}
 
+	/**
+	 * Checks whether the player is currently disconnected.
+	 * @return {@code true} if disconnected
+	 */
 	public boolean getDisconnected() {
 		return this.disconnected;
 	}
 
 	public void giveCredits(int amount) {
+	 * Increases the player's credits by a given amount.
+	 * @param amount credits to be added (must be positive)
+	 * @return new credit total
+	 * @throws IllegalArgumentException if amount is zero or negative
+	 */
 		this.credits += amount;
 	}
 
+	/**
+	 * Returns the current amount of credits.
+	 * @return the player's credits
+	 */
 	public int getCredits() {
 		return this.credits;
 	}
 
+	/**
+	 * Adds the given amount to the player's score.
+	 * @param rel_change points to add
+	 */
+	/**
+	 * Returns the player's current score.
+	 * @return score
+	 */
+	/**
+	 * Calculates and applies the final score at the end of the game.
+	 * Adds score from cargo and remaining credits.
+	 */
 	public void finalScore() {
 		for (ShipmentType t : ShipmentType.values()) {
 			if (t.getValue() <= 0) continue;
@@ -78,27 +139,55 @@ public class Player implements Serializable {
 		}
 	}
 
+	/**
+	 * Reconnects the player using a new {@link ClientDescriptor}.
+	 * @param new_descriptor the new descriptor to bind
+	 */
 	public void reconnect(ClientDescriptor new_descriptor) {
 		this.bindDescriptor(new_descriptor);
 		this.disconnected = false;
 	}
 
+	/**
+	 * Returns the player's spaceship.
+	 * @return {@link SpaceShip} instance
+	 */
 	public SpaceShip getSpaceShip() {
 		return this.ship;
 	}
 
+	/**
+	 * Binds a {@link ClientDescriptor} to the player.
+	 * Used during login or reconnection.
+	 * @param descriptor the client descriptor to bind
+	 */
 	public void bindDescriptor(ClientDescriptor descriptor) {
 		this.descriptor = descriptor;
 	}
 
+	/**
+	 * Returns the {@link ClientDescriptor} bound to the player.
+	 * @return descriptor
+	 */
 	public ClientDescriptor getDescriptor() {
 		return this.descriptor;
 	}
 
+	/**
+	 * Returns a formatted string with voyage information:
+	 * position, score, credits, engine power, cannon power, crew, battery level.
+	 * @param planche the {@link iPlanche} containing position information
+	 * @return string describing the player's current state in the voyage
+	 */
 	public String voyageInfo(iPlanche planche) {
 		return "[Player: '" + username + "'] Planche position: " + planche.getPlayerPosition(this) + " | Credits: " + credits + " | Engine: " + ship.getEnginePower() + " | Cannon: " + ship.getCannonPower() + " | Crew: " + ship.getTotalCrew() + " | Battery: " + ship.getEnergyPower();
 	}
 
+	/**
+	 * Compares two players based on their username and color.
+	 * @param o the object to compare
+	 * @return {@code true} if same username and color, otherwise {@code false}
+	 */
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
