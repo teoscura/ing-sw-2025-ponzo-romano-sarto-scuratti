@@ -6,6 +6,14 @@ import it.polimi.ingsw.model.cards.state.StardustState;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.state.VoyageState;
 
+/**
+ * Represents the "Stardust" card in the game.
+ * <p>
+ * This card penalizes players who have exposed connectors on their spaceship,
+ * causing a loss of time (flight days).
+ * Players are resolved in reverse order
+ * </p>
+ */
 public class StardustCard extends Card {
 
 	public StardustCard(int id) {
@@ -17,6 +25,14 @@ public class StardustCard extends Card {
 		return new StardustState(state, this);
 	}
 
+	/**
+	 * Apply the effect of the "Stardust" card to the indicated player:
+	 * If the spaceship has exposed connectors, the player will lose flying days.
+	 *
+	 * @param state The Current State
+	 * @param p The Player
+	 * @throws NullPointerException    if {@code state} or {@code p} is null
+	 */
 	public void apply(VoyageState state, Player p) {
 		if (state == null || p == null) throw new NullPointerException();
 		int lost_days = p.getSpaceShip().countExposedConnectors();
