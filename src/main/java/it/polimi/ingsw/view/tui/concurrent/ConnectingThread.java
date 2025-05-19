@@ -2,6 +2,7 @@ package it.polimi.ingsw.view.tui.concurrent;
 
 import java.util.ArrayList;
 
+import org.jline.reader.Widget;
 import org.jline.utils.InfoCmp.Capability;
 
 import it.polimi.ingsw.controller.client.connections.ConnectionType;
@@ -38,19 +39,22 @@ public class ConnectingThread extends Thread {
         screen();
         while(!terminal.isAvailable()){
             screen();
-            terminal.readBinding().apply();
+            Widget s = terminal.readBinding();
+            if(s!=null) s.apply();
         }
         args.add(terminal.takeInput());
         screen();
         while(!terminal.isAvailable()){
             screen();
-            terminal.readBinding().apply();
+            Widget s = terminal.readBinding();
+            if(s!=null) s.apply();
         }
         args.add(terminal.takeInput());
         screen();
         while(!terminal.isAvailable()){
             screen();
-            terminal.readBinding().apply();
+            Widget s = terminal.readBinding();
+            if(s!=null) s.apply();
         }
         args.add(terminal.takeInput());
         if(!validate()) state.connect("", 0, ConnectionType.NONE);

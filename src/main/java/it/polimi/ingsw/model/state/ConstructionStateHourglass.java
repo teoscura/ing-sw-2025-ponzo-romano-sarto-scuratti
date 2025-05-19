@@ -10,16 +10,26 @@ public class ConstructionStateHourglass implements Serializable {
 
 	private final Duration period;
 	private Instant toggled = null;
+	private final int total;
 	private int times;
 
 	public ConstructionStateHourglass(int seconds, int times) {
 		if (seconds <= 0 || times < 0) throw new IllegalArgumentException();
+		this.total = times;
 		this.times = times;
 		this.period = Duration.ofSeconds(seconds);
 	}
 
+	public int timesTotal(){
+		return this.total;
+	}
+
 	public int timesLeft() {
 		return this.times;
+	}
+
+	public Duration getDuration(){
+		return this.period;
 	}
 
 	public void start() {

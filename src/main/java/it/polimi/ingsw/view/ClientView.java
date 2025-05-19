@@ -24,6 +24,12 @@ public interface ClientView {
 
 	void show(ClientEndgameState state);
 
+	//State sync
+
+	void setClientState(ClientState state);
+
+	ClientState getClientState();
+
 	//Client input
 	void connect(ConnectedState state);
 

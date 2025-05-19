@@ -41,6 +41,7 @@ public class ClientVoyageStateFormatter {
 
         ClientCardStateFormatter csf = new ClientCardStateFormatter();
         state.getCardState().showCardState(csf);
+
         terminal.print(csf.getFormatted().toAnsi(), 29, 0);
         terminal.print(bottom_line+"━".repeat(128-bottom_line.length()), 30, 0);
         terminal.print(terminal.peekInput(),31,0);

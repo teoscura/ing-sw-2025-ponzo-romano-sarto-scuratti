@@ -37,6 +37,7 @@ public class ClientLobbyStatesFormatter {
             res.add(t.toAttributedString().toAnsi());
         }
         terminal.printCentered(res);
+
         terminal.print(bottom_line+"━".repeat(128-bottom_line.length()), 30, 0);
         terminal.print(terminal.peekInput(),31,0);
     }
@@ -62,6 +63,7 @@ public class ClientLobbyStatesFormatter {
             res.add(t.toAttributedString().toAnsi());
         }
         terminal.printCentered(res);
+
         terminal.print(bottom_line+"━".repeat(128-bottom_line.length()), 30, 0);
         terminal.print(terminal.peekInput(),31,0);
     }

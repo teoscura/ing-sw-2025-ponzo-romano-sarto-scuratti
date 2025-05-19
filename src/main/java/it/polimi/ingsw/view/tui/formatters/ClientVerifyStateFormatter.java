@@ -40,6 +40,7 @@ public class ClientVerifyStateFormatter {
         }
         terminal.print(ClientSpaceShipFormatter.getHelpCorner(), 11, 94);
 
+
         terminal.print(getMissingLine(state).toAnsi(), 29, 0);
         terminal.print(bottom_line+"━".repeat(128-bottom_line.length()), 30, 0);
         terminal.print(terminal.peekInput(),31,0);

@@ -23,8 +23,11 @@ public class ClientWaitingStateFormatter {
             i--;
         }
         terminal.printCentered(res);
+
         terminal.print(bottom_line+"━".repeat(128-bottom_line.length()), 30, 0);
-        terminal.print(terminal.peekInput(),31,0);
+        String s = terminal.peekInput();
+        s = s.length()<128 ? s.concat(" ".repeat(128-s.length())) : s;
+        terminal.print(s,31,0);
     }
 
 }

@@ -1,6 +1,8 @@
 package it.polimi.ingsw.view.tui;
 
 import java.io.IOException;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -26,6 +28,7 @@ import it.polimi.ingsw.model.client.card.ClientBaseCardState;
 import it.polimi.ingsw.model.client.card.ClientCardState;
 import it.polimi.ingsw.model.client.card.ClientMeteoriteCardStateDecorator;
 import it.polimi.ingsw.model.client.card.ClientNewCenterCardStateDecorator;
+import it.polimi.ingsw.model.client.player.ClientConstructionPlayer;
 import it.polimi.ingsw.model.client.player.ClientEndgamePlayer;
 import it.polimi.ingsw.model.client.player.ClientVerifyPlayer;
 import it.polimi.ingsw.model.client.player.ClientVoyagePlayer;
@@ -46,6 +49,7 @@ public class TUIView implements ClientView {
 
     private final TerminalWrapper terminal;
     private final Object input_lock;
+    private final Object state_lock;
     private PlayerColor selected_color;
     private ClientState client_state;
     private ServerMessage input;
@@ -55,6 +59,7 @@ public class TUIView implements ClientView {
     public TUIView() throws IOException {
         this.terminal = new TerminalWrapper();
         this.input_lock = new Object();
+        this.state_lock = new Object();
     }
 
     @Override
@@ -74,10 +79,7 @@ public class TUIView implements ClientView {
     @Override
     public void show(ClientLobbySelectState state) {
         if(state == null) throw new UnsupportedOperationException();
-        this.client_state = state;
-        terminal.puts(Capability.clear_screen);
-        testShowVerify();
-        // this.client_state = state;
+        testShowConstructionLevel2();
         // terminal.puts(Capability.clear_screen);
         // ClientLobbyStatesFormatter.format(terminal, state);
     }
@@ -85,49 +87,37 @@ public class TUIView implements ClientView {
     @Override
     public void show(ClientSetupState state) {
         if(state == null) throw new UnsupportedOperationException();
-        this.client_state = state;
-        terminal.puts(Capability.clear_screen);
         ClientLobbyStatesFormatter.format(terminal, state);
     }
 
     @Override
     public void show(ClientWaitingRoomState state) {
         if(state == null) throw new UnsupportedOperationException();
-        this.client_state = state;
         this.selected_color = state.getPlayerList().stream().filter(s->s.getUsername().equals(this.state.getUsername())).map(p->p.getColor()).findFirst().orElse(PlayerColor.NONE);
-        terminal.puts(Capability.clear_screen);
         ClientWaitingStateFormatter.format(terminal, state);
     }
 
     @Override
     public void show(ClientConstructionState state) {
         if(state == null) throw new UnsupportedOperationException();
-        this.client_state = state;
-        terminal.puts(Capability.clear_screen);
         ClientConstructionStateFormatter.format(terminal, state, selected_color);
     }
 
     @Override
     public void show(ClientVerifyState state) {
         if(state == null) throw new UnsupportedOperationException();
-        this.client_state = state;
-        terminal.puts(Capability.clear_screen);
         ClientVerifyStateFormatter.format(terminal, state, selected_color);
     }
 
     @Override
     public void show(ClientVoyageState state) {
         if(state == null) throw new UnsupportedOperationException();
-        this.client_state = state;
-        terminal.puts(Capability.clear_screen);
         ClientVoyageStateFormatter.format(terminal, state, selected_color);
     }
 
     @Override
     public void show(ClientEndgameState state) {
         if(state == null) throw new UnsupportedOperationException();
-        this.client_state = state;
-        terminal.puts(Capability.clear_screen);
         ClientEndingStateFormatter.format(terminal, state);
     }
 
@@ -137,7 +127,24 @@ public class TUIView implements ClientView {
     }
 
     public ClientState getClientState(){
-        return this.client_state;
+        synchronized(this.state_lock){
+            while(this.state == null)
+                try {
+                    state_lock.wait();
+                } catch (InterruptedException e) {
+                    System.out.println("Force shutdown of view thread.");
+                }
+            return this.client_state;
+        }
+        
+    }
+
+    public void setClientState(ClientState state){
+        synchronized(this.state_lock){
+            terminal.puts(Capability.clear_screen);
+            this.client_state = state;
+            state_lock.notifyAll();
+        }
     }
 
     public void changeShip(String s){
@@ -210,6 +217,111 @@ public class TUIView implements ClientView {
         players.add(new ClientWaitingPlayer("sbongus", PlayerColor.GREEN));
         ClientWaitingRoomState cs = new ClientWaitingRoomState(GameModeType.LVL2, PlayerCount.FOUR, players);
         ClientWaitingStateFormatter.format(terminal, cs);
+    }
+
+    private void testShowConstructionTest(){
+        ArrayList<ClientConstructionPlayer> players = new ArrayList<>();
+        BaseComponent c;
+        ComponentFactory f1 = new ComponentFactory();
+        ComponentFactory f2 = new ComponentFactory();
+        //player stabile
+		Player player1 = new Player(GameModeType.LVL2, "player1", PlayerColor.RED);
+		c = f1.getComponent(41);
+		c.rotate(ComponentRotation.U000);
+		player1.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.LVL2, 3, 1));
+		c = f1.getComponent(79);
+		c.rotate(ComponentRotation.U000);
+		player1.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.LVL2, 3, 3));
+		c = f1.getComponent(26);
+		c.rotate(ComponentRotation.U180);
+		player1.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.LVL2, 2, 1));
+		c = f1.getComponent(25);
+		c.rotate(ComponentRotation.U000);
+		player1.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.LVL2, 2, 2));
+
+		//player ciambella
+		Player player2 = new Player(GameModeType.LVL2, "player2", PlayerColor.BLUE);
+		c = f2.getComponent(41);
+		c.rotate(ComponentRotation.U000);
+		player2.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.LVL2, 3, 1));
+		c = f2.getComponent(78);
+		c.rotate(ComponentRotation.U000);
+		player2.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.LVL2, 3, 3));
+		c = f2.getComponent(67);
+		c.rotate(ComponentRotation.U000);
+		player2.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.LVL2, 4, 1));
+		c = f2.getComponent(58);
+		c.rotate(ComponentRotation.U000);
+		player2.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.LVL2, 5, 1));
+		c = f2.getComponent(43);
+		c.rotate(ComponentRotation.U000);
+		player2.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.LVL2, 5, 2));
+		c = f2.getComponent(59);
+		c.rotate(ComponentRotation.U000);
+		player2.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.LVL2, 5, 3));
+		c = f2.getComponent(23);
+		c.rotate(ComponentRotation.U090);
+		player2.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.LVL2, 4, 3));
+
+        players.add(new ClientConstructionPlayer(player1.getUsername(), player1.getColor(), player1.getSpaceShip().getClientSpaceShip(), new ArrayList<>(){{add(1); add(2);}}, false));
+        players.add(new ClientConstructionPlayer(player2.getUsername(), player2.getColor(), player2.getSpaceShip().getClientSpaceShip(), new ArrayList<>(){{add(31); add(102);}}, false));
+        
+        ClientConstructionState cs = new ClientConstructionState(GameModeType.TEST, players, null, new ArrayList<>(){{add(10);add(102);add(24);}}, 100, 0, 0, null, null);
+        ClientConstructionStateFormatter.format(terminal, cs, PlayerColor.RED);
+    }
+
+      private void testShowConstructionLevel2(){
+        Instant t = Instant.ofEpochMilli(Instant.now().toEpochMilli()-Duration.ofSeconds(10).toMillis());
+        ArrayList<ClientConstructionPlayer> players = new ArrayList<>();
+        BaseComponent c;
+        ComponentFactory f1 = new ComponentFactory();
+        ComponentFactory f2 = new ComponentFactory();
+        //player stabile
+		Player player1 = new Player(GameModeType.LVL2, "player1", PlayerColor.RED);
+		c = f1.getComponent(41);
+		c.rotate(ComponentRotation.U000);
+		player1.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.LVL2, 3, 1));
+		c = f1.getComponent(79);
+		c.rotate(ComponentRotation.U000);
+		player1.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.LVL2, 3, 3));
+		c = f1.getComponent(26);
+		c.rotate(ComponentRotation.U180);
+		player1.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.LVL2, 2, 1));
+		c = f1.getComponent(25);
+		c.rotate(ComponentRotation.U000);
+		player1.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.LVL2, 2, 2));
+
+		//player ciambella
+		Player player2 = new Player(GameModeType.LVL2, "player2", PlayerColor.BLUE);
+		c = f2.getComponent(41);
+		c.rotate(ComponentRotation.U000);
+		player2.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.LVL2, 3, 1));
+		c = f2.getComponent(78);
+		c.rotate(ComponentRotation.U000);
+		player2.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.LVL2, 3, 3));
+		c = f2.getComponent(67);
+		c.rotate(ComponentRotation.U000);
+		player2.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.LVL2, 4, 1));
+		c = f2.getComponent(58);
+		c.rotate(ComponentRotation.U000);
+		player2.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.LVL2, 5, 1));
+		c = f2.getComponent(43);
+		c.rotate(ComponentRotation.U000);
+		player2.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.LVL2, 5, 2));
+		c = f2.getComponent(59);
+		c.rotate(ComponentRotation.U000);
+		player2.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.LVL2, 5, 3));
+		c = f2.getComponent(23);
+		c.rotate(ComponentRotation.U090);
+		player2.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.LVL2, 4, 3));
+
+        players.add(new ClientConstructionPlayer(player1.getUsername(), player1.getColor(), player1.getSpaceShip().getClientSpaceShip(), new ArrayList<>(){{add(1); add(2);}}, false));
+        players.add(new ClientConstructionPlayer(player2.getUsername(), player2.getColor(), player2.getSpaceShip().getClientSpaceShip(), new ArrayList<>(){{add(31); add(102);}}, false));
+        ArrayList<Integer> construction = new ArrayList<>(){{add(10);add(2);add(14);add(102);add(20);}};
+        ClientConstructionState cs = new ClientConstructionState(GameModeType.LVL2, players, construction, new ArrayList<>(){{add(10);add(102);add(24);add(24);add(24);add(24);add(24);add(24);add(24);add(24);add(24);add(24);add(24);add(24);add(24);add(24);add(24);add(24);add(24);add(24);add(24);add(24);add(24);add(24);add(24);add(24);add(24);add(24);add(24);add(24);add(24);add(24);}}, 100, 3, 1, Duration.ofSeconds(90), Instant.from(t));
+        this.selected_color = PlayerColor.RED;
+        this.setClientState(cs);
+        ClientConstructionStateFormatter.format(terminal, cs, PlayerColor.RED);
     }
 
     private void testShowVerify(){

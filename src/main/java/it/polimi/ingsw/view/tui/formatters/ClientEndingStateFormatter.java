@@ -32,8 +32,8 @@ public class ClientEndingStateFormatter {
                 .append(String.format("✨: %3d | ", e.getScore()));
             res.add(b.toAnsi());
         }
-
         terminal.printCentered(res);
+
         terminal.print(bottom_line+"━".repeat(128-bottom_line.length()), 30, 0);
         terminal.print(terminal.peekInput(),31,0);
     }

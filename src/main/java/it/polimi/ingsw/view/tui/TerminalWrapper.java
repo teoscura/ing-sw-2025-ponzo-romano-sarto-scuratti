@@ -3,7 +3,6 @@ package it.polimi.ingsw.view.tui;
 import java.io.IOException;
 import java.lang.ref.Cleaner;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -19,14 +18,12 @@ import org.jline.utils.AttributedStringBuilder;
 import org.jline.utils.AttributedStyle;
 import org.jline.utils.Display;
 import org.jline.utils.InfoCmp.Capability;
-import org.jline.utils.Status;
 
 public class TerminalWrapper {
 
     private final Terminal terminal;
     private final KeyMap<Widget> keymap;
     private final BindingReader reader;
-    private final Status status;
 
     private Size size;
     private boolean legal;
@@ -41,17 +38,15 @@ public class TerminalWrapper {
             .streams(System.in, System.out)
             .encoding(Charset.forName("UTF-8"))
             .build();
-        
-
-
+            
         Attributes a = this.terminal.enterRawMode();
         c.register(this, ()->cleanUp(a));
 
         this.reader = new BindingReader(terminal.reader());
-        this.status = Status.getStatus(terminal);
         this.keymap = setupBindings();
         this.size = terminal.getSize();
         if(size.getRows()>=32&&size.getColumns()>=128) legal = true;
+        terminal.puts(Capability.cursor_invisible);
 
         terminal.handle(Terminal.Signal.WINCH, signal -> {
             Display display = new Display(terminal, true);
@@ -65,10 +60,20 @@ public class TerminalWrapper {
             legal = true;
             //clearBase();
         });
+
+        terminal.handle(Terminal.Signal.INT, signal -> {
+            this.cleanUp(a);
+            System.exit(0);
+        });
     }
 
     public Widget readBinding(){
         return reader.readBinding(this.keymap);
+    }
+
+    public Widget readBinding(int timeout){
+        if(reader.peekCharacter(timeout)<0)  return null;
+        return reader.readBinding(this.keymap, this.keymap, false);
     }
 
     public boolean isAvailable(){
@@ -171,13 +176,6 @@ public class TerminalWrapper {
         this.print(lines, firstrow, (this.size.getColumns()-lines.get(0).length())/2);
     }
 
-    public void updateCommandBar(){
-        ArrayList<AttributedString> lines = new ArrayList<>();
-        lines.add(new AttributedStringBuilder().style(AttributedStyle.BOLD.foreground(AttributedStyle.YELLOW)).append("━Typed line:━"+"━".repeat(this.size.getColumns()-"━Typed line:━".length())).toAttributedString());
-        lines.add(new AttributedStringBuilder().style(AttributedStyle.BOLD.foreground(AttributedStyle.CYAN)).append(this.line.toString()).toAttributedString());
-        status.update(lines, legal);
-    }
-
     public void puts(Capability capability, Object... params){
         if(!legal) return;
         terminal.puts(Capability.clear_screen);
@@ -186,6 +184,7 @@ public class TerminalWrapper {
 
     private void cleanUp(Attributes a){
         puts(Capability.clear_screen);
+        puts(Capability.cursor_visible);
         terminal.setAttributes(a);
     }
 

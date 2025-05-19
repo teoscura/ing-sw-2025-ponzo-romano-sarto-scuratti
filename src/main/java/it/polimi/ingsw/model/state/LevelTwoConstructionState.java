@@ -48,7 +48,7 @@ public class LevelTwoConstructionState extends ConstructionState {
 					stash,
 					this.finished.contains(p)));
 		}
-		return new ClientConstructionState(this.type, tmp, new ArrayList<>(this.voyage_deck.getConstructionCards()), discarded, this.board.getCoveredSize(), this.hourglass.getInstant());
+		return new ClientConstructionState(this.type, tmp, new ArrayList<>(this.voyage_deck.getConstructionCards()), discarded, this.board.getCoveredSize(), this.hourglass.timesTotal(), this.hourglass.timesLeft(), this.hourglass.getDuration(), this.hourglass.getInstant());
 	}
 
 	@Override

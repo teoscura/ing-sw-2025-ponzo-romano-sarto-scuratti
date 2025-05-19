@@ -7,7 +7,6 @@ import it.polimi.ingsw.message.client.ClientMessage;
 import it.polimi.ingsw.message.server.ServerDisconnectMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
 
-import java.io.IOException;
 import java.rmi.NoSuchObjectException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -34,9 +33,12 @@ public class RMIConnection implements ServerConnection {
 	@Override
 	public void close() {
 		try {
+			sendMessage(new ServerDisconnectMessage());
 			UnicastRemoteObject.unexportObject(stub, true);
 		} catch (NoSuchObjectException e) {
 			System.out.println("Unexported RMIClientStub");
+		} catch (RemoteException e) {
+			System.out.println("Closed socket.");
 		}
 	}
 
@@ -44,13 +46,7 @@ public class RMIConnection implements ServerConnection {
 	public Thread getShutdownHook() {
 		return new Thread() {
 			public void run() {
-				try {
-					sendMessage(new ServerDisconnectMessage());
-					close();
-				} catch (IOException e) {
-					System.out.println("Ran Shutdown Hook on RMIConnection");
-					close();
-				}
+				close();
 			}
 		};
 	}

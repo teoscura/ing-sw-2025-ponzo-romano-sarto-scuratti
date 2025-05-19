@@ -14,6 +14,7 @@ public class NotifyStateUpdateMessage extends ClientMessage {
 
 	@Override
 	public void receive(ConnectedState client) {
+		client.getView().setClientState(state);
 		this.state.sendToView(client.getView());
 	}
 
