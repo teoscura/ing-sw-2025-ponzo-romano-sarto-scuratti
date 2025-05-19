@@ -15,7 +15,7 @@ public class ClientVerifyState implements ClientState {
 		this.players = playerlist;
 	}
 
-	public ArrayList<ClientVerifyPlayer> getPlayers() {
+	public ArrayList<ClientVerifyPlayer> getPlayerList() {
 		return players;
 	}
 

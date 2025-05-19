@@ -32,14 +32,10 @@ public class TerminalWrapper {
     private boolean legal;
     private StringBuffer line;
     private String input;
-    private ArrayList<AttributedString> status_info;
-    
-    private String bottom_line = "━Typed line:━";
 
     public TerminalWrapper() throws IOException{
         Cleaner c = Cleaner.create();
         this.line = new StringBuffer();
-        this.status_info = new ArrayList<>();
         this.terminal = TerminalBuilder.builder().name("Galaxy Truckers")
             .system(true)
             .streams(System.in, System.out)
@@ -206,42 +202,6 @@ public class TerminalWrapper {
         print(str1.toAnsi(), r, c);
         print(str2.toAnsi(), r+1, c);
         print(str3.toAnsi(), r+2, c);
-    }
-
-
-    // private void clearBase(){
-    //     if(!legal) return;
-    //     for(int i = 0; i<30;i++){
-    //         this.terminal.puts(Capability.cursor_address, i, 0);
-    //         this.terminal.puts(Capability.clr_eol);
-    //     }
-    //     print(bottom_line, 30, 0);
-    //     this.terminal.puts(Capability.cursor_address, 31, 0);
-    //     this.terminal.puts(Capability.clr_eol);
-    //     print(updateStatus().toAnsi(terminal), 31, 0);
-
-    // }
-
-    public void updateStatusTopLines(Collection<AttributedString> extra_lines){
-        this.status_info = new ArrayList<>(extra_lines);
-    }
-
-    public void updateStatus(){
-        ArrayList<AttributedString> newstatus = new ArrayList<>(status_info);
-        newstatus.add(new AttributedStringBuilder()
-            .style(AttributedStyle.BOLD.foreground(AttributedStyle.YELLOW))
-            .append(bottom_line + "━".repeat(size.getColumns()-bottom_line.length()))
-            .toAttributedString());
-        newstatus.add(new AttributedStringBuilder()
-            .style(AttributedStyle.BOLD.foreground(AttributedStyle.GREEN))
-            .append(line.toString())
-            .toAttributedString());
-        status.update(newstatus, true);
-        status.redraw();
-    }
-
-    public void resetStatus(){
-        this.status.reset();
     }
 
 }
