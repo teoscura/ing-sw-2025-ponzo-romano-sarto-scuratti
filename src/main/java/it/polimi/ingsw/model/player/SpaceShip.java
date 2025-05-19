@@ -27,7 +27,15 @@ import it.polimi.ingsw.utils.LoggerLevel;
 import java.io.Serializable;
 import java.util.*;
 
-
+/**
+ * <h2>SpaceShip</h2>
+ * <p>
+ * Represents the player's ship in the game.
+ * The spaceship is a grid of components, dynamically assembled by the player,
+ * and responsible for handling structure validation, component effects,
+ * combat resolution, and state updates.
+ * </p>
+ */
 public class SpaceShip implements Serializable {
 
 	private final Player player;
@@ -82,14 +90,27 @@ public class SpaceShip implements Serializable {
 		this.updateShip();
 	}
 
+	/**
+	 * Returns the game mode used to initialize the ship (which defines ship size and shape).
+	 * @return the game mode type
+	 */
 	public GameModeType getType() {
 		return this.type;
 	}
 
+	/**
+	 * Returns the count of crew members by type (index 0 = human, 1 = brown, 2 = purple).
+	 * @return an array of crew counts
+	 */
 	public int[] getCrew() {
 		return this.crew;
 	}
 
+	/**
+	 * Performs a verification of all components in the ship.
+	 * Returns a 2D matrix with each component's status.
+	 * @return verification result grid
+	 */
 	public VerifyResult[][] bulkVerify() {
 		VerifyResult[][] res = new VerifyResult[this.type.getHeight()][this.type.getWidth()];
 		for (int y = 0; y < this.type.getHeight(); y++) {
@@ -108,6 +129,10 @@ public class SpaceShip implements Serializable {
 		return res;
 	}
 
+	/**
+	 * Returns {@code true} if no broken components are found.
+	 * @return overall ship integrity status
+	 */
 	public boolean bulkVerifyResult() {
 		var t = bulkVerify();
 		for (var row : t) {
@@ -118,11 +143,19 @@ public class SpaceShip implements Serializable {
 		return true;
 	}
 
+	/**
+	 * Returns the number of distinct component blobs (connected groups).
+	 * @return blob count
+	 */
 	public int getBlobsSize() {
 		this.updateShipBlobs();
 		return this.blobs.size();
 	}
 
+	/**
+	 * Updates the internal "blob" structure of the ship.
+	 * Blobs are sets of connected valid components.
+	 */
 	public void updateShipBlobs() {
 		ArrayList<ArrayList<ShipCoords>> res = new ArrayList<>();
 		VerifyResult[][] map = new VerifyResult[this.type.getHeight()][this.type.getWidth()];
@@ -139,6 +172,7 @@ public class SpaceShip implements Serializable {
 		}
 		this.blobs = res;
 	}
+
 
 	private ArrayList<ShipCoords> verifyBlob(VerifyResult[][] map, ShipCoords starting_point) {
 		ArrayList<ShipCoords> res = new ArrayList<>();
@@ -159,6 +193,13 @@ public class SpaceShip implements Serializable {
 		return res;
 	}
 
+	/**
+	 * Forces selection of one blob as the active ship structure.
+	 * All others are discarded.
+	 * @param blob_coord coordinate belonging to the blob to keep
+	 * @throws ForbiddenCallException if only one blob exists
+	 * @throws IllegalTargetException if the coordinates are invalid
+	 */
 	public void selectShipBlob(ShipCoords blob_coord) throws ForbiddenCallException {
 		updateShipBlobs();
 		if (this.blobs.size() <= 1) throw new ForbiddenCallException();
@@ -177,7 +218,13 @@ public class SpaceShip implements Serializable {
 		throw new IllegalTargetException("Blob coordinate was invalid!");
 	}
 
-
+	/**
+	 * Adds a component to the ship at the specified coordinates.
+	 * @param component the component to add
+	 * @param coords location to place it
+	 * @throws IllegalComponentAdd if the location is illegal or occupied
+	 * @throws IllegalTargetException if not adjacent to any existing component
+	 */
 	public void addComponent(BaseComponent component, ShipCoords coords) {
 		if (coords == null) throw new NullPointerException();
 		if (coords.x < 0 || coords.x >= this.type.getWidth())
@@ -201,6 +248,11 @@ public class SpaceShip implements Serializable {
 		this.updateShip();
 	}
 
+	/**
+	 * Removes the component at the given coordinates and updates the ship state.
+	 * @param coords coordinates of the component to remove
+	 * @throws IllegalTargetException if no component is present at the location
+	 */
 	public void removeComponent(ShipCoords coords) {
 		if (coords == null) throw new NullPointerException();
 		if (player.getDescriptor() != null)
@@ -213,6 +265,10 @@ public class SpaceShip implements Serializable {
 		this.updateShip();
 	}
 
+	/**
+	 * Updates the ship state based on the currently installed components.
+	 * Calculates crew, power, containers, cannon power, engine power.
+	 */
 	public void updateShip() {
 		SpaceShipUpdateVisitor v = new SpaceShipUpdateVisitor();
 		for (BaseComponent[] col : this.components) {
@@ -233,6 +289,9 @@ public class SpaceShip implements Serializable {
 		}
 	}
 
+	/**
+	 * Resets all powered components (e.g., cannons, engines) to their unpowered state.
+	 */
 	public void resetPower() {
 		EnergyVisitor v = new EnergyVisitor(false);
 		for (BaseComponent[] col : this.components) {
@@ -243,6 +302,12 @@ public class SpaceShip implements Serializable {
 		this.updateShip();
 	}
 
+	/**
+	 * Powers on a target component using a battery located at another coordinate.
+	 * @param coords_target the target component to power
+	 * @param battery_location the location of the battery
+	 * @throws IllegalTargetException if invalid component or battery
+	 */
 	public void turnOn(ShipCoords coords_target, ShipCoords battery_location) {
 		if (coords_target == null) throw new NullPointerException();
 		if (battery_location == null) throw new NullPointerException();
@@ -257,6 +322,12 @@ public class SpaceShip implements Serializable {
 		this.updateShip();
 	}
 
+	/**
+	 * Returns the component at the specified coordinates.
+	 * @param coords location to retrieve
+	 * @return component instance
+	 * @throws OutOfBoundsException if coordinates are outside grid
+	 */
 	public BaseComponent getComponent(ShipCoords coords) {
 		if (coords == null) throw new NullPointerException();
 		if (coords.x < 0 || coords.x >= this.type.getWidth())
@@ -266,33 +337,62 @@ public class SpaceShip implements Serializable {
 		return this.components[coords.y][coords.x];
 	}
 
+	/**
+	 * Returns the ship's current total cannon power.
+	 * @return cannon power
+	 */
 	public double getCannonPower() {
 		return this.cannon_power;
 	}
 
+	/**
+	 * Returns the ship's current total engine power.
+	 * @return engine power
+	 */
 	public int getEnginePower() {
 		return this.engine_power;
 	}
 
+	/**
+	 * Returns the number of batteries present.
+	 * @return battery count
+	 */
 	public int getEnergyPower() {
 		return this.containers[0];
 	}
 
+	/**
+	 * Returns a boolean array indicating shield coverage in the 4 directions.
+	 * @return shield direction map
+	 */
 	public boolean[] getShieldedDirections() {
 		return this.shielded_directions;
 	}
 
+	/**
+	 * Returns the height of the ship grid.
+	 * @return height
+	 */
 	public int getHeight() {
 		return this.type.getHeight();
 	}
 
+	/**
+	 * Returns the width of the ship grid.
+	 * @return width
+	 */
 	public int getWidth() {
 		return this.type.getWidth();
 	}
 
+	/**
+	 * Returns the default empty component reference.
+	 * @return empty placeholder
+	 */
 	public BaseComponent getEmpty() {
 		return this.empty;
 	}
+
 
 	public void addStorageCoords(ShipCoords coords) {
 		if (this.storage_coords.contains(coords))
@@ -341,6 +441,10 @@ public class SpaceShip implements Serializable {
 		this.powerable_coords.remove(coords);
 	}
 
+	/**
+	 * Returns the total number of crew members.
+	 * @return total crew
+	 */
 	public int getTotalCrew() {
 		int sum = 0;
 		for (int i : this.getCrew()) {
@@ -349,6 +453,10 @@ public class SpaceShip implements Serializable {
 		return sum;
 	}
 
+	/**
+	 * Finds cabins that are connected to at least one other cabin.
+	 * @return list of connected cabins
+	 */
 	public ArrayList<ShipCoords> findConnectedCabins() {
 		ArrayList<ShipCoords> res = new ArrayList<>();
 		for (ShipCoords coords : this.cabin_coords) {
@@ -361,7 +469,10 @@ public class SpaceShip implements Serializable {
 		return res;
 	}
 
-
+	/**
+	 * Counts how many exposed connectors are not connected to other components.
+	 * @return number of exposed connectors
+	 */
 	public int countExposedConnectors() {
 		int sum = 0;
 		for (BaseComponent[] col : this.components) {
@@ -385,7 +496,11 @@ public class SpaceShip implements Serializable {
 		return sum;
 	}
 
-
+	/**
+	 * Handles an incoming meteorite based on direction and offset.
+	 * Applies shield logic and potentially removes components.
+	 * @param p meteor projectile
+	 */
 	public void handleMeteorite(Projectile p) {
 		//Normalize Roll and see if it grazes or is in a possible row.
 		int index = normalizeRoll(p.getDirection(), p.getOffset());
@@ -411,6 +526,11 @@ public class SpaceShip implements Serializable {
 	}
 
 
+	/**
+	 * Handles a laser shot based on direction and offset.
+	 * Applies shield logic and removes first impacted component.
+	 * @param p laser projectile
+	 */
 	public void handleShot(Projectile p) {
 		//Normalize Roll and see if it grazes or is in a possible row.
 		int index = normalizeRoll(p.getDirection(), p.getOffset());
@@ -423,6 +543,7 @@ public class SpaceShip implements Serializable {
 		if (tmp.equals(this.empty.getCoords())) return;
 		this.removeComponent(tmp);
 	}
+
 
 	private int normalizeRoll(ProjectileDirection direction, int roll) {
 		if (direction.getShift() % 2 == 0) {
@@ -477,6 +598,10 @@ public class SpaceShip implements Serializable {
 		return v.getFoundCannon();
 	}
 
+	/**
+	 * Returns the current cargo quantities stored in the ship.
+	 * @return array with cargo values (by type)
+	 */
 	public int[] getContains() {
 		return this.containers;
 	}
@@ -485,11 +610,21 @@ public class SpaceShip implements Serializable {
 	// 	return this.center;
 	// }
 
+	/**
+	 * Checks if the provided coordinates belong to a cabin component.
+	 * @param coords coordinate to verify
+	 * @return {@code true} if it is a cabin, {@code false} otherwise
+	 */
 	public boolean isCabin(ShipCoords coords) {
 		if (coords == null) throw new NullPointerException();
 		return this.cabin_coords.contains(coords);
 	}
 
+	/**
+	 * Converts the internal ship state to a serializable {@link ClientSpaceShip}
+	 * used for network transmission to clients.
+	 * @return a complete client-side representation of the ship
+	 */
 	public ClientSpaceShip getClientSpaceShip() {
 		ClientComponent[][] res = new ClientComponent[this.type.getHeight()][this.type.getWidth()];
 		for (int x = 0; x < this.type.getWidth(); x++) {
