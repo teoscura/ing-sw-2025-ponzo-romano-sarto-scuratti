@@ -14,7 +14,13 @@ import it.polimi.ingsw.utils.LoggerLevel;
 
 import java.util.ArrayList;
 
-
+/**
+ * Represents the "Pirates" adventure card in the game.
+ * <p>
+ * This card presents a combat challenge where players may receive a reward for
+ * strong firepower, or suffer projectile damage if their ship is underpowered.
+ * </p>
+ */
 public class PiratesCard extends Card {
 
 	private final ProjectileArray shots;
@@ -52,6 +58,18 @@ public class PiratesCard extends Card {
 		return this.shots.getProjectiles();
 	}
 
+	/**
+	 * Applies the PiratesCard effect based on the ship's firepower.
+	 * <p>
+	 * - If firepower is sufficient, the player wins and gains credits.<br>
+	 * - If equal, no effect is applied.<br>
+	 * - If lower, the ship takes projectile damage.
+	 * </p>
+	 *
+	 * @param state The Current State
+	 * @param p The Player
+	 * @throws NullPointerException    if {@code state} or {@code p} is null
+	 */
 	public boolean apply(VoyageState state, Player p) {
 		if (state == null || p == null) throw new NullPointerException();
 		if (p.getSpaceShip().getCannonPower() > this.min_power) {
