@@ -74,8 +74,8 @@ public class ClientConstructionStateFormatter {
                 Duration elapsed = Duration.between(state.getLastToggle(), Instant.now());
                 Duration time_left = Duration.ofMillis(state.getHourglassDuration().toMillis()-elapsed.toMillis());
                 boolean has_expired = elapsed.compareTo(state.getHourglassDuration()) > 0;
-                String time = has_expired ? "Hourglass expired." : formatTime(time_left)+"s"+(state.getTogglesLeft()>0?" but you can still build! ":"");
-
+                String time = has_expired ? "Hourglass expired." : formatTime(time_left)+"s";
+                time += has_expired && state.getTogglesLeft() > 0 ? "but you can still build!" : ""; 
                 res.style(AttributedStyle.BOLD.foreground(has_expired ? state.getTogglesLeft()>0? AttributedStyle.YELLOW : AttributedStyle.RED : AttributedStyle.GREEN))
                     .append("Time left: "+time+" | ");
             }

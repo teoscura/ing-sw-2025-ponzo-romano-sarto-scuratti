@@ -67,6 +67,19 @@ public class ClientSmallComponentPrinter implements ClientComponentVisitor {
 
     @Override
     public void show(ClientShipmentsComponentDecorator component) {
+        switch(component.getType()){
+            case DOUBLENORMAL:
+                this.character_component =  "🚙";
+            case TRIPLENORMAL:
+                this.character_component =  "🛻";
+            case SINGLESPECIAL:
+                this.character_component =  "🚚";
+            case DOUBLESPECIAL:
+                this.character_component =  "🚛";
+            default:
+                break;
+
+        }
         this.character_component = "📦";
     }
     

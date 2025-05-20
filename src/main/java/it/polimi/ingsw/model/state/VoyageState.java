@@ -83,7 +83,7 @@ public class VoyageState extends GameState {
 					p.getDisconnected(),
 					p.getRetired()));
 		}
-		return new ClientVoyageState(type, tmp, this.state.getClientCardState());
+		return new ClientVoyageState(type, tmp, this.state.getClientCardState(), this.voyage_deck.getLeft());
 	}
 
 	@Override
@@ -121,6 +121,8 @@ public class VoyageState extends GameState {
 			this.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' attempted to give up, but they already aren't playing!"));
 			return;
 		}
+		Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' gave up!");
+			this.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' gave up!"));
 		this.to_give_up.add(p);
 	}
 

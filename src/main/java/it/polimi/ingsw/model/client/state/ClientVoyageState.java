@@ -12,12 +12,14 @@ public class ClientVoyageState implements ClientState {
 	private final GameModeType type;
 	private final ArrayList<ClientVoyagePlayer> playerlist;
 	private final ClientCardState card_state;
+	private final int cards_left;
 
-	public ClientVoyageState(GameModeType type, ArrayList<ClientVoyagePlayer> playerlist, ClientCardState card_state) {
+	public ClientVoyageState(GameModeType type, ArrayList<ClientVoyagePlayer> playerlist, ClientCardState card_state, int cards_left) {
 		if (type == null || playerlist == null) throw new NullPointerException();
 		this.type = type;
-		this.playerlist = playerlist;;
+		this.playerlist = playerlist;
 		this.card_state = card_state;
+		this.cards_left = cards_left;
 	}
 
 	public GameModeType getType() {
@@ -30,6 +32,10 @@ public class ClientVoyageState implements ClientState {
 
 	public ClientCardState getCardState() {
 		return this.card_state;
+	}
+
+	public int getCardsLeft(){
+		return this.cards_left;
 	}
 
 	@Override

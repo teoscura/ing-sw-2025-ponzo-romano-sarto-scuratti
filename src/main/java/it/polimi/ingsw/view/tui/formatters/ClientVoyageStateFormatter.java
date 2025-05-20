@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jline.utils.AttributedStringBuilder;
+import org.jline.utils.AttributedStyle;
 
 import it.polimi.ingsw.model.client.player.ClientVoyagePlayer;
 import it.polimi.ingsw.model.client.state.ClientVoyageState;
@@ -46,6 +47,7 @@ public class ClientVoyageStateFormatter {
     public static void formatStatus(TerminalWrapper terminal, ClientVoyageState state){
         ClientCardStateFormatter csf = new ClientCardStateFormatter();
         state.getCardState().showCardState(csf);
+        terminal.print(new AttributedStringBuilder().style(AttributedStyle.BOLD.foreground(AttributedStyle.YELLOW)).append("Card "+(state.getType().getTurns()-state.getCardsLeft())+"/"+state.getType().getTurns()+".").toAnsi(), 28, 0);
         terminal.print(csf.getFormatted().toAnsi(), 29, 0);
         terminal.print(new AttributedStringBuilder().append(bottom_line+"━".repeat(128-bottom_line.length())).toAttributedString().toAnsi(), 30, 0);
         terminal.setStatus(List.of(new AttributedStringBuilder().append(terminal.peekInput()).toAttributedString()));
