@@ -32,6 +32,7 @@ public class TUIView implements ClientView {
     //add info to verify state.
     //if cargopenalty is 0 nothing is needed
     //logger su give up e check che uno non sia gia' dentro
+    //special symbols for each storage.
 
 
     private ConnectedState state;
