@@ -77,7 +77,7 @@ public class DummyVoyageState extends VoyageState {
 					p.getDisconnected(),
 					p.getRetired()));
 		}
-		return new ClientVoyageState(type, tmp, this.state.getClientCardState());
+		return new ClientVoyageState(type, tmp, this.state.getClientCardState(), 0);
 	}
 
 	@Override
