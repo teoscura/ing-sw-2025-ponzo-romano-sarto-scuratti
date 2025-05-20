@@ -1,5 +1,7 @@
 package it.polimi.ingsw.gui;
 
+import it.polimi.ingsw.controller.client.state.ConnectingState;
+import it.polimi.ingsw.controller.client.state.TitleScreenState;
 import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.client.card.*;
 import it.polimi.ingsw.model.client.components.*;
@@ -33,6 +35,16 @@ public class GUIView implements ClientView {
         stage.show();
     }
 
+    @Override
+    public void show(ClientLobbySelectState state) {
+
+    }
+
+    @Override
+    public void show(ClientSetupState state) {
+
+    }
+
     //Game states
     public void show (ClientWaitingRoomState state) {
         Scene scene = null;
@@ -46,10 +58,23 @@ public class GUIView implements ClientView {
         }
         else scene.setFill(Color.MEDIUMPURPLE);
 
+        WaitingRoomController controller = new WaitingRoomController(state);
+        controller.paint();
+
         stage.setScene(scene);
     }
 
-    public void show(ClientConstructionState state) {};
+    public void show(ClientConstructionState state) {
+        Scene scene = null;
+        try {
+            scene = new Scene(FXMLLoader.load(getClass().getResource("/it/polimi/ingsw/ConstructionView.fxml")));
+        } catch (IOException e) {}
+
+        ConstructionController controller = new ConstructionController(state);
+        controller.paint();
+
+        stage.setScene(scene);
+    };
 
     public void show(ClientVerifyState state) {};
 
@@ -58,7 +83,9 @@ public class GUIView implements ClientView {
     public void show(ClientEndgameState state) {};
 
     //Components
-    public void show(ClientBaseComponent component) {};
+    public void show(ClientBaseComponent component) {
+
+    };
 
     public void show(ClientPoweredComponentDecorator component) {};
 
@@ -96,5 +123,17 @@ public class GUIView implements ClientView {
     //Misc and debug
     public void showTextMessage(String message){
 
-    };
+    }
+
+    @Override
+    public void showTitleScreen(TitleScreenState titlesScreenState) {
+
+    }
+
+    @Override
+    public void showConnectionScreen(ConnectingState connectingState) {
+
+    }
+
+    ;
 }
