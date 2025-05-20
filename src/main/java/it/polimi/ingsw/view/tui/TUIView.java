@@ -31,8 +31,8 @@ public class TUIView implements ClientView {
     //And show cards message for construction state.
     //add info to verify state.
     //if cargopenalty is 0 nothing is needed
-    //logger su give up e check che uno non sia gia' dentro
-    //special symbols for each storage.
+    //reconnecting with disconnected name doesn't reintegrate into correct notify state.
+    //entering after a lobby has timedout doesnot properly work.
 
 
     private ConnectedState state;
