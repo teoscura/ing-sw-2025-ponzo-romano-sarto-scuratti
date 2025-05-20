@@ -26,7 +26,7 @@ public class WaitingRoomController {
 
     }
 
-    public void setup(){
+    public void paint(){
         player_list.setFixedCellSize(50);
         player_list.setItems(FXCollections.observableList(state.getPlayerList().stream().map(ClientWaitingPlayer::getUsername).collect(Collectors.toList())));
 
