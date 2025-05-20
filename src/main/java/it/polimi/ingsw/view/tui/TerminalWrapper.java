@@ -28,6 +28,8 @@ public class TerminalWrapper {
     private final Status status;
     private final Attributes previous;
 
+    private final Object termlock;
+
     private Size size;
     private StringBuffer line;
     private String input;
@@ -36,8 +38,7 @@ public class TerminalWrapper {
         this.terminal = TerminalBuilder.builder()
             .system(true)
             .build();
-            
-        
+        this.termlock = new Object();
         previous = this.terminal.enterRawMode();
         this.terminal.puts(Capability.enter_ca_mode);
         this.terminal.puts(Capability.clear_screen);
@@ -66,6 +67,7 @@ public class TerminalWrapper {
                 this.size = terminal.getSize();
                 showSmallScreen(size);
                 return;
+                
             }
             display.resize(size.getRows(), size.getColumns());
             puts(Capability.clear_screen);
@@ -166,9 +168,11 @@ public class TerminalWrapper {
     }
 
     public void print(String string, int row, int scol){
-        this.terminal.puts(Capability.cursor_address, row, scol);
-        this.terminal.writer().print(string);
-        this.terminal.writer().flush();
+        synchronized(this.termlock){
+            this.terminal.puts(Capability.cursor_address, row, scol);
+            this.terminal.writer().print(string);
+            this.terminal.writer().flush();
+        }  
     }
 
     public void print(Collection<String> lines, int srow, int scol){
@@ -192,8 +196,10 @@ public class TerminalWrapper {
     }
 
     public void puts(Capability capability, Object... params){
-        terminal.puts(capability, params);
-        terminal.flush();
+        synchronized(this.termlock){
+            terminal.puts(capability, params);
+            terminal.flush();
+        }
     }
 
     public void setStatus(List<AttributedString> lines){

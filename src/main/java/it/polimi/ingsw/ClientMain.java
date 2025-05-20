@@ -8,7 +8,7 @@ import it.polimi.ingsw.view.tui.TUIView;
 
 public class ClientMain {
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException, InterruptedException {
 		if (args.length != 1) {
 			System.out.println("Jar must be launched with [gui|tui] as arguments only!");
 			System.exit(-1);
@@ -26,6 +26,7 @@ public class ClientMain {
 		}
 		ClientController c = new ClientController(v);
 		while (!c.getClosed()) {
+			Thread.sleep(1000);
 		}
 	}
 

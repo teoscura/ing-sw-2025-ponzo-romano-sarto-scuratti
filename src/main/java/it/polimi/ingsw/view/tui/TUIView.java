@@ -40,6 +40,7 @@ public class TUIView implements ClientView {
     }
 
     public void redraw(){
+        //Check if null.
         terminal.puts(Capability.clear_screen);
         this.client_state.sendToView(this);
         this.status_runnable.run();
@@ -205,7 +206,7 @@ public class TUIView implements ClientView {
         this.inputthread.interrupt();
         this.inputthread = new ConnectedKeyboardInputThread(terminal, this);
         this.inputthread.start();
-        this.statusthread.start();;
+        this.statusthread.start();
         this.state = state;
     }
 
