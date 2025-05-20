@@ -22,7 +22,7 @@ public class CommandBuilder {
 
 		ServerMessage mess = null;
 		boolean valid = false;
-		String[] parts = command.split(" ", 16);
+		String[] parts = command.trim().split(" ", 16);
 
 		switch (parts[0]) {
 			case "entersetup":
@@ -114,7 +114,7 @@ public class CommandBuilder {
 				mess = new RemoveCrewMessage(crewCoords);
 				break;
 			case "selectlanding":
-				valid = Pattern.matches("^selectlanding [0-9]+$", command);
+				valid = Pattern.matches("^selectlanding ([0-9]+|-[0-9]+)$", command);
 				if (!valid) break;
 				int landingId = Integer.parseInt(parts[1]);
 				mess = new SelectLandingMessage(landingId);
@@ -170,7 +170,7 @@ public class CommandBuilder {
 			case "togglehourglass":
 				valid = Pattern.matches("^togglehourglass$", command);
 				if (!valid) break;
-				mess = new SendContinueMessage();
+				mess = new ToggleHourglassMessage();
 				break;
 			default:
 				view.showTextMessage("Command not valid");

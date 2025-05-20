@@ -27,7 +27,12 @@ public class TUIView implements ClientView {
     private boolean overlay;
     private Runnable overlay_runnable;
 
-    //XXX synchronize every object accessed by threads here.
+    //XXX fix construction state message, add that when placing components, you dont lose it if the placement is invalid
+    //And show cards message for construction state.
+    //add info to verify state.
+    //if cargopenalty is 0 nothing is needed
+    //logger su give up e check che uno non sia gia' dentro
+
 
     private ConnectedState state;
 

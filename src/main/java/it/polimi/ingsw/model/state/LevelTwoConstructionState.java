@@ -121,6 +121,8 @@ public class LevelTwoConstructionState extends ConstructionState {
 		}
 		try {
 			hourglass.toggle();
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' turned the hourglass and moved it to the next slot! (Times remaining: " + hourglass.timesLeft() + ")");
+			this.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' turned the hourglass and moved it to the next slot! (Times remaining: " + hourglass.timesLeft() + ")"));
 		} catch (ForbiddenCallException e) {
 			Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' attempted to toggle the hourglass, but it's already run out on the last slot!");
 			this.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' attempted to toggle the hourglass, but it's already run out on the last slot!"));

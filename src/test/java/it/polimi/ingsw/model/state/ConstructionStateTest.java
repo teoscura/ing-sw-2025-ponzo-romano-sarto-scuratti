@@ -101,7 +101,7 @@ public class ConstructionStateTest {
 		LevelTwoConstructionState state = new LevelTwoConstructionState(model, GameModeType.TEST, PlayerCount.TWO, players, 1);
 		model.setState(state);
 		ServerMessage mess = null;
-		Thread.sleep(1500);
+		Thread.sleep(2000);
 		mess = new TakeComponentMessage();
 		mess.setDescriptor(p1desc);
 		model.validate(mess);
@@ -150,11 +150,11 @@ public class ConstructionStateTest {
 		mess = new ToggleHourglassMessage();
 		mess.setDescriptor(p1desc);
 		model.validate(mess);
-		Thread.sleep(1500);
+		Thread.sleep(3000);
 		mess = new ToggleHourglassMessage();
 		mess.setDescriptor(p2desc);
 		model.validate(mess);
-		Thread.sleep(1500);
+		Thread.sleep(2000);
 		test = state.getHoarded(player1).getLast().getID();
 		mess = new TakeComponentMessage();
 		mess.setDescriptor(p1desc);
