@@ -33,6 +33,8 @@ public class TUIView implements ClientView {
     //if cargopenalty is 0 nothing is needed
     //reconnecting with disconnected name doesn't reintegrate into correct notify state.
     //entering after a lobby has timedout doesnot properly work.
+    //add that enter removes help screen
+    
 
 
     private ConnectedState state;
@@ -122,7 +124,6 @@ public class TUIView implements ClientView {
 
     @Override
     public void showTextMessage(String message) {
-        if(state == null) throw new UnsupportedOperationException();
         TextMessageFormatter.format(terminal, message);
     }
 

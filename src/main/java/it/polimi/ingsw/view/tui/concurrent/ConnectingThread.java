@@ -35,21 +35,13 @@ public class ConnectingThread extends Thread {
 
     @Override
     public void run(){
-        while(!terminal.isAvailable()){
-            screen();
-            terminal.readBinding().apply();
+        while(args.size()<3){
+            while(!terminal.isAvailable()){
+                screen();
+                terminal.readBinding().apply();
+            }
+            args.add(terminal.takeInput());
         }
-        args.add(terminal.takeInput());
-        while(!terminal.isAvailable()){
-            screen();
-            terminal.readBinding().apply();
-        }
-        args.add(terminal.takeInput());
-        while(!terminal.isAvailable()){
-            screen();
-            terminal.readBinding().apply();
-        }
-        args.add(terminal.takeInput());
         if(!validate()) state.connect("", 0, ConnectionType.NONE);
         else state.connect(args.get(0), Integer.parseInt(args.get(1)), args.get(2).equals("rmi") ? ConnectionType.RMI :args.get(2).equals("tcp") ? ConnectionType.SOCKET : ConnectionType.NONE);
     }

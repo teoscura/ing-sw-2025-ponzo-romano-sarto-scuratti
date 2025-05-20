@@ -125,10 +125,12 @@ public abstract class ConstructionState extends GameState {
 			return;
 		}
 		//Is it the current tile
+		//TODO: ristrutturare questo
 		BaseComponent c = null;
+		boolean current = false;
 		if(this.current_tile.get(p)!=null && this.current_tile.get(p).getID()==id){
 			c = this.current_tile.get(p);
-			this.current_tile.put(p, null);
+			current = true;
 		} else {
 			c = this.hoarded_tile.get(p).stream().filter(cm->cm.getID()==id).findFirst().orElse(null);
 		}
@@ -136,13 +138,11 @@ public abstract class ConstructionState extends GameState {
 			Logger.getInstance().print(LoggerLevel.ERROR, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' attempted to place a component, they passed the check, but component is null!");
 			return;
 		} else {
-			this.hoarded_tile.get(p).remove(c);
 		}
 		try {
 			c.rotate(rotation);
 			p.getSpaceShip().addComponent(c, new ShipCoords(type, coords.x, coords.y));
 			Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' placed a component in " + coords);
-			this.current_tile.put(p, null);
 		} catch (OutOfBoundsException e) {
 			Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' attempted to place a component, but the coordinates are illegal!");
 			this.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' attempted to place a component, but the coordinates are illegal!"));
@@ -156,6 +156,8 @@ public abstract class ConstructionState extends GameState {
 			this.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' attempted to place a component, but the coordinates are not connected to the rest of the ship!"));
 			return;
 		}
+		if(current) this.current_tile.put(p, null);
+		else this.hoarded_tile.get(p).remove(c);
 	}
 
 	@Override
