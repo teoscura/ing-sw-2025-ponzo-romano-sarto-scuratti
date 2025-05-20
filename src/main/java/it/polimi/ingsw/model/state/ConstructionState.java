@@ -146,12 +146,15 @@ public abstract class ConstructionState extends GameState {
 		} catch (OutOfBoundsException e) {
 			Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' attempted to place a component, but the coordinates are illegal!");
 			this.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' attempted to place a component, but the coordinates are illegal!"));
+			return;
 		} catch (IllegalComponentAdd e) {
 			Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' attempted to place a component, but the coordinates are already occupied!");
 			this.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' attempted to place a component, but the coordinates are already occupied!"));
+			return;
 		} catch (IllegalTargetException e) {
 			Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' attempted to place a component, but the coordinates are not connected to the rest of the ship!");
 			this.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' attempted to place a component, but the coordinates are not connected to the rest of the ship!"));
+			return;
 		}
 	}
 
