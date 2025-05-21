@@ -2,9 +2,9 @@ package it.polimi.ingsw.controller.server;
 
 import it.polimi.ingsw.controller.ThreadSafeMessageQueue;
 import it.polimi.ingsw.controller.server.connections.*;
+import it.polimi.ingsw.message.client.ClientDisconnectMessage;
 import it.polimi.ingsw.message.client.ClientMessage;
 import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
-import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.ModelInstance;
@@ -101,13 +101,12 @@ public class MainServerController extends Thread implements VirtualServer {
 	public void receiveMessage(ServerMessage message) {
 		if (message.getDescriptor() == null) {
 			Logger.getInstance().print(LoggerLevel.WARN, "Received a message from a Client: not properly connected!");
-			this.broadcast(new ViewMessage("Received a message from a Client: not properly connected!"));
+			this.sendMessage(message.getDescriptor(), new ClientDisconnectMessage());
 			return;
 		}
 		synchronized (listeners_lock) {
 			if (!this.all_listeners.containsKey(message.getDescriptor().getUsername())) {
 				Logger.getInstance().print(LoggerLevel.WARN, "Received a message from a Client: not properly connected!");
-				this.broadcast(new ViewMessage("Received a message from a Client: not properly connected!"));
 				return;
 			}
 		}
@@ -177,6 +176,16 @@ public class MainServerController extends Thread implements VirtualServer {
 			Logger.getInstance().print(LoggerLevel.WARN, "A Client: attempted to connect with an invalid name!");
 			return;
 		}
+		synchronized(listeners_lock){
+			if(this.all_listeners.containsKey(username)){
+				try {
+					client.sendMessage(new ClientDisconnectMessage());
+				} catch (IOException e) {
+				} finally {
+					client.close();
+				}
+			}
+		}
 		Logger.getInstance().print(LoggerLevel.LOBSL, "Client: '" + username + "' connected from '" + client.getSocket().getInetAddress() + "'.");
 		ClientDescriptor new_listener = new ClientDescriptor(username, client);
 		try {
@@ -197,7 +206,6 @@ public class MainServerController extends Thread implements VirtualServer {
 		}
 		ClientDescriptor new_listener = new ClientDescriptor(name, client);
 		synchronized (listeners_lock) {
-
 			if (this.all_listeners.containsKey(name) || !validateUsername(name))
 				return null;
 			try {

@@ -3,6 +3,7 @@ package it.polimi.ingsw.controller.server;
 import it.polimi.ingsw.controller.ThreadSafeMessageQueue;
 import it.polimi.ingsw.controller.server.connections.VirtualServer;
 import it.polimi.ingsw.message.client.ClientMessage;
+import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.ModelInstance;
@@ -150,12 +151,11 @@ public class LobbyController extends Thread implements VirtualServer {
 				Logger.getInstance().print(LoggerLevel.LOBCN, "[" + this.id + "] " + "Client '" + client.getUsername() + "' attempted to connect twice!");
 				return;
 			} else if (this.disconnected_usernames.containsKey(client.getUsername())) {
-				this.disconnected_usernames.remove(client.getUsername());
 				client.bindPlayer(this.disconnected_usernames.get(client.getUsername()));
+				this.disconnected_usernames.remove(client.getUsername());
 				reconnect = true;
-			} else {
-				this.listeners.put(client.getUsername(), client);
 			}
+			this.listeners.put(client.getUsername(), client);
 		}
 		synchronized (model_lock) {
 			if (!model.getStarted()) {
@@ -163,12 +163,15 @@ public class LobbyController extends Thread implements VirtualServer {
 				this.model.connect(client);
 			} else if (reconnect) {
 				this.model.connect(client.getPlayer());
-				this.dsctimer.cancel();
-				this.dsctimer = null;
+				if(dsctimer!=null){
+					this.dsctimer.cancel();
+					this.dsctimer = null;
+				}
 			} else {
 				Logger.getInstance().print(LoggerLevel.LOBCN, "[" + this.id + "] " + "Client '" + client.getUsername() + "' started spectating!");
 			}
 		}
+		if(reconnect) this.sendMessage(client, new NotifyStateUpdateMessage(model.getState().getClientState()));
 	}
 
 	public void disconnect(ClientDescriptor client){

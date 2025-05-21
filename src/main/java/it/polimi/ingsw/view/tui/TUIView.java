@@ -38,8 +38,8 @@ public class TUIView implements ClientView {
     //XXX add show cards message for construction state.
     //add info to verify state.
     //if cargopenalty is 0 nothing is needed
-    //reconnecting with disconnected name doesn't reintegrate into correct notify state.
     //entering after a lobby has timedout does not properly work.
+    //COnnecting with same name as someone already present is broken.
     //add that enter removes help screen
 
     public TUIView() throws IOException {
