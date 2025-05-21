@@ -48,9 +48,12 @@ public class ClientVoyageStateFormatter {
         ClientCardStateFormatter csf = new ClientCardStateFormatter();
         state.getCardState().showCardState(csf);
         terminal.print(new AttributedStringBuilder().style(AttributedStyle.BOLD.foreground(AttributedStyle.YELLOW)).append("Card "+(state.getType().getTurns()-state.getCardsLeft())+"/"+state.getType().getTurns()+".").toAnsi(), 28, 0);
+        terminal.print(" ".repeat(128), 29, 0);
+        terminal.print(" ".repeat(128), 30, 0);
+        terminal.print(" ".repeat(128), 31, 0);
         terminal.print(csf.getFormatted().toAnsi(), 29, 0);
-        terminal.print(new AttributedStringBuilder().append(bottom_line+"━".repeat(128-bottom_line.length())).toAttributedString().toAnsi(), 30, 0);
-        terminal.setStatus(List.of(new AttributedStringBuilder().append(terminal.peekInput()).toAttributedString()));
+        terminal.print(bottom_line+"━".repeat(128-bottom_line.length()), 30, 0);
+        terminal.print(terminal.peekInput(), 31, 0);
     }
 
     static private List<String> printPlanche(ClientVoyageState state, PlayerColor color){

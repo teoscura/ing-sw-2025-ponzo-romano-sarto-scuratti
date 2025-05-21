@@ -6,18 +6,19 @@ import org.jline.utils.InfoCmp.Capability;
 
 import it.polimi.ingsw.controller.client.connections.ConnectionType;
 import it.polimi.ingsw.controller.client.state.ConnectingState;
+import it.polimi.ingsw.view.tui.TUIView;
 import it.polimi.ingsw.view.tui.TerminalWrapper;
 
 public class ConnectingThread extends Thread {
     
-    private final TerminalWrapper terminal;
     private final ConnectingState state;
+    private final TUIView view;
     private final ArrayList<String> screen;
     private final ArrayList<String> args;
 
-    public ConnectingThread(TerminalWrapper terminal, ConnectingState state){
-        if (terminal == null || state==null) throw new NullPointerException();
-        this.terminal = terminal;
+    public ConnectingThread(ConnectingState state, TUIView view){
+        if (state==null) throw new NullPointerException();
+        this.view = view;
         this.state = state;
         this.args = new ArrayList<>();
         this.screen = new ArrayList<>(){{
@@ -27,7 +28,7 @@ public class ConnectingThread extends Thread {
             add("│                       │");
             add("│──────── Port: ────────│");
             add("│                       │");
-            add("│───── \"tcp\"|\"rmi\" ─────│");
+            add("│───── 'tcp'|'rmi' ─────│");
             add("│                       │");
             add("╰───────────────────────╯");
         }};
@@ -36,17 +37,13 @@ public class ConnectingThread extends Thread {
     @Override
     public void run(){
         while(args.size()<3){
-            while(!terminal.isAvailable()){
-                screen();
-                terminal.readBinding().apply();
-            }
-            args.add(terminal.takeInput());
+            args.add(view.takeLine());
         }
         if(!validate()) state.connect("", 0, ConnectionType.NONE);
         else state.connect(args.get(0), Integer.parseInt(args.get(1)), args.get(2).equals("rmi") ? ConnectionType.RMI :args.get(2).equals("tcp") ? ConnectionType.SOCKET : ConnectionType.NONE);
     }
 
-    private void screen(){
+    public void format(TerminalWrapper terminal){
         terminal.puts(Capability.clear_screen);
         int i = 0;
         for(var s : args){
@@ -54,10 +51,13 @@ public class ConnectingThread extends Thread {
             this.screen.set(screen.size()-2*(3-i),"│"+shown+"│");
             i++;
         }
-        int index = 2*(3-args.size());
-        String current_input = terminal.peekInput();
-        String shown = normalize(current_input);
-        this.screen.set(screen.size()-index,"│"+shown+"│");
+        if(args.size()<3){
+            int index = 2*(3-args.size());
+            String current_input = terminal.peekInput();
+            String shown = normalize(current_input);
+            terminal.print(args.size()+"", 0, 0);
+            this.screen.set(screen.size()-index,"│"+shown+"│");
+        }
         terminal.printCentered(screen);
     }
 

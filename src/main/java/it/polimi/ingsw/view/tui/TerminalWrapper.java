@@ -33,6 +33,7 @@ public class TerminalWrapper {
     private Size size;
     private StringBuffer line;
     private String input;
+    private boolean legal;
 
     public TerminalWrapper(TUIView view) throws IOException{
         this.terminal = TerminalBuilder.builder()
@@ -54,6 +55,14 @@ public class TerminalWrapper {
         this.keymap = setupBindings(view);
         this.reader = new BindingReader(terminal.reader());
         setupHooks(view);
+
+        legal = true;
+        this.size = terminal.getSize();
+        if(size.getRows()!=32 || size.getColumns()!=128){
+            this.size = terminal.getSize();
+            showSmallScreen(size);
+            legal = false;
+        }
     }
 
     private void setupHooks(TUIView view){
@@ -63,15 +72,14 @@ public class TerminalWrapper {
         terminal.handle(Terminal.Signal.WINCH, signal -> {
             Display display = new Display(terminal, true);
             this.size = terminal.getSize();
-            if(size.getRows()<32 || size.getColumns()<128){
+            if(size.getRows()!=32 || size.getColumns()!=128){
                 this.size = terminal.getSize();
                 showSmallScreen(size);
+                legal = false;
                 return;
-                
             }
             display.resize(size.getRows(), size.getColumns());
-            puts(Capability.clear_screen);
-            view.redraw();
+            legal = true;
         });
 
         //Makes the JVM close gracefully.
@@ -110,15 +118,15 @@ public class TerminalWrapper {
             line.append(" ");
             return true;
         };
-        Widget inserdot = () -> {
+        Widget inserdotw = () -> {
             line.append(".");
             return true;
         };
-        Widget inserdash = () -> {
+        Widget inserdashw = () -> {
             line.append("-");
             return true;
         };
-        Widget inserunderscore = () -> {
+        Widget inserunderscorew = () -> {
             line.append("_");
             return true;
         };
@@ -133,9 +141,9 @@ public class TerminalWrapper {
             line.delete(0, line.length());
             return true;
         };
-        km.bind(inserdot, ".");
-        km.bind(inserdash, "-");
-        km.bind(inserunderscore, "_");
+        km.bind(inserdotw, ".");
+        km.bind(inserdashw, "-");
+        km.bind(inserunderscorew, "_");
         km.bind(inserspacw, " ");
         km.bind(backspacew, KeyMap.del());
         km.bind(backspacew, KeyMap.key(terminal, Capability.key_backspace));
@@ -146,11 +154,6 @@ public class TerminalWrapper {
 
     public Widget readBinding(){
         return reader.readBinding(this.keymap);
-    }
-
-    public Widget readBinding(int timeout){
-        if(reader.peekCharacter(timeout)<0)  return null;
-        return reader.readBinding(this.keymap, this.keymap, false);
     }
 
     public boolean isAvailable(){
@@ -168,6 +171,7 @@ public class TerminalWrapper {
     }
 
     public void print(String string, int row, int scol){
+        if(!legal) return;
         synchronized(this.termlock){
             this.terminal.puts(Capability.cursor_address, row, scol);
             this.terminal.writer().print(string);
@@ -196,6 +200,7 @@ public class TerminalWrapper {
     }
 
     public void puts(Capability capability, Object... params){
+        if(!legal) return;
         synchronized(this.termlock){
             terminal.puts(capability, params);
             terminal.flush();

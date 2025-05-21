@@ -26,6 +26,7 @@ public class ConnectedState extends ClientControllerState {
 	private final Thread sender_thread;
 	private final Thread shutdown_hook;
 	private final Thread input_thread;
+	private final Timer pingtimer;
 
 	public ConnectedState(ClientController controller, ClientView view, String username, ServerConnection connection, ThreadSafeMessageQueue<ClientMessage> inqueue) {
 		super(controller, view);
@@ -36,6 +37,7 @@ public class ConnectedState extends ClientControllerState {
 		this.sender_thread = new SenderThread(this, this.outqueue, this.connection);
 		this.shutdown_hook = this.getShutdownHook();
 		this.input_thread = new InputCommandThread(this, view);
+		this.pingtimer = new Timer(true);
 	}
 
 	@Override
@@ -56,7 +58,6 @@ public class ConnectedState extends ClientControllerState {
 	public void onClose() {
 		Runtime.getRuntime().removeShutdownHook(this.shutdown_hook);
 		this.disconnect();
-		this.view.disconnect();
 	}
 
 	// -------------------------------------------------------------
@@ -74,10 +75,13 @@ public class ConnectedState extends ClientControllerState {
 			this.connection.close();
 			this.sender_thread.interrupt();
 			this.consumer_thread.interrupt();
-			this.controller.reset();
+			stopPingTask();
+			this.view.disconnect();
 		} catch (RemoteException e) {
-			this.controller.reset();
+			view.showTextMessage("Error during RMI Disconnect!");
 		} catch (IOException e) {
+			view.showTextMessage("Error during TCP Disconnect!");
+		} finally {
 			this.controller.reset();
 		}
 	}
@@ -103,8 +107,11 @@ public class ConnectedState extends ClientControllerState {
 	// -------------------------------------------------------------
 
 	private void startPingTask() {
-		Timer t = new Timer(true);
-		t.scheduleAtFixedRate(this.getPingTask(this), 0, 100);
+		pingtimer.scheduleAtFixedRate(this.getPingTask(this), 0, 100);
+	}
+
+	private void stopPingTask() {
+		pingtimer.cancel();
 	}
 
 	private TimerTask getPingTask(ConnectedState controller) {

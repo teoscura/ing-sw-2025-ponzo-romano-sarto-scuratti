@@ -5,18 +5,19 @@ import java.util.ArrayList;
 import org.jline.utils.InfoCmp.Capability;
 
 import it.polimi.ingsw.controller.client.state.TitleScreenState;
+import it.polimi.ingsw.view.tui.TUIView;
 import it.polimi.ingsw.view.tui.TerminalWrapper;
 
 public class TitleScreenThread extends Thread {
 
-    private final TerminalWrapper terminal;
     private final TitleScreenState state;
+    private final TUIView view;
     private final ArrayList<String> screen;
 
-    public TitleScreenThread(TerminalWrapper terminal, TitleScreenState state){
-        if (terminal == null || state==null) throw new NullPointerException();
-        this.terminal = terminal;
+    public TitleScreenThread(TitleScreenState state, TUIView view){
+        if (state==null) throw new NullPointerException();
         this.state = state;
+        this.view = view;
         this.screen = new ArrayList<>(){{
             add(".·:\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\':·.");
             add(": :    ___      _                    _____                 _                  : :");
@@ -36,14 +37,10 @@ public class TitleScreenThread extends Thread {
     }
 
     public void run(){
-        while(!terminal.isAvailable()){
-            screen();
-            terminal.readBinding().apply();
-        }
-        state.setUsername(terminal.takeInput());
+        state.setUsername(view.takeLine());
     }
 
-    private void screen(){
+    public void format(TerminalWrapper terminal){
         terminal.puts(Capability.clear_screen);
         String current_input = terminal.peekInput();
         String shown = current_input.length() > 30 ? current_input.substring(current_input.length()-30) : String.format("%1$-30s", current_input);

@@ -51,9 +51,12 @@ public class ClientConstructionStateFormatter {
     }
 
     public static void formatStatus(TerminalWrapper terminal, ClientConstructionState state){
+        terminal.print(" ".repeat(128), 29, 0);
+        terminal.print(" ".repeat(128), 30, 0);
+        terminal.print(" ".repeat(128), 31, 0);
         terminal.print(getBoardLine(state).toAnsi(), 29, 0);
-        terminal.print(new AttributedStringBuilder().append(bottom_line+"━".repeat(128-bottom_line.length())).toAttributedString().toAnsi(), 30, 0);
-        terminal.setStatus(List.of(new AttributedStringBuilder().append(terminal.peekInput()).toAttributedString()));
+        terminal.print(bottom_line+"━".repeat(128-bottom_line.length()), 30, 0);
+        terminal.print(terminal.peekInput(), 31, 0);
     }
 
     static private AttributedString getBoardLine(ClientConstructionState state){

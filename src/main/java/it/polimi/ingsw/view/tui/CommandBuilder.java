@@ -124,7 +124,7 @@ public class CommandBuilder {
 				if (!valid) break;
 				ShipCoords cabinCoords = new ShipCoords(GameModeType.TEST, Integer.parseInt(parts[1]),
 						Integer.parseInt(parts[2]));
-				AlienType alienType = AlienType.values()[Integer.parseInt(parts[3])];
+				AlienType alienType = Integer.parseInt(parts[3]) == 1 ? AlienType.BROWN : Integer.parseInt(parts[3]) == 2 ? AlienType.PURPLE : AlienType.HUMAN;
 				mess = new SetCrewMessage(cabinCoords, alienType);
 				break;
 			case "takecargo":
