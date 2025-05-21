@@ -112,7 +112,7 @@ public class ClientSpaceShipFormatter {
             .style(AttributedStyle.DEFAULT)
             .append("│").toAnsi());
         tmp.get(12).append(new AttributedStringBuilder()
-            .append("🛡️: ")
+            .append("🔒:")
             .style(AttributedStyle.BOLD.foreground(ship.getShielded()[0] ? AttributedStyle.GREEN : AttributedStyle.BLACK))
             .append("N")
             .style(AttributedStyle.BOLD.foreground(ship.getShielded()[1] ? AttributedStyle.GREEN : AttributedStyle.BLACK))
