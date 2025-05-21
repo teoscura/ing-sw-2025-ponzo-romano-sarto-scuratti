@@ -58,7 +58,19 @@ public class ConnectedState extends ClientControllerState {
 	@Override
 	public void onClose() {
 		Runtime.getRuntime().removeShutdownHook(this.shutdown_hook);
-		this.disconnect();
+		try {
+			this.connection.sendMessage(new ServerDisconnectMessage());
+			this.connection.close();
+			this.sender_thread.interrupt();
+			this.consumer_thread.interrupt();
+			stopPingTask();
+		} catch (RemoteException e) {
+			view.showTextMessage("Error during RMI Disconnect!");
+		} catch (IOException e) {
+			view.showTextMessage("Error during TCP Disconnect!");
+		} finally {
+			this.view.disconnect();
+		}
 	}
 
 	// -------------------------------------------------------------
