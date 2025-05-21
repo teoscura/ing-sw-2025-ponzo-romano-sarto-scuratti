@@ -33,6 +33,7 @@ public class ClientController {
 	}
 
 	public void reset() {
+		this.state.onClose();
 		this.setState(new TitleScreenState(this, view));
 	}
 

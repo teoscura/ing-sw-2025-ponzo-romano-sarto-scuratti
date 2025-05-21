@@ -14,7 +14,7 @@ public class ConnectedThread extends Thread {
     @Override
     public void run(){
         CommandPreprocessor cb = new CommandPreprocessor(view);
-        while(true){
+        while(view.connected()){
             cb.process(view.takeLine());
         }
     }

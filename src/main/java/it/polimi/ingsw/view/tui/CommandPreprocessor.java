@@ -9,10 +9,18 @@ public class CommandPreprocessor {
 	}
 
     public void process(String s){
-        String[] parts = s.split(" ", 16);
         switch(s){
-            case "ship": if(parts.length!=2) forward(s);
-                view.changeShip(s);
+            case "red":
+                view.changeShip("red");
+                break;
+            case "blue":
+                view.changeShip("blue");
+                break;
+            case "green":
+                view.changeShip("green");
+                break;
+            case "yellow":
+                view.changeShip("yellow");
                 break;
             case "help":
                 view.showHelpScreen();

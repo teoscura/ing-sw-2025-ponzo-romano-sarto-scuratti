@@ -55,7 +55,6 @@ public class ConnectingThread extends Thread {
             int index = 2*(3-args.size());
             String current_input = terminal.peekInput();
             String shown = normalize(current_input);
-            terminal.print(args.size()+"", 0, 0);
             this.screen.set(screen.size()-index,"│"+shown+"│");
         }
         terminal.printCentered(screen);

@@ -8,7 +8,7 @@ public class TextMessageFormatter {
 
     public static void format(TerminalWrapper terminal, String message){
         ArrayList<String> res = new ArrayList<>();
-        int wraplength = 33;
+        int wraplength = 32;
         res.add("╭"+"─".repeat(8)+"  New Message!  "+"─".repeat(8)+"╮");
         StringBuffer remaining = new StringBuffer(message);
         while(remaining.length()>0){

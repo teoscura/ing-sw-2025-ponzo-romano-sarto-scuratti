@@ -12,7 +12,7 @@ public class HelpScreenFormatter {
         res.add("│  Argument types: <i>: number,<gt>: 1-2 gamemode type, <s>: game size 2-4, <r>: rotation in terms of 90* clockwise    │");
         res.add("│   <cv>: coordinate value, <mvl>: value of merch [0: battery, 4: red], <cid>: component id, <b> \"true\" or \"false\"     │");
         res.add("│                      Commands:                           ││                         Symbols:                         │");
-        res.add("│ 'ship [color]' specify ship to view as main.             ││ '🔫': Cannon/Cannon PWR   │ '🮆🮆': Forbidden/Placeholder  │");
+        res.add("│ '(red|blue|green|yellow)' select ship to display as main ││ '🔫': Cannon/Cannon PWR   │ '🮆🮆': Forbidden/Placeholder  │");
         res.add("│ 'entersetup'                                             ││ '🚀': Engine/Engine PWR   │ 'SC': Single Connector       │");
         res.add("│ 'leavesetup'                                             ││ '🔋': Battery/Batteries   │ 'DC': Double Connector       │");
         res.add("│ 'openlobby <gt> <s>'                                     ││ '🔒': Shield              │ 'UN': Universal connector    │");

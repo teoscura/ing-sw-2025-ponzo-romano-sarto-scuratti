@@ -35,13 +35,9 @@ public interface ClientView {
 
 	void disconnect();
 
-	Object getLock();
-
-	boolean inputAvailable();
-
 	void setInput(ServerMessage input);
 
-	ServerMessage getInput();
+	ServerMessage takeInput();
 
 	//Misc and debug
 	void showTextMessage(String message);

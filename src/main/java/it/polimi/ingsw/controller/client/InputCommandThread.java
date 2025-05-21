@@ -15,16 +15,7 @@ public class InputCommandThread extends Thread {
 
 	public void run() {
 		while (true) {
-			synchronized(view.getLock()){
-				while(!view.inputAvailable()){
-					try {
-						view.getLock().wait();
-					} catch (InterruptedException e) {
-						view.showTextMessage("Shutdown of input thread!");
-					}
-				}
-				cc.sendMessage(view.getInput());
-			}
+			cc.sendMessage(view.takeInput());
 		}
 	}
 

@@ -19,10 +19,10 @@ public class CommandBuilder {
 	}
 
 	public ServerMessage build(String command) {
-
+		command = command.trim();
 		ServerMessage mess = null;
 		boolean valid = false;
-		String[] parts = command.trim().split(" ", 16);
+		String[] parts = command.split(" ", 16);
 
 		switch (parts[0]) {
 			case "entersetup":

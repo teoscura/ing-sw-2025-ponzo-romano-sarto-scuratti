@@ -57,21 +57,11 @@ public class DummyView implements ClientView {
 	}
 
 	@Override
-	public Object getLock() {
-		return new Object();
-	}
-
-	@Override
-	public boolean inputAvailable() {
-		return true;
-	}
-
-	@Override
 	public void setInput(ServerMessage input) {
 	}
 
 	@Override
-	public ServerMessage getInput() {
+	public ServerMessage takeInput() {
 		return null;
 	}
 

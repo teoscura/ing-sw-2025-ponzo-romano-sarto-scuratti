@@ -20,6 +20,9 @@ public abstract class ClientControllerState {
 
 	public abstract ClientControllerState getNext();
 
+	public void onClose(){
+	}
+
 	protected void transition() {
 		this.controller.setState(this.getNext());
 	}

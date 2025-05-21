@@ -35,12 +35,11 @@ public class TUIView implements ClientView {
     private Runnable overlay_runnable;
     
 
-    //XXX fix construction state message, add that when placing components, you dont lose it if the placement is invalid
-    //And show cards message for construction state.
+    //XXX add show cards message for construction state.
     //add info to verify state.
     //if cargopenalty is 0 nothing is needed
     //reconnecting with disconnected name doesn't reintegrate into correct notify state.
-    //entering after a lobby has timedout doesnot properly work.
+    //entering after a lobby has timedout does not properly work.
     //add that enter removes help screen
 
     public TUIView() throws IOException {
@@ -57,8 +56,11 @@ public class TUIView implements ClientView {
     }
 
     public void redraw(){
+        if(state!=null && state.getUsername()!=null){
+            String topline = "You are: " + state.getUsername();
+            terminal.print(topline, 0, (128-topline.length())/2);
+        } 
         this.screen_runnable.run();
-        this.terminal.print(" ".repeat(128), 31, 0);
         this.status_runnable.run();
         if(overlay) this.overlay_runnable.run();
     }
@@ -73,7 +75,6 @@ public class TUIView implements ClientView {
 
     @Override
     public void show(ConnectingState state) {
-        this.line_thread.interrupt();
         ConnectingThread s = new ConnectingThread(state, this);
         this.line_thread = s;
         s.start();
@@ -82,14 +83,12 @@ public class TUIView implements ClientView {
 
     @Override
     public void show(ClientLobbySelectState state) {
-        this.selected_color = PlayerColor.NONE;
         this.screen_runnable = () -> ClientLobbyStatesFormatter.format(terminal, state);
         this.status_runnable = () -> ClientLobbyStatesFormatter.formatStatus(terminal, state);
     }
 
     @Override
     public void show(ClientSetupState state) {
-        this.selected_color = PlayerColor.NONE;
         this.screen_runnable = () -> ClientLobbyStatesFormatter.format(terminal, state);
         this.status_runnable = () -> ClientLobbyStatesFormatter.formatStatus(terminal, state);
     }
@@ -145,7 +144,7 @@ public class TUIView implements ClientView {
         terminal.puts(Capability.clear_screen);
         this.overlay = false;
         this.overlay_runnable = null;
-        this.redraw();
+        //this.redraw();
     }
 
     public Runnable getStatusRunnable(){
@@ -193,6 +192,7 @@ public class TUIView implements ClientView {
             this.line = line;
             line_lock.notifyAll();
         }
+        if(overlay) resetOverlay();
     }
 
 
@@ -200,18 +200,22 @@ public class TUIView implements ClientView {
         switch(s){
             case "red":
                 this.selected_color = PlayerColor.RED;
+                break;
             case "blue":
                 this.selected_color = PlayerColor.BLUE;
+                break;
             case "green":
                 this.selected_color = PlayerColor.GREEN;
+                break;
             case "yellow":
                 this.selected_color = PlayerColor.YELLOW;
+                break;
             default: this.selected_color = PlayerColor.NONE;
         }
         this.redraw();
     }
 
-    @Override
+     @Override
     public void setInput(ServerMessage input){
         synchronized(this.input_lock){
             this.input = input;
@@ -220,29 +224,29 @@ public class TUIView implements ClientView {
     }
 
     @Override
-    public Object getLock() {
-        return this.input_lock;
-    }
-
-    @Override
-    public boolean inputAvailable() {
+    public ServerMessage takeInput() {
         synchronized(this.input_lock){
-            return this.input != null;
-        }
-    }
-
-    @Override
-    public ServerMessage getInput() {
-        synchronized(this.input_lock){
+            while(this.input==null){
+                try {
+                    this.input_lock.wait();
+                } catch (InterruptedException e){
+                    return null;
+                }
+            } 
             ServerMessage res = this.input;
             this.input = null;
             return res;
         }
     }
 
+    public boolean connected(){
+        return this.state != null;
+    }
+
     @Override
     public void connect(ConnectedState state){
-        this.line_thread.interrupt();
+        this.selected_color = PlayerColor.NONE;
+        terminal.puts(Capability.clear_screen);
         ConnectedThread s = new ConnectedThread(this);
         this.line_thread = s;
         s.start();

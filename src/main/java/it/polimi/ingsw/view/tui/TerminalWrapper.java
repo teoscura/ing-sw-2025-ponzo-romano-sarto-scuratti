@@ -139,6 +139,7 @@ public class TerminalWrapper {
             if(line.length()==0) return true;
             this.input = line.toString();
             line.delete(0, line.length());
+            view.resetOverlay();
             return true;
         };
         km.bind(inserdotw, ".");

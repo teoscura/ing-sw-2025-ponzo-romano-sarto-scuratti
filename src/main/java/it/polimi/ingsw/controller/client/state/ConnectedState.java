@@ -55,6 +55,7 @@ public class ConnectedState extends ClientControllerState {
 		return new TitleScreenState(controller, view);
 	}
 
+	@Override
 	public void onClose() {
 		Runtime.getRuntime().removeShutdownHook(this.shutdown_hook);
 		this.disconnect();
@@ -76,12 +77,12 @@ public class ConnectedState extends ClientControllerState {
 			this.sender_thread.interrupt();
 			this.consumer_thread.interrupt();
 			stopPingTask();
-			this.view.disconnect();
 		} catch (RemoteException e) {
 			view.showTextMessage("Error during RMI Disconnect!");
 		} catch (IOException e) {
 			view.showTextMessage("Error during TCP Disconnect!");
 		} finally {
+			this.view.disconnect();
 			this.controller.reset();
 		}
 	}
