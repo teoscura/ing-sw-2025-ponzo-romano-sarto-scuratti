@@ -20,6 +20,8 @@ public class SenderThread extends Thread {
 		this.connection = connection;
 	}
 
+
+	//XXX fix npe that happens when server refuses connection.
 	@Override
 	public void run() {
 		while (true) {
