@@ -9,8 +9,8 @@ public class HelpScreenFormatter {
     static public void format(TerminalWrapper terminal){
         ArrayList<String> res = new ArrayList<>();
         res.add("╭─────────────────────────────────────────────────────── [Help] ───────────────────────────────────────────────────────╮");
-        res.add("│  Argument types: <i>: number,<gt>: 1-2 gamemode type, <s>: game size 2-4, <r>: rotation in terms of 90* clockwise    │");
-        res.add("│               <mvl>: value of merch [0: battery to 4: red], <cid>: component id, <b> \"true\" or \"false\"              │");
+        res.add("│  Argument types: <i>: number, <gt>: 1-2 gamemode type, <s>: game size 2-4, <r>: rotation in terms of 90* clockwise   │");
+        res.add("│              <mvl>: value of merch [0: battery to 4: red], <cid>: component id, <b> 'true' or 'false'                │");
         res.add("│                      Commands:                           ││                         Symbols:                         │");
         res.add("│ '(red|blue|green|yellow)' select ship to display as main ││ '🔫': Cannon/Cannon PWR   │ '🮆🮆': Forbidden/Placeholder  │");
         res.add("│ 'entersetup'                                             ││ '🚀': Engine/Engine PWR   │ 'SC': Single Connector       │");
