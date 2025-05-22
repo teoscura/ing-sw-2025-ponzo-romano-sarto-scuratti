@@ -61,6 +61,7 @@ public class PlanetAnnounceState extends CardState {
 
 	@Override
 	public ClientCardState getClientCardState() {
+		ArrayList<Boolean> landings = new ArrayList<>(this.card.getVisited().stream().map(b->!b).toList());
 		return new ClientLandingCardStateDecorator(
 			new ClientBaseCardState(
 				this.getClass().getSimpleName(),
@@ -68,7 +69,7 @@ public class PlanetAnnounceState extends CardState {
 			this.list.getFirst().getColor(),
 			this.card.getDays(),
 			0,
-			new ArrayList<>(this.card.getVisited()));
+			new ArrayList<>(landings));
 	}
 
 	@Override
