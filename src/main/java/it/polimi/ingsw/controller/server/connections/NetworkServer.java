@@ -62,7 +62,8 @@ public class NetworkServer extends Thread implements RMISkeletonProvider, Serial
 		//rely on Network functionality, but may call the singleton MainServerController, which launches this class.
 		if (rmiport >= 0) {
 			try {
-				registry = LocateRegistry.createRegistry(this.rmiport);
+				System.setProperty("java.rmi.server.hostname", ip);
+				registry = LocateRegistry.createRegistry(rmiport);
 				registry.bind("galaxy_truckers", this);
 				UnicastRemoteObject.exportObject(this, this.rmiport);
 				Logger.getInstance().print(LoggerLevel.SERVR, "Set up RMI on address: '" + this.ip + ":" + this.rmiport + "'...");
@@ -103,11 +104,12 @@ public class NetworkServer extends Thread implements RMISkeletonProvider, Serial
 		} catch (IOException e) {
 			try {
 				this.server.close();
-				System.exit(-1);
+				Logger.getInstance().print(LoggerLevel.ERROR, "Catastrophic IOException, terminating.");
 			} catch (IOException e1) {
 				e1.printStackTrace();
+			} finally {
+				System.exit(-1);
 			}
-			System.exit(-1);
 		}
 	}
 

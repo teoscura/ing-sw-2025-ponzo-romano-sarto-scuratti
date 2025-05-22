@@ -68,15 +68,13 @@ public class TUIView implements ClientView {
             String topline = "You are: " + state.getUsername();
             terminal.print(topline, 0, (128-topline.length())/2);
         } 
-        if(overlay_runnable!=null){
-            this.overlay_runnable.run();
-        } else {
-            this.screen_runnable.run();
-            synchronized(notifications){
-                if(!notifications.isEmpty()) TextMessageFormatter.format(terminal, notifications);
-            }
-        }
+        this.screen_runnable.run();
         this.status_runnable.run();
+        if(overlay_runnable!=null)this.overlay_runnable.run();
+        synchronized(notifications){
+            if(!notifications.isEmpty()) TextMessageFormatter.format(terminal, notifications);
+        }
+        
     }
 
     @Override

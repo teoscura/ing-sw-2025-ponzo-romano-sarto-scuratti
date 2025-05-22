@@ -18,6 +18,8 @@ public class CommandBuilder {
 		this.view = view;
 	}
 
+	//XXXCargo is built badly.
+
 	public ServerMessage build(String command) {
 		if(command == null) return null; 
 		command = command.trim();
