@@ -8,6 +8,7 @@ public class CommandPreprocessor {
 		this.view = view;
 	}
 
+    //XXX add disconnect command that handles disconnection gracefully.
     public void process(String s){
         switch(s){
             case "red":
@@ -24,6 +25,9 @@ public class CommandPreprocessor {
                 break;
             case "help":
                 view.showHelpScreen();
+                break;
+            case "stateinfo":
+                view.showStateInfo();
                 break;
             default:
                 forward(s);

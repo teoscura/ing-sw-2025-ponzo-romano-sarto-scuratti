@@ -44,7 +44,7 @@ public class ClientConstructionStateFormatter {
         } else {
             terminal.print(ClientSpaceShipFormatter.getEmptyShipSmall(), 3, 94);
         }
-        if(color!=PlayerColor.NONE || list.isEmpty())terminal.print(ClientSpaceShipFormatter.getHelpCorner(), 11, 94);
+        if(color!=PlayerColor.NONE || list.isEmpty())terminal.print(ClientSpaceShipFormatter.getConstructionHelpCorner(), 11, 94);
         else terminal.print(ClientSpaceShipFormatter.formatSmall(list.getFirst().getShip(), list.getFirst().getUsername(), list.getFirst().getColor(), 0, false), 11, 94);    
         terminal.print(getUserComponents(state, color), 19, 6);
         terminal.print(getDiscardedBoard(state), 19, 24);
@@ -188,7 +188,7 @@ public class ClientConstructionStateFormatter {
                 res.get(k+5).append(a.get(k));
                 res.get(k+5).append("│");
             }
-            res.get(8).append("─"+String.format("%04d",components.getFirst())+"]╯");
+            res.get(8).append("["+String.format("%04d",components.getFirst())+"]╯");
         } else {
             var a = pr.getForbidden();
             for(int k = 0; k<3; k++){

@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model.client.state;
 
 import it.polimi.ingsw.model.client.ClientGameListEntry;
-import it.polimi.ingsw.view.ClientView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,8 +19,8 @@ public class ClientLobbySelectState implements ClientState {
 	}
 
 	@Override
-	public void sendToView(ClientView view) {
-		view.show(this);
+	public void sendToView(ClientStateVisitor visitor) {
+		visitor.show(this);
 	}
 
 }

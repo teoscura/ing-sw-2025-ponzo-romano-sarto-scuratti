@@ -52,23 +52,32 @@ public class ClientVerifyStateFormatter {
     }
 
 
-    //TODO: fix
     static private AttributedString getMissingLine(ClientVerifyState state){
         AttributedStringBuilder res = new AttributedStringBuilder();
-        boolean ongoing = true;
-        res.style(AttributedStyle.BOLD.foreground(AttributedStyle.CYAN))
-                .append("| Current finishing order: ");
+        res.style(AttributedStyle.BOLD.foreground(AttributedStyle.MAGENTA))
+                .append("Still setupping: ");
         ArrayList<ClientVerifyPlayer> list = new ArrayList<>(state.getPlayerList());
         list.stream().sorted((p1,p2)->Integer.compare(p1.getOrder(), p2.getOrder()));
         for(ClientVerifyPlayer p : list){
-            if(!p.isFinished()) continue;
+            if(p.hasProgressed()) continue;
+            res.style(AttributedStyle.BOLD.foreground(getColor(p.getColor())))
+                .append(p.getColor().toString())
+                .style(AttributedStyle.BOLD.foreground(AttributedStyle.MAGENTA))
+                .append(" | ");
+        }
+        res.style(AttributedStyle.BOLD.foreground(AttributedStyle.CYAN))
+                .append("| Current finishing order: ");
+        list.stream().sorted((p1,p2)->Integer.compare(p1.getOrder(), p2.getOrder()));
+        boolean ongoing = true;
+        for(ClientVerifyPlayer p : list){
+            if(!p.isValid()) continue;
             ongoing = false;
             res.style(AttributedStyle.BOLD.foreground(getColor(p.getColor())))
                 .append(p.getColor().toString())
                 .style(AttributedStyle.BOLD.foreground(AttributedStyle.CYAN))
                 .append(" | ");
         }
-        if(ongoing) res.append("none yet.");
+        if(ongoing) res.append("none yet. | ");
         return res.toAttributedString();
     }
 

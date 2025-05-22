@@ -4,28 +4,14 @@ import it.polimi.ingsw.controller.client.state.*;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.client.state.*;
 
-public interface ClientView {
-	//Game states
+public interface ClientView extends ClientStateVisitor {
+	
+	//User info setup.
 	void show(TitleScreenState state);
 
 	void show(ConnectingState state);
 
-	void show(ClientLobbySelectState state);
-
-	void show(ClientSetupState state);
-
-	void show(ClientWaitingRoomState state);
-
-	void show(ClientConstructionState state);
-
-	void show(ClientVerifyState state);
-
-	void show(ClientVoyageState state);
-
-	void show(ClientEndgameState state);
-
 	//State sync
-
 	void setClientState(ClientState state);
 
 	ClientState getClientState();

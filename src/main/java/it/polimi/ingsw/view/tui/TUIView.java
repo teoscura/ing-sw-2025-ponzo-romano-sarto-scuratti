@@ -8,12 +8,12 @@ import java.util.ArrayList;
 import org.jline.utils.InfoCmp.Capability;
 
 import it.polimi.ingsw.controller.client.state.*;
-import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.client.state.*;
-import it.polimi.ingsw.model.player.PlayerColor;
-import it.polimi.ingsw.view.ClientView;
 import it.polimi.ingsw.view.tui.concurrent.*;
 import it.polimi.ingsw.view.tui.formatters.*;
+import it.polimi.ingsw.message.server.ServerMessage;
+import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.view.ClientView;
 
 public class TUIView implements ClientView {
 
@@ -25,7 +25,6 @@ public class TUIView implements ClientView {
     private final ArrayList<TUINotification> notifications;
     private Thread line_thread;
     private Thread drawthread;
-
     private ConnectedState state;
     private PlayerColor selected_color;
     private ClientState client_state;
@@ -33,12 +32,11 @@ public class TUIView implements ClientView {
     private ServerMessage input;
     private String line;
     
-
+    private final ClientStateOverlayFormatter overlay_formatter;
     private boolean overlay;
     private Runnable screen_runnable;
     private Runnable status_runnable;
     private Runnable overlay_runnable;
-    
 
     //XXX add show cards message for construction state.
     //add info to verify state.
@@ -59,6 +57,7 @@ public class TUIView implements ClientView {
         this.screen_runnable = () -> {};
         this.status_runnable = () -> {};
         this.notifications = new ArrayList<>();
+        this.overlay_formatter = new ClientStateOverlayFormatter(terminal);
     }
 
     public void redraw(){
@@ -150,8 +149,15 @@ public class TUIView implements ClientView {
     public void showHelpScreen() {
         this.overlay = true;
         this.overlay_runnable = () -> HelpScreenFormatter.format(terminal);
-        HelpScreenFormatter.format(terminal);
+        //HelpScreenFormatter.format(terminal);
     }
+
+    public void showStateInfo() {
+        this.overlay = true;
+        this.overlay_runnable = () -> this.getClientState().sendToView(overlay_formatter);
+        //HelpScreenFormatter.format(terminal);
+    }
+
 
     public void resetOverlay(){
         terminal.puts(Capability.clear_screen);

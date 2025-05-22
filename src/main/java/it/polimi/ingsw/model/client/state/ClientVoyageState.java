@@ -3,7 +3,6 @@ package it.polimi.ingsw.model.client.state;
 import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.client.card.ClientCardState;
 import it.polimi.ingsw.model.client.player.ClientVoyagePlayer;
-import it.polimi.ingsw.view.ClientView;
 
 import java.util.ArrayList;
 
@@ -39,8 +38,8 @@ public class ClientVoyageState implements ClientState {
 	}
 
 	@Override
-	public void sendToView(ClientView view) {
-		view.show(this);
+	public void sendToView(ClientStateVisitor visitor) {
+		visitor.show(this);
 	}
 
 }

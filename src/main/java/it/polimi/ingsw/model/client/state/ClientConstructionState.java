@@ -2,7 +2,6 @@ package it.polimi.ingsw.model.client.state;
 
 import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.client.player.ClientConstructionPlayer;
-import it.polimi.ingsw.view.ClientView;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -81,8 +80,8 @@ public class ClientConstructionState implements ClientState {
 	}
 
 	@Override
-	public void sendToView(ClientView view) {
-		view.show(this);
+	public void sendToView(ClientStateVisitor visitor) {
+		visitor.show(this);
 	}
 
 }

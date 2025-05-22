@@ -176,12 +176,24 @@ public class ClientSpaceShipFormatter {
         return username.substring(0, trimsize)+"... - "+color.toString();
     }
 
+    static public ArrayList<String> getConstructionHelpCorner(){
+        ArrayList<String> res = new ArrayList<>();
+        res.add("┌"+"─".repeat(30)+"┐");
+        res.add("│"+" ".repeat(30)+"│");
+        res.add("│  For more info type 'help'!  │");
+        res.add("│ To see uncovered cards type: │");
+        res.add("│         'stateinfo'.         │");
+        res.add("│"+" ".repeat(30)+"│");
+        res.add("└"+"─".repeat(30)+"┘");
+        return res;
+    }
+
     static public ArrayList<String> getHelpCorner(){
         ArrayList<String> res = new ArrayList<>();
         res.add("┌"+"─".repeat(30)+"┐");
         res.add("│"+" ".repeat(30)+"│");
         res.add("│"+" ".repeat(30)+"│");
-        res.add("│"+"  For more help type 'help'!  "+"│");
+        res.add("│  For more info type 'help'!  │");
         res.add("│"+" ".repeat(30)+"│");
         res.add("│"+" ".repeat(30)+"│");
         res.add("└"+"─".repeat(30)+"┘");

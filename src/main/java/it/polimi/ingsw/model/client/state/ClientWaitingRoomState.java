@@ -3,7 +3,6 @@ package it.polimi.ingsw.model.client.state;
 import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.PlayerCount;
 import it.polimi.ingsw.model.client.player.ClientWaitingPlayer;
-import it.polimi.ingsw.view.ClientView;
 
 import java.util.ArrayList;
 
@@ -34,8 +33,8 @@ public class ClientWaitingRoomState implements ClientState {
 	}
 
 	@Override
-	public void sendToView(ClientView view) {
-		view.show(this);
+	public void sendToView(ClientStateVisitor visitor) {
+		visitor.show(this);
 	}
 
 }

@@ -53,8 +53,8 @@ public class CommandBuilder {
 				if (!valid) break;
 				mess = new EnterLobbyMessage(Integer.parseInt(parts[1]));
 				break;
-			case "blobselect":
-				valid = Pattern.matches("^blobselect [0-9] [0-9]$", command);
+			case "selectblob":
+				valid = Pattern.matches("^selectblob [0-9] [0-9]$", command);
 				if (!valid) break;
 				ShipCoords blobCoords = new ShipCoords(GameModeType.TEST, Integer.parseInt(parts[1]),
 						Integer.parseInt(parts[2]));
