@@ -54,9 +54,9 @@ public class ClientConstructionStateFormatter {
         terminal.print(" ".repeat(128), 29, 0);
         terminal.print(" ".repeat(128), 30, 0);
         terminal.print(" ".repeat(128), 31, 0);
-        terminal.print(getBoardLine(state).toAnsi().substring(0, 128), 29, 0);
+        terminal.print(getBoardLine(state).toAnsi(), 29, 0);
         terminal.print(bottom_line+"━".repeat(128-bottom_line.length()), 30, 0);
-        terminal.print(terminal.peekInput().substring(0, 128), 31, 0);
+        terminal.print(terminal.peekInput(), 31, 0);
     }
 
     static private AttributedString getBoardLine(ClientConstructionState state){
