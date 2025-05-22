@@ -68,10 +68,10 @@ public class SocketConnection extends Thread implements ServerConnection {
 				caller.interrupt();
 				try {
 					sendMessage(new ServerDisconnectMessage());
+					socket.close();
 				} catch (IOException e) {
 					System.out.println("Ran Shutdown Hook on SocketConnection");
 				}
-				close();
 			}
 		};
 	}

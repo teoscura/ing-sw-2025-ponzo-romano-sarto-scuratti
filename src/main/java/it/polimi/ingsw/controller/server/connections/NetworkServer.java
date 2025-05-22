@@ -2,6 +2,8 @@ package it.polimi.ingsw.controller.server.connections;
 
 import it.polimi.ingsw.controller.server.ClientDescriptor;
 import it.polimi.ingsw.controller.server.MainServerController;
+import it.polimi.ingsw.message.client.ClientDisconnectMessage;
+import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.utils.Logger;
 import it.polimi.ingsw.utils.LoggerLevel;
 
@@ -140,6 +142,15 @@ public class NetworkServer extends Thread implements RMISkeletonProvider, Serial
 
 	public VirtualServer accept(RMIClientConnection client) throws RemoteException {
 		ClientDescriptor new_client = MainServerController.getInstance().connectListener(client);
+		if(new_client==null) {
+            try {
+				client.sendMessage(new ViewMessage("A player with that name is already connected!"));
+				client.sendMessage(new ClientDisconnectMessage());
+			} catch (IOException e) {
+				Logger.getInstance().print(LoggerLevel.ERROR, "Failed to send a disconnect message to a refused RMI connection");
+			}
+			return null;
+		} 
 		try {
 			return MainServerController.getInstance().getStub(new_client);
 		} catch (RemoteException e) {

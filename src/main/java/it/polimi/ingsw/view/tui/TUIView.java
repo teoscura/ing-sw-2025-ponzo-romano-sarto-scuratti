@@ -1,6 +1,9 @@
 package it.polimi.ingsw.view.tui;
 
 import java.io.IOException;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.ArrayList;
 
 import org.jline.utils.InfoCmp.Capability;
 
@@ -19,6 +22,7 @@ public class TUIView implements ClientView {
     private final Object line_lock;
     private final Object state_lock;
     private final Thread inputthread;
+    private final ArrayList<TUINotification> notifications;
     private Thread line_thread;
     private Thread drawthread;
 
@@ -28,6 +32,7 @@ public class TUIView implements ClientView {
     
     private ServerMessage input;
     private String line;
+    
 
     private boolean overlay;
     private Runnable screen_runnable;
@@ -38,9 +43,9 @@ public class TUIView implements ClientView {
     //XXX add show cards message for construction state.
     //add info to verify state.
     //if cargopenalty is 0 nothing is needed
-    //entering after a lobby has timedout does not properly work.
-    //COnnecting with same name as someone already present is broken.
-    //add that enter removes help screen
+    //Fix connecting with same name on TCP.
+    //Direction specifier for shieldcomponent.
+    //Ending voyage gracefully if everyone loses.
 
     public TUIView() throws IOException {
         this.terminal = new TerminalWrapper(this);
@@ -53,16 +58,23 @@ public class TUIView implements ClientView {
         this.line_lock = new Object();
         this.screen_runnable = () -> {};
         this.status_runnable = () -> {};
+        this.notifications = new ArrayList<>();
     }
 
     public void redraw(){
+        synchronized(notifications){
+            if(TextMessageFormatter.trimExpired(notifications)) terminal.puts(Capability.clear_screen); 
+        }
         if(state!=null && state.getUsername()!=null){
             String topline = "You are: " + state.getUsername();
             terminal.print(topline, 0, (128-topline.length())/2);
         } 
         this.screen_runnable.run();
         this.status_runnable.run();
-        if(overlay) this.overlay_runnable.run();
+        synchronized(notifications){
+            if(!notifications.isEmpty()) TextMessageFormatter.format(terminal, notifications);
+        }
+        if(overlay_runnable!=null) this.overlay_runnable.run();
     }
 
     @Override
@@ -130,8 +142,9 @@ public class TUIView implements ClientView {
 
     @Override
     public void showTextMessage(String message) {
-        //TODO fix this.
-        TextMessageFormatter.format(terminal, message);
+        synchronized(this.notifications){
+            notifications.add(new TUINotification(message, Instant.now(), Duration.ofSeconds(10)));
+        }
     }
 
     public void showHelpScreen() {
@@ -142,9 +155,7 @@ public class TUIView implements ClientView {
 
     public void resetOverlay(){
         terminal.puts(Capability.clear_screen);
-        this.overlay = false;
         this.overlay_runnable = null;
-        //this.redraw();
     }
 
     public Runnable getStatusRunnable(){

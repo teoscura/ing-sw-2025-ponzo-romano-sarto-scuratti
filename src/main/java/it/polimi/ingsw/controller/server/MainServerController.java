@@ -101,7 +101,6 @@ public class MainServerController extends Thread implements VirtualServer {
 	public void receiveMessage(ServerMessage message) {
 		if (message.getDescriptor() == null) {
 			Logger.getInstance().print(LoggerLevel.WARN, "Received a message from a Client: not properly connected!");
-			this.sendMessage(message.getDescriptor(), new ClientDisconnectMessage());
 			return;
 		}
 		synchronized (listeners_lock) {
@@ -207,6 +206,7 @@ public class MainServerController extends Thread implements VirtualServer {
 		ClientDescriptor new_listener = new ClientDescriptor(name, client);
 		synchronized (listeners_lock) {
 			if (this.all_listeners.containsKey(name) || !validateUsername(name))
+			
 				return null;
 			try {
 				Logger.getInstance().print(LoggerLevel.LOBSL, "Client: '" + client.getUsername() + "' connected with RMI.");
@@ -237,7 +237,7 @@ public class MainServerController extends Thread implements VirtualServer {
 		synchronized (listeners_lock) {
 			if (all_listeners.containsKey(client.getUsername())) {
 				Logger.getInstance().print(LoggerLevel.WARN, "Client: '" + client.getUsername() + "' tried to connect twice!");
-				return;
+				throw new ForbiddenCallException();
 			}
 			this.all_listeners.put(client.getUsername(), client);
 			if (this.disconnected.containsKey(client.getUsername())) {

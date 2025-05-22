@@ -27,6 +27,7 @@ import java.util.regex.Pattern;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class MainServerControllerTest {
 
@@ -132,7 +133,7 @@ public class MainServerControllerTest {
 		t.connect(p1);
 		t.connect(p2);
 		t.connect(p3);
-		t.connect(p2);
+		assertThrows(ForbiddenCallException.class, ()->t.connect(p2));
 		t.connect(p4);
 		t.connect(p5);
 		t.connect(s1);

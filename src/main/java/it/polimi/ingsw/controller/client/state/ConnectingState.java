@@ -50,6 +50,8 @@ public class ConnectingState extends ClientControllerState {
 					view.showTextMessage("Failed to connect to server, terminating.");		
 				} catch (NotBoundException e) {
 					view.showTextMessage("Selected server does not host game, terminating.");
+				} catch (NullPointerException e) {
+					view.showTextMessage("Server refused the connection... terminating.");
 				}
 			}
 			break;

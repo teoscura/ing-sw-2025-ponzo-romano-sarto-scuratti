@@ -1,12 +1,29 @@
 package it.polimi.ingsw.view.tui.formatters;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Iterator;
 
+import it.polimi.ingsw.view.tui.TUINotification;
 import it.polimi.ingsw.view.tui.TerminalWrapper;
 
 public class TextMessageFormatter {
 
-    public static void format(TerminalWrapper terminal, String message){
+    static public void format(TerminalWrapper terminal, ArrayList<TUINotification> notifications){
+        ArrayList<TUINotification> to_show = new ArrayList<>();
+        int size = notifications.size();
+        if(size>3) to_show.addAll(notifications.subList(size-3, size));
+        else to_show.addAll(notifications);
+        int row = 1;
+        for(int i = 0; i<to_show.size(); i++){
+            var notif = format(to_show.get(i).getText());
+            terminal.print(notif, row, 94);
+            row += notif.size();
+        }
+    } 
+
+    static private ArrayList<String> format(String message){
         ArrayList<String> res = new ArrayList<>();
         int wraplength = 32;
         res.add("╭"+"─".repeat(8)+"  New Message!  "+"─".repeat(8)+"╮");
@@ -18,6 +35,18 @@ public class TextMessageFormatter {
             remaining.delete(0, remaining.length() > wraplength ? wraplength : remaining.length());
         }
         res.add("╰"+"─".repeat(wraplength)+"╯");
-        terminal.print(res, 1, 94);
+        return res;
+    }
+
+    static public boolean trimExpired(ArrayList<TUINotification> notifications){
+        Iterator<TUINotification> it = notifications.listIterator();
+        boolean trimmed = false;
+        while(it.hasNext()){
+            TUINotification n = it.next();
+            if(Duration.between(n.getTimestamp(), Instant.now()).compareTo(n.getTTL())<0) continue;
+            it.remove();
+            trimmed = true;
+        }
+        return trimmed;
     }
 }

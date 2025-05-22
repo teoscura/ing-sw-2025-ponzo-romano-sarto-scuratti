@@ -19,6 +19,7 @@ public class CommandBuilder {
 	}
 
 	public ServerMessage build(String command) {
+		if(command == null) return null; 
 		command = command.trim();
 		ServerMessage mess = null;
 		boolean valid = false;
@@ -173,8 +174,6 @@ public class CommandBuilder {
 				mess = new ToggleHourglassMessage();
 				break;
 			default:
-				view.showTextMessage("Command not valid");
-				break;
 		}
 
 		if (!valid) {

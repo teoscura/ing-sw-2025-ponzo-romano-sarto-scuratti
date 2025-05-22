@@ -19,10 +19,11 @@ public class RMIConnection implements ServerConnection {
 	private final RMIClientStub stub;
 	private final VirtualServer server;
 
-	public RMIConnection(ThreadSafeMessageQueue<ClientMessage> queue, String server_ip, String username, int port) throws RemoteException, NotBoundException {
+	public RMIConnection(ThreadSafeMessageQueue<ClientMessage> queue, String server_ip, String username, int port) throws RemoteException, NotBoundException, NullPointerException {
 		Registry registry = LocateRegistry.getRegistry(server_ip, port);
 		this.stub = new RMIClientStub(queue, username, port);
 		this.server = ((RMISkeletonProvider) registry.lookup("galaxy_truckers")).accept(stub);
+		if(this.server == null) throw new NullPointerException();
 	}
 
 	@Override
@@ -38,7 +39,7 @@ public class RMIConnection implements ServerConnection {
 		} catch (NoSuchObjectException e) {
 			System.out.println("Unexported RMIClientStub");
 		} catch (RemoteException e) {
-			System.out.println("Closed socket.");
+			System.out.println("Closed RMI Connection.");
 		}
 	}
 
