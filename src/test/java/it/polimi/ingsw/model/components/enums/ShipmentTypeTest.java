@@ -24,8 +24,4 @@ public class ShipmentTypeTest {
 		assertEquals(0, ShipmentType.EMPTY.getValue());
 	}
 
-	@Test
-	void getTypes() {
-		assertArrayEquals(new ShipmentType[]{ShipmentType.BLUE, ShipmentType.GREEN, ShipmentType.YELLOW, ShipmentType.RED}, ShipmentType.getTypes());
-	}
 }

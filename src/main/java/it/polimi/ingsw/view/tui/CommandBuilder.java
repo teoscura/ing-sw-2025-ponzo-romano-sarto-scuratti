@@ -67,7 +67,7 @@ public class CommandBuilder {
 				if (!valid) break;
 				ShipCoords discardCoords = new ShipCoords(GameModeType.TEST, Integer.parseInt(parts[1]),
 						Integer.parseInt(parts[2]));
-				ShipmentType discardType = ShipmentType.values()[Integer.parseInt(parts[3])];
+				ShipmentType discardType = ShipmentType.fromValue(Integer.parseInt(parts[3]));
 				mess = new DiscardCargoMessage(discardCoords, discardType);
 				break;
 			case "discardcomponent":
@@ -84,7 +84,7 @@ public class CommandBuilder {
 						Integer.parseInt(parts[2]));
 				ShipCoords cargoSource = new ShipCoords(GameModeType.TEST, Integer.parseInt(parts[4]),
 						Integer.parseInt(parts[5]));
-				ShipmentType cargoType = ShipmentType.values()[4 - Integer.parseInt(parts[3])];
+				ShipmentType cargoType = ShipmentType.fromValue(Integer.parseInt(parts[3]));
 				mess = new MoveCargoMessage(cargoTarget, cargoSource, cargoType);
 				break;
 			case "takecomponent":
@@ -134,7 +134,7 @@ public class CommandBuilder {
 				if (!valid) break;
 				ShipCoords cargCoords = new ShipCoords(GameModeType.TEST, Integer.parseInt(parts[1]),
 						Integer.parseInt(parts[2]));
-				ShipmentType cargoType1 = ShipmentType.values()[4 - Integer.parseInt(parts[3])];
+				ShipmentType cargoType1 = ShipmentType.fromValue(Integer.parseInt(parts[3]));
 				mess = new TakeCargoMessage(cargCoords, cargoType1);
 				break;
 			case "takediscarded":
