@@ -29,7 +29,7 @@ public class HelpScreenFormatter {
         res.add("│ 'setcrew <x> <y> <0-2>' 0: human 1: brown 2: purple      ││ '😈': Purple Alien        │ '💜': Purple Life Support    │");
         res.add("│ 'takecargo <x> <y> <mvl>                                 ││ '💰': Credits             │ '🚙': Double Normal Storage  │");
         res.add("│ 'discardcargo <x> <y> <mvl>'                             ││ '✨': Score               │ '🛻': Triple Normal Storage  │");
-        res.add("│ 'movecargo <x> <y> <mvl> <x> <y>' target, second source  ╰╰───────────────────────────│ '🚚': Single Special Storage │");
+        res.add("│ 'movecargo <x> <y> <mvl> <x> <y>' target, second source  ╰╰───────────────────────────┤ '🚚': Single Special Storage │");
         res.add("│ 'removecrew <x> <y>'                                        'selectlanding <i>'       │ '🚛': Double Special Storage │");
         res.add("│ 'turnon <x> <y> <x> <y>' first target, second source        'takereward <b>'          │                              │");
         res.add("│ 'giveup'                                                    'disconnect'              │                              │");

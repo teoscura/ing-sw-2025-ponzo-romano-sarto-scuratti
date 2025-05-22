@@ -61,11 +61,21 @@ class CombatZonePenaltyState extends CardState {
 		super.init(new_state);
 		Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "CardState -> Combat Zone Penalty State!: [" + (3 - sections.size()) + " - " + this.sections.getFirst().getPenalty() + "].");
 		Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Targeting: '" + this.target.getUsername() + "'.");
-		if (sections.getFirst().getPenalty() == CombatZonePenalty.CARGO)
-			Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Bat: " + required[0] + " Blu: " + required[1] + " Grn: " + required[2] + " Ylw: " + required[3] + " Red: " + required[4]);
-		if (sections.getFirst().getPenalty() != CombatZonePenalty.DAYS) return;
-		this.state.getPlanche().movePlayer(state, target, -sections.getFirst().getAmount());
-		this.transition();
+		switch(this.sections.getFirst().getPenalty()){
+			case CARGO: {
+				Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Bat: " + required[0] + " Blu: " + required[1] + " Grn: " + required[2] + " Ylw: " + required[3] + " Red: " + required[4]);
+				int total = 0;
+				for(int t : this.required) total+=t;
+				if(total==0) this.transition();
+			} break;
+			case CREW: return;
+			case DAYS: {
+				this.state.getPlanche().movePlayer(state, target, -sections.getFirst().getAmount());
+				this.transition();
+			} break;
+			case SHOTS: return;
+			default: return;
+		}
 	}
 
 	@Override

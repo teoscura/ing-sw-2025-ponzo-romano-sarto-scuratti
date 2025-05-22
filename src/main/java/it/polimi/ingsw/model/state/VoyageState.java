@@ -174,10 +174,10 @@ public class VoyageState extends GameState {
 	}
 
 	public void setCardState(CardState next) {
-		// if(this.getOrder(CardOrder.NORMAL).size()==0){
-		// 	this.transition();
-		// 	return;
-		// } XXX
+		if(this.getOrder(CardOrder.NORMAL).size()==0){
+			this.transition();
+			return;
+		}
 		if (next == null) {
 			for (Player p : this.to_give_up) {
 				if (!p.getRetired()) this.loseGame(p);
