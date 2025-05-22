@@ -12,14 +12,12 @@ import it.polimi.ingsw.model.client.card.ClientCardState;
 import it.polimi.ingsw.model.client.state.ClientState;
 import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
 import it.polimi.ingsw.model.player.Player;
-import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.VoyageState;
 import it.polimi.ingsw.utils.Logger;
 import it.polimi.ingsw.utils.LoggerLevel;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class PiratesAnnounceState extends CardState {
@@ -63,11 +61,10 @@ public class PiratesAnnounceState extends CardState {
 
 	@Override
 	public ClientCardState getClientCardState() {
-		List<PlayerColor> awaiting = Collections.singletonList(this.list.getFirst().getColor());
 		return new ClientAwaitConfirmCardStateDecorator(new ClientBaseCardState(
 				this.getClass().getSimpleName(),
 				card.getId()), 
-			new ArrayList<>(awaiting));
+			new ArrayList<>(List.of(this.list.getFirst().getColor())));
 	}
 
 	@Override

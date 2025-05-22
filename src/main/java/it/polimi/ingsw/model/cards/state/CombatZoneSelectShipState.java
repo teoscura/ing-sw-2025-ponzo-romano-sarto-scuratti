@@ -13,14 +13,12 @@ import it.polimi.ingsw.model.client.card.ClientNewCenterCardStateDecorator;
 import it.polimi.ingsw.model.client.state.ClientState;
 import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
 import it.polimi.ingsw.model.player.Player;
-import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.VoyageState;
 import it.polimi.ingsw.utils.Logger;
 import it.polimi.ingsw.utils.LoggerLevel;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class CombatZoneSelectShipState extends CardState {
@@ -61,7 +59,6 @@ public class CombatZoneSelectShipState extends CardState {
 
 	@Override
 	public ClientCardState getClientCardState() {
-		List<PlayerColor> awaiting = Collections.singletonList(target.getColor());
 		return new ClientNewCenterCardStateDecorator(
 			new ClientCombatZoneIndexCardStateDecorator(
 				new ClientBaseCardState(
@@ -69,7 +66,7 @@ public class CombatZoneSelectShipState extends CardState {
 					this.card_id), 
 				this.sections.getFirst(),
 				3 - this.sections.size()),
-			new ArrayList<>(awaiting));
+			new ArrayList<>(List.of(target.getColor())));
 	}
 
 	@Override

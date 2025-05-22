@@ -130,7 +130,11 @@ public class ClientCardStateFormatter implements ClientCardStateVisitor {
     @Override
     public void show(ClientLandingCardStateDecorator state) {
         line.style(AttributedStyle.BOLD.background(AttributedStyle.BLACK).foreground(AttributedStyle.CYAN))
-            .append("Landing available: ");
+            .append("Landing available for ")
+            .style(AttributedStyle.BOLD.background(AttributedStyle.BLACK).foreground(getColor(state.getTurn())))
+            .append(state.getTurn().toString())
+            .style(AttributedStyle.BOLD.background(AttributedStyle.BLACK).foreground(AttributedStyle.CYAN))
+            .append(": ");
         int i = 0;
         for(Boolean p : state.getAvailable()){
             line.style(AttributedStyle.BOLD.background(AttributedStyle.BLACK).foreground(p?AttributedStyle.GREEN:AttributedStyle.RED))
