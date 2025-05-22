@@ -114,7 +114,7 @@ class CombatZonePenaltyState extends CardState {
 						this.sections.getFirst(),
 						3 - this.sections.size()),
 					target.getColor(),
-					this.sections.getFirst().getAmount());
+					this.sections.getFirst().getAmount()-this.amount);
 			case CombatZonePenalty.SHOTS:
 				return new ClientProjectileCardStateDecorator(
 					new ClientAwaitConfirmCardStateDecorator(

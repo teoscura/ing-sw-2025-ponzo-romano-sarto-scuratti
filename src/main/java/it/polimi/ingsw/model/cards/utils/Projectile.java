@@ -5,7 +5,7 @@ import it.polimi.ingsw.exceptions.OutOfBoundsException;
 
 import java.io.Serializable;
 
-public class Projectile implements Serializable {
+public class Projectile implements Serializable, Cloneable {
 
 	private final ProjectileDirection direction;
 	private final ProjectileDimension dimension;
@@ -24,6 +24,16 @@ public class Projectile implements Serializable {
 		this.dimension = dimension;
 	}
 
+	@Override
+	public Object clone() {
+		try {
+			return super.clone();
+		}
+		catch(CloneNotSupportedException e) {
+			return null;
+		}
+	}
+
 	public ProjectileDirection getDirection() {
 		return this.direction;
 	}
@@ -35,6 +45,7 @@ public class Projectile implements Serializable {
 	public int getOffset() {
 		return this.offset;
 	}
+
 } 
 
 
