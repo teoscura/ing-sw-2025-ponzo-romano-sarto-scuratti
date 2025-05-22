@@ -54,9 +54,9 @@ public class ClientConstructionStateFormatter {
         terminal.print(" ".repeat(128), 29, 0);
         terminal.print(" ".repeat(128), 30, 0);
         terminal.print(" ".repeat(128), 31, 0);
-        terminal.print(getBoardLine(state).toAnsi(), 29, 0);
+        terminal.print(getBoardLine(state).toAnsi().substring(0, 128), 29, 0);
         terminal.print(bottom_line+"━".repeat(128-bottom_line.length()), 30, 0);
-        terminal.print(terminal.peekInput(), 31, 0);
+        terminal.print(terminal.peekInput().substring(0, 128), 31, 0);
     }
 
     static private AttributedString getBoardLine(ClientConstructionState state){
@@ -77,10 +77,10 @@ public class ClientConstructionStateFormatter {
                 Duration elapsed = Duration.between(state.getLastToggle(), Instant.now());
                 Duration time_left = Duration.ofMillis(state.getHourglassDuration().toMillis()-elapsed.toMillis());
                 boolean has_expired = elapsed.compareTo(state.getHourglassDuration()) > 0;
-                String time = has_expired ? "Hourglass expired." : formatTime(time_left)+"s";
-                time += has_expired && state.getTogglesLeft() > 0 ? "but you can still build!" : ""; 
+                String time = has_expired ? "Expired." : "Time left: "+formatTime(time_left)+"s";
+                time += has_expired && state.getTogglesLeft() > 0 ? "can still build!" : ""; 
                 res.style(AttributedStyle.BOLD.foreground(has_expired ? state.getTogglesLeft()>0? AttributedStyle.YELLOW : AttributedStyle.RED : AttributedStyle.GREEN))
-                    .append("Time left: "+time+" | ");
+                    .append(time+" | ");
             }
         }
         res.style(AttributedStyle.BOLD.foreground(AttributedStyle.CYAN))
