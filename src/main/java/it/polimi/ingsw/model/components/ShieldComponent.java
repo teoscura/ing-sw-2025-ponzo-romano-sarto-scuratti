@@ -64,24 +64,14 @@ public class ShieldComponent extends BaseComponent {
 
 	public ShieldType getShield() {
 		if (!this.powered) return ShieldType.NONE;
-		switch (this.getRotation().getShift()) {
-			case 0:
-				return ShieldType.NE;
-			case 1:
-				return ShieldType.SE;
-			case 2:
-				return ShieldType.SW;
-			case 3:
-				return ShieldType.NW;
-		}
-		return ShieldType.NE;
+		return ShieldType.values()[this.getRotation().getShift()];
 	}
 
 	@Override
 	public ClientComponent getClientComponent() {
 		return new ClientPoweredComponentDecorator(
 			new ClientShieldComponentDecorator(
-				new ClientBaseComponent(getID(), getRotation(), getConnectors()), getShield()),
+				new ClientBaseComponent(getID(), getRotation(), getConnectors()), ShieldType.values()[this.getRotation().getShift()]),
 			powered);		
 	}
 

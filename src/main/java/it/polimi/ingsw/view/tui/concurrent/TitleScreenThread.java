@@ -37,7 +37,11 @@ public class TitleScreenThread extends Thread {
     }
 
     public void run(){
-        state.setUsername(view.takeLine());
+        try {
+            state.setUsername(view.takeLine());
+        } catch (InterruptedException e) {
+            view.showTextMessage("Interrupted title screen thread.");
+        }
     }
 
     public void format(TerminalWrapper terminal){

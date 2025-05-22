@@ -37,7 +37,11 @@ public class ConnectingThread extends Thread {
     @Override
     public void run(){
         while(args.size()<3){
-            args.add(view.takeLine());
+            try {
+                args.add(view.takeLine());
+            } catch (InterruptedException e) {
+                view.showTextMessage("Interrupted connecting thread.");
+            }
         }
         if(!validate()) state.connect("", 0, ConnectionType.NONE);
         else state.connect(args.get(0), Integer.parseInt(args.get(1)), args.get(2).equals("rmi") ? ConnectionType.RMI :args.get(2).equals("tcp") ? ConnectionType.SOCKET : ConnectionType.NONE);

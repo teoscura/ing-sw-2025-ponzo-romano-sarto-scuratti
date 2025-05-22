@@ -24,7 +24,6 @@ public class CommandBuilder {
 		ServerMessage mess = null;
 		boolean valid = false;
 		String[] parts = command.split(" ", 16);
-
 		switch (parts[0]) {
 			case "entersetup":
 				valid = Pattern.matches("^entersetup$", command);

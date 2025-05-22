@@ -15,7 +15,11 @@ public class ConnectedThread extends Thread {
     public void run(){
         CommandPreprocessor cb = new CommandPreprocessor(view);
         while(view.connected()){
-            cb.process(view.takeLine());
+            try {
+                cb.process(view.takeLine());
+            } catch (InterruptedException e) {
+                view.showTextMessage("Interrupted connected thread, server closed?");
+            }
         }
     }
 

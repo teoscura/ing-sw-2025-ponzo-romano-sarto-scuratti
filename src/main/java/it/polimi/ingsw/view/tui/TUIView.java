@@ -182,15 +182,9 @@ public class TUIView implements ClientView {
         }
     }
 
-    public String takeLine(){
+    public String takeLine() throws InterruptedException{
         synchronized(this.line_lock){
-            while(this.line == null){
-                try {
-                    line_lock.wait();
-                } catch (InterruptedException e) {
-                    return "";
-                }
-            }
+            while(this.line == null) line_lock.wait();
             String s = this.line;
             this.line = null;
             return s;

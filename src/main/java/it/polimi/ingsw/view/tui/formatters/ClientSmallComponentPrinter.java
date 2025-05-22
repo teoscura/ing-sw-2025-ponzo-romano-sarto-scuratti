@@ -78,9 +78,7 @@ public class ClientSmallComponentPrinter implements ClientComponentVisitor {
                 this.character_component =  "🚛";
             default:
                 break;
-
         }
-        this.character_component = "📦";
     }
     
 }

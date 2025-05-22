@@ -186,13 +186,13 @@ public class ClientLargeComponentPrinter implements ClientComponentVisitor {
     @Override
     public void show(ClientShieldComponentDecorator component) {
         if(component.getType()!=ShieldType.NONE){
-            this.component.get(0).get(2).delete(0, this.component.get(0).get(2).length());
+            this.component.get(2).get(0).delete(0, this.component.get(2).get(0).length());
             String s = new AttributedStringBuilder()
                 .style(AttributedStyle.BOLD.foreground(AttributedStyle.GREEN))
                 .append(component.getType().toString())
                 .style(AttributedStyle.DEFAULT).toAttributedString().toAnsi();
-            this.component.get(0).get(2).append(s);
-        } 
+            this.component.get(2).get(0).append(s);
+        }
     }
 
     @Override

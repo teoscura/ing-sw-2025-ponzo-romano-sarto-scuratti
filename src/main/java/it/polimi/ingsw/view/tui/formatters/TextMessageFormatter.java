@@ -27,7 +27,7 @@ public class TextMessageFormatter {
         ArrayList<String> res = new ArrayList<>();
         int wraplength = 32;
         res.add("╭"+"─".repeat(8)+"  New Message!  "+"─".repeat(8)+"╮");
-        StringBuffer remaining = new StringBuffer(message);
+        StringBuffer remaining = new StringBuffer(message.trim());
         while(remaining.length()>0){
             String line = remaining.substring(0, remaining.length() > wraplength ? wraplength : remaining.length());
             line = line.length() == wraplength ? line : line+" ".repeat(wraplength-line.length());
