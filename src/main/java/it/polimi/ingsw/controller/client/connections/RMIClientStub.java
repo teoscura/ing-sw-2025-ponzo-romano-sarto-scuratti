@@ -17,7 +17,6 @@ public class RMIClientStub extends UnicastRemoteObject implements RMIClientConne
 	private final String username;
 
 	public RMIClientStub(ThreadSafeMessageQueue<ClientMessage> inqueue, String username, int port) throws RemoteException, NotBoundException {
-		super(port);
 		if (inqueue == null || username == null) throw new NullPointerException();
 		this.inqueue = inqueue;
 		this.username = username;
