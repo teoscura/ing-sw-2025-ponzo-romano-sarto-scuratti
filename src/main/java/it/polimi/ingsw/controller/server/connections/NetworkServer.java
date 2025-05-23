@@ -95,20 +95,13 @@ public class NetworkServer extends Thread implements RMISkeletonProvider, Serial
 	public void run() {
 		if (!this.init) throw new NotYetConnectedException();
 		this.startServer();
-		try {
-			while (true) {
+		while (true) {
+			try {
 				SocketClient new_connection = new SocketClient(server.accept());
 				MainServerController.getInstance().connectListener(new_connection);
 				this.serverPool.submit(new_connection);
-			}
-		} catch (IOException e) {
-			try {
-				this.server.close();
-				Logger.getInstance().print(LoggerLevel.ERROR, "Catastrophic IOException, terminating.");
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			} finally {
-				System.exit(-1);
+			} catch (IOException e) {
+				Logger.getInstance().print(LoggerLevel.ERROR, "Server IOException trying to accept a connection with TCP: "+e.getMessage());
 			}
 		}
 	}
