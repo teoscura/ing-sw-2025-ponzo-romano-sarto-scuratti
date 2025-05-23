@@ -70,10 +70,10 @@ public class TUIView implements ClientView {
         } 
         this.screen_runnable.run();
         this.status_runnable.run();
-        if(overlay_runnable!=null)this.overlay_runnable.run();
         synchronized(notifications){
             if(!notifications.isEmpty()) TextMessageFormatter.format(terminal, notifications);
         }
+         if(overlay_runnable!=null)this.overlay_runnable.run();
         
     }
 
@@ -150,13 +150,11 @@ public class TUIView implements ClientView {
     public void showHelpScreen() {
         this.overlay = true;
         this.overlay_runnable = () -> HelpScreenFormatter.format(terminal);
-        //HelpScreenFormatter.format(terminal);
     }
 
     public void showStateInfo() {
         this.overlay = true;
         this.overlay_runnable = () -> this.getClientState().sendToView(overlay_formatter);
-        //HelpScreenFormatter.format(terminal);
     }
 
 

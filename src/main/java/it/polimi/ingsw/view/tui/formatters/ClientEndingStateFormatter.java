@@ -18,7 +18,7 @@ public class ClientEndingStateFormatter {
         res.add("Game Results:");
         list.stream().sorted((p1, p2)->Integer.compare(p1.getScore(), p2.getScore()));
         int finished = (int) list.stream().filter(p->p.getPlanche_slot()>=0).count();
-        for(var e : state.getPlayerList()){
+        for(var e : list){
             AttributedStringBuilder b = new AttributedStringBuilder()
                 .append(e.getUsername())
                 .append(" - "+e.getColor())
@@ -31,6 +31,7 @@ public class ClientEndingStateFormatter {
                 .append(String.format("✨: %3d | ", e.getScore()));
             res.add(b.toAnsi());
         }
+        res.add("");
         terminal.printCentered(res);
     }
 

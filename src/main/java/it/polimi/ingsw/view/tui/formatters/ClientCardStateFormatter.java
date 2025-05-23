@@ -131,7 +131,7 @@ public class ClientCardStateFormatter implements ClientCardStateVisitor {
     @Override
     public void show(ClientLandingCardStateDecorator state) {
         line.style(AttributedStyle.BOLD.background(AttributedStyle.BLACK).foreground(AttributedStyle.CYAN))
-            .append("Landing available for ")
+            .append("Landing: ")
             .style(AttributedStyle.BOLD.background(AttributedStyle.BLACK).foreground(getColor(state.getTurn())))
             .append(state.getTurn().toString())
             .style(AttributedStyle.BOLD.background(AttributedStyle.BLACK).foreground(AttributedStyle.CYAN))
@@ -163,7 +163,7 @@ public class ClientCardStateFormatter implements ClientCardStateVisitor {
                     .append(" Days: "+state.getDaysTaken()+" Crew: "+state.getCrewNeeded());
             } else {
                 line.style(AttributedStyle.BOLD.background(AttributedStyle.BLACK).foreground(AttributedStyle.GREEN))
-                    .append("Days: "+state.getDaysTaken()+" | ");
+                    .append("Days: "+state.getDaysTaken()+" ");
                 int i = 0;
                 for(Planet p : state.getAvailable()){
                     if(p.getVisited()){
@@ -189,7 +189,7 @@ public class ClientCardStateFormatter implements ClientCardStateVisitor {
                             .style(AttributedStyle.BOLD.foreground(AttributedStyle.RED))
                             .append(String.format("%02d",state.getAvailable().get(i).getContains()[3]))
                             .style(AttributedStyle.BOLD.background(AttributedStyle.BLACK).foreground(AttributedStyle.GREEN))
-                            .append("] | ");
+                            .append("] ");
                     }
                     i++;
                 }
