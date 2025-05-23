@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class ProjectileArray implements Serializable, Cloneable{
+public class ProjectileArray implements Serializable {
 
 	private final ArrayList<Projectile> projectiles;
 
@@ -24,17 +24,16 @@ public class ProjectileArray implements Serializable, Cloneable{
 
 	}
 
-	@Override
-	public Object clone(){
-		try {
-			return super.clone();
-		}
-		catch(CloneNotSupportedException e) {
-			return null;
-		}
-	}
-
 	public ArrayList<Projectile> getProjectiles() {
 		return this.projectiles;
+	}
+
+	public ProjectileArray copy(){
+		Projectile[] copy = new Projectile[this.projectiles.size()];
+		int i = 0;
+		for(Projectile p : projectiles){
+			copy[i] = new Projectile(p.getDirection(), p.getDimension(), p.getOffset());
+		}
+		return new ProjectileArray(copy);
 	}
 }

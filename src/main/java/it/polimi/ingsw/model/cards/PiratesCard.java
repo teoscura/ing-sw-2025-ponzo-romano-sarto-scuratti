@@ -38,7 +38,7 @@ public class PiratesCard extends Card {
 	}
 
 	public ProjectileArray getShots() {
-		return this.shots;
+		return this.shots.copy();
 	}
 
 	public boolean apply(VoyageState state, Player p) {

@@ -5,7 +5,6 @@ import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.cards.PiratesCard;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
-import it.polimi.ingsw.model.cards.utils.ProjectileArray;
 import it.polimi.ingsw.model.client.card.ClientAwaitConfirmCardStateDecorator;
 import it.polimi.ingsw.model.client.card.ClientBaseCardState;
 import it.polimi.ingsw.model.client.card.ClientCardState;
@@ -75,7 +74,7 @@ public class PiratesAnnounceState extends CardState {
 			Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Card exhausted, moving to a new one!");
 			return null;
 		}
-		if (!result) return new PiratesPenaltyState(state, card, list, (ProjectileArray) this.card.getShots().clone());
+		if (!result) return new PiratesPenaltyState(state, card, list, this.card.getShots());
 		if (this.card.getExhausted()) return new PiratesRewardState(state, card, list);
 		this.list.removeFirst();
 		if (!this.list.isEmpty()) return new PiratesAnnounceState(state, card, list);
