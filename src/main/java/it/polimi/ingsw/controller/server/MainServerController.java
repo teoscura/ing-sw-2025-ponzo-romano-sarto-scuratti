@@ -370,12 +370,10 @@ public class MainServerController extends Thread implements VirtualServer {
 				Logger.getInstance().print(LoggerLevel.NOTIF, "Read error during loading of File: '" + f.getName() + ", cleaning it up.");
 				f.delete();
 				Logger.getInstance().print(LoggerLevel.DEBUG, "Deleted file: '" + f.getName() + "'.");
-				e.printStackTrace();
 			} catch (ClassNotFoundException e) {
 				Logger.getInstance().print(LoggerLevel.NOTIF, "File: '" + f.getName() + "' is not a valid savefile, cleaning it up.");
 				f.delete();
 				Logger.getInstance().print(LoggerLevel.DEBUG, "Deleted file: '" + f.getName() + "'.");
-				e.printStackTrace();
 			}
 		}
 		synchronized (lobbies_lock) {
