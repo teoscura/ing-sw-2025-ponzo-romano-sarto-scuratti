@@ -69,13 +69,13 @@ public class ClientSmallComponentPrinter implements ClientComponentVisitor {
     public void show(ClientShipmentsComponentDecorator component) {
         switch(component.getType()){
             case DOUBLENORMAL:
-                this.character_component =  "🚙";
+                this.character_component =  "🚙"; break;
             case TRIPLENORMAL:
-                this.character_component =  "🛻";
+                this.character_component =  "🛻"; break;
             case SINGLESPECIAL:
-                this.character_component =  "🚚";
+                this.character_component =  "🚚"; break;
             case DOUBLESPECIAL:
-                this.character_component =  "🚛";
+                this.character_component =  "🚛"; break;
             default:
                 break;
         }

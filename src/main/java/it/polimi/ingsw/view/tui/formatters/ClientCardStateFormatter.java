@@ -98,7 +98,7 @@ public class ClientCardStateFormatter implements ClientCardStateVisitor {
     public void show(ClientCombatZoneIndexCardStateDecorator state) {
         String sectioninfo = state.getSection().getPenalty()!=CombatZonePenalty.SHOTS ? state.getSection().getPenalty()+": "+state.getSection().getAmount() : state.getSection().getPenalty().toString();
         line.style(AttributedStyle.BOLD.background(AttributedStyle.BLACK).foreground(AttributedStyle.RED))
-            .append("CombatZone ["+state.getIndex()+"]: "+state.getSection().getCriteria()+"/"+sectioninfo+" ]")
+            .append("["+state.getIndex()+"]: "+state.getSection().getCriteria()+"/"+sectioninfo+" ]")
             .style(AttributedStyle.DEFAULT)
             .append(" | ");
     }
