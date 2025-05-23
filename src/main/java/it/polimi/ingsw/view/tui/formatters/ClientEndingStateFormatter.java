@@ -16,7 +16,7 @@ public class ClientEndingStateFormatter {
         ArrayList<String> res = new ArrayList<>();
         ArrayList<ClientEndgamePlayer> list = new ArrayList<>(state.getPlayerList());
         res.add("Game Results:");
-        list.stream().sorted((p1, p2)->Integer.compare(p1.getPlanche_slot(), p2.getPlanche_slot()));
+        list.stream().sorted((p1, p2)->Integer.compare(p1.getScore(), p2.getScore()));
         int finished = (int) list.stream().filter(p->p.getPlanche_slot()>=0).count();
         for(var e : state.getPlayerList()){
             AttributedStringBuilder b = new AttributedStringBuilder()
