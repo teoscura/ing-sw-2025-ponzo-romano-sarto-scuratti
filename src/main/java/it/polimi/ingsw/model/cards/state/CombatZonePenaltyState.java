@@ -83,7 +83,7 @@ class CombatZonePenaltyState extends CardState {
 	@Override
 	public void validate(ServerMessage message) throws ForbiddenCallException {
 		message.receive(this);
-		if (!responded && !this.target.getRetired()) {
+		if (!responded) {
 			this.state.broadcastMessage(new NotifyStateUpdateMessage(this.state.getClientState()));
 			return;
 		}
@@ -139,7 +139,7 @@ class CombatZonePenaltyState extends CardState {
 
 	@Override
 	public CardState getNext() {
-		if (this.target.getRetired() || this.target.getDisconnected()) {
+		if (this.target.getDisconnected()) {
 			this.sections.removeFirst();
 			if (!this.sections.isEmpty()) return new CombatZoneAnnounceState(state, card_id, sections, shots);
 			Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "...Card exhausted, moving to a new one!");

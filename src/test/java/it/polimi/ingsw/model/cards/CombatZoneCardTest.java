@@ -11,6 +11,7 @@ import it.polimi.ingsw.model.board.Planche;
 import it.polimi.ingsw.model.board.TestFlightCards;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.cards.state.CardState;
+import it.polimi.ingsw.model.cards.state.CombatZoneAnnounceState;
 import it.polimi.ingsw.model.cards.utils.Projectile;
 import it.polimi.ingsw.model.cards.visitors.ContainsLoaderVisitor;
 import it.polimi.ingsw.model.cards.visitors.CrewRemoveVisitor;
@@ -635,28 +636,40 @@ public class CombatZoneCardTest {
 		message.setDescriptor(p3desc);
 		state.validate(message);
 		assertEquals(x - 4, planche.getPlayerPosition(player1));
+		assertFalse(player3.getRetired());
 		//Phase 2
 		message = new SendContinueMessage();
 		message.setDescriptor(p1desc);
 		state.validate(message);
+		assertFalse(player3.getRetired());
 		//P2 disconnects. therefore is not considered.
 		message = new ServerDisconnectMessage();
 		message.setDescriptor(p2desc);
+		model.validate(message);
+		assertFalse(player3.getRetired());
+		//p2 disconnects, its p3's penalty. and he gets killed.
+		message = new SendContinueMessage();
+		message.setDescriptor(p3desc);
+		state.validate(message);
+		assertFalse(player3.getRetired());
+		//P3 gives up two crew in coords
+		message = new RemoveCrewMessage(new ShipCoords(GameModeType.TEST, 3, 2));
+		message.setDescriptor(p3desc);
+		state.validate(message);
+		assertFalse(player3.getRetired());
+		message = new RemoveCrewMessage(new ShipCoords(GameModeType.TEST, 3, 2));
+		message.setDescriptor(p3desc);
+		model.validate(message);
+		//Phase 3
+		message = new ServerDisconnectMessage();
+		message.setDescriptor(p1desc);
 		model.validate(message);
 		//p2 disconnects, its p3's penalty. and he gets killed.
 		message = new SendContinueMessage();
 		message.setDescriptor(p3desc);
 		state.validate(message);
-		//P3 gives up two crew in coords
-		message = new RemoveCrewMessage(new ShipCoords(GameModeType.TEST, 3, 2));
-		message.setDescriptor(p3desc);
-		state.validate(message);
-		message = new RemoveCrewMessage(new ShipCoords(GameModeType.TEST, 3, 2));
-		message.setDescriptor(p3desc);
-		model.validate(message);
 		//And loses.
 		assertTrue(player3.getRetired());
-		//Phase 3 gets skipped since p1 is the only one left.
 		assertNull(state.getCardState(player1));
 	}
 

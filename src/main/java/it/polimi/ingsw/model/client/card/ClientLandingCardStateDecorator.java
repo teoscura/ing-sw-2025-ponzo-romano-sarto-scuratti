@@ -16,7 +16,8 @@ public class ClientLandingCardStateDecorator implements ClientCardState {
 	private final ArrayList<Planet> available;
 
 	public ClientLandingCardStateDecorator(ClientCardState base, PlayerColor turn, int days_taken, int crew_needed, int credits, ArrayList<Planet> available) {
-		if (base == null || available == null) throw new NullPointerException();
+		if (base == null) throw new NullPointerException();
+		if(crew_needed<=0 && available==null) throw new NullPointerException();
 		if (days_taken <= 0 || crew_needed < 0) throw new IllegalArgumentException();
 		this.base = base;
 		this.turn = turn;
