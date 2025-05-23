@@ -181,6 +181,9 @@ public class VoyageState extends GameState {
 		for(Player p : this.getOrder(CardOrder.NORMAL)){
 			if(p.getSpaceShip().getCrew()[0]==0 || p.getSpaceShip().getBlobsSize() <= 0) loseGame(p);
 		}
+		for(Player p : this.getOrder(CardOrder.NORMAL)){
+			if(planche.checkLapped(p)) loseGame(p);
+		}
 		if (next == null) {
 			for (Player p : this.to_give_up) {
 				if (!p.getRetired()) this.loseGame(p);

@@ -5,6 +5,7 @@ import org.jline.utils.AttributedStringBuilder;
 import org.jline.utils.AttributedStyle;
 
 import it.polimi.ingsw.model.cards.utils.CombatZonePenalty;
+import it.polimi.ingsw.model.cards.utils.Planet;
 import it.polimi.ingsw.model.client.card.*;
 import it.polimi.ingsw.model.player.PlayerColor;
 
@@ -110,7 +111,7 @@ public class ClientCardStateFormatter implements ClientCardStateVisitor {
             .style(AttributedStyle.BOLD.background(AttributedStyle.BLACK).foreground(this.getColor(state.getTurn())))
             .append(state.getTurn().toString())
             .style(AttributedStyle.BOLD.background(AttributedStyle.BLACK).foreground(AttributedStyle.YELLOW))
-            .append(" credits: "+state.getCredits()+" days: "+state.getDaysTaken()+"")
+            .append(" credits: "+state.getCredits()+" days: "+state.getDaysTaken())
             .style(AttributedStyle.DEFAULT)
             .append(" | ");
     }
@@ -135,20 +136,71 @@ public class ClientCardStateFormatter implements ClientCardStateVisitor {
             .append(state.getTurn().toString())
             .style(AttributedStyle.BOLD.background(AttributedStyle.BLACK).foreground(AttributedStyle.CYAN))
             .append(": ");
-        int i = 0;
-        for(Boolean p : state.getAvailable()){
-            line.style(AttributedStyle.BOLD.background(AttributedStyle.BLACK).foreground(p?AttributedStyle.GREEN:AttributedStyle.RED))
-            .append(i+" - "+(p?"available":"not available"))
-            .style(AttributedStyle.DEFAULT)
-            .append(" | ");
-            i++;
+        if(state.getAvailable()==null){
+            line.style(AttributedStyle.BOLD.background(AttributedStyle.BLACK).foreground(AttributedStyle.YELLOW))
+                .append("0: credits: "+state.getCredits()+" days: "+state.getDaysTaken()+" crew: "+state.getCrewNeeded());
+        } else {
+            if(state.getCrewNeeded()>0){
+                line.style(AttributedStyle.BOLD.background(AttributedStyle.BLACK).foreground(AttributedStyle.WHITE))
+                    .append("0: [")
+                    .style(AttributedStyle.BOLD.foreground(AttributedStyle.BLUE))
+                    .append(String.format("%02d",state.getAvailable().get(0).getContains()[0]))
+                    .style(AttributedStyle.BOLD.background(AttributedStyle.BLACK).foreground(AttributedStyle.WHITE))
+                    .append(" | ")
+                    .style(AttributedStyle.BOLD.foreground(AttributedStyle.GREEN))
+                    .append(String.format("%02d",state.getAvailable().get(0).getContains()[1]))
+                    .style(AttributedStyle.BOLD.background(AttributedStyle.BLACK).foreground(AttributedStyle.WHITE))
+                    .append(" | ")
+                    .style(AttributedStyle.BOLD.foreground(AttributedStyle.YELLOW))
+                    .append(String.format("%02d",state.getAvailable().get(0).getContains()[2]))
+                    .style(AttributedStyle.BOLD.background(AttributedStyle.BLACK).foreground(AttributedStyle.WHITE))
+                    .append(" | ")
+                    .style(AttributedStyle.BOLD.foreground(AttributedStyle.RED))
+                    .append(String.format("%02d",state.getAvailable().get(0).getContains()[3]))
+                    .style(AttributedStyle.DEFAULT)
+                    .append("]")
+                    .style(AttributedStyle.BOLD.background(AttributedStyle.BLACK).foreground(AttributedStyle.GREEN))
+                    .append(" Days: "+state.getDaysTaken()+" Crew: "+state.getCrewNeeded());
+            } else {
+                line.style(AttributedStyle.BOLD.background(AttributedStyle.BLACK).foreground(AttributedStyle.GREEN))
+                    .append("Days: "+state.getDaysTaken()+" | ");
+                int i = 0;
+                for(Planet p : state.getAvailable()){
+                    if(p.getVisited()){
+                        line.style(AttributedStyle.BOLD.background(AttributedStyle.BLACK).foreground(AttributedStyle.RED))
+                            .append(i+": NA ")
+                            .style(AttributedStyle.BOLD.background(AttributedStyle.BLACK).foreground(AttributedStyle.GREEN))
+                            .append("| ");
+                    } else {
+                        line.style(AttributedStyle.BOLD.background(AttributedStyle.BLACK).foreground(AttributedStyle.GREEN))
+                            .append(i+": [")
+                            .style(AttributedStyle.BOLD.foreground(AttributedStyle.BLUE))
+                            .append(String.format("%02d",state.getAvailable().get(i).getContains()[0]))
+                            .style(AttributedStyle.BOLD.background(AttributedStyle.BLACK).foreground(AttributedStyle.GREEN))
+                            .append(" | ")
+                            .style(AttributedStyle.BOLD.foreground(AttributedStyle.GREEN))
+                            .append(String.format("%02d",state.getAvailable().get(i).getContains()[1]))
+                            .style(AttributedStyle.BOLD.background(AttributedStyle.BLACK).foreground(AttributedStyle.GREEN))
+                            .append(" | ")
+                            .style(AttributedStyle.BOLD.foreground(AttributedStyle.YELLOW))
+                            .append(String.format("%02d",state.getAvailable().get(i).getContains()[2]))
+                            .style(AttributedStyle.BOLD.background(AttributedStyle.BLACK).foreground(AttributedStyle.GREEN))
+                            .append(" | ")
+                            .style(AttributedStyle.BOLD.foreground(AttributedStyle.RED))
+                            .append(String.format("%02d",state.getAvailable().get(i).getContains()[3]))
+                            .style(AttributedStyle.BOLD.background(AttributedStyle.BLACK).foreground(AttributedStyle.GREEN))
+                            .append("] | ");
+                    }
+                }
+            }
+            line.style(AttributedStyle.DEFAULT);
         }
     }
 
     @Override
     public void show(ClientMeteoriteCardStateDecorator state) {
         line.style(AttributedStyle.BOLD.background(AttributedStyle.BLACK).foreground(AttributedStyle.BRIGHT))
-            .append(state.getProjectile().getDimension()+" Meteor points: "+state.getProjectile().getDirection()+" "+normalizeOffset(state.getProjectile().getDirection().getShift(), state.getProjectile().getOffset()))
+            .append(state.getProjectile().getDimension()+" Meteor "+state.getProjectile().getDirection()+" "+normalizeOffset(state.getProjectile().getDirection().getShift(), state.getProjectile().getOffset()))
             .style(AttributedStyle.DEFAULT)
             .append(" | ");
     }
@@ -168,7 +220,7 @@ public class ClientCardStateFormatter implements ClientCardStateVisitor {
     @Override
     public void show(ClientProjectileCardStateDecorator state) {
         line.style(AttributedStyle.BOLD.background(AttributedStyle.BLACK).foreground(AttributedStyle.MAGENTA))
-            .append(state.getProjectile().getDimension()+" Projectile points: "+state.getProjectile().getDirection()+" "+normalizeOffset(state.getProjectile().getDirection().getShift(), state.getProjectile().getOffset()))
+            .append(state.getProjectile().getDimension()+" Shot "+state.getProjectile().getDirection()+" "+normalizeOffset(state.getProjectile().getDirection().getShift(), state.getProjectile().getOffset()))
             .style(AttributedStyle.DEFAULT)
             .append(" | ");
     }
