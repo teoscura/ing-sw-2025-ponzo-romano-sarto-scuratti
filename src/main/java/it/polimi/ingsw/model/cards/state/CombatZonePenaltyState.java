@@ -68,7 +68,9 @@ class CombatZonePenaltyState extends CardState {
 				for(int t : this.required) total+=t;
 				if(total==0) this.transition();
 			} break;
-			case CREW: return;
+			case CREW: {
+				if(target.getSpaceShip().getCrew()[0] <= 0) this.transition();
+			} break;
 			case DAYS: {
 				this.state.getPlanche().movePlayer(state, target, -sections.getFirst().getAmount());
 				this.transition();
@@ -87,7 +89,6 @@ class CombatZonePenaltyState extends CardState {
 		}
 		if (this.sections.getFirst().getPenalty() == CombatZonePenalty.SHOTS) {
 			this.target.getSpaceShip().handleShot(this.shots.getProjectiles().getFirst());
-			if (this.target.getSpaceShip().getBlobsSize() <= 0) this.state.loseGame(target);
 		}
 		this.transition();
 	}
@@ -216,11 +217,7 @@ class CombatZonePenaltyState extends CardState {
 			return;
 		}
 		p.getSpaceShip().updateShip();
-		if (p.getSpaceShip().getCrew()[0] == 0) {
-			this.state.loseGame(p);
-			return;
-		}
-		if (this.amount == this.sections.getFirst().getAmount()) {
+		if (this.amount == this.sections.getFirst().getAmount() || p.getSpaceShip().getCrew()[0] == 0) {
 			this.responded = true;
 		}
 	}

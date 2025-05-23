@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.client.card;
 
+import it.polimi.ingsw.model.cards.utils.Planet;
 import it.polimi.ingsw.model.player.PlayerColor;
 
 import java.util.ArrayList;
@@ -11,9 +12,9 @@ public class ClientLandingCardStateDecorator implements ClientCardState {
 	private final PlayerColor turn;
 	private final int days_taken;
 	private final int crew_needed;
-	private final ArrayList<Boolean> available;
+	private final ArrayList<Planet> available;
 
-	public ClientLandingCardStateDecorator(ClientCardState base, PlayerColor turn, int days_taken, int crew_needed, ArrayList<Boolean> available) {
+	public ClientLandingCardStateDecorator(ClientCardState base, PlayerColor turn, int days_taken, int crew_needed, ArrayList<Planet> available) {
 		if (base == null || available == null) throw new NullPointerException();
 		if (days_taken <= 0 || crew_needed < 0) throw new IllegalArgumentException();
 		this.base = base;
@@ -35,7 +36,7 @@ public class ClientLandingCardStateDecorator implements ClientCardState {
 		return this.crew_needed;
 	}
 
-	public ArrayList<Boolean> getAvailable() {
+	public ArrayList<Planet> getAvailable() {
 		return this.available;
 	}
 

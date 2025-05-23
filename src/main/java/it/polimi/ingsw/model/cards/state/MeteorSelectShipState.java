@@ -51,9 +51,6 @@ class MeteorSelectShipState extends CardState {
 			this.state.broadcastMessage(new NotifyStateUpdateMessage(this.state.getClientState()));
 			return;
 		}
-		for (Player p : this.state.getOrder(CardOrder.NORMAL)) {
-			if (p.getSpaceShip().getBlobsSize() == 1 && p.getSpaceShip().getCrew()[0] <= 0) this.state.loseGame(p);
-		}
 		this.transition();
 	}
 

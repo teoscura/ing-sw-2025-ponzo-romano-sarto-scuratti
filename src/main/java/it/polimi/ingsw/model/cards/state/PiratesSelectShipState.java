@@ -48,7 +48,6 @@ public class PiratesSelectShipState extends CardState {
 			this.state.broadcastMessage(new NotifyStateUpdateMessage(this.state.getClientState()));
 			return;
 		}
-		if (this.list.getFirst().getSpaceShip().getCrew()[0] <= 0) this.state.loseGame(this.list.getFirst());
 		this.transition();
 	}
 

@@ -44,7 +44,6 @@ public class SelectShipReconnectState extends CardState {
 			this.state.broadcastMessage(new NotifyStateUpdateMessage(this.state.getClientState()));
 			return;
 		}
-		if (this.awaiting.getSpaceShip().getCrew()[0] <= 0) this.state.loseGame(awaiting);
 		this.transition();
 	}
 

@@ -53,7 +53,6 @@ public class CombatZoneSelectShipState extends CardState {
 			this.state.broadcastMessage(new NotifyStateUpdateMessage(this.state.getClientState()));
 			return;
 		}
-		if (this.target.getSpaceShip().getCrew()[0] <= 0) this.state.loseGame(target);
 		this.transition();
 	}
 

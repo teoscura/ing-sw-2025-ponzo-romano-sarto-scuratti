@@ -51,26 +51,26 @@ public class Planche implements iPlanche {
 			count--;
 		}
 		this.planche.put(p, position);
-		if (rel_change > 0) {
-			ArrayList<Player> to_lose = new ArrayList<>();
-			for (Player other : this.planche.keySet()) {
-				if (p.equals(other)) continue;
-				if (this.planche.get(p) - this.planche.get(other) >= this.length) {
-					to_lose.add(other);
-				}
-			}
-			for (Player l : to_lose) {
-				state.loseGame(l);
-			}
-		} else {
-			for (Player other : this.planche.keySet()) {
-				if (p.equals(other)) continue;
-				if (this.planche.get(other) - this.planche.get(p) >= this.length) {
-					state.loseGame(p);
-					return;
-				}
-			}
-		}
+		// if (rel_change > 0) {
+		// 	ArrayList<Player> to_lose = new ArrayList<>();
+		// 	for (Player other : this.planche.keySet()) {
+		// 		if (p.equals(other)) continue;
+		// 		if (this.planche.get(p) - this.planche.get(other) >= this.length) {
+		// 			to_lose.add(other);
+		// 		}
+		// 	}
+		// 	for (Player l : to_lose) {
+		// 		state.loseGame(l);
+		// 	}
+		// } else {
+		// 	for (Player other : this.planche.keySet()) {
+		// 		if (p.equals(other)) continue;
+		// 		if (this.planche.get(other) - this.planche.get(p) >= this.length) {
+		// 			state.loseGame(p);
+		// 			return;
+		// 		}
+		// 	}
+		// }
 
 	}
 
