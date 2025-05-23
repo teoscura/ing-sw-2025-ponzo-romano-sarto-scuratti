@@ -5,7 +5,7 @@ import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.cards.PiratesCard;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
-import it.polimi.ingsw.model.cards.utils.ProjectileArray;
+import it.polimi.ingsw.model.cards.utils.Projectile;
 import it.polimi.ingsw.model.client.card.ClientBaseCardState;
 import it.polimi.ingsw.model.client.card.ClientCardState;
 import it.polimi.ingsw.model.client.card.ClientNewCenterCardStateDecorator;
@@ -24,9 +24,9 @@ public class PiratesSelectShipState extends CardState {
 
 	private final PiratesCard card;
 	private final ArrayList<Player> list;
-	private final ProjectileArray shots;
+	private final ArrayList<Projectile> shots;
 
-	public PiratesSelectShipState(VoyageState state, PiratesCard card, ArrayList<Player> list, ProjectileArray shots) {
+	public PiratesSelectShipState(VoyageState state, PiratesCard card, ArrayList<Player> list, ArrayList<Projectile> shots) {
 		super(state);
 		if (card == null || list == null || shots == null) throw new NullPointerException();
 		this.card = card;
@@ -68,8 +68,8 @@ public class PiratesSelectShipState extends CardState {
 			Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Card exhausted, moving to a new one!");
 			return null;
 		}
-		if (!this.shots.getProjectiles().isEmpty()) {
-			this.shots.getProjectiles().removeFirst();
+		if (!this.shots.isEmpty()) {
+			this.shots.removeFirst();
 			return new PiratesPenaltyState(state, card, list, shots);
 		}
 		this.list.removeFirst();

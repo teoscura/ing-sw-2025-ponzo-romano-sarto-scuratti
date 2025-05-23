@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class ProjectileArray implements Serializable {
+public class ProjectileArray implements Serializable, Cloneable {
 
 	private final ArrayList<Projectile> projectiles;
 
@@ -28,12 +28,4 @@ public class ProjectileArray implements Serializable {
 		return this.projectiles;
 	}
 
-	public ProjectileArray copy(){
-		Projectile[] copy = new Projectile[this.projectiles.size()];
-		int i = 0;
-		for(Projectile p : projectiles){
-			copy[i] = new Projectile(p.getDirection(), p.getDimension(), p.getOffset());
-		}
-		return new ProjectileArray(copy);
-	}
 }

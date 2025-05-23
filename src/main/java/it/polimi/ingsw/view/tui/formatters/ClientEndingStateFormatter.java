@@ -34,6 +34,8 @@ public class ClientEndingStateFormatter {
         terminal.printCentered(res);
     }
 
+    //XXX add list of people missing to end game.
+
     public static void formatStatus(TerminalWrapper terminal, ClientEndgameState state){
         terminal.print(" ".repeat(128), 30, 0);
         terminal.print(" ".repeat(128), 31, 0);

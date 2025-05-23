@@ -74,7 +74,7 @@ public class PiratesAnnounceState extends CardState {
 			Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Card exhausted, moving to a new one!");
 			return null;
 		}
-		if (!result) return new PiratesPenaltyState(state, card, list, this.card.getShots());
+		if (!result) return new PiratesPenaltyState(state, card, list, this.card.getShotsCopy());
 		if (this.card.getExhausted()) return new PiratesRewardState(state, card, list);
 		this.list.removeFirst();
 		if (!this.list.isEmpty()) return new PiratesAnnounceState(state, card, list);
