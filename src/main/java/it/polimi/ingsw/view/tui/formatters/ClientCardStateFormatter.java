@@ -71,7 +71,11 @@ public class ClientCardStateFormatter implements ClientCardStateVisitor {
 
     @Override
     public void show(ClientCargoRewardCardStateDecorator state) {
-        line.style(AttributedStyle.BOLD.background(AttributedStyle.BLACK).foreground(AttributedStyle.WHITE))
+        line.style(AttributedStyle.BOLD.background(AttributedStyle.BLACK).foreground(getColor(state.getTurn())))
+            .append(state.getTurn().toString())
+            .style(AttributedStyle.DEFAULT)
+            .append(" | ")
+            .style(AttributedStyle.BOLD.background(AttributedStyle.BLACK).foreground(AttributedStyle.WHITE))
             .append("Cargo reward: ")
             .style(AttributedStyle.BOLD.background(AttributedStyle.BLACK).foreground(this.getColor(state.getTurn())))
             .append(state.getTurn().toString())
