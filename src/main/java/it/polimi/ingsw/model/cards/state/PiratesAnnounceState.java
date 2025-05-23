@@ -5,9 +5,11 @@ import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.cards.PiratesCard;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
+import it.polimi.ingsw.model.cards.utils.CombatZonePenalty;
 import it.polimi.ingsw.model.client.card.ClientAwaitConfirmCardStateDecorator;
 import it.polimi.ingsw.model.client.card.ClientBaseCardState;
 import it.polimi.ingsw.model.client.card.ClientCardState;
+import it.polimi.ingsw.model.client.card.ClientEnemyCardStateDecorator;
 import it.polimi.ingsw.model.client.state.ClientState;
 import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
 import it.polimi.ingsw.model.player.Player;
@@ -60,10 +62,14 @@ public class PiratesAnnounceState extends CardState {
 
 	@Override
 	public ClientCardState getClientCardState() {
-		return new ClientAwaitConfirmCardStateDecorator(new ClientBaseCardState(
-				this.getClass().getSimpleName(),
-				card.getId()), 
-			new ArrayList<>(List.of(this.list.getFirst().getColor())));
+		return new ClientEnemyCardStateDecorator(
+				new ClientAwaitConfirmCardStateDecorator(new ClientBaseCardState(
+					this.getClass().getSimpleName(),
+					card.getId()), 
+				new ArrayList<>(List.of(this.list.getFirst().getColor()))), 
+			this.card.getPower(),
+			CombatZonePenalty.SHOTS,
+			0);
 	}
 
 	@Override

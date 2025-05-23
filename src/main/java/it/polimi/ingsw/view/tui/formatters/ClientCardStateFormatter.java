@@ -226,6 +226,14 @@ public class ClientCardStateFormatter implements ClientCardStateVisitor {
             .append(" | ");
     }
 
+    @Override
+    public void show(ClientEnemyCardStateDecorator state) {
+        line.style(AttributedStyle.BOLD.background(AttributedStyle.BLACK).foreground(AttributedStyle.RED))
+            .append(" Enemy power: "+state.getPower()+" | Penalty: "+state.getPenalty()+"/"+(state.getAmount()>0?state.getAmount():""))
+            .style(AttributedStyle.DEFAULT)
+            .append(" | ");
+    }
+
     private int getColor(PlayerColor color){
         switch(color){
             case BLUE:
@@ -249,5 +257,7 @@ public class ClientCardStateFormatter implements ClientCardStateVisitor {
 		if (roll < 5 || roll > 9) return -1;
 		return roll - 5;
 	}
+
+    
     
 }

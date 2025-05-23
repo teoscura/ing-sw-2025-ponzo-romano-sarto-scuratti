@@ -54,7 +54,6 @@ public class VoyageState extends GameState {
 	@Override
 	public void validate(ServerMessage message) throws ForbiddenCallException {
 		message.receive(this);
-		Player p = message.getDescriptor().getPlayer();
 		if (this.state != null && this.getOrder(CardOrder.NORMAL).size() > 0) return;
 		this.transition();
 	}

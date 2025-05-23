@@ -40,6 +40,10 @@ public class PiratesCard extends Card {
 		return this.credits;
 	}
 
+	public double getPower(){
+		return this.min_power;
+	}
+
 	public ArrayList<Projectile> getShotsCopy() {
 		return new ArrayList<>(this.shots.getProjectiles());
 	}

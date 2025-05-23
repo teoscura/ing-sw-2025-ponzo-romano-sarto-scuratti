@@ -23,4 +23,6 @@ public interface ClientCardStateVisitor {
     public void show(ClientNewCenterCardStateDecorator state);
 
     public void show(ClientProjectileCardStateDecorator state);
+
+    public void show(ClientEnemyCardStateDecorator state);
 }
