@@ -40,7 +40,7 @@ package Model {
                 {method} + init(ClientState) : void
                 {method} + validate(ServerMessage) : void
                 {method} + getClientCardState() : ClientCardState
-                {method} [protected] getNext() : CardState
+                {method} + getNext() : CardState
                 {method} + selectLanding(Player, int) : void
                 {method} + disconnect(Player) : void
             }
@@ -54,7 +54,7 @@ package Model {
                 {method} + init(ClientState) : void
                 {method} + validate(ServerMessage) : void
                 {method} + getClientCardState() : ClientCardState
-                {method} [protected] getNext() : CardState
+                {method} + getNext() : CardState
                 {method} + removeCrew(Player, ShipCoords) : void
                 {method} + disconnect(Player) : void
             }
@@ -68,7 +68,7 @@ package Model {
                 {method} + init(ClientState) : void
                 {method} + validate(ServerMessage) : void
                 {method} + getClientCardState() : ClientCardState
-                {method} [protected] getNext() : CardState
+                {method} + getNext() : CardState
                 {method} + selectLanding(Player, int) : void
                 {method} + disconnect(Player) : void
             }
@@ -81,7 +81,7 @@ package Model {
                 {method} + init(ClientState) : void
                 {method} + validate(ServerMessage) : void
                 {method} + getClientCardState() : ClientCardState
-                {method} [protected] getNext() : CardState
+                {method} + getNext() : CardState
                 {method} + takeCargo(Player, ShipmentType, ShipCoords) : void
                 {method} + moveCargo(Player, ShipmentType, ShipCoords, ShipCoords) : void
                 {method} + discardCargo(Player, ShipmentType, ShipCoords) : void
@@ -100,23 +100,9 @@ package Model {
                 {method} + init(ClientState) : void
                 {method} + validate(ServerMessage) : void
                 {method} + getClientCardState() : ClientCardState
-                {method} [protected] getNext() : CardState
+                {method} + getNext() : CardState
                 {method} + turnOn(Player, ShipCoords, ShipCoords) : void
                 {method} + progressTurn(Player) : void
-                {method} + disconnect(Player) : void
-            }
-
-            CardState^--CombatZoneNewCabinState
-            class CombatZoneNewCabinState {
-                {field} [final] card_id : int
-                {field} [final] sections : List<CombatZoneSection>
-                {field} [final] shots : ProjectileArray
-                {field} target : Player
-                {method} + init(ClientState) : void
-                {method} + validate(ServerMessage) : void
-                {method} + getClientCardState() : ClientCardState
-                {method} [protected] getNext() : CardState
-                {method} + setNewShipCentre(Player, ShipCoords) : void
                 {method} + disconnect(Player) : void
             }
 
@@ -132,11 +118,25 @@ package Model {
                 {method} + init(ClientState) : void
                 {method} + validate(ServerMessage) : void
                 {method} + getClientCardState() : ClientCardState
-                {method} [protected] getNext() : CardState
+                {method} + getNext() : CardState
                 {method} + turnOn(Player, ShipCoords, ShipCoords) : void
                 {method} + progressTurn(Player) : void
                 {method} + removeCrew(Player, ShipCoords) : void
                 {method} + discardCargo(Player, ShipmentType, ShipCoords) : void
+                {method} + disconnect(Player) : void
+            }
+
+            CardState^--CombatZoneSelectShipState
+            class CombatZoneSelectShipState {
+                {field} [final] card_id : int
+                {field} [final] sections : ArrayList<CombatZoneSection>
+                {field} [final] shots : ProjectileArray
+                {field} [final] target : Player
+                {method} + init(ClientState) : void
+                {method} + validate(ServerMessage) : void
+                {method} + getClientCardState() : ClientCardState
+                {method} + getNext() : CardState
+                {method} + selectBlob(Player, ShipCoords) : void
                 {method} + disconnect(Player) : void
             }
 
@@ -147,9 +147,9 @@ package Model {
                 {method} + init(ClientState) : void
                 {method} + validate(ServerMessage) : void
                 {method} + getClientCardState() : ClientCardState
-                {method} [protected] getNext() : CardState
+                {method} + getNext() : CardState
                 {method} + progressTurn(Player) : void
-                'ask why disconnect isn't here
+                {method} + disconnect(Player) : void
             }
 
             CardState^--MeteorAnnounceState
@@ -161,21 +161,21 @@ package Model {
                 {method} + init(ClientState) : void
                 {method} + validate(ServerMessage) : void
                 {method} + getClientCardState() : ClientCardState
-                {method} [protected] getNext() : CardState
+                {method} + getNext() : CardState
                 {method} + turnOn(Player, ShipCoords, ShipCoords) : void
                 {method} + progressTurn(Player) : void
                 {method} + disconnect(Player) : void
             }
 
-            CardState^--MeteorNewCabinState
-            class MeteorNewCabinState {
+            CardState^--MeteorSelectShipState
+            class MeteorSelectShipState {
                 {field} [final] card_id : int
                 {field} [final] left : ProjectileArray
                 {method} + init(ClientState) : void
                 {method} + validate(ServerMessage) : void
                 {method} + getClientCardState() : ClientCardState
-                {method} [protected] getNext() : CardState
-                {method} + setNewShipCentre(Player, ShipCoords) : void
+                {method} + getNext() : CardState
+                {method} + selectBlob(Player, ShipCoords) : void
                 {method} + disconnect(Player) : void
             }
 
@@ -186,7 +186,7 @@ package Model {
                 {method} + init(ClientState) : void
                 {method} + validate(ServerMessage) : void
                 {method} + getClientCardState() : ClientCardState
-                {method} [protected] getNext() : CardState
+                {method} + getNext() : CardState
                 {method} + turnOn(Player, ShipCoords, ShipCoords) : void
                 {method} + progressTurn(Player) : void
                 {method} + disconnect(Player) : void
@@ -201,22 +201,22 @@ package Model {
                 {method} + init(ClientState) : void
                 {method} + validate(ServerMessage) : void
                 {method} + getClientCardState() : ClientCardState
-                {method} [protected] getNext() : CardState
+                {method} + getNext() : CardState
                 {method} + turnOn(Player, ShipCoords, ShipCoords) : void
                 {method} + progressTurn(Player) : void
                 {method} + disconnect(Player) : void
             }
 
-            CardState^--PiratesNewCabinState
-            class PiratesNewCabinState {
+            CardState^--PiratesSelectShipState
+            class PiratesSelectShipState {
                 {field} [final] card : PiratesCard
                 {field} [final] list : List<Player>
                 {field} [final] shots : ProjectileArray
                 {method} + init(ClientState) : void
                 {method} + validate(ServerMessage) : void
                 {method} + getClientCardState() : ClientCardState
-                {method} [protected] getNext() : CardState
-                {method} + setNewShipCentre(Player, ShipCoords) : void
+                {method} + getNext() : CardState
+                {method} + selectBlob(Player, ShipCoords) : void
                 {metohd} + disconnect(Player) : void
             }
 
@@ -258,7 +258,7 @@ package Model {
                 {method} + init(ClientState) : void
                 {method} + validate(ServerMessage) : void
                 {method} + getClientCardState() : ClientCardState
-                {method} [protected] getNext() : CardState
+                {method} + getNext() : CardState
                 {method} + selectLanding(Player, int) : void
                 {method} + disconnect(Player) : void
             }
@@ -272,7 +272,7 @@ package Model {
                 {method} + init(ClientState) : void
                 {method} + validate(ServerMessage) : void
                 {method} + getClientCardState() : ClientCardState
-                {method} [protected] getNext() : CardState
+                {method} + getNext() : CardState
                 {method} + takeCargo(Player, ShipmentType, ShipCoords) : void
                 {method} + moveCargo(Player, ShipmentType, ShipCoords, ShipCoords) : void
                 {method} + discardCargo(Player, ShipmentType, ShipCoords) : void
@@ -289,7 +289,7 @@ package Model {
                 {method} + init(ClientState) : void
                 {method} + validate(ServerMessage) : void
                 {method} + getClientCardState() : ClientCardState
-                {method} [protected] getNext() : CardState
+                {method} + getNext() : CardState
                 {method} + turnOn(Player, ShipCoords, ShipCoords) : void
                 {method} + progressTurn(Player) : void
                 {method} + disconnect(Player) : void
@@ -304,7 +304,7 @@ package Model {
                 {method} + init(ClientState) : void
                 {method} + validate(ServerMessage) : void
                 {method} + getClientCardState() : ClientCardState
-                {method} [protected] getNext() : CardState
+                {method} + getNext() : CardState
                 {method} + removeCrew(Player, ShipCoords) : void
                 {method} + disconnect(Player) : void
             }
@@ -318,7 +318,7 @@ package Model {
                 {method} + init(ClientState) : void
                 {method} + validate(ServerMessage) : void
                 {method} + getClientCardState() : ClientCardState
-                {method} [protected] getNext() : CardState
+                {method} + getNext() : CardState
                 {method} + setTakeReward(Player, boolean) : void
                 {method} + disconnect(Player) : void
             }
@@ -332,7 +332,7 @@ package Model {
                 {method} + init(ClientState) : void
                 {method} + validate(ServerMessage) : void
                 {method} + getClientCardState() : ClientCardState
-                {method} [protected] getNext() : CardState
+                {method} + getNext() : CardState
                 {method} + turnOn(Player, ShipCoords, ShipCoords) : void
                 {method} + progressTurn(Player) : void
                 {method} + disconnect(player) : void
@@ -347,7 +347,7 @@ package Model {
                 {method} + init(ClientState) : void
                 {method} + validate(ServerMessage) : void
                 {method} + getClientCardState() : ClientCardState
-                {method} [protected] getNext() : CardState
+                {method} + getNext() : CardState
                 {method} + discardCargo(Player, ShipmentType, ShipCoords) : void
                 {method} + disconnect(Player) : void
             }
@@ -361,7 +361,7 @@ package Model {
                 {method} + init(ClientState) : void
                 {method} + validate(ServerMessage) : void
                 {method} + getClientCardState() : ClientCardState
-                {method} [protected] getNext() : CardState
+                {method} + getNext() : CardState
                 {method} + takeCargo(Player, ShipmentType, ShipCoords) : void
                 {method} + moveCargo(Player, ShipmentType, ShipCoords, ShipCoords) : void
                 {method} + discardCargo(Player, ShipmentType, ShipCoords) : void
@@ -376,8 +376,20 @@ package Model {
                 {method} + init(ClientState) : void
                 {method} + validate(ServerMessage) : void
                 {method} + getClientCardState() : ClientCardState
-                {method} [protected] getNext() : CardState
+                {method} + getNext() : CardState
                 {method} + progressTurn(Player) : void
+            }
+
+            CardState^--SelectShipReconnectState
+            class SelectShipReconnectState {
+                {field} [final] resume : CardState
+                {field} [final] awaiting : Player
+                {method} + init(ClientState) : void
+                {method} + validate(ServerMessage) : void
+                {method} + getClientCardState() : ClientCardState
+                {method} + getNext() : CardState
+                {method} + selectBlob(Player, ShipCoords) : void
+                {method} + disconnect(Player) : void
             }
         }
 
@@ -398,6 +410,7 @@ package Model {
                 {method} + getContains() : int[]
                 {method} + visit() : void
                 {method} + getVisited() : boolean
+                {method} + getTotalContains() : int
             }
             
             class Projectile {
@@ -413,12 +426,18 @@ package Model {
                 {field} [field] projectiles : List<Projectile>
                 {method} + getProjectiles : List<Projectile>
             }
-                
         }
 
         package Visitors {
             
+            class ContainerMoveValidationVisitor {
+                {field} [final] searching_for : ShipmentType
+                {field} found : boolean
+                {method} + visit(StorageComponent) : void
+            }
+
             class ContainsLoaderVisitor {
+                {field} [final] ship : SpaceShip
                 {field} [final] cargo : ShipmentType
                 {method} + visit(StorageComponent) : void
             }
@@ -431,9 +450,10 @@ package Model {
 
             class CrewRemoveVisitor {
                 {field} [final] ship : SpaceShip
+                {field} searching : ShipmentType
+                {method} + changeType(ShipmentType) : void
                 {method} + visit(CabinComponent) : void
                 {method} + visit(AlienLifeSupportComponent) : void
-                {method} + visit(StartingCabinComponent) : void
             }
 
             class LargeMeteorVisitor {
@@ -568,33 +588,64 @@ package Model {
     package Board {
 
         interface iCards <<interface>> {
-            TODO
+            {method} pullCard() : iCard
+            {method} getLeft() : int
+            {method} getConstructionCards : List<Integer>
         }
 
-        iCards^--Cards
-        class Cards {
-            TODO
+        iCards^--TestFlightCards
+        class TestFlightCards {
+            {field} [final] cards : ArrayDeque<iCard>
+            {method} + pullCard() : iCard
+            {method} + getLeft() : int
+            {method} + getConstructionCards : List<Integer>
+        }
+
+        iCards^--LevelTwoCards
+        class LevelTwoCards {
+            {field} cards : ArrayDeque<iCard>
+            {field} construction_cards : ArrayList<Integer>
+            {method} + pullCard() : iCard
+            {method} + getLeft() : int
+            {method} + getConstructionCards : List<Integer>
         }
 
         interface iCommonBoard <<interface>> {
-            TODO
+            {method} getCoveredSize() : int
+            {method} pullComponent() : BaseComponent
+            {method} discardComponent(BaseComponent) : void
+            {method} pullDiscarded(int) : BaseComponent
+            {method} getDiscarded() : ArrayList<Integer>
         }
 
         iCommonBoard^..CommonBoard
         class CommonBoard {
-            TODO
+            {field} [final] covered_components : ArrayDeque<BaseComponent>
+            {field} [final] uncovered_components : HashMap<Integer, BaseComponent>
+            {method} + getCoveredSize() : int
+            {method} + pullComponent() : BaseComponent
+            {method} + discardComponent(BaseComponent) : void
+            {method} + pullDiscarded(int) : BaseComponent
+            {method} + getDiscarded() : ArrayList<Integer>
         }
 
         interface iPlanche <<interface>> {
-            TODO
+            {method} getPlayerPosition(Player) : int
+            {method} getPlayerAt(int) : Player
+            {method} movePlayer(VoyageState, Player, int) : void
+            {method} loseGame(Player) : void
         }
 
 
         iPlanche^..Planche
         class Planche{
-            TODO
+            {field} [final] planche : HashMap<Player, Integer>
+            {field} [final] length : int
+            {method} + getPlayerPosition(Player) : int
+            {method} + getPlayerAt(int) : Player
+            {method} + movePlayer(VoyageState, Player, int) : void
+            {method} + loseGame(Player) : void
         }
-
     }
 
     package Components {
@@ -622,34 +673,82 @@ package Model {
             class CabinVisitor {
                 {field} type : AlienType
                 {method} + getSupportedType() : AlienType
+                {method} + visit(AlienLifeSupportComponent) : void
+            }
+
+            iVisitor^--CrewSetVisitor
+            class CrewSetVisitor {
+                {field} [field] ship : SpaceShip
+                {field} [field] type : AlienType
+                {method} + visit(CabinComponent) : void
             }
 
             iVisitor^..EnergyVisitor
             class EnergyVisitor {
-                TODO
+                {field} positive : boolean
+                {field} found_battery : boolean
+                {field} powerable : boolean
+                {field} has_battery : boolean
+                {method} + visit(BaseComponent) : void
+                {method} + getFoundBatteryComponent() : boolean
+                {method} + getPowerable() : boolean
+                {method} + hasBattery() : boolean
+                {method} + toggle() : void
             }
 
             iVisitor^..FreeSpaceVisitor
             class FreeSpaceVisitor {
-                TODO
+                {field} isfree : boolean
+                {method} + visit(BaseComponent) : void
+                {method} + getSpaceIsFree() : boolean
+            }
+
+            class LifeSupportUpdateVisitor {
+                {field} [final] type : AlienType
+                {field} still_alive : boolean
+                {method} + getStillAlive() : boolean
+                {method} + visit(CabinComponent) : void
+                {method} + visit(AlienLifeSupportComponent) : void
             }
 
             iVisitor^..SpaceShipUpdateVisitor
             class SpaceShipUpdateVisitor {
-                TODO
+                {field} [final] containers : int[]
+                {field} [final] crew_members : int[]
+                {field} [field] directions : boolean[]
+                {field} engine_power : int
+                {field} cannon_power : double
+                {method} + visit(BaseComponent) : void
+                {method} + getEnginePower() : int
+                {method} + getCannonPower() : double
+                {method} + getContainers() : int[]
+                {method} + getCrewMembers() : int[]
+                {method} + getDirections() : boolean[]
             }
         
         }
-        
-
-        interface iBaseComponent <<interface>> {
-            TODO
-        }
 
         Visitors::iVisitable ^--BaseComponent
-        iBaseComponent^--BaseComponent
         abstract BaseComponent <<abstract>> {
-            TODO
+            {field} [final] id : int
+            {field} [final] connectors : ConnectorType[]
+            {field} [protected] coords : ShipCoords
+            {field} rotation : ComponentRotation
+            {method} + getID() : int
+            {method} + getConnectors() : ConnectorType[]
+            {method} + getRotation() : ComponentRotation
+            {method} + rotate(ComponentRotation) : void
+            {method} + verify(SpaceShip) : boolean
+            {method} + getConnector(ComponentRotation) : ConnectorType
+            {method} + getCoords() : ShipCoords
+            {method} + powerable() : boolean
+            {method} + [abstract] onCreation(SpaceShip, ShipCoords) : void
+            {method} + [abstract] onDelete(SpaceShip) : void
+            {method} + [abstract] getClientComponent() : ClientComponent
+            {method} + [abstract] check(iVisitor) : void
+            {method} + getConnectedComponents(SpaceShip) : BaseComponent[]
+
+
         }
 
         BaseComponent^..AlienLifeSupportComponent
@@ -791,19 +890,108 @@ package Model {
     }
 
     package Player {
-        
-        interface SpaceShip <<interface>> {
-            TODO
+
+        class Player {
+            {field} [final] username : String
+            {field} [final] color : PlayerColor
+            {field} [final] ship : SpaceShip
+            {field} [transient] descriptor : ClientDescriptor
+            {field} credits : int
+            {field} score : int
+            {field} retired : boolean
+            {field} disconnected : boolean
+            {method} + getUsername() : String
+            {method} + getColor() : String
+            {method} + retire() : void
+            {method} + getRetired : boolean
+            {method} + reconnect() : void
+            {method} + disconnect() : void
+            {method} + getDisconnected() : boolean
+            {method} + giveCredits(int) : int
+            {method} + getCredits() : int
+            {method} + addScore(int) : void
+            {method} + getScore() : int
+            {method} + finalScore() : void
+            {method} + reconnect(ClientDescriptor) : void
+            {method} + getSpaceShip() : SpaceShip
+            {method} + bindDescriptor(ClientDescriptor) : void
+            {method} + getDescriptor() : ClientDescriptor
+            {method} + voyageInfo(iPlanche) : String
+            {method} + equals : boolean
         }
 
-        SpaceShip^..SpaceShip
         class SpaceShip {
-            TODO
+            {field} [final] player : Player
+            {field} [final] storage_coords : ArrayList<ShipCoords>
+            {field} [final] cabin_coords : ArrayList<ShipCoords>
+            {field} [final] battery_coords : ArrayList<ShipCoords>
+            {field} [final] powerable_coords : ArrayList<ShipCoords>
+            {field} [final] type : GameModeType
+            {field} [final] components : BaseComponent[][]
+            {field} [final] empty : BaseComponent
+            {field} blobs : ArrayList<ArrayList<ShipCoords>>
+            {field} crew : int[]
+            {field} center : ShipCoords
+            {field} containers : int[]
+            {field} shielded_directions : boolean[]
+            {field} cannon_power : double
+            {field} engine_power : int
+            {method} + getType() : GameModeType
+            {method} + getCrew() : int[]
+            {method} + bulkVerify() : VerifyResult[][]
+            {method} + bulkVerifyResult() : boolean
+            {method} + getBlobsSize() : int
+            {method} + updateShipBlobs() : void
+            {method} + verifyBlob(VerifyResult[][]) : ArrayList<ShipCoords>
+            {method} + selectShipBlob(ShipCoords) : void
+            {method} + addComponent(BaseComponent, ShipCoords) : void
+            {method} + removeComponent(ShipCoords) : void
+            {method} + updateShip() : void
+            {method} + resetPower() : void
+            {method} + turnOn(ShipCoords, ShipCoords) : void
+            {method} + getComponent : BaseComponent
+            {method} + getCannonPower() : double
+            {method} + getEnginePower() : int
+            {method} + getEnergyPOwer() : int
+            {method} + getShieldedDirections() : int
+            {method} + getHeight() : int
+            {method} + getWidth() : int
+            {method} + getEmpty() : BaseComponent
+            {method} + addStorageCoords(ShipCoords) : void
+            {method} + delStorageCoords(ShipCoords) : void
+            {method} + addCabinCoords(ShipCoords) : void
+            {method} + delCabinCoords(ShipCoords) : void
+            {method} + addBatteryCoords(ShipCoords) : void
+            {method} + delBatteryCoords(ShipCoords) : void
+            {method} + addPowerableCoords(ShipCoords) : void
+            {method} + delPowerableCoords(ShipCoords) : void
+            {method} + getTotalCrew() : int
+            {method} + findConnectedCabins() : ArrayList<ShipCoords>
+            {method} + countExposedConnectors() : int
+            {method} + handleMeteorite(Projectile) : void
+            {method} + handleShot(Projectile) : void
+            {method} + normalizeRoll(ProjectileDirection, int) : int
+            {method} + getFirst(ProjectileDirection, int) : ShipCoords
+            {method} + constrctCol(int) : BaseComponent[]
+            {method} + findCannon(ProjectileDirection, int) : boolean
+            {method} + getContains() : int[]
+            {method} + isCabin(ShipCoords) : boolean
+            {method} + getClientSpaceShip() : ClientSpaceShip
         }
 
         ShipCoords <-- "1" Components::BaseComponent
         class ShipCoords{
-            TODO
+            {field} [final] x : int
+            {field} [final] y : int
+            {field} [final] type : GameModeType
+            {method} + getType() : GameModeType
+            {method} + getNextTo() : ShipCoords[]
+            {method} + up() : ShipCoords
+            {method} + down() : ShipCoords
+            {method} + right() : ShipCoords
+            {method} + left() : ShipCoords
+            {method} + toString() : String
+            {method} + equals(Object) : boolean
         }
 
     }
@@ -817,12 +1005,17 @@ package Model {
             {field} # [final] players : List<Player>
             {method} + [abstract] validate(ServerMessage message) : void
             {method} + [abstract] getNext() : GameState 
-            {method} + [abstract] getClientState() : ClientState 
-            {method} + init() : void : void
-            {method} + transition() : void : void
-            {method} + getCount() : void : PlayerCount
-            {method} + getPlayer(PlayerColor) : void : Player
-            {method} + getType() : void : GameModeType
+            {method} + [abstract] getClientState() : ClientState
+            {method} + [abstract] toSerialize() : boolean
+            {method} + [abstract] toString() : String
+            {method} + [abstract] getOngoingEntry(int) : ClientGameListEntry
+            {method} + init() : void
+            {method} + broadcastMessage(ClientMessage) : void
+            {method} + transition() : void
+            {method} + getCount() : PlayerCount
+            {method} + getPlayer(PlayerColor) : Player
+            {method} + getType() : GameModeType
+            {method} + getModelID() : int
             {method} + connect(ClientDescriptor client) : void
             {method} + disconnect(ClientDescriptor client) : void
             {method} + connect(Player) : void
@@ -836,7 +1029,8 @@ package Model {
             {method} + removeComponent(Player, ShipCoords coords) : void
             {method} + setCrewType(Player, ShipCoords coords, AlienType type) : void
             {method} + giveUp(Player) : void
-            {method} + CardState getCardState(Player) : void
+            {method} + selectBlob(Player, ShipCoords) : void
+            {method} + getCardState(Player) : CardState
         }
 
         GameState ^... WaitingState
@@ -846,24 +1040,40 @@ package Model {
             {method} + validate(ServerMessage message) : void
             {method} + getNext() : GameState 
             {method} + getClientState() : ClientState 
-            {method} + init() : void : void
+            {method} + init() : void
             {method} + connect(ClientDescriptor client) : void
             {method} + disconnect(ClientDescriptor client) : void
         }
 
+        GameState^--ResumeWaitingState
+        class ResumeWaitingState {
+            {field} - [final] next : GameState
+            {field} - [final] awaiting : HashMap<String, ClientDescriptor>
+            {field} - [final] count : PlayerCount
+            {method} + validate(ServerMessage message) : void
+            {method} + getNext() : GameState
+            {method} + getClientState() : ClientState
+            {method} + init() : void
+            {method} - resumeState() : void
+            {method} + toSerialize() : boolean
+            {method} + connect(ClientDescriptor) : void
+            {method} + disconnect(ClientDescriptor) : void
+            {method} + toString() : String
+            {method} + getOngoingEntry(int) : ClientGameListEntry
+        }
+
         GameState ^... ConstructionState
-        class ConstructionState {
-            {field} - [final] construction_cards : List<Integer> 
-            {field} - [final] voyage_deck : iCards 
-            {field} - [final] building : List<Player> 
-            {field} - [final] finished : List<Player> 
-            {field} - [final] hourglass : ConstructionStateHourglass 
-            {field} - current_tile : HashMap<Player, iBaseComponent> 
-            {field} - hoarded_tile : HashMap<Player, List<iBaseComponent>> 
+        abstract ConstructionState <<abstract>> {
+            {field} [final] board : iCommonBoard
+            {field} [final] voyage_deck : iCards
+            {field} [final] building : ArrayList<Player>
+            {field} [final] finished : ArrayList<Player>
+            {field} [final] current_tile : HashMap<Player, BaseComponent>
+            {field} [final] hoarded_tile : HashMap<Player, ArrayList<BaseComponent>>
             {method} + validate(ServerMessage message) : void
             {method} + getNext() : GameState 
             {method} + getClientState() : ClientState 
-            {method} + init() : void : void
+            {method} + init() : void
             {method} + connect(Player) : void
             {method} + disconnect(Player) : void
             {method} + sendContinue(Player) : void
@@ -871,46 +1081,94 @@ package Model {
             {method} + takeComponent(Player) : void
             {method} + takeDiscarded(Player, int id) : void
             {method} + discardComponent(Player, int id) : void
-            {method} + toggleHourglass(Player) : void
+            {method} + toSerialize() : boolean
+            {method} + toString() : String
+            {method} + getCurrent(Player) : BaseComponent
+            {method} + getHoarded : ArrayList<BaseComponent>
+            {method} + getDiscarded() : ArrayList<Integer>
+            {method} + getOngoingEntry(int) : ClientGameListEntry
+        }
+
+        ConstructionState^--TestFlightConstructionState
+        class TestFlightConstructionState {
+            {method} + getClientState : ClientState
+        }
+
+        ConstructionState^--LevelTwoConstructionState
+        class LevelTwoConstructionState {
+            {field} [final] hourglass : ConstructionStateHourglass
+            {method} + init() : void
+            {method} + getClientState() : ClientState
+            {method} + sendContinue(Player) : void
+            {method} + putComponent(Player, int, ShipCoords, ComponentRotation) : void
+            {method} + takeComponent(Player) : void
+            {method} + takeDiscarded(Player, int) : void
+            {method} + discardComponent(Player, int) ; void
+            {method} + toggleHourglass(player) : void
+        }
+
+        class ConstructionStateHourglass {
+            {field} [final] period : Duration
+            {field} toggled : Instant
+            {field} [final] total : int
+            {field} times : int
+            {method} + timesTotal() : int
+            {method} + timesLeft() : int
+            {method} + getDuration() : Duration
+            {method} + start() : void
+            {method} + toggle() : void
+            {method} + canAct() : boolean
+            {method} + isRunning() : boolean
+            {method} + getInstant() : Instant
         }
 
         GameState ^... VerifyState
         class VerifyState {
             {field} - [final] voyage_deck : iCards 
-            {field} - [final] to_validate : List<Player>
-            {field} - [final] finish_order : List<Player>
+            {field} - [final] to_remove_broken : ArrayList<Player>
+            {field} - [final] to_choose_blob : ArrayList<Player>
+            {field} - [final] finish_order : ArrayList<Player>
+            {field} - [final] awaiting : ArrayList<Player>
+            {field} - [final] starts_losing : ArrayList<Player>
             {method} + validate(ServerMessage message) : void
             {method} + getNext() : GameState 
             {method} + getClientState() : ClientState 
-            {method} + init() : void : void
+            {method} + init() : void
             {method} + connect(Player) : void
             {method} + disconnect(Player) : void
             {method} + sendContinue(Player) : void
             {method} + removeComponent(Player, ShipCoords coords) : void
             {method} + setCrewType(Player, ShipCoords coords, AlienType type) : void
+            {method} + toSerialize : boolean
+            {method} + selectBlob(Player, ShipCoords) : void
+            {method} + toString() : String
+            {method} + getOngoingEntry(int) : ClientGameListEntry
         }
 
         GameState ^... VoyageState
         class VoyageState {
             {field} - [final] planche : iPlanche 
             {field} - [final] voyage_deck : iCards 
-            {field} - [final] to_give_up : List<Player> 
+            {field} - [final] to_give_up : ArrayList<Player>
             {field} - card : iCard 
             {field} - state : CardState state
             {method} + validate(ServerMessage message) : void
             {method} + getNext() : GameState 
             {method} + getClientState() : ClientState 
-            {method} + init() : void : void
+            {method} + init() : void
             {method} + connect(Player) : void
             {method} + disconnect(Player) : void
             {method} + giveUp(Player) : void
             {method} + getCardState(Player) : CardState
             {method} + loseGame(Player) : void
             {method} + getAllConnectedPlayers() : List<Player> 
-            {method} + etOrder(CardOrder) : List<Player> 
+            {method} + getOrder(CardOrder) : List<Player>
             {method} + findCriteria(CombatZoneCriteria) : Player
             {method} + getPlanche() : iPlanche 
             {method} + setCardState(CardState) : void
+            {method} + toSerialize() : boolean
+            {method} + toString() : String
+            {method} + getOngoingEntry(int) : ClientGameListEntry
         }
 
         GameState ^... EndscreenState
@@ -920,9 +1178,12 @@ package Model {
             {method} + validate(ServerMessage message) : void
             {method} + getNext() : GameState 
             {method} + getClientState() : ClientState 
-            {method} + init() : void : void
+            {method} + init() : void
             {method} + sendContinue(Player) : void
             {method} + disconnect(Player) : void
+            {method} + toSerialize() : boolean
+            {method} + toString() : boolean
+            {method} + getOngoingEntry(int) : ClientGameListEntry
         }
         
     }
@@ -945,48 +1206,57 @@ package Model {
         package Card {
             
             interface ClientCardState <<interface>> {
-                {method} + showCardState(ClientView) : void
+                {method} showCardState(ClientView) : void
             }
 
             ClientCardState ^.. ClientBaseCardState
             class ClientBaseCardState {
                 {field} - [final] id : int
-                {method} + showCardState(ClientView) : void
+                {field} - [final] state : String
+                {method} + getState() : String
+                {method} + getID() : int
+                {method} + showCardState(ClientCardStateVisitor) : void
             }
 
             ClientCardState ^.. ClassAwaitConfirmCardStateDecorator
             ClientBaseCardState <-- ClassAwaitConfirmCardStateDecorator:base
-            class ClassAwaitConfirmCardStateDecorator {
+            class ClientAwaitConfirmCardStateDecorator {
+                {field} - [final] base : ClientCardState
                 {field} - [final] awaiting : List<PlayerColor> 
                 {method} + getAwaiting() : List<PlayerColor> 
-                {method} + showCardState(ClientView) : void
+                {method} + showCardState(ClientCardStateVisitor) : void
             }
 
             ClientCardState ^.. ClientCargoPenaltyCardStateDecorator
             ClientBaseCardState <-- ClientCargoPenaltyCardStateDecorator:base
             class ClientCargoPenaltyCardStateDecorator {
+                {field} - [final] base : ClientCardState
                 {field} - [final] turn : PlayerColor 
                 {field} - [final] shipments : int[] 
                 {method} + getTurn() : PlayerColor 
                 {method} + getShipments() : int[] 
-                {method} + showCardState(ClientView) : void
+                {method} + showCardState(ClientCardStateVisitor) : void
             }
             
             ClientCardState ^.. ClientCargoRewardCardStateDecorator
             ClientBaseCardState <-- ClientCargoRewardCardStateDecorator:base
-            class ClientCargoRewardCardStateDecorator { 
+            class ClientCargoRewardCardStateDecorator {
+                {field} - [final] base : ClientCardState
                 {field} - [final] turn : PlayerColor 
                 {field} - [final] days_taken : int 
                 {field} - [final] shipments : int[] 
-                {method} + getTurn() : PlayerColor 
+                {method} + getTurn() : PlayerColor
+                {method} + getDaysTaken() : int
                 {method} + getShipments() : int[] 
-                {method} + showCardState(ClientView) : void
+                {method} + showCardState(ClientCardStateVisitor) : void
             } 
             
             ClientCardState ^.. ClientCombatZoneIndexCardStateDecorator
             ClientBaseCardState <-- ClientCombatZoneIndexCardStateDecorator:base
             class ClientCombatZoneIndexCardStateDecorator {
-                {field} - [final] index : int 
+                {field} - [final] base : ClientCardState
+                {field} - [final] index : int
+                {method} + getSection() : CombatZoneSection
                 {method} + getIndex() : int
                 {method} + showCardState(ClientView) : void
             }
@@ -994,6 +1264,7 @@ package Model {
             ClientCardState ^.. ClientCreditsRewardCardStateDecorator
             ClientBaseCardState <-- ClientCreditsRewardCardStateDecorator:base
             class ClientCreditsRewardCardStateDecorator {
+                {field} - [final] base : ClientCardState
                 {field} - [final] turn : PlayerColor 
                 {field} - [final] credits : int 
                 {field} - [final] days_taken : int 
@@ -1006,16 +1277,18 @@ package Model {
             ClientCardState ^.. ClientCrewPenaltyCardStateDecorator
             ClientBaseCardState <-- ClientCrewPenaltyCardStateDecorator:base
             class ClientCrewPenaltyCardStateDecorator {
+                {field} - [final] base : ClientCardState
                 {field} - [final] turn : PlayerColor 
                 {field} - [final] days_taken : int 
                 {method} + getTurn() : PlayerColor
-                {method} + getDaysTaken() : int
+                {method} + getCrewLost() : int
                 {method} + showCardState(ClientView) : void
             }
             
             ClientCardState ^.. ClientLandingCardStateDecorator
             ClientBaseCardState <-- ClientLandingCardStateDecorator:base
             class ClientLandingCardStateDecorator {
+                {field} - [final] base : ClientCardState
                 {field} - [final] turn : PlayerColor 
                 {field} - [final] days_taken : int 
                 {field} - [final] crew_needed: int 
@@ -1038,6 +1311,7 @@ package Model {
             ClientCardState ^.. ClientNewCenterCardStateDecorator
             ClientBaseCardState <-- ClientNewCenterCardStateDecorator:base
             class ClientNewCenterCardStateDecorator {
+                {field} - [final] base : ClientCardState
                 {field} - [final] awaiting : List<PlayerColor>
                 {method} + getAwaiting() : List<PlayerColor>
                 {method} + showCardState(ClientView) : void
@@ -1046,6 +1320,7 @@ package Model {
             ClientCardState ^.. ClientProjectileCardStateDecorator
             ClientBaseCardState <-- ClientProjectileCardStateDecorator:base
             class ClientProjectileCardStateDecorator {
+                {field} - [final] base : ClientCardState
                 {field} - [final] shot : Projectile
                 {method} + getProjectile() : Projectile
                 {method} + showCardState(ClientView) : void
@@ -1056,56 +1331,118 @@ package Model {
         package Components {
             
             interface ClientComponent <<interface>> {
-                {method} + showComponent(ClientView) : void
+                {method} + showComponent(ClientComponentVisitor) : void
+            }
+
+            interface ClientComponentVisitor <<interface>> {
+                {method} + show(ClientComponent) : void
             }
 
             ClientComponent ^.. ClientBaseComponent
             class ClientBaseComponent {
                 {field} - [final] id : int
                 {field} - [final] rotation : ComponentRotation
+                {field} - [final] connectors : ConnectorType[]
+                {method} + getConnectors(ComponentRotation) : ConnectorType
                 {method} + getId() : int 
                 {method} + getRotation() : ComponentRotation 
-                {method} + showComponent(ClientView) : void
+                {method} + showComponent(ClientComponentVisitor) : void
             }
             
             ClientComponent ^.. ClientBatteryComponentDecorator
             ClientBaseComponent <-- ClientBatteryComponentDecorator:base
             class ClientBatteryComponentDecorator {
+                {field} - [final] base : ClientComponent
                 {field} - [final] batteries : int
+                {method} + getBase() : ClientComponent
                 {method} + getBatteries() : int
-                {method} + showComponent(ClientView) : void
+                {method} + showComponent(ClientComponentVisitor) : void
             }
 
             ClientComponent ^.. ClientCrewComponentDecorator
             ClientBaseComponent <-- ClientCrewComponentDecorator:base
-            class ClientCrewComponentDecorator {
+            class ClientCabinComponentDecorator {
+                {field} - [final] base : ClientComponent
                 {field} - [final] type : AlienType 
                 {field} - [final] crew : int
+                {field} - [final] base : ClientComponent
+                {method} + getBase() : ClientComponent
                 {method} + getAlienType() : AlienType
                 {method} + getCrew() : int
-                {method} + showComponent(ClientView) : void
+                {method} + showComponent(ClientComponentVisitor) : void
+            }
+
+            ClientComponent ^.. ClientCannonComponentDecorator
+            ClientBaseComponent <-- ClientCannonComponentDecorator:base
+            class ClientCannonComponentDecorator {
+                {field} - [final] rotation : ComponentRotation
+                {field} - [final] base : ClientComponent
+                {method} + getBase() : ClientComponent
+                {method} + getRotation() : ComponentRotation
+                {method} + showComponent(ClientComponentVisitor) : void
+            }
+
+            ClientComponent^..ClientEmptyComponent
+            class ClientEmptyComponent {
+                {method} + showComponent(ClientComponentVisitor) : void
+            }
+
+
+            ClientComponent ^.. ClientEngineComponentDecorator
+            ClientBaseComponent <-- ClientEngineComponentDecorator:base
+            class ClientEngineComponentDecorator {
+                {field} - [final] base : ClientComponent
+                {field} - [final] rotation : ComponentRotation
+                {method} + getBase() : ClientComponent
+                {method} + getRotation() : ComponentRotation
+                {method} + showComponent(ClientComponentVisitor) : void
+            }
+
+
+            ClientComponent ^.. ClientLifeSupportComponentDecorator
+            ClientBaseComponent <-- ClientLifeSupportComponentDecorator:base
+            class ClientLifeSupportComponentDecorator {
+                {field} - [final] base : ClientComponent
+                {field} - [final] type : AlienType
+                {method} + getBase() : ClientComponent
+                {method} + getAlienType() : AlienType
+                {method} + showComponent(ClientComponentVisitor) : void
             }
 
             ClientComponent ^.. ClientPoweredComponentDecorator 
             ClientBaseComponent <-- ClientPoweredComponentDecorator:base
             class ClientPoweredComponentDecorator {
                 {field} - [final] powered : boolean
+                {field} - [final] base : ClientComponent
+                {method} + getBase() : ClientComponent
                 {method} + getPowered() : boolean
-                {method} + showComponent(ClientView) : void
+                {method} + showComponent(ClientComponentVisitor) : void
+            }
+
+            class ClientShieldComponentDecorator {
+                {field} - [final] base : ClientComponent
+                {field} - [final] type : ShieldType
+                {method} + getBase() : ClientComponent
+                {method} + getType() : ShieldType
+                {method} + showComponent(ClientComponentVisitor) : void
             }
 
             ClientComponent ^.. ClientShipmentComponentDecorator
             ClientBaseComponent <-- ClientShipmentComponentDecorator:base
-            class ClientShipmentComponentDecorator {
+            class ClientShipmentsComponentDecorator {
                 {field} - [final] shipments : int[]
+                {field} - [final] base : ClientComponent
+                {method} + getBase() : ClientComponent
                 {method} + getShipments() : int[]
-                {method} + showComponent(ClientView) : void
+                {method} + showComponent(ClientComponentVisitor) : void
             }
 
             ClientComponent ^.. ClientBrokenVerifyComponentDecorator
             ClientBaseComponent <-- ClientBrokenVerifyComponentDecorator:base
             class ClientBrokenVerifyComponentDecorator {
-                {method} + showComponent(ClientView) : void
+                {field} - [final] base : ClientComponent
+                {method} + getBase() : ClientComponent
+                {method} + showComponent(ClientComponentVisitor) : void
             }
 
             class ClientSpaceShip {
@@ -1114,8 +1451,9 @@ package Model {
                 {field} - [final] boolean[] shielded;
                 {field} - [final] cannon_power : int
                 {field} - [final] engine_power : int
-                {field} - [final] energy_power : int
+                {field} - [final] containers : int[]
                 {field} - [final] crew : int[]
+                {method} + getVerifyShip(VerifyResult[][]) : ClientSpaceShip
                 {method} + getType() : GameModeType
                 {method} + getComponent(ShipCoords) : ClientComponent
                 {method} + getShielded() : boolean[]
@@ -1141,7 +1479,7 @@ package Model {
                 {field} - [final] username : String
                 {field} - [final] color : PlayerColor
                 {field} - [final] ship : ClientSpaceShip
-                {field} - [final] reserved_components : List<Integer> 
+                {field} - [final] reserved_components : ArrayList<Integer>
                 {field} - [final] boolean : finished
                 {method} + getUsername() : String
                 {method} + getColor() : PlayerColor
@@ -1155,13 +1493,11 @@ package Model {
                 {field} - [final] username : String
                 {field} - [final] color : PlayerColor
                 {field} - [final] ship : ClientSpaceShip
-                {field} - [final] results : VerifyResult[][]
                 {field} - [final] finished : boolean
                 {field} - [final] order : int
                 {method} + getUsername() : String
                 {method} + getColor() : PlayerColor
                 {method} + getShip() : ClientSpaceShip
-                {method} + getResults() : VerifyResult[][] 
                 {method} + isFinished() : boolean
                 {method} + getOrder() : int
             }
@@ -1208,11 +1544,29 @@ package Model {
                 {method} + sendToView(ClientView) : void
             }
 
+            ClientState ^.. ClientSetupState
+            class ClientSetupState {
+                {field} - [final] setupper_name : String
+                {field} - [final] unfinished_games : ArrayList<ClientGameListEntry>
+                {method} + getSetupperName() : String
+                {method} + getUnfinishedList() : ArrayList<ClientGameListEntry>
+                {method} + sendToView(ClientView) : void
+            }
+
+            ClientState ^.. ClientLobbySelectState
+            class ClientLobbySelectState {
+                {field} - [final] unfinished_games : ArrayList<ClientGameListEntry>
+                {method} + getLobbyList() : ArrayList<ClientGameListEntry>
+                {method} + sendToView(ClientView) : void
+            }
+
             ClientState ^.. ClientWaitingRoomState
             class ClientWaitingRoomState {
                 {field} - [final] type : GameModeType
-                {field} - [final] playerlist : List<ClientWaitingPlayer>
+                {field} - [final] count : PlayerCount
+                {field} - [final] playerlist : ArrayList<ClientWaitingPlayer>
                 {method} + getType() : GameModeType
+                {method} + getCount() : PlayerCount
                 {method} + getPlayerList() : List<ClientWaitingPlayer>
                 {method} + sendToView(ClientView) : void 
             }
@@ -1220,47 +1574,64 @@ package Model {
             ClientState ^.. ClientConstructionState
             class ClientConstructionState {
                 {field} - [final] type : GameModeType
-                {field} - [final] playerlist : List<ClientConstructionPlayer> 
-                {field} - [final] construction_cards : List<Integer> 
-                {field} - [final] discarded_tiles : List<Integer> 
+                {field} - [final] playerlist : ArrayList<ClientConstructionPlayer>
+                {field} - [final] construction_cards : ArrayList<Integer>
+                {field} - [final] discarded_tiles : ArrayList<Integer>
                 {field} - [final] tiles_left : int
+                {field} - [final] toggles_total : int
+                {field} - [final] toggles_left : int
+                {field} - [final] hourglass_duration : Duration
                 {field} - [final] last_hourglass_toggle : Instant 
                 {method} + getType() : GameModeType
                 {method} + getPlayerList() : List<ClientConstructionPlayer> 
                 {method} + getConstructionCards() : List<Integer> 
                 {method} + getDiscardedTiles() : List<Integer> 
                 {method} + getTilesLeft() : int
+                {method} + getTogglesTotal() : int
+                {method} + getTogglesLeft() : int
+                {method} + getHourglassDuration() : Duration
                 {method} + getLastToggle() : Instant
                 {method} + sendToView(ClientView) : void 
             }
 
             ClientState ^.. ClientVerifyState
             class ClientVerifyState {
-                {field} - [final] players : List<ClientVerifyPlayer> 
-                {method} + getPlayers() : List<ClientVerifyPlayer> 
+                {field} - [final] players : ArrayList<ClientVerifyPlayer>
+                {method} + getPlayers() : ArrayList<ClientVerifyPlayer>
                 {method} + sendToView(ClientView) : void  
             }
 
             ClientState ^.. ClientVoyageState
             class ClientVoyageState {
                 {field} - [final] type : GameModeType
-                {field} - [final] playerlist : List<ClientVoyagePlayer> 
-                {field} - [final] card_id : int
+                {field} - [final] playerlist : ArrayList<ClientVoyagePlayer>
                 {field} - [final] card_state : ClientCardState 
                 {method} + getType() : GameModeType
-                {method} + getPlayerList() : List<ClientVoyagePlayer> 
-                {method} + getCardId() : int
+                {method} + getPlayerList() : ArrayList<ClientVoyagePlayer>
                 {method} + getCardState() : ClientCardState 
                 {method} + sendToView(ClientView) : void 
             }
 
             ClientState ^.. ClientEndgameState
             class ClientEndgameState {
-                {field} - [final] playerlist : List<ClientEndgamePlayer>
+                {field} - [final] playerlist : ArrayList<ClientEndgamePlayer>
                 {method} + getPlayerList() : List<ClientEndgamePlayer>
                 {method} + sendToView(ClientView) : void 
             }
 
+        }
+
+        class ClientGameListEntry {
+            {field} - [final] players : ArrayList<String>
+            {field} - [final] model_id : int
+            {field} - [final] type : GameModeType
+            {field} - [final] count : PlayerCount
+            {field} - [final] state : String
+            {method} + getType() : GameModeType
+            {method} + getCount() : PlayerCount
+            {method} + getPlayers() : ArrayList<String>
+            {method} + getModelId() : int
+            {method} + getState() : String
         }
 
     }
