@@ -11,7 +11,6 @@ import it.polimi.ingsw.model.board.Planche;
 import it.polimi.ingsw.model.board.TestFlightCards;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.cards.state.CardState;
-import it.polimi.ingsw.model.cards.state.CombatZoneAnnounceState;
 import it.polimi.ingsw.model.cards.utils.Projectile;
 import it.polimi.ingsw.model.cards.visitors.ContainsLoaderVisitor;
 import it.polimi.ingsw.model.cards.visitors.CrewRemoveVisitor;

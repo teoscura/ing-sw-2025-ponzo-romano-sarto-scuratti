@@ -146,15 +146,15 @@ public class ClientCardStateFormatter implements ClientCardStateVisitor {
                     .style(AttributedStyle.BOLD.foreground(AttributedStyle.BLUE))
                     .append(String.format("%02d",state.getAvailable().get(0).getContains()[0]))
                     .style(AttributedStyle.BOLD.background(AttributedStyle.BLACK).foreground(AttributedStyle.WHITE))
-                    .append(" | ")
+                    .append("|")
                     .style(AttributedStyle.BOLD.foreground(AttributedStyle.GREEN))
                     .append(String.format("%02d",state.getAvailable().get(0).getContains()[1]))
                     .style(AttributedStyle.BOLD.background(AttributedStyle.BLACK).foreground(AttributedStyle.WHITE))
-                    .append(" | ")
+                    .append("|")
                     .style(AttributedStyle.BOLD.foreground(AttributedStyle.YELLOW))
                     .append(String.format("%02d",state.getAvailable().get(0).getContains()[2]))
                     .style(AttributedStyle.BOLD.background(AttributedStyle.BLACK).foreground(AttributedStyle.WHITE))
-                    .append(" | ")
+                    .append("|")
                     .style(AttributedStyle.BOLD.foreground(AttributedStyle.RED))
                     .append(String.format("%02d",state.getAvailable().get(0).getContains()[3]))
                     .style(AttributedStyle.DEFAULT)
@@ -168,7 +168,7 @@ public class ClientCardStateFormatter implements ClientCardStateVisitor {
                 for(Planet p : state.getAvailable()){
                     if(p.getVisited()){
                         line.style(AttributedStyle.BOLD.background(AttributedStyle.BLACK).foreground(AttributedStyle.RED))
-                            .append(i+": NA ")
+                            .append(i+": N/A ")
                             .style(AttributedStyle.BOLD.background(AttributedStyle.BLACK).foreground(AttributedStyle.GREEN))
                             .append("| ");
                     } else {
@@ -177,20 +177,21 @@ public class ClientCardStateFormatter implements ClientCardStateVisitor {
                             .style(AttributedStyle.BOLD.foreground(AttributedStyle.BLUE))
                             .append(String.format("%02d",state.getAvailable().get(i).getContains()[0]))
                             .style(AttributedStyle.BOLD.background(AttributedStyle.BLACK).foreground(AttributedStyle.GREEN))
-                            .append(" | ")
+                            .append("|")
                             .style(AttributedStyle.BOLD.foreground(AttributedStyle.GREEN))
                             .append(String.format("%02d",state.getAvailable().get(i).getContains()[1]))
                             .style(AttributedStyle.BOLD.background(AttributedStyle.BLACK).foreground(AttributedStyle.GREEN))
-                            .append(" | ")
+                            .append("|")
                             .style(AttributedStyle.BOLD.foreground(AttributedStyle.YELLOW))
                             .append(String.format("%02d",state.getAvailable().get(i).getContains()[2]))
                             .style(AttributedStyle.BOLD.background(AttributedStyle.BLACK).foreground(AttributedStyle.GREEN))
-                            .append(" | ")
+                            .append("|")
                             .style(AttributedStyle.BOLD.foreground(AttributedStyle.RED))
                             .append(String.format("%02d",state.getAvailable().get(i).getContains()[3]))
                             .style(AttributedStyle.BOLD.background(AttributedStyle.BLACK).foreground(AttributedStyle.GREEN))
                             .append("] | ");
                     }
+                    i++;
                 }
             }
             line.style(AttributedStyle.DEFAULT);
