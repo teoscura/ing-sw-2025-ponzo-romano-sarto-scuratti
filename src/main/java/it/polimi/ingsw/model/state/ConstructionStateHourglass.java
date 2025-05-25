@@ -9,8 +9,8 @@ import java.time.Instant;
 public class ConstructionStateHourglass implements Serializable {
 
 	private final Duration period;
-	private Instant toggled = null;
 	private final int total;
+	private Instant toggled = null;
 	private int times;
 
 	public ConstructionStateHourglass(int seconds, int times) {
@@ -20,7 +20,7 @@ public class ConstructionStateHourglass implements Serializable {
 		this.period = Duration.ofSeconds(seconds);
 	}
 
-	public int timesTotal(){
+	public int timesTotal() {
 		return this.total;
 	}
 
@@ -28,7 +28,7 @@ public class ConstructionStateHourglass implements Serializable {
 		return this.times;
 	}
 
-	public Duration getDuration(){
+	public Duration getDuration() {
 		return this.period;
 	}
 
@@ -44,7 +44,7 @@ public class ConstructionStateHourglass implements Serializable {
 	}
 
 	public boolean canAct() {
-		boolean canact = this.times >= 1 || Duration.between(toggled, Instant.now()).compareTo(period)<0;
+		boolean canact = this.times >= 1 || Duration.between(toggled, Instant.now()).compareTo(period) < 0;
 		return canact;
 	}
 

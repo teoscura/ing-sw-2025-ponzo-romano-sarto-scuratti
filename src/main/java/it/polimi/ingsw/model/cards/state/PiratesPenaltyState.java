@@ -63,14 +63,14 @@ public class PiratesPenaltyState extends CardState {
 
 	@Override
 	public ClientCardState getClientCardState() {
-		if(list.isEmpty()) return new ClientBaseCardState(
-							this.getClass().getSimpleName(),
-							card.getId());
+		if (list.isEmpty()) return new ClientBaseCardState(
+				this.getClass().getSimpleName(),
+				card.getId());
 		return new ClientProjectileCardStateDecorator(
 				new ClientAwaitConfirmCardStateDecorator(
 						new ClientBaseCardState(
-							this.getClass().getSimpleName(),
-							card.getId()),
+								this.getClass().getSimpleName(),
+								card.getId()),
 						new ArrayList<>(List.of(this.list.getFirst().getColor()))),
 				this.shots.getFirst());
 	}

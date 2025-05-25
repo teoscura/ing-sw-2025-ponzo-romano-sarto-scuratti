@@ -9,7 +9,7 @@ public class ClientBrokenVerifyComponentDecorator implements ClientComponent {
 		this.base = base;
 	}
 
-	public ClientComponent getBase(){
+	public ClientComponent getBase() {
 		return this.base;
 	}
 

@@ -120,7 +120,7 @@ public class VoyageState extends GameState {
 			return;
 		}
 		Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' gave up!");
-			this.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' gave up!"));
+		this.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' gave up!"));
 		this.to_give_up.add(p);
 	}
 
@@ -173,15 +173,15 @@ public class VoyageState extends GameState {
 
 	public void setCardState(CardState next) {
 		if (next == null) {
-			if(this.getOrder(CardOrder.NORMAL).size()==0){
+			if (this.getOrder(CardOrder.NORMAL).size() == 0) {
 				this.transition();
 				return;
 			}
-			for(Player p : this.getOrder(CardOrder.NORMAL)){
-				if(p.getSpaceShip().getCrew()[0]==0 || p.getSpaceShip().getBlobsSize() <= 0) loseGame(p);
+			for (Player p : this.getOrder(CardOrder.NORMAL)) {
+				if (p.getSpaceShip().getCrew()[0] == 0 || p.getSpaceShip().getBlobsSize() <= 0) loseGame(p);
 			}
-			for(Player p : this.getOrder(CardOrder.NORMAL)){
-				if(planche.checkLapped(p)) loseGame(p);
+			for (Player p : this.getOrder(CardOrder.NORMAL)) {
+				if (planche.checkLapped(p)) loseGame(p);
 			}
 			for (Player p : this.to_give_up) {
 				if (!p.getRetired()) this.loseGame(p);

@@ -44,11 +44,11 @@ public class ClientVerifyPlayer implements Serializable {
 		return this.valid;
 	}
 
-	public boolean hasProgressed(){
+	public boolean hasProgressed() {
 		return this.progressed;
 	}
 
-	public boolean startsLosing(){
+	public boolean startsLosing() {
 		return this.starts_losing;
 	}
 

@@ -6,13 +6,13 @@ public class ClientBaseCardState implements ClientCardState {
 	private final int id;
 
 	public ClientBaseCardState(String state, int id) {
-		if(state == null) throw new NullPointerException();
+		if (state == null) throw new NullPointerException();
 		if (id < 1 || id > 120 || (id > 20 && id < 100)) throw new IllegalArgumentException();
 		this.state = state;
 		this.id = id;
 	}
 
-	public String getState(){
+	public String getState() {
 		return this.state;
 	}
 

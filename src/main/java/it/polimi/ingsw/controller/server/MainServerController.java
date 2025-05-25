@@ -175,8 +175,8 @@ public class MainServerController extends Thread implements VirtualServer {
 			Logger.getInstance().print(LoggerLevel.WARN, "A Client: attempted to connect with an invalid name!");
 			return;
 		}
-		synchronized(listeners_lock){
-			if(this.all_listeners.containsKey(username)){
+		synchronized (listeners_lock) {
+			if (this.all_listeners.containsKey(username)) {
 				try {
 					client.sendMessage(new ClientDisconnectMessage());
 				} catch (IOException e) {
@@ -206,7 +206,7 @@ public class MainServerController extends Thread implements VirtualServer {
 		ClientDescriptor new_listener = new ClientDescriptor(name, client);
 		synchronized (listeners_lock) {
 			if (this.all_listeners.containsKey(name) || !validateUsername(name))
-			
+
 				return null;
 			try {
 				Logger.getInstance().print(LoggerLevel.LOBSL, "Client: '" + client.getUsername() + "' connected with RMI.");

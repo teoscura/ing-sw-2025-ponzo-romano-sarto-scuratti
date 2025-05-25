@@ -63,15 +63,15 @@ public class ClientConstructionState implements ClientState {
 		return this.tiles_left;
 	}
 
-	public int getTogglesTotal(){
+	public int getTogglesTotal() {
 		return this.toggles_total;
 	}
 
-	public int getTogglesLeft(){
+	public int getTogglesLeft() {
 		return this.toggles_left;
 	}
 
-	public Duration getHourglassDuration(){
+	public Duration getHourglassDuration() {
 		return this.hourglass_duration;
 	}
 

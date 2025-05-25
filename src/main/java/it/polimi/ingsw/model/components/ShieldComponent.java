@@ -70,9 +70,9 @@ public class ShieldComponent extends BaseComponent {
 	@Override
 	public ClientComponent getClientComponent() {
 		return new ClientPoweredComponentDecorator(
-			new ClientShieldComponentDecorator(
-				new ClientBaseComponent(getID(), getRotation(), getConnectors()), ShieldType.values()[this.getRotation().getShift()]),
-			powered);		
+				new ClientShieldComponentDecorator(
+						new ClientBaseComponent(getID(), getRotation(), getConnectors()), ShieldType.values()[this.getRotation().getShift()]),
+				powered);
 	}
 
 }

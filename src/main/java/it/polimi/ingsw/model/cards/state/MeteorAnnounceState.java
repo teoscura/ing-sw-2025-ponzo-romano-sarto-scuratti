@@ -67,10 +67,10 @@ public class MeteorAnnounceState extends CardState {
 		List<PlayerColor> tmp = this.awaiting.stream().map(p -> p.getColor()).toList();
 		return new ClientMeteoriteCardStateDecorator(
 				new ClientAwaitConfirmCardStateDecorator(
-					new ClientBaseCardState(
-						this.getClass().getSimpleName(),
-						this.card_id),
-					new ArrayList<>(tmp)),
+						new ClientBaseCardState(
+								this.getClass().getSimpleName(),
+								this.card_id),
+						new ArrayList<>(tmp)),
 				this.left.getProjectiles().getFirst());
 	}
 

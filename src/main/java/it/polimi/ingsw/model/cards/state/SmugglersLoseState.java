@@ -53,8 +53,8 @@ public class SmugglersLoseState extends CardState {
 			Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + p.voyageInfo(this.state.getPlanche()));
 		}
 		int total = 0;
-		for(int t : this.required) total+=t;
-		if(total==0) this.transition();
+		for (int t : this.required) total += t;
+		if (total == 0) this.transition();
 	}
 
 	@Override
@@ -70,7 +70,7 @@ public class SmugglersLoseState extends CardState {
 	@Override
 	public ClientCardState getClientCardState() {
 		return new ClientCargoPenaltyCardStateDecorator(
-				new ClientBaseCardState(this.getClass().getSimpleName(),card.getId()),
+				new ClientBaseCardState(this.getClass().getSimpleName(), card.getId()),
 				this.list.getFirst().getColor(),
 				required
 		);

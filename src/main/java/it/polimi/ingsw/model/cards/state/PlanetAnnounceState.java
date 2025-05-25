@@ -62,13 +62,13 @@ public class PlanetAnnounceState extends CardState {
 	@Override
 	public ClientCardState getClientCardState() {
 		return new ClientLandingCardStateDecorator(
-			new ClientBaseCardState(
-				this.getClass().getSimpleName(),
-				card.getId()),
-			this.list.getFirst().getColor(),
-			this.card.getDays(),
-			0, 0,
-			card.getPlanets());
+				new ClientBaseCardState(
+						this.getClass().getSimpleName(),
+						card.getId()),
+				this.list.getFirst().getColor(),
+				this.card.getDays(),
+				0, 0,
+				card.getPlanets());
 	}
 
 	@Override

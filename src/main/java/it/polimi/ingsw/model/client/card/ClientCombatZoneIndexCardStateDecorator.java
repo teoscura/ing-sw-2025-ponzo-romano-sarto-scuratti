@@ -17,7 +17,7 @@ public class ClientCombatZoneIndexCardStateDecorator implements ClientCardState 
 		this.index = index;
 	}
 
-	public CombatZoneSection getSection(){
+	public CombatZoneSection getSection() {
 		return this.section;
 	}
 

@@ -18,7 +18,7 @@ public class ClientCabinComponentDecorator implements ClientComponent {
 		this.starting = starting;
 	}
 
-	public ClientComponent getBase(){
+	public ClientComponent getBase() {
 		return this.base;
 	}
 
@@ -30,7 +30,7 @@ public class ClientCabinComponentDecorator implements ClientComponent {
 		return this.crew;
 	}
 
-	public boolean getStarting(){
+	public boolean getStarting() {
 		return this.starting;
 	}
 

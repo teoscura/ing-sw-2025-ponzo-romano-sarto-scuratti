@@ -14,18 +14,23 @@ public enum PlayerColor {
 		this.order = order;
 	}
 
-	public int getOrder() {
-		return this.order;
+	static public PlayerColor getColor(int i) {
+		switch (i) {
+			case 0:
+				return PlayerColor.RED;
+			case 1:
+				return PlayerColor.BLUE;
+			case 2:
+				return PlayerColor.GREEN;
+			case 3:
+				return PlayerColor.YELLOW;
+			default:
+				throw new RuntimeException();
+		}
 	}
 
-	static public PlayerColor getColor(int i){
-		switch(i){
-			case 0: return PlayerColor.RED;
-			case 1: return PlayerColor.BLUE;
-			case 2: return PlayerColor.GREEN;
-			case 3: return PlayerColor.YELLOW;
-			default: throw new RuntimeException();
-		}
+	public int getOrder() {
+		return this.order;
 	}
 }
 

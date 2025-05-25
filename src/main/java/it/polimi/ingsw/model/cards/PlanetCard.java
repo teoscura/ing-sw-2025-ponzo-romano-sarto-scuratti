@@ -42,7 +42,7 @@ public class PlanetCard extends Card {
 		return planets.size();
 	}
 
-	public ArrayList<Planet> getPlanets(){
+	public ArrayList<Planet> getPlanets() {
 		return new ArrayList<>(this.planets);
 	}
 

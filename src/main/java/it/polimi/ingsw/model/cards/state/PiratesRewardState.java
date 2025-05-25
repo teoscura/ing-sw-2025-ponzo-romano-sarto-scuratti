@@ -59,8 +59,8 @@ class PiratesRewardState extends CardState {
 	public ClientCardState getClientCardState() {
 		return new ClientCreditsRewardCardStateDecorator(
 				new ClientBaseCardState(
-					this.getClass().getSimpleName(),
-					this.card.getId()),
+						this.getClass().getSimpleName(),
+						this.card.getId()),
 				this.list.getFirst().getColor(),
 				this.card.getCredits(),
 				this.card.getDays());

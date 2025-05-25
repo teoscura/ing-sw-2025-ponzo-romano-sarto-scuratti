@@ -101,7 +101,7 @@ public class NetworkServer extends Thread implements RMISkeletonProvider, Serial
 				MainServerController.getInstance().connectListener(new_connection);
 				this.serverPool.submit(new_connection);
 			} catch (IOException e) {
-				Logger.getInstance().print(LoggerLevel.ERROR, "Server IOException trying to accept a connection with TCP: "+e.getMessage());
+				Logger.getInstance().print(LoggerLevel.ERROR, "Server IOException trying to accept a connection with TCP: " + e.getMessage());
 			}
 		}
 	}
@@ -137,15 +137,15 @@ public class NetworkServer extends Thread implements RMISkeletonProvider, Serial
 
 	public VirtualServer accept(RMIClientConnection client) throws RemoteException {
 		ClientDescriptor new_client = MainServerController.getInstance().connectListener(client);
-		if(new_client==null) {
-            try {
+		if (new_client == null) {
+			try {
 				client.sendMessage(new ViewMessage("A player with that name is already connected!"));
 				client.sendMessage(new ClientDisconnectMessage());
 			} catch (IOException e) {
 				Logger.getInstance().print(LoggerLevel.ERROR, "Failed to send a disconnect message to a refused RMI connection");
 			}
 			return null;
-		} 
+		}
 		try {
 			return MainServerController.getInstance().getStub(new_client);
 		} catch (RemoteException e) {

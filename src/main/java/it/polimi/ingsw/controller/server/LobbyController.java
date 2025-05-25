@@ -163,7 +163,7 @@ public class LobbyController extends Thread implements VirtualServer {
 				this.model.connect(client);
 			} else if (reconnect) {
 				this.model.connect(client.getPlayer());
-				if(dsctimer!=null){
+				if (dsctimer != null) {
 					this.dsctimer.cancel();
 					this.dsctimer = null;
 				}
@@ -171,10 +171,10 @@ public class LobbyController extends Thread implements VirtualServer {
 				Logger.getInstance().print(LoggerLevel.LOBCN, "[" + this.id + "] " + "Client '" + client.getUsername() + "' started spectating!");
 			}
 		}
-		if(reconnect) this.sendMessage(client, new NotifyStateUpdateMessage(model.getState().getClientState()));
+		if (reconnect) this.sendMessage(client, new NotifyStateUpdateMessage(model.getState().getClientState()));
 	}
 
-	public void disconnect(ClientDescriptor client){
+	public void disconnect(ClientDescriptor client) {
 		MainServerController.getInstance().disconnect(client);
 	}
 
@@ -196,7 +196,7 @@ public class LobbyController extends Thread implements VirtualServer {
 				return;
 			}
 			if (this.disconnected_usernames.size() >= this.model.getState().getCount().getNumber() - 1) {
-				Logger.getInstance().print(LoggerLevel.LOBCN, "Lobby ["+this.id+"] has only one player left, starting timer, if nobody joins, game's over!");
+				Logger.getInstance().print(LoggerLevel.LOBCN, "Lobby [" + this.id + "] has only one player left, starting timer, if nobody joins, game's over!");
 				this.dsctimer = new Timer(true);
 				this.dsctimer.schedule(this.getEndMatchTask(this), 60000L);
 			}

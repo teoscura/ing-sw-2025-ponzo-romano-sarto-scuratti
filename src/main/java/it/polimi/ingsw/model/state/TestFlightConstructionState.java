@@ -31,7 +31,7 @@ public class TestFlightConstructionState extends ConstructionState {
 					stash,
 					this.finished.contains(p)));
 		}
-		return new ClientConstructionState(this.type, tmp, null, discarded, this.board.getCoveredSize(), 0, 0 , null, null);
+		return new ClientConstructionState(this.type, tmp, null, discarded, this.board.getCoveredSize(), 0, 0, null, null);
 	}
 
 }

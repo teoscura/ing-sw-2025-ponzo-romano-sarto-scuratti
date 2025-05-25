@@ -88,8 +88,8 @@ public class AlienLifeSupportComponent extends BaseComponent {
 	@Override
 	public ClientComponent getClientComponent() {
 		return new ClientLifeSupportComponentDecorator(
-			new ClientBaseComponent(this.getID(), this.getRotation(), getConnectors()), 
-			type);
+				new ClientBaseComponent(this.getID(), this.getRotation(), getConnectors()),
+				type);
 	}
 
 }

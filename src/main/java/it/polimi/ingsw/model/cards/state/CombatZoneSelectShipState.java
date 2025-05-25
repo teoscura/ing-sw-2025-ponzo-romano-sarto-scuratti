@@ -59,13 +59,13 @@ public class CombatZoneSelectShipState extends CardState {
 	@Override
 	public ClientCardState getClientCardState() {
 		return new ClientNewCenterCardStateDecorator(
-			new ClientCombatZoneIndexCardStateDecorator(
-				new ClientBaseCardState(
-					this.getClass().getSimpleName(),	
-					this.card_id), 
-				this.sections.getFirst(),
-				3 - this.sections.size()),
-			new ArrayList<>(List.of(target.getColor())));
+				new ClientCombatZoneIndexCardStateDecorator(
+						new ClientBaseCardState(
+								this.getClass().getSimpleName(),
+								this.card_id),
+						this.sections.getFirst(),
+						3 - this.sections.size()),
+				new ArrayList<>(List.of(target.getColor())));
 	}
 
 	@Override

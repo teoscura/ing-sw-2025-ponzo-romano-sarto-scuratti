@@ -14,12 +14,12 @@ public class CommandBuilder {
 
 	private final TUIView view;
 
-	public CommandBuilder(TUIView view){
+	public CommandBuilder(TUIView view) {
 		this.view = view;
 	}
 
 	public ServerMessage build(String command) {
-		if(command == null) return null; 
+		if (command == null) return null;
 		command = command.trim();
 		ServerMessage mess = null;
 		boolean valid = false;

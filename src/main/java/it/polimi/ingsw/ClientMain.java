@@ -1,10 +1,10 @@
 package it.polimi.ingsw;
 
-import java.io.IOException;
-
 import it.polimi.ingsw.controller.client.ClientController;
 import it.polimi.ingsw.view.ClientView;
 import it.polimi.ingsw.view.tui.TUIView;
+
+import java.io.IOException;
 
 public class ClientMain {
 

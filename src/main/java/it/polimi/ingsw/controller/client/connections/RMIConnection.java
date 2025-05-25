@@ -23,7 +23,7 @@ public class RMIConnection implements ServerConnection {
 		Registry registry = LocateRegistry.getRegistry(server_ip, port);
 		this.stub = new RMIClientStub(queue, username, port);
 		this.server = ((RMISkeletonProvider) registry.lookup("galaxy_truckers")).accept(stub);
-		if(this.server == null) throw new NullPointerException();
+		if (this.server == null) throw new NullPointerException();
 	}
 
 	@Override

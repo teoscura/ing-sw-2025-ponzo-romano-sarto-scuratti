@@ -11,7 +11,7 @@ public class ClientBatteryComponentDecorator implements ClientComponent {
 		this.batteries = batteries;
 	}
 
-	public ClientComponent getBase(){
+	public ClientComponent getBase() {
 		return this.base;
 	}
 

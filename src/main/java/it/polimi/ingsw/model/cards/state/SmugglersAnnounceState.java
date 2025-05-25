@@ -63,14 +63,14 @@ public class SmugglersAnnounceState extends CardState {
 	@Override
 	public ClientCardState getClientCardState() {
 		return new ClientEnemyCardStateDecorator(
-			new ClientAwaitConfirmCardStateDecorator(
-				new ClientBaseCardState(
-					this.getClass().getSimpleName(),
-					card.getId()), 
-				new ArrayList<>(List.of(this.list.getFirst().getColor()))),
-			this.card.getPower(),
-			CombatZonePenalty.CARGO,
-			this.card.getCargoPenalty());
+				new ClientAwaitConfirmCardStateDecorator(
+						new ClientBaseCardState(
+								this.getClass().getSimpleName(),
+								card.getId()),
+						new ArrayList<>(List.of(this.list.getFirst().getColor()))),
+				this.card.getPower(),
+				CombatZonePenalty.CARGO,
+				this.card.getCargoPenalty());
 	}
 
 	@Override

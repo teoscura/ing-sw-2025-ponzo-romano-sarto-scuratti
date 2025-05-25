@@ -13,7 +13,7 @@ public class ClientLifeSupportComponentDecorator implements ClientComponent {
 		this.type = type;
 	}
 
-	public ClientComponent getBase(){
+	public ClientComponent getBase() {
 		return this.base;
 	}
 

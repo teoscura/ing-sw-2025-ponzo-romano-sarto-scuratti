@@ -66,12 +66,12 @@ public class DummyView implements ClientView {
 	}
 
 	@Override
-	public void setClientState(ClientState state) {
+	public ClientState getClientState() {
+		return null;
 	}
 
 	@Override
-	public ClientState getClientState() {
-		return null;
+	public void setClientState(ClientState state) {
 	}
 
 }

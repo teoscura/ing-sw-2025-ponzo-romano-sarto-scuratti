@@ -1,8 +1,6 @@
 //Done.
 package it.polimi.ingsw.model.cards;
 
-import java.util.ArrayList;
-
 import it.polimi.ingsw.exceptions.NegativeArgumentException;
 import it.polimi.ingsw.model.cards.state.CardState;
 import it.polimi.ingsw.model.cards.state.PiratesAnnounceState;
@@ -13,6 +11,8 @@ import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.state.VoyageState;
 import it.polimi.ingsw.utils.Logger;
 import it.polimi.ingsw.utils.LoggerLevel;
+
+import java.util.ArrayList;
 
 
 public class PiratesCard extends Card {
@@ -40,7 +40,7 @@ public class PiratesCard extends Card {
 		return this.credits;
 	}
 
-	public double getPower(){
+	public double getPower() {
 		return this.min_power;
 	}
 

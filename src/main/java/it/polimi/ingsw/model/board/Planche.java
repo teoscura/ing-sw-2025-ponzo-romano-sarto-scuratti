@@ -52,8 +52,8 @@ public class Planche implements iPlanche {
 		this.planche.put(p, position);
 	}
 
-	public boolean checkLapped(Player p){
-		return this.planche.keySet().stream().filter(pl->getPlayerPosition(pl)-getPlayerPosition(p)>=length).findAny().isPresent();
+	public boolean checkLapped(Player p) {
+		return this.planche.keySet().stream().filter(pl -> getPlayerPosition(pl) - getPlayerPosition(p) >= length).findAny().isPresent();
 	}
 
 	@Override

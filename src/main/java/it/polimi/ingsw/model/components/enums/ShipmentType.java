@@ -15,13 +15,18 @@ public enum ShipmentType {
 		this.value = value;
 	}
 
-	static public ShipmentType fromValue(int i){
-		switch(i){
-			case 4:  return ShipmentType.RED;
-			case 3:  return ShipmentType.YELLOW;
-			case 2:  return ShipmentType.GREEN;
-			case 1:  return ShipmentType.BLUE;
-			default: return ShipmentType.EMPTY;
+	static public ShipmentType fromValue(int i) {
+		switch (i) {
+			case 4:
+				return ShipmentType.RED;
+			case 3:
+				return ShipmentType.YELLOW;
+			case 2:
+				return ShipmentType.GREEN;
+			case 1:
+				return ShipmentType.BLUE;
+			default:
+				return ShipmentType.EMPTY;
 		}
 	}
 

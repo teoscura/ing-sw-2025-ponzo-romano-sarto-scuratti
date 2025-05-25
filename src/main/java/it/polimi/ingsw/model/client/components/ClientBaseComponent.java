@@ -10,7 +10,7 @@ public class ClientBaseComponent implements ClientComponent {
 	private final ConnectorType[] connectors;
 
 	public ClientBaseComponent(int id, ComponentRotation rotation, ConnectorType[] connectors) {
-		if(connectors == null) throw new NullPointerException();
+		if (connectors == null) throw new NullPointerException();
 		if (id < 1 || id > 157 || connectors.length != 4) throw new IllegalArgumentException();
 		this.id = id;
 		this.rotation = rotation;

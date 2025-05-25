@@ -15,11 +15,11 @@ public class ClientShipmentsComponentDecorator implements ClientComponent {
 		this.shipments = shipments;
 	}
 
-	public ClientComponent getBase(){
+	public ClientComponent getBase() {
 		return this.base;
 	}
 
-	public StorageType getType(){
+	public StorageType getType() {
 		return this.type;
 	}
 

@@ -66,7 +66,7 @@ public enum GameModeType {
 		return this.max_y;
 	}
 
-	public int getTurns(){
+	public int getTurns() {
 		return this.turns;
 	}
 

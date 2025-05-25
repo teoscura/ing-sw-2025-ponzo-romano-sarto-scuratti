@@ -30,7 +30,7 @@ public class SlaversCard extends Card {
 		return new SlaversAnnounceState(state, this, new ArrayList<>(state.getOrder(CardOrder.NORMAL)));
 	}
 
-	public double getPower(){
+	public double getPower() {
 		return this.min_power;
 	}
 

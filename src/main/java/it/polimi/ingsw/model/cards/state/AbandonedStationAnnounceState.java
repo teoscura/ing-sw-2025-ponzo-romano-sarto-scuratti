@@ -63,12 +63,14 @@ public class AbandonedStationAnnounceState extends CardState {
 	@Override
 	public ClientCardState getClientCardState() {
 		return new ClientLandingCardStateDecorator(new ClientBaseCardState(
-					this.getClass().getSimpleName(),
-					this.card.getId()),
+				this.getClass().getSimpleName(),
+				this.card.getId()),
 				this.list.getFirst().getColor(),
 				this.card.getDays(),
 				this.card.getCrewLost(), 0,
-				new ArrayList<>(){{add(card.getPlanet());}});
+				new ArrayList<>() {{
+					add(card.getPlanet());
+				}});
 	}
 
 	@Override

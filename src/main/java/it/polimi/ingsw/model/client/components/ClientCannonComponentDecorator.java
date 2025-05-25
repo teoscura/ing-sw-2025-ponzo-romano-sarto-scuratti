@@ -3,8 +3,8 @@ package it.polimi.ingsw.model.client.components;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 
 public class ClientCannonComponentDecorator implements ClientComponent {
-    
-    private final ClientComponent base;
+
+	private final ClientComponent base;
 
 	private final ComponentRotation rotation;
 
@@ -14,11 +14,11 @@ public class ClientCannonComponentDecorator implements ClientComponent {
 		this.rotation = rotation;
 	}
 
-	public ClientComponent getBase(){
+	public ClientComponent getBase() {
 		return this.base;
 	}
 
-	public ComponentRotation getRotation(){
+	public ComponentRotation getRotation() {
 		return this.rotation;
 	}
 

@@ -47,7 +47,7 @@ public class ConnectingState extends ClientControllerState {
 				try {
 					this.connection = new RMIConnection(inqueue, address, username, port);
 				} catch (RemoteException e) {
-					view.showTextMessage("Failed to connect to server, terminating.");		
+					view.showTextMessage("Failed to connect to server, terminating.");
 				} catch (NotBoundException e) {
 					view.showTextMessage("Selected server does not host game, terminating.");
 				} catch (NullPointerException e) {

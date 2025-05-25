@@ -97,7 +97,7 @@ public class EngineComponent extends BaseComponent {
 	@Override
 	public ClientComponent getClientComponent() {
 		ClientComponent c = new ClientEngineComponentDecorator(new ClientBaseComponent(getID(), getRotation(), getConnectors()), getRotation());
-		if(!powerable) return c;
+		if (!powerable) return c;
 		return new ClientPoweredComponentDecorator(c, powered);
 	}
 

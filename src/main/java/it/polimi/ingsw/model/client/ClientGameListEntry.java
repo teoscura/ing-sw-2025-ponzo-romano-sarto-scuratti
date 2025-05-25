@@ -29,7 +29,7 @@ public class ClientGameListEntry implements Serializable {
 		return this.type;
 	}
 
-	public PlayerCount getCount(){
+	public PlayerCount getCount() {
 		return this.count;
 	}
 

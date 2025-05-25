@@ -61,7 +61,7 @@ public class SpaceShip implements Serializable {
 		this.battery_coords = new ArrayList<ShipCoords>();
 		this.powerable_coords = new ArrayList<ShipCoords>();
 		this.center = type.getCenterCabin();
-		
+
 		for (BaseComponent[] t : this.components) {
 			Arrays.fill(t, this.empty); // E' la stessa reference;
 		}

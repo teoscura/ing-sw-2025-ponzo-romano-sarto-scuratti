@@ -47,10 +47,10 @@ public class VerifyState extends GameState {
 	@Override
 	public void init() {
 		Iterator<Player> it = to_clean.iterator();
-		while(it.hasNext()){
+		while (it.hasNext()) {
 			var p = it.next();
 			if (p.getSpaceShip().bulkVerifyResult() && p.getSpaceShip().getBlobsSize() == 1) it.remove();
-		}	
+		}
 		for (Player p : this.to_clean) {
 			finish_order.remove(p);
 		}
@@ -62,11 +62,11 @@ public class VerifyState extends GameState {
 	@Override
 	public void validate(ServerMessage message) throws ForbiddenCallException {
 		message.receive(this);
-		
+
 		Iterator<Player> it = to_clean.iterator();
-		while(it.hasNext()){
+		while (it.hasNext()) {
 			var p = it.next();
-			if(!p.getSpaceShip().bulkVerifyResult() || p.getSpaceShip().getBlobsSize()>1) continue;
+			if (!p.getSpaceShip().bulkVerifyResult() || p.getSpaceShip().getBlobsSize() > 1) continue;
 			it.remove();
 			this.finish_order.addLast(p);
 		}
@@ -93,7 +93,7 @@ public class VerifyState extends GameState {
 		}
 		Planche planche = new Planche(type, finish_order);
 		VoyageState res = new VoyageState(model, type, count, players, voyage_deck, planche);
-		
+
 		return res;
 	}
 
@@ -145,7 +145,6 @@ public class VerifyState extends GameState {
 		} catch (IllegalTargetException e) {
 			Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' tried to remove an empty component!");
 			this.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' tried to remove an empty component!"));
-			return;
 		}
 	}
 

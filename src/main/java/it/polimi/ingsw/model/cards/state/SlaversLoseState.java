@@ -58,8 +58,8 @@ public class SlaversLoseState extends CardState {
 	public ClientCardState getClientCardState() {
 		return new ClientCrewPenaltyCardStateDecorator(
 				new ClientBaseCardState(
-					this.getClass().getSimpleName(),
-					card.getId()),
+						this.getClass().getSimpleName(),
+						card.getId()),
 				this.list.getFirst().getColor(),
 				this.card.getCrewLost() - this.done);
 	}

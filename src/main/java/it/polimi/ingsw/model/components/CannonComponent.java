@@ -112,7 +112,7 @@ public class CannonComponent extends BaseComponent {
 	@Override
 	public ClientComponent getClientComponent() {
 		ClientComponent c = new ClientCannonComponentDecorator(new ClientBaseComponent(getID(), getRotation(), getConnectors()), getRotation());
-		if(!powerable) return c;
+		if (!powerable) return c;
 		return new ClientPoweredComponentDecorator(c, powered);
 	}
 

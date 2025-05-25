@@ -33,7 +33,7 @@ public class ClientVoyageState implements ClientState {
 		return this.card_state;
 	}
 
-	public int getCardsLeft(){
+	public int getCardsLeft() {
 		return this.cards_left;
 	}
 

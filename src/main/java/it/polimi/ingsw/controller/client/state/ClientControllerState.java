@@ -20,7 +20,7 @@ public abstract class ClientControllerState {
 
 	public abstract ClientControllerState getNext();
 
-	public void onClose(){
+	public void onClose() {
 	}
 
 	protected void transition() {

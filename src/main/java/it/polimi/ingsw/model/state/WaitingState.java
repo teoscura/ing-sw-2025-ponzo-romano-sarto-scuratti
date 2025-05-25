@@ -76,7 +76,7 @@ public class WaitingState extends GameState {
 	public ClientState getClientState() {
 		ArrayList<ClientWaitingPlayer> tmp = new ArrayList<>();
 		int i = 0;
-		for(ClientDescriptor c : this.connected){
+		for (ClientDescriptor c : this.connected) {
 			tmp.add(new ClientWaitingPlayer(c.getUsername(), PlayerColor.getColor(i)));
 			i++;
 		}

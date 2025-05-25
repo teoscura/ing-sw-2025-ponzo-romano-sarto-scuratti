@@ -11,7 +11,7 @@ public class ClientWaitingRoomState implements ClientState {
 	private final GameModeType type;
 	private final PlayerCount count;
 	private final ArrayList<ClientWaitingPlayer> playerlist;
-	
+
 
 	public ClientWaitingRoomState(GameModeType type, PlayerCount count, ArrayList<ClientWaitingPlayer> playerlist) {
 		if (playerlist == null) throw new NullPointerException();
@@ -24,7 +24,7 @@ public class ClientWaitingRoomState implements ClientState {
 		return this.type;
 	}
 
-	public PlayerCount getCount(){
+	public PlayerCount getCount() {
 		return this.count;
 	}
 

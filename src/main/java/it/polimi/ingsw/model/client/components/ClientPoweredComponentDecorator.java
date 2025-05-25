@@ -12,7 +12,7 @@ public class ClientPoweredComponentDecorator implements ClientComponent {
 		this.powered = powered;
 	}
 
-	public ClientComponent getBase(){
+	public ClientComponent getBase() {
 		return this.base;
 	}
 
