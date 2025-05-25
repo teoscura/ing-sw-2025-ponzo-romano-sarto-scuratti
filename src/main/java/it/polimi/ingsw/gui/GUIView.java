@@ -1,7 +1,9 @@
 package it.polimi.ingsw.gui;
 
+import it.polimi.ingsw.controller.client.state.ConnectedState;
 import it.polimi.ingsw.controller.client.state.ConnectingState;
 import it.polimi.ingsw.controller.client.state.TitleScreenState;
+import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.client.card.*;
 import it.polimi.ingsw.model.client.components.*;
@@ -30,6 +32,52 @@ public class GUIView implements ClientView {
 		stage.show();
 	}
 
+
+	@Override
+	public void show(TitleScreenState state) {
+
+	}
+
+	@Override
+	public void show(ConnectingState state) {
+
+	}
+
+	@Override
+	public ClientState getClientState() {
+		return null;
+	}
+
+	@Override
+	public void setClientState(ClientState state) {
+
+	}
+
+	@Override
+	public void connect(ConnectedState state) {
+
+	}
+
+	@Override
+	public void disconnect() {
+
+	}
+
+	@Override
+	public void setInput(ServerMessage input) {
+
+	}
+
+	@Override
+	public ServerMessage takeInput() {
+		return null;
+	}
+
+	@Override
+	public void showTextMessage(String message) {
+
+	}
+
 	@Override
 	public void show(ClientLobbySelectState state) {
 
@@ -40,114 +88,28 @@ public class GUIView implements ClientView {
 
 	}
 
-	//Game states
+	@Override
 	public void show(ClientWaitingRoomState state) {
-		Scene scene = null;
-		try {
-			scene = new Scene(FXMLLoader.load(getClass().getResource("/it/polimi/ingsw/WaitingRoomMenuView.fxml")));
-		} catch (IOException e) {
-		}
 
-		if (state.getType() == GameModeType.TEST) {
-			scene.setFill(Color.LIGHTBLUE);
-
-		} else scene.setFill(Color.MEDIUMPURPLE);
-
-		WaitingRoomController controller = new WaitingRoomController(state);
-		controller.paint();
-
-		stage.setScene(scene);
 	}
 
+	@Override
 	public void show(ClientConstructionState state) {
-		Scene scene = null;
-		try {
-			scene = new Scene(FXMLLoader.load(getClass().getResource("/it/polimi/ingsw/ConstructionView.fxml")));
-		} catch (IOException e) {
-		}
 
-		ConstructionController controller = new ConstructionController(state);
-		controller.paint();
-
-		stage.setScene(scene);
 	}
 
+	@Override
 	public void show(ClientVerifyState state) {
+
 	}
 
+	@Override
 	public void show(ClientVoyageState state) {
+
 	}
 
+	@Override
 	public void show(ClientEndgameState state) {
-	}
-
-	//Components
-	public void show(ClientBaseComponent component) {
 
 	}
-
-	public void show(ClientPoweredComponentDecorator component) {
-	}
-
-	public void show(ClientShipmentsComponentDecorator component) {
-	}
-
-	public void show(ClientBatteryComponentDecorator component) {
-	}
-
-	public void show(ClientCrewComponentDecorator component) {
-	}
-
-	public void show(ClientBrokenVerifyComponentDecorator component) {
-	}
-
-	//Card states
-	public void show(ClientAwaitConfirmCardStateDecorator state) {
-	}
-
-	public void show(ClientBaseCardState state) {
-	}
-
-	public void show(ClientCargoPenaltyCardStateDecorator state) {
-	}
-
-	public void show(ClientCargoRewardCardStateDecorator state) {
-	}
-
-	public void show(ClientCombatZoneIndexCardStateDecorator state) {
-	}
-
-	public void show(ClientCreditsRewardCardStateDecorator state) {
-	}
-
-	public void show(ClientCrewPenaltyCardStateDecorator state) {
-	}
-
-	public void show(ClientLandingCardStateDecorator state) {
-	}
-
-	public void show(ClientMeteoriteCardStateDecorator state) {
-	}
-
-	public void show(ClientNewCenterCardStateDecorator state) {
-	}
-
-	public void show(ClientProjectileCardStateDecorator state) {
-	}
-
-	//Misc and debug
-	public void showTextMessage(String message) {
-
-	}
-
-	@Override
-	public void showTitleScreen(TitleScreenState titlesScreenState) {
-
-	}
-
-	@Override
-	public void showConnectionScreen(ConnectingState connectingState) {
-
-	}
-
 }
