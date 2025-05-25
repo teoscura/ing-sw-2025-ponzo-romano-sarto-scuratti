@@ -1,17 +1,13 @@
-package it.polimi.ingsw.gui;
+package it.polimi.ingsw.view.gui;
 
 import it.polimi.ingsw.controller.client.state.ConnectedState;
 import it.polimi.ingsw.controller.client.state.ConnectingState;
 import it.polimi.ingsw.controller.client.state.TitleScreenState;
 import it.polimi.ingsw.message.server.ServerMessage;
-import it.polimi.ingsw.model.GameModeType;
-import it.polimi.ingsw.model.client.card.*;
-import it.polimi.ingsw.model.client.components.*;
 import it.polimi.ingsw.model.client.state.*;
 import it.polimi.ingsw.view.ClientView;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.io.IOException;

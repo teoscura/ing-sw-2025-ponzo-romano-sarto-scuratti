@@ -1,4 +1,4 @@
-package it.polimi.ingsw.gui;
+package it.polimi.ingsw.view.gui;
 
 import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.client.state.ClientConstructionState;
