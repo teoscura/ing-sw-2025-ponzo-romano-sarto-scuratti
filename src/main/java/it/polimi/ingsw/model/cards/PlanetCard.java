@@ -42,6 +42,10 @@ public class PlanetCard extends Card {
 		return planets.size();
 	}
 
+	public ArrayList<Planet> getPlanets() {
+		return new ArrayList<>(this.planets);
+	}
+
 	public void apply(Player p, int id) {
 		if (p == null) throw new NullPointerException();
 		if (id >= this.planets.size()) throw new ArgumentTooBigException("Sent a planet id larger than the list.");

@@ -134,11 +134,14 @@ public class MeteorSwarmCardTest {
 		message.setDescriptor(p2desc);
 		model.validate(message);
 		assertFalse(player1.getRetired());
-		//p1 needs to choose its new ship section before actually dying.
+		//p1 needs to choose its new ship section
 		message = new SelectBlobMessage(new ShipCoords(GameModeType.TEST, 4, 1));
 		message.setDescriptor(p1desc);
 		model.validate(message);
 		//p2 needs to do nothing, since its smooth.
+		message = new SendContinueMessage();
+		message.setDescriptor(p1desc);
+		model.validate(message);
 		message = new SendContinueMessage();
 		message.setDescriptor(p2desc);
 		model.validate(message);

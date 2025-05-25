@@ -40,7 +40,7 @@ public class StructuralComponent extends BaseComponent {
 
 	@Override
 	public ClientComponent getClientComponent() {
-		return new ClientBaseComponent(this.getID(), this.getRotation());
+		return new ClientBaseComponent(this.getID(), this.getRotation(), getConnectors());
 	}
 
 }

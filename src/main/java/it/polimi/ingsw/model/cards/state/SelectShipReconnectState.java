@@ -16,7 +16,6 @@ import it.polimi.ingsw.utils.Logger;
 import it.polimi.ingsw.utils.LoggerLevel;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class SelectShipReconnectState extends CardState {
@@ -45,13 +44,12 @@ public class SelectShipReconnectState extends CardState {
 			this.state.broadcastMessage(new NotifyStateUpdateMessage(this.state.getClientState()));
 			return;
 		}
-		if (this.awaiting.getSpaceShip().getCrew()[0] <= 0) this.state.loseGame(awaiting);
 		this.transition();
 	}
 
 	@Override
 	public ClientCardState getClientCardState() {
-		List<PlayerColor> tmp = Collections.singletonList(awaiting.getColor());
+		List<PlayerColor> tmp = List.of(awaiting.getColor());
 		return new ClientNewCenterCardStateDecorator(this.resume.getClientCardState(), new ArrayList<>(tmp));
 	}
 

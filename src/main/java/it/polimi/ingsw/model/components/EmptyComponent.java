@@ -1,8 +1,8 @@
 //Done.
 package it.polimi.ingsw.model.components;
 
-import it.polimi.ingsw.model.client.components.ClientBaseComponent;
 import it.polimi.ingsw.model.client.components.ClientComponent;
+import it.polimi.ingsw.model.client.components.ClientEmptyComponent;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ConnectorType;
 import it.polimi.ingsw.model.components.visitors.iVisitor;
@@ -49,7 +49,7 @@ public class EmptyComponent extends BaseComponent {
 
 	@Override
 	public ClientComponent getClientComponent() {
-		return new ClientBaseComponent(157, ComponentRotation.U000);
+		return new ClientEmptyComponent();
 	}
 
 }

@@ -1,7 +1,5 @@
 package it.polimi.ingsw.model.client.components;
 
-import it.polimi.ingsw.view.ClientView;
-
 public class ClientPoweredComponentDecorator implements ClientComponent {
 
 	private final ClientComponent base;
@@ -14,14 +12,18 @@ public class ClientPoweredComponentDecorator implements ClientComponent {
 		this.powered = powered;
 	}
 
+	public ClientComponent getBase() {
+		return this.base;
+	}
+
 	public boolean getPowered() {
 		return this.powered;
 	}
 
 	@Override
-	public void showComponent(ClientView view) {
-		base.showComponent(view);
-		view.show(this);
+	public void showComponent(ClientComponentVisitor visitor) {
+		base.showComponent(visitor);
+		visitor.show(this);
 	}
 
 }

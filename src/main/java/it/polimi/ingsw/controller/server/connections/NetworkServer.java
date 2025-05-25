@@ -2,6 +2,8 @@ package it.polimi.ingsw.controller.server.connections;
 
 import it.polimi.ingsw.controller.server.ClientDescriptor;
 import it.polimi.ingsw.controller.server.MainServerController;
+import it.polimi.ingsw.message.client.ClientDisconnectMessage;
+import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.utils.Logger;
 import it.polimi.ingsw.utils.LoggerLevel;
 
@@ -57,10 +59,11 @@ public class NetworkServer extends Thread implements RMISkeletonProvider, Serial
 		Cleaner c = Cleaner.create();
 		//Rmi ports less than zero are not allowed in argument parsing at launch, but are used by tests to get around
 		//Certain JVM limitations, as only one rmi registry per JVM may be launched, breaking JUnit tests that don't 
-		//rely on Network functionality.
+		//rely on Network functionality, but may call the singleton MainServerController, which launches this class.
 		if (rmiport >= 0) {
 			try {
-				registry = LocateRegistry.createRegistry(this.rmiport);
+				System.setProperty("java.rmi.server.hostname", ip);
+				registry = LocateRegistry.createRegistry(rmiport);
 				registry.bind("galaxy_truckers", this);
 				UnicastRemoteObject.exportObject(this, this.rmiport);
 				Logger.getInstance().print(LoggerLevel.SERVR, "Set up RMI on address: '" + this.ip + ":" + this.rmiport + "'...");
@@ -78,7 +81,7 @@ public class NetworkServer extends Thread implements RMISkeletonProvider, Serial
 		try {
 			this.server = new ServerSocket();
 			this.server.bind(new InetSocketAddress(this.ip, this.tcpport));
-			Logger.getInstance().print(LoggerLevel.SERVR, "Started server on: '" + ip + ":" + this.server.getLocalPort() + "'...");
+			Logger.getInstance().print(LoggerLevel.SERVR, "Set up TCP on address: '" + ip + ":" + this.server.getLocalPort() + "'...");
 			c.register(this, this.TCPCleanup());
 		} catch (IOException e) {
 			Logger.getInstance().print(LoggerLevel.ERROR, "Couldn't start server on the specified address and port, terminating.");
@@ -92,20 +95,14 @@ public class NetworkServer extends Thread implements RMISkeletonProvider, Serial
 	public void run() {
 		if (!this.init) throw new NotYetConnectedException();
 		this.startServer();
-		try {
-			while (true) {
+		while (true) {
+			try {
 				SocketClient new_connection = new SocketClient(server.accept());
 				MainServerController.getInstance().connectListener(new_connection);
 				this.serverPool.submit(new_connection);
+			} catch (IOException e) {
+				Logger.getInstance().print(LoggerLevel.ERROR, "Server IOException trying to accept a connection with TCP: " + e.getMessage());
 			}
-		} catch (IOException e) {
-			try {
-				this.server.close();
-				System.exit(-1);
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
-			System.exit(-1);
 		}
 	}
 
@@ -140,6 +137,15 @@ public class NetworkServer extends Thread implements RMISkeletonProvider, Serial
 
 	public VirtualServer accept(RMIClientConnection client) throws RemoteException {
 		ClientDescriptor new_client = MainServerController.getInstance().connectListener(client);
+		if (new_client == null) {
+			try {
+				client.sendMessage(new ViewMessage("A player with that name is already connected!"));
+				client.sendMessage(new ClientDisconnectMessage());
+			} catch (IOException e) {
+				Logger.getInstance().print(LoggerLevel.ERROR, "Failed to send a disconnect message to a refused RMI connection");
+			}
+			return null;
+		}
 		try {
 			return MainServerController.getInstance().getStub(new_client);
 		} catch (RemoteException e) {

@@ -5,30 +5,28 @@ import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.cards.PiratesCard;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
-import it.polimi.ingsw.model.cards.utils.ProjectileArray;
+import it.polimi.ingsw.model.cards.utils.Projectile;
 import it.polimi.ingsw.model.client.card.ClientBaseCardState;
 import it.polimi.ingsw.model.client.card.ClientCardState;
 import it.polimi.ingsw.model.client.card.ClientNewCenterCardStateDecorator;
 import it.polimi.ingsw.model.client.state.ClientState;
 import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
 import it.polimi.ingsw.model.player.Player;
-import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.VoyageState;
 import it.polimi.ingsw.utils.Logger;
 import it.polimi.ingsw.utils.LoggerLevel;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class PiratesSelectShipState extends CardState {
 
 	private final PiratesCard card;
 	private final ArrayList<Player> list;
-	private final ProjectileArray shots;
+	private final ArrayList<Projectile> shots;
 
-	public PiratesSelectShipState(VoyageState state, PiratesCard card, ArrayList<Player> list, ProjectileArray shots) {
+	public PiratesSelectShipState(VoyageState state, PiratesCard card, ArrayList<Player> list, ArrayList<Projectile> shots) {
 		super(state);
 		if (card == null || list == null || shots == null) throw new NullPointerException();
 		this.card = card;
@@ -50,14 +48,15 @@ public class PiratesSelectShipState extends CardState {
 			this.state.broadcastMessage(new NotifyStateUpdateMessage(this.state.getClientState()));
 			return;
 		}
-		if (this.list.getFirst().getSpaceShip().getCrew()[0] <= 0) this.state.loseGame(this.list.getFirst());
 		this.transition();
 	}
 
 	@Override
 	public ClientCardState getClientCardState() {
-		List<PlayerColor> awaiting = Collections.singletonList(this.list.getFirst().getColor());
-		return new ClientNewCenterCardStateDecorator(new ClientBaseCardState(this.card.getId()), new ArrayList<>(awaiting));
+		return new ClientNewCenterCardStateDecorator(new ClientBaseCardState(
+				this.getClass().getSimpleName(),
+				card.getId()),
+				new ArrayList<>(List.of(this.list.getFirst().getColor())));
 	}
 
 	@Override
@@ -68,8 +67,8 @@ public class PiratesSelectShipState extends CardState {
 			Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Card exhausted, moving to a new one!");
 			return null;
 		}
-		if (!this.shots.getProjectiles().isEmpty()) {
-			this.shots.getProjectiles().removeFirst();
+		if (!this.shots.isEmpty()) {
+			this.shots.removeFirst();
 			return new PiratesPenaltyState(state, card, list, shots);
 		}
 		this.list.removeFirst();

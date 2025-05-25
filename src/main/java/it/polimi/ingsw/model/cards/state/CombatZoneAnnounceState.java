@@ -64,7 +64,8 @@ public class CombatZoneAnnounceState extends CardState {
 			return;
 		}
 		this.target = this.state.findCriteria(this.sections.getFirst().getCriteria());
-		Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Applying penalty to player: '" + target.getUsername() + "'");
+		if (target != null)
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Applying penalty to player: '" + target.getUsername() + "'");
 		this.transition();
 	}
 
@@ -72,8 +73,11 @@ public class CombatZoneAnnounceState extends CardState {
 	public ClientCardState getClientCardState() {
 		return new ClientCombatZoneIndexCardStateDecorator(
 				new ClientAwaitConfirmCardStateDecorator(
-						new ClientBaseCardState(card_id),
+						new ClientBaseCardState(
+								this.getClass().getSimpleName(),
+								card_id),
 						new ArrayList<>(this.awaiting.stream().map(p -> p.getColor()).toList())),
+				this.sections.getFirst(),
 				3 - this.sections.size());
 	}
 

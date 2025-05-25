@@ -21,7 +21,7 @@ import it.polimi.ingsw.utils.Logger;
 import it.polimi.ingsw.utils.LoggerLevel;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.List;
 
 class CombatZonePenaltyState extends CardState {
 
@@ -61,23 +61,38 @@ class CombatZonePenaltyState extends CardState {
 		super.init(new_state);
 		Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "CardState -> Combat Zone Penalty State!: [" + (3 - sections.size()) + " - " + this.sections.getFirst().getPenalty() + "].");
 		Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Targeting: '" + this.target.getUsername() + "'.");
-		if (sections.getFirst().getPenalty() == CombatZonePenalty.CARGO)
-			Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Bat: " + required[0] + " Blu: " + required[1] + " Grn: " + required[2] + " Ylw: " + required[3] + " Red: " + required[4]);
-		if (sections.getFirst().getPenalty() != CombatZonePenalty.DAYS) return;
-		this.state.getPlanche().movePlayer(state, target, -sections.getFirst().getAmount());
-		this.transition();
+		switch (this.sections.getFirst().getPenalty()) {
+			case CARGO: {
+				Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Bat: " + required[0] + " Blu: " + required[1] + " Grn: " + required[2] + " Ylw: " + required[3] + " Red: " + required[4]);
+				int total = 0;
+				for (int t : this.required) total += t;
+				if (total == 0) this.transition();
+			}
+			break;
+			case CREW: {
+				if (target.getSpaceShip().getCrew()[0] <= 0) this.transition();
+			}
+			break;
+			case DAYS: {
+				this.state.getPlanche().movePlayer(state, target, -sections.getFirst().getAmount());
+				this.transition();
+			}
+			break;
+			case SHOTS:
+				return;
+			default:
+		}
 	}
 
 	@Override
 	public void validate(ServerMessage message) throws ForbiddenCallException {
 		message.receive(this);
-		if (!responded && !this.target.getRetired()) {
+		if (!responded) {
 			this.state.broadcastMessage(new NotifyStateUpdateMessage(this.state.getClientState()));
 			return;
 		}
 		if (this.sections.getFirst().getPenalty() == CombatZonePenalty.SHOTS) {
 			this.target.getSpaceShip().handleShot(this.shots.getProjectiles().getFirst());
-			if (this.target.getSpaceShip().getBlobsSize() <= 0) this.state.loseGame(target);
 		}
 		this.transition();
 	}
@@ -88,35 +103,47 @@ class CombatZonePenaltyState extends CardState {
 			case CombatZonePenalty.CARGO:
 				return new ClientCargoPenaltyCardStateDecorator(
 						new ClientCombatZoneIndexCardStateDecorator(
-								new ClientBaseCardState(card_id),
+								new ClientBaseCardState(
+										this.getClass().getSimpleName(),
+										card_id),
+								this.sections.getFirst(),
 								3 - this.sections.size()),
 						target.getColor(),
 						this.required);
 			case CombatZonePenalty.CREW:
 				return new ClientCrewPenaltyCardStateDecorator(
 						new ClientCombatZoneIndexCardStateDecorator(
-								new ClientBaseCardState(card_id),
+								new ClientBaseCardState(
+										this.getClass().getSimpleName(),
+										card_id),
+								this.sections.getFirst(),
 								3 - this.sections.size()),
 						target.getColor(),
-						this.sections.getFirst().getAmount());
+						this.sections.getFirst().getAmount() - this.amount);
 			case CombatZonePenalty.SHOTS:
 				return new ClientProjectileCardStateDecorator(
 						new ClientAwaitConfirmCardStateDecorator(
 								new ClientCombatZoneIndexCardStateDecorator(
-										new ClientBaseCardState(card_id),
+										new ClientBaseCardState(
+												this.getClass().getSimpleName(),
+												card_id),
+										this.sections.getFirst(),
 										3 - this.sections.size()),
-								new ArrayList<>(Collections.singletonList(this.target.getColor()))),
+								new ArrayList<>(List.of(this.target.getColor()))),
 						this.shots.getProjectiles().getFirst());
 			default:
 				return new ClientCombatZoneIndexCardStateDecorator(
-						new ClientBaseCardState(card_id),
+						new ClientBaseCardState(
+								this.getClass().getSimpleName(),
+								card_id),
+						this.sections.getFirst(),
 						3 - this.sections.size());
 		}
 	}
 
 	@Override
 	public CardState getNext() {
-		if (this.target.getRetired() || this.target.getDisconnected()) {
+		if (this.target.getDisconnected()) {
 			this.sections.removeFirst();
 			if (!this.sections.isEmpty()) return new CombatZoneAnnounceState(state, card_id, sections, shots);
 			Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "...Card exhausted, moving to a new one!");
@@ -194,11 +221,7 @@ class CombatZonePenaltyState extends CardState {
 			return;
 		}
 		p.getSpaceShip().updateShip();
-		if (p.getSpaceShip().getCrew()[0] == 0) {
-			this.state.loseGame(p);
-			return;
-		}
-		if (this.amount == this.sections.getFirst().getAmount()) {
+		if (this.amount == this.sections.getFirst().getAmount() || p.getSpaceShip().getCrew()[0] == 0) {
 			this.responded = true;
 		}
 	}

@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class PlancheTest {
 
@@ -32,7 +31,7 @@ class PlancheTest {
 
 		assertEquals(2, (planche.getPlayerPosition(p1) - planche.getPlayerPosition(p2)));
 		planche.movePlayer(state, p1, +31);
-		assertTrue(p2.getRetired());
+		assertEquals(35, planche.getPlayerPosition(p1) - planche.getPlayerPosition(p2));
 	}
 
 	@Test
@@ -49,7 +48,7 @@ class PlancheTest {
 		planche.movePlayer(state, p1, +10);
 		planche.movePlayer(state, p2, +10);
 		planche.movePlayer(state, p2, -20);
-		assertTrue(p2.getRetired());
+		assertEquals(24, planche.getPlayerPosition(p1) - planche.getPlayerPosition(p2));
 	}
 
 }

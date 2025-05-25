@@ -2,9 +2,9 @@ package it.polimi.ingsw.controller.server;
 
 import it.polimi.ingsw.controller.ThreadSafeMessageQueue;
 import it.polimi.ingsw.controller.server.connections.*;
+import it.polimi.ingsw.message.client.ClientDisconnectMessage;
 import it.polimi.ingsw.message.client.ClientMessage;
 import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
-import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.ModelInstance;
@@ -101,13 +101,11 @@ public class MainServerController extends Thread implements VirtualServer {
 	public void receiveMessage(ServerMessage message) {
 		if (message.getDescriptor() == null) {
 			Logger.getInstance().print(LoggerLevel.WARN, "Received a message from a Client: not properly connected!");
-			this.broadcast(new ViewMessage("Received a message from a Client: not properly connected!"));
 			return;
 		}
 		synchronized (listeners_lock) {
 			if (!this.all_listeners.containsKey(message.getDescriptor().getUsername())) {
 				Logger.getInstance().print(LoggerLevel.WARN, "Received a message from a Client: not properly connected!");
-				this.broadcast(new ViewMessage("Received a message from a Client: not properly connected!"));
 				return;
 			}
 		}
@@ -177,6 +175,16 @@ public class MainServerController extends Thread implements VirtualServer {
 			Logger.getInstance().print(LoggerLevel.WARN, "A Client: attempted to connect with an invalid name!");
 			return;
 		}
+		synchronized (listeners_lock) {
+			if (this.all_listeners.containsKey(username)) {
+				try {
+					client.sendMessage(new ClientDisconnectMessage());
+				} catch (IOException e) {
+				} finally {
+					client.close();
+				}
+			}
+		}
 		Logger.getInstance().print(LoggerLevel.LOBSL, "Client: '" + username + "' connected from '" + client.getSocket().getInetAddress() + "'.");
 		ClientDescriptor new_listener = new ClientDescriptor(username, client);
 		try {
@@ -197,8 +205,8 @@ public class MainServerController extends Thread implements VirtualServer {
 		}
 		ClientDescriptor new_listener = new ClientDescriptor(name, client);
 		synchronized (listeners_lock) {
-
 			if (this.all_listeners.containsKey(name) || !validateUsername(name))
+
 				return null;
 			try {
 				Logger.getInstance().print(LoggerLevel.LOBSL, "Client: '" + client.getUsername() + "' connected with RMI.");
@@ -229,7 +237,7 @@ public class MainServerController extends Thread implements VirtualServer {
 		synchronized (listeners_lock) {
 			if (all_listeners.containsKey(client.getUsername())) {
 				Logger.getInstance().print(LoggerLevel.WARN, "Client: '" + client.getUsername() + "' tried to connect twice!");
-				return;
+				throw new ForbiddenCallException();
 			}
 			this.all_listeners.put(client.getUsername(), client);
 			if (this.disconnected.containsKey(client.getUsername())) {
@@ -267,6 +275,8 @@ public class MainServerController extends Thread implements VirtualServer {
 			}
 			Logger.getInstance().print(LoggerLevel.LOBSL, "Client: '" + client.getUsername() + "' disconnected.");
 			this.all_listeners.remove(client.getUsername());
+			this.stp_listeners.remove(client.getUsername());
+			this.lob_listeners.remove(client.getUsername());
 			if (id == -1) {
 				this.lob_listeners.remove(client.getUsername());
 			}
@@ -274,14 +284,13 @@ public class MainServerController extends Thread implements VirtualServer {
 		try {
 			client.getConnection().close();
 		} catch (IOException e) {
-			e.printStackTrace();
 			Logger.getInstance().print(LoggerLevel.DEBUG, "Client: '" + client.getUsername() + "' connection closed.");
 		}
 		if (id == -1) return;
 		synchronized (lobbies_lock) {
 			var l = this.lobbies.get(id);
 			if (l == null) return;
-			l.disconnect(client);
+			l.disconnectProcedure(client);
 		}
 	}
 
@@ -361,12 +370,10 @@ public class MainServerController extends Thread implements VirtualServer {
 				Logger.getInstance().print(LoggerLevel.NOTIF, "Read error during loading of File: '" + f.getName() + ", cleaning it up.");
 				f.delete();
 				Logger.getInstance().print(LoggerLevel.DEBUG, "Deleted file: '" + f.getName() + "'.");
-				e.printStackTrace();
 			} catch (ClassNotFoundException e) {
 				Logger.getInstance().print(LoggerLevel.NOTIF, "File: '" + f.getName() + "' is not a valid savefile, cleaning it up.");
 				f.delete();
 				Logger.getInstance().print(LoggerLevel.DEBUG, "Deleted file: '" + f.getName() + "'.");
-				e.printStackTrace();
 			}
 		}
 		synchronized (lobbies_lock) {
@@ -475,15 +482,25 @@ public class MainServerController extends Thread implements VirtualServer {
 				this.stp_listeners.remove(client.getUsername());
 				this.lob_listeners.put(client.getUsername(), client);
 			}
+			this.sendMessage(client, new NotifyStateUpdateMessage(new ClientLobbySelectState(this.getLobbyList())));
 			return;
 		}
+		reset = false;
 		synchronized (saved_lock) {
 			Logger.getInstance().print(LoggerLevel.DEBUG, "Opening unfinished lobby [" + id + "].");
 			loaded = this.saved.get(id);
 			if (!loaded.getEntry().getPlayers().contains(client.getUsername())) {
 				Logger.getInstance().print(LoggerLevel.NOTIF, "Client: '" + client.getUsername() + "' attempted to resume a game, but he wasn't playing in it before!");
-				return;
+				reset = true;
 			}
+		}
+		if (reset) {
+			synchronized (listeners_lock) {
+				this.stp_listeners.remove(client.getUsername());
+				this.lob_listeners.put(client.getUsername(), client);
+			}
+			this.sendMessage(client, new NotifyStateUpdateMessage(new ClientLobbySelectState(this.getLobbyList())));
+			return;
 		}
 		this.updateUnfinishedList();
 		Logger.getInstance().print(LoggerLevel.LOBSL, "Client: '" + client.getUsername() + "' opened a new lobby from unfinished: [Type: " + loaded.getState().getType() + " | Size: " + loaded.getState().getCount() + "].");

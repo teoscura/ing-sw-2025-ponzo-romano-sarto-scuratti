@@ -1,20 +1,25 @@
 package it.polimi.ingsw.model.client.components;
 
 import it.polimi.ingsw.model.components.enums.AlienType;
-import it.polimi.ingsw.view.ClientView;
 
-public class ClientCrewComponentDecorator implements ClientComponent {
+public class ClientCabinComponentDecorator implements ClientComponent {
 
 	private final ClientComponent base;
 	private final AlienType type;
 	private final int crew;
+	private final boolean starting;
 
-	public ClientCrewComponentDecorator(ClientComponent base, AlienType type, int crew) {
+	public ClientCabinComponentDecorator(ClientComponent base, AlienType type, int crew, boolean starting) {
 		if (base == null || (!type.getLifeSupportExists() && type.getArraypos() != 0) || crew < 0 || crew > type.getMaxCapacity())
 			throw new NullPointerException();
 		this.base = base;
 		this.type = type;
 		this.crew = crew;
+		this.starting = starting;
+	}
+
+	public ClientComponent getBase() {
+		return this.base;
 	}
 
 	public AlienType getAlienType() {
@@ -25,9 +30,13 @@ public class ClientCrewComponentDecorator implements ClientComponent {
 		return this.crew;
 	}
 
+	public boolean getStarting() {
+		return this.starting;
+	}
+
 	@Override
-	public void showComponent(ClientView view) {
-		base.showComponent(view);
-		view.show(this);
+	public void showComponent(ClientComponentVisitor visitor) {
+		base.showComponent(visitor);
+		visitor.show(this);
 	}
 }

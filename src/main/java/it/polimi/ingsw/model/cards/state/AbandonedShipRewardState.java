@@ -58,7 +58,9 @@ public class AbandonedShipRewardState extends CardState {
 
 	@Override
 	public ClientCardState getClientCardState() {
-		return new ClientCrewPenaltyCardStateDecorator(new ClientBaseCardState(this.card.getId()),
+		return new ClientCrewPenaltyCardStateDecorator(new ClientBaseCardState(
+				this.getClass().getSimpleName(),
+				this.card.getId()),
 				this.list.getFirst().getColor(),
 				this.card.getCrewLost() - this.done);
 	}

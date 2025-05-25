@@ -3,6 +3,7 @@ package it.polimi.ingsw.controller.client.state;
 import it.polimi.ingsw.controller.ThreadSafeMessageQueue;
 import it.polimi.ingsw.controller.client.ClientController;
 import it.polimi.ingsw.controller.client.ConsumerThread;
+import it.polimi.ingsw.controller.client.InputCommandThread;
 import it.polimi.ingsw.controller.client.SenderThread;
 import it.polimi.ingsw.controller.client.connections.ServerConnection;
 import it.polimi.ingsw.message.client.ClientMessage;
@@ -10,7 +11,6 @@ import it.polimi.ingsw.message.server.PingMessage;
 import it.polimi.ingsw.message.server.ServerDisconnectMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.view.ClientView;
-import it.polimi.ingsw.view.commandbuilder.InputCommandTask;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
@@ -24,8 +24,9 @@ public class ConnectedState extends ClientControllerState {
 	private final String username;
 	private final Thread consumer_thread;
 	private final Thread sender_thread;
-	private final Thread commandbuilder_thread;
 	private final Thread shutdown_hook;
+	private final Thread input_thread;
+	private final Timer pingtimer;
 
 	public ConnectedState(ClientController controller, ClientView view, String username, ServerConnection connection, ThreadSafeMessageQueue<ClientMessage> inqueue) {
 		super(controller, view);
@@ -34,17 +35,19 @@ public class ConnectedState extends ClientControllerState {
 		this.consumer_thread = new ConsumerThread(this, inqueue);
 		this.outqueue = new ThreadSafeMessageQueue<>(100);
 		this.sender_thread = new SenderThread(this, this.outqueue, this.connection);
-		this.commandbuilder_thread = new InputCommandTask(this);
 		this.shutdown_hook = this.getShutdownHook();
+		this.input_thread = new InputCommandThread(this, view);
+		this.pingtimer = new Timer(true);
 	}
 
 	@Override
 	public void init() {
 		Runtime.getRuntime().addShutdownHook(this.shutdown_hook);
 		this.startPingTask();
+		this.view.connect(this);
 		consumer_thread.start();
 		sender_thread.start();
-		commandbuilder_thread.start();
+		input_thread.start();
 	}
 
 	@Override
@@ -52,9 +55,22 @@ public class ConnectedState extends ClientControllerState {
 		return new TitleScreenState(controller, view);
 	}
 
+	@Override
 	public void onClose() {
 		Runtime.getRuntime().removeShutdownHook(this.shutdown_hook);
-		this.disconnect();
+		try {
+			this.connection.sendMessage(new ServerDisconnectMessage());
+			this.connection.close();
+			this.sender_thread.interrupt();
+			this.consumer_thread.interrupt();
+			stopPingTask();
+		} catch (RemoteException e) {
+			view.showTextMessage("Error during RMI Disconnect!");
+		} catch (IOException e) {
+			view.showTextMessage("Error during TCP Disconnect!");
+		} finally {
+			this.view.disconnect();
+		}
 	}
 
 	// -------------------------------------------------------------
@@ -72,10 +88,13 @@ public class ConnectedState extends ClientControllerState {
 			this.connection.close();
 			this.sender_thread.interrupt();
 			this.consumer_thread.interrupt();
-			this.controller.reset();
+			stopPingTask();
 		} catch (RemoteException e) {
-			this.controller.reset();
+			view.showTextMessage("Error during RMI Disconnect!");
 		} catch (IOException e) {
+			view.showTextMessage("Error during TCP Disconnect!");
+		} finally {
+			this.view.disconnect();
 			this.controller.reset();
 		}
 	}
@@ -101,8 +120,11 @@ public class ConnectedState extends ClientControllerState {
 	// -------------------------------------------------------------
 
 	private void startPingTask() {
-		Timer t = new Timer(true);
-		t.scheduleAtFixedRate(this.getPingTask(this), 0, 100);
+		pingtimer.scheduleAtFixedRate(this.getPingTask(this), 0, 100);
+	}
+
+	private void stopPingTask() {
+		pingtimer.cancel();
 	}
 
 	private TimerTask getPingTask(ConnectedState controller) {

@@ -75,14 +75,12 @@ public class WaitingState extends GameState {
 	@Override
 	public ClientState getClientState() {
 		ArrayList<ClientWaitingPlayer> tmp = new ArrayList<>();
-		for (PlayerColor c : PlayerColor.values()) {
-			if (c.getOrder() < tmp.size()) {
-				if (c.getOrder() + 1 > this.count.getNumber()) break;
-				if (c.getOrder() < 0) continue;
-				tmp.add(new ClientWaitingPlayer(this.connected.get(c.getOrder()).getUsername(), c));
-			}
+		int i = 0;
+		for (ClientDescriptor c : this.connected) {
+			tmp.add(new ClientWaitingPlayer(c.getUsername(), PlayerColor.getColor(i)));
+			i++;
 		}
-		return new ClientWaitingRoomState(type, tmp);
+		return new ClientWaitingRoomState(type, count, tmp);
 	}
 
 	@Override
@@ -114,7 +112,7 @@ public class WaitingState extends GameState {
 
 	@Override
 	public ClientGameListEntry getOngoingEntry(int id) {
-		return new ClientGameListEntry(type, this.toString(), connected.stream().map(c -> c.getUsername()).toList(), id);
+		return new ClientGameListEntry(type, count, this.toString(), connected.stream().map(c -> c.getUsername()).toList(), id);
 	}
 
 }

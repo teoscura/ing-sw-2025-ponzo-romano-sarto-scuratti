@@ -24,12 +24,12 @@ import it.polimi.ingsw.utils.Logger;
 import it.polimi.ingsw.utils.LoggerLevel;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class VerifyState extends GameState {
 
 	private final iCards voyage_deck;
-	private final ArrayList<Player> to_remove_broken;
-	private final ArrayList<Player> to_choose_blob;
+	private final ArrayList<Player> to_clean;
 	private final ArrayList<Player> finish_order;
 	private final ArrayList<Player> awaiting;
 	private final ArrayList<Player> starts_losing;
@@ -38,25 +38,20 @@ public class VerifyState extends GameState {
 		super(model, type, count, players);
 		if (voyage_deck == null || finish_order == null || players == null) throw new NullPointerException();
 		this.voyage_deck = voyage_deck;
-		this.to_remove_broken = new ArrayList<>();
-		this.to_choose_blob = new ArrayList<>();
+		this.to_clean = new ArrayList<>(players);
 		this.finish_order = finish_order;
-		this.awaiting = new ArrayList<>();
-		this.awaiting.addAll(players);
+		this.awaiting = new ArrayList<>(players);
 		this.starts_losing = new ArrayList<>();
 	}
 
 	@Override
 	public void init() {
-		for (Player p : this.finish_order) {
-			if (p.getSpaceShip().bulkVerifyResult() && p.getSpaceShip().getBlobsSize() == 1) continue;
-			else if (!p.getSpaceShip().bulkVerifyResult()) this.to_remove_broken.add(p);
-			else this.to_choose_blob.add(p);
+		Iterator<Player> it = to_clean.iterator();
+		while (it.hasNext()) {
+			var p = it.next();
+			if (p.getSpaceShip().bulkVerifyResult() && p.getSpaceShip().getBlobsSize() == 1) it.remove();
 		}
-		for (Player p : this.to_choose_blob) {
-			finish_order.remove(p);
-		}
-		for (Player p : this.to_remove_broken) {
+		for (Player p : this.to_clean) {
 			finish_order.remove(p);
 		}
 		Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "New Game State -> Verify State");
@@ -67,6 +62,14 @@ public class VerifyState extends GameState {
 	@Override
 	public void validate(ServerMessage message) throws ForbiddenCallException {
 		message.receive(this);
+
+		Iterator<Player> it = to_clean.iterator();
+		while (it.hasNext()) {
+			var p = it.next();
+			if (!p.getSpaceShip().bulkVerifyResult() || p.getSpaceShip().getBlobsSize() > 1) continue;
+			it.remove();
+			this.finish_order.addLast(p);
+		}
 		int disconnected = 0;
 		for (Player p : this.awaiting) {
 			if (p.getDisconnected()) disconnected++;
@@ -82,16 +85,15 @@ public class VerifyState extends GameState {
 	@Override
 	public GameState getNext() {
 		for (Player p : this.players) {
-			if (p.getDisconnected()) this.starts_losing.add(p);
+			if (p.getSpaceShip().getCrew()[0] <= 0 || this.to_clean.contains(p)) this.starts_losing.add(p);
 		}
-		for (Player p : this.players) {
-			if (p.getSpaceShip().getBlobsSize() <= 0 || this.starts_losing.contains(p)) this.finish_order.remove(p);
+		for (Player p : this.starts_losing) {
+			this.finish_order.remove(p);
+			p.retire();
 		}
 		Planche planche = new Planche(type, finish_order);
 		VoyageState res = new VoyageState(model, type, count, players, voyage_deck, planche);
-		for (Player p : this.players) {
-			if (p.getSpaceShip().getBlobsSize() <= 0 || this.starts_losing.contains(p)) res.loseGame(p);
-		}
+
 		return res;
 	}
 
@@ -102,8 +104,9 @@ public class VerifyState extends GameState {
 			tmp.add(new ClientVerifyPlayer(p.getUsername(),
 					p.getColor(),
 					p.getSpaceShip().getClientSpaceShip().getVerifyShip(p.getSpaceShip().bulkVerify()),
-					p.getSpaceShip().bulkVerify(),
 					this.finish_order.contains(p),
+					!this.awaiting.contains(p),
+					this.starts_losing.contains(p),
 					this.finish_order.indexOf(p)));
 		}
 		return new ClientVerifyState(tmp);
@@ -121,7 +124,7 @@ public class VerifyState extends GameState {
 			this.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' already finished validating!"));
 			return;
 		}
-		if (this.to_choose_blob.contains(p) || this.to_remove_broken.contains(p)) {
+		if (this.to_clean.contains(p)) {
 			Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' motioned to progress without validating and finalizing his ship!");
 			this.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' motioned to progress without validating and finalizing his ship!"));
 			return;
@@ -132,7 +135,7 @@ public class VerifyState extends GameState {
 
 	@Override
 	public void removeComponent(Player p, ShipCoords coords) throws ForbiddenCallException {
-		if (!this.to_remove_broken.contains(p)) {
+		if (!this.to_clean.contains(p)) {
 			Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' attempted to act on the ship after cleaning it!");
 			this.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' attempted to act on the ship after cleaning it!"));
 			return;
@@ -142,27 +145,19 @@ public class VerifyState extends GameState {
 		} catch (IllegalTargetException e) {
 			Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' tried to remove an empty component!");
 			this.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' tried to remove an empty component!"));
-			return;
 		}
-		if (!p.getSpaceShip().bulkVerifyResult()) return;
-		this.to_remove_broken.remove(p);
-		if (p.getSpaceShip().getBlobsSize() > 1) this.to_choose_blob.add(p);
-		else this.finish_order.addLast(p);
 	}
 
 	@Override
 	public void selectBlob(Player p, ShipCoords blob_coord) {
-		if (!this.to_choose_blob.contains(p)) {
-			Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' attempted to set a new center during another player's turn!");
-			this.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to set a new center during another player's turn!"));
+		if (!this.to_clean.contains(p)) {
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' attempted to select his ship, but he doesn't need to!");
+			this.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to select his ship, but he doesn't need to!"));
 			return;
 		}
 		try {
 			p.getSpaceShip().selectShipBlob(blob_coord);
 			Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' selected blob that contains coords " + blob_coord + ".");
-			if (p.getSpaceShip().getCrew()[0] <= 0) this.starts_losing.add(p);
-			this.to_choose_blob.remove(p);
-			this.finish_order.addLast(p);
 		} catch (IllegalTargetException e) {
 			Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' attempted to select a nonexistant blob!");
 			this.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to select a nonexistant blob!"));
@@ -176,7 +171,7 @@ public class VerifyState extends GameState {
 
 	@Override
 	public void setCrewType(Player p, ShipCoords coords, AlienType type) throws ForbiddenCallException {
-		if (this.to_choose_blob.contains(p) || this.to_remove_broken.contains(p)) {
+		if (this.to_clean.contains(p)) {
 			Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' tried to set crew type before having a valid ship!");
 			this.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' tried to set crew type before having a valid ship!"));
 			return;
@@ -227,7 +222,7 @@ public class VerifyState extends GameState {
 
 	@Override
 	public ClientGameListEntry getOngoingEntry(int id) {
-		return new ClientGameListEntry(type, this.toString(), this.players.stream().map(p -> p.getUsername()).toList(), id);
+		return new ClientGameListEntry(type, count, this.toString(), this.players.stream().map(p -> p.getUsername()).toList(), id);
 	}
 
 }

@@ -66,7 +66,9 @@ class PlanetRewardState extends CardState {
 	@Override
 	public ClientCardState getClientCardState() {
 		return new ClientCargoRewardCardStateDecorator(
-				new ClientBaseCardState(this.card.getId()),
+				new ClientBaseCardState(
+						this.getClass().getSimpleName(),
+						card.getId()),
 				this.list.getFirst().getColor(),
 				this.card.getDays(),
 				this.card.getPlanet(this.id).getContains());

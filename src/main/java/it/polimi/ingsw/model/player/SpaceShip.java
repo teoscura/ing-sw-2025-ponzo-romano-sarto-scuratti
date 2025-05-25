@@ -61,6 +61,7 @@ public class SpaceShip implements Serializable {
 		this.battery_coords = new ArrayList<ShipCoords>();
 		this.powerable_coords = new ArrayList<ShipCoords>();
 		this.center = type.getCenterCabin();
+
 		for (BaseComponent[] t : this.components) {
 			Arrays.fill(t, this.empty); // E' la stessa reference;
 		}
@@ -159,6 +160,7 @@ public class SpaceShip implements Serializable {
 	}
 
 	public void selectShipBlob(ShipCoords blob_coord) throws ForbiddenCallException {
+		updateShipBlobs();
 		if (this.blobs.size() <= 1) throw new ForbiddenCallException();
 		for (ArrayList<ShipCoords> blob : this.blobs) {
 			if (!blob.contains(blob_coord)) continue;

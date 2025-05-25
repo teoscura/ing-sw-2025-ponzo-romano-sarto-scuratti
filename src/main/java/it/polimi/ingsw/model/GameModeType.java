@@ -3,8 +3,8 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.model.player.ShipCoords;
 
 public enum GameModeType {
-	TEST(1, false, 5, 7, 18, 4, 10, 5, 9),
-	LVL2(2, true, 5, 7, 24, 4, 10, 5, 9);
+	TEST(1, false, 5, 7, 18, 4, 10, 5, 9, 8),
+	LVL2(2, true, 5, 7, 24, 4, 10, 5, 9, 12);
 
 	private final boolean lifesupports;
 	private final int level;
@@ -15,8 +15,9 @@ public enum GameModeType {
 	private final int max_x;
 	private final int min_y;
 	private final int max_y;
+	private final int turns;
 
-	GameModeType(int level, boolean lifesupports, int height, int width, int length, int min_x, int max_x, int min_y, int max_y) {
+	GameModeType(int level, boolean lifesupports, int height, int width, int length, int min_x, int max_x, int min_y, int max_y, int turns) {
 		this.level = level;
 		this.lifesupports = lifesupports;
 		this.height = height;
@@ -26,6 +27,7 @@ public enum GameModeType {
 		this.max_x = max_x;
 		this.min_y = min_y;
 		this.max_y = max_y;
+		this.turns = turns;
 	}
 
 	public int getLevel() {
@@ -62,6 +64,10 @@ public enum GameModeType {
 
 	public int getMaxY() {
 		return this.max_y;
+	}
+
+	public int getTurns() {
+		return this.turns;
 	}
 
 	private int[] getShape() {

@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model.client.state;
 
 import it.polimi.ingsw.model.client.player.ClientVerifyPlayer;
-import it.polimi.ingsw.view.ClientView;
 
 import java.util.ArrayList;
 
@@ -15,13 +14,13 @@ public class ClientVerifyState implements ClientState {
 		this.players = playerlist;
 	}
 
-	public ArrayList<ClientVerifyPlayer> getPlayers() {
+	public ArrayList<ClientVerifyPlayer> getPlayerList() {
 		return players;
 	}
 
 	@Override
-	public void sendToView(ClientView view) {
-		view.show(this);
+	public void sendToView(ClientStateVisitor visitor) {
+		visitor.show(this);
 	}
 
 }

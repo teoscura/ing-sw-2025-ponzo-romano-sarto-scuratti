@@ -57,7 +57,6 @@ public class MeteorAnnounceState extends CardState {
 		}
 		for (Player p : this.state.getOrder(CardOrder.NORMAL)) {
 			p.getSpaceShip().handleMeteorite(this.left.getProjectiles().getFirst());
-			if (p.getSpaceShip().getBlobsSize() <= 0) this.state.loseGame(p);
 			this.reselect = this.reselect || (p.getSpaceShip().getBlobsSize() > 1);
 		}
 		this.transition();
@@ -68,7 +67,9 @@ public class MeteorAnnounceState extends CardState {
 		List<PlayerColor> tmp = this.awaiting.stream().map(p -> p.getColor()).toList();
 		return new ClientMeteoriteCardStateDecorator(
 				new ClientAwaitConfirmCardStateDecorator(
-						new ClientBaseCardState(this.card_id),
+						new ClientBaseCardState(
+								this.getClass().getSimpleName(),
+								this.card_id),
 						new ArrayList<>(tmp)),
 				this.left.getProjectiles().getFirst());
 	}

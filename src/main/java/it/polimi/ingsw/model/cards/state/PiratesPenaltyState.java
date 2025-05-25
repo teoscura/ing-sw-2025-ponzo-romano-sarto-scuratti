@@ -5,7 +5,7 @@ import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.cards.PiratesCard;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
-import it.polimi.ingsw.model.cards.utils.ProjectileArray;
+import it.polimi.ingsw.model.cards.utils.Projectile;
 import it.polimi.ingsw.model.client.card.ClientAwaitConfirmCardStateDecorator;
 import it.polimi.ingsw.model.client.card.ClientBaseCardState;
 import it.polimi.ingsw.model.client.card.ClientCardState;
@@ -13,24 +13,22 @@ import it.polimi.ingsw.model.client.card.ClientProjectileCardStateDecorator;
 import it.polimi.ingsw.model.client.state.ClientState;
 import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
 import it.polimi.ingsw.model.player.Player;
-import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.VoyageState;
 import it.polimi.ingsw.utils.Logger;
 import it.polimi.ingsw.utils.LoggerLevel;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class PiratesPenaltyState extends CardState {
 
 	private final PiratesCard card;
 	private final ArrayList<Player> list;
-	private final ProjectileArray shots;
+	private final ArrayList<Projectile> shots;
 	private boolean responded = false;
 
-	protected PiratesPenaltyState(VoyageState state, PiratesCard card, ArrayList<Player> list, ProjectileArray shots) {
+	protected PiratesPenaltyState(VoyageState state, PiratesCard card, ArrayList<Player> list, ArrayList<Projectile> shots) {
 		super(state);
 		if (list.size() > this.state.getCount().getNumber() || list.size() < 1 || list == null)
 			throw new IllegalArgumentException("Constructed insatisfyable state");
@@ -57,7 +55,7 @@ public class PiratesPenaltyState extends CardState {
 			return;
 		}
 		if (!this.list.getFirst().getDisconnected()) {
-			this.list.getFirst().getSpaceShip().handleShot(this.shots.getProjectiles().getFirst());
+			this.list.getFirst().getSpaceShip().handleShot(this.shots.getFirst());
 			if (this.list.getFirst().getSpaceShip().getBlobsSize() <= 0) this.state.loseGame(this.list.getFirst());
 		}
 		this.transition();
@@ -65,12 +63,16 @@ public class PiratesPenaltyState extends CardState {
 
 	@Override
 	public ClientCardState getClientCardState() {
-		List<PlayerColor> awaiting = Collections.singletonList(this.list.getFirst().getColor());
+		if (list.isEmpty()) return new ClientBaseCardState(
+				this.getClass().getSimpleName(),
+				card.getId());
 		return new ClientProjectileCardStateDecorator(
 				new ClientAwaitConfirmCardStateDecorator(
-						new ClientBaseCardState(this.card.getId()),
-						new ArrayList<>(awaiting)),
-				this.shots.getProjectiles().getFirst());
+						new ClientBaseCardState(
+								this.getClass().getSimpleName(),
+								card.getId()),
+						new ArrayList<>(List.of(this.list.getFirst().getColor()))),
+				this.shots.getFirst());
 	}
 
 	@Override
@@ -81,10 +83,10 @@ public class PiratesPenaltyState extends CardState {
 			Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Card exhausted, moving to a new one!");
 			return null;
 		}
-		this.shots.getProjectiles().removeFirst();
+		this.shots.removeFirst();
 		if (this.list.getFirst().getSpaceShip().getBlobsSize() > 1)
 			return new PiratesSelectShipState(state, card, list, shots);
-		if (!this.shots.getProjectiles().isEmpty()) return new PiratesPenaltyState(state, card, list, shots);
+		if (!this.shots.isEmpty()) return new PiratesPenaltyState(state, card, list, shots);
 		this.list.removeFirst();
 		if (!this.list.isEmpty()) return new PiratesAnnounceState(state, card, list);
 		Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Card exhausted, moving to a new one!");

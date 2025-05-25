@@ -21,16 +21,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class ResumeWaitingState extends GameState {
+public class ResumeWaitingState extends WaitingState {
 
 	private final GameState next;
 	private final HashMap<String, ClientDescriptor> awaiting;
 	private final PlayerCount count;
 
-	public ResumeWaitingState(ModelInstance model, GameModeType type, PlayerCount count, GameState state) {
-		super(model, type, count, null);
-		if (state == null) throw new NullPointerException();
-		this.next = state;
+	public ResumeWaitingState(ModelInstance model, GameModeType type, PlayerCount count, GameState next) {
+		super(model, type, count);
+		if (next == null) throw new NullPointerException();
+		this.next = next;
 		this.awaiting = new HashMap<>();
 		for (String s : this.next.players.stream().map(p -> p.getUsername()).toList()) {
 			this.awaiting.put(s, null);
@@ -88,7 +88,7 @@ public class ResumeWaitingState extends GameState {
 			if (c.getOrder() < 0) continue;
 			tmp.add(new ClientWaitingPlayer(tmp2.get(c.getOrder()), this.awaiting.get(tmp2.get(c.getOrder())) == null ? PlayerColor.NONE : c));
 		}
-		return new ClientWaitingRoomState(type, tmp);
+		return new ClientWaitingRoomState(type, count, tmp);
 	}
 
 	@Override
@@ -134,7 +134,7 @@ public class ResumeWaitingState extends GameState {
 
 	@Override
 	public ClientGameListEntry getOngoingEntry(int id) {
-		return new ClientGameListEntry(type, this.toString(), awaiting.keySet().stream().toList(), id);
+		return new ClientGameListEntry(type, count, this.toString(), awaiting.keySet().stream().toList(), id);
 	}
 
 }

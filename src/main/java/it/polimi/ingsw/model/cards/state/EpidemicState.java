@@ -51,7 +51,6 @@ public class EpidemicState extends CardState {
 		for (Player p : this.state.getOrder(CardOrder.INVERSE)) {
 			try {
 				card.apply(this.state, p);
-				if (p.getSpaceShip().getCrew()[0] == 0) this.state.loseGame(p);
 			} catch (PlayerNotFoundException e) {
 				e.printStackTrace();
 			}
@@ -63,7 +62,7 @@ public class EpidemicState extends CardState {
 	public ClientCardState getClientCardState() {
 		List<PlayerColor> tmp = this.awaiting.stream().map(p -> p.getColor()).toList();
 		return new ClientAwaitConfirmCardStateDecorator(
-				new ClientBaseCardState(card.getId()),
+				new ClientBaseCardState(this.getClass().getSimpleName(), card.getId()),
 				new ArrayList<>(tmp));
 	}
 

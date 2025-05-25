@@ -37,6 +37,7 @@ public class SocketConnection extends Thread implements ServerConnection {
 			} catch (IOException e) {
 				System.out.println("Failed to read object from: " + socket.getInetAddress() + ", closing socket.");
 				this.close();
+				return;
 			}
 			inqueue.insert(message);
 		}
@@ -67,10 +68,10 @@ public class SocketConnection extends Thread implements ServerConnection {
 				caller.interrupt();
 				try {
 					sendMessage(new ServerDisconnectMessage());
+					socket.close();
 				} catch (IOException e) {
 					System.out.println("Ran Shutdown Hook on SocketConnection");
 				}
-				close();
 			}
 		};
 	}

@@ -124,7 +124,7 @@ public class PiratesCardTest {
 		model.setState(state);
 		state.setCard(card);
 		state.setCardState(card.getState(state));
-		ArrayList<Projectile> s = card.getShots().getProjectiles();
+		ArrayList<Projectile> s = card.getShots();
 		Projectile pr = s.get(0);
 		s.set(0, new Projectile(pr.getDirection(), pr.getDimension(), 1));
 		pr = s.get(1);

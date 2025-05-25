@@ -5,11 +5,14 @@ import it.polimi.ingsw.exceptions.NegativeArgumentException;
 import it.polimi.ingsw.model.cards.state.CardState;
 import it.polimi.ingsw.model.cards.state.PiratesAnnounceState;
 import it.polimi.ingsw.model.cards.utils.CardOrder;
+import it.polimi.ingsw.model.cards.utils.Projectile;
 import it.polimi.ingsw.model.cards.utils.ProjectileArray;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.state.VoyageState;
 import it.polimi.ingsw.utils.Logger;
 import it.polimi.ingsw.utils.LoggerLevel;
+
+import java.util.ArrayList;
 
 
 public class PiratesCard extends Card {
@@ -37,8 +40,16 @@ public class PiratesCard extends Card {
 		return this.credits;
 	}
 
-	public ProjectileArray getShots() {
-		return this.shots;
+	public double getPower() {
+		return this.min_power;
+	}
+
+	public ArrayList<Projectile> getShotsCopy() {
+		return new ArrayList<>(this.shots.getProjectiles());
+	}
+
+	public ArrayList<Projectile> getShots() {
+		return this.shots.getProjectiles();
 	}
 
 	public boolean apply(VoyageState state, Player p) {

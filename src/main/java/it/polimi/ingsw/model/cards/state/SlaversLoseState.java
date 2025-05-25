@@ -57,7 +57,9 @@ public class SlaversLoseState extends CardState {
 	@Override
 	public ClientCardState getClientCardState() {
 		return new ClientCrewPenaltyCardStateDecorator(
-				new ClientBaseCardState(this.card.getId()),
+				new ClientBaseCardState(
+						this.getClass().getSimpleName(),
+						card.getId()),
 				this.list.getFirst().getColor(),
 				this.card.getCrewLost() - this.done);
 	}
@@ -93,11 +95,7 @@ public class SlaversLoseState extends CardState {
 			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to remove a crew member from invalid coordinates!"));
 			return;
 		}
-		if (p.getSpaceShip().getCrew()[0] == 0) {
-			this.state.loseGame(p);
-			return;
-		}
-		if (this.done >= this.card.getCrewLost()) {
+		if (this.done >= this.card.getCrewLost() || p.getSpaceShip().getCrew()[0] == 0) {
 			this.responded = true;
 		}
 	}

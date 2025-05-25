@@ -2,8 +2,8 @@ package it.polimi.ingsw.model.client.state;
 
 import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.client.player.ClientConstructionPlayer;
-import it.polimi.ingsw.view.ClientView;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,9 +15,12 @@ public class ClientConstructionState implements ClientState {
 	private final ArrayList<Integer> construction_cards;
 	private final ArrayList<Integer> discarded_tiles;
 	private final int tiles_left;
+	private final int toggles_total;
+	private final int toggles_left;
+	private final Duration hourglass_duration;
 	private final Instant last_hourglass_toggle;
 
-	public ClientConstructionState(GameModeType type, ArrayList<ClientConstructionPlayer> playerlist, ArrayList<Integer> construction, ArrayList<Integer> discarded, int tiles, Instant last_hourglass_toggle) {
+	public ClientConstructionState(GameModeType type, ArrayList<ClientConstructionPlayer> playerlist, ArrayList<Integer> construction, ArrayList<Integer> discarded, int tiles, int toggles_total, int toggles_left, Duration hourglass_duration, Instant last_hourglass_toggle) {
 		if (discarded == null || playerlist == null) throw new NullPointerException();
 		if (construction == null && type.getLevel() > 1) throw new IllegalArgumentException();
 		if (type.getLevel() > 1) {
@@ -34,6 +37,9 @@ public class ClientConstructionState implements ClientState {
 		this.construction_cards = construction;
 		this.discarded_tiles = discarded;
 		this.tiles_left = tiles;
+		this.toggles_total = toggles_total;
+		this.toggles_left = toggles_left;
+		this.hourglass_duration = hourglass_duration;
 		this.last_hourglass_toggle = last_hourglass_toggle;
 	}
 
@@ -57,13 +63,25 @@ public class ClientConstructionState implements ClientState {
 		return this.tiles_left;
 	}
 
+	public int getTogglesTotal() {
+		return this.toggles_total;
+	}
+
+	public int getTogglesLeft() {
+		return this.toggles_left;
+	}
+
+	public Duration getHourglassDuration() {
+		return this.hourglass_duration;
+	}
+
 	public Instant getLastToggle() {
 		return this.last_hourglass_toggle;
 	}
 
 	@Override
-	public void sendToView(ClientView view) {
-		view.show(this);
+	public void sendToView(ClientStateVisitor visitor) {
+		visitor.show(this);
 	}
 
 }

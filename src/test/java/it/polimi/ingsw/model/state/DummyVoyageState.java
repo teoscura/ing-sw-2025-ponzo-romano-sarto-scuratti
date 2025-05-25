@@ -77,7 +77,7 @@ public class DummyVoyageState extends VoyageState {
 					p.getDisconnected(),
 					p.getRetired()));
 		}
-		return new ClientVoyageState(type, tmp, this.card.getId(), this.state.getClientCardState());
+		return new ClientVoyageState(type, tmp, this.state.getClientCardState(), 0);
 	}
 
 	@Override
@@ -163,6 +163,10 @@ public class DummyVoyageState extends VoyageState {
 
 	public iPlanche getPlanche() {
 		return planche;
+	}
+
+	public iCard getCard() {
+		return this.card;
 	}
 
 	public void setCard(iCard card) {

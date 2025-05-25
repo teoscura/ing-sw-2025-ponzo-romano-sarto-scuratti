@@ -28,7 +28,7 @@ public class ConnectingState extends ClientControllerState {
 
 	@Override
 	public void init() {
-		view.showConnectionScreen(this);
+		view.show(this);
 	}
 
 	public ClientController getController() {
@@ -47,11 +47,11 @@ public class ConnectingState extends ClientControllerState {
 				try {
 					this.connection = new RMIConnection(inqueue, address, username, port);
 				} catch (RemoteException e) {
-					System.out.println("Failed to connect to server, terminating.");
-					e.printStackTrace();
+					view.showTextMessage("Failed to connect to server, terminating.");
 				} catch (NotBoundException e) {
-					System.out.println("Selected server does not host game, terminating.");
-					e.printStackTrace();
+					view.showTextMessage("Selected server does not host game, terminating.");
+				} catch (NullPointerException e) {
+					view.showTextMessage("Server refused the connection... terminating.");
 				}
 			}
 			break;
@@ -63,13 +63,12 @@ public class ConnectingState extends ClientControllerState {
 					tmp.sendMessage(new UsernameSetupMessage(this.username));
 					connection = tmp;
 				} catch (IOException e) {
-					System.out.println("Failed to connect to server, going back to main screen.");
-					e.printStackTrace();
+					view.showTextMessage("Failed to connect to server, going back to main screen.");
 				}
 			}
 			break;
 			default:
-				throw new UnsupportedOperationException();
+				this.connection = null;
 		}
 		if (connection == null) this.controller.reset();
 		else this.transition();

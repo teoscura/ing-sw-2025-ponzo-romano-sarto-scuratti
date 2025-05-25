@@ -10,12 +10,14 @@ import it.polimi.ingsw.model.state.GameState;
 
 public class PutComponentMessage extends ServerMessage {
 
+	private final int id;
 	private final ShipCoords coords;
 	private final ComponentRotation rotation;
 
-	public PutComponentMessage(ShipCoords coords, ComponentRotation rotation) {
+	public PutComponentMessage(int id, ShipCoords coords, ComponentRotation rotation) {
 		if (coords == null)
 			throw new NullPointerException();
+		this.id = id;
 		this.coords = coords;
 		this.rotation = rotation;
 	}
@@ -39,7 +41,7 @@ public class PutComponentMessage extends ServerMessage {
 
 	@Override
 	public void receive(GameState state) throws ForbiddenCallException {
-		state.putComponent(this.descriptor.getPlayer(), coords, rotation);
+		state.putComponent(this.descriptor.getPlayer(), id, coords, rotation);
 	}
 
 	public ShipCoords getCoords() {

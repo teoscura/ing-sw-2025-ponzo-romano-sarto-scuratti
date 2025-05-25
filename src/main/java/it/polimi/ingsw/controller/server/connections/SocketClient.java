@@ -58,19 +58,22 @@ public class SocketClient extends Thread implements ClientConnection {
 	}
 
 	private void readSetup() {
+		MainServerController controller = MainServerController.getInstance();
 		UsernameSetupMessage setup = null;
 		try {
 			setup = (UsernameSetupMessage) in.readObject();
 		} catch (ClassNotFoundException e) {
 			Logger.getInstance().print(LoggerLevel.NOTIF, "Failed to read class object from tcp socket: " + socket.getInetAddress());
+			return;
 		} catch (IOException e) {
 			Logger.getInstance().print(LoggerLevel.ERROR, "Failed to read object from: " + socket.getInetAddress() + ", closing socket.");
-			this.close();
+			MainServerController.getInstance().disconnect(controller.getDescriptor(this.username));
 		} catch (ClassCastException e) {
 			Logger.getInstance().print(LoggerLevel.NOTIF, "Received non-setup message from tcp socket: " + socket.getInetAddress());
+			return;
 		}
 		this.username = setup.getUsername();
-		MainServerController.getInstance().setupSocketListener(this, this.username);
+		controller.setupSocketListener(this, this.username);
 	}
 
 	private void read() {
@@ -80,9 +83,11 @@ public class SocketClient extends Thread implements ClientConnection {
 			message = (ServerMessage) in.readObject();
 		} catch (ClassNotFoundException e) {
 			Logger.getInstance().print(LoggerLevel.NOTIF, "Failed to read class object from tcp socket: " + socket.getInetAddress());
+			return;
 		} catch (IOException e) {
 			Logger.getInstance().print(LoggerLevel.ERROR, "Failed to read object from: " + socket.getInetAddress() + ", closing socket.");
-			this.close();
+			MainServerController.getInstance().disconnect(controller.getDescriptor(this.username));
+			return;
 		}
 		message.setDescriptor(controller.getDescriptor(this.username));
 		controller.receiveMessage(message);

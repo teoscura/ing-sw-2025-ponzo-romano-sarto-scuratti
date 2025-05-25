@@ -4,7 +4,6 @@ import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.state.VoyageState;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
@@ -51,27 +50,10 @@ public class Planche implements iPlanche {
 			count--;
 		}
 		this.planche.put(p, position);
-		if (rel_change > 0) {
-			ArrayList<Player> to_lose = new ArrayList<>();
-			for (Player other : this.planche.keySet()) {
-				if (p.equals(other)) continue;
-				if (this.planche.get(p) - this.planche.get(other) >= this.length) {
-					to_lose.add(other);
-				}
-			}
-			for (Player l : to_lose) {
-				state.loseGame(l);
-			}
-		} else {
-			for (Player other : this.planche.keySet()) {
-				if (p.equals(other)) continue;
-				if (this.planche.get(other) - this.planche.get(p) >= this.length) {
-					state.loseGame(p);
-					return;
-				}
-			}
-		}
+	}
 
+	public boolean checkLapped(Player p) {
+		return this.planche.keySet().stream().filter(pl -> getPlayerPosition(pl) - getPlayerPosition(p) >= length).findAny().isPresent();
 	}
 
 	@Override

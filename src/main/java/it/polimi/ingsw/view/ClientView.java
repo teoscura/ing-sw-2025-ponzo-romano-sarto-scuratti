@@ -1,68 +1,34 @@
 package it.polimi.ingsw.view;
 
+import it.polimi.ingsw.controller.client.state.ConnectedState;
 import it.polimi.ingsw.controller.client.state.ConnectingState;
 import it.polimi.ingsw.controller.client.state.TitleScreenState;
-import it.polimi.ingsw.model.client.card.*;
-import it.polimi.ingsw.model.client.components.*;
-import it.polimi.ingsw.model.client.state.*;
+import it.polimi.ingsw.message.server.ServerMessage;
+import it.polimi.ingsw.model.client.state.ClientState;
+import it.polimi.ingsw.model.client.state.ClientStateVisitor;
 
-public interface ClientView {
-	//Game states
-	void show(ClientLobbySelectState state);
+public interface ClientView extends ClientStateVisitor {
 
-	void show(ClientSetupState state);
+	//User info setup.
+	void show(TitleScreenState state);
 
-	void show(ClientWaitingRoomState state);
+	void show(ConnectingState state);
 
-	void show(ClientConstructionState state);
+	ClientState getClientState();
 
-	void show(ClientVerifyState state);
+	//State sync
+	void setClientState(ClientState state);
 
-	void show(ClientVoyageState state);
+	//Client input
+	void connect(ConnectedState state);
 
-	void show(ClientEndgameState state);
+	void disconnect();
 
-	//Components
-	void show(ClientBaseComponent component);
+	void setInput(ServerMessage input);
 
-	void show(ClientPoweredComponentDecorator component);
-
-	void show(ClientShipmentsComponentDecorator component);
-
-	void show(ClientBatteryComponentDecorator component);
-
-	void show(ClientCrewComponentDecorator component);
-
-	void show(ClientBrokenVerifyComponentDecorator component);
-
-	//Card states
-	void show(ClientAwaitConfirmCardStateDecorator state);
-
-	void show(ClientBaseCardState state);
-
-	void show(ClientCargoPenaltyCardStateDecorator state);
-
-	void show(ClientCargoRewardCardStateDecorator state);
-
-	void show(ClientCombatZoneIndexCardStateDecorator state);
-
-	void show(ClientCreditsRewardCardStateDecorator state);
-
-	void show(ClientCrewPenaltyCardStateDecorator state);
-
-	void show(ClientLandingCardStateDecorator state);
-
-	void show(ClientMeteoriteCardStateDecorator state);
-
-	void show(ClientNewCenterCardStateDecorator state);
-
-	void show(ClientProjectileCardStateDecorator state);
+	ServerMessage takeInput();
 
 	//Misc and debug
 	void showTextMessage(String message);
-
-	void showTitleScreen(TitleScreenState titlesScreenState);
-
-	void showConnectionScreen(ConnectingState connectingState);
 
 }

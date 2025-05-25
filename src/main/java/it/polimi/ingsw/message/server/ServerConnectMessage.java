@@ -6,6 +6,7 @@ import it.polimi.ingsw.controller.server.MainServerController;
 import it.polimi.ingsw.model.ModelInstance;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.state.GameState;
+import it.polimi.ingsw.model.state.WaitingState;
 
 public class ServerConnectMessage extends ServerMessage {
 
@@ -32,7 +33,8 @@ public class ServerConnectMessage extends ServerMessage {
 
 	@Override
 	public void receive(GameState state) throws ForbiddenCallException {
-		if (this.descriptor.getPlayer() == null) state.connect(descriptor);
+		if (WaitingState.class.isAssignableFrom(state.getClass())) state.connect(descriptor);
+		else if (this.descriptor.getPlayer() == null) state.connect(descriptor);
 		else state.connect(this.descriptor.getPlayer());
 	}
 

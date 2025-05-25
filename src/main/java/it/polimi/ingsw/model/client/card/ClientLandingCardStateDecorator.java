@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model.client.card;
 
+import it.polimi.ingsw.model.cards.utils.Planet;
 import it.polimi.ingsw.model.player.PlayerColor;
-import it.polimi.ingsw.view.ClientView;
 
 import java.util.ArrayList;
 
@@ -12,15 +12,18 @@ public class ClientLandingCardStateDecorator implements ClientCardState {
 	private final PlayerColor turn;
 	private final int days_taken;
 	private final int crew_needed;
-	private final ArrayList<Boolean> available;
+	private final int credits;
+	private final ArrayList<Planet> available;
 
-	public ClientLandingCardStateDecorator(ClientCardState base, PlayerColor turn, int days_taken, int crew_needed, ArrayList<Boolean> available) {
-		if (base == null || available == null) throw new NullPointerException();
+	public ClientLandingCardStateDecorator(ClientCardState base, PlayerColor turn, int days_taken, int crew_needed, int credits, ArrayList<Planet> available) {
+		if (base == null) throw new NullPointerException();
+		if (crew_needed <= 0 && available == null) throw new NullPointerException();
 		if (days_taken <= 0 || crew_needed < 0) throw new IllegalArgumentException();
 		this.base = base;
 		this.turn = turn;
 		this.days_taken = days_taken;
 		this.crew_needed = crew_needed;
+		this.credits = credits;
 		this.available = available;
 	}
 
@@ -36,14 +39,18 @@ public class ClientLandingCardStateDecorator implements ClientCardState {
 		return this.crew_needed;
 	}
 
-	public ArrayList<Boolean> getAvailable() {
+	public int getCredits() {
+		return this.credits;
+	}
+
+	public ArrayList<Planet> getAvailable() {
 		return this.available;
 	}
 
 	@Override
-	public void showCardState(ClientView view) {
-		base.showCardState(view);
-		view.show(this);
+	public void showCardState(ClientCardStateVisitor visitor) {
+		base.showCardState(visitor);
+		visitor.show(this);
 	}
 
 }

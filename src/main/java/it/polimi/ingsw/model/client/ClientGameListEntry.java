@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.client;
 
 import it.polimi.ingsw.model.GameModeType;
+import it.polimi.ingsw.model.PlayerCount;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -11,19 +12,25 @@ public class ClientGameListEntry implements Serializable {
 	private final ArrayList<String> players;
 	private final int model_id;
 	private final GameModeType type;
+	private final PlayerCount count;
 	private final String state;
 
-	public ClientGameListEntry(GameModeType type, String state, List<String> players, int model_id) {
+	public ClientGameListEntry(GameModeType type, PlayerCount count, String state, List<String> players, int model_id) {
 		if (players == null || type == null || state == null) throw new NullPointerException();
 		if (players.size() < 0 || players.size() > 4 || model_id < 0) throw new IllegalArgumentException();
 		this.players = new ArrayList<>(players);
 		this.model_id = model_id;
 		this.type = type;
+		this.count = count;
 		this.state = state;
 	}
 
 	public GameModeType getType() {
 		return this.type;
+	}
+
+	public PlayerCount getCount() {
+		return this.count;
 	}
 
 	public ArrayList<String> getPlayers() {

@@ -112,7 +112,7 @@ public abstract class GameState implements Serializable {
 		throw new ForbiddenCallException("This state doesn't support this function.");
 	}
 
-	public void putComponent(Player p, ShipCoords coords, ComponentRotation rotation) throws ForbiddenCallException {
+	public void putComponent(Player p, int id, ShipCoords coords, ComponentRotation rotation) throws ForbiddenCallException {
 		this.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' tried to put a component in a state that doesn't allow it!"));
 		Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' tried to put a component in a state that doesn't allow it!");
 		throw new ForbiddenCallException("This state doesn't support this function.");

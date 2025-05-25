@@ -33,6 +33,10 @@ public class SmugglersCard extends Card {
 		return new SmugglersAnnounceState(state, this, new ArrayList<>(state.getOrder(CardOrder.NORMAL)));
 	}
 
+	public double getPower() {
+		return this.min_power;
+	}
+
 	public Planet getReward() {
 		return this.reward;
 	}

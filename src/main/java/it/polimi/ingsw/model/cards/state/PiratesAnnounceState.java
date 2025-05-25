@@ -5,20 +5,20 @@ import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.cards.PiratesCard;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
+import it.polimi.ingsw.model.cards.utils.CombatZonePenalty;
 import it.polimi.ingsw.model.client.card.ClientAwaitConfirmCardStateDecorator;
 import it.polimi.ingsw.model.client.card.ClientBaseCardState;
 import it.polimi.ingsw.model.client.card.ClientCardState;
+import it.polimi.ingsw.model.client.card.ClientEnemyCardStateDecorator;
 import it.polimi.ingsw.model.client.state.ClientState;
 import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
 import it.polimi.ingsw.model.player.Player;
-import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.VoyageState;
 import it.polimi.ingsw.utils.Logger;
 import it.polimi.ingsw.utils.LoggerLevel;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class PiratesAnnounceState extends CardState {
@@ -62,8 +62,14 @@ public class PiratesAnnounceState extends CardState {
 
 	@Override
 	public ClientCardState getClientCardState() {
-		List<PlayerColor> awaiting = Collections.singletonList(this.list.getFirst().getColor());
-		return new ClientAwaitConfirmCardStateDecorator(new ClientBaseCardState(this.card.getId()), new ArrayList<>(awaiting));
+		return new ClientEnemyCardStateDecorator(
+				new ClientAwaitConfirmCardStateDecorator(new ClientBaseCardState(
+						this.getClass().getSimpleName(),
+						card.getId()),
+						new ArrayList<>(List.of(this.list.getFirst().getColor()))),
+				this.card.getPower(),
+				CombatZonePenalty.SHOTS,
+				0);
 	}
 
 	@Override
@@ -74,7 +80,7 @@ public class PiratesAnnounceState extends CardState {
 			Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Card exhausted, moving to a new one!");
 			return null;
 		}
-		if (!result) return new PiratesPenaltyState(state, card, list, card.getShots());
+		if (!result) return new PiratesPenaltyState(state, card, list, this.card.getShotsCopy());
 		if (this.card.getExhausted()) return new PiratesRewardState(state, card, list);
 		this.list.removeFirst();
 		if (!this.list.isEmpty()) return new PiratesAnnounceState(state, card, list);

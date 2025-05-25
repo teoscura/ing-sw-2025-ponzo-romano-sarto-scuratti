@@ -1,4 +1,4 @@
-package it.polimi.ingsw.view.commandbuilder;
+package it.polimi.ingsw.view.tui;
 
 import it.polimi.ingsw.message.server.*;
 import it.polimi.ingsw.model.GameModeType;
@@ -12,12 +12,18 @@ import java.util.regex.Pattern;
 
 public class CommandBuilder {
 
-	public ServerMessage build(String command) {
+	private final TUIView view;
 
+	public CommandBuilder(TUIView view) {
+		this.view = view;
+	}
+
+	public ServerMessage build(String command) {
+		if (command == null) return null;
+		command = command.trim();
 		ServerMessage mess = null;
 		boolean valid = false;
 		String[] parts = command.split(" ", 16);
-
 		switch (parts[0]) {
 			case "entersetup":
 				valid = Pattern.matches("^entersetup$", command);
@@ -47,8 +53,8 @@ public class CommandBuilder {
 				if (!valid) break;
 				mess = new EnterLobbyMessage(Integer.parseInt(parts[1]));
 				break;
-			case "blobselect":
-				valid = Pattern.matches("^blobselect [0-9] [0-9]$", command);
+			case "selectblob":
+				valid = Pattern.matches("^selectblob [0-9] [0-9]$", command);
 				if (!valid) break;
 				ShipCoords blobCoords = new ShipCoords(GameModeType.TEST, Integer.parseInt(parts[1]),
 						Integer.parseInt(parts[2]));
@@ -59,7 +65,7 @@ public class CommandBuilder {
 				if (!valid) break;
 				ShipCoords discardCoords = new ShipCoords(GameModeType.TEST, Integer.parseInt(parts[1]),
 						Integer.parseInt(parts[2]));
-				ShipmentType discardType = ShipmentType.values()[Integer.parseInt(parts[3])];
+				ShipmentType discardType = ShipmentType.fromValue(Integer.parseInt(parts[3]));
 				mess = new DiscardCargoMessage(discardCoords, discardType);
 				break;
 			case "discardcomponent":
@@ -76,16 +82,21 @@ public class CommandBuilder {
 						Integer.parseInt(parts[2]));
 				ShipCoords cargoSource = new ShipCoords(GameModeType.TEST, Integer.parseInt(parts[4]),
 						Integer.parseInt(parts[5]));
-				ShipmentType cargoType = ShipmentType.values()[4 - Integer.parseInt(parts[3])];
+				ShipmentType cargoType = ShipmentType.fromValue(Integer.parseInt(parts[3]));
 				mess = new MoveCargoMessage(cargoTarget, cargoSource, cargoType);
 				break;
-			case "putcomponent":
-				valid = Pattern.matches("^putcomponent [0-9] [0-9] [0-3]$", command);
+			case "takecomponent":
+				valid = Pattern.matches("^takecomponent$", command);
 				if (!valid) break;
-				ShipCoords componentCoords = new ShipCoords(GameModeType.TEST, Integer.parseInt(parts[1]),
-						Integer.parseInt(parts[2]));
-				ComponentRotation componentRotation = ComponentRotation.values()[Integer.parseInt(parts[3])];
-				mess = new PutComponentMessage(componentCoords,
+				mess = new TakeComponentMessage();
+				break;
+			case "putcomponent":
+				valid = Pattern.matches("^putcomponent [0-9]+ [0-9] [0-9] [0-3]$", command);
+				if (!valid) break;
+				ShipCoords componentCoords = new ShipCoords(GameModeType.TEST, Integer.parseInt(parts[2]),
+						Integer.parseInt(parts[3]));
+				ComponentRotation componentRotation = ComponentRotation.values()[Integer.parseInt(parts[4])];
+				mess = new PutComponentMessage(Integer.parseInt(parts[1]), componentCoords,
 						componentRotation);
 				break;
 			case "removecomponent":
@@ -103,7 +114,7 @@ public class CommandBuilder {
 				mess = new RemoveCrewMessage(crewCoords);
 				break;
 			case "selectlanding":
-				valid = Pattern.matches("^selectlanding [0-9]+$", command);
+				valid = Pattern.matches("^selectlanding ([0-9]+|-[0-9]+)$", command);
 				if (!valid) break;
 				int landingId = Integer.parseInt(parts[1]);
 				mess = new SelectLandingMessage(landingId);
@@ -113,7 +124,7 @@ public class CommandBuilder {
 				if (!valid) break;
 				ShipCoords cabinCoords = new ShipCoords(GameModeType.TEST, Integer.parseInt(parts[1]),
 						Integer.parseInt(parts[2]));
-				AlienType alienType = AlienType.values()[Integer.parseInt(parts[3])];
+				AlienType alienType = Integer.parseInt(parts[3]) == 1 ? AlienType.BROWN : Integer.parseInt(parts[3]) == 2 ? AlienType.PURPLE : AlienType.HUMAN;
 				mess = new SetCrewMessage(cabinCoords, alienType);
 				break;
 			case "takecargo":
@@ -121,7 +132,7 @@ public class CommandBuilder {
 				if (!valid) break;
 				ShipCoords cargCoords = new ShipCoords(GameModeType.TEST, Integer.parseInt(parts[1]),
 						Integer.parseInt(parts[2]));
-				ShipmentType cargoType1 = ShipmentType.values()[4 - Integer.parseInt(parts[3])];
+				ShipmentType cargoType1 = ShipmentType.fromValue(Integer.parseInt(parts[3]));
 				mess = new TakeCargoMessage(cargCoords, cargoType1);
 				break;
 			case "takediscarded":
@@ -146,12 +157,26 @@ public class CommandBuilder {
 						Integer.parseInt(parts[4]));
 				mess = new TurnOnMessage(targetCoords, batteryCoords);
 				break;
-			default:
-				System.out.println("Command not recognized: '" + command + "'");
+			case "giveup":
+				valid = Pattern.matches("^giveup$", command);
+				if (!valid) break;
+				mess = new PlayerGiveUpMessage();
 				break;
+			case "sendcontinue":
+				valid = Pattern.matches("^sendcontinue$", command);
+				if (!valid) break;
+				mess = new SendContinueMessage();
+				break;
+			case "togglehourglass":
+				valid = Pattern.matches("^togglehourglass$", command);
+				if (!valid) break;
+				mess = new ToggleHourglassMessage();
+				break;
+			default:
 		}
+
 		if (!valid) {
-			System.out.println("Command not valid");
+			view.showTextMessage("Command not valid");
 		}
 
 		return mess;

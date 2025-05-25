@@ -4,6 +4,7 @@ package it.polimi.ingsw.model.components;
 import it.polimi.ingsw.model.client.components.ClientBaseComponent;
 import it.polimi.ingsw.model.client.components.ClientComponent;
 import it.polimi.ingsw.model.client.components.ClientPoweredComponentDecorator;
+import it.polimi.ingsw.model.client.components.ClientShieldComponentDecorator;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ConnectorType;
 import it.polimi.ingsw.model.components.enums.ShieldType;
@@ -63,22 +64,15 @@ public class ShieldComponent extends BaseComponent {
 
 	public ShieldType getShield() {
 		if (!this.powered) return ShieldType.NONE;
-		switch (this.getRotation().getShift()) {
-			case 0:
-				return ShieldType.NE;
-			case 1:
-				return ShieldType.SE;
-			case 2:
-				return ShieldType.SW;
-			case 3:
-				return ShieldType.NW;
-		}
-		return ShieldType.NE;
+		return ShieldType.values()[this.getRotation().getShift()];
 	}
 
 	@Override
 	public ClientComponent getClientComponent() {
-		return new ClientPoweredComponentDecorator(new ClientBaseComponent(getID(), getRotation()), powered);
+		return new ClientPoweredComponentDecorator(
+				new ClientShieldComponentDecorator(
+						new ClientBaseComponent(getID(), getRotation(), getConnectors()), ShieldType.values()[this.getRotation().getShift()]),
+				powered);
 	}
 
 }

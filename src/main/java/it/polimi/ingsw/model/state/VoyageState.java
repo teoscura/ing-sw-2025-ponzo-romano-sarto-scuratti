@@ -54,8 +54,6 @@ public class VoyageState extends GameState {
 	@Override
 	public void validate(ServerMessage message) throws ForbiddenCallException {
 		message.receive(this);
-		Player p = message.getDescriptor().getPlayer();
-		if (!p.getRetired() && p.getSpaceShip().getCrew()[0] <= 0) this.loseGame(p);
 		if (this.state != null && this.getOrder(CardOrder.NORMAL).size() > 0) return;
 		this.transition();
 	}
@@ -83,7 +81,7 @@ public class VoyageState extends GameState {
 					p.getDisconnected(),
 					p.getRetired()));
 		}
-		return new ClientVoyageState(type, tmp, this.card.getId(), this.state.getClientCardState());
+		return new ClientVoyageState(type, tmp, this.state.getClientCardState(), this.voyage_deck.getLeft());
 	}
 
 	@Override
@@ -121,6 +119,8 @@ public class VoyageState extends GameState {
 			this.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' attempted to give up, but they already aren't playing!"));
 			return;
 		}
+		Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' gave up!");
+		this.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' gave up!"));
 		this.to_give_up.add(p);
 	}
 
@@ -173,6 +173,16 @@ public class VoyageState extends GameState {
 
 	public void setCardState(CardState next) {
 		if (next == null) {
+			if (this.getOrder(CardOrder.NORMAL).size() == 0) {
+				this.transition();
+				return;
+			}
+			for (Player p : this.getOrder(CardOrder.NORMAL)) {
+				if (p.getSpaceShip().getCrew()[0] == 0 || p.getSpaceShip().getBlobsSize() <= 0) loseGame(p);
+			}
+			for (Player p : this.getOrder(CardOrder.NORMAL)) {
+				if (planche.checkLapped(p)) loseGame(p);
+			}
 			for (Player p : this.to_give_up) {
 				if (!p.getRetired()) this.loseGame(p);
 			}
@@ -206,7 +216,7 @@ public class VoyageState extends GameState {
 
 	@Override
 	public ClientGameListEntry getOngoingEntry(int id) {
-		return new ClientGameListEntry(type, this.toString(), this.players.stream().map(p -> p.getUsername()).toList(), id);
+		return new ClientGameListEntry(type, count, this.toString(), this.players.stream().map(p -> p.getUsername()).toList(), id);
 	}
 
 }

@@ -9,17 +9,27 @@ import java.time.Instant;
 public class ConstructionStateHourglass implements Serializable {
 
 	private final Duration period;
+	private final int total;
 	private Instant toggled = null;
 	private int times;
 
 	public ConstructionStateHourglass(int seconds, int times) {
 		if (seconds <= 0 || times < 0) throw new IllegalArgumentException();
+		this.total = times;
 		this.times = times;
 		this.period = Duration.ofSeconds(seconds);
 	}
 
+	public int timesTotal() {
+		return this.total;
+	}
+
 	public int timesLeft() {
 		return this.times;
+	}
+
+	public Duration getDuration() {
+		return this.period;
 	}
 
 	public void start() {
@@ -34,7 +44,8 @@ public class ConstructionStateHourglass implements Serializable {
 	}
 
 	public boolean canAct() {
-		return Duration.between(Instant.now(), toggled).compareTo(period) >= 0 || this.times >= 1;
+		boolean canact = this.times >= 1 || Duration.between(toggled, Instant.now()).compareTo(period) < 0;
+		return canact;
 	}
 
 	public boolean isRunning() {

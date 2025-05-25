@@ -3,8 +3,6 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.controller.DummyConnection;
 import it.polimi.ingsw.controller.DummyController;
 import it.polimi.ingsw.controller.server.ClientDescriptor;
-import it.polimi.ingsw.message.server.ServerConnectMessage;
-import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.board.Planche;
 import it.polimi.ingsw.model.board.TestFlightCards;
 import it.polimi.ingsw.model.board.iCards;
@@ -44,7 +42,6 @@ public class ModelInstanceTest {
 
 	@Test
 	void resumeFromSerial() throws ForbiddenCallException {
-		ServerMessage mess = null;
 		ModelInstance model = getModelInstance();
 		assertInstanceOf(DummyVoyageState.class, model.getState());
 		model.afterSerialRestart();
@@ -53,15 +50,11 @@ public class ModelInstanceTest {
 		ClientDescriptor p1descagain = new ClientDescriptor("bibo1", new DummyConnection());
 		ClientDescriptor p2descagain = new ClientDescriptor("bibo2", new DummyConnection());
 		ClientDescriptor p3descagain = new ClientDescriptor("bibo3", new DummyConnection());
-		mess = new ServerConnectMessage(p1descagain);
-		model.validate(mess);
-		mess = new ServerConnectMessage(p2descagain);
-		model.validate(mess);
+		model.connect(p1descagain);
+		model.connect(p2descagain);
 		model.disconnect(p1descagain);
-		mess = new ServerConnectMessage(p3descagain);
-		model.validate(mess);
-		mess = new ServerConnectMessage(p1descagain);
-		model.validate(mess);
+		model.connect(p3descagain);
+		model.connect(p1descagain);
 		assertInstanceOf(DummyVoyageState.class, model.getState());
 	}
 

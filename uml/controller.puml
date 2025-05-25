@@ -14,38 +14,204 @@ package Controller{
 
     package Client{
 
-        abstract ClientConnection{
-            {method} # sendMessage(Message) : void
-            {method} # close() : void
+        package Connections {
+
+            interface ServerConnection <<interface>> {
+                {method} sendMessage(ServerMessage) : void
+                {method} close() : void
+                {method} getShutdownHook() : Thread
+            }
+
+            ServerConnection ^.. SocketConnection
+            class SocketConnection {
+                {field} - [final] inqueue : ThreadSafeMessageQueue<ClientMessage)
+                {field} - [final] socket : Socket
+                {field} - [final] out : ObjectOutputStream
+                {field} - [final] in : ObjectInputStream
+                {method} + run() : void
+                {method} + sendMessage(ServerMessage) : void
+                {method} + close() : void
+                {method} + getShutdownHook() : Thread
+            }
+
+            ServerConnection ^.. RMIConnection
+            class RMIConnection {
+                {field} - [final] stup RMIClientStub
+                {field} - [final] server VirtualServer
+                {method} + sendMessage(ServerMessage) : void
+                {method} + close() : void
+                {method} + getShutdownHook() : Thread
+            }
+
+            class RMIClientStub {
+                {field} - [transient] [final] inqueue ThreadSafeMessageQueue<ClientMessage>
+                {field} - [final] username : String
+                {method} + sendMessage(ServerMessage) : void
+                {method} + close() : void
+                {method} + getUsername() : String
+            }
+
         }
 
-        ClientConnection^..ClientRMIServerStub
-        class ClientRMIServerStub{
-            TODO
-            {method} + sendMessage(Message) : void
-            {method} + close() : void
-        }
+        package State {
 
-        ClientConnection^..ClientSocket
-        class ClientSocket{
-            TODO
-            {method} + sendMessage(Message) : void
-            {method} + close() : void
-        }
+            abstract ClientControllerState {
+                {field} - [final] controller : ClientController
+                {field} - [final] view : ClientView
+                {method} # init() : void
+                {method} # getNext() : ClientControllerState
+                {method} + onClose() : void
+                {method} [protected] transition() : void
+                {method} [protected] getView() : ClientView
+                {method} + setUsername(String) : void
+                {method} + connect(String, int, ConnectionType) : void
+                {method} + sendMessage(ServerMessage) : void
+                {method} + disconnect() : void
+            }
 
-        iClientGameController^--ClientGameController
-        ClientConnection<--ClientGameController:Server
-        class ClientGameController{
-            {field} - model : ModelView
-            {field} - state : GameState
-            {field} - listener : ViewListener
-            {method} + 
-            {method} + ping() : void 
+            ClientControllerState ^.. ConnectedState
+            class ConnectedState {
+                {field} - [final] connection : ServerConnection
+                {field} - [final] outqueue : ThreadSafeMessageQueue<ServerMessage>
+                {field} - [final] username : String
+                {field} - [final] consumer_thread : Thread
+                {field} - [final] sender_thread : Thread
+                {field} - [final] shutdown_hook : Thread
+                {field} - [final] input_thread : Thread
+                {field} - [final] pingtimer : Timer
+                {method} + init() : void
+                {method} + getNext() : ClientControllerState
+                {method} + onClose() : void
+                {method} + sendMessage(ServerMessage) : void
+                {method} + disconnect() : void
+                {method} + getView() : ClientView
+                {method} + getUsername() : String
+                {method} + showTextMessage(String) : void
+                {method} - startPingTask() : void
+                {method} - stopPingTask() : void
+                {method} - getPingTask(ConnectedState) : TimerTask
+                {method} - ping() : void
+                {method} - getShutdownHook() : Thread
+            }
+
+            ClientControllerState ^.. ConnectingState
+            class ConnectingState {
+                {field} - [final] username : String
+                {field} - [final] connection : ServerConnection
+                {field} - [final] inqueue : ThreadSafeMessageQueue<ServerMessage>
+                {method} + init() : void
+                {method} + getController() : ClientController
+                {method} + getNext() : ClientControllerState
+                {method} + connect(String, int, ConnectionType) : void
+            }
+
+            ClientControllerState ^.. TitleScreenState
+            class TitleScreenState {
+                {field} - [final] username : String
+                {method} + init() : void
+                {method} + getNext() : ClientControllerState
+                {method} + setUsername(String) : void
+                {method} + exit() : void
+                {method} + validateUsername(String) : boolean
+            }
+
+            class ClientController {
+                {field} - [final] view : ClientView
+                {field} - [final] state : ClientControllerState
+                {field} - [final] closed : boolean
+                {method} + getState() : ClientControllerState
+                {method} + setState(ClientControllerState) : void
+                {method} + close() : void
+                {method} + getClosed() : boolean
+                {method} + reset() : void
+            }
+
+            class ConsumerThread {
+                {field} - [final] state : ConnectedState
+                {field} - [final] inqueue : ThreadSafeMessageQueue<ClientMessage>
+                {method} + run() : void
+            }
+
+            class InputCommandThread {
+                {field} - [final] cc : ConnectedState
+                {field} - [final] view : ClientView
+                {method} + run() : void
+            }
+
+            class SenderThread {
+                {field} - [final] outqueue : ThreadSafeMessageQueue<ClientMessage>
+                {field} - [final] connection : ServerConnection
+                {field} - [final] state : ConnectedState
+                {method} + run() : void
+            }
+
         }
 
     }
 
     package Server{
+
+        package Connections {
+
+            interface ClientConnection <<interface>> {
+                {method} sendMessage(ClientMessage) : void
+                {method} close() : void
+            }
+
+            interface RMIClientConnection <<interface>> {
+                {method} getUsername() : String
+            }
+
+            interface RMISkeletonProvider <<interface>> {
+                {method} accept(RMIClientConnection) : VirtualServer
+            }
+
+            interface VirtualServer <<interface>> {
+                {method} receiveMessage(ServerMessage) : void
+            }
+
+            RMISkeletonProvider ^.. NetworkServer
+            class NetworkServer {
+                {field} - [final] serverPool : ExecutorService
+                {field} - ip : String
+                {field} - tcpport : int
+                {field} - rmiport : int
+                {field} - init : boolean
+                {field} - server : ServerSocket
+                {method} + init(String, int, int) : void
+                {method} + init(String, int) : void
+                {method} + startServer() : void
+                {method} + run() : void
+                {method} + RMICleanup() : Thread
+                {method} + TCPCleanup() : Thread
+                {method} + accept(RMIClientConnection) : VirtualServer
+            }
+
+            VirtualServer ^.. RMIServerStubImpl
+            class RMIServerStubImpl {
+                {field} - [transient] [final] controller : MainServerController
+                {field} - [transient] [final] client : ClientDescriptor
+                {method} + receiveMessage(ServerMessage) : void
+            }
+
+            ClientConnection ^.. SocketClient
+            class SocketClient {
+                {field} - [final] socket : Socket
+                {field} - [final] out : ObjectOutputStream
+                {field} - [final] in : ObjectInputStream
+                {field} - setup_timeout : TimerTask
+                {field} - username : String
+                {method} + setTimeout(TimerTask) : void
+                {method} + cancelTimeout() : void
+                {method} + getSocket() : Socket
+                {method} + run() : void
+                {method} + sendMessage(ClientMessage) : void
+                {method} + readSetup() : void
+                {method} + read() : void
+                {method} + close() : void
+            }
+
+        }
 
         class ClientDescriptor{
             {field} - username: String
@@ -57,281 +223,298 @@ package Controller{
             {method} + sendMessage(ClientMessage m) : void
         }
 
-        Connection<-ClientDescriptor:connection
-        abstract Connection {
-            {method} # sendMessage(Message) : void
-            {method} # close() : void
-        }
+    }
 
-        Connection^.. RMIConnection
-        class RMIConnection {
-            TODO
-            {method} + sendMessage(Message) : void
-            {method} + close() : void
-        }
-
-        Connection^.. SocketConnection
-        class SocketConnection {
-            TODO
-            {method} + sendMessage(Message) : void
-            {method} + close() : void
-        }
-
-        ServerController <---> Server:Controller
-        class Server <<singleton>>{
-            {field} - instance : Server
-            {method} + run() : void
-            {method} + accept(RmiConnection) : ClientRMIServerStub
-            {method} + getInstance() : Server  <<static>>
-        }
-
-
-        class ModelInstance{
-            {field} - player_ships : SpaceShip[]
-            {field} - planche : iPlanche
-            {field} - board : iCommonBoard
-            {field} - card_piles : iCards[]
-            {method} + getShip(PlayerColor) : SpaceShip
-            {method} + getPlanche() : iPlanche 
-            {method} + getBoard() : iCommonBoard
-            {method} + getCard(int) : iCard
-        }
-
-        ClientDescriptor <--- "0..4  " ServerController:players
-        ModelInstance<-ServerController:model
-        class ServerController{
-            {field} - waiting : boolean
-            {method} + disconnect() : void
-
-            {method} + sendContinue() : void
-            {method} + putComponent(ClientDescriptor, ShipCoords, ComponentRotation, int) : void
-            {method} + takeComponent(ClientDescriptor) : void
-            {method} + takeDiscarded(ClientDescriptor, int) : void
-            {method} + discardComponent(ClientDescriptor, int component_id) : void
-            {method} + toggleHourglass(ClientDescriptor) : void
-            {method} + removeComponent(ClientDescriptor, ShipCoords) : void
-            {method} + setCrewType(ClientDescriptor, ShipCoords, AlienType) : void
-
-            {method} + setNewShipCenter(ClientDescriptor, ShipCoords) : void
-            {method} + turnOn(ClientDescriptor, ShipCoords, ShipCoords) : void
-            {method} + removeCrew(ClientDescriptor, ShipCoords[]) : void
-            {method} + removeCargo(ClientDescriptor, ShipCoords[]) : void
-            {method} + takeCargo(ClientDescriptor, ShipmentType, ShipCoords) : void
-            {method} + selectLanding(ClientDescriptor, int) : void
-            {method} + removeCrew(ClientDescriptor, ShipCoords) : void
-            {method} + askUpdateState(ClientDescriptor) : void
-            {method} + progressTurn(ClientDescriptor) : void
-
-            {method} + giveUp(ClientDescriptor) : void
-            {method} + ping(ClientDescriptor) : void
-        }
-
-        GameState<-- ServerController:state
-        abstract GameState <<abstract>> {
-            {field} - match : MatchController
-            {field} - model : ModelInstance
-            {field} - plist : ClientDescriptor[]
-            {method} + action(ModelInstance instance) : void
-            {method} + finished() : boolean
-            {method} + transition() : void 
-            {method} + ping(ClientDescriptor) : void
-        }
-
-        GameState^.. ConstructionState
-        class ConstructionState{
-            {field} - match : MatchController
-            {field} - model : ModelInstance
-            {field} - plist : ClientDescriptor[]
-            {method} + action(ModelInstance instance) : void
-            {method} + finished() : boolean
-            {method} + transition() : void 
-            {method} + putComponent(ClientDescriptor, ShipCoords, ComponentRotation, int) : void
-            {method} + takeComponent(ClientDescriptor) : void
-            {method} + takeDiscarded(ClientDescriptor, int) : void
-            {method} + discardComponent(ClientDescriptor, int component_id) : void
-            {method} + toggleHourglass(ClientDescriptor) : void
-        }
-
-        GameState^.. VerifyState
-        class VerifyState{
-            {field} - match : MatchController
-            {field} - model : ModelInstance
-            {field} - plist : ClientDescriptor[]
-            {method} + action(ModelInstance instance) : void
-            {method} + finished() : boolean
-            {method} + transition() : void 
-            {method} + removeComponent(ClientDescriptor, ShipCoords) : void
-            {method} + setCrewType(ClientDescriptor, ShipCoords, AlienType) : void
-        }
-        
-        GameState^.. VoyageState
-        class VoyageState{
-            {field} - await : PlayerColor
-            {field} - respt : ResponseType
-            {field} - match : MatchController
-            {field} - model : ModelInstance
-            {field} - plist : ClientDescriptor[]
-            {method} + action(ModelInstance instance) : void
-            {method} + finished() : boolean
-            {method} + transition() : void 
-            {method} + setNewShipCenter(ClientDescriptor, ShipCoords) : void
-            {method} + turnOn(ClientDescriptor, ShipCoords, ShipCoords) : void
-            {method} + removeCrew(ClientDescriptor, ShipCoords[]) : void
-            {method} + takeCargo(ClientDescriptor, ShipmentType, ShipCoords) : void
-            {method} + selectLanding(ClientDescriptor, int) : void
-            {method} + askUpdateState(ClientDescriptor) : void
-            {method} + progressTurn(ClientDescriptor) : void
-        }
-
-        GameState^.. LeaderboardState
-        class LeaderboardState{
-            {field} - match : MatchController
-            {field} - model : ModelInstance
-            {field} - plist : ClientDescriptor[]
-            {method} + action(ModelInstance instance) : void
-            {method} + finished() : boolean
-            {method} + transition() : void 
-        }
-
+    class ThreadSafeMessageQueue<T> {
+        {field} - [final] threadpool : ExecutorService
+        {field} - [final] queue ArrayBlockingQueue<T>
+        {method} + take() : T
+        {method} + insert(T) : void
     }
 
     'TODO creare classe stub per il client.
-    iClientGameController .. SocketConnection
-    iClientGameController .. RMIConnection
 
-    ClientRMIServerStub .. Server::Server
-    ClientSocket .. Server::Server
+    Server::Connections::RMIClientConnection .. RMIClientStub
 
     package Message{
 
         interface Message <<interface, serializable>>
 
-        Message^------ ServerMessage::ServerMessage
+        Message ^------ ServerMessage::ServerMessage
         package ServerMessage{
             abstract ServerMessage <<abstract>> {
 
             }
 
-            class DisconnectMessage{
-
+            ServerMessage ^..... DiscardCargoMessage
+            class DiscardCargoMessage {
+                {field} - [final] coords : ShipCoords
+                {field} - [final] type : ShipmentType
+                {method} + receive(MainServerController) : void
+                {method} + receive(LobbyController) : void
+                {method} + receive(ModelInstance) : void
+                {method} + receive(GameState) : void
+                {method} + receive(CardState) : void
+                {method} + getCoords() : ShipCoords
+                {method} + getShipmentType() : ShipmentType
             }
 
-            ServerMessage^..... AcceptMessage
-            class AcceptMessage{
-
+            ServerMessage ^... EnterLobbyMessage
+            class EnterLobbyMessage {
+                {field} - [final] id : int
+                {method} + receive(MainServerController) : void
             }
 
-            ServerMessage^... PlaceComponentMessage
-            class PlaceComponentMessage{
-
+            ServerMessage ^..... EnterSetupMessage
+            class EnterSetupMessage {
+                {method} + receive(MainServerController) : void
             }
 
-            ServerMessage^..... PullComponentMessage
-            class PullComponentMessage{
-
+            ServerMessage ^... LeaveSetupMessage
+            class LeaveSetupMessage {
+                {method} + receive(MainServerController) : void
             }
 
-            ServerMessage^... PullDiscardedMessage
-            class PullDiscardedMessage{
-
+            ServerMessage ^..... MoveCargoMessage
+            class MoveCargoMessage {
+                {field} - [final] target : ShipCoords
+                {field} - [final] source : ShipCoords
+                {field} - [final] type : ShipmentType
+                {method} + receive(MainServerController) : void
+                {method} + receive(LobbyController) : void
+                {method} + receive(ModelInstance) : void
+                {method} + receive(GameState) : void
+                {method} + receive(CardState) : void
+                {method} + getTarget() : ShipCoords
+                {method} + getSource() : ShipCoords
+                {method} + getShipmentType() : ShipmentType
             }
 
-            ServerMessage^..... DiscardComponentMessage
+            ServerMessage ^... OpenLobbyMessage
+            class OpenLobbyMessage {
+                {field} - [final] count : PlayerCount
+                {field} - [final] type : GameModeType
+                {method} + receive(MainServerController) : void
+            }
+
+            ServerMessage ^..... OpenUnfinishedMessage
+            class OpenUnfinishedMessage {
+                {field} - [final] id : int
+                {method} + receive(MainServerController) : void
+            }
+
+            ServerMessage ^... PlayerGiveUpMessage
+            class PlayerGiveUpMessage {
+                {method} + receive(MainServerController) : void
+                {method} + receive(LobbyController) : void
+                {method} + receive(ModelInstance) : void
+                {method} + receive(GameState) : void
+            }
+
+            ServerMessage ^..... PutComponentMessage
+            class PutComponentMessage {
+                {field} - [final] id : int
+                {field} - [final] coords : ShipCoords
+                {field} - [final] rotation : ComponentRotation
+                {method} + receive(MainServerController) : void
+                {method} + receive(LobbyController) : void
+                {method} + receive(ModelInstance) : void
+                {method} + receive(GameState) : void
+                {method} + getCoords() : ShipCoords
+                {method} + getRotation() : ComponentRotation
+            }
+
+            ServerMessage ^... RemoveComponentMessage
+            class RemoveComponentMessage {
+                {field} - [final] coords : ShipCoords
+                {method} + receive(MainServerController) : void
+                {method} + receive(LobbyController) : void
+                {method} + receive(ModelInstance) : void
+                {method} + receive(GameState) : void
+                {method} + getCoords() : ShipCoords
+            }
+
+            ServerMessage ^..... SelectBlobMessage
+            class SelectBlobMessage {
+                {field} - [final] blob_coords : ShipCoords
+                {method} + receive(MainServerController) : void
+                {method} + receive(LobbyController) : void
+                {method} + receive(ModelInstance) : void
+                {method} + receive(GameState) : void
+                {method} + receive(CardState) : void
+                {method} + getCoords() : ShipCoords
+            }
+
+            ServerMessage ^... SendContinueMessage
+            class SendContinueMessage {
+                {method} + receive(MainServerController) : void
+                {method} + receive(LobbyController) : void
+                {method} + receive(ModelInstance) : void
+                {method} + receive(GameState) : void
+                {method} + receive(CardState) : void
+            }
+
+            ServerMessage ^..... DiscardComponentMessage
             class DiscardComponentMessage{
-
+                {field} - [final] id : int
+                {method} + receive(MainServerController) : void
+                {method} + receive(LobbyController) : void
+                {method} + receive(ModelInstance) : void
+                {method} + receive(GameState) : void
+                {method} + receive(CardState) : void
+                {method} + getId() : int
             }
 
-            ServerMessage^... ToggleHourglassMessage
+            ServerMessage ^... ToggleHourglassMessage
             class ToggleHourglassMessage{
-
+                {method} + receive(MainServerController) : void
+                {method} + receive(LobbyController) : void
+                {method} + receive(ModelInstance) : void
+                {method} + receive(GameState) : void
             }
 
-            ServerMessage^..... ComponentDeleteMessage
-            class ComponentDeleteMessage{
-
+            ServerMessage ^..... ServerConnectMessage
+            class ServerConnectMessage {
+                {method} + receive(MainServerController) : void
+                {method} + receive(LobbyController) : void
+                {method} + receive(ModelInstance) : void
+                {method} + receive(GameState) : void
             }
-            
-            ServerMessage^... SetCrewMessage
+
+            ServerMessage ^... ServerDisconnectMessage
+            class ServerDisconnectMessage {
+                {method} + receive(MainServerController) : void
+                {method} + receive(LobbyController) : void
+                {method} + receive(ModelInstance) : void
+                {method} + receive(GameState) : void
+                {method} + receive(CardState) : void
+            }
+
+            ServerMessage ^..... TakeComponentMessage
+            class TakeComponentMessage {
+                {method} + receive(MainServerController) : void
+                {method} + receive(LobbyController) : void
+                {method} + receive(ModelInstance) : void
+                {method} + receive(GameState) : void
+            }
+
+            ServerMessage ^... SetCrewMessage
             class SetCrewMessage{
-
+                {field} - [final] coords : ShipCoords
+                {field} - [final] type : AlienType
+                {method} + receive(MainServerController) : void
+                {method} + receive(LobbyController) : void
+                {method} + receive(ModelInstance) : void
+                {method} + receive(GameState) : void
+                {method} + getCoords() : ShipCoords
+                {method} + getAlienType() : AlienType
             }
 
-            ServerMessage^..... NewShipCenterMessage
-            class NewShipCenterMessage{
-
+            ServerMessage ^..... TakeDiscardedComponentMessage
+            class TakeDiscardedComponentMessage {
+                {field} - [final] id : int
+                {method} + receive(MainServerController) : void
+                {method} + receive(LobbyController) : void
+                {method} + receive(ModelInstance) : void
+                {method} + receive(GameState) : void
+                {method} + getId() : int
             }
 
-            ServerMessage^... TurnOnMessage
+            ServerMessage ^... TurnOnMessage
             class TurnOnMessage{
-
+                {field} - [final] target : ShipCoords
+                {field} - [final] battery : ShipCoords
+                {method} + receive(MainServerController) : void
+                {method} + receive(LobbyController) : void
+                {method} + receive(ModelInstance) : void
+                {method} + receive(GameState) : void
+                {method} + receive(CardState) : void
+                {method} + getTarget() : ShipCoords
+                {method} + getBattery() : ShipCoords
             }
             
-            ServerMessage^..... RemoveCrewMessage
+            ServerMessage ^..... RemoveCrewMessage
             class RemoveCrewMessage{
-
+                {field} - [final] coords : ShipCoords
+                {method} + receive(MainServerController) : void
+                {method} + receive(LobbyController) : void
+                {method} + receive(ModelInstance) : void
+                {method} + receive(GameState) : void
+                {method} + receive(CardState) : void
+                {method} + getCoords() : ShipCoords
             }
-            
-            ServerMessage^... RemoveCargoMessage
-            class RemoveCargoMessage{
 
+            ServerMessage ^... TakeRewardMessage
+            class TakeRewardMessage {
+                {field} - [final] took : boolean
+                {method} + receive(MainServerController) : void
+                {method} + receive(LobbyController) : void
+                {method} + receive(ModelInstance) : void
+                {method} + receive(GameState) : void
+                {method} + receive(CardState) : void
+                {method} + getTook() : boolean
             }
-            
-            ServerMessage^..... TakeCargoMessage
+
+            ServerMessage ^..... TakeCargoMessage
             class TakeCargoMessage{
-
+                {field} - [final] coords : ShipCoords
+                {field} - [final] type : ShipmentType
+                {method} + receive(MainServerController) : void
+                {method} + receive(LobbyController) : void
+                {method} + receive(ModelInstance) : void
+                {method} + receive(GameState) : void
+                {method} + receive(CardState) : void
+                {method} + getCoords() : ShipCoords
+                {method} + getShipmentType() : ShipmentType
             }
 
-            ServerMessage^... SelectLandingMessage
-            class SelectLandingMessage{
-
+            ServerMessage ^... SelectLandingMessage
+            class SelectLandingMessage {
+                {field} - [final] id : int
+                {method} + receive(MainServerController) : void
+                {method} + receive(LobbyController) : void
+                {method} + receive(ModelInstance) : void
+                {method} + receive(GameState) : void
+                {method} + receive(CardState) : void
+                {method} + getId() : int
             }
-            
-            ServerMessage^..... GiveUpMessage
-            class GiveUpMessage{
 
+            ServerMessage ^..... UsernameSetupMessage
+            class UsernameSetupMessage {
+                {field} - [final] username : String
+                {method} + receive(MainServerController) : void
+                {method} + getUsername() : String
             }
 
-            ServerMessage^... ServerPingMessage
-            class ServerPingMessage{
-
+            ServerMessage ^... PingMessage
+            class PingMessage{
+                {method} + receive(MainServerController) : void
+                {method} + receive(LobbyController) : void
             }
 
         }
 
-        Message^-- ClientMessage::ClientMessage
+        Message ^-- ClientMessage::ClientMessage
         package ClientMessage {
 
             abstract ClientMessage <<abstract>> {
-        
+                {method} + [abstract] receive(ConnectedState) : void
             }
 
-            class DisconnectMessage {
-
+            ClientMessage ^... ClientDisconnectMessage
+            class ClientDisconnectMessage {
+                {method} + [abstract] receive(ConnectedState) : void
             }
 
-            ClientMessage^..... NotifyCardStateUpdateMessage
-            class NotifyCardStateUpdateMessage{
-
+            class NotifyStateUpdateMessage {
+                {field} - [final] state : ClientState
+                {method} + [abstract] receive(ConnectedState) : void
             }
 
-            ClientMessage^..... NotifyPlayerUpdateMessage
-            class NotifyPlayerUpdateMessage{
-
-            }
-
-            ClientMessage^..... NotifyCardStateUpdateMessage
-            class NotifyCardStateUpdateMessage{
-                
-            }
-
-            ClientMessage^..... PingMessage
-            class PingMessage{
-
-            }
-
-            ClientMessage^..... ViewMessage
+            ClientMessage ^..... ViewMessage
             class ViewMessage{
-
+                {field} - [final] message : String
+                {method} + [abstract] receive(ConnectedState) : void
             }
 
         }

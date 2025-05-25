@@ -2,6 +2,7 @@
 package it.polimi.ingsw.model.components;
 
 import it.polimi.ingsw.model.client.components.ClientBaseComponent;
+import it.polimi.ingsw.model.client.components.ClientCannonComponentDecorator;
 import it.polimi.ingsw.model.client.components.ClientComponent;
 import it.polimi.ingsw.model.client.components.ClientPoweredComponentDecorator;
 import it.polimi.ingsw.model.components.enums.CannonType;
@@ -110,7 +111,9 @@ public class CannonComponent extends BaseComponent {
 
 	@Override
 	public ClientComponent getClientComponent() {
-		return new ClientPoweredComponentDecorator(new ClientBaseComponent(getID(), getRotation()), powered);
+		ClientComponent c = new ClientCannonComponentDecorator(new ClientBaseComponent(getID(), getRotation(), getConnectors()), getRotation());
+		if (!powerable) return c;
+		return new ClientPoweredComponentDecorator(c, powered);
 	}
 
 }

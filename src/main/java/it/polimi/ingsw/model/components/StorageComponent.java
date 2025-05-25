@@ -96,7 +96,7 @@ public class StorageComponent extends BaseComponent {
 
 	@Override
 	public ClientComponent getClientComponent() {
-		return new ClientShipmentsComponentDecorator(new ClientBaseComponent(getID(), getRotation()), shipments);
+		return new ClientShipmentsComponentDecorator(new ClientBaseComponent(getID(), getRotation(), getConnectors()), type, shipments);
 	}
 
 }

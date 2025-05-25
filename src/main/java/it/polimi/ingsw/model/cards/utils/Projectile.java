@@ -35,6 +35,7 @@ public class Projectile implements Serializable {
 	public int getOffset() {
 		return this.offset;
 	}
+
 } 
 
 
