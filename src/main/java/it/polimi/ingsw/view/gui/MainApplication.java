@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view.gui;
 
+import it.polimi.ingsw.controller.client.ClientController;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -7,7 +8,7 @@ import java.io.IOException;
 
 public class MainApplication extends Application {
 
-	private static final SmallModel model = new SmallModel();
+	//private static final SmallModel model = new SmallModel();
 
 	private static GUIView guiView;
 
@@ -16,10 +17,15 @@ public class MainApplication extends Application {
 	}
 
 	@Override
-	public void start(Stage primaryStage) throws IOException {
-		guiView = new GUIView(primaryStage);
-		guiView.setup();
+	public void start(Stage primaryStage) throws IOException, InterruptedException {
 
+		// roba da riaggiungere
+		guiView = new GUIView(primaryStage);
+		ClientController c = new ClientController(guiView);
+		//while (!c.getClosed()) {
+		//	Thread.sleep(1000);
+		//}
+		//TitleScreenController controller = new TitleScreenController(state, this);
 
 
 		//mockNetworkMessages();
