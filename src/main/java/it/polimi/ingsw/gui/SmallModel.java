@@ -2,10 +2,10 @@ package it.polimi.ingsw.gui;
 
 public class SmallModel {
 
-    private Controller controller;
+	private Controller controller;
 
-    public void setListener(Controller controller) {
-        this.controller = controller;
-    }
+	public void setListener(Controller controller) {
+		this.controller = controller;
+	}
 
 }
