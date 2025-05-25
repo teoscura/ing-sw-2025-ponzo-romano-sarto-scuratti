@@ -34,8 +34,13 @@ public class GUIView implements ClientView {
 		Scene scene = null;
 		try {
 			scene = new Scene(FXMLLoader.load(getClass().getResource("/it/polimi/ingsw/TitleScreenView.fxml")));
+		} catch (IOException e) {
+			System.out.println("dingo");
 		}
-		catch (IOException e) {}
+//		Pane pane = new Pane();
+//		Scene scene = new Scene(pane);
+//
+//		pane.setPrefSize(800, 600);
 
 		TitleScreenController controller = new TitleScreenController(state, this);
 		stage.setScene(scene);

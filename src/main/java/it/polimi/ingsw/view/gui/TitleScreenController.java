@@ -6,10 +6,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 
-public class TitleScreenController{
+public class TitleScreenController {
 
-	private TitleScreenState state;
-	private GUIView view;
+	private final TitleScreenState state;
+	private final GUIView view;
 
 	@FXML
 	private ImageView logo;
@@ -20,8 +20,8 @@ public class TitleScreenController{
 	public TitleScreenController(TitleScreenState state, GUIView view) {
 		this.state = state;
 		this.view = view;
-		logo.setFitHeight();
-		name_field.setOnAction(this::confirm_name);
+		//logo.setFitHeight();
+		//name_field.setOnAction(this::confirm_name);
 	}
 
 	public void confirm_name(ActionEvent event) {
