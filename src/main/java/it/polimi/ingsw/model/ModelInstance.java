@@ -3,6 +3,7 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.controller.server.ClientDescriptor;
 import it.polimi.ingsw.controller.server.LobbyController;
 import it.polimi.ingsw.message.client.ClientMessage;
+import it.polimi.ingsw.message.server.ServerConnectMessage;
 import it.polimi.ingsw.message.server.ServerDisconnectMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
@@ -80,7 +81,8 @@ public class ModelInstance implements Serializable {
 
 	public void connect(ClientDescriptor client) {
 		try {
-			this.state.connect(client);
+			ServerMessage mess = new ServerConnectMessage(client);
+			this.state.validate(mess);
 		} catch (ForbiddenCallException e) {
 			Logger.getInstance().print(LoggerLevel.MODEL, "[" + this.id + "] " + "Client: '" + client.getUsername() + "' tried connecting when the current state doesn't support it anymore!");
 		}
@@ -88,7 +90,9 @@ public class ModelInstance implements Serializable {
 
 	public void disconnect(ClientDescriptor client) {
 		try {
-			this.state.disconnect(client);
+			ServerMessage mess = new ServerDisconnectMessage();
+			mess.setDescriptor(client);
+			this.state.validate(mess);
 		} catch (ForbiddenCallException e) {
 			Logger.getInstance().print(LoggerLevel.MODEL, "[" + this.id + "] " + "Client: '" + client.getUsername() + "' tried disconnecting when the current state doesn't support it anymore!");
 		}
