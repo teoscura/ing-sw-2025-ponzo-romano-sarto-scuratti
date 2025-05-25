@@ -11,43 +11,41 @@ import java.io.IOException;
 
 public class StartingMenuController extends Controller {
 
-    private Stage stage;
+	String username;
+	private Stage stage;
+	@FXML
+	private Button confirm_button;
+	@FXML
+	private TextField name_field;
+	@FXML
+	private Button connect_button;
+	@FXML
+	private TextField connection_field;
+	@FXML
+	private Text connection_prompt;
 
-    public Stage getStage() {
-        return stage;
-    }
+	public Stage getStage() {
+		return stage;
+	}
 
-    public void setStage(Stage stage) {
-        this.stage = stage;
-    }
+	public void setStage(Stage stage) {
+		this.stage = stage;
+	}
 
-    @FXML
-    private Button confirm_button;
-    @FXML
-    private TextField name_field;
-    @FXML
-    private Button connect_button;
-    @FXML
-    private TextField connection_field;
-    @FXML
-    private Text connection_prompt;
+	public void confirm(ActionEvent event) throws IOException {
+		username = name_field.getText();
+		System.out.println("Username: " + username);
+		name_field.setDisable(true);
+		confirm_button.setDisable(true);
+		connect_button.setDisable(false);
+		connect_button.setVisible(true);
+		connection_prompt.setVisible(true);
+		connection_field.setDisable(false);
+		connection_field.setVisible(true);
 
-    String username;
+	}
 
-    public void confirm(ActionEvent event) throws IOException {
-        username = name_field.getText();
-        System.out.println("Username: " + username);
-        name_field.setDisable(true);
-        confirm_button.setDisable(true);
-        connect_button.setDisable(false);
-        connect_button.setVisible(true);
-        connection_prompt.setVisible(true);
-        connection_field.setDisable(false);
-        connection_field.setVisible(true);
+	public void connect() {
 
-    }
-
-    public void connect(){
-
-    }
+	}
 }
