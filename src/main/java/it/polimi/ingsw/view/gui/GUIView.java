@@ -20,18 +20,26 @@ public class GUIView implements ClientView {
 		this.stage = stage;
 	}
 
-	public void setup() throws IOException {
-		Scene scene = new Scene(FXMLLoader.load(getClass().getResource("/it/polimi/ingsw/StartingMenuView.fxml")));
+	/*public void setup() throws IOException {
+		Scene scene = new Scene(FXMLLoader.load(getClass().getResource("/it/polimi/ingsw/TitleScreenView.fxml")));
 		StartingMenuController controller = new StartingMenuController();
 		controller.setStage(stage);
 		stage.setScene(scene);
 		stage.show();
-	}
+	}*/
 
 
 	@Override
 	public void show(TitleScreenState state) {
+		Scene scene = null;
+		try {
+			scene = new Scene(FXMLLoader.load(getClass().getResource("/it/polimi/ingsw/TitleScreenView.fxml")));
+		}
+		catch (IOException e) {}
 
+		TitleScreenController controller = new TitleScreenController(state, this);
+		stage.setScene(scene);
+		stage.show();
 	}
 
 	@Override

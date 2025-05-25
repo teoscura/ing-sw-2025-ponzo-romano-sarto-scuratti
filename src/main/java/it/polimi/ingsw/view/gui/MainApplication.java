@@ -21,6 +21,7 @@ public class MainApplication extends Application {
 		guiView.setup();
 
 
+
 		//mockNetworkMessages();
 		//model.setListener(controller);
 	}
