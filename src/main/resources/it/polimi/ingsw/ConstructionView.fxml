@@ -5,7 +5,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="720.0" prefWidth="1280.0"
-            xmlns="http://javafx.com/javafx/23.0.1" fx:controller="it.polimi.ingsw.gui.ConstructionController">
+            xmlns="http://javafx.com/javafx/23.0.1" fx:controller="it.polimi.ingsw.view.gui.ConstructionController">
     <children>
         <GridPane gridLinesVisible="true" layoutX="79.0" layoutY="61.0" prefHeight="345.0" prefWidth="493.0">
             <columnConstraints>

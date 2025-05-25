@@ -1,4 +1,4 @@
-package it.polimi.ingsw.gui.assets;
+package it.polimi.ingsw.view.gui.assets;
 
 import it.polimi.ingsw.model.client.player.ClientConstructionPlayer;
 import javafx.scene.Scene;
