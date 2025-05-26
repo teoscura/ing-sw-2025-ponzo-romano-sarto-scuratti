@@ -1,0 +1,45 @@
+package it.polimi.ingsw.view.tui.states;
+
+import java.util.ArrayList;
+
+import it.polimi.ingsw.controller.client.connections.ConnectionType;
+import it.polimi.ingsw.controller.client.state.ConnectingState;
+import it.polimi.ingsw.view.tui.TUIView;
+import it.polimi.ingsw.view.tui.TerminalWrapper;
+import it.polimi.ingsw.view.tui.formatters.MenuFormatter;
+
+public class TUIConnectionSetupState extends TUIState {
+    
+    private final ArrayList<String> args;
+    private final ConnectingState state;
+
+    public TUIConnectionSetupState(TUIView view, ConnectingState state){
+        super(view);
+        this.state = state;
+        this.args = new ArrayList<>();
+    }
+
+    @Override
+    public void handleLine(String s) {
+        args.add(s);
+        if(args.size()<3) return;
+        if (!validate()) state.connect("", 0, ConnectionType.NONE);
+		else
+			state.connect(args.get(0), Integer.parseInt(args.get(1)), args.get(2).equals("rmi") ? ConnectionType.RMI : args.get(2).equals("tcp") ? ConnectionType.SOCKET : ConnectionType.NONE);
+	
+    }
+
+    public Runnable getRunnable(TerminalWrapper terminal){
+        return () -> MenuFormatter.connection(terminal, args);
+    }
+    
+	private boolean validate() {
+		try {
+			Integer.parseInt(args.get(1));
+			return true;
+		} catch (NumberFormatException e) {
+			return false;
+		}
+	}
+    
+}

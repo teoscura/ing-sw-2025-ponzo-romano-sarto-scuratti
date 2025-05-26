@@ -20,7 +20,7 @@ public class KeyboardInputThread extends Thread {
 			while (!terminal.isAvailable()) {
 				terminal.readBinding().apply();
 			}
-			view.setLine(terminal.takeInput());
+			view.handleLine(terminal.takeInput());
 		}
 	}
 

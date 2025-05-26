@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view.tui;
 
+import it.polimi.ingsw.controller.ThreadSafeMessageQueue;
 import it.polimi.ingsw.controller.client.state.ConnectedState;
 import it.polimi.ingsw.controller.client.state.ConnectingState;
 import it.polimi.ingsw.controller.client.state.TitleScreenState;
@@ -9,6 +10,11 @@ import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.view.ClientView;
 import it.polimi.ingsw.view.tui.concurrent.*;
 import it.polimi.ingsw.view.tui.formatters.*;
+import it.polimi.ingsw.view.tui.states.TUIConnectionSetupState;
+import it.polimi.ingsw.view.tui.states.TUIInGameState;
+import it.polimi.ingsw.view.tui.states.TUIState;
+import it.polimi.ingsw.view.tui.states.TUITitleState;
+
 import org.jline.utils.InfoCmp.Capability;
 
 import java.io.IOException;
@@ -19,48 +25,40 @@ import java.util.ArrayList;
 public class TUIView implements ClientView {
 
 	private final TerminalWrapper terminal;
-	private final Object input_lock;
-	private final Object line_lock;
-	private final Object state_lock;
+	
+	private final ThreadSafeMessageQueue<ServerMessage> queue;
 	private final Thread inputthread;
-	private final ArrayList<TUINotification> notifications;
-	private final ClientStateOverlayFormatter overlay_formatter;
-	private final Thread drawthread;
+	private TUIState tuistate;
 
-	private Thread line_thread;
-	private ConnectedState state;
-	private PlayerColor selected_color;
 	private ClientState client_state;
-	private ServerMessage input;
-	private String line;
-	private boolean overlay;
+	private String username;
+	private PlayerColor selected_color;
+	
+	private final ArrayList<TUINotification> notifications;
+	private final Thread drawthread;
 	private Runnable screen_runnable;
 	private Runnable status_runnable;
 	private Runnable overlay_runnable;
 
 	public TUIView() throws IOException {
 		this.terminal = new TerminalWrapper(this);
+		this.queue = new ThreadSafeMessageQueue<>(10);
 		this.inputthread = new KeyboardInputThread(terminal, this);
 		inputthread.start();
+		
+		this.screen_runnable = () -> {};
+		this.status_runnable = () -> {};
+		this.notifications = new ArrayList<>();
 		this.drawthread = new RedrawThread(this);
 		drawthread.start();
-		this.input_lock = new Object();
-		this.state_lock = new Object();
-		this.line_lock = new Object();
-		this.screen_runnable = () -> {
-		};
-		this.status_runnable = () -> {
-		};
-		this.notifications = new ArrayList<>();
-		this.overlay_formatter = new ClientStateOverlayFormatter(terminal);
 	}
 
 	public void redraw() {
 		synchronized (notifications) {
 			if (TextMessageFormatter.trimExpired(notifications)) terminal.puts(Capability.clear_screen);
 		}
-		if (state != null && state.getUsername() != null) {
-			String topline = "You are: " + state.getUsername();
+		if (username != null) {
+			String topline = "You are: " + username;
 			terminal.print(topline, 0, (128 - topline.length()) / 2);
 		}
 		if(overlay_runnable == null){
@@ -79,18 +77,14 @@ public class TUIView implements ClientView {
 
 	@Override
 	public void show(TitleScreenState state) {
-		this.line_thread.interrupt();
-		this.line_thread = new TitleScreenThread(state, this);
-		this.line_thread.start();
-		this.screen_runnable = () -> MenuFormatter.title(terminal);
+		this.tuistate = new TUITitleState(this, state);
+		this.screen_runnable = () -> this.tuistate.getRunnable(terminal);
 	}
 
 	@Override
 	public void show(ConnectingState state) {
-		this.line_thread.interrupt();
-		this.line_thread = new ConnectingThread(state, this);
-		this.line_thread.start();
-		this.screen_runnable = () -> MenuFormatter.connection(terminal, ((ConnectingThread)this.line_thread).getArgs());
+		this.tuistate = new TUIConnectionSetupState(this, state);
+		this.screen_runnable = () -> this.tuistate.getRunnable(terminal);
 	}
 
 	@Override
@@ -108,7 +102,7 @@ public class TUIView implements ClientView {
 	@Override
 	public void show(ClientWaitingRoomState state) {
 		if (this.selected_color == PlayerColor.NONE)
-			this.selected_color = state.getPlayerList().stream().filter(s -> s.getUsername().equals(this.state.getUsername())).map(p -> p.getColor()).findFirst().orElse(PlayerColor.NONE);
+			this.selected_color = state.getPlayerList().stream().filter(s -> s.getUsername().equals(username)).map(p -> p.getColor()).findFirst().orElse(PlayerColor.NONE);
 		this.screen_runnable = () -> ClientWaitingStateFormatter.format(terminal, state);
 		this.status_runnable = () -> ClientWaitingStateFormatter.formatStatus(terminal, state);
 	}
@@ -116,7 +110,7 @@ public class TUIView implements ClientView {
 	@Override
 	public void show(ClientConstructionState state) {
 		if (this.selected_color == PlayerColor.NONE)
-			this.selected_color = state.getPlayerList().stream().filter(s -> s.getUsername().equals(this.state.getUsername())).map(p -> p.getColor()).findFirst().orElse(PlayerColor.NONE);
+			this.selected_color = state.getPlayerList().stream().filter(s -> s.getUsername().equals(username)).map(p -> p.getColor()).findFirst().orElse(PlayerColor.NONE);
 		this.screen_runnable = () -> ClientConstructionStateFormatter.format(terminal, state, selected_color);
 		this.status_runnable = () -> ClientConstructionStateFormatter.formatStatus(terminal, state);
 	}
@@ -124,7 +118,7 @@ public class TUIView implements ClientView {
 	@Override
 	public void show(ClientVerifyState state) {
 		if (this.selected_color == PlayerColor.NONE)
-			this.selected_color = state.getPlayerList().stream().filter(s -> s.getUsername().equals(this.state.getUsername())).map(p -> p.getColor()).findFirst().orElse(PlayerColor.NONE);
+			this.selected_color = state.getPlayerList().stream().filter(s -> s.getUsername().equals(username)).map(p -> p.getColor()).findFirst().orElse(PlayerColor.NONE);
 		this.screen_runnable = () -> ClientVerifyStateFormatter.format(terminal, state, selected_color);
 		this.status_runnable = () -> ClientVerifyStateFormatter.formatStatus(terminal, state);
 	}
@@ -132,7 +126,7 @@ public class TUIView implements ClientView {
 	@Override
 	public void show(ClientVoyageState state) {
 		if (this.selected_color == PlayerColor.NONE)
-			this.selected_color = state.getPlayerList().stream().filter(s -> s.getUsername().equals(this.state.getUsername())).map(p -> p.getColor()).findFirst().orElse(PlayerColor.NONE);
+			this.selected_color = state.getPlayerList().stream().filter(s -> s.getUsername().equals(username)).map(p -> p.getColor()).findFirst().orElse(PlayerColor.NONE);
 		this.screen_runnable = () -> ClientVoyageStateFormatter.format(terminal, state, selected_color);
 		this.status_runnable = () -> ClientVoyageStateFormatter.formatStatus(terminal, state);
 	}
@@ -151,16 +145,18 @@ public class TUIView implements ClientView {
 		}
 	}
 
+	@Override
+	public void setClientState(ClientState state) {
+		this.client_state = state;
+	}
+
 	public void showHelpScreen() {
-		this.overlay = true;
 		this.overlay_runnable = () -> HelpScreenFormatter.format(terminal);
 	}
 
 	public void showStateInfo() {
-		this.overlay = true;
-		this.overlay_runnable = () -> this.getClientState().sendToView(overlay_formatter);
+		this.overlay_runnable = () -> this.client_state.sendToView(new ClientStateOverlayFormatter(terminal));
 	}
-
 
 	public void resetOverlay() {
 		terminal.puts(Capability.clear_screen);
@@ -171,44 +167,9 @@ public class TUIView implements ClientView {
 		return this.status_runnable;
 	}
 
-	public ClientState getClientState() {
-		synchronized (this.state_lock) {
-			while (this.state == null)
-				try {
-					state_lock.wait();
-				} catch (InterruptedException e) {
-					System.out.println("Force shutdown of view thread.");
-				}
-			return this.client_state;
-		}
+	public void handleLine(String line) {
+		this.tuistate.handleLine(line);
 	}
-
-	public void setClientState(ClientState state) {
-		synchronized (this.state_lock) {
-			terminal.puts(Capability.clear_screen);
-			this.client_state = state;
-			state_lock.notifyAll();
-		}
-	}
-
-	public String takeLine() throws InterruptedException {
-		synchronized (this.line_lock) {
-			while (this.line == null) line_lock.wait();
-			String s = this.line;
-			this.line = null;
-			return s;
-		}
-	}
-
-	public void setLine(String line) {
-		synchronized (this.line_lock) {
-			terminal.puts(Capability.clear_screen);
-			this.line = line;
-			line_lock.notifyAll();
-		}
-		if (overlay) resetOverlay();
-	}
-
 
 	public void changeShip(String s) {
 		switch (s) {
@@ -232,49 +193,31 @@ public class TUIView implements ClientView {
 
 	@Override
 	public void setInput(ServerMessage input) {
-		synchronized (this.input_lock) {
-			this.input = input;
-			this.input_lock.notifyAll();
-		}
+		queue.insert(input);
 	}
 
 	@Override
 	public ServerMessage takeInput() {
-		synchronized (this.input_lock) {
-			while (this.input == null) {
-				try {
-					this.input_lock.wait();
-				} catch (InterruptedException e) {
-					return null;
-				}
-			}
-			ServerMessage res = this.input;
-			this.input = null;
-			return res;
+		try {
+			return queue.take();
+		} catch (InterruptedException e) {
+			this.showTextMessage("Shutting down input command thread!");
+			return null;
 		}
-	}
-
-	public boolean connected() {
-		return this.state != null;
 	}
 
 	@Override
 	public void connect(ConnectedState state) {
-		this.selected_color = PlayerColor.NONE;
 		terminal.puts(Capability.clear_screen);
-		ConnectedThread s = new ConnectedThread(this);
-		this.line_thread = s;
-		s.start();
-		this.state = state;
+		this.selected_color = PlayerColor.NONE;
+		this.username = state.getUsername();
+		this.tuistate = new TUIInGameState(this);
 	}
 
 	@Override
 	public void disconnect() {
-		this.line_thread.interrupt();
-		this.status_runnable = () -> {
-		};
-		resetOverlay();
-		this.state = null;
+		this.status_runnable = () -> {};
+		this.overlay_runnable = null;
 		this.client_state = null;
 	}
 

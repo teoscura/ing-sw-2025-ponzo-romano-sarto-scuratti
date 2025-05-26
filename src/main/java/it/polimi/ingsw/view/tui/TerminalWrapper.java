@@ -93,6 +93,7 @@ public class TerminalWrapper {
 
 	private KeyMap<Widget> setupBindings(TUIView view) {
 		KeyMap<Widget> km = new KeyMap<>();
+		km.setNomatch(()->{return false;});
 		for (String s : KeyMap.range("a-z")) {
 			Widget w = () -> {
 				line.append(s);

@@ -13,9 +13,7 @@ public interface ClientView extends ClientStateVisitor {
 	void show(TitleScreenState state);
 
 	void show(ConnectingState state);
-
-	ClientState getClientState();
-
+	
 	//State sync
 	void setClientState(ClientState state);
 

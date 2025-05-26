@@ -11,17 +11,8 @@ public class CommandPreprocessor {
 	//XXX add disconnect command that handles disconnection gracefully.
 	public void process(String s) {
 		switch (s) {
-			case "red":
-				view.changeShip("red");
-				break;
-			case "blue":
-				view.changeShip("blue");
-				break;
-			case "green":
-				view.changeShip("green");
-				break;
-			case "yellow":
-				view.changeShip("yellow");
+			case "red", "blue", "green", "yellow":
+				view.changeShip(s);
 				break;
 			case "help":
 				view.showHelpScreen();

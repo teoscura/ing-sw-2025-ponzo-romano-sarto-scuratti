@@ -21,6 +21,7 @@ public class ThreadSafeMessageQueue<T extends Message> {
 	}
 
 	public void insert(T item) {
+		if(item == null) return;
 		threadpool.submit(() -> {
 			queue.add(item);
 		});
