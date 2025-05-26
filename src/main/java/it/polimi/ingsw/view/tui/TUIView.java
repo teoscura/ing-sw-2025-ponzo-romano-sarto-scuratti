@@ -38,6 +38,7 @@ public class TUIView implements ClientView {
 	private final Thread drawthread;
 	private Runnable screen_runnable;
 	private Runnable status_runnable;
+	private boolean overlay;
 	private Runnable overlay_runnable;
 
 	public TUIView() throws IOException {
@@ -61,7 +62,7 @@ public class TUIView implements ClientView {
 			String topline = "You are: " + username;
 			terminal.print(topline, 0, (128 - topline.length()) / 2);
 		}
-		if(overlay_runnable == null){
+		if(overlay){
 			this.screen_runnable.run();
 			this.status_runnable.run();
 			synchronized (notifications) {
@@ -71,7 +72,7 @@ public class TUIView implements ClientView {
 			synchronized (notifications) {
 				if (!notifications.isEmpty()) TextMessageFormatter.format(terminal, notifications);
 			}
-			if (overlay_runnable != null) this.overlay_runnable.run();
+			this.overlay_runnable.run();
 		}
 	}
 
@@ -152,15 +153,18 @@ public class TUIView implements ClientView {
 
 	public void showHelpScreen() {
 		this.overlay_runnable = () -> HelpScreenFormatter.format(terminal);
+		overlay = true;
 	}
 
 	public void showStateInfo() {
 		this.overlay_runnable = () -> this.client_state.sendToView(new ClientStateOverlayFormatter(terminal));
+		overlay = true;
 	}
 
 	public void resetOverlay() {
 		terminal.puts(Capability.clear_screen);
-		this.overlay_runnable = null;
+		this.overlay_runnable = () -> {};
+		overlay = false;
 	}
 
 	public Runnable getStatusRunnable() {
