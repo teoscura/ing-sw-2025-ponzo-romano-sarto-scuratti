@@ -23,17 +23,9 @@ import java.time.Instant;
 import java.util.ArrayList;
 
 public class TUIView implements ClientView {
-
+	
+	//Drawing fields.
 	private final TerminalWrapper terminal;
-	
-	private final ThreadSafeMessageQueue<ServerMessage> queue;
-	private final Thread inputthread;
-	private TUIState tuistate;
-
-	private ClientState client_state;
-	private String username;
-	private PlayerColor selected_color;
-	
 	private final ArrayList<TUINotification> notifications;
 	private final Thread drawthread;
 	private Runnable screen_runnable;
@@ -41,12 +33,21 @@ public class TUIView implements ClientView {
 	private boolean overlay;
 	private Runnable overlay_runnable;
 
+	//Controller communication fields.
+	private final ThreadSafeMessageQueue<ServerMessage> queue;
+	private final Thread inputthread;
+	private TUIState tuistate;
+
+	//Game info fields.
+	private ClientState client_state;
+	private String username;
+	private PlayerColor selected_color;
+
 	public TUIView() throws IOException {
 		this.terminal = new TerminalWrapper(this);
 		this.queue = new ThreadSafeMessageQueue<>(10);
 		this.inputthread = new KeyboardInputThread(terminal, this);
 		inputthread.start();
-		
 		this.screen_runnable = () -> {};
 		this.status_runnable = () -> {};
 		this.notifications = new ArrayList<>();
