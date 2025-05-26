@@ -50,6 +50,7 @@ public class TUIView implements ClientView {
 		inputthread.start();
 		this.screen_runnable = () -> {};
 		this.status_runnable = () -> {};
+		this.overlay_runnable = () -> {};
 		this.notifications = new ArrayList<>();
 		this.drawthread = new RedrawThread(this);
 		drawthread.start();
@@ -63,7 +64,7 @@ public class TUIView implements ClientView {
 			String topline = "You are: " + username;
 			terminal.print(topline, 0, (128 - topline.length()) / 2);
 		}
-		if(overlay){
+		if(!overlay){
 			this.screen_runnable.run();
 			this.status_runnable.run();
 			synchronized (notifications) {
