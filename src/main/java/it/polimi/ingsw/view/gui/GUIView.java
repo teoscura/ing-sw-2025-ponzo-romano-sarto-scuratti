@@ -3,6 +3,7 @@ package it.polimi.ingsw.view.gui;
 import it.polimi.ingsw.controller.client.state.ConnectedState;
 import it.polimi.ingsw.controller.client.state.ConnectingState;
 import it.polimi.ingsw.controller.client.state.TitleScreenState;
+import it.polimi.ingsw.model.client.state.ClientLobbySelectState;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.client.state.*;
 import it.polimi.ingsw.view.ClientView;
@@ -10,6 +11,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
+
 
 import java.io.IOException;
 
@@ -43,6 +45,18 @@ public class GUIView implements ClientView {
 			scene = new Scene(loader.load());
 		} catch (IOException e) {
 		}
+		stage.setScene(scene);
+		stage.show();
+	}
+
+	@Override
+	public void show(ClientLobbySelectState state) {
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/LobbyStateView.fxml"));
+		loader.setControllerFactory(f -> new ClientLobbyStateController(state, this));
+		Scene scene = null;
+		try {
+			scene = new Scene(loader.load());
+		} catch (IOException e) {}
 		stage.setScene(scene);
 		stage.show();
 	}
@@ -84,11 +98,6 @@ public class GUIView implements ClientView {
 		errorAlert.setContentText(message);
 		errorAlert.showAndWait();
 
-
-	}
-
-	@Override
-	public void show(ClientLobbySelectState state) {
 
 	}
 
