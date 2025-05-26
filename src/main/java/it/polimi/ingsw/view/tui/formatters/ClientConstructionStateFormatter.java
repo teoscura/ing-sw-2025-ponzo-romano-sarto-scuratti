@@ -125,7 +125,8 @@ public class ClientConstructionStateFormatter {
 		if (pl == null) {
 			return res.stream().map(sb -> sb.toString()).toList();
 		}
-		ArrayList<Integer> components = new ArrayList<>(pl.getReserved());
+		Integer current = pl.getCurrent();
+		ArrayList<Integer> reserved = new ArrayList<>(pl.getReserved());
 		ClientLargeComponentPrinter pr = new ClientLargeComponentPrinter();
 		ClientSmallComponentPrinter ps = new ClientSmallComponentPrinter();
 		res.add(new StringBuffer("╭" + " Your tiles. " + "╮"));
@@ -133,8 +134,9 @@ public class ClientConstructionStateFormatter {
 			if (i == 3) res.add(new StringBuffer("├"));
 			else res.add(new StringBuffer("│"));
 		}
-		if (components.size() > 0) {
-			ClientComponent c = new ComponentFactory().getComponent(components.getFirst()).getClientComponent();
+		//Held component
+		if (current > 0) {
+			ClientComponent c = new ComponentFactory().getComponent(current).getClientComponent();
 			pr.reset();
 			c.showComponent(ps);
 			pr.setCenter(ps.getComponentStringSmall());
@@ -144,8 +146,7 @@ public class ClientConstructionStateFormatter {
 				res.get(k + 1).append(a.get(k));
 				res.get(k + 1).append("│");
 			}
-			res.get(4).append("[" + String.format("%04d", components.getFirst()) + "]┼");
-			components.removeFirst();
+			res.get(4).append("[" + String.format("%04d", current) + "]┼");
 		} else {
 			var a = pr.getForbidden();
 			for (int k = 0; k < 3; k++) {
@@ -154,8 +155,9 @@ public class ClientConstructionStateFormatter {
 			}
 			res.get(4).append("──────┼");
 		}
-		if (components.size() > 0) {
-			ClientComponent c = new ComponentFactory().getComponent(components.getFirst()).getClientComponent();
+		//Reserved first.
+		if (reserved.size() > 0) {
+			ClientComponent c = new ComponentFactory().getComponent(reserved.getFirst()).getClientComponent();
 			pr.reset();
 			c.showComponent(ps);
 			pr.setCenter(ps.getComponentStringSmall());
@@ -165,8 +167,8 @@ public class ClientConstructionStateFormatter {
 				res.get(k + 1).append(a.get(k));
 				res.get(k + 1).append("│");
 			}
-			res.get(4).append("[" + String.format("%04d", components.getFirst()) + "]┤");
-			components.removeFirst();
+			res.get(4).append("[" + String.format("%04d", reserved.getFirst()) + "]┤");
+			reserved.removeFirst();
 		} else {
 			var a = pr.getForbidden();
 			for (int k = 0; k < 3; k++) {
@@ -179,8 +181,9 @@ public class ClientConstructionStateFormatter {
 		res.get(6).append(" curr │");
 		res.get(7).append("      │");
 		res.add(new StringBuffer("╰──────┴"));
-		if (components.size() > 0) {
-			ClientComponent c = new ComponentFactory().getComponent(components.getFirst()).getClientComponent();
+		//Second reserved
+		if (reserved.size() > 0) {
+			ClientComponent c = new ComponentFactory().getComponent(reserved.getFirst()).getClientComponent();
 			pr.reset();
 			c.showComponent(ps);
 			pr.setCenter(ps.getComponentStringSmall());
@@ -190,7 +193,7 @@ public class ClientConstructionStateFormatter {
 				res.get(k + 5).append(a.get(k));
 				res.get(k + 5).append("│");
 			}
-			res.get(8).append("[" + String.format("%04d", components.getFirst()) + "]╯");
+			res.get(8).append("[" + String.format("%04d", reserved.getFirst()) + "]╯");
 		} else {
 			var a = pr.getForbidden();
 			for (int k = 0; k < 3; k++) {
