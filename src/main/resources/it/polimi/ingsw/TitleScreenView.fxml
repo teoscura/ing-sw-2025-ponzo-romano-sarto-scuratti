@@ -12,6 +12,6 @@
                 <Image url="@../../../galaxy_trucker_imgs/images_logo/images/galaxy-trucker-clean.png" />
             </image>
         </ImageView>
-        <TextField fx:id="name_field" layoutX="221.0" layoutY="266.0" onAction="#confirm_name" prefHeight="26.0" prefWidth="155.0" promptText="Insert username" />
+        <TextField fx:id="name_field" layoutX="221.0" layoutY="266.0" prefHeight="26.0" prefWidth="155.0" promptText="Insert username" text="Insert username" />
     </children>
 </AnchorPane>
