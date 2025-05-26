@@ -3,6 +3,7 @@ package it.polimi.ingsw.view.gui;
 import it.polimi.ingsw.controller.client.connections.ConnectionType;
 import it.polimi.ingsw.controller.client.state.ConnectingState;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 
@@ -69,15 +70,31 @@ public class ConnectingStateController {
 	protected void connect() {
 		ip = ip_field.getText();
 		port = port_field.getText();
+		if (connection_menu.getValue() == null) {
+			errorMessage("Select either TCP or RMI");
+			return;
+		}
+		try {
+			Integer.parseInt(port);
+		} catch (NumberFormatException e) {
+			errorMessage("The port is not an integer");
+			return;
+		}
+
 		connection_type = connection_menu.getValue().toString();
 		if (Objects.equals(connection_type, "TCP")) {
 			state.connect(ip, Integer.parseInt(port), ConnectionType.SOCKET);
 		} else if (Objects.equals(connection_type, "RMI")) {
 			state.connect(ip, Integer.parseInt(port), ConnectionType.RMI);
-		} else {
-			System.out.println("Select either TCP or RMI");
 		}
-
 	}
 
+	@FXML
+	protected void errorMessage(String error) {
+		System.out.println(error);
+		Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+		errorAlert.setHeaderText("Input not valid");
+		errorAlert.setContentText(error);
+		errorAlert.showAndWait();
+	}
 }
