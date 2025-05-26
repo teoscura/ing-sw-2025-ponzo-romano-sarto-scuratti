@@ -621,7 +621,7 @@ package Model {
         iCommonBoard^..CommonBoard
         class CommonBoard {
             {field} [final] covered_components : ArrayDeque<BaseComponent>
-            {field} [final] uncovered_components : HashMap<Integer, BaseComponent>
+            {field} [final] discarded_components : HashMap<Integer, BaseComponent>
             {method} + getCoveredSize() : int
             {method} + pullComponent() : BaseComponent
             {method} + discardComponent(BaseComponent) : void
@@ -897,7 +897,6 @@ package Model {
             {field} [final] ship : SpaceShip
             {field} [transient] descriptor : ClientDescriptor
             {field} credits : int
-            {field} score : int
             {field} retired : boolean
             {field} disconnected : boolean
             {method} + getUsername() : String
@@ -909,8 +908,6 @@ package Model {
             {method} + getDisconnected() : boolean
             {method} + giveCredits(int) : int
             {method} + getCredits() : int
-            {method} + addScore(int) : void
-            {method} + getScore() : int
             {method} + finalScore() : void
             {method} + reconnect(ClientDescriptor) : void
             {method} + getSpaceShip() : SpaceShip
@@ -1023,8 +1020,9 @@ package Model {
             {method} + sendContinue(Player) : void
             {method} + putComponent(Player, ShipCoords coords) : void
             {method} + takeComponent(Player) : void
-            {method} + takeDiscarded(Player, int id) : void
-            {method} + discardComponent(Player, int id) : void
+            {method} + takeDiscarded(Player, int) : void
+            {method} + reserveComponent(Player) : void
+            {method} + discardComponent(Player, int) : void
             {method} + toggleHourglass(Player) : void
             {method} + removeComponent(Player, ShipCoords coords) : void
             {method} + setCrewType(Player, ShipCoords coords, AlienType type) : void
@@ -1103,7 +1101,7 @@ package Model {
             {method} + putComponent(Player, int, ShipCoords, ComponentRotation) : void
             {method} + takeComponent(Player) : void
             {method} + takeDiscarded(Player, int) : void
-            {method} + discardComponent(Player, int) ; void
+            {method} + discardComponent(Player) ; void
             {method} + toggleHourglass(player) : void
         }
 
@@ -1481,11 +1479,13 @@ package Model {
                 {field} - [final] ship : ClientSpaceShip
                 {field} - [final] reserved_components : ArrayList<Integer>
                 {field} - [final] boolean : finished
+                {field} - [final] current_component : int
                 {method} + getUsername() : String
                 {method} + getColor() : PlayerColor
                 {method} + getShip() : ClientSpaceShip
                 {method} + getReserved() : List<Integer> 
                 {method} + isFinished() : boolean
+                {method} + getCurrent() : int
             }
 
             ClientSpaceShip <-- ClientVerifyPlayer:ship
@@ -1527,13 +1527,11 @@ package Model {
                 {field} - [final] planche_slot : int
                 {field} - [final] credits : int
                 {field} - [final] shipments : int[]
-                {field} - [final] score : int
                 {method} + getUsername() : String
                 {method} + getColor() : PlayerColor
                 {method} + getPlanche_slot() : int
                 {method} + getCredits() : int
                 {method} + getShipments() : int[]
-                {method} + getScore() : int
             }
 
         }

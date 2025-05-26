@@ -255,8 +255,6 @@ package Controller{
                 {method} + receive(ModelInstance) : void
                 {method} + receive(GameState) : void
                 {method} + receive(CardState) : void
-                {method} + getCoords() : ShipCoords
-                {method} + getShipmentType() : ShipmentType
             }
 
             ServerMessage ^... EnterLobbyMessage
@@ -285,9 +283,6 @@ package Controller{
                 {method} + receive(ModelInstance) : void
                 {method} + receive(GameState) : void
                 {method} + receive(CardState) : void
-                {method} + getTarget() : ShipCoords
-                {method} + getSource() : ShipCoords
-                {method} + getShipmentType() : ShipmentType
             }
 
             ServerMessage ^... OpenLobbyMessage
@@ -320,8 +315,6 @@ package Controller{
                 {method} + receive(LobbyController) : void
                 {method} + receive(ModelInstance) : void
                 {method} + receive(GameState) : void
-                {method} + getCoords() : ShipCoords
-                {method} + getRotation() : ComponentRotation
             }
 
             ServerMessage ^... RemoveComponentMessage
@@ -331,7 +324,6 @@ package Controller{
                 {method} + receive(LobbyController) : void
                 {method} + receive(ModelInstance) : void
                 {method} + receive(GameState) : void
-                {method} + getCoords() : ShipCoords
             }
 
             ServerMessage ^..... SelectBlobMessage
@@ -342,7 +334,6 @@ package Controller{
                 {method} + receive(ModelInstance) : void
                 {method} + receive(GameState) : void
                 {method} + receive(CardState) : void
-                {method} + getCoords() : ShipCoords
             }
 
             ServerMessage ^... SendContinueMessage
@@ -356,13 +347,11 @@ package Controller{
 
             ServerMessage ^..... DiscardComponentMessage
             class DiscardComponentMessage{
-                {field} - [final] id : int
                 {method} + receive(MainServerController) : void
                 {method} + receive(LobbyController) : void
                 {method} + receive(ModelInstance) : void
                 {method} + receive(GameState) : void
                 {method} + receive(CardState) : void
-                {method} + getId() : int
             }
 
             ServerMessage ^... ToggleHourglassMessage
@@ -406,8 +395,6 @@ package Controller{
                 {method} + receive(LobbyController) : void
                 {method} + receive(ModelInstance) : void
                 {method} + receive(GameState) : void
-                {method} + getCoords() : ShipCoords
-                {method} + getAlienType() : AlienType
             }
 
             ServerMessage ^..... TakeDiscardedComponentMessage
@@ -417,7 +404,6 @@ package Controller{
                 {method} + receive(LobbyController) : void
                 {method} + receive(ModelInstance) : void
                 {method} + receive(GameState) : void
-                {method} + getId() : int
             }
 
             ServerMessage ^... TurnOnMessage
@@ -429,8 +415,6 @@ package Controller{
                 {method} + receive(ModelInstance) : void
                 {method} + receive(GameState) : void
                 {method} + receive(CardState) : void
-                {method} + getTarget() : ShipCoords
-                {method} + getBattery() : ShipCoords
             }
             
             ServerMessage ^..... RemoveCrewMessage
@@ -441,7 +425,6 @@ package Controller{
                 {method} + receive(ModelInstance) : void
                 {method} + receive(GameState) : void
                 {method} + receive(CardState) : void
-                {method} + getCoords() : ShipCoords
             }
 
             ServerMessage ^... TakeRewardMessage
@@ -452,7 +435,6 @@ package Controller{
                 {method} + receive(ModelInstance) : void
                 {method} + receive(GameState) : void
                 {method} + receive(CardState) : void
-                {method} + getTook() : boolean
             }
 
             ServerMessage ^..... TakeCargoMessage
@@ -464,8 +446,6 @@ package Controller{
                 {method} + receive(ModelInstance) : void
                 {method} + receive(GameState) : void
                 {method} + receive(CardState) : void
-                {method} + getCoords() : ShipCoords
-                {method} + getShipmentType() : ShipmentType
             }
 
             ServerMessage ^... SelectLandingMessage
@@ -476,7 +456,6 @@ package Controller{
                 {method} + receive(ModelInstance) : void
                 {method} + receive(GameState) : void
                 {method} + receive(CardState) : void
-                {method} + getId() : int
             }
 
             ServerMessage ^..... UsernameSetupMessage
@@ -492,6 +471,14 @@ package Controller{
                 {method} + receive(LobbyController) : void
             }
 
+        }
+
+        ServerMessage ^..... ReserveComponentMessage
+        class ReserveComponentMessage {
+            {method} + receive(MainServerController) : void
+            {method} + receive(LobbyController) : void
+            {method} + receive(ModelInstance) : void
+            {method} + receive(GameState) : void
         }
 
         Message ^-- ClientMessage::ClientMessage
