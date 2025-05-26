@@ -25,7 +25,6 @@ import it.polimi.ingsw.utils.LoggerLevel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Optional;
 
 public abstract class ConstructionState extends GameState {
 
@@ -77,6 +76,10 @@ public abstract class ConstructionState extends GameState {
 
 	@Override
 	public GameState getNext() {
+		for(Player p : this.players){
+			if(this.current_tile.get(p)!=null) p.giveCredits(-1);
+			p.giveCredits(-this.hoarded_tile.get(p).size());
+		}
 		return new VerifyState(model, type, count, players, voyage_deck, finished);
 	}
 
@@ -97,14 +100,6 @@ public abstract class ConstructionState extends GameState {
 		}
 		this.building.remove(p);
 		this.finished.addLast(p);
-		boolean only_disconnected_left = true;
-		for (Player other : this.players) {
-			if (!other.getDisconnected() && this.building.contains(other)) {
-				only_disconnected_left = false;
-				break;
-			}
-		}
-		if (only_disconnected_left) this.transition();
 	}
 
 	@Override
@@ -114,30 +109,20 @@ public abstract class ConstructionState extends GameState {
 			this.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' attempted to place a component, but their ship is already confirmed!"));
 			return;
 		}
-		boolean ispresent = false;
-		if (this.current_tile.get(p) != null) {
-			ispresent = ispresent || this.current_tile.get(p).getID() == id;
-		}
-		ispresent = ispresent || this.hoarded_tile.get(p).stream().anyMatch(t -> t.getID() == id);
-		if (!ispresent) {
-			Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' attempted to place a component they don't own!");
-			this.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' attempted to place a component they don't own!"));
+		ArrayList<Integer> holding = new ArrayList<>();
+		if(this.current_tile.get(p)!= null) holding.add(this.current_tile.get(p).getID());
+		for(var c : this.hoarded_tile.get(p)) holding.add(c.getID());
+		if(!holding.contains(id)){
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' attempted to place a component, but they don't have it!");
+			this.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' attempted to place a component, but they don't have it!"));
 			return;
 		}
-		//Is it the current tile
-		//TODO: ristrutturare questo
 		BaseComponent c = null;
-		boolean current = false;
-		if (this.current_tile.get(p) != null && this.current_tile.get(p).getID() == id) {
-			c = this.current_tile.get(p);
-			current = true;
+		if(this.current_tile.get(p)!=null && this.current_tile.get(p).getID()==id){
+			c = this.current_tile.remove(p);
 		} else {
-			c = this.hoarded_tile.get(p).stream().filter(cm -> cm.getID() == id).findFirst().orElse(null);
-		}
-		if (c == null) {
-			Logger.getInstance().print(LoggerLevel.ERROR, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' attempted to place a component, they passed the check, but component is null!");
-			return;
-		} else {
+			c = this.hoarded_tile.get(p).stream().filter(cm->cm.getID()==id).findAny().orElse(null);
+			this.hoarded_tile.get(p).remove(c);
 		}
 		try {
 			c.rotate(rotation);
@@ -155,9 +140,11 @@ public abstract class ConstructionState extends GameState {
 			Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' attempted to place a component, but the coordinates are not connected to the rest of the ship!");
 			this.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' attempted to place a component, but the coordinates are not connected to the rest of the ship!"));
 			return;
+		} catch (NullPointerException e) {
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' attempted to place a component, but it's null!");
+			this.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' attempted to place a component, but it's null!"));
+			return;
 		}
-		if (current) this.current_tile.put(p, null);
-		else this.hoarded_tile.get(p).remove(c);
 	}
 
 	@Override
@@ -167,23 +154,19 @@ public abstract class ConstructionState extends GameState {
 			this.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' attempted to take a component, but their ship is already confirmed!"));
 			return;
 		}
-		BaseComponent tmp = this.board.pullComponent();
-		if (tmp == null) {
+		if(this.current_tile.get(p)!=null){
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' attempted to take a component, but they are holding one!");
+			this.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' attempted to take a component, but they are holding one!"));
+			return;
+		}
+		BaseComponent c = this.board.pullComponent();
+		if (c == null) {
 			Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' attempted to take a component, but there are no more to take!");
 			this.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' attempted to take a component, but there are no more to take!"));
 			return;
-		}
-		Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' took component " + tmp.getID() + " from the covered pile!");
-		if (this.current_tile.get(p) == null) {
-			this.current_tile.put(p, tmp);
 		} else {
-			BaseComponent old_current = this.current_tile.get(p);
-			this.current_tile.put(p, tmp);
-			this.hoarded_tile.get(p).addFirst(old_current);
-			while (this.hoarded_tile.get(p).size() >= 3) {
-				Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Component " + this.hoarded_tile.get(p).getLast().getID() + " added to discarded components.");
-				this.board.discardComponent(this.hoarded_tile.get(p).removeLast());
-			}
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' took component " + c.getID() + " from the covered pile!");
+			this.current_tile.put(p, c);
 		}
 	}
 
@@ -194,49 +177,64 @@ public abstract class ConstructionState extends GameState {
 			this.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' attempted to take a discarded component, but their ship is already confirmed!"));
 			return;
 		}
-		BaseComponent tmp = null;
+		if(this.current_tile.get(p)!=null){
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' attempted to take a discarded component, but they are holding one!");
+			this.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' attempted to take a discarded component, but they are holding one!"));
+			return;
+		}
+		BaseComponent c = null;
 		try {
-			tmp = this.board.pullDiscarded(id);
+			c = this.board.pullDiscarded(id);
 		} catch (ContainerEmptyException e) {
 			Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' attempted to take a discarded component, but there aren't any with that ID!");
 			this.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' attempted to take a discarded component, but there aren't any with that ID!"));
 			return;
 		}
-		Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' took component " + tmp.getID() + " from the uncovered pile!");
-		BaseComponent oldcurrent = this.current_tile.get(p);
-		if (oldcurrent == null) this.current_tile.put(p, tmp);
-		else {
-			this.current_tile.put(p, tmp);
-			this.hoarded_tile.get(p).addFirst(oldcurrent);
+		Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' took component: " + c.getID() + " from the discarded pile!");
+		this.broadcastMessage(new ViewMessage("[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' took component: " + c.getID() + " from the discarded pile!"));
+		this.current_tile.put(p, c);
+	}
+
+	public void reserveComponent(Player p) throws ForbiddenCallException {
+		if (!this.building.contains(p)) {
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' attempted to reserve a component, but their ship is already confirmed!");
+			this.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' attempted to reserve a component, but their ship is already confirmed!"));
+			return;
 		}
-		while (this.hoarded_tile.get(p).size() >= 3) {
-			this.board.discardComponent(this.hoarded_tile.get(p).removeLast());
+		if(this.current_tile.get(p)==null){
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' attempted to reserve a component, but they aren't holding any!");
+			this.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' attempted to reserve a component, but they aren't holding any!"));
+			return;
 		}
+		if(this.hoarded_tile.get(p).size()>=2){
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' attempted to reserve a component, but their stash is full!");
+			this.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' attempted to reserve a component, but their stash is full!"));
+			return;
+		}
+		var c = this.current_tile.get(p);
+		this.current_tile.put(p, null);
+		this.hoarded_tile.get(p).addFirst(c);
+		Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' reserved component: " + c.getID() + "!");
+		this.broadcastMessage(new ViewMessage("[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' reserved component: " + c.getID() + "!"));
 	}
 
 	@Override
-	public void discardComponent(Player p, int id) throws ForbiddenCallException {
+	public void discardComponent(Player p) throws ForbiddenCallException {
 		if (!this.building.contains(p)) {
 			Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' attempted to discard a component, but their ship is already confirmed!");
 			this.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' attempted to discard a component, but their ship is already confirmed!"));
 			return;
 		}
-		if (this.current_tile.get(p).getID() == id) {
-			BaseComponent tmp = this.current_tile.get(p);
-			this.current_tile.put(p, null);
-			this.board.discardComponent(tmp);
-			Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' discarded component " + tmp.getID() + "!");
+		if(this.current_tile.get(p)==null){
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' attempted to discard a component, but they aren't holding any!");
+			this.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' attempted to discard a component, but they aren't holding any!"));
 			return;
 		}
-		Optional<BaseComponent> c = this.hoarded_tile.get(p).stream().filter(a -> a.getID() == id).findFirst();
-		if (c.isPresent()) {
-			this.hoarded_tile.get(p).remove(c.get());
-			this.board.discardComponent(c.get());
-			Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' discarded component " + c.get().getID() + "!");
-		} else {
-			Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' attempted to discard a component, but they don't own the one with the id provided!");
-			this.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' attempted to discard a component, but they don't own the one with the id provided!"));
-		}
+		var c = this.current_tile.get(p);
+		this.current_tile.put(p, null);
+		this.board.discardComponent(c);
+		Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' discarded component: " + c.getID() + "!");
+		this.broadcastMessage(new ViewMessage("[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' discarded component: " + c.getID() + "!"));
 	}
 
 	@Override

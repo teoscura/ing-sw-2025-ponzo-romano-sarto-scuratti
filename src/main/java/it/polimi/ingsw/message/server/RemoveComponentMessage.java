@@ -38,8 +38,4 @@ public class RemoveComponentMessage extends ServerMessage {
 		state.removeComponent(this.descriptor.getPlayer(), coords);
 	}
 
-	public ShipCoords getCoords() {
-		return coords;
-	}
-
 }

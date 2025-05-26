@@ -49,16 +49,4 @@ public class MoveCargoMessage extends ServerMessage {
 		state.moveCargo(this.descriptor.getPlayer(), type, target, source);
 	}
 
-	public ShipCoords getTarget() {
-		return target;
-	}
-
-	public ShipCoords getSource() {
-		return source;
-	}
-
-	public ShipmentType getShipmentType() {
-		return type;
-	}
-
 }

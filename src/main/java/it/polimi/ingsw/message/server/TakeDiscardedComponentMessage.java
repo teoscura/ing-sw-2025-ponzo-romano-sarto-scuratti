@@ -37,8 +37,4 @@ public class TakeDiscardedComponentMessage extends ServerMessage {
 		state.takeDiscarded(this.descriptor.getPlayer(), id);
 	}
 
-	public int getId() {
-		return id;
-	}
-
 }

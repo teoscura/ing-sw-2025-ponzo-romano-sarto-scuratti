@@ -42,8 +42,4 @@ public class TakeRewardMessage extends ServerMessage {
 		state.setTakeReward(this.descriptor.getPlayer(), this.took);
 	}
 
-	public boolean getTook() {
-		return took;
-	}
-
 }

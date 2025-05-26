@@ -47,12 +47,4 @@ public class TakeCargoMessage extends ServerMessage {
 		state.takeCargo(this.descriptor.getPlayer(), type, coords);
 	}
 
-	public ShipCoords getCoords() {
-		return coords;
-	}
-
-	public ShipmentType getShipmentType() {
-		return type;
-	}
-
 }

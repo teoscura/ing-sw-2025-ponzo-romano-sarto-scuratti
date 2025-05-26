@@ -43,8 +43,4 @@ public class SelectLandingMessage extends ServerMessage {
 		state.selectLanding(this.descriptor.getPlayer(), id);
 	}
 
-	public int getId() {
-		return id;
-	}
-
 }

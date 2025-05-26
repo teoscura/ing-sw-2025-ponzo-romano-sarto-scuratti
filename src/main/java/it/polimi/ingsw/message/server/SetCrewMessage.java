@@ -40,13 +40,5 @@ public class SetCrewMessage extends ServerMessage {
 	public void receive(GameState state) throws ForbiddenCallException {
 		state.setCrewType(this.descriptor.getPlayer(), coords, type);
 	}
-
-	public ShipCoords getCoords() {
-		return coords;
-	}
-
-	public AlienType getAlienType() {
-		return type;
-	}
-
+	
 }

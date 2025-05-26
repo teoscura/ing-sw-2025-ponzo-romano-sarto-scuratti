@@ -13,7 +13,7 @@ import java.util.HashMap;
 public class CommonBoard implements iCommonBoard {
 
 	private final ArrayDeque<BaseComponent> covered_components;
-	private final HashMap<Integer, BaseComponent> uncovered_components;
+	private final HashMap<Integer, BaseComponent> discarded_components;
 
 	public CommonBoard() {
 		ComponentFactory factory = new ComponentFactory();
@@ -27,7 +27,7 @@ public class CommonBoard implements iCommonBoard {
 		}
 		Collections.shuffle(tmp);
 		this.covered_components = new ArrayDeque<BaseComponent>(tmp);
-		this.uncovered_components = new HashMap<>();
+		this.discarded_components = new HashMap<>();
 	}
 
 	@Override
@@ -38,16 +38,16 @@ public class CommonBoard implements iCommonBoard {
 
 	@Override
 	public void discardComponent(BaseComponent c) {
-		if (this.uncovered_components.containsKey(c.getID()))
+		if (this.discarded_components.containsKey(c.getID()))
 			throw new IllegalArgumentException("Tried to insert a duplicate component.");
-		this.uncovered_components.put(c.getID(), c);
+		this.discarded_components.put(c.getID(), c);
 	}
 
 	@Override
 	public BaseComponent pullDiscarded(int id) {
-		if (!this.uncovered_components.containsKey(id)) throw new ContainerEmptyException();
-		BaseComponent tmp = this.uncovered_components.get(id);
-		this.uncovered_components.remove(id);
+		if (!this.discarded_components.containsKey(id)) throw new ContainerEmptyException();
+		BaseComponent tmp = this.discarded_components.get(id);
+		this.discarded_components.remove(id);
 		return tmp;
 	}
 
@@ -58,7 +58,7 @@ public class CommonBoard implements iCommonBoard {
 
 	@Override
 	public ArrayList<Integer> getDiscarded() {
-		return new ArrayList<Integer>(this.uncovered_components.keySet());
+		return new ArrayList<Integer>(this.discarded_components.keySet());
 	}
 
 }

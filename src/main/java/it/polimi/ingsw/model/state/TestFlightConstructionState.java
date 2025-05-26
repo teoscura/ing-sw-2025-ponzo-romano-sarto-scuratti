@@ -23,11 +23,12 @@ public class TestFlightConstructionState extends ConstructionState {
 		ArrayList<Integer> discarded = new ArrayList<>(this.board.getDiscarded());
 		for (Player p : this.players) {
 			ArrayList<Integer> stash = new ArrayList<>();
-			if (this.current_tile.get(p) != null) stash.add(this.current_tile.get(p).getID());
+			int id = this.current_tile.get(p) == null ? -1 : this.current_tile.get(p).getID();
 			stash.addAll(this.hoarded_tile.get(p).stream().filter(t -> t != null).map(t -> t.getID()).toList());
 			tmp.add(new ClientConstructionPlayer(p.getUsername(),
 					p.getColor(),
 					p.getSpaceShip().getClientSpaceShip(),
+					id,
 					stash,
 					this.finished.contains(p)));
 		}

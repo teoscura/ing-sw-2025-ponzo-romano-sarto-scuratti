@@ -68,12 +68,15 @@ public class CommandBuilder {
 				ShipmentType discardType = ShipmentType.fromValue(Integer.parseInt(parts[3]));
 				mess = new DiscardCargoMessage(discardCoords, discardType);
 				break;
+			case "reservecomponent":
+				valid = Pattern.matches("^reservecomponent", command);
+				if (!valid) break;
+				mess = new ReserveComponentMessage();
+				break;
 			case "discardcomponent":
-				valid = Pattern.matches("^discardcomponent [0-9]+", command);
-				if (!valid)
-					break;
-				int discardId = Integer.parseInt(parts[1]);
-				mess = new DiscardComponentMessage(discardId);
+				valid = Pattern.matches("^discardcomponent", command);
+				if (!valid) break;
+				mess = new DiscardComponentMessage();
 				break;
 			case "movecargo":
 				valid = Pattern.matches("^movecargo [0-9] [0-9] [0-4] [0-9] [0-9]$", command);

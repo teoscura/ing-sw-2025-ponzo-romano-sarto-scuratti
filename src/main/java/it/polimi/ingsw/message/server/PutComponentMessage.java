@@ -44,12 +44,4 @@ public class PutComponentMessage extends ServerMessage {
 		state.putComponent(this.descriptor.getPlayer(), id, coords, rotation);
 	}
 
-	public ShipCoords getCoords() {
-		return coords;
-	}
-
-	public ComponentRotation getRotation() {
-		return rotation;
-	}
-
 }

@@ -130,9 +130,15 @@ public abstract class GameState implements Serializable {
 		throw new ForbiddenCallException("This state doesn't support this function.");
 	}
 
-	public void discardComponent(Player p, int id) throws ForbiddenCallException {
+	public void reserveComponent(Player p) throws ForbiddenCallException {
 		this.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' tried to discard a component in a state that doesn't allow it!"));
 		Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' tried to discard a component in a state that doesn't allow it!");
+		throw new ForbiddenCallException("This state doesn't support this function.");
+	}
+
+	public void discardComponent(Player p) throws ForbiddenCallException {
+		this.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' tried to reserve a component in a state that doesn't allow it!"));
+		Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' tried to reserve a component in a state that doesn't allow it!");
 		throw new ForbiddenCallException("This state doesn't support this function.");
 	}
 

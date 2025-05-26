@@ -66,7 +66,6 @@ public class Player implements Serializable {
 	}
 
 	public int giveCredits(int amount) {
-		if (amount <= 0) throw new IllegalArgumentException("Cannot earn negative credits.");
 		this.credits += amount;
 		return this.credits;
 	}

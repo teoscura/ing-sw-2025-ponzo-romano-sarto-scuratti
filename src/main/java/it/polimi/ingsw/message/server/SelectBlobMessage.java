@@ -49,8 +49,4 @@ public class SelectBlobMessage extends ServerMessage {
 		state.selectBlob(this.descriptor.getPlayer(), blob_coord);
 	}
 
-	public ShipCoords getCoords() {
-		return blob_coord;
-	}
-
 }

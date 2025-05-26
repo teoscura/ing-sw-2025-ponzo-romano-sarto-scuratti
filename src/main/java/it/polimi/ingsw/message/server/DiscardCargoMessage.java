@@ -47,12 +47,4 @@ public class DiscardCargoMessage extends ServerMessage {
 		state.discardCargo(this.descriptor.getPlayer(), type, coords);
 	}
 
-	public ShipCoords getCoords() {
-		return coords;
-	}
-
-	public ShipmentType getShipmentType() {
-		return type;
-	}
-
 }

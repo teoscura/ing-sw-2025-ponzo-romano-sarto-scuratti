@@ -39,12 +39,13 @@ public class LevelTwoConstructionState extends ConstructionState {
 		ArrayList<ClientConstructionPlayer> tmp = new ArrayList<>();
 		ArrayList<Integer> discarded = new ArrayList<>(this.board.getDiscarded());
 		for (Player p : this.players) {
+			int id = this.current_tile.get(p) == null ? -1 : this.current_tile.get(p).getID();
 			ArrayList<Integer> stash = new ArrayList<>();
-			if (this.current_tile.get(p) != null) stash.add(this.current_tile.get(p).getID());
 			stash.addAll(this.hoarded_tile.get(p).stream().filter(t -> t != null).map(t -> t.getID()).toList());
 			tmp.add(new ClientConstructionPlayer(p.getUsername(),
 					p.getColor(),
 					p.getSpaceShip().getClientSpaceShip(),
+					id,
 					stash,
 					this.finished.contains(p)));
 		}
@@ -87,13 +88,13 @@ public class LevelTwoConstructionState extends ConstructionState {
 	}
 
 	@Override
-	public void discardComponent(Player p, int id) throws ForbiddenCallException {
+	public void discardComponent(Player p) throws ForbiddenCallException {
 		if (!hourglass.canAct()) {
 			Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' attempted to discard a component, but the hourglass has ran out on the last space!");
 			this.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' attempted to discard a component, but the hourglass has ran out on the last space!"));
 			return;
 		}
-		super.discardComponent(p, id);
+		super.discardComponent(p);
 	}
 
 	@Override

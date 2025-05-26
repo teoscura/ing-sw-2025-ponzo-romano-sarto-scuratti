@@ -8,13 +8,6 @@ import it.polimi.ingsw.model.state.GameState;
 
 public class DiscardComponentMessage extends ServerMessage {
 
-	private final int id;
-
-	public DiscardComponentMessage(int id) {
-		if (id <= 0 || id > 156) throw new IllegalArgumentException();
-		this.id = id;
-	}
-
 	@Override
 	public void receive(MainServerController server) throws ForbiddenCallException {
 		throw new ForbiddenCallException("Client: '" + this.descriptor.getUsername() + "' sent a " + this.getClass().getSimpleName() + " message while in lobby select");
@@ -34,11 +27,7 @@ public class DiscardComponentMessage extends ServerMessage {
 
 	@Override
 	public void receive(GameState state) throws ForbiddenCallException {
-		state.discardComponent(this.descriptor.getPlayer(), id);
-	}
-
-	public int getId() {
-		return id;
+		state.discardComponent(this.descriptor.getPlayer());
 	}
 
 }
