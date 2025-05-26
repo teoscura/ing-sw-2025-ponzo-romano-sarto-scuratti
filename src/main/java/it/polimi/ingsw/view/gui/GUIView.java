@@ -8,6 +8,7 @@ import it.polimi.ingsw.model.client.state.*;
 import it.polimi.ingsw.view.ClientView;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -27,7 +28,8 @@ public class GUIView implements ClientView {
 		Scene scene = null;
 		try {
 			scene = new Scene(loader.load());
-		} catch (IOException e) {}
+		} catch (IOException e) {
+		}
 		stage.setScene(scene);
 		stage.show();
 	}
@@ -39,7 +41,8 @@ public class GUIView implements ClientView {
 		Scene scene = null;
 		try {
 			scene = new Scene(loader.load());
-		} catch (IOException e) {}
+		} catch (IOException e) {
+		}
 		stage.setScene(scene);
 		stage.show();
 	}
@@ -76,6 +79,11 @@ public class GUIView implements ClientView {
 
 	@Override
 	public void showTextMessage(String message) {
+		Alert errorAlert = new Alert(Alert.AlertType.INFORMATION);
+		errorAlert.setHeaderText("Info");
+		errorAlert.setContentText(message);
+		errorAlert.showAndWait();
+
 
 	}
 
