@@ -125,7 +125,7 @@ public class AbadonedShipCardTest {
 		assertEquals(j - 2, player2.getSpaceShip().getTotalCrew());
 		assertTrue(card.getExhausted());
 		assertEquals(x - card.getDays() - 1, state.getPlanche().getPlayerPosition(player2));
-		assertEquals(z + card.getCredits(), player2.getCredits());
+		assertEquals(z + card.getCredits() + 2, player2.getCredits());
 		assertNull(state.getCardState(player1));
 	}
 

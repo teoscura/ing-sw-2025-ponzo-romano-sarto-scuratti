@@ -15,7 +15,6 @@ public class Player implements Serializable {
 	private final SpaceShip ship;
 	private transient ClientDescriptor descriptor;
 	private int credits;
-	private int score;
 	private boolean retired = false;
 	private boolean disconnected = false;
 
@@ -38,13 +37,12 @@ public class Player implements Serializable {
 	public void retire() {
 		if (this.retired) throw new AlreadyPoweredException("Player: has alredy retired.");
 		this.retired = true;
-		this.score += credits;
 		int sum = 0;
 		for (ShipmentType t : ShipmentType.values()) {
 			if (t.getValue() <= 0) continue;
 			sum += getSpaceShip().getContains()[t.getValue()] * t.getValue();
 		}
-		addScore((sum / 2 + sum % 2));
+		this.credits += (sum/2 + sum % 2);
 	}
 
 	public boolean getRetired() {
@@ -74,20 +72,11 @@ public class Player implements Serializable {
 		return this.credits;
 	}
 
-	public void addScore(int rel_change) {
-		this.score += rel_change;
-	}
-
-	public int getScore() {
-		return this.score;
-	}
-
 	public void finalScore() {
 		for (ShipmentType t : ShipmentType.values()) {
 			if (t.getValue() <= 0) continue;
-			this.score += getSpaceShip().getContains()[t.getValue()] * t.getValue();
+			this.credits += getSpaceShip().getContains()[t.getValue()] * t.getValue();
 		}
-		this.score += credits;
 	}
 
 	public void reconnect(ClientDescriptor new_descriptor) {
@@ -108,7 +97,7 @@ public class Player implements Serializable {
 	}
 
 	public String voyageInfo(iPlanche planche) {
-		return "[Player: '" + username + "'] Planche position: " + planche.getPlayerPosition(this) + " | Score: " + score + " | Credits: " + credits + " | Engine: " + ship.getEnginePower() + " | Cannon: " + ship.getCannonPower() + " | Crew: " + ship.getTotalCrew() + " | Battery: " + ship.getEnergyPower();
+		return "[Player: '" + username + "'] Planche position: " + planche.getPlayerPosition(this) + " | Credits: " + credits + " | Engine: " + ship.getEnginePower() + " | Cannon: " + ship.getCannonPower() + " | Crew: " + ship.getTotalCrew() + " | Battery: " + ship.getEnergyPower();
 	}
 
 	@Override

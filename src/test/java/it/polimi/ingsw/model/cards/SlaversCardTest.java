@@ -159,7 +159,7 @@ public class SlaversCardTest {
 		message.setDescriptor(p3desc);
 		state.validate(message);
 		//Confermo
-		assertFalse(player2.getRetired());
+		assertFalse(player3.getRetired());
 		//Tocca a p2 che accende e vince.
 		message = new TurnOnMessage(new ShipCoords(GameModeType.TEST, 3, 1), new ShipCoords(GameModeType.TEST, 3, 3));
 		message.setDescriptor(p2desc);
@@ -176,11 +176,14 @@ public class SlaversCardTest {
 		//P2 sceglie di prenderlo, perde giorni ma guadagna crediti.
 		int x = state.getPlanche().getPlayerPosition(player2);
 		int y = player2.getCredits();
+		System.out.println(y);
 		message = new TakeRewardMessage(true);
 		message.setDescriptor(p2desc);
 		state.validate(message);
+		int z = card.getCredits() ;
+		System.out.println(z);
 		assertEquals(x - card.getDays(), state.getPlanche().getPlayerPosition(player2));
-		assertEquals(y + card.getCredits(), player2.getCredits());
+		assertEquals(y + card.getCredits() + 3 + 2, player2.getCredits());
 		assertNull(state.getCardState(player1));
 		assertTrue(player1.getRetired());
 		assertEquals(2, player2.getSpaceShip().getTotalCrew());
@@ -241,7 +244,7 @@ public class SlaversCardTest {
 		message.setDescriptor(p2desc);
 		state.validate(message);
 		assertEquals(x, state.getPlanche().getPlayerPosition(player2));
-		assertEquals(y, player2.getCredits());
+		assertEquals(y + 3 + 2, player2.getCredits());
 		assertNull(state.getCardState(player1));
 		assertTrue(player1.getRetired());
 		assertEquals(2, player2.getSpaceShip().getTotalCrew());
@@ -316,7 +319,7 @@ public class SlaversCardTest {
 		message.setDescriptor(p2desc);
 		state.validate(message);
 		assertEquals(x - card.getDays(), state.getPlanche().getPlayerPosition(player2));
-		assertEquals(y + card.getCredits(), player2.getCredits());
+		assertEquals(y + card.getCredits() + 2, player2.getCredits());
 		assertNull(state.getCardState(player1));
 		assertEquals(1, player1.getSpaceShip().getTotalCrew());
 		assertEquals(2, player2.getSpaceShip().getTotalCrew());
@@ -379,7 +382,7 @@ public class SlaversCardTest {
 		int y = player2.getCredits();
 		model.disconnect(player2);
 		assertEquals(x, state.getPlanche().getPlayerPosition(player2));
-		assertEquals(y, player2.getCredits());
+		assertEquals(y + 2, player2.getCredits());
 		assertNull(state.getCardState(player1));
 		assertEquals(3, player1.getSpaceShip().getTotalCrew());
 		assertEquals(2, player2.getSpaceShip().getTotalCrew());

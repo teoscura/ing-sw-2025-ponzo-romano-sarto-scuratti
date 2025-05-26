@@ -208,7 +208,7 @@ public class SpaceShip implements Serializable {
 		BaseComponent tmp = this.getComponent(coords);
 		if (this.components[coords.y][coords.x] == this.empty) throw new IllegalTargetException();
 		this.components[coords.y][coords.x] = this.empty;
-		this.player.addScore(-1);
+		this.player.giveCredits(-1);
 		tmp.onDelete(this);
 		this.updateShip();
 	}

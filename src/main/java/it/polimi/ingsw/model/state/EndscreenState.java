@@ -38,8 +38,8 @@ public class EndscreenState extends GameState {
 		}
 		for (Player p : this.players) {
 			if (p.getRetired()) continue;
-			if (p.getSpaceShip().countExposedConnectors() == min) p.addScore(2);
-			if (this.order_arrival.contains(p)) p.addScore(4 - order_arrival.indexOf(p));
+			if (p.getSpaceShip().countExposedConnectors() == min) p.giveCredits(2);
+			if (this.order_arrival.contains(p)) p.giveCredits(4 - order_arrival.indexOf(p));
 			p.finalScore();
 		}
 		Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "New Game State -> Endscreen State");
@@ -69,8 +69,7 @@ public class EndscreenState extends GameState {
 					p.getColor(),
 					this.order_arrival.indexOf(p),
 					p.getCredits(),
-					p.getSpaceShip().getContains(),
-					p.getScore()));
+					p.getSpaceShip().getContains()));
 		}
 		return new ClientEndgameState(tmp);
 	}

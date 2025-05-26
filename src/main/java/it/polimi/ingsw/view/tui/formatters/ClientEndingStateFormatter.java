@@ -15,7 +15,7 @@ public class ClientEndingStateFormatter {
 		ArrayList<String> res = new ArrayList<>();
 		ArrayList<ClientEndgamePlayer> list = new ArrayList<>(state.getPlayerList());
 		res.add("Game Results:");
-		list.stream().sorted((p1, p2) -> Integer.compare(p1.getScore(), p2.getScore()));
+		list.stream().sorted((p1, p2) -> Integer.compare(p1.getCredits(), p2.getCredits()));
 		int finished = (int) list.stream().filter(p -> p.getPlanche_slot() >= 0).count();
 		for (var e : list) {
 			AttributedStringBuilder b = new AttributedStringBuilder()
@@ -26,8 +26,7 @@ public class ClientEndingStateFormatter {
 					.append(String.format("🟩: %3d | ", e.getShipments()[2]))
 					.append(String.format("🟨: %3d | ", e.getShipments()[3]))
 					.append(String.format("🟥: %3d | ", e.getShipments()[4]))
-					.append(String.format("💰: %3d | " + (e.getPlanche_slot() == -1 ? "retired" : " alive "), e.getCredits()))
-					.append(String.format("✨: %3d | ", e.getScore()));
+					.append(String.format("💰: %3d | " + (e.getPlanche_slot() == -1 ? "retired" : " alive "), e.getCredits()));
 			res.add(b.toAnsi());
 		}
 		res.add("");

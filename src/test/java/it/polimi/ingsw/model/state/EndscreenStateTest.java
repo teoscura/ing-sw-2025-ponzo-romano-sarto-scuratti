@@ -95,11 +95,10 @@ public class EndscreenStateTest {
 		player3.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 4, 2)).check(v3g);
 		//score is 6+3;
 
-
 		//Aggiunge 2 per quello con meno connettori esposti
 		//Aggiunge da 1 a 4 per tutti gli storage.
 		//Aggiunge in ordine un premio da 4 a 1 per la posizione di arrivo ignorando ritirati.
-		ArrayList<Player> order = new ArrayList<>(Arrays.asList(player2, player1, player3));
+		ArrayList<Player> order = new ArrayList<>(Arrays.asList(player1, player3));
 		planche = new Planche(GameModeType.TEST, order);
 		ArrayList<Player> tmp = new ArrayList<>();
 		tmp.addAll(order);
@@ -109,7 +108,7 @@ public class EndscreenStateTest {
 		model.setController(new DummyController(model.getID()));
 		tmp = new ArrayList<>(tmp.stream().filter(p -> !p.getRetired()).toList());
 		tmp.sort((p1, p2) -> Integer.compare(planche.getPlayerPosition(p1), planche.getPlayerPosition(p2)));
-		this.state = new EndscreenState(model, GameModeType.TEST, PlayerCount.THREE, new ArrayList<>(Arrays.asList(player1, player2, player3)), new ArrayList<>(tmp.reversed()));
+		this.state = new EndscreenState(model, GameModeType.TEST, PlayerCount.THREE, new ArrayList<>(Arrays.asList(player1, player2, player3)), order);
 	}
 
 	@Test
@@ -117,9 +116,9 @@ public class EndscreenStateTest {
 		model.setState(state);
 		//Prepare order of arrival as Player2, Player1, Player3
 		//Retired only sells their stuff at half price+change.
-		assertEquals(2, player1.getScore());
-		assertEquals(13, player2.getScore());
-		assertEquals(11, player3.getScore());
+		assertEquals(2, player1.getCredits());
+		assertEquals(13, player2.getCredits());
+		assertEquals(11, player3.getCredits());
 
 	}
 
