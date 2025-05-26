@@ -12,11 +12,23 @@ public class TUIConnectionSetupState extends TUIState {
     
     private final ArrayList<String> args;
     private final ConnectingState state;
+    private final ArrayList<String> screen;
 
     public TUIConnectionSetupState(TUIView view, ConnectingState state){
         super(view);
         this.state = state;
         this.args = new ArrayList<>();
+        this.screen = new ArrayList<>() {{
+            add("Connection setup...");
+            add("");
+            add("╭─────── Address ───────╮");
+            add("│                       │");
+            add("│──────── Port: ────────│");
+            add("│                       │");
+            add("│───── 'tcp'|'rmi' ─────│");
+            add("│                       │");
+            add("╰───────────────────────╯");
+        }};
     }
 
     @Override
@@ -30,7 +42,7 @@ public class TUIConnectionSetupState extends TUIState {
     }
 
     public Runnable getRunnable(TerminalWrapper terminal){
-        return () -> MenuFormatter.connection(terminal, args);
+        return () -> MenuFormatter.connection(terminal, args, screen);
     }
     
 	private boolean validate() {

@@ -12,7 +12,6 @@ import org.jline.utils.InfoCmp.Capability;
 
 import java.io.IOException;
 import java.lang.ref.Cleaner;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -35,8 +34,8 @@ public class TerminalWrapper {
 	public TerminalWrapper(TUIView view) throws IOException {
 		this.terminal = TerminalBuilder.builder()
 				.system(true)
-				.encoding(Charset.forName("UTF-8"))
 				.build();
+
 		this.termlock = new Object();
 		previous = this.terminal.enterRawMode();
 		this.terminal.puts(Capability.enter_ca_mode);
@@ -68,15 +67,13 @@ public class TerminalWrapper {
 		if (size.getRows() < 32 || size.getColumns() < 128) showSmallScreen(size);
 
 		terminal.handle(Terminal.Signal.WINCH, signal -> {
-			Display display = new Display(terminal, true);
 			this.size = terminal.getSize();
-			if (size.getRows() != 32 || size.getColumns() != 128) {
-				this.size = terminal.getSize();
+			terminal.setSize(size);
+			if (size.getRows() < 32 || size.getColumns() < 128) {
 				showSmallScreen(size);
 				legal = false;
 				return;
 			}
-			display.resize(size.getRows(), size.getColumns());
 			legal = true;
 		});
 
@@ -232,7 +229,11 @@ public class TerminalWrapper {
 		res.add(new AttributedStringBuilder().style(AttributedStyle.BOLD.foreground(AttributedStyle.RED)).append("Current one is " + s.getColumns() + "x" + s.getRows() + "!").toAttributedString());
 		res.add(new AttributedStringBuilder().style(AttributedStyle.BOLD.foreground(AttributedStyle.RED)).append("Press any key when resized.").toAttributedString());
 		puts(Capability.clear_screen);
-		printCentered(res.stream().map(as -> as.toAnsi()).toList());
+		int firstrow = (s.getRows() - res.size()) / 2;
+		for (String line : res.stream().map(as->as.toAnsi()).toList()) {
+			this.print(line, firstrow, (s.getColumns() - line.length()) / 2);
+			firstrow++;
+		}
 	}
 
 }

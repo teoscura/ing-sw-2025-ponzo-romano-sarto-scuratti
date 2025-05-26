@@ -45,13 +45,17 @@ public class TUIView implements ClientView {
 
 	public TUIView() throws IOException {
 		this.terminal = new TerminalWrapper(this);
+
 		this.queue = new ThreadSafeMessageQueue<>(10);
-		this.inputthread = new KeyboardInputThread(terminal, this);
-		inputthread.start();
 		this.screen_runnable = () -> {};
 		this.status_runnable = () -> {};
 		this.overlay_runnable = () -> {};
 		this.notifications = new ArrayList<>();
+
+		overlay = false;
+
+		this.inputthread = new KeyboardInputThread(terminal, this);
+		inputthread.start();
 		this.drawthread = new RedrawThread(this);
 		drawthread.start();
 	}
@@ -64,30 +68,27 @@ public class TUIView implements ClientView {
 			String topline = "You are: " + username;
 			terminal.print(topline, 0, (128 - topline.length()) / 2);
 		}
+		this.status_runnable.run();
 		if(!overlay){
 			this.screen_runnable.run();
-			this.status_runnable.run();
-			synchronized (notifications) {
-				if (!notifications.isEmpty()) TextMessageFormatter.format(terminal, notifications);
-			}
 		} else {
-			synchronized (notifications) {
-				if (!notifications.isEmpty()) TextMessageFormatter.format(terminal, notifications);
-			}
 			this.overlay_runnable.run();
+		}
+		synchronized (notifications) {
+			if (!notifications.isEmpty()) TextMessageFormatter.format(terminal, notifications);
 		}
 	}
 
 	@Override
 	public void show(TitleScreenState state) {
 		this.tuistate = new TUITitleState(this, state);
-		this.screen_runnable = () -> this.tuistate.getRunnable(terminal);
+		this.screen_runnable = this.tuistate.getRunnable(terminal);
 	}
 
 	@Override
 	public void show(ConnectingState state) {
 		this.tuistate = new TUIConnectionSetupState(this, state);
-		this.screen_runnable = () -> this.tuistate.getRunnable(terminal);
+		this.screen_runnable = this.tuistate.getRunnable(terminal);
 	}
 
 	@Override
@@ -150,6 +151,7 @@ public class TUIView implements ClientView {
 
 	@Override
 	public void setClientState(ClientState state) {
+		terminal.puts(Capability.clear_screen);
 		this.client_state = state;
 	}
 
