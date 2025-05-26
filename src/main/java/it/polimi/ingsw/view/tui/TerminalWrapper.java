@@ -12,6 +12,7 @@ import org.jline.utils.InfoCmp.Capability;
 
 import java.io.IOException;
 import java.lang.ref.Cleaner;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -34,6 +35,7 @@ public class TerminalWrapper {
 	public TerminalWrapper(TUIView view) throws IOException {
 		this.terminal = TerminalBuilder.builder()
 				.system(true)
+				.encoding(Charset.forName("UTF-8"))
 				.build();
 		this.termlock = new Object();
 		previous = this.terminal.enterRawMode();

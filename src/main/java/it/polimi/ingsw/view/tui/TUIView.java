@@ -25,8 +25,9 @@ public class TUIView implements ClientView {
 	private final Thread inputthread;
 	private final ArrayList<TUINotification> notifications;
 	private final ClientStateOverlayFormatter overlay_formatter;
-	private Thread line_thread;
 	private final Thread drawthread;
+
+	private Thread line_thread;
 	private ConnectedState state;
 	private PlayerColor selected_color;
 	private ClientState client_state;
@@ -36,13 +37,6 @@ public class TUIView implements ClientView {
 	private Runnable screen_runnable;
 	private Runnable status_runnable;
 	private Runnable overlay_runnable;
-
-	//XXX add show cards message for construction state.
-	//add info to verify state.
-	//if cargopenalty is 0 nothing is needed
-	//Fix connecting with same name on TCP.
-	//Direction specifier for shieldcomponent.
-	//Ending voyage gracefully if everyone loses.
 
 	public TUIView() throws IOException {
 		this.terminal = new TerminalWrapper(this);
@@ -69,29 +63,34 @@ public class TUIView implements ClientView {
 			String topline = "You are: " + state.getUsername();
 			terminal.print(topline, 0, (128 - topline.length()) / 2);
 		}
-		this.screen_runnable.run();
-		this.status_runnable.run();
-		synchronized (notifications) {
-			if (!notifications.isEmpty()) TextMessageFormatter.format(terminal, notifications);
+		if(overlay_runnable == null){
+			this.screen_runnable.run();
+			this.status_runnable.run();
+			synchronized (notifications) {
+				if (!notifications.isEmpty()) TextMessageFormatter.format(terminal, notifications);
+			}
+		} else {
+			synchronized (notifications) {
+				if (!notifications.isEmpty()) TextMessageFormatter.format(terminal, notifications);
+			}
+			if (overlay_runnable != null) this.overlay_runnable.run();
 		}
-		if (overlay_runnable != null) this.overlay_runnable.run();
-
 	}
 
 	@Override
 	public void show(TitleScreenState state) {
-		TitleScreenThread s = new TitleScreenThread(state, this);
-		this.line_thread = s;
-		s.start();
-		this.screen_runnable = () -> s.format(terminal);
+		this.line_thread.interrupt();
+		this.line_thread = new TitleScreenThread(state, this);
+		this.line_thread.start();
+		this.screen_runnable = () -> MenuFormatter.title(terminal);
 	}
 
 	@Override
 	public void show(ConnectingState state) {
-		ConnectingThread s = new ConnectingThread(state, this);
-		this.line_thread = s;
-		s.start();
-		this.screen_runnable = () -> s.format(terminal);
+		this.line_thread.interrupt();
+		this.line_thread = new ConnectingThread(state, this);
+		this.line_thread.start();
+		this.screen_runnable = () -> MenuFormatter.connection(terminal, ((ConnectingThread)this.line_thread).getArgs());
 	}
 
 	@Override

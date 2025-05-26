@@ -3,8 +3,6 @@ package it.polimi.ingsw.view.tui.concurrent;
 import it.polimi.ingsw.controller.client.connections.ConnectionType;
 import it.polimi.ingsw.controller.client.state.ConnectingState;
 import it.polimi.ingsw.view.tui.TUIView;
-import it.polimi.ingsw.view.tui.TerminalWrapper;
-import org.jline.utils.InfoCmp.Capability;
 
 import java.util.ArrayList;
 
@@ -12,7 +10,6 @@ public class ConnectingThread extends Thread {
 
 	private final ConnectingState state;
 	private final TUIView view;
-	private final ArrayList<String> screen;
 	private final ArrayList<String> args;
 
 	public ConnectingThread(ConnectingState state, TUIView view) {
@@ -20,17 +17,6 @@ public class ConnectingThread extends Thread {
 		this.view = view;
 		this.state = state;
 		this.args = new ArrayList<>();
-		this.screen = new ArrayList<>() {{
-			add("Connection setup...");
-			add("");
-			add("╭─────── Address ───────╮");
-			add("│                       │");
-			add("│──────── Port: ────────│");
-			add("│                       │");
-			add("│───── 'tcp'|'rmi' ─────│");
-			add("│                       │");
-			add("╰───────────────────────╯");
-		}};
 	}
 
 	@Override
@@ -47,21 +33,8 @@ public class ConnectingThread extends Thread {
 			state.connect(args.get(0), Integer.parseInt(args.get(1)), args.get(2).equals("rmi") ? ConnectionType.RMI : args.get(2).equals("tcp") ? ConnectionType.SOCKET : ConnectionType.NONE);
 	}
 
-	public void format(TerminalWrapper terminal) {
-		terminal.puts(Capability.clear_screen);
-		int i = 0;
-		for (var s : args) {
-			String shown = normalize(s);
-			this.screen.set(screen.size() - 2 * (3 - i), "│" + shown + "│");
-			i++;
-		}
-		if (args.size() < 3) {
-			int index = 2 * (3 - args.size());
-			String current_input = terminal.peekInput();
-			String shown = normalize(current_input);
-			this.screen.set(screen.size() - index, "│" + shown + "│");
-		}
-		terminal.printCentered(screen);
+	public ArrayList<String> getArgs(){
+		return new ArrayList<>(args);
 	}
 
 	private boolean validate() {
@@ -71,10 +44,6 @@ public class ConnectingThread extends Thread {
 		} catch (NumberFormatException e) {
 			return false;
 		}
-	}
-
-	private String normalize(String input) {
-		return input.length() > 23 ? input.substring(input.length() - 23) : String.format("%1$-23s", input);
 	}
 
 }
