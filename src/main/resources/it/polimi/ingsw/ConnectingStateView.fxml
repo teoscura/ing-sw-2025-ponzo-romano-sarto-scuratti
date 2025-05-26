@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.ConnectingStateController">
+   <children>
+      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="216.0" layoutY="27.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../galaxy_trucker_imgs/images_logo/images/galaxy-trucker-clean.png" />
+         </image>
+      </ImageView>
+      <TextField fx:id="ip_field" layoutX="216.0" layoutY="209.0" prefHeight="26.0" prefWidth="168.0" text="IP address" />
+      <TextField fx:id="port_field" disable="true" layoutX="216.0" layoutY="243.0" prefHeight="26.0" prefWidth="168.0" promptText="Connection port" text="Connection port" />
+      <MenuButton fx:id="connection_menu" disable="true" layoutX="216.0" layoutY="279.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="168.0" text="Connection">
+        <items>
+          <MenuItem mnemonicParsing="false" text="RMI" />
+          <MenuItem mnemonicParsing="false" text="TCP" />
+        </items>
+      </MenuButton>
+   </children>
+</AnchorPane>

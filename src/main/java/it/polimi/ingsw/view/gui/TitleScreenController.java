@@ -20,13 +20,24 @@ public class TitleScreenController {
 	public TitleScreenController(TitleScreenState state, GUIView view) {
 		this.state = state;
 		this.view = view;
-		//logo.setFitHeight();
-		//name_field.setOnAction(this::confirm_name);
 	}
 
-	public void confirm_name(ActionEvent event) {
+	@FXML
+	public void confirmName(ActionEvent event) {
 		state.setUsername(name_field.getText());
-		//view.show(state.getNext());
 	}
+
+	@FXML
+	protected void initialize() {
+		name_field.setOnAction(this::confirmName);
+	}
+
+	/*public void setState(TitleScreenState state) {
+		this.state = state;
+	}
+
+	public void setView(GUIView view) {
+		this.view = view;
+	}*/
 
 }

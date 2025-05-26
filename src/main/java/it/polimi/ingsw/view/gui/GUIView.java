@@ -20,36 +20,28 @@ public class GUIView implements ClientView {
 		this.stage = stage;
 	}
 
-	/*public void setup() throws IOException {
-		Scene scene = new Scene(FXMLLoader.load(getClass().getResource("/it/polimi/ingsw/TitleScreenView.fxml")));
-		StartingMenuController controller = new StartingMenuController();
-		controller.setStage(stage);
-		stage.setScene(scene);
-		stage.show();
-	}*/
-
-
 	@Override
 	public void show(TitleScreenState state) {
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/TitleScreenView.fxml"));
+		loader.setControllerFactory(f -> new TitleScreenController(state, this));
 		Scene scene = null;
 		try {
-			scene = new Scene(FXMLLoader.load(getClass().getResource("/it/polimi/ingsw/TitleScreenView.fxml")));
-		} catch (IOException e) {
-			System.out.println("dingo");
-		}
-//		Pane pane = new Pane();
-//		Scene scene = new Scene(pane);
-//
-//		pane.setPrefSize(800, 600);
-
-		TitleScreenController controller = new TitleScreenController(state, this);
+			scene = new Scene(loader.load());
+		} catch (IOException e) {}
 		stage.setScene(scene);
 		stage.show();
 	}
 
 	@Override
 	public void show(ConnectingState state) {
-
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/ConnectingStateView.fxml"));
+		loader.setControllerFactory(f -> new ConnectingStateController(state, this));
+		Scene scene = null;
+		try {
+			scene = new Scene(loader.load());
+		} catch (IOException e) {}
+		stage.setScene(scene);
+		stage.show();
 	}
 
 	@Override
