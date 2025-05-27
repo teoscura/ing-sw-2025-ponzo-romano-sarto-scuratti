@@ -9,6 +9,7 @@ import it.polimi.ingsw.model.client.state.*;
 import it.polimi.ingsw.view.ClientView;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
@@ -56,8 +57,10 @@ public class GUIView implements ClientView {
 		Platform.runLater(() -> {
 			try {
 				FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/LobbyStateView.fxml"));
-				loader.setControllerFactory(f -> new ClientLobbyStateController(state, this));
-				Scene scene = new Scene(loader.load());
+				ClientLobbyStateController controller = new ClientLobbyStateController(state, this);
+				loader.setController(controller);
+				Parent root = loader.load();
+				Scene scene = new Scene(root);
 				stage.setScene(scene);
 				stage.show();
 			} catch (IOException e) {
