@@ -4,7 +4,6 @@ import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.client.ClientGameListEntry;
 import it.polimi.ingsw.model.client.state.ClientLobbySelectState;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.util.Callback;
@@ -65,5 +64,13 @@ public class ClientLobbyStateController {
 		}
 
 		return sb.toString().trim();
+	}
+
+	@FXML
+	public void enterSetup() {
+		System.out.println("change state");
+		//TODO
+		//view.setInput(new EnterSetupMessage());
+		//view.takeInput();
 	}
 }
