@@ -199,7 +199,6 @@ public class TUIView implements ClientView {
 		this.redraw();
 	}
 
-	@Override
 	public void setInput(ServerMessage input) {
 		queue.insert(input);
 	}
@@ -225,6 +224,9 @@ public class TUIView implements ClientView {
 	@Override
 	public void disconnect() {
 		this.status_runnable = () -> {};
+		//XXX this.queue.dump();
+		//dump all queues.
+		this.username = null;
 		this.overlay_runnable = null;
 		this.client_state = null;
 	}

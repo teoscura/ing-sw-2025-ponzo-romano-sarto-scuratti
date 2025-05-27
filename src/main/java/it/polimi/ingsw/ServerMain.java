@@ -7,7 +7,6 @@ import it.polimi.ingsw.utils.LoggerLevel;
 public class ServerMain {
 
 	public static void main(String[] args) {
-		//XXX rework this into a system of tags where arguments are not ordered, but give variables, makes it easier for us to init everything.
 		if (args.length < 2 || args.length > 3) {
 			System.out.println("Usage: java -jar <jar name> <tcp address> [tcp port] <rmi port>");
 			System.exit(-1);

@@ -57,10 +57,6 @@ public class DummyView implements ClientView {
 	}
 
 	@Override
-	public void setInput(ServerMessage input) {
-	}
-
-	@Override
 	public ServerMessage takeInput() {
 		return null;
 	}
