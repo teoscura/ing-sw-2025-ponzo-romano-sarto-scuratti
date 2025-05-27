@@ -219,7 +219,7 @@ public class TUIView implements ClientView {
 		terminal.puts(Capability.clear_screen);
 		this.selected_color = PlayerColor.NONE;
 		this.username = state.getUsername();
-		this.tuistate = new TUIInGameState(this);
+		this.tuistate = new TUIInGameState(this, state);
 	}
 
 	@Override

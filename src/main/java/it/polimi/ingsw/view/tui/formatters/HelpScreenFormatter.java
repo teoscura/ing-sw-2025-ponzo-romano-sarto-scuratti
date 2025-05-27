@@ -21,7 +21,7 @@ public class HelpScreenFormatter {
 		res.add("│ 'sendcontinue'                                           ││ '🟦': Blue cargo          │ '⏬': 🔫/🚀 Direction        │");
 		res.add("│ 'takecomponent'                                          ││ '🟩': Green cargo         │ '⏪': 🔫/🚀 Direction        │");
 		res.add("│ 'putcomponent <cid> <x> <y> <r>'                         ││ '🟨': Yellow cargo        │ '..': Empty space            │");
-		res.add("│ 'discardcomponent <cid>'                                 ││ '🟥': Red cargo           │ '🔗': Structural Component   │");
+		res.add("│ 'discardcomponent'/'reservecomponent' (current comp.)    ││ '🟥': Red cargo           │ '🔗': Structural Component   │");
 		res.add("│ 'takediscarded <cid>'                                    ││ '❌': Illegal Component   │ '🔋': Battery Component      │");
 		res.add("│ 'togglehourglass'                                        ││ '🧍': Total crew          │ '🏦': Starting Cabin Comp.   │");
 		res.add("│ 'selectblob <x> <y>'                                     ││ '😀': Human Crewmate      │ '🛖': Cabin Component        │");

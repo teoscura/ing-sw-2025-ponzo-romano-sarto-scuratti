@@ -1,14 +1,17 @@
 package it.polimi.ingsw.view.tui;
 
+import it.polimi.ingsw.controller.client.state.ConnectedState;
+
 public class CommandPreprocessor {
 
 	private final TUIView view;
+	private final ConnectedState state;
 
-	public CommandPreprocessor(TUIView view) {
+	public CommandPreprocessor(TUIView view, ConnectedState state) {
 		this.view = view;
+		this.state = state;
 	}
 
-	//XXX add disconnect command that handles disconnection gracefully.
 	public void process(String s) {
 		switch (s) {
 			case "red", "blue", "green", "yellow":
@@ -19,6 +22,9 @@ public class CommandPreprocessor {
 				break;
 			case "stateinfo":
 				view.showStateInfo();
+				break;
+			case "disconnect":
+				state.disconnect();
 				break;
 			default:
 				forward(s);
