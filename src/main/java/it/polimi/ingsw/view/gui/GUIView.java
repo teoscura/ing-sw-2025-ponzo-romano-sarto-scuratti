@@ -107,10 +107,10 @@ public class GUIView implements ClientView {
 
 	@Override
 	public void showTextMessage(String message) {
-		Alert errorAlert = new Alert(Alert.AlertType.INFORMATION);
-		errorAlert.setHeaderText("Info");
-		errorAlert.setContentText(message);
-		errorAlert.showAndWait();
+//		Alert errorAlert = new Alert(Alert.AlertType.INFORMATION);
+//		errorAlert.setHeaderText("Info");
+//		errorAlert.setContentText(message);
+//		errorAlert.showAndWait();
 
 
 	}
@@ -132,7 +132,7 @@ public class GUIView implements ClientView {
 
 	@Override
 	public void show(ClientWaitingRoomState state) {
-
+	System.out.println("method called");
 	}
 
 	@Override

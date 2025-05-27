@@ -1,7 +1,13 @@
 package it.polimi.ingsw.view.gui;
 
+import it.polimi.ingsw.message.server.EnterSetupMessage;
+import it.polimi.ingsw.message.server.LeaveSetupMessage;
+import it.polimi.ingsw.message.server.OpenLobbyMessage;
 import it.polimi.ingsw.model.GameModeType;
+import it.polimi.ingsw.model.PlayerCount;
 import it.polimi.ingsw.model.client.state.ClientSetupState;
+import it.polimi.ingsw.model.player.Player;
+import it.polimi.ingsw.model.player.PlayerColor;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 
@@ -10,7 +16,7 @@ public class SetupStateController {
 	private final ClientSetupState state;
 	private final GUIView view;
 	private GameModeType gameModeType;
-	private int numPlayers;
+	private PlayerCount numPlayers;
 
 	@FXML
 	private ChoiceBox player_number;
@@ -47,14 +53,19 @@ public class SetupStateController {
 			view.showTextMessage("Select the game type.");
 			return;
 		}
-
-		try {
-			numPlayers = Integer.parseInt(selectedPlayerNumber);
-		} catch (NumberFormatException e) {
-
-			view.showTextMessage("Invalid player number format.");
-			return;
+		switch (selectedPlayerNumber) {
+			case "2":
+				numPlayers = PlayerCount.TWO;
+				break;
+			case "3":
+				numPlayers = PlayerCount.THREE;
+			case "4":
+				numPlayers = PlayerCount.FOUR;
+			default:
+				view.showTextMessage("Invalid player number.");
 		}
+
+
 
 		switch (selectedGameType) {
 			case "Test Flight":
@@ -64,10 +75,17 @@ public class SetupStateController {
 				gameModeType = GameModeType.LVL2;
 				break;
 			default:
-				view.showTextMessage("Invalid game type selected.");
+				view.showTextMessage("Invalid game ViewMessagetype.");
 		}
+		System.out.println(gameModeType);
+		System.out.println(numPlayers);
 
-		// send
+		view.setInput(new OpenLobbyMessage(gameModeType, numPlayers));
+		//view.setInput(new LeaveSetupMessage());
 
+	}
+	@FXML
+	protected void leaveSetup(){
+		view.setInput(new LeaveSetupMessage());
 	}
 }
