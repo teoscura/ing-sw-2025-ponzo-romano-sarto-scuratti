@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view.gui;
 
+import it.polimi.ingsw.message.server.EnterSetupMessage;
 import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.client.ClientGameListEntry;
 import it.polimi.ingsw.model.client.state.ClientLobbySelectState;
@@ -70,7 +71,7 @@ public class ClientLobbyStateController {
 	public void enterSetup() {
 		System.out.println("change state");
 		//TODO
-		//view.setInput(new EnterSetupMessage());
-		//view.takeInput();
+		view.setInput(new EnterSetupMessage());
+
 	}
 }

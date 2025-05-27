@@ -7,8 +7,8 @@
     <children>
         <Label layoutX="219.0" layoutY="30.0" text="Select an unfinished game:" />
         <Label layoutX="237.0" layoutY="149.0" text="Or create a new one:" />
-        <ChoiceBox id="player_number" layoutX="227.0" layoutY="175.0" prefWidth="150.0" />
-        <ChoiceBox id="game_type" layoutX="227.0" layoutY="214.0" prefWidth="150.0" />
+        <ChoiceBox fx:id="player_number" layoutX="227.0" layoutY="175.0" prefWidth="150.0" />
+        <ChoiceBox fx:id="game_type" layoutX="227.0" layoutY="214.0" prefWidth="150.0" />
         <Button layoutX="272.0" layoutY="264.0" mnemonicParsing="false" text="Create" />
         <ScrollPane layoutX="200.0" layoutY="49.0" prefHeight="85.0" prefWidth="205.0">
             <content>

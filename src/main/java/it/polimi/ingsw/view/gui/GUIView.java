@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view.gui;
 
+import it.polimi.ingsw.controller.ThreadSafeMessageQueue;
 import it.polimi.ingsw.controller.client.state.ConnectedState;
 import it.polimi.ingsw.controller.client.state.ConnectingState;
 import it.polimi.ingsw.controller.client.state.TitleScreenState;
@@ -14,13 +15,17 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+
 public class GUIView implements ClientView {
 
 	private final Stage stage;
+	private final ThreadSafeMessageQueue<ServerMessage> queue;
 
 	public GUIView(Stage stage) {
 		this.stage = stage;
+		this.queue = new ThreadSafeMessageQueue<>(10);
 	}
+
 
 	@Override
 	public void show(TitleScreenState state) {
@@ -85,14 +90,19 @@ public class GUIView implements ClientView {
 
 	}
 
-	@Override
 	public void setInput(ServerMessage input) {
-
+		queue.insert(input);
 	}
 
 	@Override
 	public ServerMessage takeInput() {
-		return null;
+		try {
+			return queue.take();
+		} catch (InterruptedException e) {
+			this.showTextMessage("Shutting down input command thread!");
+			//queue.dump();
+			return null;
+		}
 	}
 
 	@Override

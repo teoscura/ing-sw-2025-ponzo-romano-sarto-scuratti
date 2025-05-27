@@ -25,8 +25,8 @@ public class TUIView implements ClientView {
 	private final Thread inputthread;
 	private final ArrayList<TUINotification> notifications;
 	private final ClientStateOverlayFormatter overlay_formatter;
-	private Thread line_thread;
 	private final Thread drawthread;
+	private Thread line_thread;
 	private ConnectedState state;
 	private PlayerColor selected_color;
 	private ClientState client_state;
