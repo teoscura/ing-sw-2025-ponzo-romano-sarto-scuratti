@@ -61,7 +61,7 @@ public class GUIView implements ClientView {
 				stage.setScene(scene);
 				stage.show();
 			} catch (IOException e) {
-				e.printStackTrace();
+				 e.printStackTrace();
 			}
 		});
 	}
