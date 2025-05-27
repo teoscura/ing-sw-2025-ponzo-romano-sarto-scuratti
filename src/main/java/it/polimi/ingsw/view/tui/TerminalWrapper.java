@@ -58,7 +58,7 @@ public class TerminalWrapper {
 
 		legal = true;
 		this.size = terminal.getSize();
-		if (size.getRows() != 32 || size.getColumns() != 128) {
+		if (size.getRows() < 32 || size.getColumns() < 128) {
 			this.size = terminal.getSize();
 			showSmallScreen(size);
 			legal = false;
