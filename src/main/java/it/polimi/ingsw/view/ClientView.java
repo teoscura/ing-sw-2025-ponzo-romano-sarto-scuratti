@@ -9,10 +9,12 @@ import it.polimi.ingsw.model.client.state.ClientStateVisitor;
 
 public interface ClientView extends ClientStateVisitor {
 
-	//User info setup.
+	//User info & setup.
 	void show(TitleScreenState state);
 
 	void show(ConnectingState state);
+
+	void showTextMessage(String message);
 	
 	//State sync
 	void setClientState(ClientState state);
@@ -26,7 +28,6 @@ public interface ClientView extends ClientStateVisitor {
 
 	ServerMessage takeInput();
 
-	//Misc and debug
-	void showTextMessage(String message);
+	
 
 }
