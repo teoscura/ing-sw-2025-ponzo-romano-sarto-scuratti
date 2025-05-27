@@ -56,6 +56,7 @@ public class GUIView implements ClientView {
 				loader.setControllerFactory(f -> new ClientLobbyStateController(state, this));
 				Scene scene;
 				scene = new Scene(loader.load());
+				scene.getStylesheets().add(getClass().getResource("/it/polimi/ingsw/style.css").toExternalForm());
 				stage.setScene(scene);
 				stage.show();
 			} catch (IOException e) {
