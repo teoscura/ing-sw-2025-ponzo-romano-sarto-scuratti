@@ -26,4 +26,8 @@ public class ThreadSafeMessageQueue<T extends Message> {
 			queue.add(item);
 		});
 	}
+
+	public void dump(){
+		queue.clear();
+	}
 }

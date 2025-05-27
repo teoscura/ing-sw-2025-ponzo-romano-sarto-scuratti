@@ -24,6 +24,6 @@ public interface ClientView extends ClientStateVisitor {
 
 	void disconnect();
 
-	ServerMessage takeInput();
+	ServerMessage takeInput() throws InterruptedException;
 
 }

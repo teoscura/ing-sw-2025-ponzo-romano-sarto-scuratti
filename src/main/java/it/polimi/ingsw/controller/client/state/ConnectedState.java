@@ -59,11 +59,11 @@ public class ConnectedState extends ClientControllerState {
 	public void onClose() {
 		Runtime.getRuntime().removeShutdownHook(this.shutdown_hook);
 		try {
+			stopPingTask();
 			this.connection.sendMessage(new ServerDisconnectMessage());
 			this.connection.close();
 			this.sender_thread.interrupt();
 			this.consumer_thread.interrupt();
-			stopPingTask();
 		} catch (RemoteException e) {
 			view.showTextMessage("Error during RMI Disconnect!");
 		} catch (IOException e) {
@@ -77,7 +77,6 @@ public class ConnectedState extends ClientControllerState {
 	// Communication methods
 	// -------------------------------------------------------------
 
-	@Override
 	public void sendMessage(ServerMessage message) {
 		this.outqueue.insert(message);
 	}

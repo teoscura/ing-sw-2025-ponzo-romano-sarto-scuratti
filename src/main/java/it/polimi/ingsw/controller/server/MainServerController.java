@@ -100,12 +100,12 @@ public class MainServerController extends Thread implements VirtualServer {
 
 	public void receiveMessage(ServerMessage message) {
 		if (message.getDescriptor() == null) {
-			Logger.getInstance().print(LoggerLevel.WARN, "Received a message from a Client: not properly connected!");
+			Logger.getInstance().print(LoggerLevel.WARN, "Received a message from a Client: not properly connected! (Null descriptor)");
 			return;
 		}
 		synchronized (listeners_lock) {
 			if (!this.all_listeners.containsKey(message.getDescriptor().getUsername())) {
-				Logger.getInstance().print(LoggerLevel.WARN, "Received a message from a Client: not properly connected!");
+				Logger.getInstance().print(LoggerLevel.WARN, "Received a message from a Client: not properly connected! (Player not connected)");
 				return;
 			}
 		}

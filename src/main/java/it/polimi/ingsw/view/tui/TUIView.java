@@ -1,6 +1,5 @@
 package it.polimi.ingsw.view.tui;
 
-import it.polimi.ingsw.controller.ThreadSafeMessageQueue;
 import it.polimi.ingsw.controller.client.state.ConnectedState;
 import it.polimi.ingsw.controller.client.state.ConnectingState;
 import it.polimi.ingsw.controller.client.state.TitleScreenState;
@@ -21,6 +20,7 @@ import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.concurrent.ArrayBlockingQueue;
 
 public class TUIView implements ClientView {
 	
@@ -34,8 +34,8 @@ public class TUIView implements ClientView {
 	private Runnable overlay_runnable;
 
 	//Controller communication fields.
-	private final ThreadSafeMessageQueue<ServerMessage> queue;
 	private final Thread inputthread;
+	private final ArrayBlockingQueue<ServerMessage> queue;
 	private TUIState tuistate;
 
 	//Game info fields.
@@ -45,13 +45,13 @@ public class TUIView implements ClientView {
 
 	public TUIView() throws IOException {
 		this.terminal = new TerminalWrapper(this);
-		this.queue = new ThreadSafeMessageQueue<>(10);
 		this.screen_runnable = () -> {};
 		this.status_runnable = () -> {};
 		this.overlay_runnable = () -> {};
 		this.notifications = new ArrayList<>();
 		overlay = false;
 		this.inputthread = new KeyboardInputThread(terminal, this);
+		this.queue = new ArrayBlockingQueue<>(10);
 		this.drawthread = new RedrawThread(this);
 		inputthread.start();
 		drawthread.start();
@@ -197,18 +197,13 @@ public class TUIView implements ClientView {
 	}
 
 	public void setInput(ServerMessage input) {
-		queue.insert(input);
+		if(input==null) return;
+		queue.add(input);
 	}
 
 	@Override
-	public ServerMessage takeInput() {
-		try {
-			return queue.take();
-		} catch (InterruptedException e) {
-			this.showTextMessage("Shutting down input command thread!");
-			//queue.dump();
-			return null;
-		}
+	public ServerMessage takeInput() throws InterruptedException {
+		return queue.take();
 	}
 
 	@Override
@@ -222,6 +217,7 @@ public class TUIView implements ClientView {
 	@Override
 	public void disconnect() {
 		this.status_runnable = () -> {};
+		this.queue.clear();
 		this.username = null;
 		this.overlay_runnable = null;
 		this.client_state = null;

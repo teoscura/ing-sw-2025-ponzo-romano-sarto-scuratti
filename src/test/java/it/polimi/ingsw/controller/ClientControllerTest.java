@@ -25,9 +25,9 @@ public class ClientControllerTest {
 	@Test
 	void invalidUsernameTest() {
 		this.controller.setState(new TitleScreenState(controller, view));
-		this.controller.getState().setUsername("???invalid");
+		((TitleScreenState)this.controller.getState()).setUsername("???invalid");
 		assertInstanceOf(TitleScreenState.class, controller.getState());
-		this.controller.getState().setUsername("bingus");
+		((TitleScreenState)this.controller.getState()).setUsername("bingus");
 		assertInstanceOf(ConnectingState.class, controller.getState());
 	}
 
