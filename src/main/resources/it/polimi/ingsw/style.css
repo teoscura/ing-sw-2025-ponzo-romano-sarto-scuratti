@@ -1,0 +1,6 @@
+.invisible-scroll .scroll-bar:vertical,
+.invisible-scroll .scroll-bar:horizontal {
+    -fx-opacity: 0;
+    -fx-pref-width: 0;
+    -fx-pref-height: 0;
+}
