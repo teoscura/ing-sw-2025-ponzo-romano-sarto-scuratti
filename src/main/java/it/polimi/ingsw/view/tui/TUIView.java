@@ -29,6 +29,7 @@ public class TUIView implements ClientView {
 	private final TerminalWrapper terminal;
 	private final ArrayList<TUINotification> notifications;
 	private final Thread drawthread;
+	private Thread line_thread;
 	private Runnable screen_runnable;
 	private Runnable status_runnable;
 	private boolean overlay;
