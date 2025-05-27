@@ -45,18 +45,15 @@ public class TUIView implements ClientView {
 
 	public TUIView() throws IOException {
 		this.terminal = new TerminalWrapper(this);
-
 		this.queue = new ThreadSafeMessageQueue<>(10);
 		this.screen_runnable = () -> {};
 		this.status_runnable = () -> {};
 		this.overlay_runnable = () -> {};
 		this.notifications = new ArrayList<>();
-
 		overlay = false;
-
 		this.inputthread = new KeyboardInputThread(terminal, this);
-		inputthread.start();
 		this.drawthread = new RedrawThread(this);
+		inputthread.start();
 		drawthread.start();
 	}
 
@@ -209,6 +206,7 @@ public class TUIView implements ClientView {
 			return queue.take();
 		} catch (InterruptedException e) {
 			this.showTextMessage("Shutting down input command thread!");
+			//queue.dump();
 			return null;
 		}
 	}
@@ -224,8 +222,6 @@ public class TUIView implements ClientView {
 	@Override
 	public void disconnect() {
 		this.status_runnable = () -> {};
-		//XXX this.queue.dump();
-		//dump all queues.
 		this.username = null;
 		this.overlay_runnable = null;
 		this.client_state = null;
