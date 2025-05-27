@@ -19,7 +19,6 @@ public class ClientLobbyStateController {
 
 	@FXML
 	public void initialize() {
-		System.out.println("Initialize called");
 		for (ClientGameListEntry entry : state.getLobbyList()) {
 			String lobbyInfo = formatLobbyEntry(entry);
 			lobbyListView.getItems().add(lobbyInfo);
