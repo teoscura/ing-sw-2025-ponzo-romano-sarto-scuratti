@@ -3,20 +3,16 @@ package it.polimi.ingsw.view.gui;
 import it.polimi.ingsw.controller.client.state.ConnectedState;
 import it.polimi.ingsw.controller.client.state.ConnectingState;
 import it.polimi.ingsw.controller.client.state.TitleScreenState;
-import it.polimi.ingsw.model.client.state.ClientLobbySelectState;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.client.state.*;
 import it.polimi.ingsw.view.ClientView;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 
-
 import java.io.IOException;
-import java.net.URL;
 
 public class GUIView implements ClientView {
 
@@ -57,14 +53,13 @@ public class GUIView implements ClientView {
 		Platform.runLater(() -> {
 			try {
 				FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/LobbyStateView.fxml"));
-				ClientLobbyStateController controller = new ClientLobbyStateController(state, this);
-				loader.setController(controller);
-				Parent root = loader.load();
-				Scene scene = new Scene(root);
+				loader.setControllerFactory(f -> new ClientLobbyStateController(state, this));
+				Scene scene;
+				scene = new Scene(loader.load());
 				stage.setScene(scene);
 				stage.show();
 			} catch (IOException e) {
-				 e.printStackTrace();
+				e.printStackTrace();
 			}
 		});
 	}
@@ -111,7 +106,17 @@ public class GUIView implements ClientView {
 
 	@Override
 	public void show(ClientSetupState state) {
-
+		Platform.runLater(() -> {
+			try {
+				FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/SetupStateView.fxml"));
+				loader.setControllerFactory(f -> new SetupStateController(state, this));
+				Scene scene = new Scene(loader.load());
+				stage.setScene(scene);
+				stage.show();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		});
 	}
 
 	@Override
