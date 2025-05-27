@@ -7,6 +7,7 @@ import it.polimi.ingsw.model.client.state.ClientLobbySelectState;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.client.state.*;
 import it.polimi.ingsw.view.ClientView;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -14,6 +15,7 @@ import javafx.stage.Stage;
 
 
 import java.io.IOException;
+import java.net.URL;
 
 public class GUIView implements ClientView {
 
@@ -51,14 +53,17 @@ public class GUIView implements ClientView {
 
 	@Override
 	public void show(ClientLobbySelectState state) {
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/LobbyStateView.fxml"));
-		loader.setControllerFactory(f -> new ClientLobbyStateController(state, this));
-		Scene scene = null;
-		try {
-			scene = new Scene(loader.load());
-		} catch (IOException e) {}
-		stage.setScene(scene);
-		stage.show();
+		Platform.runLater(() -> {
+			try {
+				FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/LobbyStateView.fxml"));
+				loader.setControllerFactory(f -> new ClientLobbyStateController(state, this));
+				Scene scene = new Scene(loader.load());
+				stage.setScene(scene);
+				stage.show();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		});
 	}
 
 	@Override

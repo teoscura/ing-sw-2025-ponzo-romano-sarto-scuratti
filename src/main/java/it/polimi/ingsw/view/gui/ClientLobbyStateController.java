@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view.gui;
 
+import it.polimi.ingsw.model.client.ClientGameListEntry;
 import it.polimi.ingsw.model.client.state.ClientLobbySelectState;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
@@ -16,5 +17,25 @@ public class ClientLobbyStateController {
 		this.view = view;
 	}
 
+	@FXML
+	public void initialize() {
+		System.out.println("Initialize called");
+		for (ClientGameListEntry entry : state.getLobbyList()) {
+			String lobbyInfo = formatLobbyEntry(entry);
+			lobbyListView.getItems().add(lobbyInfo);
+		}
+	}
+
+	private String formatLobbyEntry(ClientGameListEntry entry) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("ID ").append(entry.getModelId()).append(" - ")
+				.append(entry.getType()).append(" | ")
+				.append(entry.getPlayers().size()).append("/")
+				.append(entry.getCount().getNumber()).append(" - ");
+		for (String player : entry.getPlayers()) {
+			sb.append(player).append(" ");
+		}
+		return sb.toString();
+	}
 
 }
