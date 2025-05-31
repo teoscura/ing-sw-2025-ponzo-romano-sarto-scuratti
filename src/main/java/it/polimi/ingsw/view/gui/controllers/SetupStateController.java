@@ -1,13 +1,11 @@
-package it.polimi.ingsw.view.gui;
+package it.polimi.ingsw.view.gui.controllers;
 
-import it.polimi.ingsw.message.server.EnterSetupMessage;
 import it.polimi.ingsw.message.server.LeaveSetupMessage;
 import it.polimi.ingsw.message.server.OpenLobbyMessage;
 import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.PlayerCount;
 import it.polimi.ingsw.model.client.state.ClientSetupState;
-import it.polimi.ingsw.model.player.Player;
-import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.view.gui.GUIView;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 
