@@ -1,9 +1,10 @@
-package it.polimi.ingsw.view.gui;
+package it.polimi.ingsw.view.gui.controllers;
 
 import it.polimi.ingsw.message.server.EnterSetupMessage;
 import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.client.ClientGameListEntry;
 import it.polimi.ingsw.model.client.state.ClientLobbySelectState;
+import it.polimi.ingsw.view.gui.GUIView;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;

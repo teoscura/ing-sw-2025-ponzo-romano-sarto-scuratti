@@ -1,7 +1,8 @@
-package it.polimi.ingsw.view.gui;
+package it.polimi.ingsw.view.gui.controllers;
 
 import it.polimi.ingsw.controller.client.connections.ConnectionType;
 import it.polimi.ingsw.controller.client.state.ConnectingState;
+import it.polimi.ingsw.view.gui.GUIView;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceBox;

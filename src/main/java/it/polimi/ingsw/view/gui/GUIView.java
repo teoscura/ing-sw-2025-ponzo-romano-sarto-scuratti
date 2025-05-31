@@ -7,10 +7,13 @@ import it.polimi.ingsw.controller.client.state.TitleScreenState;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.client.state.*;
 import it.polimi.ingsw.view.ClientView;
+import it.polimi.ingsw.view.gui.controllers.ClientLobbyStateController;
+import it.polimi.ingsw.view.gui.controllers.ConnectingStateController;
+import it.polimi.ingsw.view.gui.controllers.SetupStateController;
+import it.polimi.ingsw.view.gui.controllers.TitleScreenController;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 
 import java.io.IOException;
