@@ -102,12 +102,13 @@ public class SetupStateController {
 				break;
 			case "3":
 				numPlayers = PlayerCount.THREE;
+				break;
 			case "4":
 				numPlayers = PlayerCount.FOUR;
+				break;
 			default:
 				view.showTextMessage("Invalid player number.");
 		}
-
 
 
 		switch (selectedGameType) {
@@ -127,8 +128,9 @@ public class SetupStateController {
 		//view.setInput(new LeaveSetupMessage());
 
 	}
+
 	@FXML
-	protected void leaveSetup(){
+	protected void leaveSetup() {
 		view.setInput(new LeaveSetupMessage());
 	}
 }

@@ -8,7 +8,7 @@ public class TileImageVisitor implements ClientComponentVisitor {
 
 	private TileAsset tile;
 
-	public TileAsset getTile(){
+	public TileAsset getTile() {
 		return tile;
 	}
 

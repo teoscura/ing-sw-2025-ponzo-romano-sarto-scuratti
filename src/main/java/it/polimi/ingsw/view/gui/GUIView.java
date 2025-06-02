@@ -7,10 +7,7 @@ import it.polimi.ingsw.controller.client.state.TitleScreenState;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.client.state.*;
 import it.polimi.ingsw.view.ClientView;
-import it.polimi.ingsw.view.gui.controllers.ClientLobbyStateController;
-import it.polimi.ingsw.view.gui.controllers.ConnectingStateController;
-import it.polimi.ingsw.view.gui.controllers.SetupStateController;
-import it.polimi.ingsw.view.gui.controllers.TitleScreenController;
+import it.polimi.ingsw.view.gui.controllers.*;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -135,7 +132,18 @@ public class GUIView implements ClientView {
 
 	@Override
 	public void show(ClientWaitingRoomState state) {
-	System.out.println("method called");
+		System.out.println("method called");
+		Platform.runLater(() -> {
+			try {
+				FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/WaitingRoomView.fxml"));
+				loader.setControllerFactory(f -> new WaitingRoomController(state, this));
+				Scene scene = new Scene(loader.load());
+				stage.setScene(scene);
+				stage.show();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		});
 	}
 
 	@Override
