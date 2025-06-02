@@ -25,9 +25,8 @@ public class TerminalWrapper {
 	private final Attributes previous;
 
 	private final Object termlock;
-
-	private Size size;
 	private final StringBuffer line;
+	private Size size;
 	private String input;
 	private boolean legal;
 
