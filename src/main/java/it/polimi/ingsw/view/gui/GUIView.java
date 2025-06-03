@@ -19,11 +19,11 @@ import java.io.IOException;
 public class GUIView implements ClientView {
 
 	private final Stage stage;
-	private final ThreadSafeMessageQueue<ServerMessage> queue;
+	private ConnectedState state;
 
 	public GUIView(Stage stage) {
 		this.stage = stage;
-		this.queue = new ThreadSafeMessageQueue<>(10);
+		this.state = null;
 	}
 
 
@@ -82,27 +82,20 @@ public class GUIView implements ClientView {
 
 	@Override
 	public void connect(ConnectedState state) {
-
+		this.state = state;
 	}
 
 	@Override
 	public void disconnect() {
-
+		this.state = null;
 	}
 
-	public void setInput(ServerMessage input) {
-		queue.insert(input);
-	}
-
-	@Override
-	public ServerMessage takeInput() {
-		try {
-			return queue.take();
-		} catch (InterruptedException e) {
-			this.showTextMessage("Shutting down input command thread!");
-			//queue.dump();
-			return null;
+	public void sendMessage(ServerMessage message){
+		if(this.state == null){
+			this.showTextMessage("Attempted to send a message while state was null!");
+			return;
 		}
+		this.state.sendMessage(message);
 	}
 
 	@Override
@@ -111,8 +104,7 @@ public class GUIView implements ClientView {
 //		errorAlert.setHeaderText("Info");
 //		errorAlert.setContentText(message);
 //		errorAlert.showAndWait();
-
-
+		
 	}
 
 	@Override

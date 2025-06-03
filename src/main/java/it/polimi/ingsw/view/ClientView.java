@@ -24,10 +24,6 @@ public interface ClientView extends ClientStateVisitor {
 
 	void disconnect();
 
-	void setInput(ServerMessage input);
-
-	ServerMessage takeInput();
-
 	//Misc and debug
 	void showTextMessage(String message);
 

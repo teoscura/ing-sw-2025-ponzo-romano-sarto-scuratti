@@ -124,13 +124,12 @@ public class SetupStateController {
 		System.out.println(gameModeType);
 		System.out.println(numPlayers);
 
-		view.setInput(new OpenLobbyMessage(gameModeType, numPlayers));
-		//view.setInput(new LeaveSetupMessage());
+		view.sendMessage(new OpenLobbyMessage(gameModeType, numPlayers));
 
 	}
 
 	@FXML
 	protected void leaveSetup() {
-		view.setInput(new LeaveSetupMessage());
+		view.sendMessage(new LeaveSetupMessage());
 	}
 }
