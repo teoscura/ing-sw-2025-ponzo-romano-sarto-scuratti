@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.controllers.EndScreenController">
+   <children>
+      <ListView fx:id="ranking_list" layoutX="115.0" layoutY="117.0" prefHeight="165.0" prefWidth="370.0" />
+   </children>
+</AnchorPane>

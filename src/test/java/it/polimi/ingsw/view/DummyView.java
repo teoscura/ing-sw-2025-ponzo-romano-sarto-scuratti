@@ -54,8 +54,7 @@ public class DummyView implements ClientView {
 	@Override
 	public void disconnect() {
 	}
-
-	@Override
+  
 	public void setClientState(ClientState state) {
 	}
 

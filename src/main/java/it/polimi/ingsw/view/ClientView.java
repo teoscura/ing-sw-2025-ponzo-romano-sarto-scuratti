@@ -22,5 +22,7 @@ public interface ClientView extends ClientStateVisitor {
 	void connect(ConnectedState state);
 	
 	void disconnect();
-
+	//Misc and debug
+	void showTextMessage(String message);
+  
 }
