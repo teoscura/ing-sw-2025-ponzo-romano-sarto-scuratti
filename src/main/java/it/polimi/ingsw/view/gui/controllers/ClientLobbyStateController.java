@@ -72,7 +72,7 @@ public class ClientLobbyStateController {
 	public void enterSetup() {
 		System.out.println("change state");
 		//TODO
-		view.setInput(new EnterSetupMessage());
+		view.sendMessage(new EnterSetupMessage());
 
 	}
 }
