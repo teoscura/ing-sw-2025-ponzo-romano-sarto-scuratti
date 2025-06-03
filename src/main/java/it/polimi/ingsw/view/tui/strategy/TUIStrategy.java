@@ -1,13 +1,13 @@
-package it.polimi.ingsw.view.tui.states;
+package it.polimi.ingsw.view.tui.strategy;
 
 import it.polimi.ingsw.view.tui.TUIView;
 import it.polimi.ingsw.view.tui.TerminalWrapper;
 
-public abstract class TUIState {
+public abstract class TUIStrategy {
     
     protected final TUIView view;
 
-    protected TUIState(TUIView view){
+    protected TUIStrategy(TUIView view){
         this.view = view;
     }
 

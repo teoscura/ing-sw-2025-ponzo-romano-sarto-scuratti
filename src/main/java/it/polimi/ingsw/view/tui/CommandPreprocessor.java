@@ -33,7 +33,7 @@ public class CommandPreprocessor {
 	}
 
 	private void forward(String s) {
-		view.setInput(new CommandBuilder(view).build(s));
+		state.sendMessage(CommandBuilder.build(s, view));
 	}
 
 }

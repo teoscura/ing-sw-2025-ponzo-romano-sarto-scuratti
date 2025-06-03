@@ -1,4 +1,4 @@
-package it.polimi.ingsw.view.tui.states;
+package it.polimi.ingsw.view.tui.strategy;
 
 import java.util.ArrayList;
 
@@ -7,12 +7,12 @@ import it.polimi.ingsw.view.tui.TUIView;
 import it.polimi.ingsw.view.tui.TerminalWrapper;
 import it.polimi.ingsw.view.tui.formatters.MenuFormatter;
 
-public class TUITitleState extends TUIState {
+public class TUITitleStrategy extends TUIStrategy {
 
     private final TitleScreenState state;
     private final ArrayList<String> titlescreen;
 
-    public TUITitleState(TUIView view, TitleScreenState state){
+    public TUITitleStrategy(TUIView view, TitleScreenState state){
         super(view);
         this.state = state;
         this.titlescreen = new ArrayList<>() {{

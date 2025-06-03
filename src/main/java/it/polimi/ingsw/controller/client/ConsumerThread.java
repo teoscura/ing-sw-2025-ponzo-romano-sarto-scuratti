@@ -23,6 +23,7 @@ public class ConsumerThread extends Thread {
 			} catch (InterruptedException e) {
 				state.getView().showTextMessage("Interrupted Consumer Thread!");
 				inqueue.dump();
+				return;
 			}
 		}
 	}

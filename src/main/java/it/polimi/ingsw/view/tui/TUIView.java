@@ -9,10 +9,10 @@ import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.view.ClientView;
 import it.polimi.ingsw.view.tui.concurrent.*;
 import it.polimi.ingsw.view.tui.formatters.*;
-import it.polimi.ingsw.view.tui.states.TUIConnectionSetupState;
-import it.polimi.ingsw.view.tui.states.TUIInGameState;
-import it.polimi.ingsw.view.tui.states.TUIState;
-import it.polimi.ingsw.view.tui.states.TUITitleState;
+import it.polimi.ingsw.view.tui.strategy.TUIConnectionSetupStrategy;
+import it.polimi.ingsw.view.tui.strategy.TUIInGameStrategy;
+import it.polimi.ingsw.view.tui.strategy.TUIStrategy;
+import it.polimi.ingsw.view.tui.strategy.TUITitleStrategy;
 
 import org.jline.utils.InfoCmp.Capability;
 
@@ -36,7 +36,7 @@ public class TUIView implements ClientView {
 	//Controller communication fields.
 	private final Thread inputthread;
 	private final ArrayBlockingQueue<ServerMessage> queue;
-	private TUIState tuistate;
+	private TUIStrategy tuistate;
 
 	//Game info fields.
 	private ClientState client_state;
@@ -78,13 +78,13 @@ public class TUIView implements ClientView {
 
 	@Override
 	public void show(TitleScreenState state) {
-		this.tuistate = new TUITitleState(this, state);
+		this.tuistate = new TUITitleStrategy(this, state);
 		this.screen_runnable = this.tuistate.getRunnable(terminal);
 	}
 
 	@Override
 	public void show(ConnectingState state) {
-		this.tuistate = new TUIConnectionSetupState(this, state);
+		this.tuistate = new TUIConnectionSetupStrategy(this, state);
 		this.screen_runnable = this.tuistate.getRunnable(terminal);
 	}
 
@@ -196,22 +196,12 @@ public class TUIView implements ClientView {
 		this.redraw();
 	}
 
-	public void setInput(ServerMessage input) {
-		if(input==null) return;
-		queue.add(input);
-	}
-
-	@Override
-	public ServerMessage takeInput() throws InterruptedException {
-		return queue.take();
-	}
-
 	@Override
 	public void connect(ConnectedState state) {
 		terminal.puts(Capability.clear_screen);
 		this.selected_color = PlayerColor.NONE;
 		this.username = state.getUsername();
-		this.tuistate = new TUIInGameState(this, state);
+		this.tuistate = new TUIInGameStrategy(this, state);
 	}
 
 	@Override

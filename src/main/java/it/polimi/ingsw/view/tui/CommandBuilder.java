@@ -12,13 +12,7 @@ import java.util.regex.Pattern;
 
 public class CommandBuilder {
 
-	private final TUIView view;
-
-	public CommandBuilder(TUIView view) {
-		this.view = view;
-	}
-
-	public ServerMessage build(String command) {
+	static public ServerMessage build(String command, TUIView view) {
 		if (command == null) return null;
 		command = command.trim();
 		ServerMessage mess = null;

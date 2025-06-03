@@ -1,23 +1,22 @@
-package it.polimi.ingsw.view.tui.states;
+package it.polimi.ingsw.view.tui.strategy;
 
 import it.polimi.ingsw.controller.client.state.ConnectedState;
 import it.polimi.ingsw.view.tui.CommandPreprocessor;
 import it.polimi.ingsw.view.tui.TUIView;
 import it.polimi.ingsw.view.tui.TerminalWrapper;
 
-public class TUIInGameState extends TUIState {
+public class TUIInGameStrategy extends TUIStrategy {
 
-    private final ConnectedState state;
+    private final CommandPreprocessor cp;
 
-    public TUIInGameState(TUIView view, ConnectedState state){
+    public TUIInGameStrategy(TUIView view, ConnectedState state){
         super(view);
-        this.state = state;
+        this.cp = new CommandPreprocessor(view, state);
     }
 
     @Override
     public void handleLine(String s) {
-		CommandPreprocessor cb = new CommandPreprocessor(view, state);
-		cb.process(s);
+		cp.process(s);
 	}
 
     @Override

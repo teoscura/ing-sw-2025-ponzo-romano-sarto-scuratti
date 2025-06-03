@@ -1,4 +1,4 @@
-package it.polimi.ingsw.view.tui.states;
+package it.polimi.ingsw.view.tui.strategy;
 
 import java.util.ArrayList;
 
@@ -8,13 +8,13 @@ import it.polimi.ingsw.view.tui.TUIView;
 import it.polimi.ingsw.view.tui.TerminalWrapper;
 import it.polimi.ingsw.view.tui.formatters.MenuFormatter;
 
-public class TUIConnectionSetupState extends TUIState {
+public class TUIConnectionSetupStrategy extends TUIStrategy {
     
     private final ArrayList<String> args;
     private final ConnectingState state;
     private final ArrayList<String> screen;
 
-    public TUIConnectionSetupState(TUIView view, ConnectingState state){
+    public TUIConnectionSetupStrategy(TUIView view, ConnectingState state){
         super(view);
         this.state = state;
         this.args = new ArrayList<>();

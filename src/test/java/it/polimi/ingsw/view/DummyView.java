@@ -3,7 +3,6 @@ package it.polimi.ingsw.view;
 import it.polimi.ingsw.controller.client.state.ConnectedState;
 import it.polimi.ingsw.controller.client.state.ConnectingState;
 import it.polimi.ingsw.controller.client.state.TitleScreenState;
-import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.client.state.*;
 
 public class DummyView implements ClientView {
@@ -54,11 +53,6 @@ public class DummyView implements ClientView {
 
 	@Override
 	public void disconnect() {
-	}
-
-	@Override
-	public ServerMessage takeInput() {
-		return null;
 	}
 
 	@Override
