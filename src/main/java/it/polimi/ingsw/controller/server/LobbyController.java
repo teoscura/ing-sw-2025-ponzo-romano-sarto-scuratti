@@ -138,6 +138,7 @@ public class LobbyController extends Thread implements VirtualServer {
 		return new TimerTask() {
 			public void run() {
 				Logger.getInstance().print(LoggerLevel.LOBCN, "[" + id + "] " + "Only one player was left for too long, closing the match!");
+				broadcast(new ViewMessage("Game timed out due to too few players, sending back to lobby select!"));
 				controller.endGame();
 			}
 		};
@@ -162,6 +163,7 @@ public class LobbyController extends Thread implements VirtualServer {
 				Logger.getInstance().print(LoggerLevel.LOBCN, "[" + this.id + "] " + "Client '" + client.getUsername() + "' connected to waiting room!");
 				this.model.connect(client);
 			} else if (reconnect) {
+				broadcast(new ViewMessage("Player: '"+client.getUsername()+"' resconnected!"));
 				this.model.connect(client.getPlayer());
 				if (dsctimer != null) {
 					this.dsctimer.cancel();
@@ -187,6 +189,7 @@ public class LobbyController extends Thread implements VirtualServer {
 			}
 			this.listeners.remove(client.getUsername());
 			if (client.getPlayer() != null) {
+				broadcast(new ViewMessage("Player: '"+client.getUsername()+"' disconnected!"));
 				this.disconnected_usernames.put(client.getUsername(), client.getPlayer());
 				s.addDisconnected(client.getUsername(), this.id);
 			}

@@ -15,9 +15,10 @@ public class ClientConstructionPlayer implements Serializable {
 	private final int current_component;
 	private final ArrayList<Integer> reserved_components;
 	private final boolean finished;
+	private final boolean disconnected;
 
 	public ClientConstructionPlayer(String username, PlayerColor color, ClientSpaceShip ship, int current_component,
-									ArrayList<Integer> reserved_components, boolean finished) {
+									ArrayList<Integer> reserved_components, boolean finished, boolean disconnected) {
 		if (username == null || ship == null || reserved_components == null || color == PlayerColor.NONE)
 			throw new NullPointerException();
 		if (reserved_components.size() > 2) throw new IllegalArgumentException();
@@ -27,6 +28,7 @@ public class ClientConstructionPlayer implements Serializable {
 		this.current_component = current_component;
 		this.reserved_components = reserved_components;
 		this.finished = finished;
+		this.disconnected = disconnected;
 	}
 
 	public String getUsername() {
@@ -51,6 +53,10 @@ public class ClientConstructionPlayer implements Serializable {
 
 	public boolean isFinished() {
 		return this.finished;
+	}
+
+	public boolean isDisconnected(){
+		return this.disconnected;
 	}
 
 }

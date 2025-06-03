@@ -107,6 +107,7 @@ public class VerifyState extends GameState {
 					this.finish_order.contains(p),
 					!this.awaiting.contains(p),
 					this.starts_losing.contains(p),
+					p.getDisconnected(),
 					this.finish_order.indexOf(p)));
 		}
 		return new ClientVerifyState(tmp);
