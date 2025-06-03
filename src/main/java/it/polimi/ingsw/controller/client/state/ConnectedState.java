@@ -55,15 +55,15 @@ public class ConnectedState extends ClientControllerState {
 	public void onClose() {
 		Runtime.getRuntime().removeShutdownHook(this.shutdown_hook);
 		try {
+			this.sender_thread.interrupt();
 			stopPingTask();
 			this.connection.sendMessage(new ServerDisconnectMessage());
 			this.connection.close();
-			this.sender_thread.interrupt();
 			this.consumer_thread.interrupt();
 		} catch (RemoteException e) {
-			view.showTextMessage("Error during RMI Disconnect!");
+			view.showTextMessage("Forced RMI Disconnect!");
 		} catch (IOException e) {
-			view.showTextMessage("Error during TCP Disconnect!");
+			view.showTextMessage("Forced TCP Disconnect!");
 		} finally {
 			this.view.disconnect();
 		}
@@ -79,15 +79,16 @@ public class ConnectedState extends ClientControllerState {
 
 	public void disconnect() {
 		try {
+			this.sender_thread.interrupt();
 			stopPingTask();
 			this.connection.sendMessage(new ServerDisconnectMessage());
 			this.sender_thread.interrupt();
 			this.consumer_thread.interrupt();
 			this.connection.close();
 		} catch (RemoteException e) {
-			view.showTextMessage("Error during RMI Disconnect!");
+			view.showTextMessage("Forced RMI Disconnect!");
 		} catch (IOException e) {
-			view.showTextMessage("Error during TCP Disconnect!");
+			view.showTextMessage("Forced TCP Disconnect!");
 		} finally {
 			this.view.disconnect();
 			this.controller.reset();
