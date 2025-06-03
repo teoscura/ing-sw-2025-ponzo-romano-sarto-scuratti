@@ -24,7 +24,6 @@ public class SenderThread extends Thread {
 	public void run() {
 		while (true) {
 			try {
-				state.getView().showTextMessage("ST TEST: sending message to state: "+state.getUsername());
 				this.connection.sendMessage(outqueue.take());
 			} catch (IOException e) {
 				outqueue.dump();
