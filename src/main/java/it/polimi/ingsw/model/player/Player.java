@@ -63,9 +63,8 @@ public class Player implements Serializable {
 		return this.disconnected;
 	}
 
-	public int giveCredits(int amount) {
+	public void giveCredits(int amount) {
 		this.credits += amount;
-		return this.credits;
 	}
 
 	public int getCredits() {

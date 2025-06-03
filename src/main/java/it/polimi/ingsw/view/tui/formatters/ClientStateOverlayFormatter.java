@@ -19,7 +19,7 @@ public class ClientStateOverlayFormatter implements ClientStateVisitor {
 		ArrayList<String> res = new ArrayList<>();
 		res.add("╭" + "─".repeat(32) + "╮");
 		res.add("│" + " State doesn't have extra info! " + "│");
-		res.add("╰" + "─".repeat(32) + "╯");
+		res.add("╰" + "─".repeat(7) + " 'ESC' to return! " + "─".repeat(7) + "╯");
 		terminal.print(res, 13, 48);
 	}
 
@@ -27,7 +27,7 @@ public class ClientStateOverlayFormatter implements ClientStateVisitor {
 		ArrayList<String> res = new ArrayList<>();
 		res.add("╭" + "─".repeat(32) + "╮");
 		res.add("│" + " State doesn't have extra info! " + "│");
-		res.add("╰" + "─".repeat(32) + "╯");
+		res.add("╰" + "─".repeat(7) + " 'ESC' to return! " + "─".repeat(7) + "╯");
 		terminal.print(res, 13, 48);
 	}
 
@@ -35,7 +35,7 @@ public class ClientStateOverlayFormatter implements ClientStateVisitor {
 		ArrayList<String> res = new ArrayList<>();
 		res.add("╭" + "─".repeat(32) + "╮");
 		res.add("│" + " State doesn't have extra info! " + "│");
-		res.add("╰" + "─".repeat(32) + "╯");
+		res.add("╰" + "─".repeat(7) + " 'ESC' to return! " + "─".repeat(7) + "╯");
 		terminal.print(res, 13, 48);
 	}
 
@@ -54,8 +54,8 @@ public class ClientStateOverlayFormatter implements ClientStateVisitor {
 				String line = " [" + id + "]: " + (t > 20 ? f2.getCard(t) : f1.getCard(t)).getClass().getSimpleName();
 				res.add("│" + line + " ".repeat(32 - line.length()) + "│");
 			}
-		}
-		res.add("╰" + "─".repeat(32) + "╯");
+		}                                                
+		res.add("╰" + "─".repeat(7) + " 'ESC' to return! " + "─".repeat(7) + "╯");
 		terminal.print(res, 9, 48);
 	}
 
@@ -63,7 +63,7 @@ public class ClientStateOverlayFormatter implements ClientStateVisitor {
 		ArrayList<String> res = new ArrayList<>();
 		res.add("╭" + "─".repeat(32) + "╮");
 		res.add("│" + " State doesn't have extra info! " + "│");
-		res.add("╰" + "─".repeat(32) + "╯");
+		res.add("╰" + "─".repeat(7) + " 'ESC' to return! " + "─".repeat(7) + "╯");
 		terminal.print(res, 13, 48);
 	}
 
@@ -71,7 +71,7 @@ public class ClientStateOverlayFormatter implements ClientStateVisitor {
 		ArrayList<String> res = new ArrayList<>();
 		res.add("╭" + "─".repeat(32) + "╮");
 		res.add("│" + " State doesn't have extra info! " + "│");
-		res.add("╰" + "─".repeat(32) + "╯");
+		res.add("╰" + "─".repeat(7) + " 'ESC' to return! " + "─".repeat(7) + "╯");
 		terminal.print(res, 13, 48);
 	}
 
@@ -79,7 +79,7 @@ public class ClientStateOverlayFormatter implements ClientStateVisitor {
 		ArrayList<String> res = new ArrayList<>();
 		res.add("╭" + "─".repeat(32) + "╮");
 		res.add("│" + " State doesn't have extra info! " + "│");
-		res.add("╰" + "─".repeat(32) + "╯");
+		res.add("╰" + "─".repeat(7) + " 'ESC' to return! " + "─".repeat(7) + "╯");
 		terminal.print(res, 13, 48);
 	}
 

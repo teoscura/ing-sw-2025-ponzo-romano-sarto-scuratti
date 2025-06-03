@@ -3,7 +3,6 @@ package it.polimi.ingsw.controller.client.state;
 import it.polimi.ingsw.controller.ThreadSafeMessageQueue;
 import it.polimi.ingsw.controller.client.ClientController;
 import it.polimi.ingsw.controller.client.ConsumerThread;
-import it.polimi.ingsw.controller.client.InputCommandThread;
 import it.polimi.ingsw.controller.client.SenderThread;
 import it.polimi.ingsw.controller.client.connections.ServerConnection;
 import it.polimi.ingsw.message.client.ClientMessage;
@@ -25,7 +24,6 @@ public class ConnectedState extends ClientControllerState {
 	private final Thread consumer_thread;
 	private final Thread sender_thread;
 	private final Thread shutdown_hook;
-	private final Thread input_thread;
 	private final Timer pingtimer;
 
 	public ConnectedState(ClientController controller, ClientView view, String username, ServerConnection connection, ThreadSafeMessageQueue<ClientMessage> inqueue) {
@@ -36,7 +34,6 @@ public class ConnectedState extends ClientControllerState {
 		this.outqueue = new ThreadSafeMessageQueue<>(100);
 		this.sender_thread = new SenderThread(this, this.outqueue, this.connection);
 		this.shutdown_hook = this.getShutdownHook();
-		this.input_thread = new InputCommandThread(this, view);
 		this.pingtimer = new Timer(true);
 	}
 
@@ -47,7 +44,6 @@ public class ConnectedState extends ClientControllerState {
 		this.view.connect(this);
 		consumer_thread.start();
 		sender_thread.start();
-		input_thread.start();
 	}
 
 	@Override
@@ -59,15 +55,15 @@ public class ConnectedState extends ClientControllerState {
 	public void onClose() {
 		Runtime.getRuntime().removeShutdownHook(this.shutdown_hook);
 		try {
+			this.sender_thread.interrupt();
+			stopPingTask();
 			this.connection.sendMessage(new ServerDisconnectMessage());
 			this.connection.close();
-			this.sender_thread.interrupt();
 			this.consumer_thread.interrupt();
-			stopPingTask();
 		} catch (RemoteException e) {
-			view.showTextMessage("Error during RMI Disconnect!");
+			view.showTextMessage("Forced RMI Disconnect!");
 		} catch (IOException e) {
-			view.showTextMessage("Error during TCP Disconnect!");
+			view.showTextMessage("Forced TCP Disconnect!");
 		} finally {
 			this.view.disconnect();
 		}
@@ -77,22 +73,22 @@ public class ConnectedState extends ClientControllerState {
 	// Communication methods
 	// -------------------------------------------------------------
 
-	@Override
 	public void sendMessage(ServerMessage message) {
 		this.outqueue.insert(message);
 	}
 
 	public void disconnect() {
 		try {
+			this.sender_thread.interrupt();
+			stopPingTask();
 			this.connection.sendMessage(new ServerDisconnectMessage());
-			this.connection.close();
 			this.sender_thread.interrupt();
 			this.consumer_thread.interrupt();
-			stopPingTask();
+			this.connection.close();
 		} catch (RemoteException e) {
-			view.showTextMessage("Error during RMI Disconnect!");
+			view.showTextMessage("Forced RMI Disconnect!");
 		} catch (IOException e) {
-			view.showTextMessage("Error during TCP Disconnect!");
+			view.showTextMessage("Forced TCP Disconnect!");
 		} finally {
 			this.view.disconnect();
 			this.controller.reset();

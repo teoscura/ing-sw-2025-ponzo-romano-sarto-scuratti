@@ -48,11 +48,11 @@ public class ClientVoyagePlayer implements Serializable {
 		return this.credits;
 	}
 
-	public boolean getDisconnected() {
+	public boolean isDisconnected() {
 		return this.disconnected;
 	}
 
-	public boolean getRetired() {
+	public boolean isRetired() {
 		return this.retired_lost;
 	}
 

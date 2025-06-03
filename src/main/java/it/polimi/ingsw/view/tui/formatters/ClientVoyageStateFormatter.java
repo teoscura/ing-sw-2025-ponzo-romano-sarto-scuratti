@@ -18,30 +18,30 @@ public class ClientVoyageStateFormatter {
 		ArrayList<ClientVoyagePlayer> list = new ArrayList<>(state.getPlayerList());
 		ClientVoyagePlayer p = list.stream().filter(pl -> pl.getColor() == color).findAny().orElse(null);
 		if (p != null)
-			terminal.print(ClientSpaceShipFormatter.formatLarge(p.getShip(), p.getUsername(), p.getColor(), p.getCredits(), p.getRetired()), 2, 5);
+			terminal.print(ClientSpaceShipFormatter.formatLarge(p.getShip(), p.getUsername(), p.getColor(), p.getCredits(), p.isRetired(), p.isDisconnected()), 2, 5);
 		else terminal.print(ClientSpaceShipFormatter.getEmptyShipLarge(), 2, 4);
 		list.remove(p);
 		if (list.size() > 0) {
-			terminal.print(ClientSpaceShipFormatter.formatSmall(list.getFirst().getShip(), list.getFirst().getUsername(), list.getFirst().getColor(), list.getFirst().getCredits(), list.getFirst().getRetired()), 3, 60);
+			terminal.print(ClientSpaceShipFormatter.formatSmall(list.getFirst().getShip(), list.getFirst().getUsername(), list.getFirst().getColor(), list.getFirst().getCredits(), list.getFirst().isRetired(), p.isDisconnected()), 3, 60);
 			list.removeFirst();
 		} else {
 			terminal.print(ClientSpaceShipFormatter.getEmptyShipSmall(), 3, 60);
 		}
 		if (list.size() > 0) {
-			terminal.print(ClientSpaceShipFormatter.formatSmall(list.getFirst().getShip(), list.getFirst().getUsername(), list.getFirst().getColor(), list.getFirst().getCredits(), list.getFirst().getRetired()), 11, 60);
+			terminal.print(ClientSpaceShipFormatter.formatSmall(list.getFirst().getShip(), list.getFirst().getUsername(), list.getFirst().getColor(), list.getFirst().getCredits(), list.getFirst().isRetired(), p.isDisconnected()), 11, 60);
 			list.removeFirst();
 		} else {
 			terminal.print(ClientSpaceShipFormatter.getEmptyShipSmall(), 11, 60);
 		}
 		if (list.size() > 0) {
-			terminal.print(ClientSpaceShipFormatter.formatSmall(list.getFirst().getShip(), list.getFirst().getUsername(), list.getFirst().getColor(), list.getFirst().getCredits(), list.getFirst().getRetired()), 3, 94);
+			terminal.print(ClientSpaceShipFormatter.formatSmall(list.getFirst().getShip(), list.getFirst().getUsername(), list.getFirst().getColor(), list.getFirst().getCredits(), list.getFirst().isRetired(), p.isDisconnected()), 3, 94);
 		} else {
 			terminal.print(ClientSpaceShipFormatter.getEmptyShipSmall(), 3, 94);
 		}
 		if (color != PlayerColor.NONE || list.isEmpty())
 			terminal.print(ClientSpaceShipFormatter.getHelpCorner(), 11, 94);
 		else
-			terminal.print(ClientSpaceShipFormatter.formatSmall(list.getFirst().getShip(), list.getFirst().getUsername(), list.getFirst().getColor(), 0, false), 11, 94);
+			terminal.print(ClientSpaceShipFormatter.formatSmall(list.getFirst().getShip(), list.getFirst().getUsername(), list.getFirst().getColor(), 0, list.getFirst().isRetired(), p.isDisconnected()), 11, 94);
 
 		terminal.print(printPlanche(state, color), 22, 4);
 	}

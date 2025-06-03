@@ -1,33 +1,30 @@
 package it.polimi.ingsw.view.tui;
 
+import it.polimi.ingsw.controller.client.state.ConnectedState;
+
 public class CommandPreprocessor {
 
 	private final TUIView view;
+	private final ConnectedState state;
 
-	public CommandPreprocessor(TUIView view) {
+	public CommandPreprocessor(TUIView view, ConnectedState state) {
 		this.view = view;
+		this.state = state;
 	}
 
-	//XXX add disconnect command that handles disconnection gracefully.
 	public void process(String s) {
 		switch (s) {
-			case "red":
-				view.changeShip("red");
-				break;
-			case "blue":
-				view.changeShip("blue");
-				break;
-			case "green":
-				view.changeShip("green");
-				break;
-			case "yellow":
-				view.changeShip("yellow");
+			case "red", "blue", "green", "yellow":
+				view.changeShip(s);
 				break;
 			case "help":
 				view.showHelpScreen();
 				break;
 			case "stateinfo":
 				view.showStateInfo();
+				break;
+			case "disconnect":
+				state.disconnect();
 				break;
 			default:
 				forward(s);
@@ -36,7 +33,7 @@ public class CommandPreprocessor {
 	}
 
 	private void forward(String s) {
-		view.setInput(new CommandBuilder(view).build(s));
+		state.sendMessage(CommandBuilder.build(s, view));
 	}
 
 }

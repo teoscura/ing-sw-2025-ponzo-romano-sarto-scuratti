@@ -30,7 +30,8 @@ public class TestFlightConstructionState extends ConstructionState {
 					p.getSpaceShip().getClientSpaceShip(),
 					id,
 					stash,
-					this.finished.contains(p)));
+					this.finished.contains(p),
+					p.getDisconnected()));
 		}
 		return new ClientConstructionState(this.type, tmp, null, discarded, this.board.getCoveredSize(), 0, 0, null, null);
 	}

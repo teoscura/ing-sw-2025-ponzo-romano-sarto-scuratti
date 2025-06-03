@@ -71,7 +71,7 @@ public class EndscreenState extends GameState {
 					p.getCredits(),
 					p.getSpaceShip().getContains()));
 		}
-		return new ClientEndgameState(tmp);
+		return new ClientEndgameState(tmp, this.awaiting.stream().map(p->p.getColor()).toList());
 	}
 
 	@Override

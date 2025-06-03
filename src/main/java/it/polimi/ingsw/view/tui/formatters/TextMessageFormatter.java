@@ -13,7 +13,7 @@ public class TextMessageFormatter {
 	static public void format(TerminalWrapper terminal, ArrayList<TUINotification> notifications) {
 		ArrayList<TUINotification> to_show = new ArrayList<>();
 		int size = notifications.size();
-		if (size > 3) to_show.addAll(notifications.subList(size - 3, size));
+		if (size > 4) to_show.addAll(notifications.subList(size - 4, size));
 		else to_show.addAll(notifications);
 		int row = 1;
 		for (int i = 0; i < to_show.size(); i++) {
@@ -23,6 +23,7 @@ public class TextMessageFormatter {
 		}
 	}
 
+	//TODO trim lenght of message because if not we have an issue xd xd xd xd xd;
 	static private ArrayList<String> format(String message) {
 		ArrayList<String> res = new ArrayList<>();
 		int wraplength = 32;

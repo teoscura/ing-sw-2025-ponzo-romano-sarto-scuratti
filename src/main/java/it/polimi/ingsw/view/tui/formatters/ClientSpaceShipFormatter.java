@@ -11,7 +11,7 @@ import java.util.List;
 
 public class ClientSpaceShipFormatter {
 
-	static public List<String> formatLarge(ClientSpaceShip ship, String username, PlayerColor color, int credits, boolean retired) {
+	static public List<String> formatLarge(ClientSpaceShip ship, String username, PlayerColor color, int credits, boolean retired, boolean disconnected) {
 		ArrayList<StringBuffer> tmp = new ArrayList<>();
 		ClientLargeComponentPrinter p = new ClientLargeComponentPrinter();
 		ClientSmallComponentPrinter ps = new ClientSmallComponentPrinter();
@@ -122,13 +122,13 @@ public class ClientSpaceShipFormatter {
 				.append("W")
 				.style(AttributedStyle.DEFAULT)
 				.append("│").toAnsi());
-		tmp.get(13).append((retired ? "retired" : " alive ") + "│");
+		tmp.get(13).append((retired ? "retired" : disconnected ? "disconn" : " alive ") + "│");
 		tmp.get(14).append("       │");
 		tmp.get(15).append("       │");
 		return tmp.stream().map(sb -> sb.toString()).toList();
 	}
 
-	static public List<String> formatSmall(ClientSpaceShip ship, String username, PlayerColor color, int credits, boolean retired) {
+	static public List<String> formatSmall(ClientSpaceShip ship, String username, PlayerColor color, int credits, boolean retired, boolean disconnected) {
 		ArrayList<StringBuffer> tmp = new ArrayList<>();
 		int finallength = 30;
 		String top = "┌" + "─".repeat(finallength) + "┐";
@@ -162,7 +162,7 @@ public class ClientSpaceShipFormatter {
 		tmp.get(3).append(String.format("🟩: %3d", ship.getContainers()[2]));
 		tmp.get(4).append(String.format("🟨: %3d│", ship.getContainers()[3]));
 		tmp.get(4).append(String.format("🟥: %3d", ship.getContainers()[4]));
-		tmp.get(5).append(String.format("💰: %3d│" + (retired ? "retired" : " alive "), credits));
+		tmp.get(5).append(String.format("💰: %3d│" + (retired ? "retired" : disconnected ? "disconn" : " alive "), credits));
 		for (int i = 0; i < 5; i++) {
 			tmp.get(i + 1).append("│");
 		}

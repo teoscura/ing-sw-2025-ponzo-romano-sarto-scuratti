@@ -47,7 +47,8 @@ public class LevelTwoConstructionState extends ConstructionState {
 					p.getSpaceShip().getClientSpaceShip(),
 					id,
 					stash,
-					this.finished.contains(p)));
+					this.finished.contains(p),
+					p.getDisconnected()));
 		}
 		return new ClientConstructionState(this.type, tmp, new ArrayList<>(this.voyage_deck.getConstructionCards()), discarded, this.board.getCoveredSize(), this.hourglass.timesTotal(), this.hourglass.timesLeft(), this.hourglass.getDuration(), this.hourglass.getInstant());
 	}

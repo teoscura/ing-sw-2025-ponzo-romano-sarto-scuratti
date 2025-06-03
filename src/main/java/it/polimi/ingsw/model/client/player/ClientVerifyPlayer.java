@@ -13,9 +13,10 @@ public class ClientVerifyPlayer implements Serializable {
 	private final boolean valid;
 	private final boolean progressed;
 	private final boolean starts_losing;
+	private final boolean disconnected;
 	private final int order;
 
-	public ClientVerifyPlayer(String username, PlayerColor color, ClientSpaceShip ship, boolean valid, boolean progressed, boolean starts_losing, int order) {
+	public ClientVerifyPlayer(String username, PlayerColor color, ClientSpaceShip ship, boolean valid, boolean progressed, boolean starts_losing, boolean disconnected, int order) {
 		if (username == null || ship == null || color == PlayerColor.NONE)
 			throw new NullPointerException();
 		if (!valid && order > 0) throw new IllegalArgumentException();
@@ -25,6 +26,7 @@ public class ClientVerifyPlayer implements Serializable {
 		this.valid = valid;
 		this.progressed = progressed;
 		this.starts_losing = starts_losing;
+		this.disconnected = disconnected;
 		this.order = order;
 	}
 
@@ -52,8 +54,13 @@ public class ClientVerifyPlayer implements Serializable {
 		return this.starts_losing;
 	}
 
+	public boolean isDisconnected() {
+		return this.disconnected;
+	}
+
 	public int getOrder() {
 		return order;
 	}
+
 
 }

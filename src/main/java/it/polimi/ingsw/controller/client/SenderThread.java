@@ -24,15 +24,16 @@ public class SenderThread extends Thread {
 	public void run() {
 		while (true) {
 			try {
-				try {
-					this.connection.sendMessage(outqueue.take());
-				} catch (IOException e) {
-					System.out.println("Failed to send a message, terminating connection!");
-					this.state.disconnect();
-					return;
-				}
+				this.connection.sendMessage(outqueue.take());
+			} catch (IOException e) {
+				outqueue.dump();
+				this.state.disconnect();
+				state.getView().showTextMessage("Error sending message to server, closing connection!");
+				return;
 			} catch (InterruptedException e) {
-				System.out.println("Shutting down connection thread.");
+				state.getView().showTextMessage("Interrupted Sender Thread!");
+				outqueue.dump();
+				return;
 			}
 		}
 	}
