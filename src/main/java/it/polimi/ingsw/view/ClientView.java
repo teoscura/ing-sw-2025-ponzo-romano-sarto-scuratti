@@ -20,7 +20,7 @@ public interface ClientView extends ClientStateVisitor {
 
 	//Client input
 	void connect(ConnectedState state);
-
+	
 	void disconnect();
 
 }

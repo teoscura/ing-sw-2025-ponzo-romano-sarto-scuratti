@@ -3,7 +3,6 @@ package it.polimi.ingsw.view.tui;
 import it.polimi.ingsw.controller.client.state.ConnectedState;
 import it.polimi.ingsw.controller.client.state.ConnectingState;
 import it.polimi.ingsw.controller.client.state.TitleScreenState;
-import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.client.state.*;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.view.ClientView;
@@ -20,7 +19,6 @@ import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.concurrent.ArrayBlockingQueue;
 
 public class TUIView implements ClientView {
 	
@@ -35,7 +33,6 @@ public class TUIView implements ClientView {
 
 	//Controller communication fields.
 	private final Thread inputthread;
-	private final ArrayBlockingQueue<ServerMessage> queue;
 	private TUIStrategy tuistate;
 
 	//Game info fields.
@@ -51,7 +48,6 @@ public class TUIView implements ClientView {
 		this.notifications = new ArrayList<>();
 		overlay = false;
 		this.inputthread = new KeyboardInputThread(terminal, this);
-		this.queue = new ArrayBlockingQueue<>(10);
 		this.drawthread = new RedrawThread(this);
 		inputthread.start();
 		drawthread.start();
@@ -207,7 +203,6 @@ public class TUIView implements ClientView {
 	@Override
 	public void disconnect() {
 		this.status_runnable = () -> {};
-		this.queue.clear();
 		this.username = null;
 		this.overlay_runnable = null;
 		this.client_state = null;
