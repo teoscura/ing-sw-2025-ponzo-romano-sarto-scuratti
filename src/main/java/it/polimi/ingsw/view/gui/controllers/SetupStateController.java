@@ -21,9 +21,9 @@ public class SetupStateController {
 	private PlayerCount numPlayers;
 
 	@FXML
-	private ChoiceBox player_number;
+	private ChoiceBox<String> player_number;
 	@FXML
-	private ChoiceBox game_type;
+	private ChoiceBox<String> game_type;
 	@FXML
 	private ListView<ClientGameListEntry> unfinishedListView;
 
@@ -35,11 +35,8 @@ public class SetupStateController {
 
 	@FXML
 	protected void initialize() {
-		player_number.getItems().add("2");
-		player_number.getItems().add("3");
-		player_number.getItems().add("4");
-		game_type.getItems().add("Test Flight");
-		game_type.getItems().add("Level 2");
+		player_number.getItems().addAll("2", "3", "4");
+		game_type.getItems().addAll("Test Flight", "Level 2");
 
 		if (unfinishedListView != null) {
 			unfinishedListView.getItems().addAll(state.getUnfinishedList());
@@ -84,8 +81,8 @@ public class SetupStateController {
 
 	@FXML
 	protected void create() {
-		String selectedPlayerNumber = (String) player_number.getValue();
-		String selectedGameType = (String) game_type.getValue();
+		String selectedPlayerNumber = player_number.getValue();
+		String selectedGameType = game_type.getValue();
 
 		if (selectedPlayerNumber == null) {
 			view.showTextMessage("Select the number of players.");

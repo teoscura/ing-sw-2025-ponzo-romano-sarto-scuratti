@@ -21,7 +21,7 @@ public class ConnectingStateController {
 	@FXML
 	private TextField port_field;
 	@FXML
-	private ChoiceBox connection_menu;
+	private ChoiceBox<String> connection_menu;
 
 	public ConnectingStateController(ConnectingState state, GUIView view) {
 		this.state = state;
@@ -62,9 +62,7 @@ public class ConnectingStateController {
 
 	@FXML
 	protected void initialize() {
-		connection_menu.getItems().add("TCP");
-		connection_menu.getItems().add("RMI");
-
+		connection_menu.getItems().addAll("TCP", "RMI");
 	}
 
 	@FXML
@@ -82,7 +80,7 @@ public class ConnectingStateController {
 			return;
 		}
 
-		connection_type = connection_menu.getValue().toString();
+		connection_type = connection_menu.getValue();
 		if (Objects.equals(connection_type, "TCP")) {
 			state.connect(ip, Integer.parseInt(port), ConnectionType.SOCKET);
 		} else if (Objects.equals(connection_type, "RMI")) {
