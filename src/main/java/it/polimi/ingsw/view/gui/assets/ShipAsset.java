@@ -10,21 +10,26 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 
 public class ShipAsset {
-	private GridPane pane;
+	private final GridPane pane;
+	private TileAsset[][] components;
 
 	public ShipAsset(ClientConstructionPlayer player) {
 		pane = new GridPane();
-		pane.getColumnConstraints().addAll(new ColumnConstraints(50), new ColumnConstraints(50), new ColumnConstraints(50), new ColumnConstraints(50), new ColumnConstraints(50));
-		pane.getRowConstraints().addAll(new RowConstraints(50), new RowConstraints(50), new RowConstraints(50), new RowConstraints(50), new RowConstraints(50), new RowConstraints(50), new RowConstraints(50));
+		pane.getColumnConstraints().addAll(new ColumnConstraints(75), new ColumnConstraints(75), new ColumnConstraints(75), new ColumnConstraints(75), new ColumnConstraints(75));
+		pane.getRowConstraints().addAll(new RowConstraints(75), new RowConstraints(75), new RowConstraints(75), new RowConstraints(75), new RowConstraints(75), new RowConstraints(75), new RowConstraints(75));
 		TileImageVisitor v = new TileImageVisitor();
 		for (int i=0; i<5; i++){
 			for (int j=0; j<7; j++){
-				player.getShip().getComponent(new ShipCoords(player.getShip().getType(), i, j)).showComponent(v);
-				ImageView temp = new ImageView();
-				temp.setFitHeight(50);
-				temp.setFitWidth(50);
-				pane.add(temp, j, i);
+				components[i][j] = new TileAsset(player.getShip().getComponent(new ShipCoords(player.getShip().getType(), i, j)));
+				pane.add(components[i][j].getBase(), j, i);
 			}
 		}
 	}
+
+	public GridPane getGrid() {
+		return pane;
+	}
+
+
+
 }

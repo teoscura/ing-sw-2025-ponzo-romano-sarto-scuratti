@@ -1,15 +1,27 @@
 package it.polimi.ingsw.view.gui.assets;
 
+import it.polimi.ingsw.model.client.components.ClientComponent;
+import it.polimi.ingsw.view.gui.TileImageVisitor;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 public class TileAsset {
-	private Image base;
+	private final ImageView base;
+	private final ClientComponent component;
 
-	public void setBase(Image base) {
-		this.base = base;
+	public TileAsset(ClientComponent component) {
+		this.component = component;
+		TileImageVisitor visitor = new TileImageVisitor();
+		component.showComponent(visitor);
+		base = new ImageView(visitor.getTile());
 	}
 
-	public Image getBase() {
+	public ImageView getBase() {
 		return base;
 	}
+
+	public ClientComponent getComponent() {
+		return component;
+	}
+
 }

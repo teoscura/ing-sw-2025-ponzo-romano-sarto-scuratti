@@ -6,22 +6,20 @@ import javafx.scene.image.Image;
 
 public class TileImageVisitor implements ClientComponentVisitor {
 
-	private TileAsset tile;
+	private Image image;
 
-	public TileAsset getTile() {
-		return tile;
+	public Image getTile() {
+		return image;
 	}
 
 	@Override
 	public void show(ClientBaseComponent component) {
-		Image base = new Image("galaxy_trucker_imgs/tiles/GT-tile-" + component.getId() + ".jpg");
-		tile.setBase(base);
+		image = new Image("galaxy_trucker_imgs/tiles/GT-tile-" + component.getId() + ".jpg");
 	}
 
 	@Override
 	public void show(ClientEmptyComponent component) {
-		Image base = new Image("galaxy_trucker_imgs/tiles/GT-tile-157.jpg");
-		tile.setBase(base);
+		return;
 	}
 
 	@Override

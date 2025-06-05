@@ -35,10 +35,8 @@ public class ConstructionPlayerTextFlow {
 	}
 
 	public void showPlayerShip(Window stage) {
-
-		//TODO: create and build ship asset
-		GridPane ship = new GridPane();
-		Scene scene = new Scene(ship);
+		ShipAsset ship = new ShipAsset(player);
+		Scene scene = new Scene(ship.getGrid());
 		Popup ship_popup = new Popup();
 		ship_popup.setAutoHide(true);
 		ship_popup.setAutoFix(true);
