@@ -57,9 +57,6 @@ If you want to start a client using the TUI, make sure to first run:
 
 ```wt --size 128,32```
 
-> [!CAUTION]
-> Don't attempt to resize the terminal window while playing on windows, as the OS doesn't allow the JVM to change the size of the terminal it's running on, it will lead to undefined behaviour.
-
 And then for both types of clients run:
 
 `java -jar GC13-client.jar <tui|gui>`
