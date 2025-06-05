@@ -33,7 +33,7 @@ All unfinished games are available to load in the lobby setup screen, provided t
 | Multi-lobby Support             |     ✅      |
 | Disconnection Resilience        |     ✅      |
 | Test Flight Ruleset             |     ✅      |
-| Persistance/Game save system    |     ✅      |
+| Persistence/Game save system    |     ✅      |
 
 ### How to start a server
 
