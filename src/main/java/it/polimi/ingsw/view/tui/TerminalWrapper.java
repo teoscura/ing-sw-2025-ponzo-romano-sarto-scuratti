@@ -19,6 +19,7 @@ import java.util.List;
 
 public class TerminalWrapper {
 
+	private final Display display;
 	private final Terminal terminal;
 	private final KeyMap<Widget> keymap;
 	private final BindingReader reader;
@@ -38,7 +39,7 @@ public class TerminalWrapper {
 				.encoding(Charset.forName("UTF-8"))
 				.ffm(true)
 				.build();
-
+		this.display = new Display(terminal, false);
 		this.termlock = new Object();
 		previous = this.terminal.enterRawMode();
 		this.terminal.puts(Capability.enter_ca_mode);
@@ -68,16 +69,15 @@ public class TerminalWrapper {
 	private void setupHooks(TUIView view) {
 		this.size = terminal.getSize();
 		if (size.getRows() < 32 || size.getColumns() < 128) showSmallScreen(size);
-
 		terminal.handle(Terminal.Signal.WINCH, signal -> {
 			this.size = terminal.getSize();
-			terminal.setSize(size);
+			display.resize(this.size.getRows(), this.size.getColumns());
 			if (size.getRows() < 32 || size.getColumns() < 128) {
 				showSmallScreen(size);
-				legal = false;
+				this.legal = false;
 				return;
 			}
-			legal = true;
+			this.legal = true;
 		});
 
 		//Makes the JVM close gracefully.
@@ -85,6 +85,7 @@ public class TerminalWrapper {
 			this.cleanUp(previous);
 			System.exit(0);
 		});
+
 		terminal.handle(Terminal.Signal.QUIT, signal -> {
 			this.cleanUp(previous);
 			System.exit(0);
@@ -171,7 +172,7 @@ public class TerminalWrapper {
 	}
 
 	public void print(String string, int row, int scol) {
-		if (!legal) return;
+		if(!legal) return;
 		synchronized (this.termlock) {
 			this.terminal.puts(Capability.cursor_address, row, scol);
 			this.terminal.writer().print(string);
@@ -200,7 +201,7 @@ public class TerminalWrapper {
 	}
 
 	public void puts(Capability capability, Object... params) {
-		if (!legal) return;
+		if(!legal) return;
 		synchronized (this.termlock) {
 			terminal.puts(capability, params);
 			terminal.flush();
@@ -231,10 +232,11 @@ public class TerminalWrapper {
 		res.add(new AttributedStringBuilder().style(AttributedStyle.BOLD.foreground(AttributedStyle.RED)).append("Must be 128x32 minimum!").toAttributedString());
 		res.add(new AttributedStringBuilder().style(AttributedStyle.BOLD.foreground(AttributedStyle.RED)).append("Current one is " + s.getColumns() + "x" + s.getRows() + "!").toAttributedString());
 		res.add(new AttributedStringBuilder().style(AttributedStyle.BOLD.foreground(AttributedStyle.RED)).append("Press any key when resized.").toAttributedString());
-		puts(Capability.clear_screen);
+		this.terminal.puts(Capability.clear_screen);
 		int firstrow = (s.getRows() - res.size()) / 2;
 		for (String line : res.stream().map(as->as.toAnsi()).toList()) {
-			this.print(line, firstrow, (s.getColumns() - line.length()) / 2);
+			this.terminal.puts(Capability.cursor_address, firstrow, (s.getColumns() - line.length()) / 2);
+			this.terminal.writer().print(line);
 			firstrow++;
 		}
 	}
