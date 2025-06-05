@@ -25,7 +25,7 @@ All unfinished games are available to load in the lobby setup screen, provided t
 
 | Feature                         | Implemented |
 |:--------------------------------|:-----------:|
-| Level 2 Flight                  |     ✅      |
+| Level 2 Flight Ruleset          |     ✅      |
 | TUI                             |     ✅      |
 | GUI                             |     ✅      |
 | Socket                          |     ✅      |
