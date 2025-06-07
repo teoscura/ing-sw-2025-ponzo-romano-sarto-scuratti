@@ -51,7 +51,7 @@ public class ClientLobbyStateController {
 
 	private String formatLobbyEntry(ClientGameListEntry entry) {
 		boolean isFull = entry.getCount().getNumber() == entry.getPlayers().size();
-		String typeColor = entry.getType() == GameModeType.LVL2 ? " [Hard]" : " [Normal]";
+		String typeColor = entry.getType() == GameModeType.LVL2 ? "Level 2" : "Test Flightfix";
 		String fullTag = isFull ? " (Full)" : "";
 
 		StringBuilder sb = new StringBuilder();
