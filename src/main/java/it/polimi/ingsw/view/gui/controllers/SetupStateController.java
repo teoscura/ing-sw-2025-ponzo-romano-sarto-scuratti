@@ -2,6 +2,7 @@ package it.polimi.ingsw.view.gui.controllers;
 
 import it.polimi.ingsw.message.server.LeaveSetupMessage;
 import it.polimi.ingsw.message.server.OpenLobbyMessage;
+import it.polimi.ingsw.message.server.OpenUnfinishedMessage;
 import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.PlayerCount;
 import it.polimi.ingsw.model.client.ClientGameListEntry;
@@ -11,6 +12,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
 
 public class SetupStateController {
@@ -77,6 +79,17 @@ public class SetupStateController {
 		}
 
 		return sb.toString().trim();
+	}
+
+	public void selectUnfinished(MouseEvent event) {
+		if (event.getClickCount() == 2) {
+			int selection = unfinishedListView.getSelectionModel().getSelectedIndex();
+			if (selection != -1) {
+				int gameId = state.getUnfinishedList().get(selection).getModelId();
+				view.sendMessage(new OpenUnfinishedMessage(gameId));
+			}
+		}
+
 	}
 
 	@FXML
