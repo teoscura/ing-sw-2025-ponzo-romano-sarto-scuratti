@@ -52,16 +52,12 @@ public class ClientLobbyStateController {
 	}
 
 	private String formatLobbyEntry(ClientGameListEntry entry) {
-		boolean isFull = entry.getCount().getNumber() == entry.getPlayers().size();
-		String typeColor = entry.getType() == GameModeType.LVL2 ? "Level 2" : "Test Flightfix";
-		String fullTag = isFull ? " (Full)" : "";
-
 		StringBuilder sb = new StringBuilder();
 		sb.append("Lobby ").append(entry.getModelId())
-				.append(" - Mode: ").append(entry.getType()).append(typeColor)
+				.append(" - Mode: ").append(entry.getType())
 				.append(" | Players: ").append(entry.getPlayers().size()).append("/")
-				.append(entry.getCount().getNumber()).append(fullTag)
-				.append(" - ");
+				.append(entry.getCount().getNumber()).
+				 append(" - ");
 
 		for (String player : entry.getPlayers()) {
 			sb.append(player).append(" ");

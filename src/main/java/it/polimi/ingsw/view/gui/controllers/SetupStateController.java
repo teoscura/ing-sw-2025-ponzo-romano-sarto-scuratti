@@ -64,15 +64,12 @@ public class SetupStateController {
 	}
 
 	private String formatUnfinishedEntry(ClientGameListEntry entry) {
-		boolean isFull = entry.getCount().getNumber() == entry.getPlayers().size();
-		String mode = entry.getType() == GameModeType.LVL2 ? "Level 2" : "Test Flight";
-		String fullTag = isFull ? " (Full)" : "";
-
 		StringBuilder sb = new StringBuilder();
-		sb.append("Game ").append(entry.getModelId())
-				.append(" - Mode: ").append(mode)
-				.append(" | Players: ").append(entry.getPlayers().size()).append("/").append(entry.getCount().getNumber()).append(fullTag)
-				.append(" - ");
+		sb.append("Lobby ").append(entry.getModelId())
+				.append(" - Mode: ").append(entry.getType())
+				.append(" | Players: ").append(entry.getPlayers().size()).append("/")
+				.append(entry.getCount().getNumber()).
+				append(" - ");
 
 		for (String player : entry.getPlayers()) {
 			sb.append(player).append(" ");
