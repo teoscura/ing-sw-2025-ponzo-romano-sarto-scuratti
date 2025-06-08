@@ -1,6 +1,5 @@
 package it.polimi.ingsw.view.gui;
 
-import it.polimi.ingsw.controller.ThreadSafeMessageQueue;
 import it.polimi.ingsw.controller.client.state.ConnectedState;
 import it.polimi.ingsw.controller.client.state.ConnectingState;
 import it.polimi.ingsw.controller.client.state.TitleScreenState;
@@ -37,6 +36,7 @@ public class GUIView implements ClientView {
 		} catch (IOException e) {
 		}
 		stage.setScene(scene);
+		stage.setResizable(false);
 		stage.show();
 	}
 
@@ -50,6 +50,7 @@ public class GUIView implements ClientView {
 		} catch (IOException e) {
 		}
 		stage.setScene(scene);
+		stage.setResizable(false);
 		stage.show();
 	}
 
@@ -63,6 +64,7 @@ public class GUIView implements ClientView {
 				scene = new Scene(loader.load());
 				scene.getStylesheets().add(getClass().getResource("/it/polimi/ingsw/style.css").toExternalForm());
 				stage.setScene(scene);
+				stage.setResizable(false);
 				stage.show();
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -85,8 +87,8 @@ public class GUIView implements ClientView {
 		this.state = null;
 	}
 
-	public void sendMessage(ServerMessage message){
-		if(this.state == null){
+	public void sendMessage(ServerMessage message) {
+		if (this.state == null) {
 			this.showTextMessage("Attempted to send a message while state was null!");
 			return;
 		}
@@ -95,11 +97,11 @@ public class GUIView implements ClientView {
 
 	@Override
 	public void showTextMessage(String message) {
-//		Alert errorAlert = new Alert(Alert.AlertType.INFORMATION);
-//		errorAlert.setHeaderText("Info");
-//		errorAlert.setContentText(message);
-//		errorAlert.showAndWait();
-		
+		//Alert errorAlert = new Alert(Alert.AlertType.INFORMATION);
+		//errorAlert.setHeaderText("Info");
+		//errorAlert.setContentText(message);
+		//errorAlert.show();
+
 	}
 
 	@Override
@@ -110,6 +112,7 @@ public class GUIView implements ClientView {
 				loader.setControllerFactory(f -> new SetupStateController(state, this));
 				Scene scene = new Scene(loader.load());
 				stage.setScene(scene);
+				stage.setResizable(false);
 				stage.show();
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -126,6 +129,7 @@ public class GUIView implements ClientView {
 				loader.setControllerFactory(f -> new WaitingRoomController(state, this));
 				Scene scene = new Scene(loader.load());
 				stage.setScene(scene);
+				stage.setResizable(false);
 				stage.show();
 			} catch (IOException e) {
 				e.printStackTrace();

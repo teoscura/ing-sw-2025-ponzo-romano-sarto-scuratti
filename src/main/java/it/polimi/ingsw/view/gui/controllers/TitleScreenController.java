@@ -25,7 +25,12 @@ public class TitleScreenController {
 
 	@FXML
 	public void confirmName(ActionEvent event) {
-		state.setUsername(name_field.getText());
+		String name = name_field.getText();
+		if (!name.isEmpty()) {
+			state.setUsername(name);
+			return;
+		}
+		view.showTextMessage("Name cannot be empty");
 	}
 
 	@FXML
