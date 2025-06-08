@@ -1,17 +1,85 @@
 @startuml sequence_tcp
 
-ConnectingState -> SocketClient
-SocketClient->Socket
-Socket->NetworkServer
-NetworkServer->MainServerController
-ConnectingState -> SocketClient
-SocketClient->Socket
-Socket->NetworkServer
-NetworkServer->MainServerController
-MainServerController->SocketConnection
-SocketConnection->ThreadSafeMessageQueue
-ConnectedState->ThreadSafeMessageQueue
-ThreadSafeMessageQueue->ConnectedState
+''Client
+control ClientController as ClientController
+entity ClientMessage as ClientMessage
+queue "Queue(ClientSide)" as ThreadSafeMessageQueueC
+entity SocketConnection as SocketConnection
+boundary Socket as SocketC
+
+''Server
+boundary NetworkServer as NetworkServer
+boundary Socket as SocketS
+collections serverPool as ExecutorService
+control MainServerController as MainServerController
+collections to_setup_tcp as SocketList
+entity SocketClient as SocketClient
+entity ClientDescriptor as ClientDescriptor
+entity ServerMessage as ServerMessage
+queue "Queue(ServerSide)" as ThreadSafeMessageQueueS
+
+''Client starts connection
+ClientController -> ThreadSafeMessageQueueC: Constructor;
+ClientController -> SocketConnection: new SocketConnection(Queue, String, String, int);
+SocketConnection -> SocketC: new Socket(String, int);
+''NetworkServer receives socketconnection
+SocketC -> NetworkServer: accept();
+NetworkServer -> NetworkServer: new SocketClient(Socket);
+NetworkServer -> MainServerController: connectListener(SocketClient);
+NetworkServer -> ExecutorService: submit(SocketClient);
+ExecutorService -> SocketClient: start();
+NetworkServer -> MainServerController: connectListener(SocketClient);
+MainServerController -> SocketList: add(SocketClient);
+''Client sends username setup message automatically.
+ClientController -> SocketConnection: sendMessage(new UsernameSetupMessage(String));
+SocketConnection -> SocketC: out.writeObject(message);
+''Server Reads it.
+SocketClient -> SocketS: in.readObject()
+SocketS -> SocketClient: return Object cast as ServerMessage
+SocketClient -> MainServerController: setupSocketListener(SocketClient, String);
+MainServerController -> SocketList: remove(SocketClient);
+MainServerController -> ClientDescriptor: new ClientDescriptor(String, RMIClientStub);
+MainServerController -> MainServerController: connect(ClientDescriptor);
+''Server sends an update.
+MainServerController -> MainServerController: sendMessage(new NotifyStateUpdateMessage());
+MainServerController -> ClientDescriptor: sendMessage(message);
+ClientDescriptor -> SocketClient: sendMessage(message);
+SocketClient -> SocketS: out.writeObject(message);
+SocketS -> SocketC: (TCP Transfer)
+''Client Receives Message and handles it.
+SocketConnection -> SocketC: in.readObject();
+SocketC -> SocketConnection: return Object cast as ClientMessage
+SocketConnection -> ThreadSafeMessageQueueC: insert(ClientMessage);
+ClientController -> ThreadSafeMessageQueueC: take();
+ThreadSafeMessageQueueC -> ClientController: return ClientMessage;
+ClientController -> ClientMessage: receive(this);
+ClientMessage -> ClientController: sendToView(state);
+''Client sends a message
+ClientController -> SocketConnection: sendMessage(new UsernameSetupMessage(String));
+SocketConnection -> SocketC: out.writeObject(message);
+''Server Receives it
+SocketC -> SocketS: (TCP Transfer)
+SocketClient -> SocketS: in.readObject();
+SocketS -> SocketClient: return Object cast as ServerMessage
+MainServerController -> ThreadSafeMessageQueueS: insert(ServerMessage);
+MainServerController -> ThreadSafeMessageQueueS: take();
+ThreadSafeMessageQueueS -> MainServerController: return ServerMessage;
+MainServerController -> ServerMessage: receive();
+''Server updates state if it changed.
+MainServerController -> MainServerController: (Generalization, depends on what the user is doing)\nGenerate ClientState and broadcast to every user.
+MainServerController -> MainServerController: sendMessage(new NotifyStateUpdateMessage());
+MainServerController -> ClientDescriptor: sendMessage(message);
+ClientDescriptor -> SocketClient: sendMessage(message);
+SocketClient -> SocketS: out.writeObject(message);
+SocketS -> SocketC: (TCP Transfer)
+''Client receives it
+SocketConnection -> SocketC: in.readObject();
+SocketC -> SocketConnection: return Object cast as ClientMessage
+SocketConnection -> ThreadSafeMessageQueueC: insert(ClientMessage);
+ClientController -> ThreadSafeMessageQueueC: take();
+ThreadSafeMessageQueueC -> ClientController: return ClientMessage;
+ClientController -> ClientMessage: receive(this);
+ClientMessage -> ClientController: sendToView(state);
 
 @enduml
 
@@ -30,7 +98,6 @@ entity RMIServerImpl as RMIServerImpl
 entity ClientDescriptor as ClientDescriptor
 entity ServerMessage as ServerMessage
 queue "Queue(ServerSide)" as ThreadSafeMessageQueueS
-collections Listeners as Listeners
 
 ''Client starts to connect
 ClientController -> ThreadSafeMessageQueueC: Constructor;
@@ -41,7 +108,7 @@ RMIConnection -> NetworkServer: (As RMISkeletonProvider) accept(RMIClientStub);
 ''Server accepts the connection.
 NetworkServer -> MainServerController: connectListener(RMIClientStub);
 MainServerController -> ClientDescriptor: new ClientDescriptor(String, RMIClientStub);
-MainServerController -> Listeners: all_listeners.put(String, ClientDescriptor);
+MainServerController -> MainServerController: connect(ClientDescriptor);
 MainServerController -> NetworkServer: return ClientDescriptor;
 NetworkServer -> MainServerController: getStub(ClientDescriptor);
 MainServerController -> RMIServerImpl: new RMIServerImpl(...);
@@ -66,6 +133,7 @@ MainServerController -> ServerMessage: receive();
 ''Server updates state if it changed.
 MainServerController -> MainServerController: (Generalization, depends on what the user is doing)\nGenerate ClientState and broadcast to every user.
 MainServerController -> RMIClientStub: sendMessage(new NotifyUpdateStateMessage(...));
+''Client receives it
 RMIClientStub -> ThreadSafeMessageQueueC: insert(ClientMessage);
 ClientController -> ThreadSafeMessageQueueC: take();
 ThreadSafeMessageQueueC -> ClientController: return ClientMessage;
