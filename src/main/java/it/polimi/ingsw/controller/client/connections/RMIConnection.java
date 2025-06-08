@@ -21,7 +21,7 @@ public class RMIConnection implements ServerConnection {
 
 	public RMIConnection(ThreadSafeMessageQueue<ClientMessage> queue, String server_ip, String username, int port) throws RemoteException, NotBoundException, NullPointerException {
 		Registry registry = LocateRegistry.getRegistry(server_ip, port);
-		this.stub = new RMIClientStub(queue, username, port);
+		this.stub = new RMIClientStub(queue, username);
 		this.server = ((RMISkeletonProvider) registry.lookup("galaxy_truckers")).accept(stub);
 		if (this.server == null) throw new NullPointerException();
 	}

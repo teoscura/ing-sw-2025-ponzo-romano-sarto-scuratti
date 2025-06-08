@@ -1,0 +1,75 @@
+@startuml sequence_tcp
+
+ConnectingState -> SocketClient
+SocketClient->Socket
+Socket->NetworkServer
+NetworkServer->MainServerController
+ConnectingState -> SocketClient
+SocketClient->Socket
+Socket->NetworkServer
+NetworkServer->MainServerController
+MainServerController->SocketConnection
+SocketConnection->ThreadSafeMessageQueue
+ConnectedState->ThreadSafeMessageQueue
+ThreadSafeMessageQueue->ConnectedState
+
+@enduml
+
+@startuml sequence_rmi
+
+''Client
+control ClientController as ClientController
+entity ClientMessage as ClientMessage
+queue "Queue(ClientSide)" as ThreadSafeMessageQueueC
+entity RMIConnection as RMIConnection
+boundary RMIClientStub as RMIClientStub
+''Server
+boundary NetworkServer as NetworkServer
+control MainServerController as MainServerController
+entity RMIServerImpl as RMIServerImpl
+entity ClientDescriptor as ClientDescriptor
+entity ServerMessage as ServerMessage
+queue "Queue(ServerSide)" as ThreadSafeMessageQueueS
+collections Listeners as Listeners
+
+''Client starts to connect
+ClientController -> ThreadSafeMessageQueueC: Constructor;
+ClientController -> RMIConnection: new RMIConnection(...);
+RMIConnection -> RMIClientStub: new RMIClientStub(...)
+RMIClientStub -> RMIClientStub: UnicastRemoteObject();\n(Called Implicitly by constructor)
+RMIConnection -> NetworkServer: (As RMISkeletonProvider) accept(RMIClientStub);
+''Server accepts the connection.
+NetworkServer -> MainServerController: connectListener(RMIClientStub);
+MainServerController -> ClientDescriptor: new ClientDescriptor(String, RMIClientStub);
+MainServerController -> Listeners: all_listeners.put(String, ClientDescriptor);
+MainServerController -> NetworkServer: return ClientDescriptor;
+NetworkServer -> MainServerController: getStub(ClientDescriptor);
+MainServerController -> RMIServerImpl: new RMIServerImpl(...);
+RMIServerImpl -> RMIServerImpl: UnicastRemoteObject();\n(Called Implicitly by constructor)
+MainServerController -> NetworkServer: return RMIServerImpl;
+NetworkServer -> RMIConnection: return ServerImpl as VirtualServer
+''Server Sends Current Lobby State
+MainServerController -> RMIClientStub: sendMessage(new NotifyUpdateStateMessage(...));
+RMIClientStub -> ThreadSafeMessageQueueC: insert(ClientMessage);
+ClientController -> ThreadSafeMessageQueueC: take();
+ThreadSafeMessageQueueC -> ClientController: return ClientMessage;
+ClientController -> ClientMessage: receive(this);
+ClientMessage -> ClientController: sendToView(state);
+''Sends Message
+ClientController -> RMIConnection : sendMessage(ServerMessage);
+RMIConnection -> MainServerController: receiveMessage(ServerMessage);
+MainServerController -> ThreadSafeMessageQueueS: insert(ServerMessage);
+MainServerController -> MainServerController: run();
+MainServerController -> ThreadSafeMessageQueueS: take();
+ThreadSafeMessageQueueS -> MainServerController: return ServerMessage;
+MainServerController -> ServerMessage: receive();
+''Server updates state if it changed.
+MainServerController -> MainServerController: (Generalization, depends on what the user is doing)\nGenerate ClientState and broadcast to every user.
+MainServerController -> RMIClientStub: sendMessage(new NotifyUpdateStateMessage(...));
+RMIClientStub -> ThreadSafeMessageQueueC: insert(ClientMessage);
+ClientController -> ThreadSafeMessageQueueC: take();
+ThreadSafeMessageQueueC -> ClientController: return ClientMessage;
+ClientController -> ClientMessage: receive(this);
+ClientMessage -> ClientController: sendToView(state);
+
+@enduml
