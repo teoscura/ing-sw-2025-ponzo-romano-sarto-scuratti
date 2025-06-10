@@ -1,0 +1,245 @@
+@startuml view
+
+package View {
+
+    enum ViewType {
+        TUI
+        GUI
+    }
+
+
+    Model::Client::ClientStateVisitor <-- ClientView
+    interface ClientView {
+        {method} + show(TitleScreenState) : void
+	    {method} + show(ConnectingState) : void
+	    {method} + showTextMessage(String) : void
+	    {method} + setClientState(ClientState) : void
+	    {method} + connect(ConnectedState) : void
+	    {method} + disconnect() : void
+    }
+
+    package TUI {
+
+        ClientView <-- TUIView
+        TUIStrategy "1" -- TUIView:tuistrategy;
+        TUI::TUINotification "0..N" -- TUIView:notifications
+        TUI::TerminalWrapper "1" -- TUIView:terminal
+        Model::Client::ClientState "1" -- TUIView:state
+        class TUIView {
+	        {field} - [final] drawthread : Thread
+            {field} - [final] inputthread : Thread
+	        {field} - screen_runnable : Runnable
+	        {field} - status_runnable : Runnable
+            {field} - overlay_runnable : Runnable
+	        {field} - overlay : boolean
+            {field} - String username : String
+            {field} - selected_color : PlayerColor;
+            //TODO add all overrides;
+	        {method} + redraw() : void
+	        {method} + showHelpScreen() : void
+	        {method} + showStateInfo() : void
+	        {method} + resetOverlay() : void
+	        {method} + getStatusRunnable() : Runnable
+	        {method} + handleLine(String line) : void
+	        {method} + changeShip(String s) : void
+        }
+
+        package Concurrent {
+            
+            View::TUI::TerminalWrapper "1" -- KeyboardInputThread:terminal
+            TUIView "1" -- KeyboardInputThread:view
+            class KeyboardInputThread {
+                {method} + run() : void
+            }
+
+            TUIView "1" -- RedrawThread:view
+            class RedrawThread {
+                {method} + run() : void
+            }
+
+        }
+
+        package Formatters {
+
+            Model::Client::Card::ClientCardStateVisitor <-- ClientCardStateFormatter
+            class ClientCardStateFormatter {
+                {field} - [final] line : AttributedStringBuilder
+                {method} + getFormatted() : AttributedString
+                {method} + show(ClientAwaitConfirmCardStateDecorator) : void
+                {method} + show(ClientBaseCardState) : void
+                {method} + show(ClientCargoPenaltyCardStateDecorator) : void
+                {method} + show(ClientCargoRewardCardStateDecorator) : void
+                {method} + show(ClientCombatZoneIndexCardStateDecorator) : void
+                {method} + show(ClientCreditsRewardCardStateDecorator) : void
+                {method} + show(ClientCrewPenaltyCardStateDecorator) : void
+                {method} + show(ClientLandingCardStateDecorator) : void
+                {method} + show(ClientMeteoriteCardStateDecorator) : void
+                {method} + show(ClientNewCenterCardStateDecorator) : void
+                {method} + show(ClientProjectileCardStateDecorator) : void
+	            {method} + show(ClientEnemyCardStateDecorator) : void
+	            {method} - getColor(PlayerColor) : int
+                {method} - normalizeOffset(int, int) : int
+            }
+
+            class ClientConstructionStateFormatter { 
+                {field} - [static] [final] bottom_line : String
+	            {method} + [static] format(TerminalWrapper, ClientConstructionState, PlayerColor) : void
+            	{method} + [static] ormatStatus(TerminalWrapper, ClientConstructionState) : void
+            	{method} - [static] getBoardLine(ClientConstructionState) : AttributedString 
+	            {method} - [static] formatTime(Duration) : String 
+	            {method} - [static] getColor(PlayerColor) : int 
+	            {method} - [static] getUserComponents(ClientConstructionState, PlayerColor) : List<String> 
+            	{method} - [static] getDiscardedBoard(ClientConstructionState) List<String> 
+        	}
+
+            class ClientEndingStateFormatter {
+                {method} + [static] format(TerminalWrapper, ClientEndgameState) : void
+                {method} + [static] formatStatus(TerminalWrapper, ClientEndgameState) : void
+                {method} - [static] getColor(PlayerColor)
+            }
+
+            class ClientSmallComponentPrinter {
+                //TODO
+            }
+
+            class ClientLargeComponentPrinter {
+                //TODO
+            }
+
+            class ClientLobbyStatesFormatter {
+                {field} - [static] [final] bottom_line : String
+                {method} + [static] format(TerminalWrapper, ClientLobbySelectState) : void
+                {method} + [static] formatStatus(TerminalWrapper, ClientLobbySelectState) : void
+                {method} + [static] format(TerminalWrapper, ClientSetupState) : void
+                {method} + [static] formatStatus(TerminalWrapper, ClientSetupState) : void
+            }
+
+
+            class ClientSpaceShipFormatter {
+                {method} - [static] trimName(String, PlayerColor, int) : String
+                {method} + [static] formatLarge(ClientSpaceShip, String, PlayerColor, int, boolean, boolean) : List<String> 
+                {method} + [static] formatSmall(ClientSpaceShip, String, PlayerColor, int, boolean, boolean) : List<String> 
+                {method} + [static] getConstructionHelpCorner() : ArrayList<String>
+                {method} + [static] getHelpCorner() : ArrayList<String>
+	            {method} + [static] getEmptyShipSmall() : ArrayList<String>
+	            {method} + [static] getEmptyShipLarge() : ArrayList<String>
+            }
+
+            class ClientStateOverlayFormatter {
+
+            }
+
+            class ClientVerifyStateFormatter {
+
+            }
+
+            class ClientVoyageStateFormatter {
+
+            }
+
+            class ClientWaitingStateFormatter {
+
+            }
+
+            class HelpScreenFormatter {
+
+            }
+
+            class MenuFormatter {
+
+            }
+
+            class TextMessageFormatter {
+
+            }
+
+        }
+
+        package Strategy {
+
+            TUIView "1" -- TUIStrategy:view
+            abstract TUIStrategy {
+                {method} # [abstract] handleLine(String) : void
+                {method} # [abstract] getRunnable(TerminalWrapper) : Runnable
+            }
+
+            TUIStrategy <-- TUITitleStrategy
+            Controller::Client::State::TitleScreenState "1" -- TUITitleStrategy:state
+            class TUITitleStrategy {
+                {field} - [final] titlescreen : ArrayList<String>
+                {method} + handleLine(String) : void
+                {method} + getRunnable(TerminalWrapper) : Runnable
+            }
+
+            TUIStrategy <-- TUIConnectionSetupStrategy
+            Controller::Client::State::ConnectingState "1" -- TUIConnectionSetupStrategy:state
+            class TUIConnectionSetupStrategy {
+                {field} - [final] args: ArrayList<String>
+                {field} - [final] screen : ArrayList<String> 
+                {method} + handleLine(String) : void
+                {method} + getRunnable(TerminalWrapper) : Runnable
+            }
+
+            TUIStrategy <-- TUIInGameStrategy
+            View::TUI::CommandPreprocessor "1" -- TUIInGameStrategy:cp
+            class TUIInGameStrategy {
+                {method} + handleLine(String) : void
+                {method} + getRunnable(TerminalWrapper) : Runnable
+            }
+
+        }
+
+        class CommandBuilder {
+            {method} + [static] build(String,TUIView) : ServerMessage
+        }
+
+            
+        TUIView "1" -- CommandPreprocessor:view
+        Controller::Client::State::ConnectedState "1" -- CommandPreprocessor:state
+        class CommandPreprocessor {
+            {method} + process(String) : void
+            {method} - forward(String) : void
+        }
+
+        class TerminalWrapper {
+            {field} - [final] display : Display
+            {field} - [final] terminal : Terminal
+            {field} - [final] keymap : KeyMap<Widget>
+            {field} - [final] reader : BindingReader
+            {field} - [final] status : Status
+            {field} - [final] previous : Attributes
+            {field} - [final] termlock : Object
+            {field} - [final] line : StringBuffer
+            {field} - size : Size
+            {field} - input : String
+            {field} - legal : boolean
+	        {method} - setupHooks(TUIView view) : void
+	        {method} - setupBindings(TUIView) : KeyMap<Widget>
+	        {method} + readBinding() : Widget
+	        {method} + isAvailable() : boolean
+	        {method} + takeInput() : String
+	        {method} + peekInput() : String
+	        {method} + print(String, int, int) : void
+	        {method} + print(Collection<String>, int, int) : void
+	        {method} + printCentered(Collection<String>) : void
+	        {method} + printCenteredCorner(List<String>) : void
+	        {method} + puts(Capability, Object...) : void
+	        {method} + setStatus(List<AttributedString>) : void
+	        {method} - cleanUp(Attributes a) : void
+	        {method} - showSmallScreen(Size s) : void
+        }
+
+        class TUINotification {
+            {field} - [final] text : String
+            {field} - [final] timestamp : Instant
+            {field} - [final] ttl : Duration
+            {method} + getTimestamp() : Instant
+            {method} + getTTL() : Duration
+            {method} + getText() : String
+        }
+
+    }
+
+}
+
+@enduml

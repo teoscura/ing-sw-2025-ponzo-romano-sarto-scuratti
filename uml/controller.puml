@@ -225,14 +225,14 @@ package Controller{
 
     }
 
+    //TODO: manca MainServerController e LobbyController
+
     class ThreadSafeMessageQueue<T> {
         {field} - [final] threadpool : ExecutorService
         {field} - [final] queue ArrayBlockingQueue<T>
         {method} + take() : T
         {method} + insert(T) : void
     }
-
-    'TODO creare classe stub per il client.
 
     Server::Connections::RMIClientConnection .. RMIClientStub
 
@@ -505,10 +505,6 @@ package Controller{
             }
 
         }
-
-        ServerMessage::ClientMessage^... ServerMessage::DisconnectMessage
-        
-        ClientMessage::ClientMessage^... ClientMessage::DisconnectMessage
         
     }
 

@@ -1187,16 +1187,30 @@ package Model {
     }
 
 
+    Controller::LobbyController "1" <-- ModelInstance:controller
     State::GameState "1" <-- ModelInstance:state 
     class ModelInstance {
-        {field} - [final] controller : ServerController 
+        {field} - [final] id: int
+        {field} - started: boolean
+        {field} - ended: boolean
+        {method} + getID() : int
         {method} + validate(ServerMessage message) : void
-        {method} + startGame(List<Player> players) : void
+        {method} + serialize() : void
+        {method} + startGame() : void
+        {method} + endGame() : void
+        {method} + getStarted() : boolean
         {method} + getState() : GameState
-        {method} + setState(GameState new_state) : void
-        {method} + connect(ClientDescriptor client) : void
-        {method} + disconnect(ClientDescriptor client) : void
-        {method} + kick(ClientDescriptor client) : void
+        {method} + setState(GameState) : void
+        {method} + resumeState(GameState) : void
+        {method} + connect(ClientDescriptor) : void
+        {method} + disconnect(ClientDescriptor) : void
+        {method} + connect(Player) : void
+        {method} + disconnect(Player) : void
+        {method} + getController() : LobbyController 
+        {method} + setController(LobbyController) : void 
+        {method} + afterSerialRestart() : void
+        {method} + broadcast(ClientMessage) : void
+        {method} + getEntry() : ClientGameListEntry
     }
 
     package Client {
@@ -1669,4 +1683,4 @@ package Model {
 '⠀⠀⠀⠀⠀⠀⣰⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 '⠀⠀⠀⠀⠀⢰⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 '⠀⠀⠀⠀⢀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-'⠀⠀⠀⠀⣸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⠀⠀⠀
+'⠀⠀⠀⠀⣸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀

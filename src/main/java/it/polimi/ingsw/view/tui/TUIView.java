@@ -33,7 +33,7 @@ public class TUIView implements ClientView {
 
 	//Controller communication fields.
 	private final Thread inputthread;
-	private TUIStrategy tuistate;
+	private TUIStrategy tuistrategy;
 
 	//Game info fields.
 	private ClientState client_state;
@@ -74,14 +74,14 @@ public class TUIView implements ClientView {
 
 	@Override
 	public void show(TitleScreenState state) {
-		this.tuistate = new TUITitleStrategy(this, state);
-		this.screen_runnable = this.tuistate.getRunnable(terminal);
+		this.tuistrategy = new TUITitleStrategy(this, state);
+		this.screen_runnable = this.tuistrategy.getRunnable(terminal);
 	}
 
 	@Override
 	public void show(ConnectingState state) {
-		this.tuistate = new TUIConnectionSetupStrategy(this, state);
-		this.screen_runnable = this.tuistate.getRunnable(terminal);
+		this.tuistrategy = new TUIConnectionSetupStrategy(this, state);
+		this.screen_runnable = this.tuistrategy.getRunnable(terminal);
 	}
 
 	@Override
@@ -169,7 +169,7 @@ public class TUIView implements ClientView {
 	}
 
 	public void handleLine(String line) {
-		this.tuistate.handleLine(line);
+		this.tuistrategy.handleLine(line);
 	}
 
 	public void changeShip(String s) {
@@ -197,7 +197,7 @@ public class TUIView implements ClientView {
 		terminal.puts(Capability.clear_screen);
 		this.selected_color = PlayerColor.NONE;
 		this.username = state.getUsername();
-		this.tuistate = new TUIInGameStrategy(this, state);
+		this.tuistrategy = new TUIInGameStrategy(this, state);
 	}
 
 	@Override
