@@ -10,11 +10,17 @@ skinparam classAttributeIconSize 12
 ' format unfinished games: list form
 ' 1 - game_id - num_players - player_name_0, .. , player_name_num_players-1.
 
-package Controller{
+package Controller {
 
-    package Client{
+    package Client {
 
         package Connections {
+
+            enum ConnectionType <<enum>> {
+                SOCKET
+                RMI
+                NONE
+            }
 
             interface ServerConnection <<interface>> {
                 {method} sendMessage(ServerMessage) : void
@@ -54,24 +60,24 @@ package Controller{
         }
 
         package State {
-
-            abstract ClientControllerState {
-                {field} - [final] controller : ClientController
-                {field} - [final] view : ClientView
+            
+            Controller::Client::ClientController "1" -- ClientControllerState:controller
+            View::ClientView "1" -u- ClientControllerState:view
+            abstract ClientControllerState <<abstract>> {
                 {method} # init() : void
                 {method} # getNext() : ClientControllerState
+                {method} # transition() : void
+                {method} # getView() : ClientView
                 {method} + onClose() : void
-                {method} [protected] transition() : void
-                {method} [protected] getView() : ClientView
                 {method} + setUsername(String) : void
                 {method} + connect(String, int, ConnectionType) : void
                 {method} + sendMessage(ServerMessage) : void
                 {method} + disconnect() : void
             }
 
-            ClientControllerState ^.. ConnectedState
+            ClientControllerState ^.. ConnectingState
+            Controller::Client::Connections::ServerConnection "1" -- ConnectedState:connection
             class ConnectedState {
-                {field} - [final] connection : ServerConnection
                 {field} - [final] outqueue : ThreadSafeMessageQueue<ServerMessage>
                 {field} - [final] username : String
                 {field} - [final] consumer_thread : Thread
@@ -95,9 +101,9 @@ package Controller{
             }
 
             ClientControllerState ^.. ConnectingState
+            Controller::Client::Connections::ServerConnection "1" -- ConnectingState:connection
             class ConnectingState {
                 {field} - [final] username : String
-                {field} - [final] connection : ServerConnection
                 {field} - [final] inqueue : ThreadSafeMessageQueue<ServerMessage>
                 {method} + init() : void
                 {method} + getController() : ClientController
@@ -114,37 +120,31 @@ package Controller{
                 {method} + exit() : void
                 {method} + validateUsername(String) : boolean
             }
+        
+        }
 
-            class ClientController {
-                {field} - [final] view : ClientView
-                {field} - [final] state : ClientControllerState
-                {field} - [final] closed : boolean
-                {method} + getState() : ClientControllerState
-                {method} + setState(ClientControllerState) : void
-                {method} + close() : void
-                {method} + getClosed() : boolean
-                {method} + reset() : void
-            }
+        View::ClientView "1" -- ClientController:view
+        Controller::Client::State::ClientControllerState "1" -- ClientController:state
+        class ClientController {
+            {field} - [final] closed : boolean
+            {method} + getState() : ClientControllerState
+            {method} + setState(ClientControllerState) : void
+            {method} + close() : void
+            {method} + getClosed() : boolean
+            {method} + reset() : void
+        }
 
-            class ConsumerThread {
-                {field} - [final] state : ConnectedState
-                {field} - [final] inqueue : ThreadSafeMessageQueue<ClientMessage>
-                {method} + run() : void
-            }
+        Controller::Client::State::ConnectedState "1" -- ConsumerThread:state
+        class ConsumerThread {
+            {field} - [final] inqueue : ThreadSafeMessageQueue<ClientMessage>
+            {method} + run() : void
+        }
 
-            class InputCommandThread {
-                {field} - [final] cc : ConnectedState
-                {field} - [final] view : ClientView
-                {method} + run() : void
-            }
-
-            class SenderThread {
-                {field} - [final] outqueue : ThreadSafeMessageQueue<ClientMessage>
-                {field} - [final] connection : ServerConnection
-                {field} - [final] state : ConnectedState
-                {method} + run() : void
-            }
-
+        Controller::Client::Connections::ServerConnection "1" -- SenderThread:connection
+        Controller::Client::State::ConnectedState "1" -- SenderThread:state
+        class SenderThread {
+            {field} - [final] outqueue : ThreadSafeMessageQueue<ClientMessage>
+            {method} + run() : void
         }
 
     }
@@ -188,9 +188,9 @@ package Controller{
             }
 
             VirtualServer ^.. RMIServerStubImpl
+            Controller::Server::MainServerController "1" -- RMIServerStubImpl:controller
+            Controller::Server::ClientDescriptor "1" -- RMIServerStubImpl:client
             class RMIServerStubImpl {
-                {field} - [transient] [final] controller : MainServerController
-                {field} - [transient] [final] client : ClientDescriptor
                 {method} + receiveMessage(ServerMessage) : void
             }
 
@@ -213,6 +213,86 @@ package Controller{
 
         }
 
+
+        Controller::Server::MainServerController "static" -- MainServerController:instance
+        Controller::Server::Connections::NetworkServer "1" -- MainServerController:server
+        class MainServerController <<singleton>> {
+            {field} - [final] all_listeners : HashMap<String, ClientDescriptor> 
+            {field} - [final] lob_listeners : HashMap<String, ClientDescriptor> 
+            {field} - [final] stp_listeners : HashMap<String, ClientDescriptor> 
+            {field} - [final] disconnected : HashMap<String, Integer> 
+            {field} - [final] to_setup_tcp : List<SocketClient> 
+            {field} - [final] listeners_lock : Object 
+            {field} - [final] queue : ThreadSafeMessageQueue<ServerMessage> 
+            {field} - [final] lobbies_lock : Object 
+            {field} - [final] saved_lock : Object 
+            {field} - [final] lobbies : HashMap<Integer, LobbyController> 
+            {field} - [final] saved : HashMap<Integer, ModelInstance>
+            {field} - init : boolean
+            {field} - next_id : int
+            {method} + [static] getInstance() : MainServerController
+            {method} + [static] reset() : void
+            {method} + init(String, int, int) : void
+            {method} + run() : void
+            {method} + receiveMessage(ServerMessage) : void
+            {method} + broadcast(ClientMessage) : void
+            {method} + sendMessage(ClientDescriptor, ClientMessage) : void
+            {method} + getDescriptor(String) : ClientDescriptor
+            {method} + connectListener(SocketClient) : void
+            {method} + setupSocketListener(SocketClient, String) : void
+            {method} + connectListener(RMIClientConnection) : ClientDescriptor 
+            {method} + getStub(ClientDescriptor) : VirtualServer
+            {method} - validateUsername(String) : boolean 
+            {method} + connect(ClientDescriptor) : void
+            {method} + disconnect(ClientDescriptor) : void
+            {method} + addDisconnected(String, int) : void
+            {method} + removeDisconnected(String) : void
+            {method} + ping(ClientDescriptor) : void
+            {method} - TCPTimeoutTask(MainServerController, SocketClient) : TimerTask
+            {method} - timeoutTask(MainServerController, ClientDescriptor) : TimerTask
+            {method} + getNext() : int
+            {method} + updateUnfinishedList() : void
+            {method} + enterSetup(ClientDescriptor) : void
+            {method} + leaveSetup(ClientDescriptor) : void
+            {method} + openNewRoom(ClientDescriptor, GameModeType, PlayerCount) : void
+            {method} + openUnfinished(ClientDescriptor, int) : void
+            {method} + gameFinishCleanup(int) : void
+            {method} + connectToLobby(ClientDescriptor, int) : void
+            {method} + notifyLobbyListeners() : void
+            {method} + getLobbyList() : ArrayList<ClientGameListEntry> 
+            {method} + joinFromEndedGame(ClientDescriptor) : void
+        }
+
+
+        }
+
+        Model::ModelInstance "1" -- LobbyController:model
+        class LobbyController {
+            {field} - [final] id : int
+            {field} - [final] listeners : HashMap<String, ClientDescriptor>
+            {field} - [final] disconnected_usernames : HashMap<String, Player>
+            {field} - [final] listeners_lock : Object
+            {field} - [final] queue : ThreadSafeMessageQueue<ServerMessage> 
+            {field} - [final] serializer_path : String
+            {field} - [final] model_lock : Object
+            {field} - dsctimer : Timer
+            {method} + getID() : int
+            {method} + run() : void
+            {method} + receiveMessage(ServerMessage)  : void
+            {method} + broadcast(ClientMessage) : void
+            {method} + sendMessage(ClientDescriptor, ClientMessage) : void
+            {method} + getModel() : ModelInstance
+            {method} + setModel(ModelInstance) : void
+            {method} + serializeCurrentGame() : void
+            {method} + endGame() : void
+            {method} - getEndMatchTask(LobbyController) : TimerTask
+            {method} + connect(ClientDescriptor) : void
+            {method} + disconnect(ClientDescriptor)  : void
+            {method} + disconnectProcedure(ClientDescriptor) : void
+            {method} + getClientInfo() : ClientGameListEntry
+            {method} + ping(ClientDescriptor) : void
+        }
+
         class ClientDescriptor{
             {field} - username: String
             {field} - color : PlayerColor
@@ -225,8 +305,6 @@ package Controller{
 
     }
 
-    //TODO: manca MainServerController e LobbyController
-
     class ThreadSafeMessageQueue<T> {
         {field} - [final] threadpool : ExecutorService
         {field} - [final] queue ArrayBlockingQueue<T>
@@ -237,6 +315,7 @@ package Controller{
     Server::Connections::RMIClientConnection .. RMIClientStub
 
     package Message{
+        '//TODO: muovi e metti in controller i messaggi che ha senso
 
         interface Message <<interface, serializable>>
 

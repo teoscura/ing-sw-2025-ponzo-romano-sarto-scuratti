@@ -318,7 +318,7 @@ public class MainServerController extends Thread implements VirtualServer {
 		client.setPingTimerTask(this.timeoutTask(this, client));
 	}
 
-	public TimerTask TCPTimeoutTask(MainServerController controller, SocketClient client) {
+	private TimerTask TCPTimeoutTask(MainServerController controller, SocketClient client) {
 		return new TimerTask() {
 			public void run() {
 				synchronized (listeners_lock) {

@@ -2,13 +2,13 @@
 
 package View {
 
-    enum ViewType {
+    enum ViewType <<enum>> {
         TUI
         GUI
     }
 
     Model::Client::ClientStateVisitor <-- ClientView
-    interface ClientView {
+    interface ClientView <<interface>> {
         {method} + show(TitleScreenState) : void
 	    {method} + show(ConnectingState) : void
 	    {method} + showTextMessage(String) : void
@@ -220,7 +220,7 @@ package View {
         package Strategy {
 
             TUIView "1" -- TUIStrategy:view
-            abstract TUIStrategy {
+            abstract TUIStrategy <<abstract>> {
                 {method} # [abstract] handleLine(String) : void
                 {method} # [abstract] getRunnable(TerminalWrapper) : Runnable
             }
@@ -254,7 +254,6 @@ package View {
         class CommandBuilder {
             {method} + [static] build(String,TUIView) : ServerMessage
         }
-
             
         TUIView "1" -- CommandPreprocessor:view
         Controller::Client::State::ConnectedState "1" -- CommandPreprocessor:state
