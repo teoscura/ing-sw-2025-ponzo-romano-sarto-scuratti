@@ -44,7 +44,7 @@ public class ClientVerifyStateFormatter {
 			terminal.print(ClientSpaceShipFormatter.formatSmall(list.getFirst().getShip(), list.getFirst().getUsername(), list.getFirst().getColor(), 0, false, p.isDisconnected()), 11, 94);
 	}
 
-	public static void formatStatus(TerminalWrapper terminal, ClientVerifyState state) {
+	static public void formatStatus(TerminalWrapper terminal, ClientVerifyState state) {
 		terminal.print(" ".repeat(128), 29, 0);
 		terminal.print(getMissingLine(state).toAnsi(), 29, 0);
 		terminal.print(" ".repeat(128), 30, 0);

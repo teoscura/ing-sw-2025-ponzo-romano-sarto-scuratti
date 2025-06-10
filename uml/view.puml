@@ -7,7 +7,6 @@ package View {
         GUI
     }
 
-
     Model::Client::ClientStateVisitor <-- ClientView
     interface ClientView {
         {method} + show(TitleScreenState) : void
@@ -33,15 +32,27 @@ package View {
             {field} - overlay_runnable : Runnable
 	        {field} - overlay : boolean
             {field} - String username : String
-            {field} - selected_color : PlayerColor;
-            //TODO add all overrides;
-	        {method} + redraw() : void
+            {field} - selected_color : PlayerColor
+            {method} + redraw() : void
+	        {method} + show(TitleScreenState) : void
+	        {method} + show(ConnectingState) : void
+	        {method} + show(ClientLobbySelectState) : void
+	        {method} + show(ClientSetupState) : void
+	        {method} + show(ClientWaitingRoomState) : void
+	        {method} + show(ClientConstructionState) : void
+	        {method} + show(ClientVerifyState) : void
+	        {method} + show(ClientVoyageState) : void
+	        {method} + show(ClientEndgameState) : void
+	        {method} + showTextMessage(String) : void
+	        {method} + setClientState(ClientState) : void
 	        {method} + showHelpScreen() : void
 	        {method} + showStateInfo() : void
 	        {method} + resetOverlay() : void
 	        {method} + getStatusRunnable() : Runnable
-	        {method} + handleLine(String line) : void
-	        {method} + changeShip(String s) : void
+	        {method} + handleLine(String) : void
+	        {method} + changeShip(String) : void
+            {method} + connect(ConnectedState) : void
+	        {method} + disconnect() : void
         }
 
         package Concurrent {
@@ -99,11 +110,41 @@ package View {
             }
 
             class ClientSmallComponentPrinter {
-                //TODO
+                {field} - character_component : String
+                {method} + reset() : void
+                {method} + getComponentStringSmall() : String
+                {method} + show(ClientBaseComponent) : void
+                {method} + show(ClientEmptyComponent) : void
+                {method} + show(ClientBatteryComponentDecorator) : void
+                {method} + show(ClientBrokenVerifyComponentDecorator) : void
+                {method} + show(ClientCabinComponentDecorator) : void
+                {method} + show(ClientCannonComponentDecorator) : void
+                {method} + show(ClientEngineComponentDecorator) : void
+                {method} + show(ClientLifeSupportComponentDecorator) : void
+                {method} + show(ClientPoweredComponentDecorator) : void
+                {method} + show(ClientShieldComponentDecorator) : void
+                {method} + show(ClientShipmentsComponentDecorator) : void
             }
 
+            Model::Client::Components::ClientComponentVisitor <-- ClientLargeComponentPrinter
             class ClientLargeComponentPrinter {
-                //TODO
+                {field} - [final] component : ArrayList<ArrayList<StringBuffer>>
+                {method} + reset() : void
+                {method} + getComponentStringsLarge() : List<String>
+                {method} + setCenter(String) : void
+                {method} + show(ClientBaseComponent) : void
+                {method} + show(ClientEmptyComponent) : void
+                {method} + show(ClientBatteryComponentDecorator) : void
+                {method} + show(ClientBrokenVerifyComponentDecorator) : void
+                {method} + show(ClientCabinComponentDecorator) : void
+                {method} + show(ClientCannonComponentDecorator) : void 
+                {method} + show(ClientEngineComponentDecorator) : void 
+                {method} + show(ClientLifeSupportComponentDecorator) : void 
+                {method} + show(ClientPoweredComponentDecorator) : void 
+                {method} + show(ClientShieldComponentDecorator) : void 
+                {method} + show(ClientShipmentsComponentDecorator) : void 
+                {method} + getForbidden() : List<String>
+                {method} - getConnectorSymbol(ConnectorType, ComponentRotation) : String
             }
 
             class ClientLobbyStatesFormatter {
@@ -125,32 +166,53 @@ package View {
 	            {method} + [static] getEmptyShipLarge() : ArrayList<String>
             }
 
+            TUI::TerminalWrapper "1" -- ClientStateOverlayFormatter:terminal
             class ClientStateOverlayFormatter {
-
+                {method} + show(ClientLobbySelectState) : void
+                {method} + show(ClientSetupState) : void
+                {method} + show(ClientWaitingRoomState) : void
+                {method} + show(ClientConstructionState) : void
+                {method} + show(ClientVerifyState) : void
+                {method} + show(ClientVoyageState) : void 
+                {method} + show(ClientEndgameState) : void
             }
 
             class ClientVerifyStateFormatter {
-
+                {field} - [static] [final] bottom_line : String
+                {method} + [static] format(TerminalWrapper, ClientVerifyState, PlayerColor) : void
+                {method} + [static] formatStatus(TerminalWrapper, ClientVerifyState) : void
+                {method} - [static] getMissingLine(ClientVerifyState) : AttributedString
+                {method} - [static] getColor(PlayerColor) : int
             }
 
             class ClientVoyageStateFormatter {
-
+                {field} - [static] [final] bottom_line : String
+	            {method} + [static] format(TerminalWrapper, ClientVoyageState, PlayerColor) : void
+	            {method} + [static] formatStatus(TerminalWrapper, ClientVoyageState) : void
+	            {method} - [static] printPlanche(ClientVoyageState, PlayerColor) : List<String>
+	            {method} - [static] getColorEmoji(PlayerColor) : String
             }
 
             class ClientWaitingStateFormatter {
-
+                {field} - [static] [final] bottom_line : String
+	            {method} + [static] format(TerminalWrapper, ClientWaitingRoomState) : void
+	            {method} + [static] formatStatus(TerminalWrapper, ClientWaitingRoomState) : void
             }
 
             class HelpScreenFormatter {
-
+                {method} + [static] format(TerminalWrapper) : void
             }
 
             class MenuFormatter {
-
+                {method} + [static] title(TerminalWrapper, ArrayList<String>) : void
+                {method} + [static] connection(TerminalWrapper, ArrayList<String>, ArrayList<String>) : void
+                {method} - [static] normalize(String, int) : String
             }
 
             class TextMessageFormatter {
-
+                {method} + [static] format(TerminalWrapper, ArrayList<TUINotification>) : void
+                {method} + [static] format(String) : ArrayList<String>
+	            {method} - [static] trimExpired(ArrayList<TUINotification>) : boolean
             }
 
         }
