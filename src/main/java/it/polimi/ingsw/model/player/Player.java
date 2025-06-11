@@ -102,13 +102,13 @@ public class Player implements Serializable {
 	public boolean getDisconnected() {
 		return this.disconnected;
 	}
-
-	public void giveCredits(int amount) {
+/*
 	 * Increases the player's credits by a given amount.
 	 * @param amount credits to be added (must be positive)
 	 * @return new credit total
 	 * @throws IllegalArgumentException if amount is zero or negative
 	 */
+	public void giveCredits(int amount) {
 		this.credits += amount;
 	}
 
