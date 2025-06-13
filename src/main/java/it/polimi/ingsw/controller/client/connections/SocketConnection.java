@@ -10,6 +10,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
+/**
+ * A client side TCP connection to a remote game server.
+ */
 public class SocketConnection extends Thread implements ServerConnection {
 
 	private final ThreadSafeMessageQueue<ClientMessage> inqueue;
@@ -17,6 +20,14 @@ public class SocketConnection extends Thread implements ServerConnection {
 	private final ObjectOutputStream out;
 	private final ObjectInputStream in;
 
+	/**
+	 * Constructs a {@link SocketConnection} object.
+	 * 
+	 * @param inqueue {@link ThreadSafeMessageQueue} Queue in which incoming {@link ServerMessage messages} will be inserted.
+	 * @param server_ip IP address on which the remote game server is running.
+	 * @param server_port Port on which the remote TCP game server is listening.
+	 * @throws IOException If there are any errors during the connection process.
+	 */
 	public SocketConnection(ThreadSafeMessageQueue<ClientMessage> inqueue, String server_ip, int server_port)
 			throws IOException {
 		if (inqueue == null)
@@ -27,6 +38,9 @@ public class SocketConnection extends Thread implements ServerConnection {
 		this.in = new ObjectInputStream(socket.getInputStream());
 	}
 
+	/**
+	 * Main loop of a socket connection, in charge of reading any possible incoming messages and casting them to a supported format.
+	 */
 	public void run() {
 		while (!this.socket.isClosed()) {
 			ClientMessage message = null;
@@ -43,6 +57,9 @@ public class SocketConnection extends Thread implements ServerConnection {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void sendMessage(ServerMessage message) throws IOException {
 		this.out.reset();
@@ -50,6 +67,9 @@ public class SocketConnection extends Thread implements ServerConnection {
 		this.out.flush();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void close() {
 		try {
@@ -60,6 +80,9 @@ public class SocketConnection extends Thread implements ServerConnection {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Thread getShutdownHook() {
 		SocketConnection caller = this;

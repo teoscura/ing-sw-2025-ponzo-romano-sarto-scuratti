@@ -33,7 +33,7 @@ public class ThreadSafeMessageQueue<T extends Message> {
 	}
 
 	/**
-	 * Inserts an item asynchronously into the queue.
+	 * Inserts an item asynchronously into the back of the queue.
 	 * 
 	 * @param item Item to be inserted.
 	 */

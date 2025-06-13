@@ -14,18 +14,31 @@ import java.io.IOException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 
+/**
+ * Represents the state of the client during the process of connecting to the game server.
+ */
 public class ConnectingState extends ClientControllerState {
 
 	private final String username;
 	private ServerConnection connection = null;
 	private ThreadSafeMessageQueue<ClientMessage> inqueue;
 
+	/**
+	 * Constructs a {@link ConnectingState} object.
+	 * 
+	 * @param controller {@inheritDoc}
+	 * @param view {@inheritDoc}
+	 * @param username Username with which the client wishes to connect to the server.
+	 */
 	public ConnectingState(ClientController controller, ClientView view, String username) {
 		super(controller, view);
 		if (username == null) throw new NullPointerException();
 		this.username = username;
 	}
 
+	/**
+	 * Notifies the view of the change.
+	 */
 	@Override
 	public void init() {
 		view.show(this);
@@ -40,6 +53,12 @@ public class ConnectingState extends ClientControllerState {
 		return new ConnectedState(controller, view, username, connection, this.inqueue);
 	}
 
+	/**
+	 * Connects to a remote game server using the provided info and transitions.
+	 * @param address Address on which the server is running. 
+	 * @param port Port on which the server is listening.
+	 * @param type {@link ConnectionType} Protocol to be used.
+	 */
 	public void connect(String address, int port, ConnectionType type) {
 		this.inqueue = new ThreadSafeMessageQueue<>(100);
 		switch (type) {
