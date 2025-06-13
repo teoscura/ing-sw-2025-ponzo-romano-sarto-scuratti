@@ -7,6 +7,9 @@ import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.cards.state.CardState;
 import it.polimi.ingsw.model.state.GameState;
 
+/**
+ * Server message indicating a request from a player to take or refuse a credit reward.
+ */
 public class TakeRewardMessage extends ServerMessage {
 
 	private final boolean took;

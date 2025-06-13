@@ -3,6 +3,9 @@ package it.polimi.ingsw.message.client;
 import it.polimi.ingsw.controller.client.state.ConnectedState;
 import it.polimi.ingsw.model.client.state.ClientState;
 
+/**
+ * Client message notifying about a remote change in the model.
+ */
 public class NotifyStateUpdateMessage extends ClientMessage {
 
 	private final ClientState state;

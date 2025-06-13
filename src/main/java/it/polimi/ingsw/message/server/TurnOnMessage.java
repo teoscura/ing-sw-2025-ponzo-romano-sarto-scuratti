@@ -8,6 +8,9 @@ import it.polimi.ingsw.model.cards.state.CardState;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.GameState;
 
+/**
+ * Server message indicating a request from a player to turn on a component using the specified coordinates, taking the battery from the other specified coordinates.
+ */
 public class TurnOnMessage extends ServerMessage {
 
 	private final ShipCoords target;

@@ -6,6 +6,9 @@ import it.polimi.ingsw.model.ModelInstance;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.state.GameState;
 
+/**
+ * Server message indicating a player action regarding the discarding of a component during construction.
+ */
 public class DiscardComponentMessage extends ServerMessage {
 
 	@Override

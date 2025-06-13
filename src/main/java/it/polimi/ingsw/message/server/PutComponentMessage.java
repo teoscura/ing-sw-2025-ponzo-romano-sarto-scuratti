@@ -8,6 +8,9 @@ import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.GameState;
 
+/**
+ * Server message indicating a request from a player to place a component at the specified coordinates and rotation.
+ */
 public class PutComponentMessage extends ServerMessage {
 
 	private final int id;

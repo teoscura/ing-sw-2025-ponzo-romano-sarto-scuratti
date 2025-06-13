@@ -8,6 +8,9 @@ import it.polimi.ingsw.model.cards.state.CardState;
 import it.polimi.ingsw.model.state.GameState;
 import it.polimi.ingsw.model.state.VoyageState;
 
+/**
+ * Server message indicating a request from a player to progress the game.
+ */
 public class SendContinueMessage extends ServerMessage {
 
 	@Override

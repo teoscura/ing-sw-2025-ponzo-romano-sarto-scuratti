@@ -9,6 +9,9 @@ import it.polimi.ingsw.model.components.enums.ShipmentType;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.GameState;
 
+/**
+ * Server message indicating a request from a player to take the cargo from a reward and place it at the specified coordinates.
+ */
 public class TakeCargoMessage extends ServerMessage {
 
 	private final ShipCoords coords;

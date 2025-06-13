@@ -9,6 +9,9 @@ import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.cards.state.CardState;
 import it.polimi.ingsw.model.state.GameState;
 
+/**
+ * Message to be received on the server.
+ */
 public abstract class ServerMessage implements Message {
 
 	protected transient ClientDescriptor descriptor = null;
@@ -17,26 +20,56 @@ public abstract class ServerMessage implements Message {
 		return this.descriptor;
 	}
 
+	/**
+	 * Set the {@link ClientDescriptor} of the message to the one provided.
+	 * 
+	 * @param client {@link ClientDescriptor} Client to be set.
+	 */
 	public void setDescriptor(ClientDescriptor client) {
 		this.descriptor = client;
 	}
 
-	//All messages need to know what to do when initially executed.
+	/**
+	 * Executes the associated logic on the {@link MainServerController server} instance provided.
+	 *  
+	 * @param server {@link MainServerController} Server handling the message.
+	 * @throws ForbiddenCallException If the command executed was not part of the currently allowed actions.
+	 */
 	public abstract void receive(MainServerController server) throws ForbiddenCallException;
 
-	//Can be omitted
+	/**
+	 * Executes the associated logic on the {@link LobbyController lobby} instance provided, can be omitted.
+	 *  
+	 * @param lobby {@link LobbyController} Lobby handling the message.
+	 * @throws ForbiddenCallException If the command executed was not part of the currently allowed actions.
+	 */
 	public void receive(LobbyController lobby) throws ForbiddenCallException {
 	}
 
-	//Can be omitted
+	/**
+	 * Executes the associated logic on the {@link ModelInstance model} instance provided, can be omitted.
+	 *  
+	 * @param instance {@link ModelInstance} Model handling the message.
+	 * @throws ForbiddenCallException If the command executed was not part of the currently allowed actions.
+	 */
 	public void receive(ModelInstance instance) throws ForbiddenCallException {
 	}
 
-	//Can be omitted
+	/**
+	 * Executes the associated logic on the {@link GameState} instance provided, can be omitted.
+	 *  
+	 * @param state {@link GameState} Game state handling the message.
+	 * @throws ForbiddenCallException If the command executed was not part of the currently allowed actions.
+	 */
 	public void receive(GameState state) throws ForbiddenCallException {
 	}
 
-	//Can be omitted
+	/**
+	 * Executes the associated logic on the {@link CardState} instance provided, can be omitted.
+	 *  
+	 * @param state {@link CardState} Card state handling the message.
+	 * @throws ForbiddenCallException If the command executed was not part of the currently allowed actions.
+	 */
 	public void receive(CardState state) throws ForbiddenCallException {
 	}
 
