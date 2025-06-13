@@ -27,7 +27,7 @@ public class StardustCard extends Card {
 
 	/**
 	 * Apply the effect of the "Stardust" card to the indicated player:
-	 * If the spaceship has exposed connectors, the player will lose flying days.
+	 * If the spaceship has exposed connectors, the player will be moved back by the number of exposed connectors.
 	 *
 	 * @param state The Current State
 	 * @param p The Player

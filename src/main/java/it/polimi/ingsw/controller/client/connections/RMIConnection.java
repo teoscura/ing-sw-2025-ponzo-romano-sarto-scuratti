@@ -1,7 +1,7 @@
 package it.polimi.ingsw.controller.client.connections;
 
 import it.polimi.ingsw.controller.ThreadSafeMessageQueue;
-import it.polimi.ingsw.controller.server.connections.RMISkeletonProvider;
+import it.polimi.ingsw.controller.server.connections.VirtualServerProvider;
 import it.polimi.ingsw.controller.server.connections.VirtualServer;
 import it.polimi.ingsw.message.client.ClientMessage;
 import it.polimi.ingsw.message.server.ServerDisconnectMessage;
@@ -22,7 +22,7 @@ public class RMIConnection implements ServerConnection {
 	public RMIConnection(ThreadSafeMessageQueue<ClientMessage> queue, String server_ip, String username, int port) throws RemoteException, NotBoundException, NullPointerException {
 		Registry registry = LocateRegistry.getRegistry(server_ip, port);
 		this.stub = new RMIClientStub(queue, username);
-		this.server = ((RMISkeletonProvider) registry.lookup("galaxy_truckers")).accept(stub);
+		this.server = ((VirtualServerProvider) registry.lookup("galaxy_truckers")).accept(stub);
 		if (this.server == null) throw new NullPointerException();
 	}
 

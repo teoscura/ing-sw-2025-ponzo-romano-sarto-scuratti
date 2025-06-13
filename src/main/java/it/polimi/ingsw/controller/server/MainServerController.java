@@ -27,6 +27,9 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Singleton class in charge of managing the opening and closing of lobbies, and the reception of each message to the respective lobby.
+ */
 public class MainServerController extends Thread implements VirtualServer {
 
 	static private MainServerController instance = new MainServerController();
@@ -46,6 +49,7 @@ public class MainServerController extends Thread implements VirtualServer {
 	private boolean init = false;
 	private int next_id;
 
+
 	private MainServerController() {
 		all_listeners = new HashMap<>();
 		lob_listeners = new HashMap<>();
@@ -63,16 +67,31 @@ public class MainServerController extends Thread implements VirtualServer {
 		server = new NetworkServer();
 	}
 
+	/**
+     * Main access method for the singleton object.
+	 * 
+	 * @return {@link MainServerController} Instance of the singleton, if not present, constructs a new one.
+     */
 	static public MainServerController getInstance() {
 		if (instance == null) instance = new MainServerController();
 		return instance;
 	}
 
+	/**
+     * Resets the singleton, mostly used during tests.
+     */
 	static public void reset() {
 		Logger.getInstance().print(LoggerLevel.DEBUG, "Reset MainServerController.");
 		instance = null;
 	}
 
+	/**
+	 * Initialize the MainServerController and the NetworkServer tied to it.
+	 *
+	 * @param address IP address on to which the server is opened.
+	 * @param tcpport Port used to open the ServerSocket.
+	 * @param rmiport Port used to open the RMI Registry.
+	 */
 	public void init(String address, int tcpport, int rmiport) {
 		if (this.init) throw new AlreadyConnectedException();
 		this.server.init(address, tcpport, rmiport);
@@ -83,6 +102,9 @@ public class MainServerController extends Thread implements VirtualServer {
 	// Message handling, reception and sending.
 	// -------------------------------------------------------------
 
+	/**
+     * Main loop of the {@code MainServerController} class, retrieves messages from the queue and processes them.
+     */
 	@Override
 	public void run() {
 		if (!this.init) throw new NotYetConnectedException();
@@ -98,6 +120,11 @@ public class MainServerController extends Thread implements VirtualServer {
 		}
 	}
 
+	/**
+     * Takes a {@code ServerMessage} and inserts it into the correct queue, either the lobby controller's or the main server controller's.
+     *
+     * @param message {@link ServerMessage} Message to be added to the queue.
+     */
 	public void receiveMessage(ServerMessage message) {
 		if (message.getDescriptor() == null) {
 			Logger.getInstance().print(LoggerLevel.WARN, "Received a message from a Client: not properly connected! (Null descriptor)");
@@ -121,6 +148,11 @@ public class MainServerController extends Thread implements VirtualServer {
 		}
 	}
 
+	/**
+     * Takes a {@code ClientMessage} and sends it to each connected listener not currently playing in a lobby.
+     *
+     * @param message {@link ClientMessage} Message to be broadcast.
+     */
 	public void broadcast(ClientMessage message) {
 		synchronized (listeners_lock) {
 			Logger.getInstance().print(LoggerLevel.DEBUG, "Broadcasting message of class: " + message.getClass().getSimpleName() + ".");
@@ -131,6 +163,11 @@ public class MainServerController extends Thread implements VirtualServer {
 		}
 	}
 
+	/**
+     * Takes a {@code ClientMessage} and sends it to a specific client.
+     *
+     * @param message {@link ClientMessage} Message to be sent.
+     */
 	public void sendMessage(ClientDescriptor client, ClientMessage message) {
 		try {
 			Logger.getInstance().print(LoggerLevel.DEBUG, "Sent message to Client: '" + client.getUsername() + "'.");
@@ -140,7 +177,12 @@ public class MainServerController extends Thread implements VirtualServer {
 		}
 	}
 
-	//Used to set the correct Client: descriptor for each message getting in.
+	/**
+     * Returns the {@code ClientDescriptor} associated to a username.
+     *
+     * @param username Name corresponding to the client to fetch.
+	 * @return {@link ClientDescriptor} Corresponding to the username, if present, if not returns null.
+     */
 	public ClientDescriptor getDescriptor(String username) {
 		return this.all_listeners.get(username);
 	}
@@ -149,6 +191,11 @@ public class MainServerController extends Thread implements VirtualServer {
 	// ClientDescriptor connection and disconnection methods.
 	// -------------------------------------------------------------
 
+	/**
+     * Connects a {@code SocketClient} to the server, and adds it to the list of sockets that need to complete their connection, starts a timeout timer in case they don't complete it in time.
+     *
+     * @param client {@link SocketClient} Socket connecting to the server
+     */
 	public void connectListener(SocketClient client) {
 		synchronized (listeners_lock) {
 			if (this.to_setup_tcp.contains(client)) {
@@ -164,6 +211,12 @@ public class MainServerController extends Thread implements VirtualServer {
 		}
 	}
 
+	/**
+     * Finalizes the connection of a {@code SocketClient} to the server by setting its username.
+	 * 
+     * @param client {@link SocketClient} Socket connecting to the server
+	 * @param username Username the client wishes to connect with.
+     */
 	public void setupSocketListener(SocketClient client, String username) {
 		if (!this.to_setup_tcp.contains(client)) {
 			Logger.getInstance().print(LoggerLevel.WARN, "A Client: attempted to change his username after connecting!");
@@ -196,6 +249,13 @@ public class MainServerController extends Thread implements VirtualServer {
 		new_listener.setPingTimerTask(this.timeoutTask(this, new_listener));
 	}
 
+	/**
+     * Connects an {@code RMIClientConnection}  to the server
+     *
+     * @param client {@link RMIClientConnection} Client connecting to server.
+	 * @return {@link ClientDescriptor} A ClientDescriptor tied to the RMI connection requesting it. 
+	 * @throws RemoteException
+     */
 	public ClientDescriptor connectListener(RMIClientConnection client) throws RemoteException {
 		String name;
 		try {
@@ -205,9 +265,10 @@ public class MainServerController extends Thread implements VirtualServer {
 		}
 		ClientDescriptor new_listener = new ClientDescriptor(name, client);
 		synchronized (listeners_lock) {
-			if (this.all_listeners.containsKey(name) || !validateUsername(name))
-
+			if (this.all_listeners.containsKey(name) || !validateUsername(name)){
+				Logger.getInstance().print(LoggerLevel.LOBSL, "Client: '" + client.getUsername() + "' attemped to connect with an invalid/taken name.");
 				return null;
+			}
 			try {
 				Logger.getInstance().print(LoggerLevel.LOBSL, "Client: '" + client.getUsername() + "' connected with RMI.");
 				this.connect(new_listener);
@@ -220,16 +281,34 @@ public class MainServerController extends Thread implements VirtualServer {
 		}
 	}
 
+	/**
+     * Returns a {@code RMIServerStubImpl} linked to a {@code ClientDescriptor} for the {@code RMIClientConnection} to send messages with.
+     *
+     * @param new_client {@link ClientDescriptor} Client requesting the stub.
+	 * @return {@link VirtualServer} A stub linked specifically to the client for it to communicate with the server.
+	 * @throws RemoteException
+     */
 	public VirtualServer getStub(ClientDescriptor new_client) throws RemoteException {
 		return new RMIServerStubImpl(this, new_client);
 	}
 
+	/**
+     * Validates a username using a regex.
+	 * 
+	 * @returns whether the username is valid or not.
+     */
 	private boolean validateUsername(String username) {
 		Pattern allowed = Pattern.compile("^[a-zA-Z0-9_.-]*$");
 		Matcher matcher = allowed.matcher(username);
 		return matcher.matches();
 	}
 
+	/**
+     * Connects a {@code ClientDescriptor} to the lobby and adds it to any list it may belong to, or reconnects it to a ongoing game in case they belonged to it.
+     *
+     * @param client {@link ClientDescriptor} Client requesting the connection.
+	 * @throws ForbiddenCallException if for any reason connecting is forbidden
+     */
 	public void connect(ClientDescriptor client) throws ForbiddenCallException {
 		//Either add him to a game if hes reconnecting, or add
 		int id = -1;
@@ -265,6 +344,11 @@ public class MainServerController extends Thread implements VirtualServer {
 		}
 	}
 
+	/**
+     * Disconnects a {@code ClientDescriptor} from the server and closes its connection, if the {@code ClientDescriptor} is connected to a lobby then the lobby handles whatever procedure may be needed.
+     *
+     * @param client {@link ClientDescriptor} Client being disconnected.
+     */
 	public void disconnect(ClientDescriptor client) {
 		int id = client.getId();
 		if (client.getPingTimerTask() != null) client.getPingTimerTask().cancel();
@@ -294,6 +378,12 @@ public class MainServerController extends Thread implements VirtualServer {
 		}
 	}
 
+	/**
+     * Adds an entry into the disconnected list for disconnection resilience purposes.
+	 * 
+     * @param username Name of the client disconnecting
+	 * @param id Id of the lobby they were in when playing.
+     */
 	public void addDisconnected(String username, int id) {
 		synchronized (listeners_lock) {
 			Logger.getInstance().print(LoggerLevel.DEBUG, "Added username: '" + username + "' to disconnected list with id: [" + id + "].");
@@ -301,6 +391,11 @@ public class MainServerController extends Thread implements VirtualServer {
 		}
 	}
 
+	/**
+     * Removes an entry from the disconnected list, either because of a reconnect or because of the game they belonged to closing.
+	 * 
+     * @param username Name of the client disconnecting
+     */
 	public void removeDisconnected(String username) {
 		synchronized (listeners_lock) {
 			Logger.getInstance().print(LoggerLevel.DEBUG, "Removed username: '" + username + "' to disconnected list, had id: [" + disconnected.get(username) + "].");
@@ -312,23 +407,41 @@ public class MainServerController extends Thread implements VirtualServer {
 	// Disconnection Resilience utility.
 	// -------------------------------------------------------------
 
+	/**
+     * Refreshes the timeout timer for a particular {@code ClientDescriptor} and restarts the timeout clock belonging to it.
+     *
+     * @param client {@link ClientDescriptor} Client pinging the server
+     */
 	public void ping(ClientDescriptor client) {
 		client.getPingTimerTask().cancel();
 		Logger.getInstance().print(LoggerLevel.DEBUG, "Received ping from client: '" + client.getUsername() + "'.");
 		client.setPingTimerTask(this.timeoutTask(this, client));
 	}
 
+	/**
+     * Creates a timeout task for a {@code SocketClient} in its setup state, closing the connection and removing them from any list in case they don't setup in time.
+	 * 
+	 * @param controller {@link MainServerController} Instance of the server to disconnect the client from.
+	 * @param client {@link ClientDescriptor} Client to be eventually timed out.
+     */
 	private TimerTask TCPTimeoutTask(MainServerController controller, SocketClient client) {
 		return new TimerTask() {
 			public void run() {
 				synchronized (listeners_lock) {
 					Logger.getInstance().print(LoggerLevel.NOTIF, "Socket '" + client.getSocket().getInetAddress() + "' didn't setup before timing out!");
 					to_setup_tcp.remove(client);
+					client.close();
 				}
 			}
 		};
 	}
 
+	/**
+     * Creates a timeout task for any {@code ClientDescriptor}, if the {@code ClientDescriptor} doesn't send a ping before it expires, task runs and disconnects the {@code ClientDescriptor}.
+	 * 
+	 * @param controller {@link MainServerController} Instance of the server to disconnect the client from.
+	 * @param client {@link ClientDescriptor} Client to be eventually timed out.
+     */
 	private TimerTask timeoutTask(MainServerController controller, ClientDescriptor client) {
 		return new TimerTask() {
 			public void run() {
@@ -348,6 +461,9 @@ public class MainServerController extends Thread implements VirtualServer {
 		return this.next_id;
 	}
 
+	/**
+     * Updates the list of {@code ModelInstance} available for loading during creation of a lobby.
+     */
 	public void updateUnfinishedList() {
 		Pattern saved_game_pattern = Pattern.compile("^gtunfinished-[0-9]+\\.gtuf$");
 		File current_directory = new File(".");
@@ -389,7 +505,12 @@ public class MainServerController extends Thread implements VirtualServer {
 		}
 	}
 
-	public void enterSetup(ClientDescriptor client) throws ForbiddenCallException {
+	/**
+     * Enters lobby setup state for a {@code ClientDescriptor} requesting it.
+     *
+     * @param client {@link ClientDescriptor} Client requesting to enter the lobby creation and setup state.
+     */
+	public void enterSetup(ClientDescriptor client) {
 		synchronized (listeners_lock) {
 			if (!lob_listeners.containsKey(client.getUsername())) {
 				Logger.getInstance().print(LoggerLevel.WARN, "Client: '" + client.getUsername() + "' started setting up a lobby, but he's already playing!");
@@ -412,6 +533,11 @@ public class MainServerController extends Thread implements VirtualServer {
 		this.sendMessage(client, new NotifyStateUpdateMessage(state));
 	}
 
+	/**
+     * Leaves lobby setup state for a {@code ClientDescriptor} requesting it.
+     *
+     * @param client {@link ClientDescriptor} Client requesting to leave the lobby creation and setup state.
+     */
 	public void leaveSetup(ClientDescriptor client) {
 		synchronized (listeners_lock) {
 			if (!lob_listeners.containsKey(client.getUsername())) {
@@ -427,6 +553,13 @@ public class MainServerController extends Thread implements VirtualServer {
 		this.notifyLobbyListeners();
 	}
 
+	/**
+     * Opens a room with given type and size for a {@code ClientDescriptor} in setup state requesting it.
+     *
+     * @param client {@link ClientDescriptor} Client requesting to open the lobby.
+	 * @param type {@link GameModeType} Gamemode of the lobby being opened.
+	 * @param count {@link PlayerCount} Size of the lobby being opened.
+     */
 	public void openNewRoom(ClientDescriptor client, GameModeType type, PlayerCount count) throws ForbiddenCallException {
 		synchronized (listeners_lock) {
 			if (!this.stp_listeners.containsKey(client.getUsername()) && this.lob_listeners.containsKey(client.getUsername())) {
@@ -455,7 +588,13 @@ public class MainServerController extends Thread implements VirtualServer {
 		this.notifyLobbyListeners();
 	}
 
-
+	/**
+     * Opens a room tied to an unfinished game for a {@code ClientDescriptor} that requests it.
+     *
+     * @param client {@link ClientDescriptor} Client requesting to open the lobby.
+	 * @param id ID of the saved game being opened.
+	 * @throws ForbiddenCallException when the lobby is being opened in a forbidden or unsupported way.
+     */
 	public void openUnfinished(ClientDescriptor client, int id) throws ForbiddenCallException {
 		synchronized (listeners_lock) {
 			if (!this.stp_listeners.containsKey(client.getUsername()) && this.lob_listeners.containsKey(client.getUsername())) {
@@ -518,7 +657,12 @@ public class MainServerController extends Thread implements VirtualServer {
 		this.notifyLobbyListeners();
 	}
 
-	public void gameFinishCleanup(int id) {
+	/**
+     * Cleans up the lobby controller and all tied objects when a lobby closes.
+     *
+	 * @param id ID of the lobby being closed.
+     */
+	public void lobbyCloseCleanup(int id) {
 		synchronized (lobbies_lock) {
 			var l = this.lobbies.get(id);
 			if (l == null) throw new RuntimeException();
@@ -534,6 +678,12 @@ public class MainServerController extends Thread implements VirtualServer {
 		this.notifyLobbyListeners();
 	}
 
+	/**
+     * Joins a lobby for a {@code ClientDescriptor} requesting it.
+     *
+     * @param client {@link ClientDescriptor} Client requesting to join the lobby.
+	 * @param id ID of the lobby being joined
+     */
 	public void connectToLobby(ClientDescriptor client, int id) throws ForbiddenCallException {
 		synchronized (listeners_lock) {
 			if (!all_listeners.containsKey(client.getUsername())) {
@@ -556,6 +706,9 @@ public class MainServerController extends Thread implements VirtualServer {
 		this.notifyLobbyListeners();
 	}
 
+	/**
+     * Notifies all {@code ClientDescriptor} in the lobby select screen with the new available lobby list.
+     */
 	public void notifyLobbyListeners() {
 		ClientLobbySelectState state = new ClientLobbySelectState(this.getLobbyList());
 		ClientMessage message = new NotifyStateUpdateMessage(state);
@@ -572,7 +725,12 @@ public class MainServerController extends Thread implements VirtualServer {
 		}
 	}
 
-	public void joinFromEndedGame(ClientDescriptor client) {
+	/**
+     * Rejoins the lobby select screen after a lobby controller has closed.
+     *
+     * @param client {@link ClientDescriptor} Client being sent back to lobby select.
+     */
+	public void joinFromClosedLobby(ClientDescriptor client) {
 		synchronized (listeners_lock) {
 			if (this.lob_listeners.containsKey(client.getUsername())) {
 				Logger.getInstance().print(LoggerLevel.WARN, "Client: '" + client.getUsername() + "' is already in lobby!");
