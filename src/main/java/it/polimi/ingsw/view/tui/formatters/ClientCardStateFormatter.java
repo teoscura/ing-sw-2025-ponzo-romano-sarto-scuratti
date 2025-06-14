@@ -8,6 +8,9 @@ import org.jline.utils.AttributedString;
 import org.jline.utils.AttributedStringBuilder;
 import org.jline.utils.AttributedStyle;
 
+/**
+ * Formatter that builds an attributed string containing all info regarding the state of a card during {@link VoyageState}.
+ */
 public class ClientCardStateFormatter implements ClientCardStateVisitor {
 
 	private final AttributedStringBuilder line;
@@ -20,6 +23,9 @@ public class ClientCardStateFormatter implements ClientCardStateVisitor {
 		return line.toAttributedString();
 	}
 
+	/**
+	 * {@inheritDoc}, adding its info to the status line.
+	 */
 	@Override
 	public void show(ClientAwaitConfirmCardStateDecorator state) {
 		line.style(AttributedStyle.BOLD.background(AttributedStyle.BLACK).foreground(AttributedStyle.GREEN))
@@ -32,6 +38,9 @@ public class ClientCardStateFormatter implements ClientCardStateVisitor {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}, adding its info to the status line.
+	 */
 	@Override
 	public void show(ClientBaseCardState state) {
 		line.style(AttributedStyle.BOLD.background(AttributedStyle.BLUE).foreground(AttributedStyle.WHITE))
@@ -40,6 +49,9 @@ public class ClientCardStateFormatter implements ClientCardStateVisitor {
 			.append(" | ");
 	}
 
+	/**
+	 * {@inheritDoc}, adding its info to the status line.
+	 */
 	@Override
 	public void show(ClientCargoPenaltyCardStateDecorator state) {
 		line.style(AttributedStyle.BOLD.background(AttributedStyle.BLACK).foreground(AttributedStyle.WHITE))
@@ -68,6 +80,9 @@ public class ClientCardStateFormatter implements ClientCardStateVisitor {
 			.append("] | ");
 	}
 
+	/**
+	 * {@inheritDoc}, adding its info to the status line.
+	 */
 	@Override
 	public void show(ClientCargoRewardCardStateDecorator state) {
 		line.style(AttributedStyle.BOLD.background(AttributedStyle.BLACK).foreground(getColor(state.getTurn())))
@@ -98,6 +113,9 @@ public class ClientCardStateFormatter implements ClientCardStateVisitor {
 			.append("] | ");
 	}
 
+	/**
+	 * {@inheritDoc}, adding its info to the status line.
+	 */
 	@Override
 	public void show(ClientCombatZoneIndexCardStateDecorator state) {
 		String sectioninfo = state.getSection().getPenalty() != CombatZonePenalty.SHOTS ? state.getSection().getPenalty() + ": " + state.getSection().getAmount() : state.getSection().getPenalty().toString();
@@ -107,6 +125,9 @@ public class ClientCardStateFormatter implements ClientCardStateVisitor {
 			.append(" | ");
 	}
 
+	/**
+	 * {@inheritDoc}, adding its info to the status line.
+	 */
 	@Override
 	public void show(ClientCreditsRewardCardStateDecorator state) {
 		line.style(AttributedStyle.BOLD.background(AttributedStyle.BLACK).foreground(AttributedStyle.YELLOW))
@@ -119,6 +140,9 @@ public class ClientCardStateFormatter implements ClientCardStateVisitor {
 			.append(" | ");
 	}
 
+	/**
+	 * {@inheritDoc}, adding its info to the status line.
+	 */
 	@Override
 	public void show(ClientCrewPenaltyCardStateDecorator state) {
 		line.style(AttributedStyle.BOLD.background(AttributedStyle.BLACK).foreground(AttributedStyle.MAGENTA))
@@ -131,6 +155,9 @@ public class ClientCardStateFormatter implements ClientCardStateVisitor {
 			.append(" | ");
 	}
 
+	/**
+	 * {@inheritDoc}, adding its info to the status line.
+	 */
 	@Override
 	public void show(ClientLandingCardStateDecorator state) {
 		line.style(AttributedStyle.BOLD.background(AttributedStyle.BLACK).foreground(AttributedStyle.CYAN))
@@ -201,6 +228,9 @@ public class ClientCardStateFormatter implements ClientCardStateVisitor {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}, adding its info to the status line.
+	 */
 	@Override
 	public void show(ClientMeteoriteCardStateDecorator state) {
 		line.style(AttributedStyle.BOLD.background(AttributedStyle.BLACK).foreground(AttributedStyle.BRIGHT))
@@ -209,6 +239,9 @@ public class ClientCardStateFormatter implements ClientCardStateVisitor {
 			.append(" | ");
 	}
 
+	/**
+	 * {@inheritDoc}, adding its info to the status line.
+	 */
 	@Override
 	public void show(ClientNewCenterCardStateDecorator state) {
 		line.style(AttributedStyle.BOLD.background(AttributedStyle.BLACK).foreground(AttributedStyle.GREEN))
@@ -221,6 +254,9 @@ public class ClientCardStateFormatter implements ClientCardStateVisitor {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}, adding its info to the status line.
+	 */
 	@Override
 	public void show(ClientProjectileCardStateDecorator state) {
 		line.style(AttributedStyle.BOLD.background(AttributedStyle.BLACK).foreground(AttributedStyle.MAGENTA))
@@ -229,6 +265,9 @@ public class ClientCardStateFormatter implements ClientCardStateVisitor {
 			.append(" | ");
 	}
 
+	/**
+	 * {@inheritDoc}, adding its info to the status line.
+	 */
 	@Override
 	public void show(ClientEnemyCardStateDecorator state) {
 		line.style(AttributedStyle.BOLD.background(AttributedStyle.BLACK).foreground(AttributedStyle.RED))

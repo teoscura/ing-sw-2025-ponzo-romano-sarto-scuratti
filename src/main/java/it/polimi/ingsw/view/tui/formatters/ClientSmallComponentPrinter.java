@@ -3,6 +3,9 @@ package it.polimi.ingsw.view.tui.formatters;
 import it.polimi.ingsw.model.client.components.*;
 import it.polimi.ingsw.model.components.enums.AlienType;
 
+/**
+ * Formatter that builds a string displaying a small {@link ClientComponent} tile.
+ */
 public class ClientSmallComponentPrinter implements ClientComponentVisitor {
 
 	private String character_component = "..";

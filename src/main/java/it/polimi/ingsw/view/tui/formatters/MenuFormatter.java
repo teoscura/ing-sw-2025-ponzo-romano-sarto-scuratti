@@ -6,6 +6,9 @@ import org.jline.utils.InfoCmp.Capability;
 
 import it.polimi.ingsw.view.tui.TerminalWrapper;
 
+/**
+ * Formatter that displays all pre-connection menu screens.
+ */
 public class MenuFormatter {
 
     static public void title(TerminalWrapper terminal, ArrayList<String> titlescreen) {

@@ -8,6 +8,9 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+/**
+ * Formatter that embellishes and displays the last four {@link TUINotification} received by the {@link TUIView}.
+ */
 public class TextMessageFormatter {
 
 	static public void format(TerminalWrapper terminal, ArrayList<TUINotification> notifications) {

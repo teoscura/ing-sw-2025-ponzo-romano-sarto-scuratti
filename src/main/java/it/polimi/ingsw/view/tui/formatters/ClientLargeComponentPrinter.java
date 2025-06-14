@@ -10,6 +10,9 @@ import org.jline.utils.AttributedStyle;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Formatter that builds a string matrix displaying a large {@link ClientComponent} tile.
+ */
 public class ClientLargeComponentPrinter implements ClientComponentVisitor {
 
 	private final ArrayList<ArrayList<StringBuffer>> component;
