@@ -1,6 +1,9 @@
 //Done.
 package it.polimi.ingsw.model.components.enums;
 
+/**
+ * Enumeration that specifies the supported crew types in this implementation of Galaxy Trucker.
+ */
 public enum AlienType {
 	NONE(0, false, -1),
 	HUMAN(2, false, 0),
@@ -30,6 +33,10 @@ public enum AlienType {
 		return this.arraypos;
 	}
 
+	/**
+	 * @param type {@link AlienType} Type to confront with this.
+	 * @return Whether they are compatible or not.
+	 */
 	public boolean compatible(AlienType type) {
 		if (max_capacity == 0) return false;
 		if (this.getArraypos() == type.getArraypos()) return true;

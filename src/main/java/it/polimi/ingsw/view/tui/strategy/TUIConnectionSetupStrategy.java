@@ -67,7 +67,8 @@ public class TUIConnectionSetupStrategy extends TUIStrategy {
      */
 	private boolean validate() {
 		try {
-			Integer.parseInt(args.get(1));
+			var i = Integer.parseInt(args.get(1));
+            if(i<0||i>=65535) return false;
 			return true;
 		} catch (NumberFormatException e) {
 			return false;

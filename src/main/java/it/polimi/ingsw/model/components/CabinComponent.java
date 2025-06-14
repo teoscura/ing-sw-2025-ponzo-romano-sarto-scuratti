@@ -61,7 +61,7 @@ public class CabinComponent extends BaseComponent {
 	 * This method sets the crew in the SpaceShip
 	 * @param ship {@link SpaceShip} to which you want set the crew.
 	 * @param new_crew the number of crewmates you want to set.
-	 * @param type the type of aliens you want to set.
+	 * @param type {@link AlienType} the type of aliens you want to set.
 	 * @throws NegativeArgumentException if the crew size is zero or negative.
 	 * @throws IllegalArgumentException if {@link AlienType} is a collector and not a single alien type.
 	 * @throws ArgumentTooBigException if the crew size exceeds {@link AlienType}'s max capacity.
@@ -88,7 +88,7 @@ public class CabinComponent extends BaseComponent {
 
 	/**
 	 * This adds the Cabin Component's coordinates to the {@link SpaceShip}
-	 * @param ship  {@link SpaceShip} to which you want to add the cabin component
+	 * @param ship {@link SpaceShip} to which you want to add the cabin component
 	 */
 	@Override
 	public void onCreation(SpaceShip ship, ShipCoords coords) {
@@ -98,7 +98,7 @@ public class CabinComponent extends BaseComponent {
 
 	/**
 	 * This removes the Cabin Component's coordinates from the {@link SpaceShip}
-	 * @param ship  {@link SpaceShip} to which you want to remove the cabin component
+	 * @param ship {@link SpaceShip} to which you want to remove the cabin component
 	 */
 	@Override
 	public void onDelete(SpaceShip ship) {

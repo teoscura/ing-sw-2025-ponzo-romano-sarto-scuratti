@@ -125,7 +125,7 @@ public class CannonComponent extends BaseComponent {
 
 	/**
 	 * This adds the Cannon Component's coordinates to the {@link SpaceShip}
-	 * @param ship  {@link SpaceShip} to which you want to add the Cannon component
+	 * @param ship {@link SpaceShip} to which you want to add the Cannon component
 	 */
 	@Override
 	public void onCreation(SpaceShip ship, ShipCoords coords) {
@@ -135,7 +135,7 @@ public class CannonComponent extends BaseComponent {
 
 	/**
 	 * This removes the Cannon Component's coordinates from the {@link SpaceShip}
-	 * @param ship  {@link SpaceShip} to which you want to remove the Cannon component
+	 * @param ship {@link SpaceShip} to which you want to remove the Cannon component
 	 */
 	@Override
 	public void onDelete(SpaceShip ship) {

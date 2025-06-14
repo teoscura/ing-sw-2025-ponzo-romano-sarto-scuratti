@@ -17,6 +17,9 @@ import it.polimi.ingsw.utils.LoggerLevel;
 
 import java.io.Serializable;
 
+/**
+ * Class represeting an entire instance of a game of Galaxy Trucker.
+ */
 public class ModelInstance implements Serializable {
 
 	protected final int id;
@@ -37,10 +40,19 @@ public class ModelInstance implements Serializable {
 		return this.id;
 	}
 
+	/**
+	 * Receives the {@link ServerMessage} and processes it.
+	 * 
+	 * @param message {@link ServerMessage} Message received.
+	 * @throws ForbiddenCallException if the model refuses the message.
+	 */
 	public void validate(ServerMessage message) throws ForbiddenCallException {
 		message.receive(this);
 	}
 
+	/**
+	 * Forwards a request to the {@link LobbyController} to serialize the current model state.
+	 */
 	public void serialize() {
 		if (!this.state.toSerialize()) return;
 		this.controller.serializeCurrentGame();
@@ -58,6 +70,10 @@ public class ModelInstance implements Serializable {
 		return this.state;
 	}
 
+	/**
+	 * Sets the next {@link GameState}, if {@code next} is null, then the game is over.
+	 * @param next {@link GameState} State to set and initialize.
+	 */
 	public void setState(GameState next) {
 		this.state = next;
 		if (this.state == null) {
@@ -69,16 +85,10 @@ public class ModelInstance implements Serializable {
 		next.init();
 	}
 
-	public void resumeState(GameState next) {
-		this.state = next;
-		if (this.state == null) {
-			return;
-		}
-		if (this.state.toSerialize()) {
-			this.serialize();
-		}
-	}
-
+	/**
+	 * Connect a {@link ClientDescriptor} to the model.
+	 * @param client {@link ClientDescriptor} Client connecting to the model.
+	 */
 	public void connect(ClientDescriptor client) {
 		try {
 			ServerMessage mess = new ServerConnectMessage(client);
@@ -88,6 +98,10 @@ public class ModelInstance implements Serializable {
 		}
 	}
 
+	/**
+	 * Disconnect a {@link ClientDescriptor} to the model.
+	 * @param client {@link ClientDescriptor} Client disconnecting from the model.
+	 */
 	public void disconnect(ClientDescriptor client) {
 		try {
 			ServerMessage mess = new ServerDisconnectMessage();
@@ -98,6 +112,10 @@ public class ModelInstance implements Serializable {
 		}
 	}
 
+	/**
+	 * Connect a {@link Player} to the model.
+	 * @param p {@link Player} Player connecting to the model.
+	 */
 	public void connect(Player p) {
 		try {
 			this.state.connect(p);
@@ -106,6 +124,10 @@ public class ModelInstance implements Serializable {
 		}
 	}
 
+	/**
+	 * Disconnect a {@link Player} to the model.
+	 * @param p {@link Player} Player disconnecting from the model.
+	 */
 	public void disconnect(Player p) {
 		try {
 			if (p == null) throw new NullPointerException();
@@ -126,20 +148,34 @@ public class ModelInstance implements Serializable {
 		this.controller = controller;
 	}
 
+	/**
+	 * Routine to restart game after a crash or closing, creates a {@link ResumeWaitingState} linked to the previous {@link GameState} and sets it as the game state.
+	 */
 	public void afterSerialRestart() {
 		this.started = false;
 		ResumeWaitingState next = new ResumeWaitingState(this, this.state.getType(), this.state.getCount(), this.state);
 		this.setState(next);
 	}
 
+	/**
+	 * Requests the {@link LobbyController} to broadcast a {@link ClientMessage} to all connected listeners.
+	 * 
+	 * @param message {@link ClientMessage} Message to be broadcast.
+	 */
 	public void broadcast(ClientMessage message) {
 		this.controller.broadcast(message);
 	}
 
+	/**
+	 * @return {@link ClientGameListEntry} An entry containing info about this {@link ModelInstance} to be sent to a client.
+	 */
 	public ClientGameListEntry getEntry() {
 		return this.state.getOngoingEntry(this.id);
 	}
 
+	/**
+	 * Requests the {@link LobbyController} to end the game and all associated resources.
+	 */
 	public void endGame() {
 		this.controller.endGame();
 	}

@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model.cards.state;
 
 import it.polimi.ingsw.controller.client.ClientController;
-import it.polimi.ingsw.controller.client.state.ClientControllerState;
 import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
@@ -16,7 +15,6 @@ import it.polimi.ingsw.model.state.VoyageState;
 import it.polimi.ingsw.utils.Logger;
 import it.polimi.ingsw.utils.LoggerLevel;
 import it.polimi.ingsw.model.cards.Card;
-import it.polimi.ingsw.view.ClientView;
 
 import java.io.Serializable;
 /**

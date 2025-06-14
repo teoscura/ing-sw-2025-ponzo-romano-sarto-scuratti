@@ -3,6 +3,9 @@ package it.polimi.ingsw.model.components.visitors;
 import it.polimi.ingsw.model.components.*;
 import it.polimi.ingsw.model.components.enums.AlienType;
 
+/**
+ * Visitor used to verify what {@link AlienType} a CabinComponent can support.
+ */
 public class CabinVisitor implements ComponentVisitor {
 
 	AlienType type = AlienType.HUMAN;
@@ -11,22 +14,24 @@ public class CabinVisitor implements ComponentVisitor {
 		return this.type;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void visit(CabinComponent c) {
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void visit(EngineComponent c) {
 	}
 
 	/**
-	 * Visit an Alien Life Support Component and update the visitor's internal status
-	 * based on the alien type.<br>
-	 * - If the visitor's current type is BOTH, no change is made. <br>
-	 * - If the current type is HUMAN, it is overwritten with the type of the visited component. <br>
-	 * - If the current type is different from the component's type, it is set to BOTH to indicate that <br>
-	 *
-	 * @param c
+	 * Visits a StartingCabinComponent and fetches the crew count.
+	 * 
+	 * @param c {@link StartingCabinComponent} Component being visited.
 	 */
 	@Override
 	public void visit(AlienLifeSupportComponent c) {
@@ -40,30 +45,51 @@ public class CabinVisitor implements ComponentVisitor {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void visit(CannonComponent c) {
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void visit(StorageComponent c) {
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void visit(BatteryComponent c) {
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void visit(ShieldComponent c) {
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void visit(EmptyComponent c) {
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void visit(StructuralComponent c) {
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void visit(StartingCabinComponent c) {
 	}

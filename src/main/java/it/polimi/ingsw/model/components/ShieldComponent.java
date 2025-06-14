@@ -61,6 +61,9 @@ public class ShieldComponent extends BaseComponent {
 		return this.powered;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean powerable() {
 		return true;
@@ -68,7 +71,7 @@ public class ShieldComponent extends BaseComponent {
 
 	/**
 	 * This adds the Shield Component's coordinates to the {@link SpaceShip}
-	 * @param ship  {@link SpaceShip} to which you want to add the shield component
+	 * @param ship {@link SpaceShip} to which you want to add the shield component
 	 */
 	@Override
 	public void onCreation(SpaceShip ship, ShipCoords coords) {
@@ -78,7 +81,7 @@ public class ShieldComponent extends BaseComponent {
 
 	/**
 	 * This removes the Shield Component's coordinates from the {@link SpaceShip}
-	 * @param ship  {@link SpaceShip} to which you want to remove the shield component
+	 * @param ship {@link SpaceShip} to which you want to remove the shield component
 	 */
 	@Override
 	public void onDelete(SpaceShip ship) {

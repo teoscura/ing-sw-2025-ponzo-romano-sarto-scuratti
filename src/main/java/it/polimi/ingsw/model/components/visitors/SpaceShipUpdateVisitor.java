@@ -3,6 +3,9 @@ package it.polimi.ingsw.model.components.visitors;
 import it.polimi.ingsw.model.components.*;
 import it.polimi.ingsw.model.components.enums.ShipmentType;
 
+/**
+ * Visitor used to update a {@link SpaceShip}'s stats.
+ */
 public class SpaceShipUpdateVisitor implements ComponentVisitor {
 
 	private final int[] containers;
@@ -18,9 +21,9 @@ public class SpaceShipUpdateVisitor implements ComponentVisitor {
 	}
 
 	/**
-	 * Visit a cabin component and update the crew count.
+	 * Visits a cabin component and fetches the crew count.
 	 *
-	 * @param c CabinComponent component containing crew members of a specific type.
+	 * @param c {@link CabinComponent} Component being visited.
 	 */
 	@Override
 	public void visit(CabinComponent c) {
@@ -28,9 +31,9 @@ public class SpaceShipUpdateVisitor implements ComponentVisitor {
 	}
 
 	/**
-	 * Visit an engine component and update the total power of the engines.
+	 * Visit an engine component and fetches its current power.
 	 *
-	 * @param c EngineComponent.
+	 * @param c {@link EngineComponent} Component being visited.
 	 */
 	@Override
 	public void visit(EngineComponent c) {
@@ -42,9 +45,9 @@ public class SpaceShipUpdateVisitor implements ComponentVisitor {
 	}
 
 	/**
-	 * Visit a Cannon component and update the total power of the cannons.
+	 * Visit a Cannon component and fetches the total power of the cannons.
 	 *
-	 * @param c CannonComponent.
+	 * @param c {@link CannonComponent} Component being visited.
 	 */
 	@Override
 	public void visit(CannonComponent c) {
@@ -52,9 +55,10 @@ public class SpaceShipUpdateVisitor implements ComponentVisitor {
 	}
 
 	/**
-	 * Visit a Storage component and update the count
+	 * Visit a Storage component and fetches the count
 	 * of containers present in the ship for each valid type.
-	 * @param c CannonComponent.
+	 * 
+	 * @param c {@link StorageComponent} Component being visited.
 	 */
 	@Override
 	public void visit(StorageComponent c) {
@@ -65,9 +69,9 @@ public class SpaceShipUpdateVisitor implements ComponentVisitor {
 	}
 
 	/**
-	 * Visit a Battery component and update the total power of the batteries.
+	 * Visit a Battery component and fetches the number of the batteries.
 	 *
-	 * @param c BatteryComponent.
+	 * @param c {@link BatteryComponent} Component being visited.
 	 */
 	@Override
 	public void visit(BatteryComponent c) {
@@ -75,8 +79,9 @@ public class SpaceShipUpdateVisitor implements ComponentVisitor {
 	}
 
 	/**
-	 * Visits a shield and updates the directions.
-	 * @param c componente ShieldComponent.
+	 * Visits a shield and fetches the directions it is shielding.
+	 * 
+	 * @param c {@link ShieldComponent} Component being visited.
 	 */
 	@Override
 	public void visit(ShieldComponent c) {
@@ -85,17 +90,24 @@ public class SpaceShipUpdateVisitor implements ComponentVisitor {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void visit(EmptyComponent c) {
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void visit(StructuralComponent c) {
 	}
 
 	/**
-	 * Visits a StartingCabinComponent and updates the crew count.
-	 * @param c StartingCabinComponent containing humans.
+	 * Visits a StartingCabinComponent and fetches the crew count.
+	 * 
+	 * @param c {@link StartingCabinComponent} Component being visited.
 	 */
 	@Override
 	public void visit(StartingCabinComponent c) {

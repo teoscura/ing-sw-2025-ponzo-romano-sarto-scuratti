@@ -1,5 +1,8 @@
 package it.polimi.ingsw.model.components.enums;
 
+/**
+ * Enumeration that specifies the supported types of connectors in this implementation of Galaxy Trucker.
+ */
 public enum ConnectorType {
 	EMPTY(0),
 	SINGLE_CONNECTOR(1),
