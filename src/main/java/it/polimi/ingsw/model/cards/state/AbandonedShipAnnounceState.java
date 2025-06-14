@@ -4,6 +4,8 @@ import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.cards.AbandonedShipCard;
+import it.polimi.ingsw.model.cards.Card;
+import it.polimi.ingsw.controller.client.ClientController;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.client.card.ClientBaseCardState;
 import it.polimi.ingsw.model.client.card.ClientCardState;
@@ -16,7 +18,9 @@ import it.polimi.ingsw.utils.LoggerLevel;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * Class representing an Announce State of the {@link AbandonedShipCard}.
+ */
 public class AbandonedShipAnnounceState extends CardState {
 
 	private final AbandonedShipCard card;
@@ -24,6 +28,15 @@ public class AbandonedShipAnnounceState extends CardState {
 	private boolean responded = false;
 	private int id = -1;
 
+	/**
+	 * Constructs a new {@code AbandonedShipAnnounceState}.
+	 *
+	 * @param state {@link VoyageState} The current voyage state
+	 * @param card  The {@link AbandonedShipCard} to resolve
+	 * @param list  The list of {@link Player}s
+	 * @throws IllegalArgumentException if the list is empty or too large
+	 * @throws NullPointerException if the card is null
+	 */
 	public AbandonedShipAnnounceState(VoyageState state, AbandonedShipCard card, List<Player> list) {
 		super(state);
 		if (list.size() > this.state.getCount().getNumber() || list.size() < 1 || list == null)
@@ -33,6 +46,12 @@ public class AbandonedShipAnnounceState extends CardState {
 		this.list = new ArrayList<>(list);
 	}
 
+	/**
+	 * Called when the card state is initialized.
+	 * Resets power for all players ships.
+	 *
+	 * @param new_state {@link ClientController} the new client state to broadcast
+	 */
 	@Override
 	public void init(ClientState new_state) {
 		super.init(new_state);
@@ -45,6 +64,12 @@ public class AbandonedShipAnnounceState extends CardState {
 		}
 	}
 
+	/**
+	 * Validates and resolves the {@link Player}'s response to the landing offer.
+	 *
+	 * @param message {@link ServerMessage} The message received from the player
+	 * @throws ForbiddenCallException if the message is not allowed
+	 */
 	@Override
 	public void validate(ServerMessage message) throws ForbiddenCallException {
 		message.receive(this);
@@ -75,6 +100,11 @@ public class AbandonedShipAnnounceState extends CardState {
 				null);
 	}
 
+	/**
+	 * Computes and returns the next {@code CardState}.
+	 *
+	 * @return the next state, or {@code null} if the card is exhausted
+	 */
 	@Override
 	public CardState getNext() {
 		if (this.list.getFirst().getDisconnected()) {
@@ -88,6 +118,12 @@ public class AbandonedShipAnnounceState extends CardState {
 		return null;
 	}
 
+	/**
+	 * Called when a {@link Player} tries to select a planet for landing.
+	 *
+	 * @param p {@link Player} The player
+	 * @param planet The selected planet
+	 */
 	@Override
 	public void selectLanding(Player p, int planet) {
 		if (!p.equals(this.list.getFirst())) {
@@ -103,6 +139,11 @@ public class AbandonedShipAnnounceState extends CardState {
 		this.responded = true;
 	}
 
+	/**
+	 * Called when a player disconnects.
+	 *
+	 * @param p {@link Player} The player
+	 */
 	@Override
 	public void disconnect(Player p) throws ForbiddenCallException {
 		if (this.list.getFirst().equals(p)) {
