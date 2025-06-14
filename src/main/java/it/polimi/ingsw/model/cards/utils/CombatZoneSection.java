@@ -2,6 +2,9 @@ package it.polimi.ingsw.model.cards.utils;
 
 import java.io.Serializable;
 
+/**
+ * Class representing a single section of a {@link CombatZoneCard}.
+ */
 public class CombatZoneSection implements Serializable {
 
 	private final CombatZoneCriteria criteria;
