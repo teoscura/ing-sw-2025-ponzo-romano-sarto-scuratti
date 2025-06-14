@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map.Entry;
 
 /**
- * The planche class handles the movement of the player on the board.
+ * {@inheritDoc}
  * Contains a HashMap that uses player color as a key, and the total steps taken by that player as a value.
  */
 public class Planche implements iPlanche {
@@ -28,9 +28,7 @@ public class Planche implements iPlanche {
 	}
 
 	/**
-	 * Returns the current position of the player
-	 *
-	 * @param p The Player
+	 * {@inheritDoc}
 	 */
 	@Override
 	public int getPlayerPosition(Player p) {
@@ -39,9 +37,7 @@ public class Planche implements iPlanche {
 	}
 
 	/**
-	 * Given a certain number of steps, finds if there are any players at the corrisponding cell on the board
-	 *
-	 * @param position
+	 * {@inheritDoc}
 	 */
 	@Override
 	public Player getPlayerAt(int position) {
@@ -53,12 +49,7 @@ public class Planche implements iPlanche {
 	}
 
 	/**
-	 * either moves the player forward or backwards by a number of steps equal to rel_change,
-	 * if a player is already present on a cell, moves one more step forward of backwards
-	 *
-	 * @param state The Current State
-	 * @param p The Player
-	 * @param rel_change
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void movePlayer(VoyageState state, Player p, int rel_change) {
@@ -73,7 +64,7 @@ public class Planche implements iPlanche {
 		}
 		this.planche.put(p, position);
 	}
-
+	
 	public boolean checkLapped(Player p) {
 		return this.planche.keySet().stream().filter(pl -> getPlayerPosition(pl) - getPlayerPosition(p) >= length).findAny().isPresent();
 	}

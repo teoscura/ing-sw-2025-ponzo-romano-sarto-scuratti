@@ -13,7 +13,7 @@ import java.util.HashMap;
 /**
  * CommonBoard handles the component piles durning the building phase of the game.
  * Contains a queue of components not yet revealed, and an array of uncovered components,
- * accessed directly and visible by the players
+ * Accessed and visible to the players
  */
 public class CommonBoard implements iCommonBoard {
 
@@ -36,9 +36,7 @@ public class CommonBoard implements iCommonBoard {
 	}
 
 	/**
-	 * Returns the current first component of the pile
-	 *
-	 * @return the first element of the pile
+	 * {@inheritDoc}
 	 */
 	@Override
 	public BaseComponent pullComponent() {
@@ -47,10 +45,7 @@ public class CommonBoard implements iCommonBoard {
 	}
 
 	/**
-	 * Takes a component c that has been discarded by the player and adds it to the uncovered_components array
-	 *
-	 * @throws IllegalArgumentException if a component is discarded twice
-	 * @param c {@link BaseComponent} Component to discard.
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void discardComponent(BaseComponent c) {
@@ -60,10 +55,7 @@ public class CommonBoard implements iCommonBoard {
 	}
 
 	/**
-	 * Pulls a component from the uncovered_components array with direct access
-	 *
-	 * @param id The Id
-	 * @return
+	 * {@inheritDoc}
 	 */
 	@Override
 	public BaseComponent pullDiscarded(int id) {
