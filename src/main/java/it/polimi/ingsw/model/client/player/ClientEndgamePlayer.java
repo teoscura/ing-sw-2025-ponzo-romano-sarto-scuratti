@@ -4,6 +4,9 @@ import it.polimi.ingsw.model.player.PlayerColor;
 
 import java.io.Serializable;
 
+/**
+ * Client side representation of a player during a {@link EndscreenState}
+ */
 public class ClientEndgamePlayer implements Serializable {
 
 	private final String username;

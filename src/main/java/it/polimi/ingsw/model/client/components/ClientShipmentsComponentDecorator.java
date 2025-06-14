@@ -2,6 +2,9 @@ package it.polimi.ingsw.model.client.components;
 
 import it.polimi.ingsw.model.components.enums.StorageType;
 
+/**
+ * Client side component decorator containing info about the cargo it contains.
+ */
 public class ClientShipmentsComponentDecorator implements ClientComponent {
 
 	private final ClientComponent base;
@@ -27,6 +30,9 @@ public class ClientShipmentsComponentDecorator implements ClientComponent {
 		return this.shipments;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void showComponent(ClientComponentVisitor visitor) {
 		base.showComponent(visitor);

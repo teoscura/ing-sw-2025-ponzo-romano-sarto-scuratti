@@ -5,6 +5,9 @@ import it.polimi.ingsw.model.player.PlayerColor;
 
 import java.util.ArrayList;
 
+/**
+ * Client side card state decorator displaying possible landing locations and their rewards.
+ */
 public class ClientLandingCardStateDecorator implements ClientCardState {
 
 	private final ClientCardState base;
@@ -47,6 +50,9 @@ public class ClientLandingCardStateDecorator implements ClientCardState {
 		return this.available;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void showCardState(ClientCardStateVisitor visitor) {
 		base.showCardState(visitor);

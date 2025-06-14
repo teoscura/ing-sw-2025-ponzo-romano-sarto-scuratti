@@ -5,6 +5,9 @@ import it.polimi.ingsw.model.player.PlayerColor;
 
 import java.io.Serializable;
 
+/**
+ * Client side representation of a player during a {@link VoyageState}
+ */
 public class ClientVoyagePlayer implements Serializable {
 
 	private final String username;

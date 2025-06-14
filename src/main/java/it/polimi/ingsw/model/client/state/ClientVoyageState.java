@@ -6,6 +6,9 @@ import it.polimi.ingsw.model.client.player.ClientVoyagePlayer;
 
 import java.util.ArrayList;
 
+/**
+ * Client side representation of a {@link VoyageState}.
+ */
 public class ClientVoyageState implements ClientState {
 
 	private final GameModeType type;
@@ -37,6 +40,9 @@ public class ClientVoyageState implements ClientState {
 		return this.cards_left;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void sendToView(ClientStateVisitor visitor) {
 		visitor.show(this);

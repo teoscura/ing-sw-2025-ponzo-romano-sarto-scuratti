@@ -4,6 +4,9 @@ import it.polimi.ingsw.model.client.player.ClientVerifyPlayer;
 
 import java.util.ArrayList;
 
+/**
+ * Client side representation of a {@link VerifyState}.
+ */
 public class ClientVerifyState implements ClientState {
 
 	private final ArrayList<ClientVerifyPlayer> players;
@@ -18,6 +21,9 @@ public class ClientVerifyState implements ClientState {
 		return players;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void sendToView(ClientStateVisitor visitor) {
 		visitor.show(this);

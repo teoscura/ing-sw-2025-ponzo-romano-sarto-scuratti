@@ -5,6 +5,9 @@ import it.polimi.ingsw.model.client.ClientGameListEntry;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Client side representation of the lobby creation screen.
+ */
 public class ClientSetupState implements ClientState {
 
 	private final String setupper_username;
@@ -24,6 +27,9 @@ public class ClientSetupState implements ClientState {
 		return this.unfinished_games;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void sendToView(ClientStateVisitor visitor) {
 		visitor.show(this);

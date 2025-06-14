@@ -2,6 +2,9 @@ package it.polimi.ingsw.model.client.card;
 
 import it.polimi.ingsw.model.cards.utils.Projectile;
 
+/**
+ * Client side card state decorator displaying an incoming shot, its direction and size.
+ */
 public class ClientProjectileCardStateDecorator implements ClientCardState {
 
 	private final ClientCardState base;
@@ -18,6 +21,9 @@ public class ClientProjectileCardStateDecorator implements ClientCardState {
 		return this.shot;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void showCardState(ClientCardStateVisitor visitor) {
 		base.showCardState(visitor);

@@ -1,5 +1,8 @@
 package it.polimi.ingsw.model.client.components;
 
+/**
+ * Client side component decorator marking it as broken or invalid.
+ */
 public class ClientBrokenVerifyComponentDecorator implements ClientComponent {
 
 	private final ClientComponent base;
@@ -13,6 +16,9 @@ public class ClientBrokenVerifyComponentDecorator implements ClientComponent {
 		return this.base;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void showComponent(ClientComponentVisitor visitor) {
 		base.showComponent(visitor);

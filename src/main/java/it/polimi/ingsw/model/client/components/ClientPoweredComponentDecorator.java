@@ -1,5 +1,8 @@
 package it.polimi.ingsw.model.client.components;
 
+/**
+ * Client side component decorator containing information about its powered state.
+ */
 public class ClientPoweredComponentDecorator implements ClientComponent {
 
 	private final ClientComponent base;
@@ -20,6 +23,9 @@ public class ClientPoweredComponentDecorator implements ClientComponent {
 		return this.powered;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void showComponent(ClientComponentVisitor visitor) {
 		base.showComponent(visitor);

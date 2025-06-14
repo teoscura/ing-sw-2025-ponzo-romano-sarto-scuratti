@@ -7,6 +7,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * An entry into any list of {@link ModelInstance} that must be displayed to the player.
+ */
 public class ClientGameListEntry implements Serializable {
 
 	private final ArrayList<String> players;

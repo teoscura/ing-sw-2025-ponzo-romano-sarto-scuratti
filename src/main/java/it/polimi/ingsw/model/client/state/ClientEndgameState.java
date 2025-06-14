@@ -6,6 +6,9 @@ import it.polimi.ingsw.model.player.PlayerColor;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Client side representation of a {@link EndscreenState}.
+ */
 public class ClientEndgameState implements ClientState {
 
 	private final ArrayList<ClientEndgamePlayer> playerlist;
@@ -24,7 +27,9 @@ public class ClientEndgameState implements ClientState {
 		return this.awaiting;
 	}
 
-
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void sendToView(ClientStateVisitor visitor) {
 		visitor.show(this);

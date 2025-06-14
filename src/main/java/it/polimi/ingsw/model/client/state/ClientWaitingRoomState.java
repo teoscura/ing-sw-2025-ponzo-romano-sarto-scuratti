@@ -6,6 +6,9 @@ import it.polimi.ingsw.model.client.player.ClientWaitingPlayer;
 
 import java.util.ArrayList;
 
+/**
+ * Client side representation of a {@link WaitingState}.
+ */
 public class ClientWaitingRoomState implements ClientState {
 
 	private final GameModeType type;
@@ -32,6 +35,9 @@ public class ClientWaitingRoomState implements ClientState {
 		return this.playerlist;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void sendToView(ClientStateVisitor visitor) {
 		visitor.show(this);

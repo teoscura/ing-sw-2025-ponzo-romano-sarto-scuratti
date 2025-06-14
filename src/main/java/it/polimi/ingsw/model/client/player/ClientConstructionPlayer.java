@@ -7,6 +7,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Client side representation of a player during a {@link ConstructionState}
+ */
 public class ClientConstructionPlayer implements Serializable {
 
 	private final String username;

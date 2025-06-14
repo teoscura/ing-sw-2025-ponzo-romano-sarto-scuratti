@@ -2,6 +2,9 @@ package it.polimi.ingsw.model.client.components;
 
 import it.polimi.ingsw.model.components.enums.AlienType;
 
+/**
+ * Client side component decorator containing info about the alien type it can support.
+ */
 public class ClientLifeSupportComponentDecorator implements ClientComponent {
 
 	private final ClientComponent base;
@@ -21,6 +24,9 @@ public class ClientLifeSupportComponentDecorator implements ClientComponent {
 		return this.type;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void showComponent(ClientComponentVisitor visitor) {
 		base.showComponent(visitor);

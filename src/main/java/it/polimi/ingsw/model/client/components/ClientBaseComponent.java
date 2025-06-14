@@ -3,6 +3,9 @@ package it.polimi.ingsw.model.client.components;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ConnectorType;
 
+/**
+ * Client side component containing the info about its id and rotation.
+ */
 public class ClientBaseComponent implements ClientComponent {
 
 	private final int id;
@@ -31,6 +34,9 @@ public class ClientBaseComponent implements ClientComponent {
 		return connectors[shift];
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void showComponent(ClientComponentVisitor visitor) {
 		visitor.show(this);

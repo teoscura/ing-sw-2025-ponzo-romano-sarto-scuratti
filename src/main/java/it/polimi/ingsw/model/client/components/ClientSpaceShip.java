@@ -6,6 +6,9 @@ import it.polimi.ingsw.model.player.VerifyResult;
 
 import java.io.Serializable;
 
+/**
+ * Client side representation of a spaceship and its stats.
+ */
 public class ClientSpaceShip implements Serializable {
 
 	private final GameModeType type;
@@ -41,6 +44,12 @@ public class ClientSpaceShip implements Serializable {
 		this.crew = crew;
 	}
 
+	/**
+	 * Parses the results of {@link SpaceShip#bulkVerify()} and returns a {@link ClientSpaceShip} that contains that information.
+	 * 
+	 * @param results {@link VerifyResult} Matrix of results from a {@link SpaceShip#bulkVerify()}.
+	 * @return {@link ClientSpaceShip} New client object containing all info regarding broken components.
+	 */
 	public ClientSpaceShip getVerifyShip(VerifyResult[][] results) {
 		if (results == null) throw new NullPointerException();
 		if (results.length != this.type.getHeight()) throw new IllegalArgumentException();

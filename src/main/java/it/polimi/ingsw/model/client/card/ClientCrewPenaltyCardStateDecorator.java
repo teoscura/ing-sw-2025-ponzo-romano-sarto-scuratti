@@ -2,6 +2,9 @@ package it.polimi.ingsw.model.client.card;
 
 import it.polimi.ingsw.model.player.PlayerColor;
 
+/**
+ * Client side card state decorator displaying a crew penalty applied to a specified player.
+ */
 public class ClientCrewPenaltyCardStateDecorator implements ClientCardState {
 
 	private final ClientCardState base;
@@ -24,6 +27,9 @@ public class ClientCrewPenaltyCardStateDecorator implements ClientCardState {
 		return this.crew_amount;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void showCardState(ClientCardStateVisitor visitor) {
 		base.showCardState(visitor);

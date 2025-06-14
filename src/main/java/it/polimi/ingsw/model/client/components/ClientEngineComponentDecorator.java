@@ -2,6 +2,9 @@ package it.polimi.ingsw.model.client.components;
 
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 
+/**
+ * Client side component decorator containing info about its engine's power and direction.
+ */
 public class ClientEngineComponentDecorator implements ClientComponent {
 
 	private final ClientComponent base;
@@ -22,6 +25,9 @@ public class ClientEngineComponentDecorator implements ClientComponent {
 		return this.rotation;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void showComponent(ClientComponentVisitor visitor) {
 		base.showComponent(visitor);
