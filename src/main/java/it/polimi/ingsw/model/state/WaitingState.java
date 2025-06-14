@@ -14,28 +14,47 @@ import it.polimi.ingsw.model.client.state.ClientState;
 import it.polimi.ingsw.model.client.state.ClientWaitingRoomState;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.model.player.SpaceShip;
 import it.polimi.ingsw.utils.Logger;
 import it.polimi.ingsw.utils.LoggerLevel;
 
 import java.util.ArrayList;
 
+/**
+ * Starting point of any newly created match of Galaxy Trucker, waits for the expected number of {@link ClientDescriptor clients} and then automatically joins.
+ */
 public class WaitingState extends GameState {
 
 	private final ArrayList<ClientDescriptor> connected;
 	private final PlayerCount count;
 
+	/**
+	 * Constructs a {@link WaitingState} object.
+	 *
+	 * @param model {@link ModelInstance} ModelInstance that owns this {@link GameState}.
+	 * @param type {@link GameModeType} Ruleset of the state.
+	 * @param count {@link PlayerCount} Size of the match.
+	 */
 	public WaitingState(ModelInstance model, GameModeType type, PlayerCount count) {
 		super(model, type, count, null);
 		this.connected = new ArrayList<>();
 		this.count = count;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void init() {
 		Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "New Game State -> Waiting Room State!");
 		this.broadcastMessage(new NotifyStateUpdateMessage(this.getClientState()));
 	}
 
+	/**
+	 * Checks that all the required {@link ClientDescriptor clients} have connected, and if so, transitions.
+	 * 
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void validate(ServerMessage message) throws ForbiddenCallException {
 		message.receive(this);
@@ -51,6 +70,11 @@ public class WaitingState extends GameState {
 		this.transition();
 	}
 
+	/**
+	 * Initializes a {@link SpaceShip} for each {@link Player}.
+	 * 
+	 * {@inheritDoc}
+	 */
 	@Override
 	public GameState getNext() {
 		if (this.connected.size() == 0) return null;
@@ -72,6 +96,9 @@ public class WaitingState extends GameState {
 		return new TestFlightConstructionState(model, type, count, playerlist);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public ClientState getClientState() {
 		ArrayList<ClientWaitingPlayer> tmp = new ArrayList<>();
@@ -83,11 +110,17 @@ public class WaitingState extends GameState {
 		return new ClientWaitingRoomState(type, count, tmp);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean toSerialize() {
 		return false;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void connect(ClientDescriptor client) throws ForbiddenCallException {
 		if (this.connected.contains(client)) {
 			this.broadcastMessage(new ViewMessage("Client '" + client.getUsername() + "' attempted to connect from an already connected connection!"));
@@ -97,6 +130,9 @@ public class WaitingState extends GameState {
 		this.connected.add(client);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void disconnect(ClientDescriptor client) throws ForbiddenCallException {
 		if (!this.connected.contains(client)) {
 			this.broadcastMessage(new ViewMessage("Client '" + client.getUsername() + "' attempted to disconnect from a connection that isn't connected!"));
@@ -105,11 +141,17 @@ public class WaitingState extends GameState {
 		this.connected.remove(client);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String toString() {
 		return "Waiting State";
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public ClientGameListEntry getOngoingEntry(int id) {
 		return new ClientGameListEntry(type, count, this.toString(), connected.stream().map(c -> c.getUsername()).toList(), id);

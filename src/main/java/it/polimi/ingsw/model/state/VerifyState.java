@@ -20,12 +20,16 @@ import it.polimi.ingsw.model.components.exceptions.UnsupportedAlienCabinExceptio
 import it.polimi.ingsw.model.components.visitors.CrewSetVisitor;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.ShipCoords;
+import it.polimi.ingsw.model.player.SpaceShip;
 import it.polimi.ingsw.utils.Logger;
 import it.polimi.ingsw.utils.LoggerLevel;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 
+/**
+ * Class representing the verification phase of a Galaxy Trucker match.
+ */
 public class VerifyState extends GameState {
 
 	private final iCards voyage_deck;
@@ -34,6 +38,16 @@ public class VerifyState extends GameState {
 	private final ArrayList<Player> awaiting;
 	private final ArrayList<Player> starts_losing;
 
+	/**
+	 * Constructs a {@link VerifyState} object.
+	 * 
+	 * @param model {@link ModelInstance} ModelInstance that owns this {@link GameState}.
+	 * @param type {@link GameModeType} Ruleset of the state.
+	 * @param count {@link PlayerCount} Size of the match.
+	 * @param players Array of all {@link Player players} in the match.
+	 * @param voyage_deck {@link iCards} Card deck to be player in the upcoming state.
+	 * @param finish_order Array of all {@link Player players}, sorted in finishing order of the construction phase.
+	 */
 	public VerifyState(ModelInstance model, GameModeType type, PlayerCount count, ArrayList<Player> players, iCards voyage_deck, ArrayList<Player> finish_order) {
 		super(model, type, count, players);
 		if (voyage_deck == null || finish_order == null || players == null) throw new NullPointerException();
@@ -44,6 +58,9 @@ public class VerifyState extends GameState {
 		this.starts_losing = new ArrayList<>();
 	}
 
+	/**
+	 * Validates every {@link Player}'s {@link SpaceShip} and if invalid removes them from the finish order.
+	 */
 	@Override
 	public void init() {
 		Iterator<Player> it = to_clean.iterator();
@@ -59,6 +76,11 @@ public class VerifyState extends GameState {
 
 	}
 
+	/**
+	 * Checks if all {@link Player players} have either finished validating or have disconnected.
+	 * 
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void validate(ServerMessage message) throws ForbiddenCallException {
 		message.receive(this);
@@ -82,6 +104,9 @@ public class VerifyState extends GameState {
 		this.transition();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public GameState getNext() {
 		for (Player p : this.players) {
@@ -97,6 +122,9 @@ public class VerifyState extends GameState {
 		return res;
 	}
 
+		/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public ClientState getClientState() {
 		ArrayList<ClientVerifyPlayer> tmp = new ArrayList<>();
@@ -113,11 +141,17 @@ public class VerifyState extends GameState {
 		return new ClientVerifyState(tmp);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean toSerialize() {
 		return true;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void sendContinue(Player p) throws ForbiddenCallException {
 		if (!this.awaiting.contains(p)) {
@@ -134,6 +168,9 @@ public class VerifyState extends GameState {
 		Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' motioned to progress! (" + (this.awaiting.size()) + " missing).");
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void removeComponent(Player p, ShipCoords coords) throws ForbiddenCallException {
 		if (!this.to_clean.contains(p)) {
@@ -149,6 +186,9 @@ public class VerifyState extends GameState {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void selectBlob(Player p, ShipCoords blob_coord) {
 		if (!this.to_clean.contains(p)) {
@@ -169,7 +209,9 @@ public class VerifyState extends GameState {
 		}
 	}
 
-
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void setCrewType(Player p, ShipCoords coords, AlienType type) throws ForbiddenCallException {
 		if (this.to_clean.contains(p)) {
@@ -202,6 +244,9 @@ public class VerifyState extends GameState {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void connect(Player p) throws ForbiddenCallException {
 		if (p == null) throw new NullPointerException();
@@ -209,6 +254,9 @@ public class VerifyState extends GameState {
 		p.reconnect();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void disconnect(Player p) throws ForbiddenCallException {
 		if (p == null) throw new NullPointerException();
@@ -216,11 +264,17 @@ public class VerifyState extends GameState {
 		p.disconnect();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String toString() {
 		return "Verify State";
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public ClientGameListEntry getOngoingEntry(int id) {
 		return new ClientGameListEntry(type, count, this.toString(), this.players.stream().map(p -> p.getUsername()).toList(), id);

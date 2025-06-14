@@ -4,7 +4,6 @@ import it.polimi.ingsw.controller.client.ClientController;
 import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
-import it.polimi.ingsw.model.cards.AbandonedShipCard;
 import it.polimi.ingsw.model.cards.AbandonedStationCard;
 import it.polimi.ingsw.model.cards.exceptions.CrewSizeException;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;

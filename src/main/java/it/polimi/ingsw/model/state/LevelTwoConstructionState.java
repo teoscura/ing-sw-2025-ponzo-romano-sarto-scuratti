@@ -18,22 +18,40 @@ import it.polimi.ingsw.utils.LoggerLevel;
 
 import java.util.ArrayList;
 
+/**
+ * Represents a the construction phase of a Galaxy Trucker match, using level two flight rules, includes a {@link ConstructionStateHourglass}.
+ */
 public class LevelTwoConstructionState extends ConstructionState {
 
 	private final ConstructionStateHourglass hourglass;
 
+	/**
+	 * Constructs a {@link LevelTwoConstructionState} object.
+	 * 
+	 * @param model {@link ModelInstance} ModelInstance that owns this {@link GameState}.
+	 * @param type {@link GameModeType} Ruleset of the state.
+	 * @param count {@link PlayerCount} Size of the match.
+	 * @param players Array of all {@link Player players} in the match.
+	 * @param seconds Amount of seconds the {@link ConstructionStateHourglass} lasts.
+	 */
 	public LevelTwoConstructionState(ModelInstance model, GameModeType type, PlayerCount count, ArrayList<Player> players, int seconds) {
 		super(model, type, count, players, new LevelTwoCards());
 		this.hourglass = new ConstructionStateHourglass(seconds, 3);
 		this.hourglass.start();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void init() {
 		Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "New Game State -> Construction State");
 		this.broadcastMessage(new NotifyStateUpdateMessage(this.getClientState()));
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public ClientState getClientState() {
 		ArrayList<ClientConstructionPlayer> tmp = new ArrayList<>();
@@ -53,11 +71,17 @@ public class LevelTwoConstructionState extends ConstructionState {
 		return new ClientConstructionState(this.type, tmp, new ArrayList<>(this.voyage_deck.getConstructionCards()), discarded, this.board.getCoveredSize(), this.hourglass.timesTotal(), this.hourglass.timesLeft(), this.hourglass.getDuration(), this.hourglass.getInstant());
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void sendContinue(Player p) throws ForbiddenCallException {
 		super.sendContinue(p);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void putComponent(Player p, int id, ShipCoords coords, ComponentRotation rotation) throws ForbiddenCallException {
 		if (!hourglass.canAct()) {
@@ -68,6 +92,9 @@ public class LevelTwoConstructionState extends ConstructionState {
 		super.putComponent(p, id, coords, rotation);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void takeComponent(Player p) throws ForbiddenCallException {
 		if (!hourglass.canAct()) {
@@ -78,6 +105,9 @@ public class LevelTwoConstructionState extends ConstructionState {
 		super.takeComponent(p);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void takeDiscarded(Player p, int id) throws ForbiddenCallException {
 		if (!hourglass.canAct()) {
@@ -88,6 +118,9 @@ public class LevelTwoConstructionState extends ConstructionState {
 		super.takeDiscarded(p, id);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void discardComponent(Player p) throws ForbiddenCallException {
 		if (!hourglass.canAct()) {
@@ -98,6 +131,9 @@ public class LevelTwoConstructionState extends ConstructionState {
 		super.discardComponent(p);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void toggleHourglass(Player p) {
 		if (hourglass.isRunning()) {
