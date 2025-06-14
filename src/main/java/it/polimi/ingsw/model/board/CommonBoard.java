@@ -50,7 +50,7 @@ public class CommonBoard implements iCommonBoard {
 	 * Takes a component c that has been discarded by the player and adds it to the uncovered_components array
 	 *
 	 * @throws IllegalArgumentException if a component is discarded twice
-	 * @param c
+	 * @param c {@link BaseComponent} Component to discard.
 	 */
 	@Override
 	public void discardComponent(BaseComponent c) {
