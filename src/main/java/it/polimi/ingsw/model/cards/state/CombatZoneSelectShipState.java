@@ -1,8 +1,10 @@
 package it.polimi.ingsw.model.cards.state;
 
+import it.polimi.ingsw.controller.client.ClientController;
 import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
+import it.polimi.ingsw.model.cards.CombatZoneCard;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.cards.utils.CombatZoneSection;
 import it.polimi.ingsw.model.cards.utils.ProjectileArray;
@@ -20,7 +22,9 @@ import it.polimi.ingsw.utils.LoggerLevel;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * Class representing a Select Ship State of the {@link CombatZoneCard}.
+ */
 public class CombatZoneSelectShipState extends CardState {
 
 	private final int card_id;
@@ -28,6 +32,15 @@ public class CombatZoneSelectShipState extends CardState {
 	private final ProjectileArray shots;
 	private final Player target;
 
+	/**
+	 * Constructs a new {@code CombatZoneSelectShipState}.
+	 *
+	 * @param state {@link VoyageState} The current voyage state
+	 * @param card_id   The card id
+	 * @param sections  The sections defining penalties
+	 * @param shots     The projectile array
+	 * @param target   The {@link Player} receiving the penalty
+	 */
 	public CombatZoneSelectShipState(VoyageState state, int card_id, ArrayList<CombatZoneSection> sections, ProjectileArray shots, Player target) {
 		super(state);
 		if (sections == null || shots == null || target == null) ;
@@ -38,6 +51,12 @@ public class CombatZoneSelectShipState extends CardState {
 		this.target = target;
 	}
 
+	/**
+	 * Called when the card state is initialized.
+	 * Resets power for all players ships.
+	 *
+	 * @param new_state {@link ClientController} The new client state to broadcast to all connected listeners.
+	 */
 	@Override
 	public void init(ClientState new_state) {
 		super.init(new_state);
@@ -46,6 +65,12 @@ public class CombatZoneSelectShipState extends CardState {
 
 	}
 
+	/**
+	 *
+	 *
+	 * @param message {@link ServerMessage} The message received from the player
+	 * @throws ForbiddenCallException if the message is not allowed
+	 */
 	@Override
 	public void validate(ServerMessage message) throws ForbiddenCallException {
 		message.receive(this);
@@ -68,6 +93,11 @@ public class CombatZoneSelectShipState extends CardState {
 				new ArrayList<>(List.of(target.getColor())));
 	}
 
+	/**
+	 * Computes and returns the next {@code CardState}.
+	 *
+	 * @return the next state, or {@code null} if the card is exhausted
+	 */
 	@Override
 	public CardState getNext() {
 		if (this.target.getRetired()) {
@@ -84,6 +114,12 @@ public class CombatZoneSelectShipState extends CardState {
 		return null;
 	}
 
+	/**
+	 * Called when a {@link Player} tries to select a ship blob center.
+	 *
+	 * @param p {@link Player} The player
+	 * @param blob_coord {@link ShipCoords} The coordinates selected
+	 */
 	@Override
 	public void selectBlob(Player p, ShipCoords blob_coord) {
 		if (!p.equals(target)) {
@@ -105,6 +141,12 @@ public class CombatZoneSelectShipState extends CardState {
 		}
 	}
 
+	/**
+	 * Called when a {@link Player} disconnects.
+	 *
+	 * @param p {@link Player} The player disconnecting.
+	 * @throws ForbiddenCallException when the state refuses the action.
+	 */
 	@Override
 	public void disconnect(Player p) throws ForbiddenCallException {
 
