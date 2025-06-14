@@ -20,7 +20,7 @@ public class SenderThread extends Thread {
 	 * Construct a {@link SenderThread} object.
 	 * 
 	 * @param state {@link ConnectedState} Client Controller State to which this Thread object is bound.
-	 * @param inqueue {@link ThreadSafeMessageQueue} Queue containing all received messages.
+	 * @param outqueue {@link ThreadSafeMessageQueue} Queue containing all received messages.
 	 * @param connection {@link ServerConnection} Connection used to send messages with.
 	 */
 	public SenderThread(ConnectedState state, ThreadSafeMessageQueue<ServerMessage> outqueue, ServerConnection connection) {
