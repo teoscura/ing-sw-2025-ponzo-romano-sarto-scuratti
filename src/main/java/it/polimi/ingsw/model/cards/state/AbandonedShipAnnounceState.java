@@ -4,7 +4,6 @@ import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.cards.AbandonedShipCard;
-import it.polimi.ingsw.model.cards.Card;
 import it.polimi.ingsw.controller.client.ClientController;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.client.card.ClientBaseCardState;
@@ -32,8 +31,8 @@ public class AbandonedShipAnnounceState extends CardState {
 	 * Constructs a new {@code AbandonedShipAnnounceState}.
 	 *
 	 * @param state {@link VoyageState} The current voyage state
-	 * @param card  The {@link AbandonedShipCard} to resolve
-	 * @param list  The list of {@link Player}s
+	 * @param card  {@link AbandonedShipCard} The card being played.
+	 * @param list  List of {@link Player} players in order of distance.
 	 * @throws IllegalArgumentException if the list is empty or too large
 	 * @throws NullPointerException if the card is null
 	 */
@@ -50,7 +49,7 @@ public class AbandonedShipAnnounceState extends CardState {
 	 * Called when the card state is initialized.
 	 * Resets power for all players ships.
 	 *
-	 * @param new_state {@link ClientController} the new client state to broadcast
+	 * @param new_state {@link ClientController} The new client state to broadcast to all connected listeners.
 	 */
 	@Override
 	public void init(ClientState new_state) {
@@ -119,10 +118,10 @@ public class AbandonedShipAnnounceState extends CardState {
 	}
 
 	/**
-	 * Called when a {@link Player} tries to select a planet for landing.
+	 * Called when a {@link Player} tries to select a landing location.
 	 *
-	 * @param p {@link Player} The player
-	 * @param planet The selected planet
+	 * @param p {@link Player} The player selecting the landing.
+	 * @param planet The id of the landing location chosen.
 	 */
 	@Override
 	public void selectLanding(Player p, int planet) {
@@ -140,9 +139,9 @@ public class AbandonedShipAnnounceState extends CardState {
 	}
 
 	/**
-	 * Called when a player disconnects.
+	 * Called when a {@link Player} disconnects.
 	 *
-	 * @param p {@link Player} The player
+	 * @param p {@link Player} The player disconnecting.
 	 */
 	@Override
 	public void disconnect(Player p) throws ForbiddenCallException {
