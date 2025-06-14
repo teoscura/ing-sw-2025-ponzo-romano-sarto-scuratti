@@ -30,6 +30,9 @@ public class AbandonedStationCard extends Card {
 		this.planet = planet;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public CardState getState(VoyageState state) {
 		return new AbandonedStationAnnounceState(state, this, state.getOrder(CardOrder.NORMAL));

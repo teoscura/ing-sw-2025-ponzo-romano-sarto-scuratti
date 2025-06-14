@@ -26,11 +26,13 @@ public class EpidemicCard extends Card {
 		super(id, 0);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public CardState getState(VoyageState state) {
 		return new EpidemicState(state, this);
 	}
-
 
 	/**
 	 * Applies the effect of the epidemic to the player's ship.

@@ -37,6 +37,9 @@ public class PiratesCard extends Card {
 		this.min_power = min_power;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public CardState getState(VoyageState state) {
 		return new PiratesAnnounceState(state, this, state.getOrder(CardOrder.NORMAL));

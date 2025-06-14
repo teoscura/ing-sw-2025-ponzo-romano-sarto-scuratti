@@ -1,6 +1,5 @@
 package it.polimi.ingsw.model.cards.state;
 
-import it.polimi.ingsw.controller.client.ClientController;
 import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
@@ -39,7 +38,7 @@ public abstract class CardState implements Serializable {
 	 * Called when the card state is initialized.
 	 * Resets power for all players ships.
 	 *
-	 * @param new_state {@link ClientController} the new client state to broadcast
+	 * @param new_state {@link ClientState} The new client state to broadcast to all connected listeners.
 	 */
 	public void init(ClientState new_state) {
 		for (Player p : state.getOrder(CardOrder.NORMAL)) {

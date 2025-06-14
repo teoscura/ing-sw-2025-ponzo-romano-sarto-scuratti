@@ -8,6 +8,9 @@ import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
 import it.polimi.ingsw.model.components.visitors.ComponentVisitor;
 import it.polimi.ingsw.model.player.SpaceShip;
 
+/**
+ * Visitor used to load {@link StorageComponent} with a specified {@link ShipmentType cargo} type.
+ */
 public class ContainsLoaderVisitor implements ComponentVisitor {
 
 	private final SpaceShip ship;
@@ -19,27 +22,40 @@ public class ContainsLoaderVisitor implements ComponentVisitor {
 		this.ship = ship;
 		this.cargo = cargo;
 	}
-
+	/**
+	 * @throws IllegalTargetException always
+	 */
 	@Override
 	public void visit(CabinComponent c) {
 		throw new IllegalTargetException();
 	}
-
+	/**
+	 * @throws IllegalTargetException always
+	 */
 	@Override
 	public void visit(EngineComponent c) {
 		throw new IllegalTargetException();
 	}
-
+	/**
+	 * @throws IllegalTargetException always
+	 */
 	@Override
 	public void visit(AlienLifeSupportComponent c) {
 		throw new IllegalTargetException();
 	}
-
+	/**
+	 * @throws IllegalTargetException always
+	 */
 	@Override
 	public void visit(CannonComponent c) {
 		throw new IllegalTargetException();
 	}
 
+	/**
+	 * Tries to load {@link StorageComponent} with the wanted cargo type.
+	 * 
+	 * @param c {@link StorageComponent} Component to visit.
+	 */
 	@Override
 	public void visit(StorageComponent c) {
 		try {
@@ -51,27 +67,37 @@ public class ContainsLoaderVisitor implements ComponentVisitor {
 		}
 		ship.updateShip();
 	}
-
+	/**
+	 * @throws IllegalTargetException always
+	 */
 	@Override
 	public void visit(BatteryComponent c) {
 		throw new IllegalTargetException();
 	}
-
+	/**
+	 * @throws IllegalTargetException always
+	 */
 	@Override
 	public void visit(ShieldComponent c) {
 		throw new IllegalTargetException();
 	}
-
+	/**
+	 * @throws IllegalTargetException always
+	 */
 	@Override
 	public void visit(EmptyComponent c) {
 		throw new IllegalTargetException();
 	}
-
+	/**
+	 * @throws IllegalTargetException always
+	 */
 	@Override
 	public void visit(StructuralComponent c) {
 		throw new IllegalTargetException();
 	}
-
+	/**
+	 * @throws IllegalTargetException always
+	 */
 	@Override
 	public void visit(StartingCabinComponent c) {
 		throw new IllegalTargetException();

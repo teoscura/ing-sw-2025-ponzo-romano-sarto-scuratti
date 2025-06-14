@@ -1,6 +1,6 @@
+//Done.
 package it.polimi.ingsw.model.cards.state;
 
-import it.polimi.ingsw.controller.client.ClientController;
 import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
@@ -33,7 +33,7 @@ public class AbandonedShipRewardState extends CardState {
 	/**
 	 * Constructs a new {@code AbandonedShipRewardState}.
 	 *
-	 * @param state {@link VoyageState} The current voyage state
+	 * @param state {@link VoyageState} The current voyage state.
 	 * @param card  {@link AbandonedShipCard} The card being played.
 	 * @param list  List of {@link Player} players in order of distance.
 	 * @throws IllegalArgumentException if any argument is null
@@ -50,7 +50,7 @@ public class AbandonedShipRewardState extends CardState {
 	 * Called when the card state is initialized.
 	 * Resets power for all players ships.
 	 *
-	 * @param new_state {@link ClientController} The new client state to broadcast to all connected listeners.
+	 * @param new_state {@link ClientState} The new client state to broadcast to all connected listeners.
 	 */
 	@Override
 	public void init(ClientState new_state) {
@@ -64,8 +64,8 @@ public class AbandonedShipRewardState extends CardState {
 	/**
 	 * Validates and resolves the {@link Player}'s response to the reward.
 	 *
-	 * @param message {@link ServerMessage} The message received from the player
-	 * @throws ForbiddenCallException if the message is not allowed
+	 * @param message {@link ServerMessage} The message received from the player.
+	 * @throws ForbiddenCallException if the message is not allowed.
 	 */
 	@Override
 	public void validate(ServerMessage message) throws ForbiddenCallException {
@@ -91,7 +91,7 @@ public class AbandonedShipRewardState extends CardState {
 	/**
 	 * Computes and returns the next {@code CardState}.
 	 *
-	 * @return the next state, or {@code null} if the card is exhausted
+	 * @return {@link CardState} the next state, or {@code null} if the card is exhausted.
 	 */
 	@Override
 	public CardState getNext() {

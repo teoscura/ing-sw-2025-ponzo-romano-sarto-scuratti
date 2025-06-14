@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.cards.state;
 import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
+import it.polimi.ingsw.model.cards.OpenSpaceCard;
 import it.polimi.ingsw.model.cards.StardustCard;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.cards.utils.CardOrder;
@@ -18,11 +19,20 @@ import it.polimi.ingsw.utils.LoggerLevel;
 
 import java.util.ArrayList;
 
+/**
+ * Class representing a State of the {@link StardustCard}.
+ */
 public class StardustState extends CardState {
 
 	private final StardustCard card;
 	private final ArrayList<Player> awaiting;
 
+	/**
+	 * Constructs a new {@code StardustState}.
+	 *
+	 * @param state {@link VoyageState} The current voyage state
+	 * @param card  {@link StardustCard} The card being played.
+	 */
 	public StardustState(VoyageState state, StardustCard card) {
 		super(state);
 		if (card == null) throw new NullPointerException();
@@ -30,6 +40,12 @@ public class StardustState extends CardState {
 		this.awaiting = new ArrayList<>(state.getOrder(CardOrder.NORMAL));
 	}
 
+	/**
+	 * Called when the card state is initialized.
+	 * Resets power for all players ships.
+	 *
+	 * @param new_state {@link ClientState} The new client state to broadcast to all connected listeners.
+	 */
 	@Override
 	public void init(ClientState new_state) {
 		super.init(new_state);
@@ -39,6 +55,12 @@ public class StardustState extends CardState {
 		}
 	}
 
+	/**
+	 * Validates the {@link ServerMessage} and if everyone motioned to progress, applies the {@link OpenSpaceCard} effect.
+	 *
+	 * @param message {@link ServerMessage} The message received from the player
+	 * @throws ForbiddenCallException if the message is not allowed
+	 */
 	@Override
 	public void validate(ServerMessage message) throws ForbiddenCallException {
 		message.receive(this);
@@ -62,6 +84,11 @@ public class StardustState extends CardState {
 				tmp);
 	}
 
+	/**
+	 * Called when a {@link Player} attempts to progress their turn.
+	 *
+	 * @param p {@link Player} The player
+	 */
 	@Override
 	public void progressTurn(Player p) {
 		if (!this.awaiting.contains(p)) {
@@ -73,12 +100,23 @@ public class StardustState extends CardState {
 		this.awaiting.remove(p);
 	}
 
+	/**
+	 * Computes and returns the next {@code CardState}.
+	 *
+	 * @return {@link CardState} the next state, or {@code null} if the card is exhausted
+	 */
 	@Override
 	public CardState getNext() {
 		Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Card exhausted, moving to a new one!");
 		return null;
 	}
 
+	/**
+	 * Called when a {@link Player} disconnects.
+	 *
+	 * @param p {@link Player} The player disconnecting.
+	 * @throws ForbiddenCallException when the state refuses the action.
+	 */
 	@Override
 	public void disconnect(Player p) throws ForbiddenCallException {
 		this.awaiting.remove(p);

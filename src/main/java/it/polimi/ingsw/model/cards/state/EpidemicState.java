@@ -1,12 +1,9 @@
 package it.polimi.ingsw.model.cards.state;
 
-import it.polimi.ingsw.controller.client.ClientController;
 import it.polimi.ingsw.exceptions.PlayerNotFoundException;
 import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
-import it.polimi.ingsw.model.cards.AbandonedStationCard;
-import it.polimi.ingsw.model.cards.CombatZoneCard;
 import it.polimi.ingsw.model.cards.EpidemicCard;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.cards.utils.CardOrder;
@@ -47,7 +44,7 @@ public class EpidemicState extends CardState {
 	 * Called when the card state is initialized.
 	 * Resets power for all players ships.
 	 *
-	 * @param new_state {@link ClientController} The new client state to broadcast to all connected listeners.
+	 * @param new_state {@link ClientState} The new client state to broadcast to all connected listeners.
 	 */
 	@Override
 	public void init(ClientState new_state) {
@@ -59,7 +56,7 @@ public class EpidemicState extends CardState {
 	}
 
 	/**
-	 *
+	 * Validates the {@link ServerMessage} and if everyone has motioned to progress, applies the {@link EpidemicCard} and trasntions.
 	 *
 	 * @param message {@link ServerMessage} The message received from the player
 	 * @throws ForbiddenCallException if the message is not allowed
@@ -108,7 +105,7 @@ public class EpidemicState extends CardState {
 	/**
 	 * Computes and returns the next {@code CardState}.
 	 *
-	 * @return the next state, or {@code null} if the card is exhausted
+	 * @return {@link CardState} The next state, or {@code null} if the card is exhausted
 	 */
 	@Override
 	public CardState getNext() {

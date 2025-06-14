@@ -1,6 +1,5 @@
 package it.polimi.ingsw.model.cards.state;
 
-import it.polimi.ingsw.controller.client.ClientController;
 import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
@@ -49,7 +48,7 @@ class MeteorSelectShipState extends CardState {
 	 * Called when the card state is initialized.
 	 * Resets power for all players ships.
 	 *
-	 * @param new_state {@link ClientController} The new client state to broadcast to all connected listeners.
+	 * @param new_state {@link ClientState} The new client state to broadcast to all connected listeners.
 	 */
 	@Override
 	public void init(ClientState new_state) {
@@ -58,7 +57,7 @@ class MeteorSelectShipState extends CardState {
 	}
 
 	/**
-	 *
+	 * Validates the {@link ServerMessage} and if everyone that was split chose a blob, transitions.
 	 *
 	 * @param message {@link ServerMessage} The message received from the player
 	 * @throws ForbiddenCallException if the message is not allowed
@@ -89,7 +88,7 @@ class MeteorSelectShipState extends CardState {
 	/**
 	 * Computes and returns the next {@code CardState}.
 	 *
-	 * @return the next state, or {@code null} if the card is exhausted
+	 * @return {@link CardState} The next state, or {@code null} if the card is exhausted
 	 */
 	@Override
 	public CardState getNext() {

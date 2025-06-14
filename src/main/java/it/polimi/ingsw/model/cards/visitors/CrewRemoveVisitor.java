@@ -7,6 +7,9 @@ import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
 import it.polimi.ingsw.model.components.visitors.ComponentVisitor;
 import it.polimi.ingsw.model.player.SpaceShip;
 
+/**
+ * Visitor used to remove crew from any types of {@link CabinComponent}.
+ */
 public class CrewRemoveVisitor implements ComponentVisitor {
 
 	private final SpaceShip ship;
@@ -16,6 +19,12 @@ public class CrewRemoveVisitor implements ComponentVisitor {
 		this.ship = ship;
 	}
 
+	/**
+	 * Tries to remove crew from a {@link CabinComponent}.
+	 * 
+	 * @param c {@link StartingCabinComponent} Component to visit.
+	 * @throws IllegalTargetException if the {@link CabinComponent} doesn't contain any crew.
+	 */
 	@Override
 	public void visit(CabinComponent c) {
 		if (c.getCrew() == 0) throw new IllegalTargetException("Coords don't correspond to a inhabited cabin");
@@ -24,46 +33,76 @@ public class CrewRemoveVisitor implements ComponentVisitor {
 		ship.updateShip();
 	}
 
+	/**
+	 * @throws IllegalTargetException always
+	 */
 	@Override
 	public void visit(EngineComponent c) {
 		throw new IllegalTargetException("Coords don't correspond to a cabin");
 	}
 
+	/**
+	 * @throws IllegalTargetException always
+	 */
 	@Override
 	public void visit(AlienLifeSupportComponent c) {
 		throw new IllegalTargetException("Coords don't correspond to a cabin");
 	}
 
+	/**
+	 * @throws IllegalTargetException always
+	 */
 	@Override
 	public void visit(CannonComponent c) {
 		throw new IllegalTargetException("Coords don't correspond to a cabin");
 	}
 
+	/**
+	 * @throws IllegalTargetException always
+	 */
 	@Override
 	public void visit(StorageComponent c) {
 		throw new IllegalTargetException("Coords don't correspond to a cabin");
 	}
 
+	/**
+	 * @throws IllegalTargetException always
+	 */
 	@Override
 	public void visit(BatteryComponent c) {
 		throw new IllegalTargetException("Coords don't correspond to a cabin");
 	}
 
+	/**
+	 * @throws IllegalTargetException always
+	 */
 	@Override
 	public void visit(ShieldComponent c) {
 		throw new IllegalTargetException("Coords don't correspond to a cabin");
 	}
 
+	/**
+	 * @throws IllegalTargetException always
+	 */
 	@Override
 	public void visit(EmptyComponent c) {
 		throw new IllegalTargetException("Coords don't correspond to a cabin");
 	}
 
+	/**
+	 * @throws IllegalTargetException always
+	 */
 	@Override
 	public void visit(StructuralComponent c) {
 		throw new IllegalTargetException("Coords don't correspond to a cabin");
 	}
 
+	/**
+	 * Tries to remove crew from a {@link StartingCabinComponent}.
+	 * 
+	 * @param c {@link StartingCabinComponent} Component to visit.
+	 * @throws IllegalTargetException if the {@link StartingCabinComponent} doesn't contain any crew.
+	 */
 	@Override
 	public void visit(StartingCabinComponent c) {
 		if (c.getCrew() == 0) throw new IllegalTargetException("Coords don't correspond to a inhabited cabin");

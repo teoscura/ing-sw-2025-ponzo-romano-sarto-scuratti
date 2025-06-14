@@ -25,6 +25,9 @@ public class MeteorSwarmCard extends Card {
 		this.meteorites = meteorites;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public CardState getState(VoyageState state) {
 		return new MeteorAnnounceState(state, this.getId(), meteorites);

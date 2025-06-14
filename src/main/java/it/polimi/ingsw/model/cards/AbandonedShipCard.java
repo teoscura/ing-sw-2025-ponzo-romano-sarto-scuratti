@@ -27,6 +27,9 @@ public class AbandonedShipCard extends Card {
 		this.credits_gained = credits_gained;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public CardState getState(VoyageState state) {
 		return new AbandonedShipAnnounceState(state, this, state.getOrder(CardOrder.NORMAL));

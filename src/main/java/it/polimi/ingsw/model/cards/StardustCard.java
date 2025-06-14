@@ -20,6 +20,9 @@ public class StardustCard extends Card {
 		super(id, 0);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public CardState getState(VoyageState state) {
 		return new StardustState(state, this);

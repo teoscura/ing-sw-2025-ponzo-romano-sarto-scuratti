@@ -40,6 +40,9 @@ public class SmugglersCard extends Card {
 		this.min_power = min_power;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public CardState getState(VoyageState state) {
 		return new SmugglersAnnounceState(state, this, new ArrayList<>(state.getOrder(CardOrder.NORMAL)));

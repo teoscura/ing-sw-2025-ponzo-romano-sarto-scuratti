@@ -28,6 +28,9 @@ public class CombatZoneCard extends Card {
 		this.shots = shots;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public CardState getState(VoyageState state) {
 		return new CombatZoneAnnounceState(state, this.getId(), sections, shots);

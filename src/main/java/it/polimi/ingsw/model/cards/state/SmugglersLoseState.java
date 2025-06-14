@@ -19,7 +19,9 @@ import it.polimi.ingsw.utils.Logger;
 import it.polimi.ingsw.utils.LoggerLevel;
 
 import java.util.ArrayList;
-
+/**
+ * Class representing the Lose State of the {@link SmugglersCard}.
+ */
 public class SmugglersLoseState extends CardState {
 
 	private final SmugglersCard card;
@@ -27,6 +29,13 @@ public class SmugglersLoseState extends CardState {
 	private final int[] required;
 	private boolean responded = false;
 
+	/**
+	 * Construct a {@link SmugglersLoseState} object.
+	 * 
+	 * @param state {@link VoyageState} The current voyage state
+	 * @param card  {@link SmugglersCard} The card being played.
+	 * @param list  List of {@link Player} players in order of distance.
+	 */
 	public SmugglersLoseState(VoyageState state, SmugglersCard card, ArrayList<Player> list) {
 		super(state);
 		if (state == null || card == null || list == null || list.size() > this.state.getCount().getNumber() || list.size() < 1)
@@ -44,6 +53,12 @@ public class SmugglersLoseState extends CardState {
 		}
 	}
 
+	/**
+	 * Called when the card state is initialized.
+	 * Resets power for all players ships.
+	 *
+	 * @param new_state {@link ClientState} The new client state to broadcast to all connected listeners.
+	 */
 	@Override
 	public void init(ClientState new_state) {
 		super.init(new_state);
@@ -57,6 +72,12 @@ public class SmugglersLoseState extends CardState {
 		if (total == 0) this.transition();
 	}
 
+	/**
+	 * Validates the {@link ServerMessage} and if the front of the remaining player list has removed the needed cargo, transition.
+	 *
+	 * @param message {@link ServerMessage} The message received from the player
+	 * @throws ForbiddenCallException if the message is not allowed
+	 */
 	@Override
 	public void validate(ServerMessage message) throws ForbiddenCallException {
 		message.receive(this);
@@ -76,6 +97,11 @@ public class SmugglersLoseState extends CardState {
 		);
 	}
 
+	/**
+	 * Computes and returns the next {@code CardState}.
+	 *
+	 * @return {@link CardState} the next state, or {@code null} if the card is exhausted
+	 */
 	@Override
 	public CardState getNext() {
 		if (this.list.getFirst().getDisconnected()) {
@@ -90,6 +116,14 @@ public class SmugglersLoseState extends CardState {
 		return null;
 	}
 
+	/**
+	 * Called when a {@link Player} tries to discard cargo.
+	 *
+	 * @param p {@link Player} The player
+	 * @param type {@link ShipmentType} The cargo type
+	 * @param coords {@link ShipCoords} the coordinates of the target
+	 * @throws ForbiddenCallException when the state refuses the action.
+	 */
 	@Override
 	public void discardCargo(Player p, ShipmentType type, ShipCoords coords) {
 		if (!p.equals(this.list.getFirst())) {
@@ -147,6 +181,12 @@ public class SmugglersLoseState extends CardState {
 		this.responded = true;
 	}
 
+	/**
+	 * Called when a {@link Player} disconnects.
+	 *
+	 * @param p {@link Player} The player disconnecting.
+	 * @throws ForbiddenCallException when the state refuses the action.
+	 */
 	@Override
 	public void disconnect(Player p) throws ForbiddenCallException {
 		if (this.list.getFirst().equals(p)) {

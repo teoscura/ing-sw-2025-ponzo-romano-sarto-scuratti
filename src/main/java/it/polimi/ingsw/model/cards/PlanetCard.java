@@ -33,6 +33,9 @@ public class PlanetCard extends Card {
 		this.left = planets.length;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public CardState getState(VoyageState state) {
 		return new PlanetAnnounceState(state, this, new ArrayList<>(state.getOrder(CardOrder.NORMAL)));

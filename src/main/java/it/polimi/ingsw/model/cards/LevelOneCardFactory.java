@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
+/**
+ * Factory for level one flight cards.
+ */
 public class LevelOneCardFactory implements iCardFactory {
 
 	private final HashMap<Integer, iCard> cards;
@@ -105,6 +108,9 @@ public class LevelOneCardFactory implements iCardFactory {
 		}};
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public iCard getCard(int id) {
 		if (!this.cards.containsKey(id)) throw new IllegalArgumentException("Non valid card id.");

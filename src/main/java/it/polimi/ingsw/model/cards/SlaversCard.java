@@ -33,6 +33,9 @@ public class SlaversCard extends Card {
 		this.credits = credits;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public CardState getState(VoyageState state) {
 		return new SlaversAnnounceState(state, this, new ArrayList<>(state.getOrder(CardOrder.NORMAL)));
