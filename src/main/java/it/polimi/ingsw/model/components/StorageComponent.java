@@ -114,7 +114,7 @@ public class StorageComponent extends BaseComponent {
 
 	/**
 	 * This removes the Storage Component's coordinates from the {@link SpaceShip}
-	 * @param ship  {@link SpaceShip} to which you want to remove the Storage component
+	 * @param ship {@link SpaceShip} to which you want to remove the Storage component
 	 */
 	@Override
 	public void onDelete(SpaceShip ship) {

@@ -92,7 +92,7 @@ public class BatteryComponent extends BaseComponent {
 
 	/**
 	 * This adds the Battery Component's coordinates to the {@link SpaceShip}
-	 * @param ship  {@link SpaceShip} to which you want to add the battery component
+	 * @param ship {@link SpaceShip} to which you want to add the battery component
 	 */
 	@Override
 	public void onCreation(SpaceShip ship, ShipCoords coords) {
@@ -102,7 +102,7 @@ public class BatteryComponent extends BaseComponent {
 
 	/**
 	 * This removes the Battery Component's coordinates from the {@link SpaceShip}
-	 * @param ship  {@link SpaceShip} to which you want to remove the battery component
+	 * @param ship {@link SpaceShip} to which you want to remove the battery component
 	 */
 	@Override
 	public void onDelete(SpaceShip ship) {

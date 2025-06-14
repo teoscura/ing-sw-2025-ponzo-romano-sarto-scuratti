@@ -1,5 +1,8 @@
 package it.polimi.ingsw.model;
 
+/**
+ * Enumeration representing all allowed lobby sizes.
+ */
 public enum PlayerCount {
 	TWO(2),
 	THREE(3),

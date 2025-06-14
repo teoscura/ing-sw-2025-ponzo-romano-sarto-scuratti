@@ -2,6 +2,9 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.player.ShipCoords;
 
+/**
+ * Enumeration containing the values and settings for all supported Game Modes.
+ */
 public enum GameModeType {
 	TEST(1, false, 5, 7, 18, 4, 10, 5, 9, 8),
 	LVL2(2, true, 5, 7, 24, 4, 10, 5, 9, 12);

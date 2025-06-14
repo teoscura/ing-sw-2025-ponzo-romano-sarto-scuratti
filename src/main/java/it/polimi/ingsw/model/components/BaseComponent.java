@@ -79,7 +79,7 @@ public abstract class BaseComponent implements Serializable {
 	 * Verifies the component is properly connected to its neighbours.
 	 * 
 	 * @param ship {@link SpaceShip} Ship from which the component retrieves its neighbours.
-	 * @return whether the component is properly connected or not.
+	 * @return Whether the component is properly connected or not.
 	 */
 	public boolean verify(SpaceShip ship) {
 		if (this.coords == null) throw new NullPointerException("Coords are not set");
@@ -108,8 +108,8 @@ public abstract class BaseComponent implements Serializable {
 	/**
 	 * Returns the connector at a specific direction of the component, given the rotation of the component inside the ship
 	 *
-	 * @param direction
-	 * @return connector
+	 * @param direction {@link ComponentRotation} Rotation requested.
+	 * @return {@link ConnectorType} Connector at that specific rotation.
 	 */
 	public ConnectorType getConnector(ComponentRotation direction) {
 		int shift = direction.getShift() + (4 - this.rotation.getShift());
@@ -124,7 +124,6 @@ public abstract class BaseComponent implements Serializable {
 		return this.coords;
 	}
 
-
 	/**
 	 * @return Whether the component can be powered or not.
 	 */
@@ -132,10 +131,22 @@ public abstract class BaseComponent implements Serializable {
 		return false;
 	}
 
+	/**
+	 * Logic when component is placed in {@link SpaceShip ship}.
+	 * @param ship {@link SpaceShip} Ship where the component was placed.
+	 * @param coords {@link ShipCoords} Coordinates where it was placed.
+	 */
 	public abstract void onCreation(SpaceShip ship, ShipCoords coords);
 
+	/**
+	 * Logic when component is removed from {@link SpaceShip ship}.
+	 * @param ship {@link SpaceShip} Ship where the component was placed.
+	 */
 	public abstract void onDelete(SpaceShip ship);
 
+	/**
+	 * @return {@link ClientComponent }
+	 */
 	public abstract ClientComponent getClientComponent();
 
 	/**
@@ -148,8 +159,8 @@ public abstract class BaseComponent implements Serializable {
 	/**
 	 * Checks if adjacent components have compatible connectors, if true adds component to an array
 	 *
-	 * @param ship
-	 * @return res: array of components
+	 * @param ship {@link SpaceShip} Ship to retrieve connected components.
+	 * @return Array of {@link BaseComponent} guaranteed to be connected to this.
 	 */
 	public BaseComponent[] getConnectedComponents(SpaceShip ship) {
 		BaseComponent[] res = new BaseComponent[]{ship.getEmpty(), ship.getEmpty(), ship.getEmpty(), ship.getEmpty()};

@@ -1,5 +1,8 @@
 package it.polimi.ingsw.model.components.enums;
 
+/**
+ * Enumeration that specifies the supported types of {@link EngineComponent} in this implementation of Galaxy Trucker.
+ */
 public enum EngineType {
 	SINGLE(1, false),
 	DOUBLE(2, true);

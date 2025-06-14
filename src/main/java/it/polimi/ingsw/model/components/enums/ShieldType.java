@@ -1,5 +1,8 @@
 package it.polimi.ingsw.model.components.enums;
 
+/**
+ * Enumeration that specifies the supported types of {@link ShieldComponent} in this implementation of Galaxy Trucker.
+ */
 public enum ShieldType {
 	NE(true, true, false, false),
 	SE(false, true, true, false),

@@ -1,5 +1,8 @@
 package it.polimi.ingsw.model.components.enums;
 
+/**
+ * Enumeration that specifies the supported types of cargo in this implementation of Galaxy Trucker.
+ */
 public enum ShipmentType {
 	RED(true, 4),     //4 - Special
 	YELLOW(false, 3),  //3 - Normal

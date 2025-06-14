@@ -11,7 +11,7 @@ import java.io.Serializable;
 /**
  * <h2>Player</h2>
  * <p>
- * Represents a player im the game.
+ * Represents a player in the game.
  * Each player has a username, color, a spaceship, credits, score,
  * and state flags for retirement and disconnection.
  * </p>
@@ -47,7 +47,7 @@ public class Player implements Serializable {
 
 	/**
 	 * Returns the color assigned to the player.
-	 * @return the player's color
+	 * @return {@link PlayerColor} The player's color.
 	 */
 	public PlayerColor getColor() {
 		return this.color;
@@ -56,7 +56,7 @@ public class Player implements Serializable {
 	/**
 	 * Marks the player as retired.
 	 * Adds all current credits to the score, and half the value of stored cargo.
-	 * @throws AlreadyPoweredException if the player is already retired
+	 * @throws AlreadyPoweredException if the player is already retired.
 	 */
 	public void retire() {
 		if (this.retired) throw new AlreadyPoweredException("Player: has alredy retired.");
@@ -71,7 +71,7 @@ public class Player implements Serializable {
 
 	/**
 	 * Checks whether the player has retired.
-	 * @return {@code true} if retired, {@code false} otherwise
+	 * @return {@code true} if retired, {@code false} otherwise.
 	 */
 	public boolean getRetired() {
 		return this.retired;
@@ -79,16 +79,16 @@ public class Player implements Serializable {
 
 	/**
 	 * Reconnects the player to the game.
-	 * @throws AlreadyPoweredException if the player is already connected
+	 * @throws AlreadyPoweredException if the player is already connected.
 	 */
 	public void reconnect() {
-		if (!this.disconnected) throw new AlreadyPoweredException("Player: is alread y connected.");
+		if (!this.disconnected) throw new AlreadyPoweredException("Player: is already connected.");
 		this.disconnected = false;
 	}
 
 	/**
 	 * Disconnects the player from the game.
-	 * @throws AlreadyPoweredException if already disconnected
+	 * @throws AlreadyPoweredException if already disconnected.
 	 */
 	public void disconnect() {
 		if (this.disconnected) throw new AlreadyPoweredException("Player: has already disconnected.");
@@ -97,16 +97,16 @@ public class Player implements Serializable {
 
 	/**
 	 * Checks whether the player is currently disconnected.
-	 * @return {@code true} if disconnected
+	 * @return {@code true} if disconnected.
 	 */
 	public boolean getDisconnected() {
 		return this.disconnected;
 	}
-/*
+	/**
 	 * Increases the player's credits by a given amount.
-	 * @param amount credits to be added (must be positive)
-	 * @return new credit total
-	 * @throws IllegalArgumentException if amount is zero or negative
+	 * @param amount Credits to be added (must be positive).
+	 * @return The new credit total.
+	 * @throws IllegalArgumentException if amount is zero or negative.
 	 */
 	public void giveCredits(int amount) {
 		this.credits += amount;
@@ -121,14 +121,6 @@ public class Player implements Serializable {
 	}
 
 	/**
-	 * Adds the given amount to the player's score.
-	 * @param rel_change points to add
-	 */
-	/**
-	 * Returns the player's current score.
-	 * @return score
-	 */
-	/**
 	 * Calculates and applies the final score at the end of the game.
 	 * Adds score from cargo and remaining credits.
 	 */
@@ -141,7 +133,7 @@ public class Player implements Serializable {
 
 	/**
 	 * Reconnects the player using a new {@link ClientDescriptor}.
-	 * @param new_descriptor the new descriptor to bind
+	 * @param new_descriptor {@link ClientDescriptor} the new descriptor to bind.
 	 */
 	public void reconnect(ClientDescriptor new_descriptor) {
 		this.bindDescriptor(new_descriptor);
@@ -150,7 +142,7 @@ public class Player implements Serializable {
 
 	/**
 	 * Returns the player's spaceship.
-	 * @return {@link SpaceShip} instance
+	 * @return {@link SpaceShip} instance.
 	 */
 	public SpaceShip getSpaceShip() {
 		return this.ship;
@@ -159,7 +151,7 @@ public class Player implements Serializable {
 	/**
 	 * Binds a {@link ClientDescriptor} to the player.
 	 * Used during login or reconnection.
-	 * @param descriptor the client descriptor to bind
+	 * @param descriptor {@link ClientDescriptor} the client descriptor to bind.
 	 */
 	public void bindDescriptor(ClientDescriptor descriptor) {
 		this.descriptor = descriptor;
@@ -167,7 +159,7 @@ public class Player implements Serializable {
 
 	/**
 	 * Returns the {@link ClientDescriptor} bound to the player.
-	 * @return descriptor
+	 * @return {@link ClientDescriptor} Descriptor.
 	 */
 	public ClientDescriptor getDescriptor() {
 		return this.descriptor;
@@ -176,8 +168,8 @@ public class Player implements Serializable {
 	/**
 	 * Returns a formatted string with voyage information:
 	 * position, score, credits, engine power, cannon power, crew, battery level.
-	 * @param planche the {@link iPlanche} containing position information
-	 * @return string describing the player's current state in the voyage
+	 * @param planche the {@link iPlanche} containing position information.
+	 * @return string describing the player's current state in the voyage.
 	 */
 	public String voyageInfo(iPlanche planche) {
 		return "[Player: '" + username + "'] Planche position: " + planche.getPlayerPosition(this) + " | Credits: " + credits + " | Engine: " + ship.getEnginePower() + " | Cannon: " + ship.getCannonPower() + " | Crew: " + ship.getTotalCrew() + " | Battery: " + ship.getEnergyPower();
@@ -185,8 +177,8 @@ public class Player implements Serializable {
 
 	/**
 	 * Compares two players based on their username and color.
-	 * @param o the object to compare
-	 * @return {@code true} if same username and color, otherwise {@code false}
+	 * @param o the object to compare.
+	 * @return {@code true} if same username and color, otherwise {@code false}.
 	 */
 	@Override
 	public boolean equals(Object o) {

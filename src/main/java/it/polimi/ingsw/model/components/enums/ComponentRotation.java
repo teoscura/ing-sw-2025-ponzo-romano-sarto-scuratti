@@ -2,7 +2,9 @@ package it.polimi.ingsw.model.components.enums;
 
 import it.polimi.ingsw.model.cards.utils.ProjectileDirection;
 
-//Defined clockwise; Up is zero.
+/**
+ * Enumeration that specifies all possible rotations of a component, starting up moving 90 degrees clockwise
+ */
 public enum ComponentRotation {
 	U000(0),
 	U090(1),

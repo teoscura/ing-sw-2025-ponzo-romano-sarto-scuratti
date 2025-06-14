@@ -1,5 +1,8 @@
 package it.polimi.ingsw.model.components.enums;
 
+/**
+ * Enumeration that specifies the supported types of {@link CannonComponent} in this implementation of Galaxy Trucker.
+ */
 public enum CannonType {
 	SINGLE(1f, false),
 	DOUBLE(2f, true);

@@ -53,7 +53,7 @@ public class EngineComponent extends BaseComponent {
 	}
 
 	/**Verify that there isn't a component under the Engine Component
-	 * @param ship  {@link SpaceShip}
+	 * @param ship {@link SpaceShip} Ship to retrieve the component under it.
 	 * @return {@code true} if the cell below is empty, {@code false} otherwise
 	 */
 	@Override
@@ -72,7 +72,7 @@ public class EngineComponent extends BaseComponent {
 	}
 
 	/**
-	 * Turn on the engine component
+	 * Turn on the engine component.
 	 *
 	 * @throws AlreadyPoweredException if the engine is already powered
 	 * @throws UnpowerableException if the engine is unpowerable
@@ -99,14 +99,17 @@ public class EngineComponent extends BaseComponent {
 		return this.max_power;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean powerable() {
 		return true;
-	} //redundant
+	}
 
 	/**
 	 * This adds the Engine Component's coordinates to the {@link SpaceShip}
-	 * @param ship  {@link SpaceShip} to which you want to add the Engine component
+	 * @param ship {@link SpaceShip} to which you want to add the Engine component
 	 */
 	@Override
 	public void onCreation(SpaceShip ship, ShipCoords coords) {
@@ -116,7 +119,7 @@ public class EngineComponent extends BaseComponent {
 
 	/**
 	 * This removes the Engine Component's coordinates from the {@link SpaceShip}
-	 * @param ship  {@link SpaceShip} to which you want to remove the Engine component
+	 * @param ship {@link SpaceShip} to which you want to remove the Engine component
 	 */
 	@Override
 	public void onDelete(SpaceShip ship) {
