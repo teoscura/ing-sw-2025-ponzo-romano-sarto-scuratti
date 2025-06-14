@@ -35,6 +35,9 @@ public enum ComponentRotation {
 		return this.shift;
 	}
 
+	/**
+	 * @return {@link ComponentRotation} The opposite pointing rotation.
+	 */
 	public ComponentRotation getOpposite() {
 		switch (this.shift) {
 			case 0:

@@ -54,6 +54,12 @@ public class SpaceShip implements Serializable {
 	private double cannon_power = 0;
 	private int engine_power = 0;
 
+	/**
+	 * Constructs a {@link SpaceShip} object.
+	 * 
+	 * @param type {@link GameModeType} Type of the ship.
+	 * @param player {@link Player} Player it belongs to.
+	 */
 	public SpaceShip(GameModeType type,
 					 Player player) {
 		this.player = player;
@@ -89,26 +95,24 @@ public class SpaceShip implements Serializable {
 		this.updateShip();
 	}
 
-	/**
-	 * Returns the game mode used to initialize the ship (which defines ship size and shape).
-	 * @return the game mode type
-	 */
 	public GameModeType getType() {
 		return this.type;
 	}
 
 	/**
 	 * Returns the count of crew members by type (index 0 = human, 1 = brown, 2 = purple).
-	 * @return an array of crew counts
+	 * 
+	 * @return An array of crew counts.
 	 */
 	public int[] getCrew() {
 		return this.crew;
 	}
 
 	/**
-	 * Performs a verification of all components in the ship.
-	 * Returns a 2D matrix with each component's status.
-	 * @return verification result grid
+	 * Performs a bulk verification of all components in the ship.
+	 * Returns a 2D matrix of {@link VerifyResult}.
+	 * 
+	 * @return Verification result grid.
 	 */
 	public VerifyResult[][] bulkVerify() {
 		VerifyResult[][] res = new VerifyResult[this.type.getHeight()][this.type.getWidth()];
@@ -130,7 +134,8 @@ public class SpaceShip implements Serializable {
 
 	/**
 	 * Returns {@code true} if no broken components are found.
-	 * @return overall ship integrity status
+	 * 
+	 * @return Overall ship integrity status.
 	 */
 	public boolean bulkVerifyResult() {
 		var t = bulkVerify();
@@ -144,7 +149,8 @@ public class SpaceShip implements Serializable {
 
 	/**
 	 * Returns the number of distinct component blobs (connected groups).
-	 * @return blob count
+	 * 
+	 * @return Number of blobs.
 	 */
 	public int getBlobsSize() {
 		this.updateShipBlobs();
@@ -152,8 +158,8 @@ public class SpaceShip implements Serializable {
 	}
 
 	/**
-	 * Updates the internal "blob" structure of the ship.
-	 * Blobs are sets of connected valid components.
+	 * Updates the list of "blobs" composing the {@link SpaceShip}.
+	 * Blobs are sets of connected {@link BaseComponent components}.
 	 */
 	public void updateShipBlobs() {
 		ArrayList<ArrayList<ShipCoords>> res = new ArrayList<>();
@@ -172,7 +178,13 @@ public class SpaceShip implements Serializable {
 		this.blobs = res;
 	}
 
-
+	/**
+	 * Utility method, uses a BFS to build a list of {@link ShipCoords coordinates} pointing to all {@link BaseComponent components} part of the same blob.
+	 * 
+	 * @param map Matrix of {@link VerifyResult} used to check which {@link ShipCoords coordinates} were already visited.
+	 * @param starting_point {@link ShipCoords} Starting point of the BFS.
+	 * @return ArrayList of {@link ShipCoords} containting all {@link ShipCoords coordinates} of all blob {@link BaseComponent components}. 
+	 */
 	private ArrayList<ShipCoords> verifyBlob(VerifyResult[][] map, ShipCoords starting_point) {
 		ArrayList<ShipCoords> res = new ArrayList<>();
 		Queue<ShipCoords> queue = new ArrayDeque<>();
@@ -193,11 +205,11 @@ public class SpaceShip implements Serializable {
 	}
 
 	/**
-	 * Forces selection of one blob as the active ship structure.
-	 * All others are discarded.
-	 * @param blob_coord coordinate belonging to the blob to keep
-	 * @throws ForbiddenCallException if only one blob exists
-	 * @throws IllegalTargetException if the coordinates are invalid
+	 * Selects a blob from {@link SpaceShip} containing the specified {@link ShipCoords coordinate}, discarding all other {@link BaseComponent components} contained in other blobs.
+	 * 
+	 * @param blob_coord {@link ShipCoords} Coordinate belonging to the blob to keep.
+	 * @throws ForbiddenCallException if only one blob exists.
+	 * @throws IllegalTargetException if the coordinates are invalid.
 	 */
 	public void selectShipBlob(ShipCoords blob_coord) throws ForbiddenCallException {
 		updateShipBlobs();
@@ -218,11 +230,12 @@ public class SpaceShip implements Serializable {
 	}
 
 	/**
-	 * Adds a component to the ship at the specified coordinates.
-	 * @param component the component to add
-	 * @param coords location to place it
-	 * @throws IllegalComponentAdd if the location is illegal or occupied
-	 * @throws IllegalTargetException if not adjacent to any existing component
+	 * Adds a {@link BaseComponent component} to the {@link SpaceShip} at the specified {@link ShipCoords coordinates}.
+	 * 
+	 * @param component {@link BaseComponent} The component to add.
+	 * @param coords {@link ShipCoords} The location to place it.
+	 * @throws IllegalComponentAdd if the location is illegal or occupied.
+	 * @throws IllegalTargetException if not adjacent to any existing component.
 	 */
 	public void addComponent(BaseComponent component, ShipCoords coords) {
 		if (coords == null) throw new NullPointerException();
@@ -248,9 +261,10 @@ public class SpaceShip implements Serializable {
 	}
 
 	/**
-	 * Removes the component at the given coordinates and updates the ship state.
-	 * @param coords coordinates of the component to remove
-	 * @throws IllegalTargetException if no component is present at the location
+	 * Removes the {@link BaseComponent component} at the given {@link ShipCoords coordinates} and updates the ship state.
+	 * 
+	 * @param coords {@link ShipCoords} Coordinates of the {@link BaseComponent component} to remove.
+	 * @throws IllegalTargetException if no {@link BaseComponent component} is present at the location.
 	 */
 	public void removeComponent(ShipCoords coords) {
 		if (coords == null) throw new NullPointerException();
@@ -265,7 +279,8 @@ public class SpaceShip implements Serializable {
 	}
 
 	/**
-	 * Updates the ship state based on the currently installed components.
+	 * Updates the ship state based on the currently installed {@link BaseComponent components}.
+	 * 
 	 * Calculates crew, power, containers, cannon power, engine power.
 	 */
 	public void updateShip() {
@@ -289,7 +304,7 @@ public class SpaceShip implements Serializable {
 	}
 
 	/**
-	 * Resets all powered components (e.g., cannons, engines) to their unpowered state.
+	 * Resets all powered {@link BaseComponent components} (e.g., cannons, engines) to their unpowered state.
 	 */
 	public void resetPower() {
 		EnergyVisitor v = new EnergyVisitor(false);
@@ -302,10 +317,10 @@ public class SpaceShip implements Serializable {
 	}
 
 	/**
-	 * Powers on a target component using a battery located at another coordinate.
-	 * @param coords_target the target component to power
-	 * @param battery_location the location of the battery
-	 * @throws IllegalTargetException if invalid component or battery
+	 * Powers on a target {@link BaseComponent component} using a battery located at another {@link ShipCoords coordinate}
+	 * @param coords_target {@link ShipCoords} Coordinates to the target {@link BaseComponent component}.
+	 * @param battery_location {@link ShipCoords} Coordinates to the battery {@link BaseComponent component}.
+	 * @throws IllegalTargetException if invalid component or battery {@link ShipCoords}.
 	 */
 	public void turnOn(ShipCoords coords_target, ShipCoords battery_location) {
 		if (coords_target == null) throw new NullPointerException();
@@ -322,10 +337,10 @@ public class SpaceShip implements Serializable {
 	}
 
 	/**
-	 * Returns the component at the specified coordinates.
-	 * @param coords location to retrieve
-	 * @return component instance
-	 * @throws OutOfBoundsException if coordinates are outside grid
+	 * Returns the {@link BaseComponent component} at the specified {@link ShipCoords coordinates}.
+	 * @param coords {@link ShipCoords} Location to retrieve.
+	 * @return {@link BaseComponent} Component Reference, corresponding to {@link SpaceShip#getEmpty()} if not set or invalid.
+	 * @throws OutOfBoundsException if {@link ShipCoords coordinates} are outside grid.
 	 */
 	public BaseComponent getComponent(ShipCoords coords) {
 		if (coords == null) throw new NullPointerException();
@@ -336,25 +351,18 @@ public class SpaceShip implements Serializable {
 		return this.components[coords.y][coords.x];
 	}
 
-	/**
-	 * Returns the ship's current total cannon power.
-	 * @return cannon power
-	 */
 	public double getCannonPower() {
 		return this.cannon_power;
 	}
 
-	/**
-	 * Returns the ship's current total engine power.
-	 * @return engine power
-	 */
 	public int getEnginePower() {
 		return this.engine_power;
 	}
 
 	/**
 	 * Returns the number of batteries present.
-	 * @return battery count
+	 * 
+	 * @return Battery count.
 	 */
 	public int getEnergyPower() {
 		return this.containers[0];
@@ -362,31 +370,34 @@ public class SpaceShip implements Serializable {
 
 	/**
 	 * Returns a boolean array indicating shield coverage in the 4 directions.
-	 * @return shield direction map
+	 * 
+	 * @return Array of booleans.
 	 */
 	public boolean[] getShieldedDirections() {
 		return this.shielded_directions;
 	}
 
 	/**
-	 * Returns the height of the ship grid.
-	 * @return height
+	 * Returns the height of the {@link SpaceShip ship}'s grid.
+	 * 
+	 * @return Height.
 	 */
 	public int getHeight() {
 		return this.type.getHeight();
 	}
 
 	/**
-	 * Returns the width of the ship grid.
-	 * @return width
+	 * Returns the width of the {@link SpaceShip ship}'s grid.
+	 * 
+	 * @return Width.
 	 */
 	public int getWidth() {
 		return this.type.getWidth();
 	}
 
 	/**
-	 * Returns the default empty component reference.
-	 * @return empty placeholder
+	 * Returns the {@link SpaceShip ship}'s reference to its {@link EmptyComponent}.
+	 * @return {@link BaseComponent} reference to owned {@link EmptyComponent}.
 	 */
 	public BaseComponent getEmpty() {
 		return this.empty;
@@ -442,7 +453,8 @@ public class SpaceShip implements Serializable {
 
 	/**
 	 * Returns the total number of crew members.
-	 * @return total crew
+	 * 
+	 * @return Total number of crew members.
 	 */
 	public int getTotalCrew() {
 		int sum = 0;
@@ -454,7 +466,8 @@ public class SpaceShip implements Serializable {
 
 	/**
 	 * Finds cabins that are connected to at least one other cabin.
-	 * @return list of connected cabins
+	 * 
+	 * @return ArrayList of {@link ShipCoords}, each one pointing to a {@link CabinComponent} that is adjacent to another {@link CabinComponent}.
 	 */
 	public ArrayList<ShipCoords> findConnectedCabins() {
 		ArrayList<ShipCoords> res = new ArrayList<>();
@@ -469,8 +482,9 @@ public class SpaceShip implements Serializable {
 	}
 
 	/**
-	 * Counts how many exposed connectors are not connected to other components.
-	 * @return number of exposed connectors
+	 * Counts how many exposed connectors are not connected to other {@link BaseComponent components}.
+	 * 
+	 * @return The number of exposed connectors.
 	 */
 	public int countExposedConnectors() {
 		int sum = 0;
@@ -496,9 +510,10 @@ public class SpaceShip implements Serializable {
 	}
 
 	/**
-	 * Handles an incoming meteorite based on direction and offset.
-	 * Applies shield logic and potentially removes components.
-	 * @param p meteor projectile
+	 * Handles an incoming meteorite based on its direction and offset.
+	 * Applies shield logic and potentially removes {@link BaseComponent}.
+	 * 
+	 * @param p {@link Projectile} Meteor to handle.
 	 */
 	public void handleMeteorite(Projectile p) {
 		//Normalize Roll and see if it grazes or is in a possible row.
@@ -527,8 +542,9 @@ public class SpaceShip implements Serializable {
 
 	/**
 	 * Handles a laser shot based on direction and offset.
-	 * Applies shield logic and removes first impacted component.
-	 * @param p laser projectile
+	 * Applies shield logic and removes first impacted component if not deflected or shielded.
+	 * 
+	 * @param p {@link Projectile} The projectile to handle.
 	 */
 	public void handleShot(Projectile p) {
 		//Normalize Roll and see if it grazes or is in a possible row.
@@ -542,7 +558,6 @@ public class SpaceShip implements Serializable {
 		if (tmp.equals(this.empty.getCoords())) return;
 		this.removeComponent(tmp);
 	}
-
 
 	private int normalizeRoll(ProjectileDirection direction, int roll) {
 		if (direction.getShift() % 2 == 0) {
@@ -565,7 +580,10 @@ public class SpaceShip implements Serializable {
 		return this.empty.getCoords();
 	}
 
-
+	/**
+	 * @param index Index of the column to fetch.
+	 * @return An Array of {@link BaseComponent} representing all components along a column of the {@link SpaceShip}.
+	 */
 	private BaseComponent[] constructCol(int index) {
 		//No validation needed, it's only used in getFirst.
 		BaseComponent[] res = new BaseComponent[this.type.getHeight()];
@@ -599,20 +617,18 @@ public class SpaceShip implements Serializable {
 
 	/**
 	 * Returns the current cargo quantities stored in the ship.
-	 * @return array with cargo values (by type)
+	 * 
+	 * @return Array of integers representing the total sum of each {@link ShipmentType}.
 	 */
 	public int[] getContains() {
 		return this.containers;
 	}
 
-	// public ShipCoords getCenter(){
-	// 	return this.center;
-	// }
-
 	/**
 	 * Checks if the provided coordinates belong to a cabin component.
-	 * @param coords coordinate to verify
-	 * @return {@code true} if it is a cabin, {@code false} otherwise
+	 * 
+	 * @param coords {@link ShipCoords} Coordinate to verify.
+	 * @return {@code true} if it is a cabin, {@code false} otherwise.
 	 */
 	public boolean isCabin(ShipCoords coords) {
 		if (coords == null) throw new NullPointerException();
@@ -622,7 +638,8 @@ public class SpaceShip implements Serializable {
 	/**
 	 * Converts the internal ship state to a serializable {@link ClientSpaceShip}
 	 * used for network transmission to clients.
-	 * @return a complete client-side representation of the ship
+	 * 
+	 * @return {@link ClientSpaceShip} A complete client-side representation of the ship
 	 */
 	public ClientSpaceShip getClientSpaceShip() {
 		ClientComponent[][] res = new ClientComponent[this.type.getHeight()][this.type.getWidth()];
