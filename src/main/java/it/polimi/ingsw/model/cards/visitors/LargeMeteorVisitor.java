@@ -2,9 +2,9 @@ package it.polimi.ingsw.model.cards.visitors;
 
 import it.polimi.ingsw.model.cards.utils.ProjectileDirection;
 import it.polimi.ingsw.model.components.*;
-import it.polimi.ingsw.model.components.visitors.iVisitor;
+import it.polimi.ingsw.model.components.visitors.ComponentVisitor;
 
-public class LargeMeteorVisitor implements iVisitor {
+public class LargeMeteorVisitor implements ComponentVisitor {
 
 	private final ProjectileDirection d;
 	private boolean found_cannon = false;

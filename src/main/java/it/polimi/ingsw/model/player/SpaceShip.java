@@ -79,8 +79,7 @@ public class SpaceShip implements Serializable {
 				ConnectorType.UNIVERSAL,
 				ConnectorType.UNIVERSAL},
 				ComponentRotation.U000,
-				player.getColor(),
-				center);
+				player.getColor());
 		scabin.onCreation(this, center);
 		this.components[center.y][center.x] = scabin;
 		this.updateShip();

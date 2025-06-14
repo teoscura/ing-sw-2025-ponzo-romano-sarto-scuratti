@@ -4,7 +4,7 @@ package it.polimi.ingsw.model.components.visitors;
 import it.polimi.ingsw.model.components.*;
 
 //This exists just to not do a `instanceof EmptySpace`.
-public class FreeSpaceVisitor implements iVisitor {
+public class FreeSpaceVisitor implements ComponentVisitor {
 
 	private boolean isfree = true;
 

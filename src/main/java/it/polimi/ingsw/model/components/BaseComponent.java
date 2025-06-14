@@ -5,14 +5,16 @@ import it.polimi.ingsw.model.client.components.ClientComponent;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ConnectorType;
 import it.polimi.ingsw.model.components.exceptions.ConnectorsSizeException;
-import it.polimi.ingsw.model.components.visitors.iVisitable;
-import it.polimi.ingsw.model.components.visitors.iVisitor;
+import it.polimi.ingsw.model.components.visitors.ComponentVisitor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.player.SpaceShip;
 
 import java.io.Serializable;
 
-public abstract class BaseComponent implements iVisitable, Serializable {
+/**
+ * Abstract class representing a server side component tile.
+ */
+public abstract class BaseComponent implements Serializable {
 
 	private final int id;
 	private final ConnectorType[] connectors;
@@ -30,6 +32,7 @@ public abstract class BaseComponent implements iVisitable, Serializable {
 		this.rotation = rotation;
 	}
 
+
 	protected BaseComponent(int id, ConnectorType[] connectors,
 							ComponentRotation rotation,
 							ShipCoords coords) {
@@ -44,45 +47,39 @@ public abstract class BaseComponent implements iVisitable, Serializable {
 	}
 
 
-	/**
-	 * Returns the unique id of the card
-	 *
-	 * @return id
-	 */
 	public int getID() {
 		return this.id;
 	}
 
 	/**
-	 * Return an array of 4 elements, representing the connectors clockwise starting from above the component
-	 *
-	 * @return connectors
+	 * @return Array of {@link ConnectorType}, one for each cardinal direction starting clockwise from the top.
 	 */
 	public ConnectorType[] getConnectors() {
 		return connectors;
 	}
 
-
 	/**
-	 * Returns the rotation of the component, given as the clockwise angle from the up position
-	 *
-	 * @return rotation
+	 * @return Rotation of the component, given as the clockwise angle from the up position
 	 */
 	public ComponentRotation getRotation() {
 		return rotation;
 	}
 
-
+	/**
+	 * Rotates the component.
+	 * 
+	 * @param rotation {@link ComponentRotation} New component rotation.
+	 */
 	public void rotate(ComponentRotation rotation) {
 		this.rotation = rotation;
 	}
 
 
 	/**
-	 * Checks each adjacent component in the 4 directions, verifies if the connectors on the adjacent sides are compatible with each other
-	 *
-	 * @param ship
-	 * @return true if no errors are found, false if at least one component is not connected correctly
+	 * Verifies the component is properly connected to its neighbours.
+	 * 
+	 * @param ship {@link SpaceShip} Ship from which the component retrieves its neighbours.
+	 * @return whether the component is properly connected or not.
 	 */
 	public boolean verify(SpaceShip ship) {
 		if (this.coords == null) throw new NullPointerException("Coords are not set");
@@ -129,28 +126,24 @@ public abstract class BaseComponent implements iVisitable, Serializable {
 
 
 	/**
-	 * @return if component is powerable, false unless specified otherwise
+	 * @return Whether the component can be powered or not.
 	 */
-
 	public boolean powerable() {
 		return false;
 	}
 
-
 	public abstract void onCreation(SpaceShip ship, ShipCoords coords);
 
-
 	public abstract void onDelete(SpaceShip ship);
-
 
 	public abstract ClientComponent getClientComponent();
 
 	/**
-	 * Calls the visitor on the component, action depends on the component found
+	 * Checks the component using the visitor provided.
 	 *
-	 * @param v
+	 * @param v {@link ComponentVisitor} Visitor to show component to.
 	 */
-	public abstract void check(iVisitor v);
+	public abstract void check(ComponentVisitor v);
 
 	/**
 	 * Checks if adjacent components have compatible connectors, if true adds component to an array

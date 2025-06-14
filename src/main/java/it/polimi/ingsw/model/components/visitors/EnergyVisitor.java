@@ -2,7 +2,7 @@ package it.polimi.ingsw.model.components.visitors;
 
 import it.polimi.ingsw.model.components.*;
 
-public class EnergyVisitor implements iVisitor {
+public class EnergyVisitor implements ComponentVisitor {
 
 	//If on turns on, if off turns off.
 	private boolean positive;

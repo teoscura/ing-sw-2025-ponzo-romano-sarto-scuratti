@@ -5,10 +5,10 @@ import it.polimi.ingsw.model.components.enums.ShipmentType;
 import it.polimi.ingsw.model.components.exceptions.ContainerFullException;
 import it.polimi.ingsw.model.components.exceptions.ContainerNotSpecialException;
 import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
-import it.polimi.ingsw.model.components.visitors.iVisitor;
+import it.polimi.ingsw.model.components.visitors.ComponentVisitor;
 import it.polimi.ingsw.model.player.SpaceShip;
 
-public class ContainsLoaderVisitor implements iVisitor {
+public class ContainsLoaderVisitor implements ComponentVisitor {
 
 	private final SpaceShip ship;
 	private final ShipmentType cargo;

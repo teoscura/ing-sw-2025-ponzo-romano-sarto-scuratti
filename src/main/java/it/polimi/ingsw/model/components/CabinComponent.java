@@ -12,7 +12,7 @@ import it.polimi.ingsw.model.components.enums.ConnectorType;
 import it.polimi.ingsw.model.components.exceptions.AlienTypeAlreadyPresentException;
 import it.polimi.ingsw.model.components.exceptions.UnsupportedAlienCabinException;
 import it.polimi.ingsw.model.components.visitors.CabinVisitor;
-import it.polimi.ingsw.model.components.visitors.iVisitor;
+import it.polimi.ingsw.model.components.visitors.ComponentVisitor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.player.SpaceShip;
 /**
@@ -41,8 +41,11 @@ public class CabinComponent extends BaseComponent {
 		super(id, connectors, rotation, coords);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
-	public void check(iVisitor v) {
+	public void check(ComponentVisitor v) {
 		v.visit(this);
 	}
 
@@ -102,6 +105,9 @@ public class CabinComponent extends BaseComponent {
 		ship.delCabinCoords(this.coords);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public ClientComponent getClientComponent() {
 		return new ClientCabinComponentDecorator(new ClientBaseComponent(getID(), getRotation(), getConnectors()), crew_type, crew_number, false);

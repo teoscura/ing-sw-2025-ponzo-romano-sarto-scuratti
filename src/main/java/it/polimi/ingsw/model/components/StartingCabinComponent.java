@@ -9,7 +9,7 @@ import it.polimi.ingsw.model.client.components.ClientComponent;
 import it.polimi.ingsw.model.components.enums.AlienType;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ConnectorType;
-import it.polimi.ingsw.model.components.visitors.iVisitor;
+import it.polimi.ingsw.model.components.visitors.ComponentVisitor;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.player.SpaceShip;
@@ -46,9 +46,12 @@ public class StartingCabinComponent extends BaseComponent {
 		this.color = color;
 		this.crew_number = 2;
 	}
-
+	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
-	public void check(iVisitor v) {
+	public void check(ComponentVisitor v) {
 		v.visit(this);
 	}
 
@@ -102,6 +105,9 @@ public class StartingCabinComponent extends BaseComponent {
 		ship.delCabinCoords(this.coords);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public ClientComponent getClientComponent() {
 		return new ClientCabinComponentDecorator(new ClientBaseComponent(getID(), getRotation(), getConnectors()), AlienType.HUMAN, crew_number, true);

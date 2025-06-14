@@ -4,10 +4,10 @@ package it.polimi.ingsw.model.cards.visitors;
 import it.polimi.ingsw.model.components.*;
 import it.polimi.ingsw.model.components.enums.AlienType;
 import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
-import it.polimi.ingsw.model.components.visitors.iVisitor;
+import it.polimi.ingsw.model.components.visitors.ComponentVisitor;
 import it.polimi.ingsw.model.player.SpaceShip;
 
-public class CrewRemoveVisitor implements iVisitor {
+public class CrewRemoveVisitor implements ComponentVisitor {
 
 	private final SpaceShip ship;
 

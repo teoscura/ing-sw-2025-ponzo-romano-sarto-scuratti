@@ -9,7 +9,7 @@ import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ConnectorType;
 import it.polimi.ingsw.model.components.exceptions.ContainerEmptyException;
 import it.polimi.ingsw.model.components.exceptions.ContainerFullException;
-import it.polimi.ingsw.model.components.visitors.iVisitor;
+import it.polimi.ingsw.model.components.visitors.ComponentVisitor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.player.SpaceShip;
 /**
@@ -44,8 +44,11 @@ public class BatteryComponent extends BaseComponent {
 		this.max = type.getCapacity();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
-	public void check(iVisitor v) {
+	public void check(ComponentVisitor v) {
 		v.visit(this);
 	}
 
@@ -106,6 +109,9 @@ public class BatteryComponent extends BaseComponent {
 		ship.delBatteryCoords(this.coords);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public ClientComponent getClientComponent() {
 		return new ClientBatteryComponentDecorator(new ClientBaseComponent(this.getID(), getRotation(), getConnectors()), this.contains);

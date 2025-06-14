@@ -5,7 +5,7 @@ import it.polimi.ingsw.model.components.enums.AlienType;
 import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
 import it.polimi.ingsw.model.player.SpaceShip;
 
-public class CrewSetVisitor implements iVisitor {
+public class CrewSetVisitor implements ComponentVisitor {
 
 	private final SpaceShip ship;
 	private final AlienType type;

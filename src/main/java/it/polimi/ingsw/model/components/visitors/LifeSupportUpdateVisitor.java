@@ -3,7 +3,7 @@ package it.polimi.ingsw.model.components.visitors;
 import it.polimi.ingsw.model.components.*;
 import it.polimi.ingsw.model.components.enums.AlienType;
 
-public class LifeSupportUpdateVisitor implements iVisitor {
+public class LifeSupportUpdateVisitor implements ComponentVisitor {
 
 	private final AlienType type;
 	private boolean still_alive = false;

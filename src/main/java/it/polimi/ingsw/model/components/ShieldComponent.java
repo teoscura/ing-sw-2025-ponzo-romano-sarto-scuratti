@@ -9,7 +9,7 @@ import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ConnectorType;
 import it.polimi.ingsw.model.components.enums.ShieldType;
 import it.polimi.ingsw.model.components.exceptions.AlreadyPoweredException;
-import it.polimi.ingsw.model.components.visitors.iVisitor;
+import it.polimi.ingsw.model.components.visitors.ComponentVisitor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.player.SpaceShip;
 
@@ -35,8 +35,11 @@ public class ShieldComponent extends BaseComponent {
 		super(id, connectors, rotation, coords);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
-	public void check(iVisitor v) {
+	public void check(ComponentVisitor v) {
 		v.visit(this);
 	}
 
@@ -91,6 +94,9 @@ public class ShieldComponent extends BaseComponent {
 		return ShieldType.values()[this.getRotation().getShift()];
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public ClientComponent getClientComponent() {
 		return new ClientPoweredComponentDecorator(

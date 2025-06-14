@@ -3,7 +3,7 @@ package it.polimi.ingsw.model.components.visitors;
 import it.polimi.ingsw.model.components.*;
 import it.polimi.ingsw.model.components.enums.AlienType;
 
-public class CabinVisitor implements iVisitor {
+public class CabinVisitor implements ComponentVisitor {
 
 	AlienType type = AlienType.HUMAN;
 

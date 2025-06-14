@@ -3,7 +3,7 @@ package it.polimi.ingsw.model.components.visitors;
 import it.polimi.ingsw.model.components.*;
 import it.polimi.ingsw.model.components.enums.ShipmentType;
 
-public class SpaceShipUpdateVisitor implements iVisitor {
+public class SpaceShipUpdateVisitor implements ComponentVisitor {
 
 	private final int[] containers;
 	private final int[] crew_members;

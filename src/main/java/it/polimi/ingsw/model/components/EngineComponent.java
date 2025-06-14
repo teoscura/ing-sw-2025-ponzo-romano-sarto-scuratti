@@ -11,7 +11,7 @@ import it.polimi.ingsw.model.components.enums.EngineType;
 import it.polimi.ingsw.model.components.exceptions.AlreadyPoweredException;
 import it.polimi.ingsw.model.components.exceptions.ComponentNotEmptyException;
 import it.polimi.ingsw.model.components.exceptions.UnpowerableException;
-import it.polimi.ingsw.model.components.visitors.iVisitor;
+import it.polimi.ingsw.model.components.visitors.ComponentVisitor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.player.SpaceShip;
 
@@ -63,8 +63,11 @@ public class EngineComponent extends BaseComponent {
 		return super.verify(ship);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
-	public void check(iVisitor v) {
+	public void check(ComponentVisitor v) {
 		v.visit(this);
 	}
 
@@ -120,6 +123,9 @@ public class EngineComponent extends BaseComponent {
 		if (powerable) ship.delPowerableCoords(this.coords);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public ClientComponent getClientComponent() {
 		ClientComponent c = new ClientEngineComponentDecorator(new ClientBaseComponent(getID(), getRotation(), getConnectors()), getRotation());

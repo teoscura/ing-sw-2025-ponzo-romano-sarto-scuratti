@@ -3,9 +3,9 @@ package it.polimi.ingsw.model.cards.visitors;
 import it.polimi.ingsw.model.components.*;
 import it.polimi.ingsw.model.components.enums.ShipmentType;
 import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
-import it.polimi.ingsw.model.components.visitors.iVisitor;
+import it.polimi.ingsw.model.components.visitors.ComponentVisitor;
 
-public class ContainerMoveValidationVisitor implements iVisitor {
+public class ContainerMoveValidationVisitor implements ComponentVisitor {
 
 	private final ShipmentType searching_for;
 	private boolean found = false;

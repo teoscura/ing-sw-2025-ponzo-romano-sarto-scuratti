@@ -2,7 +2,7 @@ package it.polimi.ingsw.model.components.visitors;
 
 import it.polimi.ingsw.model.components.*;
 
-public interface iVisitor {
+public interface ComponentVisitor {
 
 	void visit(CabinComponent c);
 

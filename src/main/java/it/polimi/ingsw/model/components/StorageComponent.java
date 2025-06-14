@@ -11,7 +11,7 @@ import it.polimi.ingsw.model.components.enums.StorageType;
 import it.polimi.ingsw.model.components.exceptions.ContainerEmptyException;
 import it.polimi.ingsw.model.components.exceptions.ContainerFullException;
 import it.polimi.ingsw.model.components.exceptions.ContainerNotSpecialException;
-import it.polimi.ingsw.model.components.visitors.iVisitor;
+import it.polimi.ingsw.model.components.visitors.ComponentVisitor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.player.SpaceShip;
 
@@ -104,7 +104,7 @@ public class StorageComponent extends BaseComponent {
 
 	/**
 	 * This adds the Storage Component's coordinates to the {@link SpaceShip}
-	 * @param ship  {@link SpaceShip} to which you want to add the Storage component
+	 * @param ship {@link SpaceShip} to which you want to add the Storage component
 	 */
 	@Override
 	public void onCreation(SpaceShip ship, ShipCoords coords) {
@@ -121,11 +121,17 @@ public class StorageComponent extends BaseComponent {
 		ship.delStorageCoords(this.coords);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
-	public void check(iVisitor v) {
+	public void check(ComponentVisitor v) {
 		v.visit(this);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public ClientComponent getClientComponent() {
 		return new ClientShipmentsComponentDecorator(new ClientBaseComponent(getID(), getRotation(), getConnectors()), type, shipments);
