@@ -4,6 +4,9 @@ import it.polimi.ingsw.view.tui.TerminalWrapper;
 
 import java.util.ArrayList;
 
+/**
+ * Formatter that displays the help screen.
+ */
 public class HelpScreenFormatter {
 
 	static public void format(TerminalWrapper terminal) {

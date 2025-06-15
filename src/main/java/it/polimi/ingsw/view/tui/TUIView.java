@@ -20,6 +20,9 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 
+/**
+ * TUI implementation of {@link ClientView}.
+ */
 public class TUIView implements ClientView {
 	
 	//Drawing fields.
@@ -40,6 +43,11 @@ public class TUIView implements ClientView {
 	private String username;
 	private PlayerColor selected_color;
 
+	/**
+	 * Constructs a {@link TUIView} object.
+	 * 
+	 * @throws IOException if the terminal couldn't be created successfully.
+	 */
 	public TUIView() throws IOException {
 		this.terminal = new TerminalWrapper(this);
 		this.screen_runnable = () -> {};
@@ -53,7 +61,10 @@ public class TUIView implements ClientView {
 		drawthread.start();
 	}
 
-	public void redraw() {
+	/**
+	 * Draws the currently loaded state and possible overlays to the screen.
+	 */
+	public void draw() {
 		synchronized (notifications) {
 			if (TextMessageFormatter.trimExpired(notifications)) terminal.puts(Capability.clear_screen);
 		}
@@ -72,38 +83,56 @@ public class TUIView implements ClientView {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void show(TitleScreenState state) {
 		this.tuistrategy = new TUITitleStrategy(this, state);
 		this.screen_runnable = this.tuistrategy.getRunnable(terminal);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void show(ConnectingState state) {
 		this.tuistrategy = new TUIConnectionSetupStrategy(this, state);
 		this.screen_runnable = this.tuistrategy.getRunnable(terminal);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void show(ClientLobbySelectState state) {
 		this.screen_runnable = () -> ClientLobbyStatesFormatter.format(terminal, state);
 		this.status_runnable = () -> ClientLobbyStatesFormatter.formatStatus(terminal, state);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void show(ClientSetupState state) {
 		this.screen_runnable = () -> ClientLobbyStatesFormatter.format(terminal, state);
 		this.status_runnable = () -> ClientLobbyStatesFormatter.formatStatus(terminal, state);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void show(ClientWaitingRoomState state) {
 		if (this.selected_color == PlayerColor.NONE)
 			this.selected_color = state.getPlayerList().stream().filter(s -> s.getUsername().equals(username)).map(p -> p.getColor()).findFirst().orElse(PlayerColor.NONE);
-		this.screen_runnable = () -> ClientWaitingStateFormatter.format(terminal, state);
-		this.status_runnable = () -> ClientWaitingStateFormatter.formatStatus(terminal, state);
+		this.screen_runnable = () -> ClientWaitingRoomStateFormatter.format(terminal, state);
+		this.status_runnable = () -> ClientWaitingRoomStateFormatter.formatStatus(terminal, state);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void show(ClientConstructionState state) {
 		if (this.selected_color == PlayerColor.NONE)
@@ -112,6 +141,9 @@ public class TUIView implements ClientView {
 		this.status_runnable = () -> ClientConstructionStateFormatter.formatStatus(terminal, state);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void show(ClientVerifyState state) {
 		if (this.selected_color == PlayerColor.NONE)
@@ -120,6 +152,9 @@ public class TUIView implements ClientView {
 		this.status_runnable = () -> ClientVerifyStateFormatter.formatStatus(terminal, state);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void show(ClientVoyageState state) {
 		if (this.selected_color == PlayerColor.NONE)
@@ -128,13 +163,19 @@ public class TUIView implements ClientView {
 		this.status_runnable = () -> ClientVoyageStateFormatter.formatStatus(terminal, state);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void show(ClientEndgameState state) {
 		this.selected_color = PlayerColor.NONE;
-		this.screen_runnable = () -> ClientEndingStateFormatter.format(terminal, state);
-		this.status_runnable = () -> ClientEndingStateFormatter.formatStatus(terminal, state);
+		this.screen_runnable = () -> ClientEndgameStateFormatter.format(terminal, state);
+		this.status_runnable = () -> ClientEndgameStateFormatter.formatStatus(terminal, state);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void showTextMessage(String message) {
 		synchronized (this.notifications) {
@@ -142,36 +183,53 @@ public class TUIView implements ClientView {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void setClientState(ClientState state) {
 		terminal.puts(Capability.clear_screen);
 		this.client_state = state;
 	}
 
+	/**
+	 * Sets the current overlay to the help screen.
+	 */
 	public void showHelpScreen() {
 		this.overlay_runnable = () -> HelpScreenFormatter.format(terminal);
 		overlay = true;
 	}
 
+	/**
+	 * Sets the current overlay to the state info overlay.
+	 */
 	public void showStateInfo() {
 		this.overlay_runnable = () -> this.client_state.sendToView(new ClientStateOverlayFormatter(terminal));
 		overlay = true;
 	}
 
+	/**
+	 * Resets and clears the current overlay.
+	 */
 	public void resetOverlay() {
 		terminal.puts(Capability.clear_screen);
 		this.overlay_runnable = () -> {};
 		overlay = false;
 	}
 
-	public Runnable getStatusRunnable() {
-		return this.status_runnable;
-	}
-
+	/**
+	 * Handles a line input by the user according to the currently set {@link TUIStrategy}.
+	 * @param line
+	 */
 	public void handleLine(String line) {
 		this.tuistrategy.handleLine(line);
 	}
 
+	/**
+	 * Changes the PlayerColor the {@link TUIView view} is currently displaying.
+	 * 
+	 * @param s Name of the color to display.
+	 */
 	public void changeShip(String s) {
 		switch (s) {
 			case "red":
@@ -189,9 +247,12 @@ public class TUIView implements ClientView {
 			default:
 				this.selected_color = PlayerColor.NONE;
 		}
-		this.redraw();
+		this.draw();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void connect(ConnectedState state) {
 		terminal.puts(Capability.clear_screen);
@@ -200,6 +261,9 @@ public class TUIView implements ClientView {
 		this.tuistrategy = new TUIInGameStrategy(this, state);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void disconnect() {
 		this.status_runnable = () -> {};

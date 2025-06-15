@@ -9,6 +9,9 @@ import it.polimi.ingsw.model.components.enums.ShipmentType;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.GameState;
 
+/**
+ * Server message indicating a player action regarding the discarding of some cargo from the provided coordinates.
+ */
 public class DiscardCargoMessage extends ServerMessage {
 
 	private final ShipCoords coords;

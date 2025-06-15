@@ -8,6 +8,9 @@ import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.state.GameState;
 import it.polimi.ingsw.model.state.WaitingState;
 
+/**
+ * Server message used locally to properly notify all model layers about the connection of a player.
+ */
 public class ServerConnectMessage extends ServerMessage {
 
 	public ServerConnectMessage(ClientDescriptor client) {

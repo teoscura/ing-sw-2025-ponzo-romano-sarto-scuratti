@@ -5,6 +5,9 @@ import it.polimi.ingsw.exceptions.OutOfBoundsException;
 
 import java.io.Serializable;
 
+/**
+ * Class representing a shot or meteorite that could hit a player.
+ */
 public class Projectile implements Serializable {
 
 	private final ProjectileDirection direction;

@@ -10,6 +10,9 @@ import org.jline.utils.AttributedStyle;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Formatter that displays all info regarding a provided {@link ClientVoyageState}.
+ */
 public class ClientVoyageStateFormatter {
 
 	private static final String bottom_line = "━Typed line:━";

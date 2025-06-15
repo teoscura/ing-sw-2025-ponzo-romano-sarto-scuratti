@@ -8,6 +8,9 @@ import it.polimi.ingsw.model.components.enums.AlienType;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.GameState;
 
+/**
+ * Server message indicating a request from a player to set the crew to a specific type on the indicated coordinates.
+ */
 public class SetCrewMessage extends ServerMessage {
 
 	private final ShipCoords coords;

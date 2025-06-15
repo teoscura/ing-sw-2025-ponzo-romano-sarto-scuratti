@@ -8,6 +8,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
+/**
+ * {@inheritDoc}
+ * Contains a HashMap that uses player color as a key, and the total steps taken by that player as a value.
+ */
 public class Planche implements iPlanche {
 
 	private final HashMap<Player, Integer> planche;
@@ -23,12 +27,18 @@ public class Planche implements iPlanche {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public int getPlayerPosition(Player p) {
 		if (!this.planche.containsKey(p)) return -1;
 		return this.planche.get(p);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Player getPlayerAt(int position) {
 		int cell = position % this.length;
@@ -38,6 +48,9 @@ public class Planche implements iPlanche {
 		return null;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void movePlayer(VoyageState state, Player p, int rel_change) {
 		if (!this.planche.containsKey(p))
@@ -51,7 +64,7 @@ public class Planche implements iPlanche {
 		}
 		this.planche.put(p, position);
 	}
-
+	
 	public boolean checkLapped(Player p) {
 		return this.planche.keySet().stream().filter(pl -> getPlayerPosition(pl) - getPlayerPosition(p) >= length).findAny().isPresent();
 	}

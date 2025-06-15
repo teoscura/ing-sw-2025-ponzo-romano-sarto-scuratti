@@ -7,6 +7,9 @@ import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.cards.state.CardState;
 import it.polimi.ingsw.model.state.GameState;
 
+/**
+ * Server message indicating a request from a player to select a landing site.
+ */
 public class SelectLandingMessage extends ServerMessage {
 
 	private final int id;

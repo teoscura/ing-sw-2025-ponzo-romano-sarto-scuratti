@@ -9,6 +9,9 @@ import org.jline.utils.AttributedStyle;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Formatter that displays an entire {@link ClientSpaceShip}, of selected size, and its info.
+ */
 public class ClientSpaceShipFormatter {
 
 	static public List<String> formatLarge(ClientSpaceShip ship, String username, PlayerColor color, int credits, boolean retired, boolean disconnected) {

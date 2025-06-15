@@ -8,6 +8,9 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Client side representation of a {@link ConstructionState}.
+ */
 public class ClientConstructionState implements ClientState {
 
 	private final GameModeType type;
@@ -79,6 +82,9 @@ public class ClientConstructionState implements ClientState {
 		return this.last_hourglass_toggle;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void sendToView(ClientStateVisitor visitor) {
 		visitor.show(this);

@@ -1,5 +1,8 @@
 package it.polimi.ingsw.model.client.card;
 
+/**
+ * Base client side card state, contains info about the card id it represents, and the card class name.
+ */
 public class ClientBaseCardState implements ClientCardState {
 
 	private final String state;
@@ -20,6 +23,9 @@ public class ClientBaseCardState implements ClientCardState {
 		return this.id;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void showCardState(ClientCardStateVisitor visitor) {
 		visitor.show(this);

@@ -10,8 +10,18 @@ import it.polimi.ingsw.model.player.ShipCoords;
 
 import java.util.regex.Pattern;
 
-public class CommandBuilder {
+/**
+ * Static class that offers a method to parse strings into {@link ServerMessage}.
+ */
+public class MessageBuilder {
 
+	/**
+	 * Parses a string into a {@link ServerMessage}.
+	 * 
+	 * @param command String to be parsed.
+	 * @param view View to return the message to, and to show possible error messages to.
+	 * @return {@link ServerMessage} a Message ready to be sent. 
+	 */
 	static public ServerMessage build(String command, TUIView view) {
 		if (command == null) return null;
 		command = command.trim();

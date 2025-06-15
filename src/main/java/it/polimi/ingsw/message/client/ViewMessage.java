@@ -2,6 +2,9 @@ package it.polimi.ingsw.message.client;
 
 import it.polimi.ingsw.controller.client.state.ConnectedState;
 
+/**
+ * Client message containing a client bound text message from the server.
+ */
 public class ViewMessage extends ClientMessage {
 
 	private final String message;

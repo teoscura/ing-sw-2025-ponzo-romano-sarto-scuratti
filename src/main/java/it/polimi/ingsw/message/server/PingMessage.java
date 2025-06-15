@@ -4,6 +4,9 @@ import it.polimi.ingsw.controller.server.LobbyController;
 import it.polimi.ingsw.controller.server.MainServerController;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 
+/**
+ * Server message indicating a ping from a client.
+ */
 public class PingMessage extends ServerMessage {
 
 	@Override

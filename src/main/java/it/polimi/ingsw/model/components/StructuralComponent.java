@@ -5,7 +5,7 @@ import it.polimi.ingsw.model.client.components.ClientBaseComponent;
 import it.polimi.ingsw.model.client.components.ClientComponent;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ConnectorType;
-import it.polimi.ingsw.model.components.visitors.iVisitor;
+import it.polimi.ingsw.model.components.visitors.ComponentVisitor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.player.SpaceShip;
 
@@ -24,20 +24,32 @@ public class StructuralComponent extends BaseComponent {
 		super(id, connectors, rotation, coords);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
-	public void check(iVisitor v) {
+	public void check(ComponentVisitor v) {
 		v.visit(this);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void onCreation(SpaceShip ship, ShipCoords coords) {
 		this.coords = coords;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void onDelete(SpaceShip ship) {
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public ClientComponent getClientComponent() {
 		return new ClientBaseComponent(this.getID(), this.getRotation(), getConnectors());

@@ -7,6 +7,9 @@ import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.GameState;
 
+/**
+ * Server message indicating a request from a player to remove a component at the specified coordinates.
+ */
 public class RemoveComponentMessage extends ServerMessage {
 
 	private final ShipCoords coords;

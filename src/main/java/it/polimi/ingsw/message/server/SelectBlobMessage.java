@@ -9,6 +9,9 @@ import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.GameState;
 import it.polimi.ingsw.model.state.VoyageState;
 
+/**
+ * Server message indicating a request from a player to select a specific blob of the ship.
+ */
 public class SelectBlobMessage extends ServerMessage {
 
 	private final ShipCoords blob_coord;

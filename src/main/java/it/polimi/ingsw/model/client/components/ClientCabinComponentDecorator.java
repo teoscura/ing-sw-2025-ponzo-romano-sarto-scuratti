@@ -2,6 +2,9 @@ package it.polimi.ingsw.model.client.components;
 
 import it.polimi.ingsw.model.components.enums.AlienType;
 
+/**
+ * Client side component decorator containing info about the crew inside it.
+ */
 public class ClientCabinComponentDecorator implements ClientComponent {
 
 	private final ClientComponent base;
@@ -34,6 +37,9 @@ public class ClientCabinComponentDecorator implements ClientComponent {
 		return this.starting;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void showComponent(ClientComponentVisitor visitor) {
 		base.showComponent(visitor);

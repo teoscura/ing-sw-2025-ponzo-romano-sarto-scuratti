@@ -21,6 +21,9 @@ import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
+/**
+ * Represents a controller in charge of controlling a single game instance, its players, the serialization of it, and the messages regarding it.
+ */
 public class LobbyController extends Thread implements VirtualServer {
 
 	private final int id;
@@ -34,7 +37,11 @@ public class LobbyController extends Thread implements VirtualServer {
 	private ModelInstance model;
 	private Timer dsctimer = null;
 
-
+	/**
+	 * Constructs a new {@code LobbyController} object without a ModelInstance tied to it.
+	 * 
+	 * @param id ID to which the lobby saves its data.
+	 */
 	public LobbyController(int id) {
 		if (id < 0) throw new IllegalArgumentException();
 		this.listeners = new HashMap<>();
@@ -50,6 +57,9 @@ public class LobbyController extends Thread implements VirtualServer {
 		return this.id;
 	}
 
+	/**
+     * Main loop of the LobbyController class, retrieves messages from the queue and processes them.
+     */
 	@Override
 	public void run() {
 		if (model == null) throw new NullPointerException();
@@ -70,6 +80,11 @@ public class LobbyController extends Thread implements VirtualServer {
 		this.endGame();
 	}
 
+	/**
+     * Takes a {@code ServerMessage} and inserts it into the queue.
+     *
+     * @param message {@link ServerMessage} Message to be added to the queue.
+     */
 	public void receiveMessage(ServerMessage message) {
 		if (message.getDescriptor() == null || !this.listeners.containsKey(message.getDescriptor().getUsername())) {
 			Logger.getInstance().print(LoggerLevel.WARN, "Recieved a message from a client not properly connected!");
@@ -79,6 +94,11 @@ public class LobbyController extends Thread implements VirtualServer {
 		this.queue.insert(message);
 	}
 
+	/**
+     * Takes a {@code ClientMessage} and sends it to each connected listener connected to the lobby.
+     *
+     * @param message {@link ClientMessage} Message to be broadcast.
+     */
 	public void broadcast(ClientMessage message) {
 		synchronized (listeners_lock) {
 			for (ClientDescriptor listener : this.listeners.values()) {
@@ -87,6 +107,11 @@ public class LobbyController extends Thread implements VirtualServer {
 		}
 	}
 
+	/**
+     * Takes a {@code ClientMessage} and sends it to a specific client.
+     *
+     * @param message {@link ClientMessage} Message to be sent.
+     */
 	public void sendMessage(ClientDescriptor client, ClientMessage message) {
 		try {
 			client.sendMessage(message);
@@ -99,10 +124,18 @@ public class LobbyController extends Thread implements VirtualServer {
 		return this.model;
 	}
 
+	/**
+	 * Sets a new {@code ModelInstance} to be acted upon by the controller
+	 * 
+	 * @param model {@link ModelInstance} New Model to be acted upon. 
+	 */
 	public void setModel(ModelInstance model) {
 		this.model = model;
 	}
 
+	/**
+	 * Serializes the current game into a file.
+	*/
 	public void serializeCurrentGame() {
 		synchronized (model_lock) {
 			try (FileOutputStream file = new FileOutputStream(this.serializer_path);
@@ -118,6 +151,9 @@ public class LobbyController extends Thread implements VirtualServer {
 		}
 	}
 
+	/**
+	 * Ends any process tied to the model and deletes the save file in case of a successfully finished game.
+	*/
 	public void endGame() {
 		Logger.getInstance().print(LoggerLevel.NOTIF, "Game id: [" + this.id + "] finished!");
 		if (this.model.getState() == null) {
@@ -126,14 +162,19 @@ public class LobbyController extends Thread implements VirtualServer {
 		}
 		MainServerController s = MainServerController.getInstance();
 		for (var e : this.listeners.values()) {
-			s.joinFromEndedGame(e);
+			s.joinFromClosedLobby(e);
 		}
 		for (var e : this.disconnected_usernames.keySet()) {
 			s.removeDisconnected(e);
 		}
-		s.gameFinishCleanup(this.id);
+		s.lobbyCloseCleanup(this.id);
 	}
 
+	/**
+	 * Returns a new TimerTask that ends the match after a set amount of time, used to automatically close a lobby when the server is left with only one player for too long.
+	 * 
+	 * @param controller {@link LobbyController} Controller instance.
+	 */
 	private TimerTask getEndMatchTask(LobbyController controller) {
 		return new TimerTask() {
 			public void run() {
@@ -144,7 +185,12 @@ public class LobbyController extends Thread implements VirtualServer {
 		};
 	}
 
-	//Connections and disconnections
+	/**
+     * Connects a {@code ClientDescriptor} to the Lobby and notifies the {@code ModelInstance} if necessary.
+     *
+     * @param client {@link ClientDescriptor} Client being connected.
+	 * @throws ForbiddenCallException if the model refused the connection.
+     */
 	public void connect(ClientDescriptor client) throws ForbiddenCallException {
 		boolean reconnect = false;
 		synchronized (listeners_lock) {
@@ -176,10 +222,20 @@ public class LobbyController extends Thread implements VirtualServer {
 		if (reconnect) this.sendMessage(client, new NotifyStateUpdateMessage(model.getState().getClientState()));
 	}
 
+	/**
+     * Notifies the {@code MainServerController} of a {@code ServerDisconnectMessage} sent by the {@code ClientDescriptor}
+     *
+     * @param client {@link ClientDescriptor} Client being disconnected.
+     */
 	public void disconnect(ClientDescriptor client) {
 		MainServerController.getInstance().disconnect(client);
 	}
 
+	/**
+     * Properly disconnects the {@code ClientDescriptor} from the Model and removes from the local listener list.
+     *
+     * @param client {@link ClientDescriptor} Client being disconnected.
+     */
 	public void disconnectProcedure(ClientDescriptor client) {
 		MainServerController s = MainServerController.getInstance();
 		synchronized (listeners_lock) {
@@ -213,6 +269,11 @@ public class LobbyController extends Thread implements VirtualServer {
 		}
 	}
 
+	/**
+     * Generates and returns a GameListEntry object containing the lobby details.
+     * 
+	 * @return {@link ClientGameListEntry} Entry containing the lobby info.
+	 */
 	public ClientGameListEntry getClientInfo() {
 		ClientGameListEntry entry = null;
 		synchronized (model_lock) {
@@ -221,6 +282,11 @@ public class LobbyController extends Thread implements VirtualServer {
 		return entry;
 	}
 
+	/**
+     * Refreshes the timeout timer for a particular {@code ClientDescriptor} and restarts the timeout clock belonging to it.
+     *
+     * @param client {@link ClientDescriptor} Client pinging the server
+     */
 	public void ping(ClientDescriptor descriptor) {
 		MainServerController.getInstance().ping(descriptor);
 	}

@@ -7,6 +7,9 @@ import it.polimi.ingsw.view.tui.TerminalWrapper;
 
 import java.util.ArrayList;
 
+/**
+ * Formatter that displays all secondary info of a provided {@link ClientState}.
+ */
 public class ClientStateOverlayFormatter implements ClientStateVisitor {
 
 	private final TerminalWrapper terminal;

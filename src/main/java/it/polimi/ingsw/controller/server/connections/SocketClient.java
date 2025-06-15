@@ -13,6 +13,9 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.TimerTask;
 
+/**
+ * Server side socket interfacing with a client connected using the TCP protocol.
+ */
 public class SocketClient extends Thread implements ClientConnection {
 
 	private final Socket socket;
@@ -21,6 +24,12 @@ public class SocketClient extends Thread implements ClientConnection {
 	private TimerTask setup_timeout;
 	private String username;
 
+	/**
+	 * Constructs a new {@link SocketClient} object associated to the provided Socket.
+	 * 
+	 * @param socket Socket open to the client's messages.
+	 * @throws IOException If there are any errors during the transfer/connection process.
+	 */
 	public SocketClient(Socket socket) throws IOException {
 		if (socket == null) throw new NullPointerException();
 		this.socket = socket;
@@ -28,6 +37,10 @@ public class SocketClient extends Thread implements ClientConnection {
 		this.in = new ObjectInputStream(socket.getInputStream());
 	}
 
+	/**
+	 * Set a timeout regarding the completion of the connection procedure regarding this object.
+	 * @param task A callback task to be executed in case of failure in the completion of the connection.
+	 */
 	public void setTimeout(TimerTask task) {
 		this.setup_timeout = task;
 	}
@@ -40,6 +53,9 @@ public class SocketClient extends Thread implements ClientConnection {
 		return this.socket;
 	}
 
+	/**
+	 * Main loop in the SocketClient class, reads all incoming messages from the client, making sure the first one to be processed properly is a {@link UsernameSetupMessage}.
+	 */
 	@Override
 	public void run() {
 		while (!this.socket.isClosed() && this.username == null) {
@@ -50,6 +66,9 @@ public class SocketClient extends Thread implements ClientConnection {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void sendMessage(ClientMessage message) throws IOException {
 		this.out.reset();
@@ -57,6 +76,9 @@ public class SocketClient extends Thread implements ClientConnection {
 		this.out.flush();
 	}
 
+	/**
+	 * Reads incoming {@link ServerMessages messages}, filtering out all those that arent {@link UsernameSetupMessage}.
+	 */
 	private void readSetup() {
 		MainServerController controller = MainServerController.getInstance();
 		UsernameSetupMessage setup = null;
@@ -76,6 +98,9 @@ public class SocketClient extends Thread implements ClientConnection {
 		controller.setupSocketListener(this, this.username);
 	}
 
+	/**
+	 * Reads incoming {@link ServerMessages messages}.
+	 */
 	private void read() {
 		MainServerController controller = MainServerController.getInstance();
 		ServerMessage message = null;
@@ -93,6 +118,9 @@ public class SocketClient extends Thread implements ClientConnection {
 		controller.receiveMessage(message);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void close() {
 		try {

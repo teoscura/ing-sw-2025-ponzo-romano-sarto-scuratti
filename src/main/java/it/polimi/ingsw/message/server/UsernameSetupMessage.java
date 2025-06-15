@@ -3,6 +3,9 @@ package it.polimi.ingsw.message.server;
 import it.polimi.ingsw.controller.server.MainServerController;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 
+/**
+ * Server message used during the TCP connection procedure, notifying the server about the username of the incoming connection.
+ */
 public class UsernameSetupMessage extends ServerMessage {
 
 	private final String username;

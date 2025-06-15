@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.cards.state;
 import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
+import it.polimi.ingsw.model.cards.CombatZoneCard;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.cards.utils.CardOrder;
 import it.polimi.ingsw.model.cards.utils.CombatZoneSection;
@@ -20,7 +21,9 @@ import it.polimi.ingsw.utils.Logger;
 import it.polimi.ingsw.utils.LoggerLevel;
 
 import java.util.ArrayList;
-
+/**
+ * Class representing an Announce State of the {@link CombatZoneCard}.
+ */
 public class CombatZoneAnnounceState extends CardState {
 
 	private final int card_id;
@@ -29,6 +32,14 @@ public class CombatZoneAnnounceState extends CardState {
 	private final ArrayList<Player> awaiting;
 	private Player target;
 
+	/**
+	 * Constructs a new {@code AbandonedStationRewardState}.
+	 *
+	 * @param state {@link VoyageState} The current voyage state
+	 * @param card_id   The card id
+	 * @param sections  the sections defining penalties
+	 * @param shots     the projectile array
+	 */
 	public CombatZoneAnnounceState(VoyageState state, int card_id, ArrayList<CombatZoneSection> sections, ProjectileArray shots) {
 		super(state);
 		if (sections == null || shots == null) throw new NullPointerException();
@@ -39,6 +50,12 @@ public class CombatZoneAnnounceState extends CardState {
 		this.awaiting = new ArrayList<>(this.state.getOrder(CardOrder.NORMAL));
 	}
 
+	/**
+	 * Called when the card state is initialized.
+	 * Resets power for all players ships.
+	 *
+	 * @param new_state {@link ClientState} The new client state to broadcast to all connected listeners.
+	 */
 	@Override
 	public void init(ClientState new_state) {
 		super.init(new_state);
@@ -56,6 +73,12 @@ public class CombatZoneAnnounceState extends CardState {
 		}
 	}
 
+	/**
+	 * Validates the {@link ServerMessage} and if everyone has progressed, transitions.
+	 *
+	 * @param message {@link ServerMessage} The message received from the player
+	 * @throws ForbiddenCallException if the message is not allowed
+	 */
 	@Override
 	public void validate(ServerMessage message) throws ForbiddenCallException {
 		message.receive(this);
@@ -81,6 +104,11 @@ public class CombatZoneAnnounceState extends CardState {
 				3 - this.sections.size());
 	}
 
+	/**
+	 * Computes and returns the next {@code CardState}.
+	 *
+	 * @return {@link CardState} the next state, or {@code null} if the card is exhausted
+	 */
 	@Override
 	public CardState getNext() {
 		if (this.state.getOrder(CardOrder.NORMAL).size() > 1)
@@ -89,6 +117,13 @@ public class CombatZoneAnnounceState extends CardState {
 		return null;
 	}
 
+	/**
+	 * Called when a {@link Player} attempts to power a component.
+	 *
+	 * @param p {@link Player} The player
+	 * @param target_coords {@link ShipCoords} the component to power
+	 * @param battery_coords {@link ShipCoords} the battery to use
+	 */
 	@Override
 	public void turnOn(Player p, ShipCoords target_coords, ShipCoords battery_coords) {
 		if (!this.awaiting.contains(p)) {
@@ -105,6 +140,11 @@ public class CombatZoneAnnounceState extends CardState {
 		}
 	}
 
+	/**
+	 * Called when a {@link Player} attempts to progress their turn.
+	 *
+	 * @param p {@link Player} The player
+	 */
 	@Override
 	public void progressTurn(Player p) {
 		if (!this.awaiting.contains(p)) {
@@ -116,6 +156,12 @@ public class CombatZoneAnnounceState extends CardState {
 		Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Player: '" + p.getUsername() + "' motioned to progress! (" + (this.state.getCount().getNumber() - this.awaiting.size()) + ").");
 	}
 
+	/**
+	 * Called when a {@link Player} disconnects.
+	 *
+	 * @param p {@link Player} The player disconnecting.
+	 * @throws ForbiddenCallException when the state refuses the action.
+	 */
 	@Override
 	public void disconnect(Player p) throws ForbiddenCallException {
 		if (awaiting.contains(p)) {

@@ -7,6 +7,9 @@ import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.cards.state.CardState;
 import it.polimi.ingsw.model.state.GameState;
 
+/**
+ * Server message indicating the disconnection of a player.
+ */
 public class ServerDisconnectMessage extends ServerMessage {
 
 	@Override

@@ -2,6 +2,9 @@ package it.polimi.ingsw.model.client.components;
 
 import it.polimi.ingsw.model.components.enums.ShieldType;
 
+/**
+ * Client side component decorator containing info about the directions it is shielding.
+ */
 public class ClientShieldComponentDecorator implements ClientComponent {
 
 	private final ClientComponent base;
@@ -17,14 +20,17 @@ public class ClientShieldComponentDecorator implements ClientComponent {
 		return this.base;
 	}
 
+	public ShieldType getType() {
+		return this.type;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void showComponent(ClientComponentVisitor visitor) {
 		base.showComponent(visitor);
 		visitor.show(this);
-	}
-
-	public ShieldType getType() {
-		return this.type;
 	}
 
 }

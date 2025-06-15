@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * A pile of {@link iCard} containing both level one and two cards, and a set of cards available to see during the construction phase.
+ */
 public class LevelTwoCards implements iCards {
 
 	private final ArrayDeque<iCard> cards;
@@ -41,15 +44,21 @@ public class LevelTwoCards implements iCards {
 		this.construction_cards = new ArrayList<>(tmp.stream().map((c) -> c.getId()).toList());
 	}
 
-	@Override
-	public List<Integer> getConstructionCards() {
-		return this.construction_cards;
-	}
-
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public iCard pullCard() {
 		if (this.cards == null) return null;
 		return this.cards.poll();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<Integer> getConstructionCards() {
+		return this.construction_cards;
 	}
 
 	@Override

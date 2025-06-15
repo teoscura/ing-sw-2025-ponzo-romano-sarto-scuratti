@@ -26,6 +26,9 @@ import it.polimi.ingsw.utils.LoggerLevel;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Space voyage phase of a match of Galaxy Trucker.
+ */
 public class VoyageState extends GameState {
 
 	private final iPlanche planche;
@@ -34,6 +37,16 @@ public class VoyageState extends GameState {
 	private iCard card;
 	private CardState state;
 
+	/**
+	 * Constructs a new {@link VoyageState} object.
+	 * 
+	 * @param model {@link ModelInstance} ModelInstance that owns this {@link GameState}.
+	 * @param type {@link GameModeType} Ruleset of the state.
+	 * @param count {@link PlayerCount} Size of the match.
+	 * @param players Array of all {@link Player players} in the match.
+	 * @param deck {@link iCards} Voyage deck containing the cards.
+	 * @param planche {@link iPlanche} Planche to use during the match.
+	 */
 	public VoyageState(ModelInstance model, GameModeType type, PlayerCount count, ArrayList<Player> players, iCards deck, iPlanche planche) {
 		super(model, type, count, players);
 		if (deck == null || planche == null) throw new NullPointerException();
@@ -42,15 +55,24 @@ public class VoyageState extends GameState {
 		this.voyage_deck = deck;
 		this.card = null;
 	}
-
+	
+	/**
+	 * Picks the first {@link iCard} from the deck.
+	 * 
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void init() {
-		super.init();
 		Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "New Game State -> Voyage State");
 		if (this.card == null) this.setCardState(null);
 		this.broadcastMessage(new NotifyStateUpdateMessage(this.getClientState()));
 	}
 
+	/**
+	 * Processes the {@link ServerMessage} by passing it through the current {@link CardState}.
+	 * 
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void validate(ServerMessage message) throws ForbiddenCallException {
 		message.receive(this);
@@ -58,6 +80,9 @@ public class VoyageState extends GameState {
 		this.transition();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public GameState getNext() {
 		ArrayList<Player> tmp = new ArrayList<>();
@@ -69,6 +94,9 @@ public class VoyageState extends GameState {
 		return new EndscreenState(model, type, count, players, new ArrayList<>(tmp.reversed()));
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public ClientState getClientState() {
 		ArrayList<ClientVoyagePlayer> tmp = new ArrayList<>();
@@ -84,11 +112,17 @@ public class VoyageState extends GameState {
 		return new ClientVoyageState(type, tmp, this.state.getClientCardState(), this.voyage_deck.getLeft());
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean toSerialize() {
 		return true;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void connect(Player p) throws ForbiddenCallException {
 		if (p == null) throw new NullPointerException();
@@ -101,6 +135,9 @@ public class VoyageState extends GameState {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void disconnect(Player p) throws ForbiddenCallException {
 		if (p == null) throw new NullPointerException();
@@ -111,6 +148,9 @@ public class VoyageState extends GameState {
 		this.state.validate(disc);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void giveUp(Player p) throws ForbiddenCallException {
 		if (p == null) return;
@@ -124,6 +164,11 @@ public class VoyageState extends GameState {
 		this.to_give_up.add(p);
 	}
 
+	/**
+	 * Loses the game for a {@link Player}.
+	 * 
+	 * @param p {@link Player} Player that lost.
+	 */
 	public void loseGame(Player p) {
 		this.planche.loseGame(p);
 		p.retire();
@@ -135,11 +180,21 @@ public class VoyageState extends GameState {
 		return tmp.stream().filter((p) -> !p.getDisconnected()).toList();
 	}
 
+	/**
+	 * @param order {@link CardOrder} Order to sort the list by.
+	 * @return A list of {@link Player} sorted in respect to the specified order on the planche.
+	 */
 	public List<Player> getOrder(CardOrder order) {
 		List<Player> tmp = this.players.stream().filter(p -> !p.getRetired() && !p.getDisconnected()).sorted((Player player1, Player player2) -> Integer.compare(planche.getPlayerPosition(player1), planche.getPlayerPosition(player2))).toList();
 		return order != CardOrder.NORMAL ? tmp : tmp.reversed();
 	}
 
+	/**
+	 * Finds the farthest {@link Player} along the planche with the worst value specified by the {@link CombatZoneCriteria}.
+	 * 
+	 * @param criteria {@link CombatZoneCriteria} Criteria according to which the {@link Player} is picked.
+	 * @return {@link Player} Farthest player along the planche with the worst value specified by the {@link CombatZoneCriteria}.
+	 */
 	public Player findCriteria(CombatZoneCriteria criteria) {
 		List<Player> tmp = new ArrayList<>();
 		tmp.addAll(this.players);
@@ -171,6 +226,12 @@ public class VoyageState extends GameState {
 		return planche;
 	}
 
+	/**
+	 * Sets a new {@link CardState}, if {@code null} then picks a new {@link iCard} from the {@link iCards deck}.
+	 * Makes every player set to lose or give up retire.
+	 * 
+	 * @param next {@link CardState} Next state to set.
+	 */
 	public void setCardState(CardState next) {
 		if (next == null) {
 			if (this.getOrder(CardOrder.NORMAL).size() == 0) {
@@ -201,6 +262,9 @@ public class VoyageState extends GameState {
 		next.init(this.getClientState());
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String toString() {
 		String res = "";
@@ -209,11 +273,17 @@ public class VoyageState extends GameState {
 		return res;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public CardState getCardState(Player p) {
 		return this.state;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public ClientGameListEntry getOngoingEntry(int id) {
 		return new ClientGameListEntry(type, count, this.toString(), this.players.stream().map(p -> p.getUsername()).toList(), id);

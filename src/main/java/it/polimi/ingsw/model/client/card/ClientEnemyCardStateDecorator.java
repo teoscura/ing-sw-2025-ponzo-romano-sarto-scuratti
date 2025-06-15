@@ -2,6 +2,9 @@ package it.polimi.ingsw.model.client.card;
 
 import it.polimi.ingsw.model.cards.utils.CombatZonePenalty;
 
+/**
+ * Client side card state decorator displaying an enemy info, power, and penalty in case of loss against it.
+ */
 public class ClientEnemyCardStateDecorator implements ClientCardState {
 
 	private final ClientCardState base;
@@ -31,6 +34,9 @@ public class ClientEnemyCardStateDecorator implements ClientCardState {
 		return this.amount;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void showCardState(ClientCardStateVisitor visitor) {
 		base.showCardState(visitor);

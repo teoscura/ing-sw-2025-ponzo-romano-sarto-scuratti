@@ -13,6 +13,18 @@ import it.polimi.ingsw.utils.LoggerLevel;
 
 import java.util.ArrayList;
 
+/**
+ * Represents the "Smuggler" card in the game.
+ * <p>
+ * Smugglers and other enemies are a
+ * threat to everyone, but attack ships
+ * of players in order of course. First
+ * attack the leader. If they win, they attack the
+ * next player, and so on, until
+ * have attacked them all or until someone has attacked them
+ * Defeats.
+ * </p>
+ */
 public class SmugglersCard extends Card {
 
 	private final Planet reward;
@@ -28,6 +40,9 @@ public class SmugglersCard extends Card {
 		this.min_power = min_power;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public CardState getState(VoyageState state) {
 		return new SmugglersAnnounceState(state, this, new ArrayList<>(state.getOrder(CardOrder.NORMAL)));
@@ -45,6 +60,23 @@ public class SmugglersCard extends Card {
 		return this.cargo_taken;
 	}
 
+	/**
+	 * Apply card effects to the player:
+	 * <ul>
+	 * <li>If the power is sufficient: the player can claim the reward by losing flight days.</li>
+	 * <li>If it's the same: nothing happens to the player, but the
+	 * enemy is not defeated and goes ahead to attack the player
+	 * next on the route.</li>
+	 * <li>If inferior: The ship takes a series of hits. the player pay the penalty indicated in the top corner
+	 * to the right of the map. After that the enemy attacks the player
+	 * next on the route. If the middle substation is destroyed,
+	 * the player is considered out of play.</li>
+	 * </ul>
+	 *
+	 * @param state The Current State
+	 * @param p The Player
+	 * @throws NullPointerException if {@code p} is null
+	 */
 	public boolean apply(VoyageState state, Player p) {
 		if (p == null) throw new NullPointerException();
 		if (p.getSpaceShip().getCannonPower() > this.min_power) {

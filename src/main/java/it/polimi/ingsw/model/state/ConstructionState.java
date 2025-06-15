@@ -26,6 +26,9 @@ import it.polimi.ingsw.utils.LoggerLevel;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * Abstract class representing the shared construction phase logic between rulesets.
+ */
 public abstract class ConstructionState extends GameState {
 
 	protected final iCommonBoard board;
@@ -35,6 +38,15 @@ public abstract class ConstructionState extends GameState {
 	protected final HashMap<Player, BaseComponent> current_tile;
 	protected final HashMap<Player, ArrayList<BaseComponent>> hoarded_tile;
 
+	/**
+	 * Constructs a {@link ConstructionState} object.
+	 * 
+	 * @param model {@link ModelInstance} ModelInstance that owns this {@link GameState}.
+	 * @param type {@link GameModeType} Ruleset of the state.
+	 * @param count {@link PlayerCount} Size of the match.
+	 * @param players Array of all {@link Player players} in the match.
+	 * @param deck {@link iCards} Deck of cards used during the remainder of the match.
+	 */
 	public ConstructionState(ModelInstance model, GameModeType type, PlayerCount count, ArrayList<Player> players, iCards deck) {
 		super(model, type, count, players);
 		this.board = new CommonBoard();
@@ -50,12 +62,22 @@ public abstract class ConstructionState extends GameState {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void init() {
 		Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "New Game State -> Construction State");
 		this.broadcastMessage(new NotifyStateUpdateMessage(this.getClientState()));
 	}
 
+
+	/**
+	 * Checks if all {@link Player players} have either finished constructing or have disconnected.
+	 * Removes a credit for each unused {@link BaseComponent} from each {@link Player}.
+	 * 
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void validate(ServerMessage message) throws ForbiddenCallException {
 		message.receive(this);
@@ -71,26 +93,38 @@ public abstract class ConstructionState extends GameState {
 			this.model.serialize();
 			return;
 		}
-		this.transition();
-	}
-
-	@Override
-	public GameState getNext() {
 		for(Player p : this.players){
 			if(this.current_tile.get(p)!=null) p.giveCredits(-1);
 			p.giveCredits(-this.hoarded_tile.get(p).size());
 		}
+		this.transition();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public GameState getNext() {
 		return new VerifyState(model, type, count, players, voyage_deck, finished);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public abstract ClientState getClientState();
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean toSerialize() {
 		return true;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void sendContinue(Player p) throws ForbiddenCallException {
 		if (!this.building.contains(p)) {
@@ -102,6 +136,9 @@ public abstract class ConstructionState extends GameState {
 		this.finished.addLast(p);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void putComponent(Player p, int id, ShipCoords coords, ComponentRotation rotation) throws ForbiddenCallException {
 		if (!this.building.contains(p)) {
@@ -151,6 +188,9 @@ public abstract class ConstructionState extends GameState {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void takeComponent(Player p) throws ForbiddenCallException {
 		if (!this.building.contains(p)) {
@@ -174,6 +214,9 @@ public abstract class ConstructionState extends GameState {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void takeDiscarded(Player p, int id) throws ForbiddenCallException {
 		if (!this.building.contains(p)) {
@@ -199,6 +242,9 @@ public abstract class ConstructionState extends GameState {
 		this.current_tile.put(p, c);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void reserveComponent(Player p) throws ForbiddenCallException {
 		if (!this.building.contains(p)) {
 			Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' attempted to reserve a component, but their ship is already confirmed!");
@@ -222,6 +268,9 @@ public abstract class ConstructionState extends GameState {
 		this.broadcastMessage(new ViewMessage("[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' reserved component: " + c.getID() + "!"));
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void discardComponent(Player p) throws ForbiddenCallException {
 		if (!this.building.contains(p)) {
@@ -241,6 +290,9 @@ public abstract class ConstructionState extends GameState {
 		this.broadcastMessage(new ViewMessage("[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' discarded component: " + c.getID() + "!"));
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void connect(Player p) throws ForbiddenCallException {
 		if (p == null) throw new NullPointerException();
@@ -248,6 +300,9 @@ public abstract class ConstructionState extends GameState {
 		p.reconnect();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void disconnect(Player p) throws ForbiddenCallException {
 		if (p == null) throw new NullPointerException();
@@ -255,6 +310,9 @@ public abstract class ConstructionState extends GameState {
 		p.disconnect();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String toString() {
 		return "Construction State";
@@ -272,6 +330,10 @@ public abstract class ConstructionState extends GameState {
 		return this.board.getDiscarded();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public ClientGameListEntry getOngoingEntry(int id) {
 		return new ClientGameListEntry(type, count, this.toString(), this.players.stream().map(p -> p.getUsername()).toList(), id);
 	}

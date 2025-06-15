@@ -2,10 +2,14 @@ package it.polimi.ingsw.utils;
 
 import java.io.PrintStream;
 
+/**
+ * Singleton class in charge of Logging any message to chat.
+ */
 public class Logger {
+
 	static private Logger instance = null;
 
-	//Add extra file printing support, a threadpool so theyre async.
+	//TODO. Add extra file printing support, a threadpool so theyre async.
 
 	private final Object stream_lock;
 	private PrintStream out;
@@ -33,6 +37,11 @@ public class Logger {
 		this.out = stream;
 	}
 
+	/**
+	 * Print to the set {@link PrintStream}.
+	 * @param level {@link LoggerLevel} Message level.
+	 * @param message Message to be written.
+	 */
 	public void print(LoggerLevel level, String message) {
 		if (level.status() < this.level.status()) return;
 		synchronized (stream_lock) {

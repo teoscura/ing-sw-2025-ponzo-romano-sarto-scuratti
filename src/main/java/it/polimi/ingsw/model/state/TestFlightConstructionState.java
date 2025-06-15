@@ -11,12 +11,21 @@ import it.polimi.ingsw.model.player.Player;
 
 import java.util.ArrayList;
 
+/**
+ * Represents a the construction phase of a Galaxy Trucker match, using test flight rules.
+ */
 public class TestFlightConstructionState extends ConstructionState {
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public TestFlightConstructionState(ModelInstance model, GameModeType type, PlayerCount count, ArrayList<Player> players) {
 		super(model, type, count, players, new TestFlightCards());
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public ClientState getClientState() {
 		ArrayList<ClientConstructionPlayer> tmp = new ArrayList<>();

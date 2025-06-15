@@ -6,6 +6,9 @@ import it.polimi.ingsw.model.ModelInstance;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.state.GameState;
 
+/**
+ * Server message indicating a request from a player to reserve a component during the construction phase.
+ */
 public class ReserveComponentMessage extends ServerMessage {
 
 	@Override

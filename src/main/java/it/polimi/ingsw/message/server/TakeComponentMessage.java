@@ -6,6 +6,9 @@ import it.polimi.ingsw.model.ModelInstance;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.state.GameState;
 
+/**
+ * Server message indicating a request from a player to take a component from the covered pile during the construction phase.
+ */
 public class TakeComponentMessage extends ServerMessage {
 
 	@Override

@@ -2,6 +2,9 @@ package it.polimi.ingsw.model.client.card;
 
 import it.polimi.ingsw.model.player.PlayerColor;
 
+/**
+ * Client side card state decorator displaying a credit reward applied to a specified player.
+ */
 public class ClientCreditsRewardCardStateDecorator implements ClientCardState {
 
 	private final ClientCardState base;
@@ -29,7 +32,10 @@ public class ClientCreditsRewardCardStateDecorator implements ClientCardState {
 	public int getDaysTaken() {
 		return this.days_taken;
 	}
-
+	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void showCardState(ClientCardStateVisitor visitor) {
 		base.showCardState(visitor);

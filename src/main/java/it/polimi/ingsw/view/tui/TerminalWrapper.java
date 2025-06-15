@@ -17,6 +17,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * Wrapper class around a {@link Terminal} object made available by the JLine3 library.
+ */
 public class TerminalWrapper {
 
 	private final Display display;
@@ -33,6 +36,11 @@ public class TerminalWrapper {
 	private String input;
 	private boolean legal;
 
+	/**
+	 * Constructs a {@link TerminalWrapper} object tied to a {@link TUIView}.
+	 * @param view {@link TUIView} View bound to the object.
+	 * @throws IOException if the Terminal couldn't be created.
+	 */
 	public TerminalWrapper(TUIView view) throws IOException {
 		this.terminal = TerminalBuilder.builder()
 				.system(true)
@@ -55,7 +63,7 @@ public class TerminalWrapper {
 		this.line = new StringBuffer();
 		this.keymap = setupBindings(view);
 		this.reader = new BindingReader(terminal.reader());
-		setupHooks(view);
+		setupHooks();
 
 		legal = true;
 		this.size = terminal.getSize();
@@ -66,7 +74,10 @@ public class TerminalWrapper {
 		}
 	}
 
-	private void setupHooks(TUIView view) {
+	/**
+	 * Sets up the hooks to the system signals that could affect the terminal object.
+	 */
+	private void setupHooks() {
 		this.size = terminal.getSize();
 		if (size.getRows() < 32 || size.getColumns() < 128) showSmallScreen(size);
 		terminal.handle(Terminal.Signal.WINCH, signal -> {
@@ -86,12 +97,19 @@ public class TerminalWrapper {
 			System.exit(0);
 		});
 
+		//Makes the JVM close gracefully.
 		terminal.handle(Terminal.Signal.QUIT, signal -> {
 			this.cleanUp(previous);
 			System.exit(0);
 		});
 	}
 
+	/**
+	 * Returns a {@link KeyMap} properly set up for the inputs the {@link TUIView} requires.
+	 * 
+	 * @param view {@link TUIView} View that will be notified of ESC/Enter keypresses.
+	 * @return {@link KeyMap} A properly set-up keymap.
+	 */
 	private KeyMap<Widget> setupBindings(TUIView view) {
 		KeyMap<Widget> km = new KeyMap<>();
 		km.setNomatch(()->{return false;});
@@ -153,24 +171,57 @@ public class TerminalWrapper {
 		return km;
 	}
 
+	/**
+	 * Reads the first binding made available by the terminal, or waits until one is available.
+	 * @return {@link Widget} Widget representing the action tied to the binding.
+	 */
 	public Widget readBinding() {
 		return reader.readBinding(this.keymap);
 	}
 
+	/**
+	 * @implNote Any methods regarding the input string are not synchronized to avoid the overhead of atomic changes,
+	 * as There's only one producer (this object) and only one {@link TUIStrategy consumer}.
+	 * 
+	 * @return Whether the input string is available or not.
+	 */
 	public boolean isAvailable() {
 		return this.input != null;
 	}
 
+	/**
+	 * @implNote Any methods regarding the input string are not synchronized to avoid the overhead of atomic changes,
+	 * as There's only one producer (this object) and only one {@link TUIStrategy consumer}.
+	 * 
+	 * Returns the input string set by the user.
+	 * 
+	 * @return The input string.
+	 */
 	public String takeInput() {
 		String res = this.input;
 		this.input = null;
 		return res;
 	}
 
+	/**
+	 * @implNote Any methods regarding the input string are not synchronized to avoid the overhead of atomic changes,
+	 * as There's only one producer (this object) and only one {@link TUIStrategy consumer}.
+	 * 
+	 * Peeks the input string without consuming it.
+	 * 
+	 * @return The input string.
+	 */
 	public String peekInput() {
 		return this.line.toString();
 	}
 
+	/**
+	 * Entry point for any external usage of the terminal, Prints to screen starting from the specified cell.
+	 * 
+	 * @param string String to be printed.
+	 * @param row Row of the starting cell.
+	 * @param scol Column of the starting cell.
+	 */
 	public void print(String string, int row, int scol) {
 		if(!legal) return;
 		synchronized (this.termlock) {
@@ -180,6 +231,14 @@ public class TerminalWrapper {
 		}
 	}
 
+
+	/**
+	 * Prints a collection of strings starting from the specified cell, and moving downwards.
+	 * 
+	 * @param lines Strings to be printed.
+	 * @param row Row of the starting cell.
+	 * @param scol Column of the starting cell.
+	 */
 	public void print(Collection<String> lines, int srow, int scol) {
 		for (String line : lines) {
 			this.print(line, srow, scol);
@@ -187,6 +246,11 @@ public class TerminalWrapper {
 		}
 	}
 
+	/**
+	 * Prints a collection of strings starting centering it automatically.
+	 * 
+	 * @param lines Strings to be printed.
+	 */
 	public void printCentered(Collection<String> lines) {
 		int firstrow = (this.size.getRows() - lines.size()) / 2;
 		for (String line : lines) {
@@ -195,11 +259,22 @@ public class TerminalWrapper {
 		}
 	}
 
+	/**
+	 * Prints a collection of strings starting centering it automatically based on the first line.
+	 * 
+	 * @param lines Strings to be printed.
+	 */
 	public void printCenteredCorner(List<String> lines) {
 		int firstrow = (this.size.getRows() - lines.size()) / 2;
 		this.print(lines, firstrow, (this.size.getColumns() - lines.get(0).length()) / 2);
 	}
 
+	/**
+	 * Prints a {@link Capability} on the screen.
+	 * 
+	 * @param capability {@link Capability} to be printed.
+	 * @param params Parameters regarding the capability.
+	 */
 	public void puts(Capability capability, Object... params) {
 		if(!legal) return;
 		synchronized (this.termlock) {
@@ -208,13 +283,11 @@ public class TerminalWrapper {
 		}
 	}
 
-	public void setStatus(List<AttributedString> lines) {
-		status.update(lines);
-		terminal.flush();
-		status.redraw();
-		terminal.flush();
-	}
-
+	/**
+	 * Method run at shutdown to return the terminal to the state it was before the TUI launched.
+	 * 
+	 * @param a {@link Attributes} Attributes representing the previous state of the Terminal.
+	 */
 	private void cleanUp(Attributes a) {
 		puts(Capability.clear_screen);
 		puts(Capability.cursor_visible);
@@ -225,6 +298,11 @@ public class TerminalWrapper {
 		}
 	}
 
+	/**
+	 * Prints warning screen related to insufficient size parameters.
+	 * 
+	 * @param s {@link Size} Current size of the terminal.
+	 */
 	private void showSmallScreen(Size s) {
 		ArrayList<AttributedString> res = new ArrayList<>();
 		res.add(new AttributedStringBuilder().style(AttributedStyle.BOLD.foreground(AttributedStyle.RED)).append("WARNING!!").toAttributedString());

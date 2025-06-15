@@ -1,5 +1,8 @@
 package it.polimi.ingsw.utils;
 
+/**
+ * Enum representing the various levels a logger can print in.
+ */
 public enum LoggerLevel {
 	OFF(8, "\033[0m"),              //No messages are ever shown
 	ERROR(7, "\u001B[41m\033[1;93m"), //Only errors are shown

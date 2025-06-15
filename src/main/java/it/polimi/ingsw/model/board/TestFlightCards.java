@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * A pile of {@link iCard} containing only eight specific level one cards, and no cards available to see during the construction phase.
+ */
 public class TestFlightCards implements iCards {
 
 	private final ArrayDeque<iCard> cards;
@@ -28,11 +31,20 @@ public class TestFlightCards implements iCards {
 		this.cards = new ArrayDeque<iCard>(test_cards);
 	}
 
+	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public iCard pullCard() {
 		return this.cards.poll();
 	}
 
+	/**
+	 * Returns always null as the Test Flight has no visible cards during construction.
+	 * 
+	 * @return null;
+	 */
 	@Override
 	public List<Integer> getConstructionCards() {
 		return null;

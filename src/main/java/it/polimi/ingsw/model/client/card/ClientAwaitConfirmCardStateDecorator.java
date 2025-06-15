@@ -4,6 +4,9 @@ import it.polimi.ingsw.model.player.PlayerColor;
 
 import java.util.ArrayList;
 
+/**
+ * Client side card state decorator displaying the list of players the model is awaiting a response from.
+ */
 public class ClientAwaitConfirmCardStateDecorator implements ClientCardState {
 
 	private final ClientCardState base;
@@ -20,6 +23,9 @@ public class ClientAwaitConfirmCardStateDecorator implements ClientCardState {
 		return this.awaiting;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void showCardState(ClientCardStateVisitor visitor) {
 		base.showCardState(visitor);

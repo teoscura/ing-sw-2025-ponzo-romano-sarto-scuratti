@@ -12,18 +12,39 @@ import it.polimi.ingsw.model.state.VoyageState;
 
 import java.util.ArrayList;
 
+/**
+ * Represents the "Epidemic" adventure card in the game.
+ * <p>
+ * This card simulates the outbreak of an illness spreading through connected cabins
+ * in a player's spaceship. Crew members in affected cabins are removed. If no crew
+ * members survive, the player loses the game.
+ * </p>
+ */
 public class EpidemicCard extends Card {
 
 	public EpidemicCard(int id) {
 		super(id, 0);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public CardState getState(VoyageState state) {
 		return new EpidemicState(state, this);
 	}
 
-
+	/**
+	 * Applies the effect of the epidemic to the player's ship.
+	 * <p>
+	 * The method identifies all connected cabins and removes their crew using
+	 * a {@link CrewRemoveVisitor}. If the ship has no crew left after this,
+	 * the player is considered to have lost the game.
+	 * </p>
+	 *
+	 * @throws PlayerNotFoundException if the ship/player is not found
+	 * @throws NullPointerException    if {@code state} or {@code p} is null
+	 */
 	public void apply(VoyageState state, Player p) throws PlayerNotFoundException {
 		if (state == null || p == null) throw new NullPointerException();
 		ArrayList<ShipCoords> ill_cabins = p.getSpaceShip().findConnectedCabins();

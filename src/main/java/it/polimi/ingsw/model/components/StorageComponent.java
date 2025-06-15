@@ -11,12 +11,19 @@ import it.polimi.ingsw.model.components.enums.StorageType;
 import it.polimi.ingsw.model.components.exceptions.ContainerEmptyException;
 import it.polimi.ingsw.model.components.exceptions.ContainerFullException;
 import it.polimi.ingsw.model.components.exceptions.ContainerNotSpecialException;
-import it.polimi.ingsw.model.components.visitors.iVisitor;
+import it.polimi.ingsw.model.components.visitors.ComponentVisitor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.player.SpaceShip;
 
 import java.util.Arrays;
 
+/**
+ * <h2>StorageComponent</h2>
+ * <p>
+ * Represents a cargo storage module on a player's spaceship in <i>Galaxy Trucker</i>.
+ * It can contain shipments of various types, such as goods or special items (e.g. red containers).
+ * </p>
+ */
 public class StorageComponent extends BaseComponent {
 
 	private final int[] shipments;
@@ -44,6 +51,13 @@ public class StorageComponent extends BaseComponent {
 		Arrays.fill(shipments, 0);
 	}
 
+	/**
+	 * Receives a shipment and adds it to the storage
+	 *
+	 * @throws ContainerFullException if the component is already full
+	 *
+	 * @param shipment
+	 */
 	public void putIn(ShipmentType shipment) {
 		if (shipment.getValue() < 1) throw new IllegalArgumentException();
 		if (shipment.getSpecial() && !this.type.getSpecial()) throw new ContainerNotSpecialException();
@@ -52,6 +66,12 @@ public class StorageComponent extends BaseComponent {
 		this.currently_full++;
 	}
 
+	/**
+	 * Removes shipment of a specific type from the storage
+	 *
+	 * @param shipment
+	 * @return true if shipment is present and removed, false otherwise
+	 */
 	public boolean takeOut(ShipmentType shipment) {
 		if (shipment.getValue() < 1) throw new IllegalArgumentException();
 		if (shipment.getSpecial() && !this.type.getSpecial()) return false;
@@ -62,6 +82,10 @@ public class StorageComponent extends BaseComponent {
 		return true;
 	}
 
+	/**
+	 * @param container
+	 * @return how many shipments of the specified container type are in the storage
+	 */
 	public int howMany(ShipmentType container) {
 		return this.shipments[container.getValue() - 1];
 	}
@@ -78,22 +102,36 @@ public class StorageComponent extends BaseComponent {
 		return this.type.getCapacity();
 	}
 
+	/**
+	 * This adds the Storage Component's coordinates to the {@link SpaceShip}
+	 * @param ship {@link SpaceShip} to which you want to add the Storage component
+	 */
 	@Override
 	public void onCreation(SpaceShip ship, ShipCoords coords) {
 		this.coords = coords;
 		ship.addStorageCoords(this.coords);
 	}
 
+	/**
+	 * This removes the Storage Component's coordinates from the {@link SpaceShip}
+	 * @param ship {@link SpaceShip} to which you want to remove the Storage component
+	 */
 	@Override
 	public void onDelete(SpaceShip ship) {
 		ship.delStorageCoords(this.coords);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
-	public void check(iVisitor v) {
+	public void check(ComponentVisitor v) {
 		v.visit(this);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public ClientComponent getClientComponent() {
 		return new ClientShipmentsComponentDecorator(new ClientBaseComponent(getID(), getRotation(), getConnectors()), type, shipments);

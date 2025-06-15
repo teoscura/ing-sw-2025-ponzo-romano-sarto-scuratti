@@ -1,5 +1,8 @@
 package it.polimi.ingsw.model.client.components;
 
+/**
+ * Client side component decorator containing info about its battery contents.
+ */
 public class ClientBatteryComponentDecorator implements ClientComponent {
 
 	private final ClientComponent base;
@@ -19,6 +22,9 @@ public class ClientBatteryComponentDecorator implements ClientComponent {
 		return this.batteries;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void showComponent(ClientComponentVisitor visitor) {
 		base.showComponent(visitor);

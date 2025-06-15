@@ -11,13 +11,21 @@ import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ConnectorType;
 import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
 import it.polimi.ingsw.model.components.visitors.LifeSupportUpdateVisitor;
-import it.polimi.ingsw.model.components.visitors.iVisitor;
+import it.polimi.ingsw.model.components.visitors.ComponentVisitor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.player.SpaceShip;
 
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * <h2>AlienLifeSupportComponent</h2>
+ * <p>
+ * This class represents a life support system specifically designed to host alien crew members.
+ * It is a special type of ship component that allows <b>AlienType</b> aliens (e.g., Brown or Purple)
+ * to inhabit cabins connected to it.
+ * </p>
+ */
 public class AlienLifeSupportComponent extends BaseComponent {
 
 	private AlienType type = AlienType.BROWN;
@@ -45,8 +53,11 @@ public class AlienLifeSupportComponent extends BaseComponent {
 		this.type = type;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
-	public void check(iVisitor v) {
+	public void check(ComponentVisitor v) {
 		v.visit(this);
 	}
 
@@ -54,11 +65,20 @@ public class AlienLifeSupportComponent extends BaseComponent {
 		return type;
 	}
 
+	/**
+	 * This adds the AlienLifeSupport Component's coordinates to the {@link SpaceShip}
+	 * 
+	 * @param ship {@link SpaceShip} Ship to which you want to add the AlienLifeSupport component
+	 */
 	@Override
 	public void onCreation(SpaceShip ship, ShipCoords coords) {
 		this.coords = coords;
 	}
 
+	/**
+	 * This removes the AlienLifeSupport Component's coordinates from the {@link SpaceShip}
+	 * @param ship {@link SpaceShip} Ship to which you want to remove the AlienLifeSupport component
+	 */
 	@Override
 	public void onDelete(SpaceShip ship) {
 		BaseComponent[] tmp = this.getConnectedComponents(ship);
@@ -85,6 +105,9 @@ public class AlienLifeSupportComponent extends BaseComponent {
 
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public ClientComponent getClientComponent() {
 		return new ClientLifeSupportComponentDecorator(

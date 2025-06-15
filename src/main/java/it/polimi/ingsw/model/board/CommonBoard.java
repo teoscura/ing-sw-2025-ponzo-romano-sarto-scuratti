@@ -10,6 +10,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
+/**
+ * CommonBoard handles the component piles durning the building phase of the game.
+ * Contains a queue of components not yet revealed, and an array of uncovered components,
+ * Accessed and visible to the players
+ */
 public class CommonBoard implements iCommonBoard {
 
 	private final ArrayDeque<BaseComponent> covered_components;
@@ -30,12 +35,18 @@ public class CommonBoard implements iCommonBoard {
 		this.discarded_components = new HashMap<>();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public BaseComponent pullComponent() {
 		if (this.covered_components.isEmpty()) return null;
 		return this.covered_components.poll();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void discardComponent(BaseComponent c) {
 		if (this.discarded_components.containsKey(c.getID()))
@@ -43,6 +54,9 @@ public class CommonBoard implements iCommonBoard {
 		this.discarded_components.put(c.getID(), c);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public BaseComponent pullDiscarded(int id) {
 		if (!this.discarded_components.containsKey(id)) throw new ContainerEmptyException();

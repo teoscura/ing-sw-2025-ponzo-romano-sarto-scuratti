@@ -4,6 +4,7 @@ import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
+import it.polimi.ingsw.model.cards.utils.CardOrder;
 import it.polimi.ingsw.model.client.card.ClientCardState;
 import it.polimi.ingsw.model.client.card.ClientNewCenterCardStateDecorator;
 import it.polimi.ingsw.model.client.state.ClientState;
@@ -18,11 +19,21 @@ import it.polimi.ingsw.utils.LoggerLevel;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class representing the selection of a ship section when a {@link Player} reconnects with a broken ship but not being retired.
+ */
 public class SelectShipReconnectState extends CardState {
 
 	private final CardState resume;
 	private final Player awaiting;
 
+	/**
+	 * Constructs a {@link SelectShipReconnectState} object.
+	 * 
+	 * @param state {@link VoyageState} VoyageState that owns this {@link CardState}.
+	 * @param resume {@link CardState} Card state to resume after everyone selected their ship section.
+	 * @param awaiting {@link Player} Player that reconnected with a broken ship.
+	 */
 	public SelectShipReconnectState(VoyageState state, CardState resume, Player awaiting) {
 		super(state);
 		if (awaiting == null || resume == null) throw new NullPointerException();
@@ -30,6 +41,12 @@ public class SelectShipReconnectState extends CardState {
 		this.awaiting = awaiting;
 	}
 
+	/**
+	 * Called when the card state is initialized.
+	 * Resets power for all players ships.
+	 *
+	 * @param new_state {@link ClientState} The new client state to broadcast to all connected listeners.
+	 */
 	@Override
 	public void init(ClientState new_state) {
 		super.init(new_state);
@@ -37,12 +54,20 @@ public class SelectShipReconnectState extends CardState {
 
 	}
 
+	/**
+	 * Validates the {@link ServerMessage} and transitions if the player has set the blob or disconnected.
+	 *
+	 * @param message {@link ServerMessage} The message received from the player
+	 * @throws ForbiddenCallException if the message is not allowed
+	 */
 	@Override
 	public void validate(ServerMessage message) throws ForbiddenCallException {
 		message.receive(this);
-		if (this.awaiting.getSpaceShip().getBlobsSize() > 1 && !this.awaiting.getDisconnected()) {
-			this.state.broadcastMessage(new NotifyStateUpdateMessage(this.state.getClientState()));
-			return;
+		for(var p : this.state.getOrder(CardOrder.NORMAL)){
+			if (p.getSpaceShip().getBlobsSize() > 1 && !p.getDisconnected()) {
+				this.state.broadcastMessage(new NotifyStateUpdateMessage(this.state.getClientState()));
+				return;
+			}
 		}
 		this.transition();
 	}
@@ -53,11 +78,22 @@ public class SelectShipReconnectState extends CardState {
 		return new ClientNewCenterCardStateDecorator(this.resume.getClientCardState(), new ArrayList<>(tmp));
 	}
 
+	/**
+	 * Computes and returns the next {@code CardState}.
+	 *
+	 * @return {@link CardState} the next state, or {@code null} if the card is exhausted
+	 */
 	@Override
 	public CardState getNext() {
 		return this.resume;
 	}
 
+	/**
+	 * Called when a {@link Player} tries to select a ship blob center.
+	 *
+	 * @param p {@link Player} The player
+	 * @param blob_coord {@link ShipCoords} The coordinates selected
+	 */
 	@Override
 	public void selectBlob(Player p, ShipCoords blob_coord) {
 		if (!p.equals(awaiting)) {
@@ -78,6 +114,12 @@ public class SelectShipReconnectState extends CardState {
 		}
 	}
 
+	/**
+	 * Called when a {@link Player} disconnects.
+	 *
+	 * @param p {@link Player} The player disconnecting.
+	 * @throws ForbiddenCallException when the state refuses the action.
+	 */
 	@Override
 	public void disconnect(Player p) {
 	}

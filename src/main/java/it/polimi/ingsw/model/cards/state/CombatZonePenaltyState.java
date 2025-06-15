@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.cards.state;
 import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
+import it.polimi.ingsw.model.cards.CombatZoneCard;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.cards.utils.CombatZonePenalty;
 import it.polimi.ingsw.model.cards.utils.CombatZoneSection;
@@ -22,7 +23,9 @@ import it.polimi.ingsw.utils.LoggerLevel;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * Class representing a Penalty State of the {@link CombatZoneCard}.
+ */
 class CombatZonePenaltyState extends CardState {
 
 	private final int card_id;
@@ -33,6 +36,15 @@ class CombatZonePenaltyState extends CardState {
 	private boolean responded = false;
 	private int amount = 0;
 
+	/**
+	 * Constructs a new {@code CombatZonePenaltyState}.
+	 *
+	 * @param state {@link VoyageState} The current voyage state
+	 * @param card_id   The card id
+	 * @param sections  The sections defining penalties
+	 * @param shots     The projectile array
+	 * @param target   The {@link Player} receiving the penalty
+	 */
 	public CombatZonePenaltyState(VoyageState state, int card_id, ArrayList<CombatZoneSection> sections, ProjectileArray shots, Player target) {
 		super(state);
 		if (sections == null || shots == null || target == null) ;
@@ -56,6 +68,13 @@ class CombatZonePenaltyState extends CardState {
 		}
 	}
 
+	/**
+	 * Called when the card state is initialized.
+	 * Resets power for all players ships.
+	 * Applies the penalty if possible and immediately transitions.
+	 *
+	 * @param new_state {@link ClientState} The new client state to broadcast to all connected listeners.
+	 */
 	@Override
 	public void init(ClientState new_state) {
 		super.init(new_state);
@@ -84,6 +103,12 @@ class CombatZonePenaltyState extends CardState {
 		}
 	}
 
+	/**
+	 * Validates the {@link ServerMessage} and if the target has responded, transitions.
+	 *
+	 * @param message {@link ServerMessage} The message received from the player
+	 * @throws ForbiddenCallException if the message is not allowed
+	 */
 	@Override
 	public void validate(ServerMessage message) throws ForbiddenCallException {
 		message.receive(this);
@@ -141,6 +166,11 @@ class CombatZonePenaltyState extends CardState {
 		}
 	}
 
+	/**
+	 * Computes and returns the next {@code CardState}.
+	 *
+	 * @return {@link CardState} the next state, or {@code null} if the card is exhausted
+	 */
 	@Override
 	public CardState getNext() {
 		if (this.target.getDisconnected()) {
@@ -161,6 +191,14 @@ class CombatZonePenaltyState extends CardState {
 		return null;
 	}
 
+	/**
+	 * Called when a {@link Player} attempts to power a component.
+	 *
+	 * @param p {@link Player} The player
+	 * @param target_coords {@link ShipCoords} the component to power
+	 * @param battery_coords {@link ShipCoords} the battery to use
+	 * @throws ForbiddenCallException when the state refuses the action.
+	 */
 	@Override
 	public void turnOn(Player p, ShipCoords target_coords, ShipCoords battery_coords) throws ForbiddenCallException {
 		if (!p.equals(this.target)) {
@@ -183,6 +221,12 @@ class CombatZonePenaltyState extends CardState {
 		}
 	}
 
+	/**
+	 * Called when a {@link Player} attempts to progress their turn.
+	 *
+	 * @param p {@link Player} The player
+	 * @throws ForbiddenCallException when the state refuses the action.
+	 */
 	@Override
 	public void progressTurn(Player p) throws ForbiddenCallException {
 		if (!p.equals(this.target)) {
@@ -198,6 +242,13 @@ class CombatZonePenaltyState extends CardState {
 		this.responded = true;
 	}
 
+	/**
+	 * Called when a {@link Player} tries to remove crew from a cabin.
+	 *
+	 * @param p {@link Player} The player
+	 * @param cabin_coords {@link ShipCoords} the coordinates of the cabin
+	 * @throws ForbiddenCallException when the state refuses the action.
+	 */
 	@Override
 	public void removeCrew(Player p, ShipCoords cabin_coords) throws ForbiddenCallException {
 		if (!p.equals(this.target)) {
@@ -226,6 +277,14 @@ class CombatZonePenaltyState extends CardState {
 		}
 	}
 
+	/**
+	 * Called when a {@link Player} tries to discard cargo.
+	 *
+	 * @param p {@link Player} The player
+	 * @param type {@link ShipmentType} The cargo type
+	 * @param coords {@link ShipCoords} the coordinates of the target
+	 * @throws ForbiddenCallException when the state refuses the action.
+	 */
 	@Override
 	public void discardCargo(Player p, ShipmentType type, ShipCoords coords) throws ForbiddenCallException {
 		if (!p.equals(this.target)) {
@@ -284,6 +343,12 @@ class CombatZonePenaltyState extends CardState {
 		this.responded = true;
 	}
 
+	/**
+	 * Called when a {@link Player} disconnects.
+	 *
+	 * @param p {@link Player} The player disconnecting.
+	 * @throws ForbiddenCallException when the state refuses the action.
+	 */
 	@Override
 	public void disconnect(Player p) throws ForbiddenCallException {
 		if (this.target.equals(p)) {

@@ -18,7 +18,9 @@ import it.polimi.ingsw.utils.Logger;
 import it.polimi.ingsw.utils.LoggerLevel;
 
 import java.util.ArrayList;
-
+/**
+ * Class representing the Lose State of the {@link SlaversCard}.
+ */
 public class SlaversLoseState extends CardState {
 
 	private final SlaversCard card;
@@ -26,6 +28,13 @@ public class SlaversLoseState extends CardState {
 	private boolean responded = false;
 	private int done = 0;
 
+	/**
+	 * Construct a {@link SlaversLoseState} object.
+	 * 
+	 * @param state {@link VoyageState} The current voyage state
+	 * @param card  {@link SlaversCard} The card being played.
+	 * @param list  List of {@link Player} players in order of distance.
+	 */
 	protected SlaversLoseState(VoyageState state, SlaversCard card, ArrayList<Player> list) {
 		super(state);
 		if (list.size() > this.state.getCount().getNumber() || list.size() < 1 || list == null)
@@ -35,6 +44,12 @@ public class SlaversLoseState extends CardState {
 		this.list = list;
 	}
 
+	/**
+	 * Called when the card state is initialized.
+	 * Resets power for all players ships.
+	 *
+	 * @param new_state {@link ClientState} The new client state to broadcast to all connected listeners.
+	 */
 	@Override
 	public void init(ClientState new_state) {
 		super.init(new_state);
@@ -44,6 +59,12 @@ public class SlaversLoseState extends CardState {
 		}
 	}
 
+	/**
+	 * Validates the {@link ServerMessage} and if the front of the remaining player list has removed the necessary crew, transition.
+	 *
+	 * @param message {@link ServerMessage} The message received from the player
+	 * @throws ForbiddenCallException if the message is not allowed
+	 */
 	@Override
 	public void validate(ServerMessage message) throws ForbiddenCallException {
 		message.receive(this);
@@ -64,6 +85,11 @@ public class SlaversLoseState extends CardState {
 				this.card.getCrewLost() - this.done);
 	}
 
+	/**
+	 * Computes and returns the next {@code CardState}.
+	 *
+	 * @return {@link CardState} the next state, or {@code null} if the card is exhausted
+	 */
 	@Override
 	public CardState getNext() {
 		if (this.list.getFirst().getRetired() || this.list.getFirst().getDisconnected()) {
@@ -78,6 +104,12 @@ public class SlaversLoseState extends CardState {
 		return null;
 	}
 
+	/**
+	 * Called when a {@link Player} tries to remove crew from a cabin.
+	 *
+	 * @param p {@link Player} The player
+	 * @param cabin_coords {@link ShipCoords} the coordinates of the cabin
+	 */
 	@Override
 	public void removeCrew(Player p, ShipCoords cabin_coords) throws ForbiddenCallException {
 		if (p != this.list.getFirst()) {
@@ -100,6 +132,12 @@ public class SlaversLoseState extends CardState {
 		}
 	}
 
+	/**
+	 * Called when a {@link Player} disconnects.
+	 *
+	 * @param p {@link Player} The player disconnecting.
+	 * @throws ForbiddenCallException when the state refuses the action.
+	 */
 	@Override
 	public void disconnect(Player p) throws ForbiddenCallException {
 		if (this.list.getFirst() == p) {

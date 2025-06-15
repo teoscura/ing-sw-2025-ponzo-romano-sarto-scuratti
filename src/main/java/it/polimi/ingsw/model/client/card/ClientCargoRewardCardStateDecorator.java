@@ -2,6 +2,9 @@ package it.polimi.ingsw.model.client.card;
 
 import it.polimi.ingsw.model.player.PlayerColor;
 
+/**
+ * Client side card state decorator displaying a cargo reward applied to a specified player.
+ */
 public class ClientCargoRewardCardStateDecorator implements ClientCardState {
 
 	private final ClientCardState base;
@@ -34,6 +37,9 @@ public class ClientCargoRewardCardStateDecorator implements ClientCardState {
 		return this.shipments;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void showCardState(ClientCardStateVisitor visitor) {
 		base.showCardState(visitor);

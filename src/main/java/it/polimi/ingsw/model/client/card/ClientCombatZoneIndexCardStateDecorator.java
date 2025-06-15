@@ -2,6 +2,9 @@ package it.polimi.ingsw.model.client.card;
 
 import it.polimi.ingsw.model.cards.utils.CombatZoneSection;
 
+/**
+ * Client side card state decorator displaying the index and section info of a combat zone card.
+ */
 public class ClientCombatZoneIndexCardStateDecorator implements ClientCardState {
 
 	private final ClientCardState base;
@@ -25,6 +28,9 @@ public class ClientCombatZoneIndexCardStateDecorator implements ClientCardState 
 		return this.index;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void showCardState(ClientCardStateVisitor visitor) {
 		base.showCardState(visitor);

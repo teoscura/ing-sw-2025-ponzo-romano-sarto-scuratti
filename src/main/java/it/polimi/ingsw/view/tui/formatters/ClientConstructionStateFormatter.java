@@ -14,7 +14,9 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * Formatter that displays all info regarding a provided {@link ClientConstructionState}.
+ */
 public class ClientConstructionStateFormatter {
 
 	private static final String bottom_line = "━Typed line:━";

@@ -5,7 +5,10 @@ import it.polimi.ingsw.view.tui.TerminalWrapper;
 
 import java.util.ArrayList;
 
-public class ClientWaitingStateFormatter {
+/**
+ * Formatter that displays all info regarding a provided {@link ClientWaitingRoomState}.
+ */
+public class ClientWaitingRoomStateFormatter {
 
 	private static final String bottom_line = "━Typed line:━";
 

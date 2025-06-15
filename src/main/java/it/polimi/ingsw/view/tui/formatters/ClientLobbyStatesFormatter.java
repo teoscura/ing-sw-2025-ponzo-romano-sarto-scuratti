@@ -10,6 +10,9 @@ import org.jline.utils.AttributedStyle;
 
 import java.util.ArrayList;
 
+/**
+ * Formatter that displays all info regarding a provided {@link ClientLobbySelectState} or {@link ClientSetupState}.
+ */
 public class ClientLobbyStatesFormatter {
 
 	private static final String bottom_line = "━Typed line:━";

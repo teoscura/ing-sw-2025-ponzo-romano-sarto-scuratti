@@ -6,6 +6,9 @@ import java.io.Serializable;
 import java.time.Duration;
 import java.time.Instant;
 
+/**
+ * The hourglass used during a {@link LevelTwoConstructionState}.
+ */
 public class ConstructionStateHourglass implements Serializable {
 
 	private final Duration period;
@@ -13,6 +16,12 @@ public class ConstructionStateHourglass implements Serializable {
 	private Instant toggled = null;
 	private int times;
 
+	/**
+	 * Constructs a {@link ConstructionStateHourglass} object.
+	 * 
+	 * @param seconds Number of seconds the {@link ConstructionStateHourglass} lasts.
+	 * @param times Number of times the {@link ConstructionStateHourglass} can be turned.
+	 */
 	public ConstructionStateHourglass(int seconds, int times) {
 		if (seconds <= 0 || times < 0) throw new IllegalArgumentException();
 		this.total = times;

@@ -6,6 +6,9 @@ import it.polimi.ingsw.model.cards.exceptions.AlreadyVisitedException;
 
 import java.io.Serializable;
 
+/**
+ * Class representing a single landing place on a {@link PlanetCard}.
+ */
 public class Planet implements Serializable {
 
 	private final int[] contains;

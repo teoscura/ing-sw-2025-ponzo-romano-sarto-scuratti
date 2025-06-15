@@ -8,6 +8,9 @@ import it.polimi.ingsw.model.cards.state.CardState;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.GameState;
 
+/**
+ * Server message indicating a request from a player to remove crew at the specified coordinates.
+ */
 public class RemoveCrewMessage extends ServerMessage {
 
 	private final ShipCoords coords;

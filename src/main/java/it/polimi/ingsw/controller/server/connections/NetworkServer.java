@@ -4,6 +4,7 @@ import it.polimi.ingsw.controller.server.ClientDescriptor;
 import it.polimi.ingsw.controller.server.MainServerController;
 import it.polimi.ingsw.message.client.ClientDisconnectMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
+import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.utils.Logger;
 import it.polimi.ingsw.utils.LoggerLevel;
 
@@ -26,7 +27,10 @@ import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-public class NetworkServer extends Thread implements RMISkeletonProvider, Serializable {
+/**
+ * Represents the entry point for any incoming connection to the {@link MainServerController}, for both protocols.
+ */
+public class NetworkServer extends Thread implements VirtualServerProvider, Serializable {
 
 	private final ExecutorService serverPool;
 	private String ip = "localhost";
@@ -34,10 +38,20 @@ public class NetworkServer extends Thread implements RMISkeletonProvider, Serial
 	private boolean init = false;
 	private ServerSocket server;
 
+	/**
+	 * Constructs a {@link NetworkServer} object, only initializing the {@link ExecutorService}.
+	 */
 	public NetworkServer() {
 		this.serverPool = new ThreadPoolExecutor(20, 120, Long.MAX_VALUE, TimeUnit.MILLISECONDS, new SynchronousQueue<>(true));
 	}
 
+	/**
+	 * Properly sets all parameters to open the server to inbound connections.
+	 * 
+	 * @param address IP address on which both protocols will be listening.
+	 * @param tcpport Port on which the TCP Socket will be opened.
+	 * @param rmiport Port on which the RMI Registy will be created.
+	 */
 	public void init(String address, int tcpport, int rmiport) {
 		if (this.init) throw new AlreadyConnectedException();
 		this.ip = address;
@@ -46,6 +60,12 @@ public class NetworkServer extends Thread implements RMISkeletonProvider, Serial
 		this.init = true;
 	}
 
+	/**
+	 * Properly sets all parameters to open the server to inbound connections. TCP port to be randomly selected.
+	 * 
+	 * @param address IP address on which both protocols will be listening.
+	 * @param rmiport Port on which the RMI Registy will be created.
+	 */
 	public void init(String address, int rmiport) {
 		if (this.init) throw new AlreadyConnectedException();
 		this.ip = address;
@@ -54,6 +74,9 @@ public class NetworkServer extends Thread implements RMISkeletonProvider, Serial
 		this.init = true;
 	}
 
+	/**
+	 * Starts both protocols with the values set using {@link NetworkServer#init(String, int, int) init(...)} and creates the RMI Registry objects binding this object to an entry.
+	 */
 	private void startServer() {
 		Registry registry = null;
 		Cleaner c = Cleaner.create();
@@ -91,6 +114,9 @@ public class NetworkServer extends Thread implements RMISkeletonProvider, Serial
 		Logger.getInstance().print(LoggerLevel.SERVR, "Successfully started server.");
 	}
 
+	/**
+	 * Main loop of the {@link NetworkServer}, listening for incoming TCP connections.
+	 */
 	@Override
 	public void run() {
 		if (!this.init) throw new NotYetConnectedException();
@@ -106,7 +132,9 @@ public class NetworkServer extends Thread implements RMISkeletonProvider, Serial
 		}
 	}
 
-
+	/**
+	 * @return A thread object related to the proper closure of any remnants of the RMI Server.
+	 */
 	private Thread RMICleanup() {
 		return new Thread() {
 			public void run() {
@@ -122,6 +150,9 @@ public class NetworkServer extends Thread implements RMISkeletonProvider, Serial
 		};
 	}
 
+	/**
+	 * @return A thread object related to the proper closure of any remnants of the TCP Server.
+	 */
 	private Thread TCPCleanup() {
 		return new Thread() {
 			public void run() {
@@ -135,6 +166,13 @@ public class NetworkServer extends Thread implements RMISkeletonProvider, Serial
 		};
 	}
 
+	/**
+	 * Main entry method for any {@link RMIClientConnection} wishing to connect. 
+	 * 
+	 * @param client {@link RMIClientConnection} Client stub object exported before connecting.
+	 * @return {@link VirtualServer} Server stub object used by client to send {@link ServerMessage messages}, null if connection is refused.
+	 * @throws RemoteException If the underlying RMI TCP channel is disrupted in any unrecoverable way.
+	 */
 	public VirtualServer accept(RMIClientConnection client) throws RemoteException {
 		ClientDescriptor new_client = MainServerController.getInstance().connectListener(client);
 		if (new_client == null) {

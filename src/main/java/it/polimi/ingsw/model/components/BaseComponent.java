@@ -5,14 +5,16 @@ import it.polimi.ingsw.model.client.components.ClientComponent;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ConnectorType;
 import it.polimi.ingsw.model.components.exceptions.ConnectorsSizeException;
-import it.polimi.ingsw.model.components.visitors.iVisitable;
-import it.polimi.ingsw.model.components.visitors.iVisitor;
+import it.polimi.ingsw.model.components.visitors.ComponentVisitor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.player.SpaceShip;
 
 import java.io.Serializable;
 
-public abstract class BaseComponent implements iVisitable, Serializable {
+/**
+ * Abstract class representing a server side component tile.
+ */
+public abstract class BaseComponent implements Serializable {
 
 	private final int id;
 	private final ConnectorType[] connectors;
@@ -29,6 +31,7 @@ public abstract class BaseComponent implements iVisitable, Serializable {
 		this.connectors = connectors;
 		this.rotation = rotation;
 	}
+
 
 	protected BaseComponent(int id, ConnectorType[] connectors,
 							ComponentRotation rotation,
@@ -48,22 +51,36 @@ public abstract class BaseComponent implements iVisitable, Serializable {
 		return this.id;
 	}
 
-
+	/**
+	 * @return Array of {@link ConnectorType}, one for each cardinal direction starting clockwise from the top.
+	 */
 	public ConnectorType[] getConnectors() {
 		return connectors;
 	}
 
-
+	/**
+	 * @return Rotation of the component, given as the clockwise angle from the up position
+	 */
 	public ComponentRotation getRotation() {
 		return rotation;
 	}
 
-
+	/**
+	 * Rotates the component.
+	 * 
+	 * @param rotation {@link ComponentRotation} New component rotation.
+	 */
 	public void rotate(ComponentRotation rotation) {
 		this.rotation = rotation;
 	}
 
 
+	/**
+	 * Verifies the component is properly connected to its neighbours.
+	 * 
+	 * @param ship {@link SpaceShip} Ship from which the component retrieves its neighbours.
+	 * @return Whether the component is properly connected or not.
+	 */
 	public boolean verify(SpaceShip ship) {
 		if (this.coords == null) throw new NullPointerException("Coords are not set");
 		BaseComponent up = ship.getComponent(this.coords.up());
@@ -88,34 +105,63 @@ public abstract class BaseComponent implements iVisitable, Serializable {
 	}
 
 
+	/**
+	 * Returns the connector at a specific direction of the component, given the rotation of the component inside the ship
+	 *
+	 * @param direction {@link ComponentRotation} Rotation requested.
+	 * @return {@link ConnectorType} Connector at that specific rotation.
+	 */
 	public ConnectorType getConnector(ComponentRotation direction) {
 		int shift = direction.getShift() + (4 - this.rotation.getShift());
 		shift = shift % 4;
 		return connectors[shift];
 	}
 
-
+	/**
+	 * @return coords of the component inside the ship
+	 */
 	public ShipCoords getCoords() {
 		return this.coords;
 	}
 
-
+	/**
+	 * @return Whether the component can be powered or not.
+	 */
 	public boolean powerable() {
 		return false;
 	}
 
-
+	/**
+	 * Logic when component is placed in {@link SpaceShip ship}.
+	 * @param ship {@link SpaceShip} Ship where the component was placed.
+	 * @param coords {@link ShipCoords} Coordinates where it was placed.
+	 */
 	public abstract void onCreation(SpaceShip ship, ShipCoords coords);
 
-
+	/**
+	 * Logic when component is removed from {@link SpaceShip ship}.
+	 * @param ship {@link SpaceShip} Ship where the component was placed.
+	 */
 	public abstract void onDelete(SpaceShip ship);
 
-
+	/**
+	 * @return {@link ClientComponent }
+	 */
 	public abstract ClientComponent getClientComponent();
 
+	/**
+	 * Checks the component using the visitor provided.
+	 *
+	 * @param v {@link ComponentVisitor} Visitor to show component to.
+	 */
+	public abstract void check(ComponentVisitor v);
 
-	public abstract void check(iVisitor v);
-
+	/**
+	 * Checks if adjacent components have compatible connectors, if true adds component to an array
+	 *
+	 * @param ship {@link SpaceShip} Ship to retrieve connected components.
+	 * @return Array of {@link BaseComponent} guaranteed to be connected to this.
+	 */
 	public BaseComponent[] getConnectedComponents(SpaceShip ship) {
 		BaseComponent[] res = new BaseComponent[]{ship.getEmpty(), ship.getEmpty(), ship.getEmpty(), ship.getEmpty()};
 		if (ship.getComponent(this.getCoords().up()) != ship.getEmpty()) {

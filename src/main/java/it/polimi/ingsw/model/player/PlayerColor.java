@@ -1,5 +1,8 @@
 package it.polimi.ingsw.model.player;
 
+/**
+ * Enumeration representing all supported player colors.
+ */
 public enum PlayerColor {
 
 	RED(0),

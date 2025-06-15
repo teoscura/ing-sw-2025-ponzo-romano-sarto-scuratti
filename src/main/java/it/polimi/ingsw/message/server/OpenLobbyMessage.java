@@ -5,6 +5,9 @@ import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.PlayerCount;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 
+/**
+ * Server message indicating a request by a client to open a lobby.
+ */
 public class OpenLobbyMessage extends ServerMessage {
 
 	private final PlayerCount count;

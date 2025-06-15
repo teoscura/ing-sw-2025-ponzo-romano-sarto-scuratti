@@ -9,6 +9,13 @@ import it.polimi.ingsw.model.state.VoyageState;
 
 import java.util.ArrayList;
 
+/**
+ * Represents a "Combat Zone" card in the game.
+ * <p>
+ * This card is used to hit players based on certain conditions (e.g. less cannons, less engines, less crew).
+ * Each criterion can lead to a penalty message or a direct bullet attack.
+ * </p>
+ */
 public class CombatZoneCard extends Card {
 
 	private final ArrayList<CombatZoneSection> sections;
@@ -21,6 +28,9 @@ public class CombatZoneCard extends Card {
 		this.shots = shots;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public CardState getState(VoyageState state) {
 		return new CombatZoneAnnounceState(state, this.getId(), sections, shots);

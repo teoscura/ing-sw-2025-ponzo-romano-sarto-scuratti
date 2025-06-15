@@ -1,7 +1,9 @@
 //Done.
 package it.polimi.ingsw.model.cards.utils;
 
-//Rotazione relativa in gradi, parte da su e va in senso orario
+/**
+ * Enumeration that specifies all possible rotations of a projectile, starting up moving 90 degrees clockwise
+ */
 public enum ProjectileDirection {
 	U000(0),
 	U090(1),

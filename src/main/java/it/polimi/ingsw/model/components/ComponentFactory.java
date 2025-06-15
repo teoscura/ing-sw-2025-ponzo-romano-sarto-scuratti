@@ -5,6 +5,9 @@ import it.polimi.ingsw.model.player.PlayerColor;
 
 import java.util.HashMap;
 
+/**
+ * Factory class used to create the tiles available in the physical release of Galaxy Trucker
+ */
 public class ComponentFactory {
 
 	private final HashMap<Integer, BaseComponent> components;
@@ -1699,11 +1702,19 @@ public class ComponentFactory {
 		}};
 	}
 
+	/**
+	 * @param id ID of the component to retrieve.
+	 * @return The component associated with the ID.
+	 * @throws IllegalArgumentException if the ID isn't contained.
+	 */
 	public BaseComponent getComponent(int id) {
 		if (!this.components.containsKey(id)) throw new IllegalArgumentException("Asked for a non-existant component.");
 		return this.components.get(id);
 	}
 
+	/**
+	 * @return An array of the IDs belonging to tiles that shouldn't appear inside the pile of components during construction.
+	 */
 	public int[] getForbiddenID() {
 		return new int[]{33, 34, 52, 61, 157};
 	}

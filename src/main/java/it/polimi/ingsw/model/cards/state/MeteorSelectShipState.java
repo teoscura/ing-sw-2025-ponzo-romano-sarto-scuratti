@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.cards.state;
 import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
+import it.polimi.ingsw.model.cards.MeteorSwarmCard;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.cards.utils.CardOrder;
 import it.polimi.ingsw.model.cards.utils.ProjectileArray;
@@ -20,12 +21,21 @@ import it.polimi.ingsw.utils.LoggerLevel;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * Class representing a Select Ship State of the {@link MeteorSwarmCard}.
+ */
 class MeteorSelectShipState extends CardState {
 
 	private final int card_id;
 	private final ProjectileArray left;
 
+	/**
+	 * Constructs a new {@code MeteorSelectShipState}.
+	 *
+	 * @param state {@link VoyageState} The current voyage state
+	 * @param card_id   The card id
+	 * @param left     The projectile array
+	 */
 	public MeteorSelectShipState(VoyageState state, int card_id, ProjectileArray left) {
 		super(state);
 		if (left == null) throw new NullPointerException();
@@ -34,12 +44,24 @@ class MeteorSelectShipState extends CardState {
 		this.left = left;
 	}
 
+	/**
+	 * Called when the card state is initialized.
+	 * Resets power for all players ships.
+	 *
+	 * @param new_state {@link ClientState} The new client state to broadcast to all connected listeners.
+	 */
 	@Override
 	public void init(ClientState new_state) {
 		super.init(new_state);
 		Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "CardState -> Meteor Swarm Select Ship State!");
 	}
 
+	/**
+	 * Validates the {@link ServerMessage} and if everyone that was split chose a blob, transitions.
+	 *
+	 * @param message {@link ServerMessage} The message received from the player
+	 * @throws ForbiddenCallException if the message is not allowed
+	 */
 	@Override
 	public void validate(ServerMessage message) throws ForbiddenCallException {
 		message.receive(this);
@@ -63,6 +85,11 @@ class MeteorSelectShipState extends CardState {
 		return new ClientNewCenterCardStateDecorator(new ClientBaseCardState(this.getClass().getSimpleName(), card_id), new ArrayList<>(tmp));
 	}
 
+	/**
+	 * Computes and returns the next {@code CardState}.
+	 *
+	 * @return {@link CardState} The next state, or {@code null} if the card is exhausted
+	 */
 	@Override
 	public CardState getNext() {
 		this.left.getProjectiles().removeFirst();
@@ -71,6 +98,12 @@ class MeteorSelectShipState extends CardState {
 		return null;
 	}
 
+	/**
+	 * Called when a {@link Player} tries to select a ship blob center.
+	 *
+	 * @param p {@link Player} The player
+	 * @param blob_coord {@link ShipCoords} The coordinates selected
+	 */
 	@Override
 	public void selectBlob(Player p, ShipCoords blob_coord) {
 		try {
@@ -85,6 +118,12 @@ class MeteorSelectShipState extends CardState {
 		}
 	}
 
+	/**
+	 * Called when a {@link Player} disconnects.
+	 *
+	 * @param p {@link Player} The player disconnecting.
+	 * @throws ForbiddenCallException when the state refuses the action.
+	 */
 	@Override
 	public void disconnect(Player p) throws ForbiddenCallException {
 

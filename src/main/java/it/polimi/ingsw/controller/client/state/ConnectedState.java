@@ -16,6 +16,9 @@ import java.rmi.RemoteException;
 import java.util.Timer;
 import java.util.TimerTask;
 
+/**
+ * Represents the state of the client after having successfully connected to the game server.
+ */
 public class ConnectedState extends ClientControllerState {
 
 	private final ServerConnection connection;
@@ -26,6 +29,15 @@ public class ConnectedState extends ClientControllerState {
 	private final Thread shutdown_hook;
 	private final Timer pingtimer;
 
+	/**
+	 * Construct a {@link ConnectedState} object.
+	 * 
+	 * @param controller {@inheritDoc}
+	 * @param view {@inheritDoc}
+	 * @param username Username with which the client has connected to the server.
+	 * @param connection A established connection to the server.
+	 * @param inqueue A queue used to send messages to the server.
+	 */
 	public ConnectedState(ClientController controller, ClientView view, String username, ServerConnection connection, ThreadSafeMessageQueue<ClientMessage> inqueue) {
 		super(controller, view);
 		this.username = username;
@@ -37,6 +49,9 @@ public class ConnectedState extends ClientControllerState {
 		this.pingtimer = new Timer(true);
 	}
 
+	/**
+	 * Initialize the state by adding all necessary cleanup related shutdown hooks, notifying the view and starting all accessory threads.
+	 */
 	@Override
 	public void init() {
 		Runtime.getRuntime().addShutdownHook(this.shutdown_hook);
@@ -51,6 +66,9 @@ public class ConnectedState extends ClientControllerState {
 		return new TitleScreenState(controller, view);
 	}
 
+	/**
+	 * Cleanup all connection and thread related resources that might cause conflicts of any kind down the line.
+	 */
 	@Override
 	public void onClose() {
 		Runtime.getRuntime().removeShutdownHook(this.shutdown_hook);
@@ -73,10 +91,17 @@ public class ConnectedState extends ClientControllerState {
 	// Communication methods
 	// -------------------------------------------------------------
 
+	/**
+	 * Adds a {@link ServerMessage} to the {@link ThreadSafeMessageQueue queue} asynchronously to be sent to the server.
+	 * @param message {@link ServerMessage} Message to be sent.
+	 */
 	public void sendMessage(ServerMessage message) {
 		this.outqueue.insert(message);
 	}
 
+	/**
+	 * Disconnect from the server and cleanup all connection and thread related resources that might cause conflicts of any kind down the line.
+	 */
 	public void disconnect() {
 		try {
 			this.sender_thread.interrupt();
@@ -107,6 +132,11 @@ public class ConnectedState extends ClientControllerState {
 		return username;
 	}
 
+	/**
+	 * Show a text message on the {@link ClientView}.
+	 * 
+	 * @param message Text to be shown.
+	 */
 	public void showTextMessage(String message) {
 		this.view.showTextMessage(message);
 	}
@@ -115,15 +145,26 @@ public class ConnectedState extends ClientControllerState {
 	// Ping and disconnection resilience methods.
 	// -------------------------------------------------------------
 
+	/**
+	 * Start the recurrent task in charge of sending regular {@link PingMessage pings} to the server.
+	 */
 	private void startPingTask() {
-		pingtimer.scheduleAtFixedRate(this.getPingTask(this), 0, 100);
+		pingtimer.scheduleAtFixedRate(this.getPingTask(), 0, 100);
 	}
 
+	/**
+	 * Stops the recurrent task in charge of sending regular {@link PingMessage pings} to the server.
+	 */
 	private void stopPingTask() {
 		pingtimer.cancel();
 	}
 
-	private TimerTask getPingTask(ConnectedState controller) {
+	/**
+	 * Returns a task that sends a single {@link PingMessage} to the server.
+	 * 
+	 * @return The task.
+	 */
+	private TimerTask getPingTask() {
 		return new TimerTask() {
 			public void run() {
 				ping();
@@ -131,6 +172,9 @@ public class ConnectedState extends ClientControllerState {
 		};
 	}
 
+	/**
+	 * Sends a single {@link PingMessage}.
+	 */
 	private void ping() {
 		this.sendMessage(new PingMessage());
 	}
