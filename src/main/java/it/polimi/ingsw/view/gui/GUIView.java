@@ -28,7 +28,6 @@ public class GUIView implements ClientView {
 		this.state = null;
 	}
 
-
 	@Override
 	public void show(TitleScreenState state) {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/TitleScreenView.fxml"));

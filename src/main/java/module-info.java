@@ -3,6 +3,7 @@ module it.polimi.ingsw {
 	requires javafx.fxml;
 	requires java.rmi;
 	requires org.jline;
+    requires javafx.graphics;
 
 	opens it.polimi.ingsw to javafx.fxml;
 	opens it.polimi.ingsw.view.gui to javafx.graphics, javafx.fxml;

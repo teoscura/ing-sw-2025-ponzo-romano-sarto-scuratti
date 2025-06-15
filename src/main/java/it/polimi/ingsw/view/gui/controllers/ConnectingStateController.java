@@ -27,38 +27,6 @@ public class ConnectingStateController {
 		this.state = state;
 		this.view = view;
 	}
-//
-//	@FXML
-//	public void confirmIp(ActionEvent event) {
-//		ip = ip_field.getText();
-//		ip_field.setDisable(true);
-//		port_field.setDisable(false);
-//	}
-//
-//	@FXML
-//	public void confirmPort(ActionEvent event) {
-//		port = port_field.getText();
-//		connection_menu.setDisable(false);
-//	}
-//
-//	@FXML
-//	public void confirmRMI(ActionEvent event) {
-//
-//		//state.connect(ip, port, "rmi");
-//	}
-//
-//	@FXML
-//	public void confirmTCP(ActionEvent event) {
-//		//state.connect(ip, port, "tcp");
-//	}
-//
-//	@FXML
-//	protected void initialize() {
-//		ip_field.setOnAction(this::confirmIp);
-//		port_field.setOnAction(this::confirmPort);
-//		connection_menu.getItems().get(0).setOnAction(this::confirmRMI);
-//		connection_menu.getItems().get(1).setOnAction(this::confirmTCP);
-//	}
 
 	@FXML
 	protected void initialize() {

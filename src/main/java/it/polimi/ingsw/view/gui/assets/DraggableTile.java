@@ -1,12 +1,8 @@
 package it.polimi.ingsw.view.gui.assets;
 
 import it.polimi.ingsw.model.client.components.ClientComponent;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.ClipboardContent;
-import javafx.scene.input.Dragboard;
-import javafx.scene.input.TransferMode;
 
-public class DraggableTile extends TileAsset{
+public class DraggableTile extends TileAsset {
 
 	double anchorX, anchorY;
 

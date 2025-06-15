@@ -8,8 +8,6 @@ import java.io.IOException;
 
 public class MainApplication extends Application {
 
-	//private static final SmallModel model = new SmallModel();
-
 	private static GUIView view;
 
 	public static void main(String[] args) {
@@ -35,5 +33,9 @@ public class MainApplication extends Application {
 		primaryStage.setScene(scene);
 		primaryStage.show();*/
 
+	}
+
+	static public GUIView getView(){
+		return view;
 	}
 }
