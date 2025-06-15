@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model.cards.utils;
 
 /**
- * Enumeration representing the dimensions of a {@link Projectile}.
+ * Enumeration representing the dimensions of a {@link it.polimi.ingsw.model.cards.utils.Projectile}.
  */
 public enum ProjectileDimension {
 

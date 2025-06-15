@@ -5,7 +5,7 @@ import it.polimi.ingsw.model.components.*;
 import it.polimi.ingsw.model.components.visitors.ComponentVisitor;
 
 /**
- * Visitor used to check if there are any {@link CannonComponent cannons} pointing in the direction of a large meteor.
+ * Visitor used to check if there are any {@link it.polimi.ingsw.model.components.CannonComponent cannons} pointing in the direction of a large meteor.
  */
 public class LargeMeteorVisitor implements ComponentVisitor {
 
@@ -42,9 +42,9 @@ public class LargeMeteorVisitor implements ComponentVisitor {
 	}
 
 	/**
-	 * Checks if the {@link CannonComponent} is pointed towards the {@link Projectile meteorite}.
+	 * Checks if the {@link it.polimi.ingsw.model.components.CannonComponent} is pointed towards the {@link it.polimi.ingsw.model.cards.utils.Projectile meteorite}.
 	 * 
-	 * @param c {@link CannonComponent} Component to be visited.
+	 * @param c {@link it.polimi.ingsw.model.components.CannonComponent} Component to be visited.
 	 */
 	@Override
 	public void visit(CannonComponent c) {

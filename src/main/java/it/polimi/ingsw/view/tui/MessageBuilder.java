@@ -11,16 +11,16 @@ import it.polimi.ingsw.model.player.ShipCoords;
 import java.util.regex.Pattern;
 
 /**
- * Static class that offers a method to parse strings into {@link ServerMessage}.
+ * Static class that offers a method to parse strings into {@link it.polimi.ingsw.message.server.ServerMessage}.
  */
 public class MessageBuilder {
 
 	/**
-	 * Parses a string into a {@link ServerMessage}.
+	 * Parses a string into a {@link it.polimi.ingsw.message.server.ServerMessage}.
 	 * 
 	 * @param command String to be parsed.
 	 * @param view View to return the message to, and to show possible error messages to.
-	 * @return {@link ServerMessage} a Message ready to be sent. 
+	 * @return {@link it.polimi.ingsw.message.server.ServerMessage} a Message ready to be sent. 
 	 */
 	static public ServerMessage build(String command, TUIView view) {
 		if (command == null) return null;

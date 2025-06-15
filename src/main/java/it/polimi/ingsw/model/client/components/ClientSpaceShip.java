@@ -45,9 +45,9 @@ public class ClientSpaceShip implements Serializable {
 	}
 
 	/**
-	 * Parses the results of {@link SpaceShip#bulkVerify()} and returns a {@link ClientSpaceShip} that contains that information.
+	 * Parses the results of {@link it.polimi.ingsw.model.player.SpaceShip#bulkVerify()} and returns a {@link ClientSpaceShip} that contains that information.
 	 * 
-	 * @param results {@link VerifyResult} Matrix of results from a {@link SpaceShip#bulkVerify()}.
+	 * @param results {@link VerifyResult} Matrix of results from a {@link it.polimi.ingsw.model.player.SpaceShip#bulkVerify()}.
 	 * @return {@link ClientSpaceShip} New client object containing all info regarding broken components.
 	 */
 	public ClientSpaceShip getVerifyShip(VerifyResult[][] results) {

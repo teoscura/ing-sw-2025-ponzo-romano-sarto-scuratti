@@ -38,12 +38,12 @@ public class VoyageState extends GameState {
 	private CardState state;
 
 	/**
-	 * Constructs a new {@link VoyageState} object.
+	 * Constructs a new {@link it.polimi.ingsw.model.state.VoyageState} object.
 	 * 
-	 * @param model {@link ModelInstance} ModelInstance that owns this {@link GameState}.
+	 * @param model {@link it.polimi.ingsw.model.ModelInstance} ModelInstance that owns this {{@link it.polimi.ingsw.model.state.GameState}.
 	 * @param type {@link GameModeType} Ruleset of the state.
-	 * @param count {@link PlayerCount} Size of the match.
-	 * @param players Array of all {@link Player players} in the match.
+	 * @param count {@link it.polimi.ingsw.model.PlayerCount} Size of the match.
+	 * @param players Array of all {@link it.polimi.ingsw.model.player.Player players} in the match.
 	 * @param deck {@link iCards} Voyage deck containing the cards.
 	 * @param planche {@link iPlanche} Planche to use during the match.
 	 */
@@ -69,7 +69,7 @@ public class VoyageState extends GameState {
 	}
 
 	/**
-	 * Processes the {@link ServerMessage} by passing it through the current {@link CardState}.
+	 * Processes the {@link it.polimi.ingsw.message.server.ServerMessage} by passing it through the current {@link CardState}.
 	 * 
 	 * {@inheritDoc}
 	 */
@@ -165,9 +165,9 @@ public class VoyageState extends GameState {
 	}
 
 	/**
-	 * Loses the game for a {@link Player}.
+	 * Loses the game for a {@link it.polimi.ingsw.model.player.Player}.
 	 * 
-	 * @param p {@link Player} Player that lost.
+	 * @param p {@link it.polimi.ingsw.model.player.Player} Player that lost.
 	 */
 	public void loseGame(Player p) {
 		this.planche.loseGame(p);
@@ -182,7 +182,7 @@ public class VoyageState extends GameState {
 
 	/**
 	 * @param order {@link CardOrder} Order to sort the list by.
-	 * @return A list of {@link Player} sorted in respect to the specified order on the planche.
+	 * @return A list of {@link it.polimi.ingsw.model.player.Player} sorted in respect to the specified order on the planche.
 	 */
 	public List<Player> getOrder(CardOrder order) {
 		List<Player> tmp = this.players.stream().filter(p -> !p.getRetired() && !p.getDisconnected()).sorted((Player player1, Player player2) -> Integer.compare(planche.getPlayerPosition(player1), planche.getPlayerPosition(player2))).toList();
@@ -190,10 +190,10 @@ public class VoyageState extends GameState {
 	}
 
 	/**
-	 * Finds the farthest {@link Player} along the planche with the worst value specified by the {@link CombatZoneCriteria}.
+	 * Finds the farthest {@link it.polimi.ingsw.model.player.Player} along the planche with the worst value specified by the {@link CombatZoneCriteria}.
 	 * 
-	 * @param criteria {@link CombatZoneCriteria} Criteria according to which the {@link Player} is picked.
-	 * @return {@link Player} Farthest player along the planche with the worst value specified by the {@link CombatZoneCriteria}.
+	 * @param criteria {@link CombatZoneCriteria} Criteria according to which the {@link it.polimi.ingsw.model.player.Player} is picked.
+	 * @return {@link it.polimi.ingsw.model.player.Player} Farthest player along the planche with the worst value specified by the {@link CombatZoneCriteria}.
 	 */
 	public Player findCriteria(CombatZoneCriteria criteria) {
 		List<Player> tmp = new ArrayList<>();

@@ -15,7 +15,7 @@ public abstract class ClientControllerState {
 	 * Construct the abstract base of a {@link ClientControllerState} derived object.
 	 * 
 	 * @param controller {@link ClientController} Controller to which this state is tied to.
-	 * @param view {@link ClientView} View to which this state is tied to.
+	 * @param view {@link it.polimi.ingsw.view.ClientView} View to which this state is tied to.
 	 */
 	public ClientControllerState(ClientController controller, ClientView view) {
 		if (view == null || controller == null) throw new NullPointerException();

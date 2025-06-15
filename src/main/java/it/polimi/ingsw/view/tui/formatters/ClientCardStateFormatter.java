@@ -9,7 +9,7 @@ import org.jline.utils.AttributedStringBuilder;
 import org.jline.utils.AttributedStyle;
 
 /**
- * Formatter that builds an attributed string containing all info regarding the state of a card during {@link VoyageState}.
+ * Formatter that builds an attributed string containing all info regarding the state of a card during {@link it.polimi.ingsw.model.state.VoyageState}.
  */
 public class ClientCardStateFormatter implements ClientCardStateVisitor {
 

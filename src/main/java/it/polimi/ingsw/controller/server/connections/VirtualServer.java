@@ -12,9 +12,9 @@ import java.rmi.RemoteException;
 public interface VirtualServer extends Remote {
 	
 	/**
-	 * Method called by the client remotely to send a {@link ServerMessage message} to the server.
+	 * Method called by the client remotely to send a {@link it.polimi.ingsw.message.server.ServerMessage message} to the server.
 	 * 
-	 * @param message {@link ServerMessage} Message received by the server.
+	 * @param message {@link it.polimi.ingsw.message.server.ServerMessage} Message received by the server.
 	 * @throws RemoteException If the underlying RMI TCP channel is disrupted in any unrecoverable way.
 	 */
 	void receiveMessage(ServerMessage message) throws RemoteException;

@@ -4,7 +4,7 @@ import it.polimi.ingsw.model.components.*;
 import it.polimi.ingsw.model.components.enums.AlienType;
 
 /**
- * Visitor used to check whether or not a {@link CabinComponent}'s crew dies after a {@link AlienLifeSupportComponent} is destroyed.
+ * Visitor used to check whether or not a {@link it.polimi.ingsw.model.components.CabinComponent}'s crew dies after a {@link AlienLifeSupportComponent} is destroyed.
  */
 public class LifeSupportUpdateVisitor implements ComponentVisitor {
 
@@ -20,9 +20,9 @@ public class LifeSupportUpdateVisitor implements ComponentVisitor {
 	}
 
 	/**
-	 * Visits a {@link CabinComponent} and checks if the crew can stay alive.
+	 * Visits a {@link it.polimi.ingsw.model.components.CabinComponent} and checks if the crew can stay alive.
 	 * 
-	 * @param c {@link CabinComponent} Component being visited.
+	 * @param c {@link it.polimi.ingsw.model.components.CabinComponent} Component being visited.
 	 */
 	@Override
 	public void visit(CabinComponent c) {

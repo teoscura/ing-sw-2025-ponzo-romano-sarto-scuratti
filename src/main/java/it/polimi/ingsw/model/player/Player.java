@@ -18,7 +18,7 @@ import java.io.Serializable;
  *
  * <p>The player is responsible for managing their own spaceship,
  * accumulating credits and score, and interacting with the game server
- * through a {@link ClientDescriptor}.</p>
+ * through a {@link it.polimi.ingsw.controller.server.ClientDescriptor}.</p>
  */
 public class Player implements Serializable {
 	private final String username;
@@ -47,7 +47,7 @@ public class Player implements Serializable {
 
 	/**
 	 * Returns the color assigned to the player.
-	 * @return {@link PlayerColor} The player's color.
+	 * @return {@link it.polimi.ingsw.model.player.PlayerColor} The player's color.
 	 */
 	public PlayerColor getColor() {
 		return this.color;
@@ -105,7 +105,6 @@ public class Player implements Serializable {
 	/**
 	 * Increases the player's credits by a given amount.
 	 * @param amount Credits to be added (must be positive).
-	 * @return The new credit total.
 	 * @throws IllegalArgumentException if amount is zero or negative.
 	 */
 	public void giveCredits(int amount) {
@@ -132,8 +131,8 @@ public class Player implements Serializable {
 	}
 
 	/**
-	 * Reconnects the player using a new {@link ClientDescriptor}.
-	 * @param new_descriptor {@link ClientDescriptor} the new descriptor to bind.
+	 * Reconnects the player using a new {@link it.polimi.ingsw.controller.server.ClientDescriptor}.
+	 * @param new_descriptor {@link it.polimi.ingsw.controller.server.ClientDescriptor} the new descriptor to bind.
 	 */
 	public void reconnect(ClientDescriptor new_descriptor) {
 		this.bindDescriptor(new_descriptor);
@@ -142,24 +141,24 @@ public class Player implements Serializable {
 
 	/**
 	 * Returns the player's spaceship.
-	 * @return {@link SpaceShip} instance.
+	 * @return {@link it.polimi.ingsw.model.player.SpaceShip} instance.
 	 */
 	public SpaceShip getSpaceShip() {
 		return this.ship;
 	}
 
 	/**
-	 * Binds a {@link ClientDescriptor} to the player.
+	 * Binds a {@link it.polimi.ingsw.controller.server.ClientDescriptor} to the player.
 	 * Used during login or reconnection.
-	 * @param descriptor {@link ClientDescriptor} the client descriptor to bind.
+	 * @param descriptor {@link it.polimi.ingsw.controller.server.ClientDescriptor} the client descriptor to bind.
 	 */
 	public void bindDescriptor(ClientDescriptor descriptor) {
 		this.descriptor = descriptor;
 	}
 
 	/**
-	 * Returns the {@link ClientDescriptor} bound to the player.
-	 * @return {@link ClientDescriptor} Descriptor.
+	 * Returns the {@link it.polimi.ingsw.controller.server.ClientDescriptor} bound to the player.
+	 * @return {@link it.polimi.ingsw.controller.server.ClientDescriptor} Descriptor.
 	 */
 	public ClientDescriptor getDescriptor() {
 		return this.descriptor;

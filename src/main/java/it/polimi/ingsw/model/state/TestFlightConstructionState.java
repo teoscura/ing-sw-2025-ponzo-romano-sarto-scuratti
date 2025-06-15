@@ -17,7 +17,12 @@ import java.util.ArrayList;
 public class TestFlightConstructionState extends ConstructionState {
 
 	/**
-	 * {@inheritDoc}
+	 * Constructs a {@link ConstructionState} object.
+	 * 
+	 * @param model {@link it.polimi.ingsw.model.ModelInstance} ModelInstance that owns this {{@link it.polimi.ingsw.model.state.GameState}.
+	 * @param type {@link GameModeType} Ruleset of the state.
+	 * @param count {@link it.polimi.ingsw.model.PlayerCount} Size of the match.
+	 * @param players Array of all {@link it.polimi.ingsw.model.player.Player players} in the match.
 	 */
 	public TestFlightConstructionState(ModelInstance model, GameModeType type, PlayerCount count, ArrayList<Player> players) {
 		super(model, type, count, players, new TestFlightCards());

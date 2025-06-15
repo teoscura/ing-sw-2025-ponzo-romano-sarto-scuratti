@@ -11,7 +11,7 @@ public abstract class TUIStrategy {
     protected final TUIView view;
 
     /**
-     * Constructs a {@link TUIStrategy} object.
+     * Constructs a {@link it.polimi.ingsw.view.tui.strategy.TUIStrategy} object.
      * 
      * @param view {@link TUIView} View to which this object is bound.
      */

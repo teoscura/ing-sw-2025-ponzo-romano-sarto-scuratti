@@ -41,10 +41,10 @@ public abstract class ConstructionState extends GameState {
 	/**
 	 * Constructs a {@link ConstructionState} object.
 	 * 
-	 * @param model {@link ModelInstance} ModelInstance that owns this {@link GameState}.
+	 * @param model {@link it.polimi.ingsw.model.ModelInstance} ModelInstance that owns this {{@link it.polimi.ingsw.model.state.GameState}.
 	 * @param type {@link GameModeType} Ruleset of the state.
-	 * @param count {@link PlayerCount} Size of the match.
-	 * @param players Array of all {@link Player players} in the match.
+	 * @param count {@link it.polimi.ingsw.model.PlayerCount} Size of the match.
+	 * @param players Array of all {@link it.polimi.ingsw.model.player.Player players} in the match.
 	 * @param deck {@link iCards} Deck of cards used during the remainder of the match.
 	 */
 	public ConstructionState(ModelInstance model, GameModeType type, PlayerCount count, ArrayList<Player> players, iCards deck) {
@@ -73,8 +73,8 @@ public abstract class ConstructionState extends GameState {
 
 
 	/**
-	 * Checks if all {@link Player players} have either finished constructing or have disconnected.
-	 * Removes a credit for each unused {@link BaseComponent} from each {@link Player}.
+	 * Checks if all {@link it.polimi.ingsw.model.player.Player players} have either finished constructing or have disconnected.
+	 * Removes a credit for each unused {@link it.polimi.ingsw.model.components.BaseComponent}  from each {@link it.polimi.ingsw.model.player.Player}.
 	 * 
 	 * {@inheritDoc}
 	 */

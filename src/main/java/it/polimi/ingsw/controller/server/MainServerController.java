@@ -123,7 +123,7 @@ public class MainServerController extends Thread implements VirtualServer {
 	/**
      * Takes a {@code ServerMessage} and inserts it into the correct queue, either the lobby controller's or the main server controller's.
      *
-     * @param message {@link ServerMessage} Message to be added to the queue.
+     * @param message {@link it.polimi.ingsw.message.server.ServerMessage} Message to be added to the queue.
      */
 	public void receiveMessage(ServerMessage message) {
 		if (message.getDescriptor() == null) {
@@ -181,7 +181,7 @@ public class MainServerController extends Thread implements VirtualServer {
      * Returns the {@code ClientDescriptor} associated to a username.
      *
      * @param username Name corresponding to the client to fetch.
-	 * @return {@link ClientDescriptor} Corresponding to the username, if present, if not returns null.
+	 * @return {@link it.polimi.ingsw.controller.server.ClientDescriptor} Corresponding to the username, if present, if not returns null.
      */
 	public ClientDescriptor getDescriptor(String username) {
 		return this.all_listeners.get(username);
@@ -253,7 +253,7 @@ public class MainServerController extends Thread implements VirtualServer {
      * Connects an {@code RMIClientConnection}  to the server
      *
      * @param client {@link RMIClientConnection} Client connecting to server.
-	 * @return {@link ClientDescriptor} A ClientDescriptor tied to the RMI connection requesting it. 
+	 * @return {@link it.polimi.ingsw.controller.server.ClientDescriptor} A ClientDescriptor tied to the RMI connection requesting it. 
 	 * @throws RemoteException
      */
 	public ClientDescriptor connectListener(RMIClientConnection client) throws RemoteException {
@@ -284,7 +284,7 @@ public class MainServerController extends Thread implements VirtualServer {
 	/**
      * Returns a {@code RMIServerStubImpl} linked to a {@code ClientDescriptor} for the {@code RMIClientConnection} to send messages with.
      *
-     * @param new_client {@link ClientDescriptor} Client requesting the stub.
+     * @param new_client {@link it.polimi.ingsw.controller.server.ClientDescriptor} Client requesting the stub.
 	 * @return {@link VirtualServer} A stub linked specifically to the client for it to communicate with the server.
 	 * @throws RemoteException
      */
@@ -306,7 +306,7 @@ public class MainServerController extends Thread implements VirtualServer {
 	/**
      * Connects a {@code ClientDescriptor} to the lobby and adds it to any list it may belong to, or reconnects it to a ongoing game in case they belonged to it.
      *
-     * @param client {@link ClientDescriptor} Client requesting the connection.
+     * @param client {@link it.polimi.ingsw.controller.server.ClientDescriptor} Client requesting the connection.
 	 * @throws ForbiddenCallException if for any reason connecting is forbidden
      */
 	public void connect(ClientDescriptor client) throws ForbiddenCallException {
@@ -347,7 +347,7 @@ public class MainServerController extends Thread implements VirtualServer {
 	/**
      * Disconnects a {@code ClientDescriptor} from the server and closes its connection, if the {@code ClientDescriptor} is connected to a lobby then the lobby handles whatever procedure may be needed.
      *
-     * @param client {@link ClientDescriptor} Client being disconnected.
+     * @param client {@link it.polimi.ingsw.controller.server.ClientDescriptor} Client being disconnected.
      */
 	public void disconnect(ClientDescriptor client) {
 		int id = client.getId();
@@ -410,7 +410,7 @@ public class MainServerController extends Thread implements VirtualServer {
 	/**
      * Refreshes the timeout timer for a particular {@code ClientDescriptor} and restarts the timeout clock belonging to it.
      *
-     * @param client {@link ClientDescriptor} Client pinging the server
+     * @param client {@link it.polimi.ingsw.controller.server.ClientDescriptor} Client pinging the server
      */
 	public void ping(ClientDescriptor client) {
 		client.getPingTimerTask().cancel();
@@ -422,7 +422,7 @@ public class MainServerController extends Thread implements VirtualServer {
      * Creates a timeout task for a {@code SocketClient} in its setup state, closing the connection and removing them from any list in case they don't setup in time.
 	 * 
 	 * @param controller {@link MainServerController} Instance of the server to disconnect the client from.
-	 * @param client {@link ClientDescriptor} Client to be eventually timed out.
+	 * @param client {@link it.polimi.ingsw.controller.server.ClientDescriptor} Client to be eventually timed out.
      */
 	private TimerTask TCPTimeoutTask(MainServerController controller, SocketClient client) {
 		return new TimerTask() {
@@ -440,7 +440,7 @@ public class MainServerController extends Thread implements VirtualServer {
      * Creates a timeout task for any {@code ClientDescriptor}, if the {@code ClientDescriptor} doesn't send a ping before it expires, task runs and disconnects the {@code ClientDescriptor}.
 	 * 
 	 * @param controller {@link MainServerController} Instance of the server to disconnect the client from.
-	 * @param client {@link ClientDescriptor} Client to be eventually timed out.
+	 * @param client {@link it.polimi.ingsw.controller.server.ClientDescriptor} Client to be eventually timed out.
      */
 	private TimerTask timeoutTask(MainServerController controller, ClientDescriptor client) {
 		return new TimerTask() {
@@ -508,7 +508,7 @@ public class MainServerController extends Thread implements VirtualServer {
 	/**
      * Enters lobby setup state for a {@code ClientDescriptor} requesting it.
      *
-     * @param client {@link ClientDescriptor} Client requesting to enter the lobby creation and setup state.
+     * @param client {@link it.polimi.ingsw.controller.server.ClientDescriptor} Client requesting to enter the lobby creation and setup state.
      */
 	public void enterSetup(ClientDescriptor client) {
 		synchronized (listeners_lock) {
@@ -536,7 +536,7 @@ public class MainServerController extends Thread implements VirtualServer {
 	/**
      * Leaves lobby setup state for a {@code ClientDescriptor} requesting it.
      *
-     * @param client {@link ClientDescriptor} Client requesting to leave the lobby creation and setup state.
+     * @param client {@link it.polimi.ingsw.controller.server.ClientDescriptor} Client requesting to leave the lobby creation and setup state.
      */
 	public void leaveSetup(ClientDescriptor client) {
 		synchronized (listeners_lock) {
@@ -556,9 +556,9 @@ public class MainServerController extends Thread implements VirtualServer {
 	/**
      * Opens a room with given type and size for a {@code ClientDescriptor} in setup state requesting it.
      *
-     * @param client {@link ClientDescriptor} Client requesting to open the lobby.
+     * @param client {@link it.polimi.ingsw.controller.server.ClientDescriptor} Client requesting to open the lobby.
 	 * @param type {@link GameModeType} Gamemode of the lobby being opened.
-	 * @param count {@link PlayerCount} Size of the lobby being opened.
+	 * @param count {@link it.polimi.ingsw.model.PlayerCount} Size of the lobby being opened.
      */
 	public void openNewRoom(ClientDescriptor client, GameModeType type, PlayerCount count) throws ForbiddenCallException {
 		synchronized (listeners_lock) {
@@ -591,7 +591,7 @@ public class MainServerController extends Thread implements VirtualServer {
 	/**
      * Opens a room tied to an unfinished game for a {@code ClientDescriptor} that requests it.
      *
-     * @param client {@link ClientDescriptor} Client requesting to open the lobby.
+     * @param client {@link it.polimi.ingsw.controller.server.ClientDescriptor} Client requesting to open the lobby.
 	 * @param id ID of the saved game being opened.
 	 * @throws ForbiddenCallException when the lobby is being opened in a forbidden or unsupported way.
      */
@@ -681,7 +681,7 @@ public class MainServerController extends Thread implements VirtualServer {
 	/**
      * Joins a lobby for a {@code ClientDescriptor} requesting it.
      *
-     * @param client {@link ClientDescriptor} Client requesting to join the lobby.
+     * @param client {@link it.polimi.ingsw.controller.server.ClientDescriptor} Client requesting to join the lobby.
 	 * @param id ID of the lobby being joined
      */
 	public void connectToLobby(ClientDescriptor client, int id) throws ForbiddenCallException {
@@ -728,7 +728,7 @@ public class MainServerController extends Thread implements VirtualServer {
 	/**
      * Rejoins the lobby select screen after a lobby controller has closed.
      *
-     * @param client {@link ClientDescriptor} Client being sent back to lobby select.
+     * @param client {@link it.polimi.ingsw.controller.server.ClientDescriptor} Client being sent back to lobby select.
      */
 	public void joinFromClosedLobby(ClientDescriptor client) {
 		synchronized (listeners_lock) {

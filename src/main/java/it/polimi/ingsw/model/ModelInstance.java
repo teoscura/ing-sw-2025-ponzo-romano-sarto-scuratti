@@ -41,9 +41,9 @@ public class ModelInstance implements Serializable {
 	}
 
 	/**
-	 * Receives the {@link ServerMessage} and processes it.
+	 * Receives the {@link it.polimi.ingsw.message.server.ServerMessage} and processes it.
 	 * 
-	 * @param message {@link ServerMessage} Message received.
+	 * @param message {@link it.polimi.ingsw.message.server.ServerMessage} Message received.
 	 * @throws ForbiddenCallException if the model refuses the message.
 	 */
 	public void validate(ServerMessage message) throws ForbiddenCallException {
@@ -51,7 +51,7 @@ public class ModelInstance implements Serializable {
 	}
 
 	/**
-	 * Forwards a request to the {@link LobbyController} to serialize the current model state.
+	 * Forwards a request to the {@link it.polimi.ingsw.controller.server.LobbyController} to serialize the current model state.
 	 */
 	public void serialize() {
 		if (!this.state.toSerialize()) return;
@@ -71,8 +71,8 @@ public class ModelInstance implements Serializable {
 	}
 
 	/**
-	 * Sets the next {@link GameState}, if {@code next} is null, then the game is over.
-	 * @param next {@link GameState} State to set and initialize.
+	 * Sets the next {{@link it.polimi.ingsw.model.state.GameState}, if {@code next} is null, then the game is over.
+	 * @param next {{@link it.polimi.ingsw.model.state.GameState} State to set and initialize.
 	 */
 	public void setState(GameState next) {
 		this.state = next;
@@ -86,8 +86,8 @@ public class ModelInstance implements Serializable {
 	}
 
 	/**
-	 * Connect a {@link ClientDescriptor} to the model.
-	 * @param client {@link ClientDescriptor} Client connecting to the model.
+	 * Connect a {@link it.polimi.ingsw.controller.server.ClientDescriptor} to the model.
+	 * @param client {@link it.polimi.ingsw.controller.server.ClientDescriptor} Client connecting to the model.
 	 */
 	public void connect(ClientDescriptor client) {
 		try {
@@ -99,8 +99,8 @@ public class ModelInstance implements Serializable {
 	}
 
 	/**
-	 * Disconnect a {@link ClientDescriptor} to the model.
-	 * @param client {@link ClientDescriptor} Client disconnecting from the model.
+	 * Disconnect a {@link it.polimi.ingsw.controller.server.ClientDescriptor} to the model.
+	 * @param client {@link it.polimi.ingsw.controller.server.ClientDescriptor} Client disconnecting from the model.
 	 */
 	public void disconnect(ClientDescriptor client) {
 		try {
@@ -113,8 +113,8 @@ public class ModelInstance implements Serializable {
 	}
 
 	/**
-	 * Connect a {@link Player} to the model.
-	 * @param p {@link Player} Player connecting to the model.
+	 * Connect a {@link it.polimi.ingsw.model.player.Player} to the model.
+	 * @param p {@link it.polimi.ingsw.model.player.Player} Player connecting to the model.
 	 */
 	public void connect(Player p) {
 		try {
@@ -125,8 +125,8 @@ public class ModelInstance implements Serializable {
 	}
 
 	/**
-	 * Disconnect a {@link Player} to the model.
-	 * @param p {@link Player} Player disconnecting from the model.
+	 * Disconnect a {@link it.polimi.ingsw.model.player.Player} to the model.
+	 * @param p {@link it.polimi.ingsw.model.player.Player} Player disconnecting from the model.
 	 */
 	public void disconnect(Player p) {
 		try {
@@ -149,7 +149,7 @@ public class ModelInstance implements Serializable {
 	}
 
 	/**
-	 * Routine to restart game after a crash or closing, creates a {@link ResumeWaitingState} linked to the previous {@link GameState} and sets it as the game state.
+	 * Routine to restart game after a crash or closing, creates a {@link ResumeWaitingState} linked to the previous {{@link it.polimi.ingsw.model.state.GameState} and sets it as the game state.
 	 */
 	public void afterSerialRestart() {
 		this.started = false;
@@ -158,7 +158,7 @@ public class ModelInstance implements Serializable {
 	}
 
 	/**
-	 * Requests the {@link LobbyController} to broadcast a {@link ClientMessage} to all connected listeners.
+	 * Requests the {@link it.polimi.ingsw.controller.server.LobbyController} to broadcast a {@link ClientMessage} to all connected listeners.
 	 * 
 	 * @param message {@link ClientMessage} Message to be broadcast.
 	 */
@@ -167,14 +167,14 @@ public class ModelInstance implements Serializable {
 	}
 
 	/**
-	 * @return {@link ClientGameListEntry} An entry containing info about this {@link ModelInstance} to be sent to a client.
+	 * @return {@link it.polimi.ingsw.model.client.ClientGameListEntry} An entry containing info about this {@link it.polimi.ingsw.model.ModelInstance} to be sent to a client.
 	 */
 	public ClientGameListEntry getEntry() {
 		return this.state.getOngoingEntry(this.id);
 	}
 
 	/**
-	 * Requests the {@link LobbyController} to end the game and all associated resources.
+	 * Requests the {@link it.polimi.ingsw.controller.server.LobbyController} to end the game and all associated resources.
 	 */
 	public void endGame() {
 		this.controller.endGame();

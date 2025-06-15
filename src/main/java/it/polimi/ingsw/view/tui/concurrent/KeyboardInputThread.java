@@ -15,7 +15,7 @@ public class KeyboardInputThread extends Thread {
 	 * Constructs a {@link KeyboardInputThread} object.
 	 * 
 	 * @param terminal {@link TerminalWrapper} Terminal to read the keypresses from.
-	 * @param view {@link ClientView} View to notify of any input lines.
+	 * @param view {@link it.polimi.ingsw.view.ClientView} View to notify of any input lines.
 	 */
 	public KeyboardInputThread(TerminalWrapper terminal, TUIView view) {
 		this.terminal = terminal;

@@ -33,9 +33,9 @@ public class AbandonedShipRewardState extends CardState {
 	/**
 	 * Constructs a new {@code AbandonedShipRewardState}.
 	 *
-	 * @param state {@link VoyageState} The current voyage state.
+	 * @param state {@link it.polimi.ingsw.model.state.VoyageState} The current voyage state.
 	 * @param card  {@link AbandonedShipCard} The card being played.
-	 * @param list  List of {@link Player} players in order of distance.
+	 * @param list  List of {@link it.polimi.ingsw.model.player.Player} players in order of distance.
 	 * @throws IllegalArgumentException if any argument is null
 	 */
 	public AbandonedShipRewardState(VoyageState state, AbandonedShipCard card, List<Player> list) {
@@ -62,9 +62,9 @@ public class AbandonedShipRewardState extends CardState {
 	}
 
 	/**
-	 * Validates and resolves the {@link Player}'s response to the reward.
+	 * Validates and resolves the {@link it.polimi.ingsw.model.player.Player}'s response to the reward.
 	 *
-	 * @param message {@link ServerMessage} The message received from the player.
+	 * @param message {@link it.polimi.ingsw.message.server.ServerMessage} The message received from the player.
 	 * @throws ForbiddenCallException if the message is not allowed.
 	 */
 	@Override
@@ -100,10 +100,10 @@ public class AbandonedShipRewardState extends CardState {
 	}
 
 	/**
-	 * Called when a {@link Player} tries to remove crew from a cabin.
+	 * Called when a {@link it.polimi.ingsw.model.player.Player} tries to remove crew from a cabin.
 	 *
-	 * @param p {@link Player} The player
-	 * @param cabin_coords {@link ShipCoords} the coordinates of the cabin
+	 * @param p {@link it.polimi.ingsw.model.player.Player} The player
+	 * @param cabin_coords {@link it.polimi.ingsw.model.player.ShipCoords} the coordinates of the cabin
 	 */
 	@Override
 	public void removeCrew(Player p, ShipCoords cabin_coords) throws ForbiddenCallException {
@@ -131,9 +131,9 @@ public class AbandonedShipRewardState extends CardState {
 	}
 
 	/**
-	 * Called when a {@link Player} disconnects.
+	 * Called when a {@link it.polimi.ingsw.model.player.Player} disconnects.
 	 *
-	 * @param p {@link Player} The player disconnecting.
+	 * @param p {@link it.polimi.ingsw.model.player.Player} The player disconnecting.
 	 */
 	@Override
 	public void disconnect(Player p) throws ForbiddenCallException {

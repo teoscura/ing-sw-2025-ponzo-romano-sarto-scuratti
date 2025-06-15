@@ -32,8 +32,8 @@ public class ConnectedState extends ClientControllerState {
 	/**
 	 * Construct a {@link ConnectedState} object.
 	 * 
-	 * @param controller {@inheritDoc}
-	 * @param view {@inheritDoc}
+	 * @param controller {@link ClientController} Controller to which this state is tied to.
+	 * @param view {@link it.polimi.ingsw.view.ClientView} View to which this state is tied to.
 	 * @param username Username with which the client has connected to the server.
 	 * @param connection A established connection to the server.
 	 * @param inqueue A queue used to send messages to the server.
@@ -92,8 +92,8 @@ public class ConnectedState extends ClientControllerState {
 	// -------------------------------------------------------------
 
 	/**
-	 * Adds a {@link ServerMessage} to the {@link ThreadSafeMessageQueue queue} asynchronously to be sent to the server.
-	 * @param message {@link ServerMessage} Message to be sent.
+	 * Adds a {@link it.polimi.ingsw.message.server.ServerMessage} to the {@link ThreadSafeMessageQueue queue} asynchronously to be sent to the server.
+	 * @param message {@link it.polimi.ingsw.message.server.ServerMessage} Message to be sent.
 	 */
 	public void sendMessage(ServerMessage message) {
 		this.outqueue.insert(message);
@@ -133,7 +133,7 @@ public class ConnectedState extends ClientControllerState {
 	}
 
 	/**
-	 * Show a text message on the {@link ClientView}.
+	 * Show a text message on the {@link it.polimi.ingsw.view.ClientView}.
 	 * 
 	 * @param message Text to be shown.
 	 */

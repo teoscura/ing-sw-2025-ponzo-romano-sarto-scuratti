@@ -7,7 +7,7 @@ import it.polimi.ingsw.model.client.player.ClientVoyagePlayer;
 import java.util.ArrayList;
 
 /**
- * Client side representation of a {@link VoyageState}.
+ * Client side representation of a {@link it.polimi.ingsw.model.state.VoyageState}.
  */
 public class ClientVoyageState implements ClientState {
 

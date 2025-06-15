@@ -35,7 +35,7 @@ public class CombatZoneAnnounceState extends CardState {
 	/**
 	 * Constructs a new {@code AbandonedStationRewardState}.
 	 *
-	 * @param state {@link VoyageState} The current voyage state
+	 * @param state {@link it.polimi.ingsw.model.state.VoyageState} The current voyage state
 	 * @param card_id   The card id
 	 * @param sections  the sections defining penalties
 	 * @param shots     the projectile array
@@ -74,9 +74,9 @@ public class CombatZoneAnnounceState extends CardState {
 	}
 
 	/**
-	 * Validates the {@link ServerMessage} and if everyone has progressed, transitions.
+	 * Validates the {@link it.polimi.ingsw.message.server.ServerMessage} and if everyone has progressed, transitions.
 	 *
-	 * @param message {@link ServerMessage} The message received from the player
+	 * @param message {@link it.polimi.ingsw.message.server.ServerMessage} The message received from the player
 	 * @throws ForbiddenCallException if the message is not allowed
 	 */
 	@Override
@@ -118,11 +118,11 @@ public class CombatZoneAnnounceState extends CardState {
 	}
 
 	/**
-	 * Called when a {@link Player} attempts to power a component.
+	 * Called when a {@link it.polimi.ingsw.model.player.Player} attempts to power a component.
 	 *
-	 * @param p {@link Player} The player
-	 * @param target_coords {@link ShipCoords} the component to power
-	 * @param battery_coords {@link ShipCoords} the battery to use
+	 * @param p {@link it.polimi.ingsw.model.player.Player} The player
+	 * @param target_coords {@link it.polimi.ingsw.model.player.ShipCoords} the component to power
+	 * @param battery_coords {@link it.polimi.ingsw.model.player.ShipCoords} the battery to use
 	 */
 	@Override
 	public void turnOn(Player p, ShipCoords target_coords, ShipCoords battery_coords) {
@@ -141,9 +141,9 @@ public class CombatZoneAnnounceState extends CardState {
 	}
 
 	/**
-	 * Called when a {@link Player} attempts to progress their turn.
+	 * Called when a {@link it.polimi.ingsw.model.player.Player} attempts to progress their turn.
 	 *
-	 * @param p {@link Player} The player
+	 * @param p {@link it.polimi.ingsw.model.player.Player} The player
 	 */
 	@Override
 	public void progressTurn(Player p) {
@@ -157,9 +157,9 @@ public class CombatZoneAnnounceState extends CardState {
 	}
 
 	/**
-	 * Called when a {@link Player} disconnects.
+	 * Called when a {@link it.polimi.ingsw.model.player.Player} disconnects.
 	 *
-	 * @param p {@link Player} The player disconnecting.
+	 * @param p {@link it.polimi.ingsw.model.player.Player} The player disconnecting.
 	 * @throws ForbiddenCallException when the state refuses the action.
 	 */
 	@Override

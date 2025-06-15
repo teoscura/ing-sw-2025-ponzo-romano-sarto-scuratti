@@ -12,6 +12,7 @@
         <version>3.6.2</version>
         <configuration>
           <show>private</show>
+          <doclint>all,-missing</doclint>
           <failOnError>false</failOnError>
         </configuration>
       </plugin>

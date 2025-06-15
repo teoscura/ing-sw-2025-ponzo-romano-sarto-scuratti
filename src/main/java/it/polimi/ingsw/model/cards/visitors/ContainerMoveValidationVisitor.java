@@ -6,7 +6,7 @@ import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
 import it.polimi.ingsw.model.components.visitors.ComponentVisitor;
 
 /**
- * Visitor used to validate moves of {@link ShipmentType cargo} between containers
+ * Visitor used to validate moves of {@link it.polimi.ingsw.model.components.enums.ShipmentType cargo} between containers
  */
 public class ContainerMoveValidationVisitor implements ComponentVisitor {
 

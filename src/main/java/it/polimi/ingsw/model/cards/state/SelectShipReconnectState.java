@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Class representing the selection of a ship section when a {@link Player} reconnects with a broken ship but not being retired.
+ * Class representing the selection of a ship section when a {@link it.polimi.ingsw.model.player.Player} reconnects with a broken ship but not being retired.
  */
 public class SelectShipReconnectState extends CardState {
 
@@ -30,9 +30,9 @@ public class SelectShipReconnectState extends CardState {
 	/**
 	 * Constructs a {@link SelectShipReconnectState} object.
 	 * 
-	 * @param state {@link VoyageState} VoyageState that owns this {@link CardState}.
+	 * @param state {@link it.polimi.ingsw.model.state.VoyageState} VoyageState that owns this {@link CardState}.
 	 * @param resume {@link CardState} Card state to resume after everyone selected their ship section.
-	 * @param awaiting {@link Player} Player that reconnected with a broken ship.
+	 * @param awaiting {@link it.polimi.ingsw.model.player.Player} Player that reconnected with a broken ship.
 	 */
 	public SelectShipReconnectState(VoyageState state, CardState resume, Player awaiting) {
 		super(state);
@@ -55,9 +55,9 @@ public class SelectShipReconnectState extends CardState {
 	}
 
 	/**
-	 * Validates the {@link ServerMessage} and transitions if the player has set the blob or disconnected.
+	 * Validates the {@link it.polimi.ingsw.message.server.ServerMessage} and transitions if the player has set the blob or disconnected.
 	 *
-	 * @param message {@link ServerMessage} The message received from the player
+	 * @param message {@link it.polimi.ingsw.message.server.ServerMessage} The message received from the player
 	 * @throws ForbiddenCallException if the message is not allowed
 	 */
 	@Override
@@ -89,10 +89,10 @@ public class SelectShipReconnectState extends CardState {
 	}
 
 	/**
-	 * Called when a {@link Player} tries to select a ship blob center.
+	 * Called when a {@link it.polimi.ingsw.model.player.Player} tries to select a ship blob center.
 	 *
-	 * @param p {@link Player} The player
-	 * @param blob_coord {@link ShipCoords} The coordinates selected
+	 * @param p {@link it.polimi.ingsw.model.player.Player} The player
+	 * @param blob_coord {@link it.polimi.ingsw.model.player.ShipCoords} The coordinates selected
 	 */
 	@Override
 	public void selectBlob(Player p, ShipCoords blob_coord) {
@@ -115,10 +115,9 @@ public class SelectShipReconnectState extends CardState {
 	}
 
 	/**
-	 * Called when a {@link Player} disconnects.
+	 * Called when a {@link it.polimi.ingsw.model.player.Player} disconnects.
 	 *
-	 * @param p {@link Player} The player disconnecting.
-	 * @throws ForbiddenCallException when the state refuses the action.
+	 * @param p {@link it.polimi.ingsw.model.player.Player} The player disconnecting.
 	 */
 	@Override
 	public void disconnect(Player p) {

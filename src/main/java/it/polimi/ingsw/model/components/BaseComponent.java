@@ -78,7 +78,7 @@ public abstract class BaseComponent implements Serializable {
 	/**
 	 * Verifies the component is properly connected to its neighbours.
 	 * 
-	 * @param ship {@link SpaceShip} Ship from which the component retrieves its neighbours.
+	 * @param ship {@link it.polimi.ingsw.model.player.SpaceShip} Ship from which the component retrieves its neighbours.
 	 * @return Whether the component is properly connected or not.
 	 */
 	public boolean verify(SpaceShip ship) {
@@ -132,15 +132,15 @@ public abstract class BaseComponent implements Serializable {
 	}
 
 	/**
-	 * Logic when component is placed in {@link SpaceShip ship}.
-	 * @param ship {@link SpaceShip} Ship where the component was placed.
-	 * @param coords {@link ShipCoords} Coordinates where it was placed.
+	 * Logic when component is placed in {@link it.polimi.ingsw.model.player.SpaceShip ship}.
+	 * @param ship {@link it.polimi.ingsw.model.player.SpaceShip} Ship where the component was placed.
+	 * @param coords {@link it.polimi.ingsw.model.player.ShipCoords} Coordinates where it was placed.
 	 */
 	public abstract void onCreation(SpaceShip ship, ShipCoords coords);
 
 	/**
-	 * Logic when component is removed from {@link SpaceShip ship}.
-	 * @param ship {@link SpaceShip} Ship where the component was placed.
+	 * Logic when component is removed from {@link it.polimi.ingsw.model.player.SpaceShip ship}.
+	 * @param ship {@link it.polimi.ingsw.model.player.SpaceShip} Ship where the component was placed.
 	 */
 	public abstract void onDelete(SpaceShip ship);
 
@@ -159,8 +159,8 @@ public abstract class BaseComponent implements Serializable {
 	/**
 	 * Checks if adjacent components have compatible connectors, if true adds component to an array
 	 *
-	 * @param ship {@link SpaceShip} Ship to retrieve connected components.
-	 * @return Array of {@link BaseComponent} guaranteed to be connected to this.
+	 * @param ship {@link it.polimi.ingsw.model.player.SpaceShip} Ship to retrieve connected components.
+	 * @return Array of {@link it.polimi.ingsw.model.components.BaseComponent}  guaranteed to be connected to this.
 	 */
 	public BaseComponent[] getConnectedComponents(SpaceShip ship) {
 		BaseComponent[] res = new BaseComponent[]{ship.getEmpty(), ship.getEmpty(), ship.getEmpty(), ship.getEmpty()};

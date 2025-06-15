@@ -26,8 +26,8 @@ public class ConnectingState extends ClientControllerState {
 	/**
 	 * Constructs a {@link ConnectingState} object.
 	 * 
-	 * @param controller {@inheritDoc}
-	 * @param view {@inheritDoc}
+	 * @param controller {@link ClientController} Controller to which this state is tied to.
+	 * @param view {@link it.polimi.ingsw.view.ClientView} View to which this state is tied to.
 	 * @param username Username with which the client wishes to connect to the server.
 	 */
 	public ConnectingState(ClientController controller, ClientView view, String username) {

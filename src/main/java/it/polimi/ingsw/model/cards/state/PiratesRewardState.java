@@ -28,9 +28,9 @@ class PiratesRewardState extends CardState {
 	/**
 	 * Constructs a new {@code PiratesRewardState}.
 	 *
-	 * @param state {@link VoyageState} The current voyage state
+	 * @param state {@link it.polimi.ingsw.model.state.VoyageState} The current voyage state
 	 * @param card  {@link PiratesCard} The card being played.
-	 * @param list  List of {@link Player} players in order of distance.
+	 * @param list  List of {@link it.polimi.ingsw.model.player.Player} players in order of distance.
 	 * @throws IllegalArgumentException if the list is empty or too large
 	 */
 	public PiratesRewardState(VoyageState state, PiratesCard card, ArrayList<Player> list) {
@@ -58,9 +58,9 @@ class PiratesRewardState extends CardState {
 	}
 
 	/**
-	 * Validates the {@link ServerMessage} and if the front of the remaining player list has decided to take the reward, transition.
+	 * Validates the {@link it.polimi.ingsw.message.server.ServerMessage} and if the front of the remaining player list has decided to take the reward, transition.
 	 *
-	 * @param message {@link ServerMessage} The message received from the player.
+	 * @param message {@link it.polimi.ingsw.message.server.ServerMessage} The message received from the player.
 	 * @throws ForbiddenCallException if the message is not allowed.
 	 */
 	@Override
@@ -100,9 +100,9 @@ class PiratesRewardState extends CardState {
 	}
 
 	/**
-	 * Called when a {@link Player} decides to take a reward.
+	 * Called when a {@link it.polimi.ingsw.model.player.Player} decides to take a reward.
 	 *
-	 * @param p {@link Player} The player taking the reward.
+	 * @param p {@link it.polimi.ingsw.model.player.Player} The player taking the reward.
 	 * @param take True if the player wants to take the reward.
 	 */
 	@Override
@@ -118,9 +118,9 @@ class PiratesRewardState extends CardState {
 	}
 
 	/**
-	 * Called when a {@link Player} disconnects.
+	 * Called when a {@link it.polimi.ingsw.model.player.Player} disconnects.
 	 *
-	 * @param p {@link Player} The player disconnecting.
+	 * @param p {@link it.polimi.ingsw.model.player.Player} The player disconnecting.
 	 * @throws ForbiddenCallException when the state refuses the action.
 	 */
 	@Override

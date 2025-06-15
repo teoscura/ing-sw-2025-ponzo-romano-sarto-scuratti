@@ -7,7 +7,7 @@ import it.polimi.ingsw.model.cards.exceptions.AlreadyVisitedException;
 import java.io.Serializable;
 
 /**
- * Class representing a single landing place on a {@link PlanetCard}.
+ * Class representing a single landing place on a {@link it.polimi.ingsw.model.cards.PlanetCard}.
  */
 public class Planet implements Serializable {
 

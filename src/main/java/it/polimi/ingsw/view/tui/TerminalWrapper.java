@@ -180,8 +180,8 @@ public class TerminalWrapper {
 	}
 
 	/**
-	 * @implNote Any methods regarding the input string are not synchronized to avoid the overhead of atomic changes,
-	 * as There's only one producer (this object) and only one {@link TUIStrategy consumer}.
+	 * Any methods regarding the input string are not synchronized to avoid the overhead of atomic changes,
+	 * as There's only one producer (this object) and only one {@link it.polimi.ingsw.view.tui.strategy.TUIStrategy consumer}.
 	 * 
 	 * @return Whether the input string is available or not.
 	 */
@@ -204,10 +204,10 @@ public class TerminalWrapper {
 	}
 
 	/**
-	 * @implNote Any methods regarding the input string are not synchronized to avoid the overhead of atomic changes,
-	 * as There's only one producer (this object) and only one {@link TUIStrategy consumer}.
-	 * 
 	 * Peeks the input string without consuming it.
+	 * 
+	 * Any methods regarding the input string are not synchronized to avoid the overhead of atomic changes,
+	 * as There's only one producer (this object) and only one {@link it.polimi.ingsw.view.tui.strategy.TUIStrategy consumer}.
 	 * 
 	 * @return The input string.
 	 */

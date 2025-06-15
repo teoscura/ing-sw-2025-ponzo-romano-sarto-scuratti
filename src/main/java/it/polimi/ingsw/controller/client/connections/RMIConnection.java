@@ -25,7 +25,7 @@ public class RMIConnection implements ServerConnection {
 	/**
 	 * Constructs a {@link RMIConnection} object.
 	 * 
-	 * @param inqueue {@link ThreadSafeMessageQueue} Queue in which incoming {@link ServerMessage messages} will be inserted.
+	 * @param inqueue {@link ThreadSafeMessageQueue} Queue in which incoming {@link it.polimi.ingsw.message.server.ServerMessage messages} will be inserted.
 	 * @param server_ip IP address on which the remote RMI Registry is running. 
 	 * @param username Username with which the client wishes to connect to the server.
 	 * @param port Port on which the RMI Server is listening.

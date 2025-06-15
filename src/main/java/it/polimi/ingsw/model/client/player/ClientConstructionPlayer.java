@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Client side representation of a player during a {@link ConstructionState}
+ * Client side representation of a player during a {@link it.polimi.ingsw.model.state.ConstructionState}
  */
 public class ClientConstructionPlayer implements Serializable {
 

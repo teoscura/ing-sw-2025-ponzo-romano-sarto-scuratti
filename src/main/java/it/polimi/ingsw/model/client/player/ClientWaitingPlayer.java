@@ -5,7 +5,7 @@ import it.polimi.ingsw.model.player.PlayerColor;
 import java.io.Serializable;
 
 /**
- * Client side representation of a player during a {@link WaitingState}
+ * Client side representation of a player during a {@link it.polimi.ingsw.model.state.WaitingState}
  */
 public class ClientWaitingPlayer implements Serializable {
 

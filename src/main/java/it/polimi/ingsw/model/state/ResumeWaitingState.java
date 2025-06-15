@@ -23,9 +23,9 @@ import java.util.List;
 
 /**
  * Special subclass of {@link WaitingState} needed to restart a saved game, 
- * only allows {@link ClientDescriptor clients} with the same names as the {@link Player players} that were playing before the {@link ModelInstance} that owned it got closed. 
- *
- * {@inheritDoc}
+ * only allows {@link ClientDescriptor clients} with the same names as the {@link it.polimi.ingsw.model.player.Player players} that were playing before the {@link it.polimi.ingsw.model.ModelInstance} that owned it got closed. 
+ * 
+ * Starting point of any newly created match of Galaxy Trucker, waits for the expected number of {@link ClientDescriptor clients} and then automatically joins.
  */
 public class ResumeWaitingState extends WaitingState {
 
@@ -36,10 +36,10 @@ public class ResumeWaitingState extends WaitingState {
 	/**
 	 * Constructs a {@link ResumeWaitingState} object.
 	 *
-	 * @param model {@link ModelInstance} ModelInstance that owns this {@link GameState}.
+	 * @param model {@link it.polimi.ingsw.model.ModelInstance} ModelInstance that owns this {{@link it.polimi.ingsw.model.state.GameState}.
 	 * @param type {@link GameModeType} Ruleset of the state.
-	 * @param count {@link PlayerCount} Size of the match.
-	 * @param next {@link GameState} State the saved game stopped at.
+	 * @param count {@link it.polimi.ingsw.model.PlayerCount} Size of the match.
+	 * @param next {{@link it.polimi.ingsw.model.state.GameState} State the saved game stopped at.
 	 */
 	public ResumeWaitingState(ModelInstance model, GameModeType type, PlayerCount count, GameState next) {
 		super(model, type, count);
@@ -62,7 +62,7 @@ public class ResumeWaitingState extends WaitingState {
 	}
 
 	/**
-	 * Checks that all the {@link Player players} previously playing have joined, and if so, transitions.
+	 * Checks that all the {@link it.polimi.ingsw.model.player.Player players} previously playing have joined, and if so, transitions.
 	 * 
 	 * {@inheritDoc}
 	 */
@@ -90,7 +90,7 @@ public class ResumeWaitingState extends WaitingState {
 	}
 
 	/**
-	 * Returns the {@link GameState} the match stopped at.
+	 * Returns the {{@link it.polimi.ingsw.model.state.GameState} the match stopped at.
 	 */
 	@Override
 	public GameState getNext() {

@@ -43,9 +43,9 @@ public class EnergyVisitor implements ComponentVisitor {
 	}
 
 	/**
-	 * Powers up {@link CannonComponent}.
+	 * Powers up {@link it.polimi.ingsw.model.components.CannonComponent}.
 	 * 
-	 * @param c {@link CannonComponent} Component being visited.
+	 * @param c {@link it.polimi.ingsw.model.components.CannonComponent} Component being visited.
 	 */
 	@Override
 	public void visit(CannonComponent c) {

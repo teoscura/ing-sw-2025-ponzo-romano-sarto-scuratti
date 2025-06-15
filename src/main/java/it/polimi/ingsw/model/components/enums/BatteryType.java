@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model.components.enums;
 
 /**
- * Enumeration that specifies the supported types of {@link BatteryComponent} in this implementation of Galaxy Trucker.
+ * Enumeration that specifies the supported types of {@link it.polimi.ingsw.model.components.BatteryComponent} in this implementation of Galaxy Trucker.
  */
 public enum BatteryType {
 	DOUBLE(2),

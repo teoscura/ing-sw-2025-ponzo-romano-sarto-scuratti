@@ -77,7 +77,7 @@ public class SocketClient extends Thread implements ClientConnection {
 	}
 
 	/**
-	 * Reads incoming {@link ServerMessages messages}, filtering out all those that arent {@link UsernameSetupMessage}.
+	 * Reads incoming {@link it.polimi.ingsw.message.server.ServerMessage messages}, filtering out all those that arent {@link UsernameSetupMessage}.
 	 */
 	private void readSetup() {
 		MainServerController controller = MainServerController.getInstance();
@@ -99,7 +99,7 @@ public class SocketClient extends Thread implements ClientConnection {
 	}
 
 	/**
-	 * Reads incoming {@link ServerMessages messages}.
+	 * Reads incoming {@link it.polimi.ingsw.message.server.ServerMessage messages}.
 	 */
 	private void read() {
 		MainServerController controller = MainServerController.getInstance();

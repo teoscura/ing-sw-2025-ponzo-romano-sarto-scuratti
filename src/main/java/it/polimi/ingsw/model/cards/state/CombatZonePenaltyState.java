@@ -39,11 +39,11 @@ class CombatZonePenaltyState extends CardState {
 	/**
 	 * Constructs a new {@code CombatZonePenaltyState}.
 	 *
-	 * @param state {@link VoyageState} The current voyage state
+	 * @param state {@link it.polimi.ingsw.model.state.VoyageState} The current voyage state
 	 * @param card_id   The card id
 	 * @param sections  The sections defining penalties
 	 * @param shots     The projectile array
-	 * @param target   The {@link Player} receiving the penalty
+	 * @param target   The {@link it.polimi.ingsw.model.player.Player} receiving the penalty
 	 */
 	public CombatZonePenaltyState(VoyageState state, int card_id, ArrayList<CombatZoneSection> sections, ProjectileArray shots, Player target) {
 		super(state);
@@ -104,9 +104,9 @@ class CombatZonePenaltyState extends CardState {
 	}
 
 	/**
-	 * Validates the {@link ServerMessage} and if the target has responded, transitions.
+	 * Validates the {@link it.polimi.ingsw.message.server.ServerMessage} and if the target has responded, transitions.
 	 *
-	 * @param message {@link ServerMessage} The message received from the player
+	 * @param message {@link it.polimi.ingsw.message.server.ServerMessage} The message received from the player
 	 * @throws ForbiddenCallException if the message is not allowed
 	 */
 	@Override
@@ -192,11 +192,11 @@ class CombatZonePenaltyState extends CardState {
 	}
 
 	/**
-	 * Called when a {@link Player} attempts to power a component.
+	 * Called when a {@link it.polimi.ingsw.model.player.Player} attempts to power a component.
 	 *
-	 * @param p {@link Player} The player
-	 * @param target_coords {@link ShipCoords} the component to power
-	 * @param battery_coords {@link ShipCoords} the battery to use
+	 * @param p {@link it.polimi.ingsw.model.player.Player} The player
+	 * @param target_coords {@link it.polimi.ingsw.model.player.ShipCoords} the component to power
+	 * @param battery_coords {@link it.polimi.ingsw.model.player.ShipCoords} the battery to use
 	 * @throws ForbiddenCallException when the state refuses the action.
 	 */
 	@Override
@@ -222,9 +222,9 @@ class CombatZonePenaltyState extends CardState {
 	}
 
 	/**
-	 * Called when a {@link Player} attempts to progress their turn.
+	 * Called when a {@link it.polimi.ingsw.model.player.Player} attempts to progress their turn.
 	 *
-	 * @param p {@link Player} The player
+	 * @param p {@link it.polimi.ingsw.model.player.Player} The player
 	 * @throws ForbiddenCallException when the state refuses the action.
 	 */
 	@Override
@@ -243,10 +243,10 @@ class CombatZonePenaltyState extends CardState {
 	}
 
 	/**
-	 * Called when a {@link Player} tries to remove crew from a cabin.
+	 * Called when a {@link it.polimi.ingsw.model.player.Player} tries to remove crew from a cabin.
 	 *
-	 * @param p {@link Player} The player
-	 * @param cabin_coords {@link ShipCoords} the coordinates of the cabin
+	 * @param p {@link it.polimi.ingsw.model.player.Player} The player
+	 * @param cabin_coords {@link it.polimi.ingsw.model.player.ShipCoords} the coordinates of the cabin
 	 * @throws ForbiddenCallException when the state refuses the action.
 	 */
 	@Override
@@ -278,11 +278,11 @@ class CombatZonePenaltyState extends CardState {
 	}
 
 	/**
-	 * Called when a {@link Player} tries to discard cargo.
+	 * Called when a {@link it.polimi.ingsw.model.player.Player} tries to discard cargo.
 	 *
-	 * @param p {@link Player} The player
-	 * @param type {@link ShipmentType} The cargo type
-	 * @param coords {@link ShipCoords} the coordinates of the target
+	 * @param p {@link it.polimi.ingsw.model.player.Player} The player
+	 * @param type {@link it.polimi.ingsw.model.components.enums.ShipmentType} The cargo type
+	 * @param coords {@link it.polimi.ingsw.model.player.ShipCoords} the coordinates of the target
 	 * @throws ForbiddenCallException when the state refuses the action.
 	 */
 	@Override
@@ -344,9 +344,9 @@ class CombatZonePenaltyState extends CardState {
 	}
 
 	/**
-	 * Called when a {@link Player} disconnects.
+	 * Called when a {@link it.polimi.ingsw.model.player.Player} disconnects.
 	 *
-	 * @param p {@link Player} The player disconnecting.
+	 * @param p {@link it.polimi.ingsw.model.player.Player} The player disconnecting.
 	 * @throws ForbiddenCallException when the state refuses the action.
 	 */
 	@Override

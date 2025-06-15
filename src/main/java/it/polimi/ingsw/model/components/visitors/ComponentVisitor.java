@@ -3,13 +3,13 @@ package it.polimi.ingsw.model.components.visitors;
 import it.polimi.ingsw.model.components.*;
 
 /**
- * Visitor interface that allows any implementer to distinguish between the various subclasses of {@link BaseComponent}.
+ * Visitor interface that allows any implementer to distinguish between the various subclasses of {@link it.polimi.ingsw.model.components.BaseComponent} .
  */
 public interface ComponentVisitor {
 
 	/**
 	 * Does nothing and returns immediately.
-	 * @param c {@link CabinComponent} Component being visited.
+	 * @param c {@link it.polimi.ingsw.model.components.CabinComponent} Component being visited.
 	 */
 	void visit(CabinComponent c);
 	/**
@@ -24,7 +24,7 @@ public interface ComponentVisitor {
 	void visit(AlienLifeSupportComponent c);
 	/**
 	 * Does nothing and returns immediately.
-	 * @param c {@link CannonComponent} Component being visited.
+	 * @param c {@link it.polimi.ingsw.model.components.CannonComponent} Component being visited.
 	 */
 	void visit(CannonComponent c);
 	/**

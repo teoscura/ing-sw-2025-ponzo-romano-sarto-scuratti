@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * Collection of {@link Projectile} that randomizes them automatically at construction.
+ * Collection of {@link it.polimi.ingsw.model.cards.utils.Projectile} that randomizes them automatically at construction.
  */
 public class ProjectileArray implements Serializable, Cloneable {
 

@@ -17,7 +17,7 @@ import it.polimi.ingsw.utils.LoggerLevel;
 import java.util.ArrayList;
 
 /**
- * Ending point of any completed Galaxy Trucker match, displays all scores and stats for all playing {@link Player players}.
+ * Ending point of any completed Galaxy Trucker match, displays all scores and stats for all playing {@link it.polimi.ingsw.model.player.Player players}.
  */
 public class EndscreenState extends GameState {
 
@@ -27,11 +27,11 @@ public class EndscreenState extends GameState {
 	/**
 	 * Constructs a {@link EndscreenState} object.
 	 *
-	 * @param model {@link ModelInstance} ModelInstance that owns this {@link GameState}.
+	 * @param model {@link it.polimi.ingsw.model.ModelInstance} ModelInstance that owns this {{@link it.polimi.ingsw.model.state.GameState}.
 	 * @param type {@link GameModeType} Ruleset of the state.
-	 * @param count {@link PlayerCount} Size of the match.
-	 * @param players Array of all {@link Player players} in the match.
-	 * @param order_arrival Array of all {@link Player players} that were alive at the end of the match, in descending order of distance.
+	 * @param count {@link it.polimi.ingsw.model.PlayerCount} Size of the match.
+	 * @param players Array of all {@link it.polimi.ingsw.model.player.Player players} in the match.
+	 * @param order_arrival Array of all {@link it.polimi.ingsw.model.player.Player players} that were alive at the end of the match, in descending order of distance.
 	 */
 	public EndscreenState(ModelInstance model, GameModeType type, PlayerCount count, ArrayList<Player> players, ArrayList<Player> order_arrival) {
 		super(model, type, count, players);
@@ -42,7 +42,7 @@ public class EndscreenState extends GameState {
 	}
 
 	/**
-	 * Finalizes scores for all {@link Players}.
+	 * Finalizes scores for all {@link it.polimi.ingsw.model.player.Player}.
 	 * 
 	 * {@inheritDoc}
 	 */

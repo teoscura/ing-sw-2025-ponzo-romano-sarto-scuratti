@@ -66,9 +66,9 @@ public class AlienLifeSupportComponent extends BaseComponent {
 	}
 
 	/**
-	 * This adds the AlienLifeSupport Component's coordinates to the {@link SpaceShip}
+	 * This adds the AlienLifeSupport Component's coordinates to the {@link it.polimi.ingsw.model.player.SpaceShip}
 	 * 
-	 * @param ship {@link SpaceShip} Ship to which you want to add the AlienLifeSupport component
+	 * @param ship {@link it.polimi.ingsw.model.player.SpaceShip} Ship to which you want to add the AlienLifeSupport component
 	 */
 	@Override
 	public void onCreation(SpaceShip ship, ShipCoords coords) {
@@ -76,8 +76,8 @@ public class AlienLifeSupportComponent extends BaseComponent {
 	}
 
 	/**
-	 * This removes the AlienLifeSupport Component's coordinates from the {@link SpaceShip}
-	 * @param ship {@link SpaceShip} Ship to which you want to remove the AlienLifeSupport component
+	 * This removes the AlienLifeSupport Component's coordinates from the {@link it.polimi.ingsw.model.player.SpaceShip}
+	 * @param ship {@link it.polimi.ingsw.model.player.SpaceShip} Ship to which you want to remove the AlienLifeSupport component
 	 */
 	@Override
 	public void onDelete(SpaceShip ship) {

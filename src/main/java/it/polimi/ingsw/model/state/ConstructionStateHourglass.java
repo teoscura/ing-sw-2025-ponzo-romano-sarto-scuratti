@@ -17,10 +17,10 @@ public class ConstructionStateHourglass implements Serializable {
 	private int times;
 
 	/**
-	 * Constructs a {@link ConstructionStateHourglass} object.
+	 * Constructs a {@link it.polimi.ingsw.model.state.ConstructionStateHourglass} object.
 	 * 
-	 * @param seconds Number of seconds the {@link ConstructionStateHourglass} lasts.
-	 * @param times Number of times the {@link ConstructionStateHourglass} can be turned.
+	 * @param seconds Number of seconds the {@link it.polimi.ingsw.model.state.ConstructionStateHourglass} lasts.
+	 * @param times Number of times the {@link it.polimi.ingsw.model.state.ConstructionStateHourglass} can be turned.
 	 */
 	public ConstructionStateHourglass(int seconds, int times) {
 		if (seconds <= 0 || times < 0) throw new IllegalArgumentException();

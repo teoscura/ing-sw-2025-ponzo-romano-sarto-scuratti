@@ -9,7 +9,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /**
- * Represents a unique Client connected to the server, can be tied to a {@link Player} object and to a {@link ClientConnection}. 
+ * Represents a unique Client connected to the server, can be tied to a {@link it.polimi.ingsw.model.player.Player} object and to a {@link ClientConnection}. 
  */
 public class ClientDescriptor {
 
@@ -22,7 +22,7 @@ public class ClientDescriptor {
 	private transient Player player = null;
 
 	/**
-	 * Constructs a {@link ClientDescriptor} object with the provided names and connection.
+	 * Constructs a {@link it.polimi.ingsw.controller.server.ClientDescriptor} object with the provided names and connection.
 	 * @param username Username, unique to the client.
 	 * @param connection {@link ClientConnection} Connection used to send messages to the client.
 	 */
@@ -35,9 +35,9 @@ public class ClientDescriptor {
 	}
 
 	/**
-	 * Bind a {@link Player} object to this descriptor.
+	 * Bind a {@link it.polimi.ingsw.model.player.Player} object to this descriptor.
 	 * 
-	 * @param p {@link Player} Player to be linked.
+	 * @param p {@link it.polimi.ingsw.model.player.Player} Player to be linked.
 	 */
 	public void bindPlayer(Player p) {
 		p.bindDescriptor(this);

@@ -2,7 +2,7 @@ package it.polimi.ingsw.model.components.enums;
 
 
 /**
- * Enumeration that specifies the supported types of {@link StorageComponent} in this implementation of Galaxy Trucker.
+ * Enumeration that specifies the supported types of {@link it.polimi.ingsw.model.components.StorageComponent} in this implementation of Galaxy Trucker.
  */
 public enum StorageType {
 	DOUBLENORMAL(false, 2),

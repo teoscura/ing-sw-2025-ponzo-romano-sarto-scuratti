@@ -4,7 +4,7 @@ import it.polimi.ingsw.model.components.*;
 import it.polimi.ingsw.model.components.enums.ShipmentType;
 
 /**
- * Visitor used to update a {@link SpaceShip}'s stats.
+ * Visitor used to update a {@link it.polimi.ingsw.model.player.SpaceShip}'s stats.
  */
 public class SpaceShipUpdateVisitor implements ComponentVisitor {
 
@@ -23,7 +23,7 @@ public class SpaceShipUpdateVisitor implements ComponentVisitor {
 	/**
 	 * Visits a cabin component and fetches the crew count.
 	 *
-	 * @param c {@link CabinComponent} Component being visited.
+	 * @param c {@link it.polimi.ingsw.model.components.CabinComponent} Component being visited.
 	 */
 	@Override
 	public void visit(CabinComponent c) {
@@ -47,7 +47,7 @@ public class SpaceShipUpdateVisitor implements ComponentVisitor {
 	/**
 	 * Visit a Cannon component and fetches the total power of the cannons.
 	 *
-	 * @param c {@link CannonComponent} Component being visited.
+	 * @param c {@link it.polimi.ingsw.model.components.CannonComponent} Component being visited.
 	 */
 	@Override
 	public void visit(CannonComponent c) {

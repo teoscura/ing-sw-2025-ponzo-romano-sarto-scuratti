@@ -4,7 +4,6 @@ import it.polimi.ingsw.controller.server.ClientDescriptor;
 import it.polimi.ingsw.controller.server.MainServerController;
 import it.polimi.ingsw.message.client.ClientDisconnectMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
-import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.utils.Logger;
 import it.polimi.ingsw.utils.LoggerLevel;
 
@@ -170,7 +169,7 @@ public class NetworkServer extends Thread implements VirtualServerProvider, Seri
 	 * Main entry method for any {@link RMIClientConnection} wishing to connect. 
 	 * 
 	 * @param client {@link RMIClientConnection} Client stub object exported before connecting.
-	 * @return {@link VirtualServer} Server stub object used by client to send {@link ServerMessage messages}, null if connection is refused.
+	 * @return {@link VirtualServer} Server stub object used by client to send {@link it.polimi.ingsw.message.server.ServerMessage messages}, null if connection is refused.
 	 * @throws RemoteException If the underlying RMI TCP channel is disrupted in any unrecoverable way.
 	 */
 	public VirtualServer accept(RMIClientConnection client) throws RemoteException {

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Client side representation of a {@link EndscreenState}.
+ * Client side representation of a {@link it.polimi.ingsw.model.state.EndscreenState}.
  */
 public class ClientEndgameState implements ClientState {
 
