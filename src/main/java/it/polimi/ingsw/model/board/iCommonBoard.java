@@ -16,14 +16,14 @@ public interface iCommonBoard extends Serializable {
 	/**
 	 * Returns the current first component of the pile
 	 *
-	 * @return {@link BaseComponent} The first element of the pile
+	 * @return {@link it.polimi.ingsw.model.components.BaseComponent}  The first element of the pile
 	 */
 	BaseComponent pullComponent();
 
 	/**
 	 * Takes a component c that has been discarded by the player and adds it to the uncovered_components array
 	 *
-	 * @param c {@link BaseComponent} Component to discard
+	 * @param c {@link it.polimi.ingsw.model.components.BaseComponent}  Component to discard
 	 * @throws IllegalArgumentException if a component is discarded twice
 	 */
 	void discardComponent(BaseComponent c);
@@ -32,7 +32,7 @@ public interface iCommonBoard extends Serializable {
 	 * Pulls a component from the uncovered_components array with direct access
 	 *
 	 * @param id The Id
-	 * @return {@link BaseComponent} Component pulled.
+	 * @return {@link it.polimi.ingsw.model.components.BaseComponent}  Component pulled.
 	 * @throws ContainerEmptyException if the ID is not contained inside the discarded componentts.
 	 */
 	BaseComponent pullDiscarded(int id);

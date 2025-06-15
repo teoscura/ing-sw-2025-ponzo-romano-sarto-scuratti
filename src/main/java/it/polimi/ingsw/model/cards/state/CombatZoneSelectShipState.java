@@ -34,11 +34,11 @@ public class CombatZoneSelectShipState extends CardState {
 	/**
 	 * Constructs a new {@code CombatZoneSelectShipState}.
 	 *
-	 * @param state {@link VoyageState} The current voyage state
+	 * @param state {@link it.polimi.ingsw.model.state.VoyageState} The current voyage state
 	 * @param card_id   The card id
 	 * @param sections  The sections defining penalties
 	 * @param shots     The projectile array
-	 * @param target   The {@link Player} receiving the penalty
+	 * @param target   The {@link it.polimi.ingsw.model.player.Player} receiving the penalty
 	 */
 	public CombatZoneSelectShipState(VoyageState state, int card_id, ArrayList<CombatZoneSection> sections, ProjectileArray shots, Player target) {
 		super(state);
@@ -65,9 +65,9 @@ public class CombatZoneSelectShipState extends CardState {
 	}
 
 	/**
-	 * Validates the {@link ServerMessage} and transitions if the player has set the blob or disconnected.
+	 * Validates the {@link it.polimi.ingsw.message.server.ServerMessage} and transitions if the player has set the blob or disconnected.
 	 *
-	 * @param message {@link ServerMessage} The message received from the player
+	 * @param message {@link it.polimi.ingsw.message.server.ServerMessage} The message received from the player
 	 * @throws ForbiddenCallException if the message is not allowed
 	 */
 	@Override
@@ -114,10 +114,10 @@ public class CombatZoneSelectShipState extends CardState {
 	}
 
 	/**
-	 * Called when a {@link Player} tries to select a ship blob center.
+	 * Called when a {@link it.polimi.ingsw.model.player.Player} tries to select a ship blob center.
 	 *
-	 * @param p {@link Player} The player
-	 * @param blob_coord {@link ShipCoords} The coordinates selected
+	 * @param p {@link it.polimi.ingsw.model.player.Player} The player
+	 * @param blob_coord {@link it.polimi.ingsw.model.player.ShipCoords} The coordinates selected
 	 */
 	@Override
 	public void selectBlob(Player p, ShipCoords blob_coord) {
@@ -141,9 +141,9 @@ public class CombatZoneSelectShipState extends CardState {
 	}
 
 	/**
-	 * Called when a {@link Player} disconnects.
+	 * Called when a {@link it.polimi.ingsw.model.player.Player} disconnects.
 	 *
-	 * @param p {@link Player} The player disconnecting.
+	 * @param p {@link it.polimi.ingsw.model.player.Player} The player disconnecting.
 	 * @throws ForbiddenCallException when the state refuses the action.
 	 */
 	@Override

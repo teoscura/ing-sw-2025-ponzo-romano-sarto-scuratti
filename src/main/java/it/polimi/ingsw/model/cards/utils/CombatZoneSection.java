@@ -3,7 +3,7 @@ package it.polimi.ingsw.model.cards.utils;
 import java.io.Serializable;
 
 /**
- * Class representing a single section of a {@link CombatZoneCard}.
+ * Class representing a single section of a {@link it.polimi.ingsw.model.cards.CombatZoneCard}.
  */
 public class CombatZoneSection implements Serializable {
 

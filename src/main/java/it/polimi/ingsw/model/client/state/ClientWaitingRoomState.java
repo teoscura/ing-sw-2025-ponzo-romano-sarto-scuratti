@@ -7,7 +7,7 @@ import it.polimi.ingsw.model.client.player.ClientWaitingPlayer;
 import java.util.ArrayList;
 
 /**
- * Client side representation of a {@link WaitingState}.
+ * Client side representation of a {@link it.polimi.ingsw.model.state.WaitingState}.
  */
 public class ClientWaitingRoomState implements ClientState {
 

@@ -19,7 +19,7 @@ import it.polimi.ingsw.utils.LoggerLevel;
 import java.util.ArrayList;
 
 /**
- * Represents a the construction phase of a Galaxy Trucker match, using level two flight rules, includes a {@link ConstructionStateHourglass}.
+ * Represents a the construction phase of a Galaxy Trucker match, using level two flight rules, includes a {@link it.polimi.ingsw.model.state.ConstructionStateHourglass}.
  */
 public class LevelTwoConstructionState extends ConstructionState {
 
@@ -28,11 +28,11 @@ public class LevelTwoConstructionState extends ConstructionState {
 	/**
 	 * Constructs a {@link LevelTwoConstructionState} object.
 	 * 
-	 * @param model {@link ModelInstance} ModelInstance that owns this {@link GameState}.
+	 * @param model {@link it.polimi.ingsw.model.ModelInstance} ModelInstance that owns this {{@link it.polimi.ingsw.model.state.GameState}.
 	 * @param type {@link GameModeType} Ruleset of the state.
-	 * @param count {@link PlayerCount} Size of the match.
-	 * @param players Array of all {@link Player players} in the match.
-	 * @param seconds Amount of seconds the {@link ConstructionStateHourglass} lasts.
+	 * @param count {@link it.polimi.ingsw.model.PlayerCount} Size of the match.
+	 * @param players Array of all {@link it.polimi.ingsw.model.player.Player players} in the match.
+	 * @param seconds Amount of seconds the {@link it.polimi.ingsw.model.state.ConstructionStateHourglass} lasts.
 	 */
 	public LevelTwoConstructionState(ModelInstance model, GameModeType type, PlayerCount count, ArrayList<Player> players, int seconds) {
 		super(model, type, count, players, new LevelTwoCards());

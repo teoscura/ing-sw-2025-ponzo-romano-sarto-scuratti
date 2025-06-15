@@ -55,10 +55,10 @@ public class SpaceShip implements Serializable {
 	private int engine_power = 0;
 
 	/**
-	 * Constructs a {@link SpaceShip} object.
+	 * Constructs a {@link it.polimi.ingsw.model.player.SpaceShip} object.
 	 * 
 	 * @param type {@link GameModeType} Type of the ship.
-	 * @param player {@link Player} Player it belongs to.
+	 * @param player {@link it.polimi.ingsw.model.player.Player} Player it belongs to.
 	 */
 	public SpaceShip(GameModeType type,
 					 Player player) {
@@ -158,7 +158,7 @@ public class SpaceShip implements Serializable {
 	}
 
 	/**
-	 * Updates the list of "blobs" composing the {@link SpaceShip}.
+	 * Updates the list of "blobs" composing the {@link it.polimi.ingsw.model.player.SpaceShip}.
 	 * Blobs are sets of connected {@link BaseComponent components}.
 	 */
 	public void updateShipBlobs() {
@@ -179,11 +179,11 @@ public class SpaceShip implements Serializable {
 	}
 
 	/**
-	 * Utility method, uses a BFS to build a list of {@link ShipCoords coordinates} pointing to all {@link BaseComponent components} part of the same blob.
+	 * Utility method, uses a BFS to build a list of {@link it.polimi.ingsw.model.player.ShipCoords coordinates} pointing to all {@link BaseComponent components} part of the same blob.
 	 * 
-	 * @param map Matrix of {@link VerifyResult} used to check which {@link ShipCoords coordinates} were already visited.
-	 * @param starting_point {@link ShipCoords} Starting point of the BFS.
-	 * @return ArrayList of {@link ShipCoords} containting all {@link ShipCoords coordinates} of all blob {@link BaseComponent components}. 
+	 * @param map Matrix of {@link VerifyResult} used to check which {@link it.polimi.ingsw.model.player.ShipCoords coordinates} were already visited.
+	 * @param starting_point {@link it.polimi.ingsw.model.player.ShipCoords} Starting point of the BFS.
+	 * @return ArrayList of {@link it.polimi.ingsw.model.player.ShipCoords} containting all {@link it.polimi.ingsw.model.player.ShipCoords coordinates} of all blob {@link BaseComponent components}. 
 	 */
 	private ArrayList<ShipCoords> verifyBlob(VerifyResult[][] map, ShipCoords starting_point) {
 		ArrayList<ShipCoords> res = new ArrayList<>();
@@ -205,9 +205,9 @@ public class SpaceShip implements Serializable {
 	}
 
 	/**
-	 * Selects a blob from {@link SpaceShip} containing the specified {@link ShipCoords coordinate}, discarding all other {@link BaseComponent components} contained in other blobs.
+	 * Selects a blob from {@link it.polimi.ingsw.model.player.SpaceShip} containing the specified {@link it.polimi.ingsw.model.player.ShipCoords coordinate}, discarding all other {@link BaseComponent components} contained in other blobs.
 	 * 
-	 * @param blob_coord {@link ShipCoords} Coordinate belonging to the blob to keep.
+	 * @param blob_coord {@link it.polimi.ingsw.model.player.ShipCoords} Coordinate belonging to the blob to keep.
 	 * @throws ForbiddenCallException if only one blob exists.
 	 * @throws IllegalTargetException if the coordinates are invalid.
 	 */
@@ -230,10 +230,10 @@ public class SpaceShip implements Serializable {
 	}
 
 	/**
-	 * Adds a {@link BaseComponent component} to the {@link SpaceShip} at the specified {@link ShipCoords coordinates}.
+	 * Adds a {@link BaseComponent component} to the {@link it.polimi.ingsw.model.player.SpaceShip} at the specified {@link it.polimi.ingsw.model.player.ShipCoords coordinates}.
 	 * 
-	 * @param component {@link BaseComponent} The component to add.
-	 * @param coords {@link ShipCoords} The location to place it.
+	 * @param component {@link it.polimi.ingsw.model.components.BaseComponent}  The component to add.
+	 * @param coords {@link it.polimi.ingsw.model.player.ShipCoords} The location to place it.
 	 * @throws IllegalComponentAdd if the location is illegal or occupied.
 	 * @throws IllegalTargetException if not adjacent to any existing component.
 	 */
@@ -261,9 +261,9 @@ public class SpaceShip implements Serializable {
 	}
 
 	/**
-	 * Removes the {@link BaseComponent component} at the given {@link ShipCoords coordinates} and updates the ship state.
+	 * Removes the {@link BaseComponent component} at the given {@link it.polimi.ingsw.model.player.ShipCoords coordinates} and updates the ship state.
 	 * 
-	 * @param coords {@link ShipCoords} Coordinates of the {@link BaseComponent component} to remove.
+	 * @param coords {@link it.polimi.ingsw.model.player.ShipCoords} Coordinates of the {@link BaseComponent component} to remove.
 	 * @throws IllegalTargetException if no {@link BaseComponent component} is present at the location.
 	 */
 	public void removeComponent(ShipCoords coords) {
@@ -317,10 +317,10 @@ public class SpaceShip implements Serializable {
 	}
 
 	/**
-	 * Powers on a target {@link BaseComponent component} using a battery located at another {@link ShipCoords coordinate}
-	 * @param coords_target {@link ShipCoords} Coordinates to the target {@link BaseComponent component}.
-	 * @param battery_location {@link ShipCoords} Coordinates to the battery {@link BaseComponent component}.
-	 * @throws IllegalTargetException if invalid component or battery {@link ShipCoords}.
+	 * Powers on a target {@link BaseComponent component} using a battery located at another {@link it.polimi.ingsw.model.player.ShipCoords coordinate}
+	 * @param coords_target {@link it.polimi.ingsw.model.player.ShipCoords} Coordinates to the target {@link BaseComponent component}.
+	 * @param battery_location {@link it.polimi.ingsw.model.player.ShipCoords} Coordinates to the battery {@link BaseComponent component}.
+	 * @throws IllegalTargetException if invalid component or battery {@link it.polimi.ingsw.model.player.ShipCoords}.
 	 */
 	public void turnOn(ShipCoords coords_target, ShipCoords battery_location) {
 		if (coords_target == null) throw new NullPointerException();
@@ -337,10 +337,10 @@ public class SpaceShip implements Serializable {
 	}
 
 	/**
-	 * Returns the {@link BaseComponent component} at the specified {@link ShipCoords coordinates}.
-	 * @param coords {@link ShipCoords} Location to retrieve.
-	 * @return {@link BaseComponent} Component Reference, corresponding to {@link SpaceShip#getEmpty()} if not set or invalid.
-	 * @throws OutOfBoundsException if {@link ShipCoords coordinates} are outside grid.
+	 * Returns the {@link BaseComponent component} at the specified {@link it.polimi.ingsw.model.player.ShipCoords coordinates}.
+	 * @param coords {@link it.polimi.ingsw.model.player.ShipCoords} Location to retrieve.
+	 * @return {@link it.polimi.ingsw.model.components.BaseComponent}  Component Reference, corresponding to {@link it.polimi.ingsw.model.player.SpaceShip#getEmpty()} if not set or invalid.
+	 * @throws OutOfBoundsException if {@link it.polimi.ingsw.model.player.ShipCoords coordinates} are outside grid.
 	 */
 	public BaseComponent getComponent(ShipCoords coords) {
 		if (coords == null) throw new NullPointerException();
@@ -378,7 +378,7 @@ public class SpaceShip implements Serializable {
 	}
 
 	/**
-	 * Returns the height of the {@link SpaceShip ship}'s grid.
+	 * Returns the height of the {@link it.polimi.ingsw.model.player.SpaceShip ship}'s grid.
 	 * 
 	 * @return Height.
 	 */
@@ -387,7 +387,7 @@ public class SpaceShip implements Serializable {
 	}
 
 	/**
-	 * Returns the width of the {@link SpaceShip ship}'s grid.
+	 * Returns the width of the {@link it.polimi.ingsw.model.player.SpaceShip ship}'s grid.
 	 * 
 	 * @return Width.
 	 */
@@ -396,8 +396,8 @@ public class SpaceShip implements Serializable {
 	}
 
 	/**
-	 * Returns the {@link SpaceShip ship}'s reference to its {@link EmptyComponent}.
-	 * @return {@link BaseComponent} reference to owned {@link EmptyComponent}.
+	 * Returns the {@link it.polimi.ingsw.model.player.SpaceShip ship}'s reference to its {@link EmptyComponent}.
+	 * @return {@link it.polimi.ingsw.model.components.BaseComponent}  reference to owned {@link EmptyComponent}.
 	 */
 	public BaseComponent getEmpty() {
 		return this.empty;
@@ -467,7 +467,7 @@ public class SpaceShip implements Serializable {
 	/**
 	 * Finds cabins that are connected to at least one other cabin.
 	 * 
-	 * @return ArrayList of {@link ShipCoords}, each one pointing to a {@link CabinComponent} that is adjacent to another {@link CabinComponent}.
+	 * @return ArrayList of {@link it.polimi.ingsw.model.player.ShipCoords}, each one pointing to a {@link it.polimi.ingsw.model.components.CabinComponent} that is adjacent to another {@link it.polimi.ingsw.model.components.CabinComponent}.
 	 */
 	public ArrayList<ShipCoords> findConnectedCabins() {
 		ArrayList<ShipCoords> res = new ArrayList<>();
@@ -511,9 +511,9 @@ public class SpaceShip implements Serializable {
 
 	/**
 	 * Handles an incoming meteorite based on its direction and offset.
-	 * Applies shield logic and potentially removes {@link BaseComponent}.
+	 * Applies shield logic and potentially removes {@link it.polimi.ingsw.model.components.BaseComponent} .
 	 * 
-	 * @param p {@link Projectile} Meteor to handle.
+	 * @param p {@link it.polimi.ingsw.model.cards.utils.Projectile} Meteor to handle.
 	 */
 	public void handleMeteorite(Projectile p) {
 		//Normalize Roll and see if it grazes or is in a possible row.
@@ -544,7 +544,7 @@ public class SpaceShip implements Serializable {
 	 * Handles a laser shot based on direction and offset.
 	 * Applies shield logic and removes first impacted component if not deflected or shielded.
 	 * 
-	 * @param p {@link Projectile} The projectile to handle.
+	 * @param p {@link it.polimi.ingsw.model.cards.utils.Projectile} The projectile to handle.
 	 */
 	public void handleShot(Projectile p) {
 		//Normalize Roll and see if it grazes or is in a possible row.
@@ -582,7 +582,7 @@ public class SpaceShip implements Serializable {
 
 	/**
 	 * @param index Index of the column to fetch.
-	 * @return An Array of {@link BaseComponent} representing all components along a column of the {@link SpaceShip}.
+	 * @return An Array of {@link it.polimi.ingsw.model.components.BaseComponent}  representing all components along a column of the {@link it.polimi.ingsw.model.player.SpaceShip}.
 	 */
 	private BaseComponent[] constructCol(int index) {
 		//No validation needed, it's only used in getFirst.
@@ -618,7 +618,7 @@ public class SpaceShip implements Serializable {
 	/**
 	 * Returns the current cargo quantities stored in the ship.
 	 * 
-	 * @return Array of integers representing the total sum of each {@link ShipmentType}.
+	 * @return Array of integers representing the total sum of each {@link it.polimi.ingsw.model.components.enums.ShipmentType}.
 	 */
 	public int[] getContains() {
 		return this.containers;
@@ -627,7 +627,7 @@ public class SpaceShip implements Serializable {
 	/**
 	 * Checks if the provided coordinates belong to a cabin component.
 	 * 
-	 * @param coords {@link ShipCoords} Coordinate to verify.
+	 * @param coords {@link it.polimi.ingsw.model.player.ShipCoords} Coordinate to verify.
 	 * @return {@code true} if it is a cabin, {@code false} otherwise.
 	 */
 	public boolean isCabin(ShipCoords coords) {

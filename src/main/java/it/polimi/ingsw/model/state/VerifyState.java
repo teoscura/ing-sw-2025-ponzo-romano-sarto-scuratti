@@ -20,7 +20,6 @@ import it.polimi.ingsw.model.components.exceptions.UnsupportedAlienCabinExceptio
 import it.polimi.ingsw.model.components.visitors.CrewSetVisitor;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.ShipCoords;
-import it.polimi.ingsw.model.player.SpaceShip;
 import it.polimi.ingsw.utils.Logger;
 import it.polimi.ingsw.utils.LoggerLevel;
 
@@ -39,14 +38,14 @@ public class VerifyState extends GameState {
 	private final ArrayList<Player> starts_losing;
 
 	/**
-	 * Constructs a {@link VerifyState} object.
+	 * Constructs a {@link it.polimi.ingsw.model.state.VerifyState} object.
 	 * 
-	 * @param model {@link ModelInstance} ModelInstance that owns this {@link GameState}.
+	 * @param model {@link it.polimi.ingsw.model.ModelInstance} ModelInstance that owns this {{@link it.polimi.ingsw.model.state.GameState}.
 	 * @param type {@link GameModeType} Ruleset of the state.
-	 * @param count {@link PlayerCount} Size of the match.
-	 * @param players Array of all {@link Player players} in the match.
+	 * @param count {@link it.polimi.ingsw.model.PlayerCount} Size of the match.
+	 * @param players Array of all {@link it.polimi.ingsw.model.player.Player players} in the match.
 	 * @param voyage_deck {@link iCards} Card deck to be player in the upcoming state.
-	 * @param finish_order Array of all {@link Player players}, sorted in finishing order of the construction phase.
+	 * @param finish_order Array of all {@link it.polimi.ingsw.model.player.Player players}, sorted in finishing order of the construction phase.
 	 */
 	public VerifyState(ModelInstance model, GameModeType type, PlayerCount count, ArrayList<Player> players, iCards voyage_deck, ArrayList<Player> finish_order) {
 		super(model, type, count, players);
@@ -59,7 +58,7 @@ public class VerifyState extends GameState {
 	}
 
 	/**
-	 * Validates every {@link Player}'s {@link SpaceShip} and if invalid removes them from the finish order.
+	 * Validates every {@link it.polimi.ingsw.model.player.Player}'s {@link it.polimi.ingsw.model.player.SpaceShip} and if invalid removes them from the finish order.
 	 */
 	@Override
 	public void init() {
@@ -77,7 +76,7 @@ public class VerifyState extends GameState {
 	}
 
 	/**
-	 * Checks if all {@link Player players} have either finished validating or have disconnected.
+	 * Checks if all {@link it.polimi.ingsw.model.player.Player players} have either finished validating or have disconnected.
 	 * 
 	 * {@inheritDoc}
 	 */

@@ -30,9 +30,9 @@ public class AbandonedShipAnnounceState extends CardState {
 	/**
 	 * Constructs a new {@code AbandonedShipAnnounceState}.
 	 *
-	 * @param state {@link VoyageState} The current voyage state
+	 * @param state {@link it.polimi.ingsw.model.state.VoyageState} The current voyage state
 	 * @param card  {@link AbandonedShipCard} The card being played.
-	 * @param list  List of {@link Player} players in order of distance.
+	 * @param list  List of {@link it.polimi.ingsw.model.player.Player} players in order of distance.
 	 * @throws IllegalArgumentException if the list is empty or too large
 	 * @throws NullPointerException if the card is null
 	 */
@@ -64,9 +64,9 @@ public class AbandonedShipAnnounceState extends CardState {
 	}
 
 	/**
-	 * Validates and resolves the {@link Player}'s response to the landing offer.
+	 * Validates and resolves the {@link it.polimi.ingsw.model.player.Player}'s response to the landing offer.
 	 *
-	 * @param message {@link ServerMessage} The message received from the player
+	 * @param message {@link it.polimi.ingsw.message.server.ServerMessage} The message received from the player
 	 * @throws ForbiddenCallException if the message is not allowed
 	 */
 	@Override
@@ -118,9 +118,9 @@ public class AbandonedShipAnnounceState extends CardState {
 	}
 
 	/**
-	 * Called when a {@link Player} tries to select a landing location.
+	 * Called when a {@link it.polimi.ingsw.model.player.Player} tries to select a landing location.
 	 *
-	 * @param p {@link Player} The player selecting the landing.
+	 * @param p {@link it.polimi.ingsw.model.player.Player} The player selecting the landing.
 	 * @param planet The id of the landing location chosen.
 	 */
 	@Override
@@ -139,9 +139,9 @@ public class AbandonedShipAnnounceState extends CardState {
 	}
 
 	/**
-	 * Called when a {@link Player} disconnects.
+	 * Called when a {@link it.polimi.ingsw.model.player.Player} disconnects.
 	 *
-	 * @param p {@link Player} The player disconnecting.
+	 * @param p {@link it.polimi.ingsw.model.player.Player} The player disconnecting.
 	 */
 	@Override
 	public void disconnect(Player p) throws ForbiddenCallException {

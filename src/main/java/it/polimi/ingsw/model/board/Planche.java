@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map.Entry;
 
 /**
- * {@inheritDoc}
+ * The planche class handles the movement of the player on the board.
  * Contains a HashMap that uses player color as a key, and the total steps taken by that player as a value.
  */
 public class Planche implements iPlanche {

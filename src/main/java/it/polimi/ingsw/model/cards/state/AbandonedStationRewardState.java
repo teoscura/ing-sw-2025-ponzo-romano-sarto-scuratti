@@ -39,9 +39,9 @@ public class AbandonedStationRewardState extends CardState {
 	/**
 	 * Constructs a new {@code AbandonedStationRewardState}.
 	 *
-	 * @param state {@link VoyageState} The current voyage state
+	 * @param state {@link it.polimi.ingsw.model.state.VoyageState} The current voyage state
 	 * @param card  {@link AbandonedStationCard} The card being played.
-	 * @param list  List of {@link Player} players in order of distance.
+	 * @param list  List of {@link it.polimi.ingsw.model.player.Player} players in order of distance.
 	 * @throws IllegalArgumentException if the list is empty or too large
 	 */
 	public AbandonedStationRewardState(VoyageState state, AbandonedStationCard card, List<Player> list) {
@@ -70,9 +70,9 @@ public class AbandonedStationRewardState extends CardState {
 	}
 
 	/**
-	 * Validates and resolves the {@link Player}'s response to the reward.
+	 * Validates and resolves the {@link it.polimi.ingsw.model.player.Player}'s response to the reward.
 	 *
-	 * @param message {@link ServerMessage} The message received from the player
+	 * @param message {@link it.polimi.ingsw.message.server.ServerMessage} The message received from the player
 	 * @throws ForbiddenCallException if the message is not allowed
 	 */
 	@Override
@@ -106,11 +106,11 @@ public class AbandonedStationRewardState extends CardState {
 	}
 
 	/**
-	 * Called when a {@link Player} attempts to take cargo.
+	 * Called when a {@link it.polimi.ingsw.model.player.Player} attempts to take cargo.
 	 *
-	 * @param p {@link Player} The player doing this action
-	 * @param type {@link ShipmentType} The cargo type.
-	 * @param target_coords {@link ShipCoords} The coordinates of the {@link StorageComponent}.
+	 * @param p {@link it.polimi.ingsw.model.player.Player} The player doing this action
+	 * @param type {@link it.polimi.ingsw.model.components.enums.ShipmentType} The cargo type.
+	 * @param target_coords {@link it.polimi.ingsw.model.player.ShipCoords} The coordinates of the {@link StorageComponent}.
 	 */
 	@Override
 	public void takeCargo(Player p, ShipmentType type, ShipCoords target_coords) {
@@ -155,12 +155,12 @@ public class AbandonedStationRewardState extends CardState {
 	}
 
 	/**
-	 * Called when a {@link Player} attempts to move cargo.
+	 * Called when a {@link it.polimi.ingsw.model.player.Player} attempts to move cargo.
 	 *
-	 * @param p {@link Player} The player
-	 * @param type {@link ShipmentType} The cargo type
-	 * @param target_coords {@link ShipCoords} the coordinates of the target
-	 * @param source_coords {@link ShipCoords} the coordinates of the source
+	 * @param p {@link it.polimi.ingsw.model.player.Player} The player
+	 * @param type {@link it.polimi.ingsw.model.components.enums.ShipmentType} The cargo type
+	 * @param target_coords {@link it.polimi.ingsw.model.player.ShipCoords} the coordinates of the target
+	 * @param source_coords {@link it.polimi.ingsw.model.player.ShipCoords} the coordinates of the source
 	 */
 	@Override
 	public void moveCargo(Player p, ShipmentType type, ShipCoords target_coords, ShipCoords source_coords) {
@@ -197,11 +197,11 @@ public class AbandonedStationRewardState extends CardState {
 	}
 
 	/**
-	 * Called when a {@link Player} tries to discard cargo.
+	 * Called when a {@link it.polimi.ingsw.model.player.Player} tries to discard cargo.
 	 *
-	 * @param p {@link Player} The player
-	 * @param type {@link ShipmentType} The cargo type
-	 * @param target_coords {@link ShipCoords} the coordinates of the target
+	 * @param p {@link it.polimi.ingsw.model.player.Player} The player
+	 * @param type {@link it.polimi.ingsw.model.components.enums.ShipmentType} The cargo type
+	 * @param target_coords {@link it.polimi.ingsw.model.player.ShipCoords} the coordinates of the target
 	 */
 	@Override
 	public void discardCargo(Player p, ShipmentType type, ShipCoords target_coords) {
@@ -229,9 +229,9 @@ public class AbandonedStationRewardState extends CardState {
 	}
 
 	/**
-	 * Called when a {@link Player} attempts to progress their turn.
+	 * Called when a {@link it.polimi.ingsw.model.player.Player} attempts to progress their turn.
 	 *
-	 * @param p {@link Player} The player
+	 * @param p {@link it.polimi.ingsw.model.player.Player} The player
 	 */
 	@Override
 	public void progressTurn(Player p) {
@@ -244,9 +244,9 @@ public class AbandonedStationRewardState extends CardState {
 	}
 
 	/**
-	 * Called when a {@link Player} disconnects.
+	 * Called when a {@link it.polimi.ingsw.model.player.Player} disconnects.
 	 *
-	 * @param p {@link Player} The player disconnecting.
+	 * @param p {@link it.polimi.ingsw.model.player.Player} The player disconnecting.
 	 * @throws ForbiddenCallException when the state refuses the action.
 	 */
 	@Override

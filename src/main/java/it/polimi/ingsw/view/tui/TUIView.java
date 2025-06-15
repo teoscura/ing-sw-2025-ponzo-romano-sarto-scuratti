@@ -21,7 +21,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 
 /**
- * TUI implementation of {@link ClientView}.
+ * TUI implementation of {@link it.polimi.ingsw.view.ClientView}.
  */
 public class TUIView implements ClientView {
 	
@@ -218,7 +218,7 @@ public class TUIView implements ClientView {
 	}
 
 	/**
-	 * Handles a line input by the user according to the currently set {@link TUIStrategy}.
+	 * Handles a line input by the user according to the currently set {@link it.polimi.ingsw.view.tui.strategy.TUIStrategy}.
 	 * @param line
 	 */
 	public void handleLine(String line) {

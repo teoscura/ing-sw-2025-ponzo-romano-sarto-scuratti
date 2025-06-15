@@ -3,7 +3,6 @@ package it.polimi.ingsw.controller.client.connections;
 import it.polimi.ingsw.message.server.ServerMessage;
 
 import java.io.IOException;
-import java.rmi.RemoteException;
 
 /*
  * A client side connection to a remote game server.
@@ -11,16 +10,14 @@ import java.rmi.RemoteException;
 public interface ServerConnection {
 
 	/**
-	 * Send a {@link ServerMessage} to the server according to the underlying network implementation.
-	 * @param message {@link ServerMessage} Message to be sent.
+	 * Send a {@link it.polimi.ingsw.message.server.ServerMessage} to the server according to the underlying network implementation.
+	 * @param message {@link it.polimi.ingsw.message.server.ServerMessage} Message to be sent.
 	 * @throws IOException If there are any errors during the transfer process.
 	 */
 	void sendMessage(ServerMessage message) throws IOException;
 	
 	/**
 	 * Close the connection.
-	 * 
-	 * @throws RemoteException If the underlying RMI TCP channel is disrupted in any unrecoverable way.
 	 */
 	void close();
 

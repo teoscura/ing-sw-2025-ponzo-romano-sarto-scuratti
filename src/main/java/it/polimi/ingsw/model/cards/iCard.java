@@ -17,7 +17,7 @@ public interface iCard extends Serializable {
 	/**
 	 * Returns the starting point of the state automata that represents the {@link iCard}.
 	 * 
-	 * @param state {@link VoyageState} VoyageState that owns the card.
+	 * @param state {@link it.polimi.ingsw.model.state.VoyageState} VoyageState that owns the card.
 	 * @return {@link CardState} Starting point of the FSA.
 	 */
 	CardState getState(VoyageState state);

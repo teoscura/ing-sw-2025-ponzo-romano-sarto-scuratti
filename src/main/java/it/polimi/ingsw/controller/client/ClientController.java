@@ -14,8 +14,8 @@ public class ClientController {
 	private boolean closed = false;
 
 	/**
-	 * Constructs a {@link ClientController} object tied to a {@link ClientView}.
-	 * @param view {@link ClientView} View tied to the controller.
+	 * Constructs a {@link ClientController} object tied to a {@link it.polimi.ingsw.view.ClientView}.
+	 * @param view {@link it.polimi.ingsw.view.ClientView} View tied to the controller.
 	 */
 	public ClientController(ClientView view) {
 		this.view = view;

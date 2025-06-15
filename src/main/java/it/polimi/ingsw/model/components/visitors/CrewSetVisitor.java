@@ -6,7 +6,7 @@ import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
 import it.polimi.ingsw.model.player.SpaceShip;
 
 /**
- * Visitor used to set a {@link CabinComponent}'s crew type.
+ * Visitor used to set a {@link it.polimi.ingsw.model.components.CabinComponent}'s crew type.
  */
 public class CrewSetVisitor implements ComponentVisitor {
 
@@ -21,9 +21,9 @@ public class CrewSetVisitor implements ComponentVisitor {
 	}
 
 	/**
-	 * Sets the crew of a {@link CabinComponent} with the {@link AlienType type} currently set in the visitor.
+	 * Sets the crew of a {@link it.polimi.ingsw.model.components.CabinComponent} with the {@link AlienType type} currently set in the visitor.
 	 * 
-	 * @param c {@link CabinComponent} Component being visited.
+	 * @param c {@link it.polimi.ingsw.model.components.CabinComponent} Component being visited.
 	 */
 	@Override
 	public void visit(CabinComponent c) {

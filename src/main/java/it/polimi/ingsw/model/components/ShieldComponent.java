@@ -70,8 +70,8 @@ public class ShieldComponent extends BaseComponent {
 	}
 
 	/**
-	 * This adds the Shield Component's coordinates to the {@link SpaceShip}
-	 * @param ship {@link SpaceShip} to which you want to add the shield component
+	 * This adds the Shield Component's coordinates to the {@link it.polimi.ingsw.model.player.SpaceShip}
+	 * @param ship {@link it.polimi.ingsw.model.player.SpaceShip} to which you want to add the shield component
 	 */
 	@Override
 	public void onCreation(SpaceShip ship, ShipCoords coords) {
@@ -80,8 +80,8 @@ public class ShieldComponent extends BaseComponent {
 	}
 
 	/**
-	 * This removes the Shield Component's coordinates from the {@link SpaceShip}
-	 * @param ship {@link SpaceShip} to which you want to remove the shield component
+	 * This removes the Shield Component's coordinates from the {@link it.polimi.ingsw.model.player.SpaceShip}
+	 * @param ship {@link it.polimi.ingsw.model.player.SpaceShip} to which you want to remove the shield component
 	 */
 	@Override
 	public void onDelete(SpaceShip ship) {

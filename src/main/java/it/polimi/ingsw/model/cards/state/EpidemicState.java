@@ -30,7 +30,7 @@ public class EpidemicState extends CardState {
 	/**
 	 * Constructs a new {@code AbandonedStationRewardState}.
 	 *
-	 * @param state {@link VoyageState} The current voyage state
+	 * @param state {@link it.polimi.ingsw.model.state.VoyageState} The current voyage state
 	 * @param card  {@link EpidemicCard} The card being played.
 	 */
 	public EpidemicState(VoyageState state, EpidemicCard card) {
@@ -56,9 +56,9 @@ public class EpidemicState extends CardState {
 	}
 
 	/**
-	 * Validates the {@link ServerMessage} and if everyone has motioned to progress, applies the {@link EpidemicCard} and trasntions.
+	 * Validates the {@link it.polimi.ingsw.message.server.ServerMessage} and if everyone has motioned to progress, applies the {@link EpidemicCard} and trasntions.
 	 *
-	 * @param message {@link ServerMessage} The message received from the player
+	 * @param message {@link it.polimi.ingsw.message.server.ServerMessage} The message received from the player
 	 * @throws ForbiddenCallException if the message is not allowed
 	 */
 	@Override
@@ -87,9 +87,9 @@ public class EpidemicState extends CardState {
 	}
 
 	/**
-	 * Called when a {@link Player} attempts to progress their turn.
+	 * Called when a {@link it.polimi.ingsw.model.player.Player} attempts to progress their turn.
 	 *
-	 * @param p {@link Player} The player
+	 * @param p {@link it.polimi.ingsw.model.player.Player} The player
 	 */
 	@Override
 	public void progressTurn(Player p) {
@@ -114,9 +114,9 @@ public class EpidemicState extends CardState {
 	}
 
 	/**
-	 * Called when a {@link Player} disconnects.
+	 * Called when a {@link it.polimi.ingsw.model.player.Player} disconnects.
 	 *
-	 * @param p {@link Player} The player disconnecting.
+	 * @param p {@link it.polimi.ingsw.model.player.Player} The player disconnecting.
 	 * @throws ForbiddenCallException when the state refuses the action.
 	 */
 	@Override

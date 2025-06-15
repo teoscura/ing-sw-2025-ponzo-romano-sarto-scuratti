@@ -5,7 +5,7 @@ import it.polimi.ingsw.model.client.player.ClientVerifyPlayer;
 import java.util.ArrayList;
 
 /**
- * Client side representation of a {@link VerifyState}.
+ * Client side representation of a {@link it.polimi.ingsw.model.state.VerifyState}.
  */
 public class ClientVerifyState implements ClientState {
 

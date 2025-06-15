@@ -2,10 +2,8 @@ package it.polimi.ingsw.model.client.state;
 
 import java.io.Serializable;
 
-import it.polimi.ingsw.model.state.GameState;
-
 /**
- * Interface representing a client side {@link GameState}, that can display its info.
+ * Interface representing a client side {{@link it.polimi.ingsw.model.state.GameState}, that can display its info.
  */
 public interface ClientState extends Serializable {
 

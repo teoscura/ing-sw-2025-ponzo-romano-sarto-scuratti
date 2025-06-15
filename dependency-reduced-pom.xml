@@ -4,9 +4,18 @@
   <groupId>it.polimi.ingsw</groupId>
   <artifactId>GC13</artifactId>
   <name>prova-finale</name>
-  <version>0.3</version>
+  <version>0.8</version>
   <build>
     <plugins>
+      <plugin>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>3.6.2</version>
+        <configuration>
+          <show>private</show>
+          <doclint>all,-missing</doclint>
+          <failOnError>false</failOnError>
+        </configuration>
+      </plugin>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.13.0</version>
@@ -14,25 +23,6 @@
           <source>21</source>
           <target>21</target>
         </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.openjfx</groupId>
-        <artifactId>javafx-maven-plugin</artifactId>
-        <version>0.0.8</version>
-        <executions>
-          <execution>
-            <id>default-cli</id>
-            <configuration>
-              <mainClass>it.polimi.provafinale/it.polimi.ingsw.HelloApplication</mainClass>
-              <launcher>app</launcher>
-              <jlinkZipName>app</jlinkZipName>
-              <jlinkImageName>app</jlinkImageName>
-              <noManPages>true</noManPages>
-              <stripDebug>true</stripDebug>
-              <noHeaderFiles>true</noHeaderFiles>
-            </configuration>
-          </execution>
-        </executions>
       </plugin>
       <plugin>
         <artifactId>maven-shade-plugin</artifactId>
@@ -114,6 +104,12 @@
           <groupId>org.apiguardian</groupId>
         </exclusion>
       </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.jline</groupId>
+      <artifactId>jline</artifactId>
+      <version>3.30.0</version>
+      <scope>provided</scope>
     </dependency>
   </dependencies>
   <properties>

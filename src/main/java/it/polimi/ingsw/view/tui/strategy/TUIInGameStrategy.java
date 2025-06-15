@@ -34,7 +34,7 @@ public class TUIInGameStrategy extends TUIStrategy {
 	}
 
     /**
-     * @returns Empty Runnable.
+     * @return Empty Runnable.
      */
     @Override
     public Runnable getRunnable(TerminalWrapper terminal) {

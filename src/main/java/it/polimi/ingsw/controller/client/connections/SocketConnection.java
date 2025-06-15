@@ -23,7 +23,7 @@ public class SocketConnection extends Thread implements ServerConnection {
 	/**
 	 * Constructs a {@link SocketConnection} object.
 	 * 
-	 * @param inqueue {@link ThreadSafeMessageQueue} Queue in which incoming {@link ServerMessage messages} will be inserted.
+	 * @param inqueue {@link ThreadSafeMessageQueue} Queue in which incoming {@link it.polimi.ingsw.message.server.ServerMessage messages} will be inserted.
 	 * @param server_ip IP address on which the remote game server is running.
 	 * @param server_port Port on which the remote TCP game server is listening.
 	 * @throws IOException If there are any errors during the connection process.

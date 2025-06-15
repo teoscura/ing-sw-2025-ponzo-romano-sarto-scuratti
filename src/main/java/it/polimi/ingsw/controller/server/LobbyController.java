@@ -83,7 +83,7 @@ public class LobbyController extends Thread implements VirtualServer {
 	/**
      * Takes a {@code ServerMessage} and inserts it into the queue.
      *
-     * @param message {@link ServerMessage} Message to be added to the queue.
+     * @param message {@link it.polimi.ingsw.message.server.ServerMessage} Message to be added to the queue.
      */
 	public void receiveMessage(ServerMessage message) {
 		if (message.getDescriptor() == null || !this.listeners.containsKey(message.getDescriptor().getUsername())) {
@@ -127,7 +127,7 @@ public class LobbyController extends Thread implements VirtualServer {
 	/**
 	 * Sets a new {@code ModelInstance} to be acted upon by the controller
 	 * 
-	 * @param model {@link ModelInstance} New Model to be acted upon. 
+	 * @param model {@link it.polimi.ingsw.model.ModelInstance} New Model to be acted upon. 
 	 */
 	public void setModel(ModelInstance model) {
 		this.model = model;
@@ -173,7 +173,7 @@ public class LobbyController extends Thread implements VirtualServer {
 	/**
 	 * Returns a new TimerTask that ends the match after a set amount of time, used to automatically close a lobby when the server is left with only one player for too long.
 	 * 
-	 * @param controller {@link LobbyController} Controller instance.
+	 * @param controller {@link it.polimi.ingsw.controller.server.LobbyController} Controller instance.
 	 */
 	private TimerTask getEndMatchTask(LobbyController controller) {
 		return new TimerTask() {
@@ -188,7 +188,7 @@ public class LobbyController extends Thread implements VirtualServer {
 	/**
      * Connects a {@code ClientDescriptor} to the Lobby and notifies the {@code ModelInstance} if necessary.
      *
-     * @param client {@link ClientDescriptor} Client being connected.
+     * @param client {@link it.polimi.ingsw.controller.server.ClientDescriptor} Client being connected.
 	 * @throws ForbiddenCallException if the model refused the connection.
      */
 	public void connect(ClientDescriptor client) throws ForbiddenCallException {
@@ -225,7 +225,7 @@ public class LobbyController extends Thread implements VirtualServer {
 	/**
      * Notifies the {@code MainServerController} of a {@code ServerDisconnectMessage} sent by the {@code ClientDescriptor}
      *
-     * @param client {@link ClientDescriptor} Client being disconnected.
+     * @param client {@link it.polimi.ingsw.controller.server.ClientDescriptor} Client being disconnected.
      */
 	public void disconnect(ClientDescriptor client) {
 		MainServerController.getInstance().disconnect(client);
@@ -234,7 +234,7 @@ public class LobbyController extends Thread implements VirtualServer {
 	/**
      * Properly disconnects the {@code ClientDescriptor} from the Model and removes from the local listener list.
      *
-     * @param client {@link ClientDescriptor} Client being disconnected.
+     * @param client {@link it.polimi.ingsw.controller.server.ClientDescriptor} Client being disconnected.
      */
 	public void disconnectProcedure(ClientDescriptor client) {
 		MainServerController s = MainServerController.getInstance();
@@ -272,7 +272,7 @@ public class LobbyController extends Thread implements VirtualServer {
 	/**
      * Generates and returns a GameListEntry object containing the lobby details.
      * 
-	 * @return {@link ClientGameListEntry} Entry containing the lobby info.
+	 * @return {@link it.polimi.ingsw.model.client.ClientGameListEntry} Entry containing the lobby info.
 	 */
 	public ClientGameListEntry getClientInfo() {
 		ClientGameListEntry entry = null;
@@ -285,7 +285,7 @@ public class LobbyController extends Thread implements VirtualServer {
 	/**
      * Refreshes the timeout timer for a particular {@code ClientDescriptor} and restarts the timeout clock belonging to it.
      *
-     * @param client {@link ClientDescriptor} Client pinging the server
+     * @param descriptor {@link it.polimi.ingsw.controller.server.ClientDescriptor} Client pinging the server
      */
 	public void ping(ClientDescriptor descriptor) {
 		MainServerController.getInstance().ping(descriptor);

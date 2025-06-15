@@ -18,7 +18,7 @@ import it.polimi.ingsw.model.player.SpaceShip;
 /**
  * <h2>CannonComponent</h2>
  * <p>
- * This class represents a <strong>cannon</strong> component that can be attached to a {@link SpaceShip}.
+ * This class represents a <strong>cannon</strong> component that can be attached to a {@link it.polimi.ingsw.model.player.SpaceShip}.
  * Cannons are used to shoot at enemies or meteorites during specific adventure cards or game phases.
  * Depending on their {@link CannonType}, cannons may be powerable (require battery activation) or not.
  * </p>
@@ -61,7 +61,7 @@ public class CannonComponent extends BaseComponent {
 	/**
 	 * 	Checks whether the cannon can be placed in the current position on the ship.
 	 * 
-	 *	@param ship {@link SpaceShip} to which you want to add the cannon component
+	 *	@param ship {@link it.polimi.ingsw.model.player.SpaceShip} to which you want to add the cannon component
 	 */
 	@Override
 	public boolean verify(SpaceShip ship) {
@@ -124,8 +124,8 @@ public class CannonComponent extends BaseComponent {
 	}
 
 	/**
-	 * This adds the Cannon Component's coordinates to the {@link SpaceShip}
-	 * @param ship {@link SpaceShip} to which you want to add the Cannon component
+	 * This adds the Cannon Component's coordinates to the {@link it.polimi.ingsw.model.player.SpaceShip}
+	 * @param ship {@link it.polimi.ingsw.model.player.SpaceShip} to which you want to add the Cannon component
 	 */
 	@Override
 	public void onCreation(SpaceShip ship, ShipCoords coords) {
@@ -134,8 +134,8 @@ public class CannonComponent extends BaseComponent {
 	}
 
 	/**
-	 * This removes the Cannon Component's coordinates from the {@link SpaceShip}
-	 * @param ship {@link SpaceShip} to which you want to remove the Cannon component
+	 * This removes the Cannon Component's coordinates from the {@link it.polimi.ingsw.model.player.SpaceShip}
+	 * @param ship {@link it.polimi.ingsw.model.player.SpaceShip} to which you want to remove the Cannon component
 	 */
 	@Override
 	public void onDelete(SpaceShip ship) {

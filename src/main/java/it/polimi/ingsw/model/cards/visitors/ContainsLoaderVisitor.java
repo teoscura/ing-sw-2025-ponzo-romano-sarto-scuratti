@@ -9,7 +9,7 @@ import it.polimi.ingsw.model.components.visitors.ComponentVisitor;
 import it.polimi.ingsw.model.player.SpaceShip;
 
 /**
- * Visitor used to load {@link StorageComponent} with a specified {@link ShipmentType cargo} type.
+ * Visitor used to load {@link StorageComponent} with a specified {@link it.polimi.ingsw.model.components.enums.ShipmentType cargo} type.
  */
 public class ContainsLoaderVisitor implements ComponentVisitor {
 

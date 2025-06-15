@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * An entry into any list of {@link ModelInstance} that must be displayed to the player.
+ * An entry into any list of {@link it.polimi.ingsw.model.ModelInstance} that must be displayed to the player.
  */
 public class ClientGameListEntry implements Serializable {
 

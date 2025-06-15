@@ -8,7 +8,7 @@ import it.polimi.ingsw.model.components.visitors.ComponentVisitor;
 import it.polimi.ingsw.model.player.SpaceShip;
 
 /**
- * Visitor used to remove crew from any types of {@link CabinComponent}.
+ * Visitor used to remove crew from any types of {@link it.polimi.ingsw.model.components.CabinComponent}.
  */
 public class CrewRemoveVisitor implements ComponentVisitor {
 
@@ -20,10 +20,10 @@ public class CrewRemoveVisitor implements ComponentVisitor {
 	}
 
 	/**
-	 * Tries to remove crew from a {@link CabinComponent}.
+	 * Tries to remove crew from a {@link it.polimi.ingsw.model.components.CabinComponent}.
 	 * 
 	 * @param c {@link StartingCabinComponent} Component to visit.
-	 * @throws IllegalTargetException if the {@link CabinComponent} doesn't contain any crew.
+	 * @throws IllegalTargetException if the {@link it.polimi.ingsw.model.components.CabinComponent} doesn't contain any crew.
 	 */
 	@Override
 	public void visit(CabinComponent c) {

@@ -11,8 +11,8 @@ public class CommandPreprocessor {
 	private final ConnectedState state;
 
 	/**
-	 * Constructs a {@link CommandPreprocessor} object tied to a {@link ClientView} and a {@link ConnectedState}.
-	 * @param view {@link ClientView} View bound to the constructed object.
+	 * Constructs a {@link CommandPreprocessor} object tied to a {@link it.polimi.ingsw.view.ClientView} and a {@link ConnectedState}.
+	 * @param view {@link it.polimi.ingsw.view.ClientView} View bound to the constructed object.
 	 * @param state {@link ConnectedState} State bound to the constructed object.
 	 */
 	public CommandPreprocessor(TUIView view, ConnectedState state) {
@@ -21,7 +21,7 @@ public class CommandPreprocessor {
 	}
 
 	/**
-	 * Preprocesses a String into a view command or a {@link ServerMessage} to be sent.
+	 * Preprocesses a String into a view command or a {@link it.polimi.ingsw.message.server.ServerMessage} to be sent.
 	 * 
 	 * @param s String to parse.
 	 */

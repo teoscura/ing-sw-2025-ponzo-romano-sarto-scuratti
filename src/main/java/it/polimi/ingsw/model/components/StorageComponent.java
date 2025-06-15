@@ -103,8 +103,8 @@ public class StorageComponent extends BaseComponent {
 	}
 
 	/**
-	 * This adds the Storage Component's coordinates to the {@link SpaceShip}
-	 * @param ship {@link SpaceShip} to which you want to add the Storage component
+	 * This adds the Storage Component's coordinates to the {@link it.polimi.ingsw.model.player.SpaceShip}
+	 * @param ship {@link it.polimi.ingsw.model.player.SpaceShip} to which you want to add the Storage component
 	 */
 	@Override
 	public void onCreation(SpaceShip ship, ShipCoords coords) {
@@ -113,8 +113,8 @@ public class StorageComponent extends BaseComponent {
 	}
 
 	/**
-	 * This removes the Storage Component's coordinates from the {@link SpaceShip}
-	 * @param ship {@link SpaceShip} to which you want to remove the Storage component
+	 * This removes the Storage Component's coordinates from the {@link it.polimi.ingsw.model.player.SpaceShip}
+	 * @param ship {@link it.polimi.ingsw.model.player.SpaceShip} to which you want to remove the Storage component
 	 */
 	@Override
 	public void onDelete(SpaceShip ship) {

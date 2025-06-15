@@ -14,7 +14,6 @@ import it.polimi.ingsw.model.client.state.ClientState;
 import it.polimi.ingsw.model.client.state.ClientWaitingRoomState;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
-import it.polimi.ingsw.model.player.SpaceShip;
 import it.polimi.ingsw.utils.Logger;
 import it.polimi.ingsw.utils.LoggerLevel;
 
@@ -31,9 +30,9 @@ public class WaitingState extends GameState {
 	/**
 	 * Constructs a {@link WaitingState} object.
 	 *
-	 * @param model {@link ModelInstance} ModelInstance that owns this {@link GameState}.
+	 * @param model {@link it.polimi.ingsw.model.ModelInstance} ModelInstance that owns this {{@link it.polimi.ingsw.model.state.GameState}.
 	 * @param type {@link GameModeType} Ruleset of the state.
-	 * @param count {@link PlayerCount} Size of the match.
+	 * @param count {@link it.polimi.ingsw.model.PlayerCount} Size of the match.
 	 */
 	public WaitingState(ModelInstance model, GameModeType type, PlayerCount count) {
 		super(model, type, count, null);
@@ -71,7 +70,7 @@ public class WaitingState extends GameState {
 	}
 
 	/**
-	 * Initializes a {@link SpaceShip} for each {@link Player}.
+	 * Initializes a {@link it.polimi.ingsw.model.player.SpaceShip} for each {@link it.polimi.ingsw.model.player.Player}.
 	 * 
 	 * {@inheritDoc}
 	 */

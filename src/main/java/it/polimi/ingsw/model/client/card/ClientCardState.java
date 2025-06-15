@@ -3,7 +3,7 @@ package it.polimi.ingsw.model.client.card;
 import java.io.Serializable;
 
 /**
- * Interface representing a client side {@link CardState}, that can display its info.
+ * Interface representing a client side {@link it.polimi.ingsw.model.cards.state.CardState}, that can display its info.
  */
 public interface ClientCardState extends Serializable {
 

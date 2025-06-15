@@ -5,7 +5,7 @@ import it.polimi.ingsw.model.GameModeType;
 import java.io.Serializable;
 
 /**
- * Class representing coordinates on a {@link SpaceShip} of a specified {@link GameModeType}.
+ * Class representing coordinates on a {@link it.polimi.ingsw.model.player.SpaceShip} of a specified {@link it.polimi.ingsw.model.GameModeType}.
  */
 public class ShipCoords implements Serializable {
 	public final int x;
@@ -24,7 +24,7 @@ public class ShipCoords implements Serializable {
 	}
 
 	/**
-	 * @return An array of {@link ShipCoords} containing all adjacent coordinates.
+	 * @return An array of {@link it.polimi.ingsw.model.player.ShipCoords} containing all adjacent coordinates.
 	 */
 	public ShipCoords[] getNextTo() {
 		return new ShipCoords[]{this.up(), this.right(), this.down(), this.left()};

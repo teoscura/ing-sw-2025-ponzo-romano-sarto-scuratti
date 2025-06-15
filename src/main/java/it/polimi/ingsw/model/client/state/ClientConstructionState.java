@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Client side representation of a {@link ConstructionState}.
+ * Client side representation of a {@link it.polimi.ingsw.model.state.ConstructionState}.
  */
 public class ClientConstructionState implements ClientState {
 

@@ -15,8 +15,8 @@ public class TitleScreenState extends ClientControllerState {
 
 	/**
 	 * Constructs a {@link TitleScreenState} object.
-	 * @param controller {@inheritDoc}
-	 * @param view {@inheritDoc}
+	 * @param controller {@link ClientController} Controller to which this state is tied to.
+	 * @param view {@link it.polimi.ingsw.view.ClientView} View to which this state is tied to.
 	 */
 	public TitleScreenState(ClientController controller, ClientView view) {
 		super(controller, view);

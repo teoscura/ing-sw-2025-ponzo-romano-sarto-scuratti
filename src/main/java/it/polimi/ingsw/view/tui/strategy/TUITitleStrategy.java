@@ -53,7 +53,7 @@ public class TUITitleStrategy extends TUIStrategy {
     }
 
     /**
-     * @returns Runnable that displays the current state of the Title Screen.
+     * @return Runnable that displays the current state of the Title Screen.
      */
     @Override
     public Runnable getRunnable(TerminalWrapper terminal) {

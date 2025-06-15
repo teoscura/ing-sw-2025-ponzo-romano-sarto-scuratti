@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
- * Formatter that embellishes and displays the last four {@link TUINotification} received by the {@link TUIView}.
+ * Formatter that embellishes and displays the last four {@link it.polimi.ingsw.view.tui.TUINotification} received by the {@link it.polimi.ingsw.view.tui.TUIView}.
  */
 public class TextMessageFormatter {
 

@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model.cards.utils;
 
 /**
- * Enumeration representing all possible criteria for which a {@link CombatZoneCard} may evaluate players.
+ * Enumeration representing all possible criteria for which a {@link it.polimi.ingsw.model.cards.CombatZoneCard} may evaluate players.
  */
 public enum CombatZoneCriteria {
 

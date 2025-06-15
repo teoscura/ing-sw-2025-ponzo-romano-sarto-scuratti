@@ -6,7 +6,7 @@ import it.polimi.ingsw.model.player.PlayerColor;
 import java.io.Serializable;
 
 /**
- * Client side representation of a player during a {@link VoyageState}
+ * Client side representation of a player during a {@link it.polimi.ingsw.model.state.VoyageState}
  */
 public class ClientVoyagePlayer implements Serializable {
 

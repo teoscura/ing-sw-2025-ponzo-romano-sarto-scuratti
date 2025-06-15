@@ -26,7 +26,7 @@ public abstract class CardState implements Serializable {
 	/**
 	 * Construct the abstract base of a {@link CardState} derived object.
 	 *
-	 * @param state {@link VoyageState} The current voyage state
+	 * @param state {@link it.polimi.ingsw.model.state.VoyageState} The current voyage state
 	 * @throws NullPointerException if {@code state} is null
 	 */
 	protected CardState(VoyageState state) {
@@ -60,8 +60,8 @@ public abstract class CardState implements Serializable {
 	/**
 	 * This state doesn't allow this action
 	 *
-	 * @param p {@link Player} The player
-	 * @param blob_coord {@link ShipCoords} The coordinates selected
+	 * @param p {@link it.polimi.ingsw.model.player.Player} The player
+	 * @param blob_coord {@link it.polimi.ingsw.model.player.ShipCoords} The coordinates selected
 	 * @throws ForbiddenCallException when the state refuses the action.
 	 */
 	public void selectBlob(Player p, ShipCoords blob_coord) throws ForbiddenCallException {
@@ -73,9 +73,9 @@ public abstract class CardState implements Serializable {
 	/**
 	 * This state doesn't allow this action
 	 *
-	 * @param p {@link Player} The player
-	 * @param target_coords {@link ShipCoords} the component to power
-	 * @param battery_coords {@link ShipCoords} the battery to use
+	 * @param p {@link it.polimi.ingsw.model.player.Player} The player
+	 * @param target_coords {@link it.polimi.ingsw.model.player.ShipCoords} the component to power
+	 * @param battery_coords {@link it.polimi.ingsw.model.player.ShipCoords} the battery to use
 	 * @throws ForbiddenCallException when the state refuses the action.
 	 */
 	public void turnOn(Player p, ShipCoords target_coords, ShipCoords battery_coords) throws ForbiddenCallException {
@@ -87,8 +87,8 @@ public abstract class CardState implements Serializable {
 	/**
 	 * This state doesn't allow this action
 	 *
-	 * @param p {@link Player} The player
-	 * @param cabin_coords {@link ShipCoords} the coordinates of the cabin
+	 * @param p {@link it.polimi.ingsw.model.player.Player} The player
+	 * @param cabin_coords {@link it.polimi.ingsw.model.player.ShipCoords} the coordinates of the cabin
 	 * @throws ForbiddenCallException when the state refuses the action.
 	 */
 	public void removeCrew(Player p, ShipCoords cabin_coords) throws ForbiddenCallException {
@@ -100,10 +100,10 @@ public abstract class CardState implements Serializable {
 	/**
 	 * This state doesn't allow this action
 	 *
-	 * @param p {@link Player} The player
-	 * @param shipment {@link ShipmentType} The cargo type
-	 * @param target_coords {@link ShipCoords} the coordinates of the target
-	 * @param source_coords {@link ShipCoords} the coordinates of the source
+	 * @param p {@link it.polimi.ingsw.model.player.Player} The player
+	 * @param shipment {@link it.polimi.ingsw.model.components.enums.ShipmentType} The cargo type
+	 * @param target_coords {@link it.polimi.ingsw.model.player.ShipCoords} the coordinates of the target
+	 * @param source_coords {@link it.polimi.ingsw.model.player.ShipCoords} the coordinates of the source
 	 * @throws ForbiddenCallException when the state refuses the action.
 	 */
 	public void moveCargo(Player p, ShipmentType shipment, ShipCoords target_coords, ShipCoords source_coords) throws ForbiddenCallException {
@@ -115,9 +115,9 @@ public abstract class CardState implements Serializable {
 	/**
 	 * This state doesn't allow this action
 	 *
-	 * @param p {@link Player} The player
-	 * @param type {@link ShipmentType} The cargo type
-	 * @param storage_coords {@link ShipCoords} the coordinates of the storage
+	 * @param p {@link it.polimi.ingsw.model.player.Player} The player
+	 * @param type {@link it.polimi.ingsw.model.components.enums.ShipmentType} The cargo type
+	 * @param storage_coords {@link it.polimi.ingsw.model.player.ShipCoords} the coordinates of the storage
 	 * @throws ForbiddenCallException when the state refuses the action.
 	 */
 	public void takeCargo(Player p, ShipmentType type, ShipCoords storage_coords) throws ForbiddenCallException {
@@ -129,9 +129,9 @@ public abstract class CardState implements Serializable {
 	/**
 	 * This state doesn't allow this action
 	 *
-	 * @param p {@link Player} The player
-	 * @param type {@link ShipmentType} The cargo type
-	 * @param target_coords {@link ShipCoords} the coordinates of the target
+	 * @param p {@link it.polimi.ingsw.model.player.Player} The player
+	 * @param type {@link it.polimi.ingsw.model.components.enums.ShipmentType} The cargo type
+	 * @param target_coords {@link it.polimi.ingsw.model.player.ShipCoords} the coordinates of the target
 	 * @throws ForbiddenCallException when the state refuses the action.
 	 */
 	public void discardCargo(Player p, ShipmentType type, ShipCoords target_coords) throws ForbiddenCallException {
@@ -143,7 +143,7 @@ public abstract class CardState implements Serializable {
 	/**
 	 * This state doesn't allow this action
 	 *
-	 * @param p {@link Player} The player
+	 * @param p {@link it.polimi.ingsw.model.player.Player} The player
 	 * @param planet The selected planet
 	 * @throws ForbiddenCallException when the state refuses the action.
 	 */
@@ -156,7 +156,7 @@ public abstract class CardState implements Serializable {
 	/**
 	 * This state doesn't allow this action
 	 *
-	 * @param p {@link Player} The player
+	 * @param p {@link it.polimi.ingsw.model.player.Player} The player
 	 * @throws ForbiddenCallException when the state refuses the action.
 	 */
 	public void progressTurn(Player p) throws ForbiddenCallException {
@@ -168,7 +168,7 @@ public abstract class CardState implements Serializable {
 	/**
 	 * This state doesn't allow this action
 	 *
-	 * @param p {@link Player} The player
+	 * @param p {@link it.polimi.ingsw.model.player.Player} The player
 	 * @param take true if the player wants to take the reward
 	 * @throws ForbiddenCallException when the state refuses the action.
 	 */
@@ -181,7 +181,7 @@ public abstract class CardState implements Serializable {
 	/**
 	 * This state doesn't allow this action
 	 *
-	 * @param p {@link Player} The player
+	 * @param p {@link it.polimi.ingsw.model.player.Player} The player
 	 * @throws ForbiddenCallException when the state refuses the action.
 	 */
 	public void connect(Player p) throws ForbiddenCallException {
@@ -193,7 +193,7 @@ public abstract class CardState implements Serializable {
 	/**
 	 * This state doesn't allow this action
 	 *
-	 * @param p {@link Player} The player
+	 * @param p {@link it.polimi.ingsw.model.player.Player} The player
 	 * @throws ForbiddenCallException when the state refuses the action.
 	 */
 	public void disconnect(Player p) throws ForbiddenCallException {
