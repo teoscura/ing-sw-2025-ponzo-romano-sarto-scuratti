@@ -5,6 +5,7 @@ import it.polimi.ingsw.controller.client.state.ConnectingState;
 import it.polimi.ingsw.controller.client.state.TitleScreenState;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.client.state.*;
+import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.view.ClientView;
 import it.polimi.ingsw.view.gui.controllers.*;
 import javafx.application.Platform;
@@ -19,6 +20,8 @@ public class GUIView implements ClientView {
 
 	private final Stage stage;
 	private ConnectedState state;
+	private PlayerColor selected_color;
+	private String username;
 
 	public GUIView(Stage stage) {
 		this.stage = stage;
@@ -56,6 +59,7 @@ public class GUIView implements ClientView {
 
 	@Override
 	public void show(ClientLobbySelectState state) {
+
 		Platform.runLater(() -> {
 			try {
 				FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/LobbyStateView.fxml"));
@@ -79,6 +83,7 @@ public class GUIView implements ClientView {
 
 	@Override
 	public void connect(ConnectedState state) {
+		username = state.getUsername();
 		this.state = state;
 	}
 
@@ -122,6 +127,10 @@ public class GUIView implements ClientView {
 
 	@Override
 	public void show(ClientWaitingRoomState state) {
+
+		if (this.selected_color == PlayerColor.NONE)
+			this.selected_color = state.getPlayerList().stream().filter(s -> s.getUsername().equals(username)).map(p -> p.getColor()).findFirst().orElse(PlayerColor.NONE);
+
 		System.out.println("method called");
 		Platform.runLater(() -> {
 			try {
@@ -139,21 +148,40 @@ public class GUIView implements ClientView {
 
 	@Override
 	public void show(ClientConstructionState state) {
+		if (this.selected_color == PlayerColor.NONE)
+			this.selected_color = state.getPlayerList().stream().filter(s -> s.getUsername().equals(username)).map(p -> p.getColor()).findFirst().orElse(PlayerColor.NONE);
 
+		Platform.runLater(() -> {
+			try {
+				FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/ConstructionStateView.fxml"));
+				loader.setControllerFactory(f -> new ConstructionController(state, this));
+				Scene scene = new Scene(loader.load());
+				stage.setScene(scene);
+				stage.show();
+			}
+			catch (IOException e) {}
+
+		});
 	}
 
 	@Override
 	public void show(ClientVerifyState state) {
-
+		if (this.selected_color == PlayerColor.NONE)
+			this.selected_color = state.getPlayerList().stream().filter(s -> s.getUsername().equals(username)).map(p -> p.getColor()).findFirst().orElse(PlayerColor.NONE);
 	}
 
 	@Override
 	public void show(ClientVoyageState state) {
-
+		if (this.selected_color == PlayerColor.NONE)
+			this.selected_color = state.getPlayerList().stream().filter(s -> s.getUsername().equals(username)).map(p -> p.getColor()).findFirst().orElse(PlayerColor.NONE);
 	}
 
 	@Override
 	public void show(ClientEndgameState state) {
 
+	}
+
+	public PlayerColor getSelectedColor() {
+		return selected_color;
 	}
 }

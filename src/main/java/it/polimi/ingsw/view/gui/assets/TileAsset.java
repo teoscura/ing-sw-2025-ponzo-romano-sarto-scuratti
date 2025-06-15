@@ -6,7 +6,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 public class TileAsset {
-	private final ImageView base;
+	protected final ImageView base;
 	private final ClientComponent component;
 
 	public TileAsset(ClientComponent component) {

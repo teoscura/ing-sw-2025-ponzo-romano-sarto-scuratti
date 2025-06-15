@@ -10,7 +10,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 
 public class ShipAsset {
-	private final GridPane pane;
+	protected final GridPane pane;
 	private TileAsset[][] components;
 
 	public ShipAsset(ClientConstructionPlayer player) {
@@ -24,12 +24,15 @@ public class ShipAsset {
 				pane.add(components[i][j].getBase(), j, i);
 			}
 		}
+
+	}
+
+	public void addComponent(TileAsset component, int i, int j){
+		components[i][j] = component;
 	}
 
 	public GridPane getGrid() {
 		return pane;
 	}
-
-
 
 }
