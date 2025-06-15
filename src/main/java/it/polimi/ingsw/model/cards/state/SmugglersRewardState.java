@@ -203,7 +203,6 @@ public class SmugglersRewardState extends CardState {
 	 * @param p {@link Player} The player
 	 * @param type {@link ShipmentType} The cargo type
 	 * @param coords {@link ShipCoords} the coordinates of the target
-	 * @throws ForbiddenCallException when the state refuses the action.
 	 */
 	@Override
 	public void discardCargo(Player p, ShipmentType type, ShipCoords target_coords) {

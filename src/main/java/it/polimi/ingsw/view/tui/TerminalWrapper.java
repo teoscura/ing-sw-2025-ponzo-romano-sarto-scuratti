@@ -190,10 +190,10 @@ public class TerminalWrapper {
 	}
 
 	/**
-	 * @implNote Any methods regarding the input string are not synchronized to avoid the overhead of atomic changes,
-	 * as There's only one producer (this object) and only one {@link TUIStrategy consumer}.
-	 * 
 	 * Returns the input string set by the user.
+	 * 
+	 * Any methods regarding the input string are not synchronized to avoid the overhead of atomic changes,
+	 * as There's only one producer (this object) and only one {@link it.polimi.ingsw.view.tui.strategy.TUIStrategy consumer}.
 	 * 
 	 * @return The input string.
 	 */
@@ -236,7 +236,7 @@ public class TerminalWrapper {
 	 * Prints a collection of strings starting from the specified cell, and moving downwards.
 	 * 
 	 * @param lines Strings to be printed.
-	 * @param row Row of the starting cell.
+	 * @param srow Row of the starting cell.
 	 * @param scol Column of the starting cell.
 	 */
 	public void print(Collection<String> lines, int srow, int scol) {
@@ -270,9 +270,9 @@ public class TerminalWrapper {
 	}
 
 	/**
-	 * Prints a {@link Capability} on the screen.
+	 * Prints a {@link org.jline.utils.InfoCmp.Capability} on the screen.
 	 * 
-	 * @param capability {@link Capability} to be printed.
+	 * @param capability {@link org.jline.utils.InfoCmp.Capability} to be printed.
 	 * @param params Parameters regarding the capability.
 	 */
 	public void puts(Capability capability, Object... params) {

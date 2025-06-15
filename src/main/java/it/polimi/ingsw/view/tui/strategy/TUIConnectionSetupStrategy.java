@@ -56,7 +56,7 @@ public class TUIConnectionSetupStrategy extends TUIStrategy {
     }
 
     /**
-     * @returns Runnable that displays the current state of the Connection Setup screen.
+     * @return Runnable that displays the current state of the Connection Setup screen.
      */
     public Runnable getRunnable(TerminalWrapper terminal){
         return () -> MenuFormatter.connection(terminal, args, screen);

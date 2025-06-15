@@ -295,7 +295,7 @@ public class MainServerController extends Thread implements VirtualServer {
 	/**
      * Validates a username using a regex.
 	 * 
-	 * @returns Whether the username is valid or not.
+	 * @return Whether the username is valid or not.
      */
 	private boolean validateUsername(String username) {
 		Pattern allowed = Pattern.compile("^[a-zA-Z0-9_.-]*$");
