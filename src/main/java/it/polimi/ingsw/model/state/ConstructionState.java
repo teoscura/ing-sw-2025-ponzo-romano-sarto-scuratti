@@ -147,6 +147,7 @@ public abstract class ConstructionState extends GameState {
 			return;
 		}
 		ArrayList<Integer> holding = new ArrayList<>();
+		boolean hoarded = false;
 		if(this.current_tile.get(p)!= null) holding.add(this.current_tile.get(p).getID());
 		for(var c : this.hoarded_tile.get(p)) holding.add(c.getID());
 		if(!holding.contains(id)){
@@ -156,14 +157,17 @@ public abstract class ConstructionState extends GameState {
 		}
 		BaseComponent c = null;
 		if(this.current_tile.get(p)!=null && this.current_tile.get(p).getID()==id){
-			c = this.current_tile.remove(p);
+			c = this.current_tile.get(p);
 		} else {
 			c = this.hoarded_tile.get(p).stream().filter(cm->cm.getID()==id).findAny().orElse(null);
-			this.hoarded_tile.get(p).remove(c);
+			hoarded = true;
 		}
 		try {
+			var tmp = c;
 			c.rotate(rotation);
 			p.getSpaceShip().addComponent(c, new ShipCoords(type, coords.x, coords.y));
+			if(hoarded) this.hoarded_tile.get(p).remove(tmp);
+			else this.current_tile.remove(p);
 			Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' placed a component in " + coords);
 		} catch (OutOfBoundsException e) {
 			Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' attempted to place a component, but the coordinates are illegal!");

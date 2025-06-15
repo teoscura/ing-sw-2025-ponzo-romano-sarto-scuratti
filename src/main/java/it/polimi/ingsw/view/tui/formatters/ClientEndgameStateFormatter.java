@@ -16,11 +16,13 @@ public class ClientEndgameStateFormatter {
 
 	private static final String bottom_line = "━Typed line:━";
 
+	//TODO fix formatting on this
 	public static void format(TerminalWrapper terminal, ClientEndgameState state) {
 		ArrayList<String> res = new ArrayList<>();
 		ArrayList<ClientEndgamePlayer> list = new ArrayList<>(state.getPlayerList());
 		res.add("Game Results:");
-		list.stream().sorted((p1, p2) -> Integer.compare(p1.getCredits(), p2.getCredits()));
+
+		list.stream().sorted((p1, p2) -> -Integer.compare(p1.getCredits(), p2.getCredits()));
 		int finished = (int) list.stream().filter(p -> p.getPlanche_slot() >= 0).count();
 		for (var e : list) {
 			AttributedStringBuilder b = new AttributedStringBuilder()
