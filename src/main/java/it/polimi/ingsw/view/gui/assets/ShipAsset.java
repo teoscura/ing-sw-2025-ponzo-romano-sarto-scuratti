@@ -2,31 +2,36 @@ package it.polimi.ingsw.view.gui.assets;
 
 import it.polimi.ingsw.model.client.player.ClientConstructionPlayer;
 import it.polimi.ingsw.model.player.ShipCoords;
-import it.polimi.ingsw.view.gui.TileImageVisitor;
+import it.polimi.ingsw.view.gui.tiles.PlacedTile;
+import it.polimi.ingsw.view.gui.tiles.PlacedTileFactory;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 
 public class ShipAsset {
+	
 	protected final GridPane pane;
-	private TileAsset[][] components;
+	private PlacedTile[][] components;
 
 	public ShipAsset(ClientConstructionPlayer player) {
 		pane = new GridPane();
 		pane.getColumnConstraints().addAll(new ColumnConstraints(75), new ColumnConstraints(75), new ColumnConstraints(75), new ColumnConstraints(75), new ColumnConstraints(75));
 		pane.getRowConstraints().addAll(new RowConstraints(75), new RowConstraints(75), new RowConstraints(75), new RowConstraints(75), new RowConstraints(75), new RowConstraints(75), new RowConstraints(75));
 		//TileImageVisitor v = new TileImageVisitor();
+		PlacedTileFactory f = new PlacedTileFactory();
 		for (int i=0; i<5; i++){
 			for (int j=0; j<7; j++){
-				components[i][j] = new TileAsset(player.getShip().getComponent(new ShipCoords(player.getShip().getType(), i, j)));
-				pane.add(components[i][j].getBase(), j, i);
+				ShipCoords tmp = new ShipCoords(player.getShip().getType(), i, j);
+				components[i][j] = f.createTile(tmp, player.getShip().getComponent(tmp));
+				pane.add(components[i][j], j, i);
 			}
 		}
 		
 	}
 
-	public void addComponent(TileAsset component, int i, int j){
-		components[i][j] = component;
+	public void addComponent(PlacedTile component){
+		var tmp = component.getCoords();
+		components[tmp.y][tmp.x] = component;
 	}
 
 	public GridPane getGrid() {

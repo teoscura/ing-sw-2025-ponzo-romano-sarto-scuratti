@@ -8,10 +8,13 @@ import it.polimi.ingsw.view.gui.MainApplication;
 
 public class ConstructionTile extends ComponentTile {
     
+    private final Integer ID;
     private ComponentRotation rotation;
 
     public ConstructionTile(Integer ID, boolean discarded, boolean primary){
         super("galaxy_trucker_imgs/tiles/GT-tile-" + ID + ".jpg");
+
+        this.ID = ID;
 
         this.setOnMouseDragReleased(event->{
             var node = event.getPickResult().getIntersectedNode();
@@ -33,6 +36,10 @@ public class ConstructionTile extends ComponentTile {
             }
         });
 
+    }
+
+    public Integer getID(){
+        return this.ID;
     }
 
 }

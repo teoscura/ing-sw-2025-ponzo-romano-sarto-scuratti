@@ -2,7 +2,6 @@ package it.polimi.ingsw.view.gui.assets;
 
 import it.polimi.ingsw.model.client.player.ClientConstructionPlayer;
 import javafx.scene.Scene;
-import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
@@ -26,6 +25,7 @@ public class ConstructionPlayerTextFlow {
 			case YELLOW -> player_name.setFill(Color.YELLOW);
 			case GREEN -> player_name.setFill(Color.GREEN);
 			case BLUE -> player_name.setFill(Color.BLUE);
+			default -> player_name.setFill(Color.RED);
 		}
 		this.cannon_text = new Text("Cannon power: " + player.getShip().getCannonPower() + "\n");
 		this.engine_text = new Text("Engine power: " + player.getShip().getEnginePower() + "\n");
@@ -36,7 +36,7 @@ public class ConstructionPlayerTextFlow {
 
 	public void showPlayerShip(Window stage) {
 		ShipAsset ship = new ShipAsset(player);
-		Scene scene = new Scene(ship.getGrid());
+		new Scene(ship.getGrid());
 		Popup ship_popup = new Popup();
 		ship_popup.setAutoHide(true);
 		ship_popup.setAutoFix(true);

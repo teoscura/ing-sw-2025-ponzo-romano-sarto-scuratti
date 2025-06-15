@@ -13,7 +13,6 @@ import java.util.Objects;
 public class ConnectingStateController {
 
 	private final ConnectingState state;
-	private final GUIView view;
 	private String ip, port, connection_type;
 
 	@FXML
@@ -25,7 +24,6 @@ public class ConnectingStateController {
 
 	public ConnectingStateController(ConnectingState state, GUIView view) {
 		this.state = state;
-		this.view = view;
 	}
 
 	@FXML
