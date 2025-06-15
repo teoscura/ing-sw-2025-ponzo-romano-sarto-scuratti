@@ -12,7 +12,7 @@ public class BatteryPiece extends DraggablePiece {
     public BatteryPiece(ShipCoords starting){
         super(PieceImagePathProvider.battery());
         if(starting==null) throw new NullPointerException();
-        this.setOnDragDropped(event -> {
+        this.setOnMouseDragReleased(event -> {
             var node = event.getPickResult().getIntersectedNode();
             if(node==null || !(node instanceof PlacedTile)) return;
             var coords = ((PlacedTile)node).getCoords();

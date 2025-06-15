@@ -34,7 +34,6 @@ public class SetupStateController {
 		this.view = view;
 	}
 
-
 	@FXML
 	protected void initialize() {
 		player_number.getItems().addAll("2", "3", "4");
@@ -93,12 +92,10 @@ public class SetupStateController {
 	protected void create() {
 		String selectedPlayerNumber = player_number.getValue();
 		String selectedGameType = game_type.getValue();
-
 		if (selectedPlayerNumber == null) {
 			view.showTextMessage("Select the number of players.");
 			return;
 		}
-
 		if (selectedGameType == null) {
 			view.showTextMessage("Select the game type.");
 			return;
@@ -116,8 +113,6 @@ public class SetupStateController {
 			default:
 				view.showTextMessage("Invalid player number.");
 		}
-
-
 		switch (selectedGameType) {
 			case "Test Flight":
 				gameModeType = GameModeType.TEST;

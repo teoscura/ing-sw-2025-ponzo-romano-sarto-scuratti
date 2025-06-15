@@ -12,7 +12,8 @@ public class CargoPiece extends DraggablePiece {
  
     public CargoPiece(ShipCoords starting, ShipmentType type){
         super(PieceImagePathProvider.cargo(type));
-        this.setOnDragDropped(event -> {
+        
+        this.setOnMouseDragReleased(event -> {
             var node = event.getPickResult().getIntersectedNode();
             if(node==null || !(node instanceof PlacedTile)) return;
             var coords = ((PlacedTile)node).getCoords();

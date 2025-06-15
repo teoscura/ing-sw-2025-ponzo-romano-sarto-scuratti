@@ -1,10 +1,7 @@
 package it.polimi.ingsw.view.gui.assets;
 
 import it.polimi.ingsw.model.client.player.ClientConstructionPlayer;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.DragEvent;
-import javafx.scene.input.TransferMode;
 import javafx.scene.layout.GridPane;
 
 public class ConstructionShipAsset extends ShipAsset{

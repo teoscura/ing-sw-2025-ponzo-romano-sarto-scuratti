@@ -20,6 +20,8 @@ public class GUIView implements ClientView {
 
 	private final Stage stage;
 	private ConnectedState state;
+	private ClientState cstate;
+	private GUIController controller;
 	private PlayerColor selected_color;
 	private String username;
 
@@ -58,7 +60,6 @@ public class GUIView implements ClientView {
 
 	@Override
 	public void show(ClientLobbySelectState state) {
-
 		Platform.runLater(() -> {
 			try {
 				FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/LobbyStateView.fxml"));
@@ -77,7 +78,7 @@ public class GUIView implements ClientView {
 
 	@Override
 	public void setClientState(ClientState state) {
-
+		this.cstate = state;
 	}
 
 	@Override
@@ -100,28 +101,29 @@ public class GUIView implements ClientView {
 	}
 
 	@Override
-	public void showTextMessage(String message) {
-		//Alert errorAlert = new Alert(Alert.AlertType.INFORMATION);
-		//errorAlert.setHeaderText("Info");
-		//errorAlert.setContentText(message);
-		//errorAlert.show();
-
+	public void showTextMessage(String message){
 	}
 
 	@Override
 	public void show(ClientSetupState state) {
 		Platform.runLater(() -> {
+			if(state.getClass()==cstate.getClass()){
+				controller.update(state);
+				return;
+			}
+			Scene tmp = null;
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/SetupStateView.fxml"));
+			loader.setControllerFactory(f -> new SetupStateController(state, this));
 			try {
-				FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/SetupStateView.fxml"));
-				loader.setControllerFactory(f -> new SetupStateController(state, this));
-				Scene scene = new Scene(loader.load());
-				stage.setScene(scene);
-				stage.setResizable(false);
-				stage.show();
+				tmp = new Scene(loader.load());
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			stage.setScene(tmp);
+			stage.setResizable(false);
+			stage.show();
 		});
+
 	}
 
 	@Override
@@ -153,7 +155,9 @@ public class GUIView implements ClientView {
 		Platform.runLater(() -> {
 			try {
 				FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/ConstructionStateView.fxml"));
+				
 				loader.setControllerFactory(f -> new ConstructionController(state, this));
+				
 				Scene scene = new Scene(loader.load());
 				stage.setScene(scene);
 				stage.show();

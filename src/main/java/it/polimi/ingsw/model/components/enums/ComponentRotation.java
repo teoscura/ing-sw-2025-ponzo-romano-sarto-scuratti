@@ -52,5 +52,15 @@ public enum ComponentRotation {
 		return ComponentRotation.U000;
 	}
 
+	public static ComponentRotation fromShift(int shift){
+		switch(shift){
+			case 0: return ComponentRotation.U000;
+			case 1: return ComponentRotation.U090;
+			case 2: return ComponentRotation.U180;
+			case 3: return ComponentRotation.U270;
+			default: return ComponentRotation.U000;
+		}
+	}
+
 
 }
