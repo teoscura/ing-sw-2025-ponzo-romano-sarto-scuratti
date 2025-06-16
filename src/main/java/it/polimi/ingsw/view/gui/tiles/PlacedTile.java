@@ -7,7 +7,10 @@ import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.view.gui.GUIView;
 import it.polimi.ingsw.view.gui.tiles.piece.DraggablePiece;
 import it.polimi.ingsw.view.gui.tiles.piece.DraggablePieceDecoder;
+import javafx.geometry.Pos;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.TransferMode;
+import javafx.scene.layout.StackPane;
 
 public class PlacedTile extends ComponentTile {
 
@@ -20,11 +23,18 @@ public class PlacedTile extends ComponentTile {
         tiles = new ArrayList<>();
 
         this.setOnDragDropped(event -> {
-            var o = event.getSource();
+            var o = event.getGestureSource();
+            if(o==null) return;
             if(!(o instanceof DraggablePiece)) return;
+            event.setDropCompleted(true);
             var dec = new DraggablePieceDecoder(coords);
             ServerMessage res = ((DraggablePiece)o).getDecoded(dec);
             view.sendMessage(res);
+        });
+
+        this.setOnDragOver(event -> {
+            event.acceptTransferModes(TransferMode.ANY);
+            event.consume();
         });
 
     }
@@ -35,13 +45,10 @@ public class PlacedTile extends ComponentTile {
     }
 
     public void addToList(DraggablePiece piece){
-        double offset = 0;
-        for(DraggablePiece p : tiles){
-            offset += p.getFitWidth();
-        }
-        tiles.add(piece);
         this.getChildren().add(piece);
-        piece.relocate(this.getLayoutBounds().getMaxX() - piece.getFitWidth() - offset, this.getLayoutBounds().getMaxY() - piece.getFitHeight());
+        StackPane.setAlignment(piece, Pos.BOTTOM_RIGHT);
+        piece.setTranslateX(-40*tiles.size());
+        this.tiles.add(piece);
     }
 
     public ShipCoords getCoords(){

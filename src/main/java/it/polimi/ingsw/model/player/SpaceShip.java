@@ -79,7 +79,7 @@ public class SpaceShip implements Serializable {
 		for (BaseComponent[] t : this.components) {
 			Arrays.fill(t, this.empty); // E' la stessa reference;
 		}
-		BaseComponent scabin = new StartingCabinComponent(1, new ConnectorType[]{
+		BaseComponent scabin = new StartingCabinComponent(player.getColor().getID(), new ConnectorType[]{
 				ConnectorType.UNIVERSAL,
 				ConnectorType.UNIVERSAL,
 				ConnectorType.UNIVERSAL,

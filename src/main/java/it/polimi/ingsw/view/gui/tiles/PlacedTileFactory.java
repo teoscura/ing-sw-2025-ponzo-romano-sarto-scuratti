@@ -27,12 +27,14 @@ public class PlacedTileFactory implements ClientComponentVisitor {
 
     @Override
     public void show(ClientBaseComponent component) {
-        tile = new PlacedTile(view, "galaxy_trucker_imgs/tiles/GT-tile-" + component.getId() + ".jpg", center);
+        tile = new PlacedTile(view, "galaxy_trucker_imgs/tiles/transparent/GT-tile-" + component.getId() + "_transparent.png", center);
         tile.setRotate(90*component.getRotation().getShift());
     }
 
     @Override
     public void show(ClientEmptyComponent component) {
+        System.out.println("galaxy_trucker_imgs/tiles/transparent/empty.png");
+        tile = new PlacedTile(view, "galaxy_trucker_imgs/tiles/transparent/empty.png", center);
     }
 
     @Override
@@ -50,7 +52,7 @@ public class PlacedTileFactory implements ClientComponentVisitor {
     @Override
     public void show(ClientCabinComponentDecorator component) {
         for(int i = 0; i < component.getCrew(); ++i){
-            tile.addToList(new CrewPiece(center, component.getAlienType()));
+            tile.addToList(new CrewPiece(view, center, component.getAlienType()));
         }
     }
 

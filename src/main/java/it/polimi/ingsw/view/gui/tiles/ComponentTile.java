@@ -7,8 +7,10 @@ public class ComponentTile extends StackPane {
 
     public ComponentTile(String path){
         var img = new ImageView(path);
-        this.setMaxWidth(img.getFitWidth());
-        this.setMaxHeight(img.getFitHeight());
+        // img.setScaleX(0.6);
+        // img.setScaleY(0.6);
+        // // this.setMaxWidth(img.get);
+        // // this.setMaxHeight(img.getFitHeight());
         this.getChildren().add(img);
     }
 }

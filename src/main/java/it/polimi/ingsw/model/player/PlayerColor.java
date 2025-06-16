@@ -5,16 +5,18 @@ package it.polimi.ingsw.model.player;
  */
 public enum PlayerColor {
 
-	RED(0),
-	BLUE(1),
-	GREEN(2),
-	YELLOW(3),
-	NONE(-1);
+	RED(0, 52),
+	BLUE(1, 33),
+	GREEN(2, 34),
+	YELLOW(3, 61),
+	NONE(-1, 1);
 
 	private final int order;
+	private final int center_cabin_id;
 
-	PlayerColor(int order) {
+	PlayerColor(int order, int center_cabin_id) {
 		this.order = order;
+		this.center_cabin_id = center_cabin_id;
 	}
 
 	static public PlayerColor getColor(int i) {
@@ -30,6 +32,10 @@ public enum PlayerColor {
 			default:
 				throw new RuntimeException();
 		}
+	}
+
+	public int getID(){
+		return center_cabin_id;
 	}
 
 	public int getOrder() {

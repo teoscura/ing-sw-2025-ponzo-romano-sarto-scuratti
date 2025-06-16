@@ -13,15 +13,7 @@ public class ConstructionTile extends ComponentTile {
 
     public ConstructionTile(GUIView view, Integer ID, boolean discarded, boolean primary){
         super("galaxy_trucker_imgs/tiles/GT-tile-" + ID + ".jpg");
-
         this.ID = ID;
-
-        this.setOnMouseDragReleased(event->{
-            var node = event.getPickResult().getIntersectedNode();
-            if(node==null || !(node instanceof PlacedTile)) return;
-            var coords = ((PlacedTile)node).getCoords();
-            view.sendMessage(new PutComponentMessage(ID, coords, this.rotation));
-        });
 
         this.setOnMouseClicked(event->{   
             if(discarded){
