@@ -18,7 +18,9 @@ import it.polimi.ingsw.view.gui.TitleScreenTreeFactory;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
+import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 
 public class GuiMain extends Application implements ClientView {
@@ -52,7 +54,7 @@ public class GuiMain extends Application implements ClientView {
 
     @Override
     public void show(ConnectingState state) {
-        System.out.println("TITLESCREEN PASSED.");
+        this.root.getChildren().clear();
     }
 
     @Override

@@ -21,10 +21,7 @@ public class ConnectionSetupTreeFactory {
         ChoiceBox<String> connection_menu;
         Button connect = new Button();
 
-        connection_menu.
-
-
-        connect.setOnMouseClicked(event->{
+        .setOnMouseClicked(event->{
             //BLa bla controllo validita' valori bla bla.
             state.connect(ip_field.getText(), Integer.parseInt(port_field.getText()), connection_menu.getValue());
         });
