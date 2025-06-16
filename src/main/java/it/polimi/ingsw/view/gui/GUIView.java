@@ -3,6 +3,7 @@ package it.polimi.ingsw.view.gui;
 
 import it.polimi.ingsw.controller.client.ClientController;
 import it.polimi.ingsw.controller.client.state.*;
+import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.client.state.*;
 import it.polimi.ingsw.view.ClientView;
 import it.polimi.ingsw.view.gui.factories.ConnectionSetupTreeFactory;
@@ -13,7 +14,6 @@ import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.layout.Background;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
@@ -21,7 +21,7 @@ public class GUIView extends Application implements ClientView {
 
     private StackPane root;
     private ClientState client_state;
-    private ClientControllerState state;
+    private ConnectedState state;
     private ClientController c;
 
     @Override
@@ -32,6 +32,10 @@ public class GUIView extends Application implements ClientView {
         primaryStage.setScene(scene);
         primaryStage.show();
         this.c = new ClientController(this);
+    }
+
+    public void sendMessage(ServerMessage message){
+        state.sendMessage(message);
     }
 
     @Override
@@ -54,7 +58,7 @@ public class GUIView extends Application implements ClientView {
     public void show(ClientLobbySelectState state) {
         Platform.runLater(() -> {
             this.root.getChildren().clear();
-            var node = LobbyStateTreeFactory.createLobbyScreen(state);
+            var node = LobbyStateTreeFactory.createLobbyScreen(state, this);
             this.root.getChildren().add(node);
             StackPane.setAlignment(node, Pos.CENTER);
         });
@@ -64,7 +68,6 @@ public class GUIView extends Application implements ClientView {
     public void show(ClientSetupState state) {
         Platform.runLater(() -> {
             this.root.getChildren().clear();
-            
         });
     }
 

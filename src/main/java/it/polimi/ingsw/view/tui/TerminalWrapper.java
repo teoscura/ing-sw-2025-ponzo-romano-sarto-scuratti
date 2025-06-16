@@ -26,11 +26,8 @@ public class TerminalWrapper {
 	private final Terminal terminal;
 	private final KeyMap<Widget> keymap;
 	private final BindingReader reader;
-	private final Status status;
 	private final Attributes previous;
-
 	private final Object termlock;
-
 	private Size size;
 	private final StringBuffer line;
 	private String input;
@@ -55,11 +52,6 @@ public class TerminalWrapper {
 		this.terminal.puts(Capability.cursor_invisible);
 		Cleaner c = Cleaner.create();
 		c.register(this, () -> cleanUp(previous));
-		this.status = Status.getStatus(terminal);
-		if (status == null) {
-			System.out.println("This terminal type doesn't support the status line, terminating.");
-			System.exit(-1);
-		}
 		this.line = new StringBuffer();
 		this.keymap = setupBindings(view);
 		this.reader = new BindingReader(terminal.reader());

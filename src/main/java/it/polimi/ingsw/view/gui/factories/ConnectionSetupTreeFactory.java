@@ -2,6 +2,7 @@ package it.polimi.ingsw.view.gui.factories;
 
 import it.polimi.ingsw.controller.client.connections.ConnectionType;
 import it.polimi.ingsw.controller.client.state.ConnectingState;
+import it.polimi.ingsw.view.gui.GUIView;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -38,6 +39,7 @@ public class ConnectionSetupTreeFactory {
             }
             state.connect(ipv, portv, tv);
         });
+        confirm.setText("Connect");
         VBox res = new VBox(10.0, l1, ip, l2, port, connection_menu, confirm);
         res.setAlignment(Pos.CENTER);
         res.setMaxHeight(800);

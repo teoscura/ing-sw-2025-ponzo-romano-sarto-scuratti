@@ -56,10 +56,10 @@
               <goal>shade</goal>
             </goals>
             <configuration>
-              <finalName>${project.artifactId}-client-${project.version}</finalName>
+              <finalName>${project.artifactId}-tui-${project.version}</finalName>
               <transformers>
                 <transformer>
-                  <mainClass>it.polimi.ingsw.ClientMain</mainClass>
+                  <mainClass>it.polimi.ingsw.TUIMain</mainClass>
                 </transformer>
               </transformers>
             </configuration>
