@@ -33,7 +33,6 @@ public class PlacedTileFactory implements ClientComponentVisitor {
 
     @Override
     public void show(ClientEmptyComponent component) {
-        System.out.println("galaxy_trucker_imgs/tiles/transparent/empty.png");
         tile = new PlacedTile(view, "galaxy_trucker_imgs/tiles/transparent/empty.png", center);
     }
 

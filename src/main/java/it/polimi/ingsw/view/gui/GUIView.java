@@ -20,6 +20,7 @@ import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.view.ClientView;
 import it.polimi.ingsw.view.gui.factories.*;
+import it.polimi.ingsw.view.gui.tiles.ConstructionTile;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
@@ -85,7 +86,11 @@ public class GUIView extends Application implements ClientView {
 			((StorageComponent)c).putIn(ShipmentType.GREEN);
 			var node = PlacedShipTreeFactory.createPlacedShip(this, player2.getSpaceShip().getClientSpaceShip());
 			root.getChildren().add(node);
+
+			ConstructionTile ct1 = new ConstructionTile(this, 101, true, false);
+			root.getChildren().addAll(ct1);
 			StackPane.setAlignment(node, Pos.CENTER_RIGHT);
+			StackPane.setAlignment(ct1, Pos.TOP_CENTER);
 			// root.setBackground(new Background(new BackgroundImage(new Image("title1.jpg"), BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
             // this.root.getChildren().clear();
             // var node = TitleScreenTreeFactory.createTitleScreen(state);
