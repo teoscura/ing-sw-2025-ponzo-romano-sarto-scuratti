@@ -53,7 +53,7 @@ public class GUIView extends Application implements ClientView {
     public void show(TitleScreenState state) {
         Platform.runLater(() -> {
 			PlacedTileFactory f = new PlacedTileFactory(this);
-			var c = new ClientShipmentsComponentDecorator(new ClientBaseComponent(22, ComponentRotation.U090, new ConnectorType[]{ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY}), StorageType.DOUBLENORMAL, new int[]{1,1,0,0});
+			var c = new ClientShipmentsComponentDecorator(new ClientBaseComponent(22, ComponentRotation.U180, new ConnectorType[]{ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY}), StorageType.DOUBLENORMAL, new int[]{1,1,0,0});
             var t = f.createTile(new ShipCoords(GameModeType.TEST, 3, 4), c);
 			this.root.getChildren().add(t);
 			StackPane.setAlignment(t, Pos.CENTER);
