@@ -1,6 +1,7 @@
 package it.polimi.ingsw;
 
 import it.polimi.ingsw.controller.client.ClientController;
+import it.polimi.ingsw.controller.client.state.ClientControllerState;
 import it.polimi.ingsw.controller.client.state.ConnectedState;
 import it.polimi.ingsw.controller.client.state.ConnectingState;
 import it.polimi.ingsw.controller.client.state.TitleScreenState;
@@ -22,6 +23,8 @@ import javafx.stage.Stage;
 public class GuiMain extends Application implements ClientView {
 
     private StackPane root;
+    private ClientState client_state;
+    private ClientControllerState state;
     private ClientController c;
 
     public static void main(String[] args) {
@@ -40,6 +43,7 @@ public class GuiMain extends Application implements ClientView {
 
     @Override
     public void show(TitleScreenState state) {
+        this.root.getChildren().clear();
         this.root.getChildren().add(TitleScreenTreeFactory.createTitleScreen(root, state));
     }
 
@@ -49,30 +53,38 @@ public class GuiMain extends Application implements ClientView {
 
     @Override
     public void show(ClientLobbySelectState state) {
+        this.root.getChildren().clear();
+
     }
 
     @Override
     public void show(ClientSetupState state) {
+        this.root.getChildren().clear();
     }
 
     @Override
     public void show(ClientWaitingRoomState state) {
+        this.root.getChildren().clear();
     }
 
     @Override
     public void show(ClientConstructionState state) {
+        this.root.getChildren().clear();
     }
 
     @Override
     public void show(ClientVerifyState state) {
+        this.root.getChildren().clear();
     }
 
     @Override
     public void show(ClientVoyageState state) {
+        this.root.getChildren().clear();
     }
 
     @Override
     public void show(ClientEndgameState state) {
+        this.root.getChildren().clear();
     }
 
     @Override
@@ -81,14 +93,17 @@ public class GuiMain extends Application implements ClientView {
 
     @Override
     public void setClientState(ClientState state) {
+        this.client_state = state;
     }
 
     @Override
     public void connect(ConnectedState state) {
+        this.state = state;
     }
 
     @Override
     public void disconnect() {
+        this.state = null;
     }
 
 }
