@@ -5,35 +5,37 @@ import it.polimi.ingsw.model.components.enums.ShipmentType;
 
 public class PieceImagePathProvider {
     
+    //TODO
+
     static public String crew(AlienType type){
         switch(type){
             case BROWN:
-                return "galaxy_trucker_imgs/piece/human.jpg";
+                return "galaxy_trucker_imgs/piece/ph.jpg";
             case HUMAN:
-                return "galaxy_trucker_imgs/piece/brown.jpg";
+                return "galaxy_trucker_imgs/piece/ph.jpg";
             case PURPLE:
-                return "galaxy_trucker_imgs/piece/purple.jpg";
+                return "galaxy_trucker_imgs/piece/ph.jpg";
             default:
-                return "galaxy_trucker_imgs/empty.jpg";
+                return "galaxy_trucker_imgs/piece/ph.jpg";
         }
     }
 
     static public String cargo(ShipmentType type){
         switch(type){
             case BLUE:
-                return "galaxy_trucker_imgs/piece/cargo.jpg";
+                return "galaxy_trucker_imgs/piece/ph.jpg";
             case GREEN:
-                return "galaxy_trucker_imgs/piece/green.jpg";
+                return "galaxy_trucker_imgs/piece/ph.jpg";
             case RED:
-                return "galaxy_trucker_imgs/piece/red.jpg";
+                return "galaxy_trucker_imgs/piece/ph.jpg";
             case YELLOW:
-                return "galaxy_trucker_imgs/piece/yellow.jpg";
+                return "galaxy_trucker_imgs/piece/ph.jpg";
             default:
-                return "galaxy_trucker_imgs/piece/empty.jpg";
+                return "galaxy_trucker_imgs/piece/ph.jpg";
         }
     }
 
     static public String battery(){
-        return "galaxy_trucker_imgs/piece/battery.jpg";
+        return "galaxy_trucker_imgs/piece/ph.jpg";
     }  
 }

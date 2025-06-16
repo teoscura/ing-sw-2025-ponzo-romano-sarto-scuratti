@@ -3,6 +3,7 @@ package it.polimi.ingsw.view.gui.tiles;
 import it.polimi.ingsw.model.client.components.*;
 import it.polimi.ingsw.model.components.enums.ShipmentType;
 import it.polimi.ingsw.model.player.ShipCoords;
+import it.polimi.ingsw.view.gui.GUIView;
 import it.polimi.ingsw.view.gui.tiles.piece.BatteryPiece;
 import it.polimi.ingsw.view.gui.tiles.piece.CargoPiece;
 import it.polimi.ingsw.view.gui.tiles.piece.CrewPiece;
@@ -10,8 +11,13 @@ import javafx.scene.image.ImageView;
 
 public class PlacedTileFactory implements ClientComponentVisitor {
 
+    private final GUIView view;
     private PlacedTile tile = null;
     private ShipCoords center = null;
+
+    public PlacedTileFactory(GUIView view){
+        this.view = view;
+    }
 
     public PlacedTile createTile(ShipCoords center, ClientComponent component){
         this.center = center;
@@ -21,7 +27,7 @@ public class PlacedTileFactory implements ClientComponentVisitor {
 
     @Override
     public void show(ClientBaseComponent component) {
-        tile = new PlacedTile("galaxy_trucker_imgs/tiles/GT-tile-" + component.getId() + ".jpg", center);
+        tile = new PlacedTile(view, "galaxy_trucker_imgs/tiles/GT-tile-" + component.getId() + ".jpg", center);
         tile.setRotate(90*component.getRotation().getShift());
     }
 
@@ -32,7 +38,7 @@ public class PlacedTileFactory implements ClientComponentVisitor {
     @Override
     public void show(ClientBatteryComponentDecorator component) {
         for(int i = 0; i < component.getBatteries(); ++i){
-            tile.addToList(new BatteryPiece(center));
+            tile.addToList(new BatteryPiece(view, center));
         }
     }
 
@@ -75,7 +81,7 @@ public class PlacedTileFactory implements ClientComponentVisitor {
         int val = 0;
         for(var i : component.getShipments()){
             for(int j = 0; j<i; j++){
-                tile.addToList(new CargoPiece(center, ShipmentType.fromValue(val+1)));
+                tile.addToList(new CargoPiece(view, center, ShipmentType.fromValue(val+1)));
             }
             val++;
         }

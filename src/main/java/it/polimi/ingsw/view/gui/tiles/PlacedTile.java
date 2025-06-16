@@ -2,8 +2,11 @@ package it.polimi.ingsw.view.gui.tiles;
 
 import java.util.ArrayList;
 
+import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.player.ShipCoords;
+import it.polimi.ingsw.view.gui.GUIView;
 import it.polimi.ingsw.view.gui.tiles.piece.DraggablePiece;
+import it.polimi.ingsw.view.gui.tiles.piece.DraggablePieceDecoder;
 import javafx.scene.image.ImageView;
 
 public class PlacedTile extends ComponentTile {
@@ -11,10 +14,19 @@ public class PlacedTile extends ComponentTile {
     private final ShipCoords coords;
     private final ArrayList<DraggablePiece> tiles;
 
-    public PlacedTile(String path, ShipCoords coords){
+    public PlacedTile(GUIView view, String path, ShipCoords coords){
         super(path);
         this.coords = coords;
         tiles = new ArrayList<>();
+
+        this.setOnDragDropped(event -> {
+            var o = event.getSource();
+            if(!(o instanceof DraggablePiece)) return;
+            var dec = new DraggablePieceDecoder(coords);
+            ServerMessage res = ((DraggablePiece)o).getDecoded(dec);
+            view.sendMessage(res);
+        });
+
     }
 
     public void setOverlay(ImageView overlay){

@@ -2,16 +2,20 @@ package it.polimi.ingsw.view.gui;
 
 
 import it.polimi.ingsw.controller.client.ClientController;
-import it.polimi.ingsw.controller.client.state.ConnectedState;
-import it.polimi.ingsw.controller.client.state.ConnectingState;
-import it.polimi.ingsw.controller.client.state.TitleScreenState;
+import it.polimi.ingsw.controller.client.state.*;
 import it.polimi.ingsw.message.server.ServerMessage;
+import it.polimi.ingsw.model.GameModeType;
+import it.polimi.ingsw.model.client.components.ClientBaseComponent;
+import it.polimi.ingsw.model.client.components.ClientShipmentsComponentDecorator;
 import it.polimi.ingsw.model.client.state.*;
+import it.polimi.ingsw.model.components.enums.ComponentRotation;
+import it.polimi.ingsw.model.components.enums.ConnectorType;
+import it.polimi.ingsw.model.components.enums.StorageType;
+import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.view.ClientView;
-import it.polimi.ingsw.view.gui.factories.ConnectionSetupTreeFactory;
-import it.polimi.ingsw.view.gui.factories.LobbyStateTreeFactory;
-import it.polimi.ingsw.view.gui.factories.SetupTreeFactory;
-import it.polimi.ingsw.view.gui.factories.TitleScreenTreeFactory;
+import it.polimi.ingsw.view.gui.factories.*;
+import it.polimi.ingsw.view.gui.tiles.PlacedTile;
+import it.polimi.ingsw.view.gui.tiles.PlacedTileFactory;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
@@ -48,11 +52,16 @@ public class GUIView extends Application implements ClientView {
     @Override
     public void show(TitleScreenState state) {
         Platform.runLater(() -> {
-            root.setBackground(new Background(new BackgroundImage(new Image("title1.jpg"), BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
-            this.root.getChildren().clear();
-            var node = TitleScreenTreeFactory.createTitleScreen(state);
-            this.root.getChildren().add(node);
-            StackPane.setAlignment(node, Pos.CENTER);
+			PlacedTileFactory f = new PlacedTileFactory(this);
+			var c = new ClientShipmentsComponentDecorator(new ClientBaseComponent(22, ComponentRotation.U090, new ConnectorType[]{ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY, ConnectorType.EMPTY}), StorageType.DOUBLENORMAL, new int[]{1,1,0,0});
+            var t = f.createTile(new ShipCoords(GameModeType.TEST, 3, 4), c);
+			this.root.getChildren().add(t);
+			StackPane.setAlignment(t, Pos.CENTER);
+			// root.setBackground(new Background(new BackgroundImage(new Image("title1.jpg"), BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
+            // this.root.getChildren().clear();
+            // var node = TitleScreenTreeFactory.createTitleScreen(state);
+            // this.root.getChildren().add(node);
+            // StackPane.setAlignment(node, Pos.CENTER);
         });
     }
 

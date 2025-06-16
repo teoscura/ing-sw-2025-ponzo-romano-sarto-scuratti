@@ -4,14 +4,14 @@ import it.polimi.ingsw.message.server.DiscardComponentMessage;
 import it.polimi.ingsw.message.server.PutComponentMessage;
 import it.polimi.ingsw.message.server.TakeDiscardedComponentMessage;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
-import it.polimi.ingsw.view.gui.MainApplication;
+import it.polimi.ingsw.view.gui.GUIView;
 
 public class ConstructionTile extends ComponentTile {
     
     private final Integer ID;
     private ComponentRotation rotation;
 
-    public ConstructionTile(Integer ID, boolean discarded, boolean primary){
+    public ConstructionTile(GUIView view, Integer ID, boolean discarded, boolean primary){
         super("galaxy_trucker_imgs/tiles/GT-tile-" + ID + ".jpg");
 
         this.ID = ID;
@@ -20,19 +20,19 @@ public class ConstructionTile extends ComponentTile {
             var node = event.getPickResult().getIntersectedNode();
             if(node==null || !(node instanceof PlacedTile)) return;
             var coords = ((PlacedTile)node).getCoords();
-            MainApplication.getView().sendMessage(new PutComponentMessage(ID, coords, this.rotation));
+            view.sendMessage(new PutComponentMessage(ID, coords, this.rotation));
         });
 
         this.setOnMouseClicked(event->{   
             if(discarded){
-                MainApplication.getView().sendMessage(new TakeDiscardedComponentMessage(ID));
+                view.sendMessage(new TakeDiscardedComponentMessage(ID));
             }
             else if(event.getClickCount()==2){
                 var new_shift = this.rotation.getShift() + 1;
                 this.rotation = ComponentRotation.fromShift(new_shift%4);
             }
             else if(event.isSecondaryButtonDown() && primary){
-                MainApplication.getView().sendMessage(new DiscardComponentMessage());
+                view.sendMessage(new DiscardComponentMessage());
             }
         });
 
