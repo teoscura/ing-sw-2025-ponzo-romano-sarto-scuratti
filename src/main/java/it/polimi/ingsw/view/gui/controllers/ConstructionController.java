@@ -38,9 +38,8 @@ public class ConstructionController {
 	@FXML private Button player_button_3;
 	@FXML private ImageView discarded_1;
 	@FXML private ImageView discarded_2;
-	@FXML private ImageView component_pile;
+	@FXML private Button component_pile;
 	@FXML private Button hourglass_button;
-	@FXML private Label components_left_label;
 	@FXML private ImageView card_pile;
 	ShipAsset player_ship;
 	TileAsset current_tile;
@@ -53,10 +52,10 @@ public class ConstructionController {
 
 	public void grabComponent() {
 		//TakeComponentMessage -> Recieve component
-		current_tile = new DraggableTile(new ClientBaseComponent(1, ComponentRotation.U000, new ConnectorType[]{ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL})); //will get component from message
+		current_tile = new DraggableTile(new ClientBaseComponent(1, ComponentRotation.U000, new ConnectorType[]{ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL, ConnectorType.UNIVERSAL})); //da fixare
 		ImageView image = current_tile.getBase();
-		image.setFitHeight(component_pile.getFitHeight());
-		image.setFitWidth(component_pile.getFitWidth());
+		image.setFitHeight(component_pile.getHeight());
+		image.setFitWidth(component_pile.getWidth());
 		image.setLayoutX(component_pile.getLayoutX());
 		image.setLayoutY(component_pile.getLayoutY());
 		AnchorPane.setBottomAnchor(image, AnchorPane.getBottomAnchor(component_pile));
