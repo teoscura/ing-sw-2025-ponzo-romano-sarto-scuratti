@@ -1,4 +1,4 @@
-@startuml uml_complete
+@startuml high_level
 hide circle
 skinparam classFontStyle bold
 skinparam groupInheritance 1
@@ -410,21 +410,6 @@ package Model {
             {method} + show(ClientVoyageState) : void
         }
 
-    }
-
-    class ClientGameListEntry {
-        {field} - [final] players : ArrayList<String>
-        {field} - [final] model_id : int
-        {field} - [final] type : GameModeType
-        {field} - [final] count : PlayerCount
-        {field} - [final] state : String
-        {method} + getType() : GameModeType
-        {method} + getCount() : PlayerCount
-        {method} + getPlayers() : ArrayList<String>
-        {method} + getModelId() : int
-        {method} + getState() : String
-    }
-
 }
 
 package Controller {
@@ -765,11 +750,6 @@ package Message {
 '//TODO add clientstatevisitor e clientcardvisitor
 
 package View {
-
-    enum ViewType <<enum>> {
-        TUI
-        GUI
-    }
 
     Model::Client::ClientStateVisitor <--u-- ClientView
     interface ClientView <<interface>> {
