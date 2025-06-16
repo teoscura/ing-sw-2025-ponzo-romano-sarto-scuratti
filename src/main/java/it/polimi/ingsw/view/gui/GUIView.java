@@ -27,7 +27,6 @@ import javafx.stage.Stage;
 
 public class GUIView extends Application implements ClientView {
 
-
     private StackPane root;
     private ClientState client_state;
     private ConnectedState state;
@@ -46,11 +45,10 @@ public class GUIView extends Application implements ClientView {
 		state.sendMessage(message);
 	}
 
-
     @Override
     public void show(TitleScreenState state) {
         Platform.runLater(() -> {
-            root.setBackground(new Background(new BackgroundImage(new Image("galaxy_trucker_imgs/title1.jpg"), BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
+            root.setBackground(new Background(new BackgroundImage(new Image("title1.jpg"), BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
             this.root.getChildren().clear();
             var node = TitleScreenTreeFactory.createTitleScreen(state);
             this.root.getChildren().add(node);
@@ -61,7 +59,7 @@ public class GUIView extends Application implements ClientView {
     @Override
     public void show(ConnectingState state) {
         Platform.runLater(() -> {
-            root.setBackground(new Background(new BackgroundImage(new Image("galaxy_trucker_imgs/title1.jpg"), BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
+            root.setBackground(new Background(new BackgroundImage(new Image("title1.jpg"), BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
             this.root.getChildren().clear();
             var node = ConnectionSetupTreeFactory.createConnectionScreen(state);
             this.root.getChildren().add(node);
@@ -92,7 +90,7 @@ public class GUIView extends Application implements ClientView {
 	@Override
 	public void show(ClientWaitingRoomState state) {
 		Platform.runLater(() -> {
-            if(state.getType().getLevel()==2) root.setBackground(new Background(new BackgroundImage(new Image("galaxy_trucker_imgs/title2.jpg"), BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
+            if(state.getType().getLevel()==2) root.setBackground(new Background(new BackgroundImage(new Image("title2.jpg"), BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
 			this.root.getChildren().clear();
 
 		});
@@ -101,7 +99,7 @@ public class GUIView extends Application implements ClientView {
 	@Override
 	public void show(ClientConstructionState state) {
 		Platform.runLater(() -> {
-            if(state.getType().getLevel()==2) root.setBackground(new Background(new BackgroundImage(new Image("galaxy_trucker_imgs/title2.jpg"), BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
+            if(state.getType().getLevel()==2) root.setBackground(new Background(new BackgroundImage(new Image("title2.jpg"), BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
 			this.root.getChildren().clear();
 
 		});
@@ -110,7 +108,7 @@ public class GUIView extends Application implements ClientView {
 	@Override
 	public void show(ClientVerifyState state) {
 		Platform.runLater(() -> {
-            if(state.getPlayerList().getFirst().getShip().getType().getLevel()==2) root.setBackground(new Background(new BackgroundImage(new Image("galaxy_trucker_imgs/title2.jpg"), BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
+            if(state.getPlayerList().getFirst().getShip().getType().getLevel()==2) root.setBackground(new Background(new BackgroundImage(new Image("title2.jpg"), BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
 			this.root.getChildren().clear();
 
 		});
@@ -119,7 +117,7 @@ public class GUIView extends Application implements ClientView {
 	@Override
 	public void show(ClientVoyageState state) {
 		Platform.runLater(() -> {
-            if(state.getType().getLevel()==2) root.setBackground(new Background(new BackgroundImage(new Image("galaxy_trucker_imgs/title2.jpg"), BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
+            if(state.getType().getLevel()==2) root.setBackground(new Background(new BackgroundImage(new Image("title2.jpg"), BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
 			this.root.getChildren().clear();
 		});
 	}
@@ -134,7 +132,7 @@ public class GUIView extends Application implements ClientView {
 
 	@Override
 	public void showTextMessage(String message) {
-
+        
 	}
 
 	@Override

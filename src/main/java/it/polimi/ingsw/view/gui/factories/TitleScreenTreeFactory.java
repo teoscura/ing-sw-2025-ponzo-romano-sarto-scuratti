@@ -20,7 +20,9 @@ public class TitleScreenTreeFactory {
 
         Label prompt = new Label("Insert Username: ");
         input.setMaxWidth(300);
-        var image = new ImageView("galaxy_trucker_imgs/cardboard/cardboard-1b.jpg");
+        var image = new ImageView("galaxy_trucker_imgs/logos/galaxy_trucker_logo_med.png");
+        image.setFitWidth(550);
+        image.setFitHeight(500);
         Button confirm = new Button("Confirm");
         confirm.setOnMouseClicked(new EventHandler<MouseEvent>() {
              @Override public void handle(MouseEvent e) {
