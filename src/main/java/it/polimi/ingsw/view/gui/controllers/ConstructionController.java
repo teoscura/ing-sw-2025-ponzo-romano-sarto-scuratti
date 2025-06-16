@@ -30,7 +30,7 @@ public class ConstructionController {
 	private ClientConstructionState state;
 	private final GUIView view;
 
-
+	@FXML private AnchorPane pane;
 	@FXML private GridPane ship_grid;
 	@FXML private ListView<ImageView> discarded_list;
 	@FXML private Button player_button_1;

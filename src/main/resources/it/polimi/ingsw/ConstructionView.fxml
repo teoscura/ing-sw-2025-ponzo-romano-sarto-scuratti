@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.shape.Rectangle?>
 
-<AnchorPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.controllers.ConstructionController">
+<AnchorPane fx:id="pane" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.controllers.ConstructionController">
     <children>
       <GridPane fx:id="ship_grid" gridLinesVisible="true" layoutX="570.0" layoutY="34.0" prefHeight="450.0" prefWidth="630.0" AnchorPane.rightAnchor="79.59999999999991" AnchorPane.topAnchor="34.0">
         <columnConstraints>
