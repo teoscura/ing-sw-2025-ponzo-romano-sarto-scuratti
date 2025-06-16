@@ -131,7 +131,7 @@ public class GUIView implements ClientView {
 	public void show(ClientWaitingRoomState state) {
 
 		if (this.selected_color == PlayerColor.NONE)
-			this.selected_color = state.getPlayerList().stream().filter(s -> s.getUsername().equals(username)).map(p -> p.getColor()).findFirst().orElse(PlayerColor.NONE);
+			this.selected_color = state.getPlayerList().stream().filter(s -> s.getUsername().equals(username)).map(p -> p.getColor()).findFirst().orElse(PlayerColor.RED);
 
 		System.out.println("method called");
 		Platform.runLater(() -> {
@@ -151,7 +151,7 @@ public class GUIView implements ClientView {
 	@Override
 	public void show(ClientConstructionState state) {
 		if (this.selected_color == PlayerColor.NONE)
-			this.selected_color = state.getPlayerList().stream().filter(s -> s.getUsername().equals(username)).map(p -> p.getColor()).findFirst().orElse(PlayerColor.NONE);
+			this.selected_color = state.getPlayerList().stream().filter(s -> s.getUsername().equals(username)).map(p -> p.getColor()).findFirst().orElse(PlayerColor.RED);
 
 		Platform.runLater(() -> {
 			try {
@@ -171,13 +171,13 @@ public class GUIView implements ClientView {
 	@Override
 	public void show(ClientVerifyState state) {
 		if (this.selected_color == PlayerColor.NONE)
-			this.selected_color = state.getPlayerList().stream().filter(s -> s.getUsername().equals(username)).map(p -> p.getColor()).findFirst().orElse(PlayerColor.NONE);
+			this.selected_color = state.getPlayerList().stream().filter(s -> s.getUsername().equals(username)).map(p -> p.getColor()).findFirst().orElse(PlayerColor.RED);
 	}
 
 	@Override
 	public void show(ClientVoyageState state) {
 		if (this.selected_color == PlayerColor.NONE)
-			this.selected_color = state.getPlayerList().stream().filter(s -> s.getUsername().equals(username)).map(p -> p.getColor()).findFirst().orElse(PlayerColor.NONE);
+			this.selected_color = state.getPlayerList().stream().filter(s -> s.getUsername().equals(username)).map(p -> p.getColor()).findFirst().orElse(PlayerColor.RED);
 	}
 
 	@Override
@@ -187,5 +187,10 @@ public class GUIView implements ClientView {
 
 	public PlayerColor getSelectedColor() {
 		return selected_color;
+	}
+
+	public void selectColor(PlayerColor c){
+		this.selected_color = c;
+		this.controller.update(cstate);
 	}
 }
