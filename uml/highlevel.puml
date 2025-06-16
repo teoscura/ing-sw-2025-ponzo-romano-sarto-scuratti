@@ -392,23 +392,24 @@ package Model {
 
         }
 
-    }
-
-    package State {
+        package State {
         
 
-        interface ClientState <<interface>> {
-            {method} + sendToView(ClientStateVisitor) : void
+            interface ClientState <<interface>> {
+                {method} + sendToView(ClientStateVisitor) : void
+            }
+
+            interface ClientStateVisitor <<interface>> {
+                {method} + show(ClientLobbySelectState) : void
+                {method} + show(ClientSetupState) : void
+                {method} + show(ClientWaitingRoomState) : void
+                {method} + show(ClientConstructionState) : void
+                {method} + show(ClientVerifyState) : void
+                {method} + show(ClientVoyageState) : void
+            }
         }
 
-        interface ClientStateVisitor <<interface>> {
-            {method} + show(ClientLobbySelectState) : void
-            {method} + show(ClientSetupState) : void
-            {method} + show(ClientWaitingRoomState) : void
-            {method} + show(ClientConstructionState) : void
-            {method} + show(ClientVerifyState) : void
-            {method} + show(ClientVoyageState) : void
-        }
+    }
 
 }
 
@@ -751,7 +752,7 @@ package Message {
 
 package View {
 
-    Model::Client::ClientStateVisitor <--u-- ClientView
+    Model::Client::State::ClientStateVisitor <--u-- ClientView
     interface ClientView <<interface>> {
         {method} + show(TitleScreenState) : void
 	    {method} + show(ConnectingState) : void
