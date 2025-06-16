@@ -32,8 +32,9 @@ public class GUIView implements ClientView {
 
 	@Override
 	public void show(TitleScreenState state) {
+		TitleScreenController controller = new TitleScreenController(state, this);
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsw/TitleScreenView.fxml"));
-		loader.setControllerFactory(f -> new TitleScreenController(state, this));
+		loader.setControllerFactory(f -> controller);
 		Scene scene = null;
 		try {
 			scene = new Scene(loader.load());

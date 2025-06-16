@@ -1,40 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
-<?import javafx.scene.image.Image?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.shape.Rectangle?>
 
 <AnchorPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.controllers.ConstructionController">
     <children>
-        <ImageView fx:id="planche_image" fitHeight="263.0" fitWidth="439.0" layoutX="759.0" layoutY="437.0" pickOnBounds="true" preserveRatio="true" />
-        <ListView fx:id="discarded_list" layoutX="290.0" layoutY="520.0" orientation="HORIZONTAL" prefHeight="130.0" prefWidth="384.0" />
-      <ImageView fx:id="ship_background" fitHeight="424.0" fitWidth="570.0" layoutX="61.0" layoutY="49.0" pickOnBounds="true" preserveRatio="true" />
-        <GridPane fx:id="ship_grid" gridLinesVisible="true" layoutX="84.0" layoutY="67.0" prefHeight="375.0" prefWidth="525.0">
-            <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            </columnConstraints>
-            <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            </rowConstraints>
-        </GridPane>
-        <ImageView fx:id="card_pile" fitHeight="143.0" fitWidth="130.0" layoutX="111.0" layoutY="520.0" onMousePressed="#grabCard" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../../../galaxy_trucker_imgs/tiles/GT-tile-157.jpg" />
-         </image>
-        </ImageView>
+      <GridPane fx:id="ship_grid" gridLinesVisible="true" layoutX="570.0" layoutY="34.0" prefHeight="450.0" prefWidth="630.0" AnchorPane.rightAnchor="79.59999999999991" AnchorPane.topAnchor="34.0">
+        <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+      </GridPane>
+      <Button fx:id="player_button_1" layoutX="538.0" layoutY="541.0" mnemonicParsing="false" prefHeight="108.0" prefWidth="175.0" text="player2" AnchorPane.bottomAnchor="71.0" AnchorPane.rightAnchor="567.6" />
+      <Button fx:id="player_button_2" layoutX="798.0" layoutY="541.0" mnemonicParsing="false" prefHeight="108.0" prefWidth="175.0" text="player3" AnchorPane.bottomAnchor="71.20000000000005" AnchorPane.rightAnchor="306.5999999999999" />
+      <Button fx:id="player_button_3" layoutX="1058.0" layoutY="541.0" mnemonicParsing="false" prefHeight="108.0" prefWidth="175.0" text="player4" AnchorPane.bottomAnchor="71.20000000000005" AnchorPane.rightAnchor="47.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ffffff00" height="650.0" layoutX="35.0" layoutY="20.0" stroke="BLACK" strokeType="INSIDE" width="396.0" AnchorPane.leftAnchor="35.0" AnchorPane.topAnchor="20.0" />
+      <ImageView fx:id="component_pile" fitHeight="200.0" fitWidth="200.0" layoutX="207.0" layoutY="97.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="207.0" AnchorPane.topAnchor="97.0" />
+      <ImageView fx:id="discarded_1" fitHeight="90.0" fitWidth="90.0" layoutX="71.0" layoutY="97.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="71.2" AnchorPane.topAnchor="97.0" />
+      <ImageView fx:id="discarded_2" fitHeight="90.0" fitWidth="90.0" layoutX="71.0" layoutY="207.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="71.0" AnchorPane.topAnchor="207.0" />
+      <Label fx:id="components_left_label" alignment="CENTER" layoutX="207.0" layoutY="307.0" prefHeight="18.0" prefWidth="200.0" text="Components left: " AnchorPane.leftAnchor="207.0" AnchorPane.topAnchor="307.0" />
+      <Button fx:id="hourglass_button" layoutX="250.0" layoutY="391.0" mnemonicParsing="false" prefHeight="67.0" prefWidth="144.0" text="Toggle hourglass" AnchorPane.leftAnchor="250.0" AnchorPane.topAnchor="391.0" />
+      <ImageView fx:id="card_pile" fitHeight="120.0" fitWidth="90.0" layoutX="71.0" layoutY="365.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="71.0" AnchorPane.topAnchor="365.0" />
+      <ScrollPane layoutX="61.0" layoutY="550.0" prefHeight="106.0" prefWidth="345.0" AnchorPane.leftAnchor="61.0" AnchorPane.topAnchor="550.0">
+         <content>
+            <ListView fx:id="discarded_list" prefHeight="90.0" prefWidth="340.0" />
+         </content>
+      </ScrollPane>
     </children>
 </AnchorPane>
