@@ -61,40 +61,12 @@ package Model {
             {method} getConstructionCards : List<Integer>
         }
 
-        iCards ^--  TestFlightCards
-        class TestFlightCards {
-            {field} [final] cards : ArrayDeque<iCard>
-            {method} + pullCard() : iCard
-            {method} + getLeft() : int
-            {method} + getConstructionCards : List<Integer>
-        }
-
-        iCards ^--  LevelTwoCards
-        class LevelTwoCards {
-            {field} cards : ArrayDeque<iCard>
-            {field} construction_cards : ArrayList<Integer>
-            {method} + pullCard() : iCard
-            {method} + getLeft() : int
-            {method} + getConstructionCards : List<Integer>
-        }
-
         interface iCommonBoard <<interface>> {
             {method} getCoveredSize() : int
             {method} pullComponent() : BaseComponent
             {method} discardComponent(BaseComponent) : void
             {method} pullDiscarded(int) : BaseComponent
             {method} getDiscarded() : ArrayList<Integer>
-        }
-
-        iCommonBoard^..CommonBoard
-        class CommonBoard {
-            {field} [final] covered_components : ArrayDeque<BaseComponent>
-            {field} [final] discarded_components : HashMap<Integer, BaseComponent>
-            {method} + getCoveredSize() : int
-            {method} + pullComponent() : BaseComponent
-            {method} + discardComponent(BaseComponent) : void
-            {method} + pullDiscarded(int) : BaseComponent
-            {method} + getDiscarded() : ArrayList<Integer>
         }
 
         interface iPlanche <<interface>> {
@@ -104,16 +76,6 @@ package Model {
             {method} loseGame(Player) : void
         }
 
-
-        iPlanche^..Planche
-        class Planche{
-            {field} [final] planche : HashMap<Player, Integer>
-            {field} [final] length : int
-            {method} + getPlayerPosition(Player) : int
-            {method} + getPlayerAt(int) : Player
-            {method} + movePlayer(VoyageState, Player, int) : void
-            {method} + loseGame(Player) : void
-        }
     }
 
     package Components {
@@ -159,7 +121,7 @@ package Model {
 
     package Player {
 
-        SpaceShip --u-- Player:ship
+        SpaceShip - Player:ship
         class Player {
             {field} [final] username : String
             {field} [final] color : PlayerColor
@@ -186,7 +148,7 @@ package Model {
         }
 
 
-        BaseComponent --u-- SpaceShip:"components[][]"
+        BaseComponent -u- SpaceShip:"components[][]"
         class SpaceShip {
             {field} [final] player : Player
             {field} [final] storage_coords : ArrayList<ShipCoords>
@@ -245,7 +207,7 @@ package Model {
             {method} + getClientSpaceShip() : ClientSpaceShip
         }
 
-        ShipCoords <-- "1" Components::BaseComponent
+        ShipCoords <-- "1" Model::Components::BaseComponent
         class ShipCoords{
             {field} [final] x : int
             {field} [final] y : int
@@ -265,11 +227,10 @@ package Model {
     package State {
         
         Model::Player::Player "0..n" --r-- GameState:players
+        Model::ModelInstance -d- GameState:model
         abstract GameState <<abstract>> {
-            {field} # [final] model : ModelInstance 
             {field} # [final] type : GameModeType
             {field} # [final] count : PlayerCount
-            {field} # [final] players : List<Player>
             {method} + [abstract] validate(ServerMessage message) : void
             {method} + [abstract] getNext() : GameState 
             {method} + [abstract] getClientState() : ClientState
@@ -302,10 +263,10 @@ package Model {
         }
 
         GameState ^... VoyageState
-        iPlanche "1" --u---- VoyageState:planche
-        iCards "1" --u---- VoyageState:voyage_deck
-        iCard "1" --u---- VoyageState:card
-        CardState "1" ----u-- VoyageState:state
+        iPlanche "1" --- VoyageState:planche
+        iCards "1" --- VoyageState:voyage_deck
+        iCard "1" --- VoyageState:card
+        CardState "1" --- VoyageState:state
         class VoyageState {
             {field} - [final] to_give_up : ArrayList<Player>
             {method} + validate(ServerMessage message) : void
@@ -330,7 +291,7 @@ package Model {
     }
 
 
-    State::GameState "1" ----u---- ModelInstance:state 
+    State::GameState "1" ---- ModelInstance:state 
     class ModelInstance {
         {field} - [final] id: int
         {field} - started: boolean
@@ -387,7 +348,17 @@ package Model {
             }
 
             interface ClientComponentVisitor <<interface>> {
-                {method} + show(ClientComponent) : void
+                {method} + show(ClientBaseComponent) : void
+                {method} + show(ClientEmptyComponent) : void
+                {method} + show(ClientBatteryComponentDecorator) : void
+                {method} + show(ClientBrokenVerifyComponentDecorator) : void
+                {method} + show(ClientCabinComponentDecorator) : void
+                {method} + show(ClientCannonComponentDecorator) : void
+                {method} + show(ClientEngineComponentDecorator) : void
+                {method} + show(ClientLifeSupportComponentDecorator) : void
+                {method} + show(ClientPoweredComponentDecorator) : void
+                {method} + show(ClientShieldComponentDecorator) : void
+                {method} + show(ClientShipmentsComponentDecorator) : void
             }
 
         }
@@ -467,6 +438,7 @@ package Controller {
         package State {
             
             Controller::Client::ClientController "1" -- ClientControllerState:controller
+            ::View::ClientView --r-- ClientControllerState:view
             abstract ClientControllerState <<abstract>> {
                 {field} - view : ClientView
                 {method} + init() : void
@@ -528,6 +500,7 @@ package Controller {
         
         }
 
+        View::ClientView -r- ClientController:view
         Controller::Client::State::ClientControllerState "1" -- ClientController:state
         class ClientController {
             {field} - view : ClientView
@@ -620,7 +593,7 @@ package Controller {
         }
 
 
-        Controller::Server::MainServerController "static" ----d---- MainServerController:instance
+        Controller::Server::MainServerController "static" --d-- MainServerController:instance
         Controller::Server::Connections::NetworkServer "1" -- MainServerController:server
         class MainServerController <<singleton>> {
             {field} - [final] all_listeners : HashMap<String, ClientDescriptor> 
@@ -669,7 +642,7 @@ package Controller {
             {method} + joinFromEndedGame(ClientDescriptor) : void
         }
 
-        Model::ModelInstance "1" ----u---- LobbyController:model
+        Model::ModelInstance "1" -- LobbyController:model
         class LobbyController {
             {field} - [final] id : int
             {field} - [final] listeners : HashMap<String, ClientDescriptor>
@@ -752,7 +725,7 @@ package Message {
 
 package View {
 
-    Model::Client::State::ClientStateVisitor <--u-- ClientView
+    Model::Client::State::ClientStateVisitor <--d-- ClientView
     interface ClientView <<interface>> {
         {method} + show(TitleScreenState) : void
 	    {method} + show(ConnectingState) : void
