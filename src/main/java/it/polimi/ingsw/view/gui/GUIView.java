@@ -1,39 +1,29 @@
-package it.polimi.ingsw;
+package it.polimi.ingsw.view.gui;
+
 
 import it.polimi.ingsw.controller.client.ClientController;
-import it.polimi.ingsw.controller.client.state.ClientControllerState;
-import it.polimi.ingsw.controller.client.state.ConnectedState;
-import it.polimi.ingsw.controller.client.state.ConnectingState;
-import it.polimi.ingsw.controller.client.state.TitleScreenState;
-import it.polimi.ingsw.model.client.state.ClientConstructionState;
-import it.polimi.ingsw.model.client.state.ClientEndgameState;
-import it.polimi.ingsw.model.client.state.ClientLobbySelectState;
-import it.polimi.ingsw.model.client.state.ClientSetupState;
-import it.polimi.ingsw.model.client.state.ClientState;
-import it.polimi.ingsw.model.client.state.ClientVerifyState;
-import it.polimi.ingsw.model.client.state.ClientVoyageState;
-import it.polimi.ingsw.model.client.state.ClientWaitingRoomState;
+import it.polimi.ingsw.controller.client.state.*;
+import it.polimi.ingsw.model.client.state.*;
 import it.polimi.ingsw.view.ClientView;
-import it.polimi.ingsw.view.gui.TitleScreenTreeFactory;
+import it.polimi.ingsw.view.gui.factories.ConnectionSetupTreeFactory;
+import it.polimi.ingsw.view.gui.factories.LobbyStateTreeFactory;
+import it.polimi.ingsw.view.gui.factories.TitleScreenTreeFactory;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.image.ImageView;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.StackPane;
-import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 
-public class GuiMain extends Application implements ClientView {
+public class GUIView extends Application implements ClientView {
 
     private StackPane root;
     private ClientState client_state;
     private ClientControllerState state;
     private ClientController c;
 
-    public static void main(String[] args) {
-        Application.launch(args);
-    }
-    
     @Override
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("Galaxy Trucker");
@@ -55,46 +45,73 @@ public class GuiMain extends Application implements ClientView {
     @Override
     public void show(ConnectingState state) {
         this.root.getChildren().clear();
+        var node = ConnectionSetupTreeFactory.createConnectionScreen(state);
+        this.root.getChildren().add(node);
+        StackPane.setAlignment(node, Pos.CENTER);
     }
 
     @Override
     public void show(ClientLobbySelectState state) {
-        this.root.getChildren().clear();
-
+        Platform.runLater(() -> {
+            this.root.getChildren().clear();
+            var node = LobbyStateTreeFactory.createLobbyScreen(state);
+            this.root.getChildren().add(node);
+            StackPane.setAlignment(node, Pos.CENTER);
+        });
     }
 
     @Override
     public void show(ClientSetupState state) {
-        this.root.getChildren().clear();
+        Platform.runLater(() -> {
+            this.root.getChildren().clear();
+            
+        });
     }
 
     @Override
     public void show(ClientWaitingRoomState state) {
-        this.root.getChildren().clear();
+        Platform.runLater(() -> {
+            this.root.getChildren().clear();
+            
+        });
     }
 
     @Override
     public void show(ClientConstructionState state) {
-        this.root.getChildren().clear();
+        Platform.runLater(() -> {
+            this.root.getChildren().clear();
+            
+        });
     }
 
     @Override
     public void show(ClientVerifyState state) {
-        this.root.getChildren().clear();
+        Platform.runLater(() -> {
+            this.root.getChildren().clear();
+            
+        });
     }
 
     @Override
     public void show(ClientVoyageState state) {
-        this.root.getChildren().clear();
+        Platform.runLater(() -> {
+            this.root.getChildren().clear();
+            
+        });
     }
 
     @Override
     public void show(ClientEndgameState state) {
-        this.root.getChildren().clear();
+        Platform.runLater(() -> {
+            this.root.getChildren().clear();
+            
+        });
     }
 
     @Override
     public void showTextMessage(String message) {
+
+        StackPane.setAlignment(new Group(), Pos.TOP_RIGHT);
     }
 
     @Override

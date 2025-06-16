@@ -64,6 +64,21 @@
               </transformers>
             </configuration>
           </execution>
+          <execution>
+            <id>3</id>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <finalName>${project.artifactId}-gui-${project.version}</finalName>
+              <transformers>
+                <transformer>
+                  <mainClass>it.polimi.ingsw.GUIMain</mainClass>
+                </transformer>
+              </transformers>
+            </configuration>
+          </execution>
         </executions>
       </plugin>
     </plugins>
