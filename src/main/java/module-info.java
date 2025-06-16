@@ -5,7 +5,6 @@ module it.polimi.ingsw {
 	requires org.jline;
     requires javafx.graphics;
 
-	opens it.polimi.ingsw to javafx.fxml;
 	
 	exports it.polimi.ingsw;
 	exports it.polimi.ingsw.controller.client.state;
