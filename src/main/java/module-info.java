@@ -4,6 +4,7 @@ module it.polimi.ingsw {
 	requires java.rmi;
 	requires org.jline;
     requires javafx.graphics;
+    requires javafx.base;
 
 	
 	exports it.polimi.ingsw;

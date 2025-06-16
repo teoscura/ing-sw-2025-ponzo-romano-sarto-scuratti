@@ -16,6 +16,7 @@ import it.polimi.ingsw.model.client.state.ClientWaitingRoomState;
 import it.polimi.ingsw.view.ClientView;
 import it.polimi.ingsw.view.gui.TitleScreenTreeFactory;
 import javafx.application.Application;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
@@ -44,11 +45,14 @@ public class GuiMain extends Application implements ClientView {
     @Override
     public void show(TitleScreenState state) {
         this.root.getChildren().clear();
-        this.root.getChildren().add(TitleScreenTreeFactory.createTitleScreen(root, state));
+        var node = TitleScreenTreeFactory.createTitleScreen(state);
+        this.root.getChildren().add(node);
+        StackPane.setAlignment(node, Pos.CENTER);
     }
 
     @Override
     public void show(ConnectingState state) {
+        System.out.println("TITLESCREEN PASSED.");
     }
 
     @Override
