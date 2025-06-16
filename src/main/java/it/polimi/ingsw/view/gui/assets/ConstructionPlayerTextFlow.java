@@ -1,6 +1,8 @@
 package it.polimi.ingsw.view.gui.assets;
 
 import it.polimi.ingsw.model.client.player.ClientConstructionPlayer;
+import it.polimi.ingsw.view.gui.GUIView;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -8,7 +10,7 @@ import javafx.scene.text.TextFlow;
 import javafx.stage.Popup;
 import javafx.stage.Window;
 
-public class ConstructionPlayerTextFlow {
+public class ConstructionPlayerTextFlow extends Node {
 
 	private final ClientConstructionPlayer player;
 	private final Text player_name;
@@ -17,7 +19,7 @@ public class ConstructionPlayerTextFlow {
 	private final Text battery_text;
 	private final TextFlow player_viewer;
 
-	public ConstructionPlayerTextFlow(ClientConstructionPlayer player) {
+	public ConstructionPlayerTextFlow(ClientConstructionPlayer player, GUIView view) {
 		this.player = player;
 		this.player_name = new Text(player.getUsername() + "\n");
 		switch (player.getColor()) {
@@ -31,7 +33,7 @@ public class ConstructionPlayerTextFlow {
 		this.engine_text = new Text("Engine power: " + player.getShip().getEnginePower() + "\n");
 		this.battery_text = new Text("Batteries: " + player.getShip().getContainers()[0] + "\n");
 		player_viewer = new TextFlow(player_name, cannon_text, engine_text, battery_text);
-		player_viewer.setOnMouseClicked(event -> showPlayerShip(player_viewer.getScene().getWindow()));
+		player_viewer.setOnMouseClicked(event -> view.selectColor(player.getColor()));
 	}
 
 	public void showPlayerShip(Window stage) {

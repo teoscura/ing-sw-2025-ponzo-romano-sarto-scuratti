@@ -1,11 +1,15 @@
 package it.polimi.ingsw.view.gui.controllers;
 
+import java.time.Duration;
+import java.time.Instant;
+
 import it.polimi.ingsw.message.server.TakeComponentMessage;
 import it.polimi.ingsw.message.server.ToggleHourglassMessage;
 import it.polimi.ingsw.model.client.state.ClientConstructionState;
 import it.polimi.ingsw.model.client.state.ClientState;
 import it.polimi.ingsw.view.gui.GUIView;
 import it.polimi.ingsw.view.gui.MainApplication;
+import it.polimi.ingsw.view.gui.assets.ConstructionPlayerTextFlow;
 import it.polimi.ingsw.view.gui.assets.ShipAsset;
 import it.polimi.ingsw.view.gui.tiles.ConstructionTile;
 import javafx.animation.AnimationTimer;
@@ -15,10 +19,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
-
-import java.time.Duration;
-import java.time.Instant;
 
 public class ConstructionController {
 
@@ -28,14 +30,15 @@ public class ConstructionController {
 	@FXML private AnchorPane pane;
 	@FXML private GridPane ship_grid;
 	@FXML private ListView<ConstructionTile> discarded_list;
-	@FXML private Button player_button_1;
-	@FXML private Button player_button_2;
-	@FXML private Button player_button_3;
+	@FXML private ConstructionPlayerTextFlow player_button_1;
+	@FXML private ConstructionPlayerTextFlow player_button_2;
+	@FXML private ConstructionPlayerTextFlow player_button_3;
 	@FXML private ConstructionTile reserved_1;
 	@FXML private ConstructionTile reserved_2;
 	@FXML private Button component_pile;
 	@FXML private Button hourglass_button;
 	@FXML private ImageView card_pile;
+
 	private ShipAsset player_ship;
 	private ConstructionTile current_tile;
 
@@ -80,15 +83,16 @@ public class ConstructionController {
 		if(p.getCurrent()==-1){
 			this.current_tile.setVisible(false);
 			this.current_tile.setDisable(true);
-			this.card_pile.setVisible(true);
-			this.card_pile.setDisable(false);
+			this.component_pile.setVisible(true);
+			this.component_pile.setDisable(false);
 		} else {
 			this.current_tile = new ConstructionTile(p.getCurrent(), false, true);
-			//TODO ancorare
+			AnchorPane.setTopAnchor(current_tile, component_pile.getLayoutY());
+			AnchorPane.setLeftAnchor(current_tile, component_pile.getLayoutX());
 			this.current_tile.setVisible(true);
 			this.current_tile.setDisable(false);
-			this.card_pile.setVisible(false);
-			this.card_pile.setDisable(true);
+			this.component_pile.setVisible(false);
+			this.component_pile.setDisable(true);
 		}
 		int j = 0;
 		for(var i : p.getReserved()){
@@ -101,9 +105,18 @@ public class ConstructionController {
 		this.player_ship = new ShipAsset(p);
 		this.ship_grid = player_ship.getGrid();
 		this.updateHourglassAnimation();
+		j = 0;
+		for(var pl : state.getPlayerList()){
+			if(pl.getColor()==view.getSelectedColor()) continue;
+			setSmallPlayer(j, new ConstructionPlayerTextFlow(pl, view));
+			j++;
+		}
+		for(; j<2;j++){
+			disableSmallPlayer(j);
+		}
 		//TODO set three player buttons.
 		hourglass_button.setOnAction(event->toggle_hourglass());
-		card_pile.setOnMouseClicked(event -> grabComponent());
+		component_pile.setOnMouseClicked(event -> grabComponent());
 		this.card_pile.setOnMouseClicked(event -> show_cards());
 	}
 
@@ -121,7 +134,8 @@ public class ConstructionController {
 				this.card_pile.setDisable(false);
 			} else {
 				this.current_tile = new ConstructionTile(newp.getCurrent(), false, true);
-				//TODO ancorare
+				AnchorPane.setTopAnchor(current_tile, component_pile.getLayoutY());
+				AnchorPane.setLeftAnchor(current_tile, component_pile.getLayoutX());
 				this.current_tile.setVisible(true);
 				this.current_tile.setDisable(false);
 				this.card_pile.setVisible(false);
@@ -153,7 +167,15 @@ public class ConstructionController {
 		if(!tmpstate.getLastToggle().equals(this.state.getLastToggle())){
 			this.updateHourglassAnimation();
 		}
-		//TODO: settare i pulsanti degli altri giocatori.
+		int j = 0;
+		for(var pl : tmpstate.getPlayerList()){
+			if(pl.getColor()==view.getSelectedColor()) continue;
+			setSmallPlayer(j, new ConstructionPlayerTextFlow(pl, view));
+			j++;
+		}
+		for(; j<2;j++){
+			disableSmallPlayer(j);
+		}
 		this.state = tmpstate;
 	}
 
@@ -172,7 +194,32 @@ public class ConstructionController {
 			this.reserved_1.setDisable(true);
 		} else if (i == 1) {
 			this.reserved_2.setVisible(false);
-			this.reserved_1.setDisable(true);
+			this.reserved_2.setDisable(true);
+		}
+		else throw new RuntimeException();
+	}
+
+	private void setSmallPlayer(int i, ConstructionPlayerTextFlow ctf){
+		if(i == 0) {
+			this.player_button_1 = ctf;
+		} else if (i == 1) {
+			this.player_button_2 = ctf;
+		} else if (i == 2) {
+			this.player_button_3 = ctf;
+		}
+		else throw new RuntimeException();
+	}
+
+	private void disableSmallPlayer(int i){
+		if(i == 0) {
+			this.player_button_1.setVisible(false);
+			this.player_button_1.setDisable(true);
+		} else if (i == 1) {
+			this.player_button_2.setVisible(false);
+			this.player_button_2.setDisable(true);
+		} else if (i == 2) {
+			this.player_button_3.setVisible(false);
+			this.player_button_3.setDisable(true);
 		}
 		else throw new RuntimeException();
 	}
