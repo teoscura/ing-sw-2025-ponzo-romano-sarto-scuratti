@@ -10,32 +10,32 @@ public class PieceImagePathProvider {
     static public String crew(AlienType type){
         switch(type){
             case BROWN:
-                return "galaxy_trucker_imgs/piece/ph.jpg";
+                return "galaxy_trucker_imgs/piece/ph.png";
             case HUMAN:
-                return "galaxy_trucker_imgs/piece/ph.jpg";
+                return "galaxy_trucker_imgs/piece/ph.png";
             case PURPLE:
-                return "galaxy_trucker_imgs/piece/ph.jpg";
+                return "galaxy_trucker_imgs/piece/ph.png";
             default:
-                return "galaxy_trucker_imgs/piece/ph.jpg";
+                return "galaxy_trucker_imgs/piece/ph.png";
         }
     }
 
     static public String cargo(ShipmentType type){
         switch(type){
             case BLUE:
-                return "galaxy_trucker_imgs/piece/ph.jpg";
+                return "galaxy_trucker_imgs/piece/ph.png";
             case GREEN:
-                return "galaxy_trucker_imgs/piece/ph.jpg";
+                return "galaxy_trucker_imgs/piece/ph.png";
             case RED:
-                return "galaxy_trucker_imgs/piece/ph.jpg";
+                return "galaxy_trucker_imgs/piece/ph.png";
             case YELLOW:
-                return "galaxy_trucker_imgs/piece/ph.jpg";
+                return "galaxy_trucker_imgs/piece/ph.png";
             default:
-                return "galaxy_trucker_imgs/piece/ph.jpg";
+                return "galaxy_trucker_imgs/piece/ph.png";
         }
     }
 
     static public String battery(){
-        return "galaxy_trucker_imgs/piece/ph.jpg";
+        return "galaxy_trucker_imgs/piece/ph.png";
     }  
 }
