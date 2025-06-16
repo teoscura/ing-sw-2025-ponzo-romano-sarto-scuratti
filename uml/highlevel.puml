@@ -681,13 +681,6 @@ package Controller {
 
     }
 
-    class ThreadSafeMessageQueue<T> {
-        {field} - [final] threadpool : ExecutorService
-        {field} - [final] queue : ArrayBlockingQueue<T>
-        {method} + take() : T
-        {method} + insert(T) : void
-    }
-
 }
 
 package Message {
