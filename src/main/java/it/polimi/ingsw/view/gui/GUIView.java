@@ -91,7 +91,7 @@ public class GUIView extends Application implements ClientView {
 			c = f2.getComponent(55);
 			c.rotate(ComponentRotation.U000);
 			player2.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 5, 4));
-			
+
 
 			ClientVerifyState s = new ClientVerifyState(
 				new ArrayList<>(){{
@@ -99,7 +99,7 @@ public class GUIView extends Application implements ClientView {
 					add(new ClientVerifyPlayer("Gigio2", PlayerColor.BLUE, player2.getSpaceShip().getClientSpaceShip().getVerifyShip(player2.getSpaceShip().bulkVerify()), true, true, false, false, 2));
 					add(new ClientVerifyPlayer("Gigio3", PlayerColor.GREEN, player2.getSpaceShip().getClientSpaceShip().getVerifyShip(player2.getSpaceShip().bulkVerify()), true, false, false, false, 3));
 				}});
-	
+
 			this.view_color = PlayerColor.RED;
 			this.client_state = s;
 			var x = VerifySidePaneTreeFactory.createSidePane(this, s, view_color);
@@ -163,7 +163,7 @@ public class GUIView extends Application implements ClientView {
 			this.root.getChildren().clear();
 			var player = state.getPlayerList().stream().filter(p->p.getUsername().equals(this.state.getUsername())).findFirst().orElse(state.getPlayerList().getFirst());
 
-			var x = ConstructionSidePaneTreeFactory.createSidePane(this, state, view_color);
+			var x = ConstructionSidePaneTreeFactory.createSidePane(this, state, view_color, root);
 			this.root.getChildren().add(x);
 			var node = PlacedShipTreeFactory.createPlacedShip(this, player.getShip());
 			this.root.getChildren().add(node);
@@ -200,7 +200,7 @@ public class GUIView extends Application implements ClientView {
             if(state.getType().getLevel()==2) root.setBackground(new Background(new BackgroundImage(new Image("title2.jpg"), BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
 			this.root.getChildren().clear();
 			var player = state.getPlayerList().stream().filter(p->p.getUsername().equals(this.state.getUsername())).findFirst().orElse(state.getPlayerList().getFirst());
-			var x = VoyageSidePaneTreeFactory.createSidePane(this, state, view_color);
+			//var x = VoyageSidePaneTreeFactory.createSidePane(this, state, view_color);
 			// this.root.getChildren().add(x);
 			// var node = PlacedShipTreeFactory.createPlacedShip(this, player.getShip());
 			// this.root.getChildren().add(node);

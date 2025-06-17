@@ -1,11 +1,13 @@
 package it.polimi.ingsw.view.gui.factories;
 
+import it.polimi.ingsw.message.server.ToggleHourglassMessage;
 import it.polimi.ingsw.message.server.SendContinueMessage;
 import it.polimi.ingsw.model.client.player.ClientConstructionPlayer;
 import it.polimi.ingsw.model.client.state.ClientConstructionState;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.view.gui.GUIView;
 import it.polimi.ingsw.view.gui.tiles.ConstructionTile;
+import javafx.animation.AnimationTimer;
 import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -14,18 +16,58 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Popup;
 
-//gray: 169 169 169 
+import java.time.Duration;
+import java.time.Instant;
+
+//gray: 169 169 169
 
 public class ConstructionSidePaneTreeFactory {
-    
-    static public Node createSidePane(GUIView view, ClientConstructionState state, PlayerColor color){
+
+    private static void toggleHourglass(GUIView view){
+        ToggleHourglassMessage message = new ToggleHourglassMessage();
+        view.sendMessage(message);
+    }
+
+    public static void showCards(GUIView view, ClientConstructionState state, Node root){
+        ListView<ImageView> card_list = new ListView();
+        ObservableList<ImageView> list = FXCollections.observableArrayList();
+        for(int id : state.getConstructionCards()){
+            list.add(new ImageView("galaxy_trucker_imgs/cards/GT-cards-" + id + ".png"));
+        }
+        card_list.setItems(list);
+        Popup popup = new Popup();
+        popup.getContent().add(card_list);
+        popup.show(root.getScene().getWindow());
+    }
+
+    public static void updateHourglassAnimation(ClientConstructionState state, Button hourglass){
+        Instant end = state.getLastToggle().plus(Duration.ofSeconds(90));
+        AnimationTimer hourglass_timer = new AnimationTimer() {
+            @Override
+            public void handle(long l) {
+                Duration time_left = Duration.between(Instant.now(), end);
+                hourglass.setText(("[Left: "+state.getTogglesLeft())+"/"+state.getTogglesTotal()+"] " + (time_left.toSeconds()) + " seconds left");
+                if (Instant.now().isAfter(end)) {
+                    stop();
+                    hourglass.setText(("[Left: "+state.getTogglesLeft())+"/"+state.getTogglesTotal()+"] Toggle hourglass");
+                }
+            }
+        };
+        hourglass_timer.start();
+    }
+
+
+    static public Node createSidePane(GUIView view, ClientConstructionState state, PlayerColor color, Node root){
         ClientConstructionPlayer you = state.getPlayerList().stream().filter(p->p.getColor()==color).findAny().orElse(state.getPlayerList().getFirst());
         StackPane sp = new StackPane();
         sp.setMaxWidth(333);
@@ -35,7 +77,7 @@ public class ConstructionSidePaneTreeFactory {
         res.getChildren().add(createMainConstructionTileTree(view, you));
         res.getChildren().add(createReservedConstructionTileTree(view, you));
         res.getChildren().add(createDiscardedConstructionTileTree(view, state));
-        if(state.getType().getLevel()>1) res.getChildren().add((createLevelTwoAddons(view, state)));
+        if(state.getType().getLevel()>1) res.getChildren().add((createLevelTwoAddons(view, state, root)));
         Button confirm = new Button("Finish building!");
         confirm.setId("constr-confirm-button");
         confirm.setOnMouseClicked(event -> {
@@ -82,15 +124,18 @@ public class ConstructionSidePaneTreeFactory {
         return res;
     }
 
-    static public Node createLevelTwoAddons(GUIView view, ClientConstructionState state){
+    static public Node createLevelTwoAddons(GUIView view, ClientConstructionState state, Node root){
         HBox res = new HBox(30);
         res.setId("constr-leveltwo-addons");
         //TODO: questi.
         Button cards = new Button("Peek the cards");
+        cards.setOnAction(e -> showCards(view, state, root));
         cards.setId("constr-peek-cards");
         Button toggle = new Button("Toggle hourglass");
+        toggle.setOnAction(e -> toggleHourglass(view));
         toggle.setId("constr-toggle-hourglass");
         res.getChildren().addAll(cards, toggle);
+        updateHourglassAnimation(state, toggle); //will be moved once update is selective
         return res;
     }
 
