@@ -1,12 +1,16 @@
 package it.polimi.ingsw.view.gui.factories;
 
+import it.polimi.ingsw.message.server.SelectLandingMessage;
+import it.polimi.ingsw.message.server.SendContinueMessage;
+import it.polimi.ingsw.message.server.TakeRewardMessage;
+import it.polimi.ingsw.model.cards.utils.ProjectileDimension;
 import it.polimi.ingsw.model.client.card.*;
-import it.polimi.ingsw.model.client.player.ClientVoyagePlayer;
 import it.polimi.ingsw.model.client.state.ClientVoyageState;
 import it.polimi.ingsw.model.components.enums.ShipmentType;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.view.gui.GUIView;
 import it.polimi.ingsw.view.gui.tiles.piece.CargoPiece;
+import it.polimi.ingsw.view.gui.tiles.piece.SelectBlobPiece;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -26,7 +30,6 @@ public class VoyageSidePaneTreeFactory implements ClientCardStateVisitor {
     }
 
     public Node createSidePane(GUIView view, ClientVoyageState state, PlayerColor color){
-        ClientVoyagePlayer you = state.getPlayerList().stream().filter(p->p.getColor()==color).findAny().orElse(state.getPlayerList().getFirst());
         StackPane sp = new StackPane();
         sp.setMaxWidth(333);
         this.cstatetree = new VBox(10);
@@ -50,6 +53,9 @@ public class VoyageSidePaneTreeFactory implements ClientCardStateVisitor {
         }
         awaiting.setMaxWidth(333);
         this.cstatetree.getChildren().add(awaiting);
+        Button confirm = new Button("Continue");
+        confirm.setId("confirm-button");
+        this.cstatetree.getChildren().add(confirm);
     }
 
     @Override
@@ -105,6 +111,11 @@ public class VoyageSidePaneTreeFactory implements ClientCardStateVisitor {
             k++;
         }
         this.cstatetree.getChildren().add(required);
+        Button ignore = new Button("Continue");
+        ignore.setOnAction(event -> {
+            view.sendMessage(new SendContinueMessage());
+        });
+        this.cstatetree.getChildren().add(ignore);
     }
 
     @Override
@@ -128,46 +139,147 @@ public class VoyageSidePaneTreeFactory implements ClientCardStateVisitor {
         selection.setAlignment(Pos.CENTER);
         selection.setMaxWidth(333);
         selection.setId("voyage-credits-rew-selection");
+        Button refuse = new Button("Refuse reward");
+        refuse.setOnAction(event -> {
+            view.sendMessage(new TakeRewardMessage(false));
+        });
         Button accept = new Button("Take reward");
         accept.setOnAction(event -> {
-            
+            view.sendMessage(new TakeRewardMessage(true));
         });
+        selection.getChildren().addAll(refuse, accept);
+        this.cstatetree.getChildren().add(selection);
     }
 
     @Override
     public void show(ClientCrewPenaltyCardStateDecorator state) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'show'");
+        HBox awaiting = new HBox(10);
+        awaiting.setAlignment(Pos.CENTER);
+        awaiting.setMaxWidth(333);
+        awaiting.getStyleClass().add("voyage-crew-pen-label");
+        Label message = new Label("Crew penalty ["+state.getCrewLost()+" LEFT]: ");
+        ImageView piece = new ImageView("galaxy_trucker_imgs/piece/"+state.getTurn().toString()+".png");
+        awaiting.getChildren().addAll(message, piece);
+        this.cstatetree.getChildren().add(awaiting);
     }
 
     @Override
     public void show(ClientLandingCardStateDecorator state) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'show'");
+        HBox awaiting = new HBox(10);
+        awaiting.setAlignment(Pos.CENTER);
+        awaiting.setMaxWidth(333);
+        awaiting.getStyleClass().add("voyage-landing-label");
+        this.cstatetree.getChildren().add(awaiting);
+        if(state.getCredits()==0 && state.getCrewNeeded() == 0){
+            Label message = new Label("Planet ["+state.getCrewNeeded()+" DAYS]: ");
+            ImageView piece = new ImageView("galaxy_trucker_imgs/piece/"+state.getTurn().toString()+".png");
+            awaiting.getChildren().addAll(message, piece);
+            int i = 0;
+            for(var p : state.getAvailable()){
+                HBox landing_contains = new HBox(10);
+                landing_contains.setAlignment(Pos.CENTER);
+                landing_contains.setMaxWidth(333);
+                Button land = new Button("Land here:");
+                int x = i;
+                land.setOnAction(event -> {
+                    view.sendMessage(new SelectLandingMessage(x));
+                });
+                landing_contains.getChildren().add(land);
+                int k = 0;
+                for(int l : p.getContains()){
+                    for(int j = 0; j < l; j++){
+                        landing_contains.getChildren().add(new CargoPiece(view, null, ShipmentType.fromValue(k+1)));
+                    }
+                    k++;
+                }
+                this.cstatetree.getChildren().add(landing_contains);
+                i++;
+            }
+        } else if (state.getCredits()==0) {
+            Label message = new Label("Abandoned Station ["+state.getCrewNeeded()+" CREW NEEDED/"+state.getDaysTaken()+" DAYS]: ");
+            ImageView piece = new ImageView("galaxy_trucker_imgs/piece/"+state.getTurn().toString()+".png");
+            awaiting.getChildren().addAll(message, piece);
+            int i = 0;
+            for(var p : state.getAvailable()){
+                HBox landing_contains = new HBox(10);
+                landing_contains.setAlignment(Pos.CENTER);
+                landing_contains.setMaxWidth(333);
+                Button land = new Button("Land here:");
+                int x = i;
+                land.setOnAction(event -> {
+                    view.sendMessage(new SelectLandingMessage(x));
+                });
+                landing_contains.getChildren().add(land);
+                int k = 0;
+                for(int l : p.getContains()){
+                    for(int j = 0; j < l; j++){
+                        landing_contains.getChildren().add(new CargoPiece(view, null, ShipmentType.fromValue(k+1)));
+                    }
+                    k++;
+                }
+                this.cstatetree.getChildren().add(landing_contains);
+                i++;
+            }
+        } else {
+            Label message = new Label("Abandoned Ship ["+state.getCrewNeeded()+" CREW NEEDED/"+state.getDaysTaken()+" DAYS]: ");
+            ImageView piece = new ImageView("galaxy_trucker_imgs/piece/"+state.getTurn().toString()+".png");
+            awaiting.getChildren().addAll(message, piece);
+            Button ship_landing = new Button(state.getCredits()+" credits.");
+            ship_landing.setOnAction(event->{
+                view.sendMessage(new SelectLandingMessage(0));
+            });
+            this.cstatetree.getChildren().add(ship_landing);
+        }
+        Button refuse = new Button("Don't land.");
+        refuse.setOnAction(event->{
+            view.sendMessage(new SelectLandingMessage(-1));
+        });
+        this.cstatetree.getChildren().add(refuse);
     }
 
     @Override
     public void show(ClientMeteoriteCardStateDecorator state) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'show'");
+        Label message = new Label(state.getProjectile().getDimension()+" meteor on index: "+normalizeOffset(state.getProjectile().getDirection().getShift(), state.getProjectile().getOffset()));
+        message.setId("meteor-announce-label");
+        this.cstatetree.getChildren().add(message);
+        this.cstatetree.getChildren().add(new ImageView("galaxy_trucker_imgs/piece/meteor_"+(state.getProjectile().getDimension()==ProjectileDimension.BIG?"b":"s")+".png"));
     }
 
     @Override
     public void show(ClientNewCenterCardStateDecorator state) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'show'");
+        HBox awaiting = new HBox(10);
+        awaiting.setAlignment(Pos.CENTER);
+        awaiting.getStyleClass().add("voyage-awaiting-list");
+        Label label = new Label("Awaiting continue from:");
+        awaiting.getChildren().add(label);
+        for(var e : state.getAwaiting()){
+            awaiting.getChildren().add(new ImageView("galaxy_trucker_imgs/piece/"+e.toString()+".png"));
+        }
+        awaiting.setMaxWidth(333);
+        this.cstatetree.getChildren().add(awaiting);
+        SelectBlobPiece p = new SelectBlobPiece();
+        this.cstatetree.getChildren().add(p);
     }
 
     @Override
     public void show(ClientProjectileCardStateDecorator state) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'show'");
+        Label message = new Label(state.getProjectile().getDimension()+" shot on index: "+normalizeOffset(state.getProjectile().getDirection().getShift(), state.getProjectile().getOffset()));
+        message.setId("shot-announce-label");
+        this.cstatetree.getChildren().add(message);
+        this.cstatetree.getChildren().add(new ImageView("galaxy_trucker_imgs/piece/shot_"+(state.getProjectile().getDimension()==ProjectileDimension.BIG?"b":"s")+".png"));
     }
 
     @Override
     public void show(ClientEnemyCardStateDecorator state) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'show'");
     }
+
+    private int normalizeOffset(int shift, int roll) {
+		if (shift % 2 == 0) {
+			if (roll < 4 || roll > 10) return -1;
+			return roll - 4;
+		}
+		if (roll < 5 || roll > 9) return -1;
+		return roll - 5;
+	}
 
 }
