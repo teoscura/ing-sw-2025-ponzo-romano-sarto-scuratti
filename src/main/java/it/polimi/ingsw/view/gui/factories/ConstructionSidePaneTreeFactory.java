@@ -42,11 +42,13 @@ public class ConstructionSidePaneTreeFactory {
         ListView<ImageView> card_list = new ListView();
         ObservableList<ImageView> list = FXCollections.observableArrayList();
         for(int id : state.getConstructionCards()){
-            list.add(new ImageView("galaxy_trucker_imgs/cards/GT-cards-" + id + ".png"));
+            list.add(new ImageView("galaxy_trucker_imgs/cards/GT-card-" + id + ".png"));
         }
+
         card_list.setItems(list);
         Popup popup = new Popup();
         popup.getContent().add(card_list);
+        popup.setAutoFix(true);
         popup.show(root.getScene().getWindow());
     }
 
