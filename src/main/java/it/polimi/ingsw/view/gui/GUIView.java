@@ -1,22 +1,14 @@
 package it.polimi.ingsw.view.gui;
 
 
-import java.time.Duration;
-import java.time.Instant;
 import java.util.ArrayList;
 
 import it.polimi.ingsw.controller.client.ClientController;
 import it.polimi.ingsw.controller.client.state.*;
-import it.polimi.ingsw.controller.server.ClientDescriptor;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.GameModeType;
-import it.polimi.ingsw.model.PlayerCount;
-import it.polimi.ingsw.model.client.components.ClientBaseComponent;
-import it.polimi.ingsw.model.client.components.ClientBatteryComponentDecorator;
-import it.polimi.ingsw.model.client.components.ClientShipmentsComponentDecorator;
-import it.polimi.ingsw.model.client.components.ClientSpaceShip;
 import it.polimi.ingsw.model.client.player.ClientConstructionPlayer;
-import it.polimi.ingsw.model.client.player.ClientWaitingPlayer;
+import it.polimi.ingsw.model.client.player.ClientVerifyPlayer;
 import it.polimi.ingsw.model.client.state.*;
 import it.polimi.ingsw.model.components.BaseComponent;
 import it.polimi.ingsw.model.components.ComponentFactory;
@@ -28,22 +20,18 @@ import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.view.ClientView;
 import it.polimi.ingsw.view.gui.factories.*;
-import it.polimi.ingsw.view.gui.tiles.ConstructionTile;
-import it.polimi.ingsw.view.gui.tiles.PlacedTile;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.StackPane;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 public class GUIView extends Application implements ClientView {
@@ -100,18 +88,26 @@ public class GUIView extends Application implements ClientView {
 			((StorageComponent)c).putIn(ShipmentType.YELLOW);
 			((StorageComponent)c).putIn(ShipmentType.BLUE);
 			((StorageComponent)c).putIn(ShipmentType.GREEN);
+			c = f2.getComponent(55);
+			c.rotate(ComponentRotation.U000);
+			player2.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 5, 4));
+			
 
-			ClientConstructionState s = new ClientConstructionState(GameModeType.TEST, 
+			ClientVerifyState s = new ClientVerifyState(
 				new ArrayList<>(){{
-					add(new ClientConstructionPlayer("Gigio1", PlayerColor.RED, player2.getSpaceShip().getClientSpaceShip(), 10, new ArrayList<>(){{add(2);add(123);}}, false, false));
-					add(new ClientConstructionPlayer("Gigio2", PlayerColor.RED, player2.getSpaceShip().getClientSpaceShip(), 10, new ArrayList<>(){{add(2);}}, false, false));
-					add(new ClientConstructionPlayer("Gigio3", PlayerColor.RED, player2.getSpaceShip().getClientSpaceShip(), 10, new ArrayList<>(){{add(2);}}, false, false));
-				}}, null, 
-				new ArrayList<>(){{add(1); add(2);add(2);add(12);add(80);add(100);}}, 120, 0, 0, null, null);
-
-			var x = ConstructionSidePaneTreeFactory.createSidePane(this, s, view_color);
+					add(new ClientVerifyPlayer("Gigio1", PlayerColor.RED, player2.getSpaceShip().getClientSpaceShip().getVerifyShip(player2.getSpaceShip().bulkVerify()), true, false, false, false, 1));
+					add(new ClientVerifyPlayer("Gigio2", PlayerColor.BLUE, player2.getSpaceShip().getClientSpaceShip().getVerifyShip(player2.getSpaceShip().bulkVerify()), true, true, false, false, 2));
+					add(new ClientVerifyPlayer("Gigio3", PlayerColor.GREEN, player2.getSpaceShip().getClientSpaceShip().getVerifyShip(player2.getSpaceShip().bulkVerify()), true, false, false, false, 3));
+				}});
+	
+			this.view_color = PlayerColor.RED;
+			this.client_state = s;
+			var x = VerifySidePaneTreeFactory.createSidePane(this, s, view_color);
 			this.root.getChildren().add(x);
+			var node = PlacedShipTreeFactory.createPlacedShip(this, player2.getSpaceShip().getClientSpaceShip());
+			this.root.getChildren().add(node);
 			StackPane.setAlignment(x, Pos.CENTER_LEFT);
+			StackPane.setAlignment(node, Pos.CENTER_RIGHT);
 			StackPane.setMargin(x, new Insets(0, 0, 0, 60));
         });
     }
@@ -167,7 +163,6 @@ public class GUIView extends Application implements ClientView {
 			this.root.getChildren().clear();
 			var player = state.getPlayerList().stream().filter(p->p.getUsername().equals(this.state.getUsername())).findFirst().orElse(state.getPlayerList().getFirst());
 
-
 			var x = ConstructionSidePaneTreeFactory.createSidePane(this, state, view_color);
 			this.root.getChildren().add(x);
 			var node = PlacedShipTreeFactory.createPlacedShip(this, player.getShip());
@@ -187,16 +182,14 @@ public class GUIView extends Application implements ClientView {
 			this.root.getChildren().clear();
 			var player = state.getPlayerList().stream().filter(p->p.getUsername().equals(this.state.getUsername())).findFirst().orElse(state.getPlayerList().getFirst());
 
-
-
-			// var x = VerifySidePaneTreeFactory.createSidePane(this, state, view_color);
-			// this.root.getChildren().add(x);
-			// var node = PlacedShipTreeFactory.createPlacedShip(this, player.getShip());
-			// this.root.getChildren().add(node);
-			// StackPane.setAlignment(x, Pos.CENTER_LEFT);
-			// StackPane.setMargin(x, new Insets(0, 0, 0, 60));
-			// StackPane.setMargin(node, new Insets(0, 60, 0, 0));
-			// StackPane.setAlignment(node, Pos.CENTER_RIGHT);
+			var x = VerifySidePaneTreeFactory.createSidePane(this, state, view_color);
+			this.root.getChildren().add(x);
+			var node = PlacedShipTreeFactory.createPlacedShip(this, player.getShip());
+			this.root.getChildren().add(node);
+			StackPane.setAlignment(x, Pos.CENTER_LEFT);
+			StackPane.setMargin(x, new Insets(0, 0, 0, 60));
+			StackPane.setMargin(node, new Insets(0, 60, 0, 0));
+			StackPane.setAlignment(node, Pos.CENTER_RIGHT);
 		});
 	}
 
@@ -245,6 +238,12 @@ public class GUIView extends Application implements ClientView {
 	@Override
 	public void disconnect() {
 		this.state = null;
+	}
+
+	public void selectColor(PlayerColor c){
+		if(c==null || c == PlayerColor.NONE) return;
+		this.view_color = c;
+		this.client_state.sendToView(this);
 	}
 
 

@@ -14,7 +14,7 @@ public class CrewPiece extends DraggablePiece {
     private final ShipCoords coords;
 
     public CrewPiece(GUIView view, ShipCoords starting, AlienType type) {
-        super(PieceImagePathProvider.crew(type));
+        super(PieceImagePathProvider.crew(type), 1);
         this.coords = starting;
 
         this.setOnDragDetected(event -> {

@@ -18,12 +18,18 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+
+//gray: 169 169 169 
 
 public class ConstructionSidePaneTreeFactory {
     
     static public Node createSidePane(GUIView view, ClientConstructionState state, PlayerColor color){
         ClientConstructionPlayer you = state.getPlayerList().stream().filter(p->p.getColor()==color).findAny().orElse(state.getPlayerList().getFirst());
+        StackPane sp = new StackPane();
+        sp.setMaxWidth(333);
+        sp.getChildren().add(new Rectangle(333, 10000, new Color(169/255f,169/255f,169/255f,0.7)));
         VBox res = new VBox(20);
         res.setId("constr-pane-base");
         res.getChildren().add(createMainConstructionTileTree(view, you));
@@ -31,6 +37,7 @@ public class ConstructionSidePaneTreeFactory {
         res.getChildren().add(createDiscardedConstructionTileTree(view, state));
         if(state.getType().getLevel()>1) res.getChildren().add((createLevelTwoAddons(view, state)));
         Button confirm = new Button("Finish building!");
+        confirm.setId("constr-confirm-button");
         confirm.setOnMouseClicked(event -> {
             view.sendMessage(new SendContinueMessage());
         });
@@ -39,7 +46,9 @@ public class ConstructionSidePaneTreeFactory {
         res.setAlignment(Pos.CENTER);
         res.setPrefHeight(10000);
         res.setMaxWidth(333);
-        return res;
+
+        sp.getChildren().add(res);
+        return sp;
     }
 
     static public Node createMainConstructionTileTree(GUIView view, ClientConstructionPlayer p){
@@ -78,7 +87,9 @@ public class ConstructionSidePaneTreeFactory {
         res.setId("constr-leveltwo-addons");
         //TODO: questi.
         Button cards = new Button("Peek the cards");
+        cards.setId("constr-peek-cards");
         Button toggle = new Button("Toggle hourglass");
+        toggle.setId("constr-toggle-hourglass");
         res.getChildren().addAll(cards, toggle);
         return res;
     }
@@ -86,7 +97,17 @@ public class ConstructionSidePaneTreeFactory {
     static public Node createColorSwitchTree(GUIView view, ClientConstructionState state, PlayerColor color){
         HBox res = new HBox();
         res.setId("constr-color-switch");
-        return new ImageView("/galaxy_trucker_imgs/piece/ph.png");
+        for(var p : state.getPlayerList()){
+            if(p.getColor()==color) continue;
+            //TODO: esiste costruttore Button(testo, Node), metterci un node figo.
+            Button b = new Button(p.getColor().toString());
+            b.setOnMouseClicked(event->{
+                view.selectColor(p.getColor());
+            });
+            res.getChildren().add(b);
+        }
+        res.setAlignment(Pos.CENTER);
+        return res;
     }
     
 

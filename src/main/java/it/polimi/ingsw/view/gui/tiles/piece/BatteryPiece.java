@@ -14,7 +14,7 @@ public class BatteryPiece extends DraggablePiece {
     private final ShipCoords coords;
 
     public BatteryPiece(GUIView view, ShipCoords starting){
-        super(PieceImagePathProvider.battery());
+        super(PieceImagePathProvider.battery(), 1);
         if(starting==null) throw new NullPointerException();
         this.coords = starting;
 

@@ -4,11 +4,9 @@ import it.polimi.ingsw.model.components.enums.AlienType;
 import it.polimi.ingsw.model.components.enums.ShipmentType;
 
 public class PieceImagePathProvider {
-    
-    //TODO
 
     static public String destroy(){
-        return "galaxy_trucker_imgs/piece/drill.png";
+        return "galaxy_trucker_imgs/piece/destroy.png";
     }
 
     static public String blob(){

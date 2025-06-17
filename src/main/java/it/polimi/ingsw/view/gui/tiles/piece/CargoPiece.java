@@ -15,7 +15,7 @@ public class CargoPiece extends DraggablePiece {
     private final ShipCoords coords;
 
     public CargoPiece(GUIView view, ShipCoords starting, ShipmentType type){
-        super(PieceImagePathProvider.cargo(type));
+        super(PieceImagePathProvider.cargo(type), 1);
         this.coords = starting;
         this.type = type;
 
