@@ -200,8 +200,7 @@ public class GUIView extends Application implements ClientView {
             if(state.getType().getLevel()==2) root.setBackground(new Background(new BackgroundImage(new Image("title2.jpg"), BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
 			this.root.getChildren().clear();
 			var player = state.getPlayerList().stream().filter(p->p.getUsername().equals(this.state.getUsername())).findFirst().orElse(state.getPlayerList().getFirst());
-
-			// var x = VoyageSidePaneTreeFactory.createSidePane(this, state, view_color);
+			var x = VoyageSidePaneTreeFactory.createSidePane(this, state, view_color);
 			// this.root.getChildren().add(x);
 			// var node = PlacedShipTreeFactory.createPlacedShip(this, player.getShip());
 			// this.root.getChildren().add(node);
