@@ -2,28 +2,28 @@ package it.polimi.ingsw.view.gui.factories;
 
 import it.polimi.ingsw.message.server.ToggleHourglassMessage;
 import it.polimi.ingsw.message.server.SendContinueMessage;
+import it.polimi.ingsw.message.server.TakeComponentMessage;
 import it.polimi.ingsw.model.client.player.ClientConstructionPlayer;
 import it.polimi.ingsw.model.client.state.ClientConstructionState;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.view.gui.GUIView;
 import it.polimi.ingsw.view.gui.tiles.ConstructionTile;
 import javafx.animation.AnimationTimer;
-import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 import javafx.stage.Popup;
 
 import java.time.Duration;
@@ -42,7 +42,7 @@ public class ConstructionSidePaneTreeFactory {
         ListView<ImageView> card_list = new ListView();
         ObservableList<ImageView> list = FXCollections.observableArrayList();
         for(int id : state.getConstructionCards()){
-            list.add(new ImageView("galaxy_trucker_imgs/cards/GT-card-" + id + ".png"));
+            list.add(new ImageView("galaxy_trucker_imgs/cards/GT-card-" + id + ".jpg"));
         }
 
         card_list.setItems(list);
@@ -77,7 +77,7 @@ public class ConstructionSidePaneTreeFactory {
         sp.getChildren().add(new Rectangle(333, 10000, new Color(169/255f,169/255f,169/255f,0.7)));
         VBox res = new VBox(20);
         res.setId("constr-pane-base");
-        res.getChildren().add(createMainConstructionTileTree(view, you));
+        res.getChildren().add(createMainConstructionTileTree(view, you, state.getTilesLeft()));
         res.getChildren().add(createReservedConstructionTileTree(view, you));
         res.getChildren().add(createDiscardedConstructionTileTree(view, state));
         if(state.getType().getLevel()>1) res.getChildren().add((createLevelTwoAddons(view, state, root)));
@@ -96,10 +96,17 @@ public class ConstructionSidePaneTreeFactory {
         return sp;
     }
 
-    static public Node createMainConstructionTileTree(GUIView view, ClientConstructionPlayer p){
+    static public Node createMainConstructionTileTree(GUIView view, ClientConstructionPlayer p, int left){
         StackPane sp = new StackPane();
         sp.setMaxHeight(120);
         sp.setMaxWidth(120);
+        Button pickb = new Button("Take Component: ["+left+" LEFT]");
+        pickb.setOnAction(event->{
+            view.sendMessage(new TakeComponentMessage());
+        });
+        pickb.setId("constr-pick-button");
+        sp.getChildren().add(pickb);
+        if(p.getCurrent()==-1) return sp;
         sp.getChildren().add(new ImageView("galaxy_trucker_imgs/tiles/transparent/bg.png"));
         sp.getChildren().add(new ConstructionTile(view, p.getCurrent(), false, true, 1.0));
         return sp;
@@ -129,8 +136,8 @@ public class ConstructionSidePaneTreeFactory {
 
     static public Node createLevelTwoAddons(GUIView view, ClientConstructionState state, Node root){
         HBox res = new HBox(30);
+        res.setAlignment(Pos.CENTER);
         res.setId("constr-leveltwo-addons");
-        //TODO: questi.
         Button cards = new Button("Peek the cards");
         cards.setOnAction(e -> showCards(view, state, root));
         cards.setId("constr-peek-cards");
@@ -143,16 +150,19 @@ public class ConstructionSidePaneTreeFactory {
     }
 
     static public Node createColorSwitchTree(GUIView view, ClientConstructionState state, PlayerColor color){
-        HBox res = new HBox();
+        
+        HBox res = new HBox(20);
+        Label lab = new Label("View: ");
+        lab.setFont(new Font(18));
+        res.getChildren().add(lab);
         res.setId("constr-color-switch");
         for(var p : state.getPlayerList()){
             if(p.getColor()==color) continue;
-            //TODO: esiste costruttore Button(testo, Node), metterci un node figo.
-            Button b = new Button(p.getColor().toString());
-            b.setOnMouseClicked(event->{
+            ImageView v = new ImageView("galaxy_trucker_imgs/piece/"+p.getColor()+".png");
+            v.setOnMouseClicked(event->{
                 view.selectColor(p.getColor());
             });
-            res.getChildren().add(b);
+            res.getChildren().add(v);
         }
         res.setAlignment(Pos.CENTER);
         return res;

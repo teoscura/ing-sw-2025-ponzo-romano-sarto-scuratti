@@ -1,14 +1,37 @@
 package it.polimi.ingsw.view.gui;
 
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 
 import it.polimi.ingsw.controller.client.ClientController;
 import it.polimi.ingsw.controller.client.state.*;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.GameModeType;
+import it.polimi.ingsw.model.cards.PlanetCard;
+import it.polimi.ingsw.model.cards.utils.CombatZoneCriteria;
+import it.polimi.ingsw.model.cards.utils.CombatZonePenalty;
+import it.polimi.ingsw.model.cards.utils.CombatZoneSection;
+import it.polimi.ingsw.model.cards.utils.Planet;
+import it.polimi.ingsw.model.cards.utils.Projectile;
+import it.polimi.ingsw.model.cards.utils.ProjectileDimension;
+import it.polimi.ingsw.model.cards.utils.ProjectileDirection;
+import it.polimi.ingsw.model.client.card.ClientAwaitConfirmCardStateDecorator;
+import it.polimi.ingsw.model.client.card.ClientBaseCardState;
+import it.polimi.ingsw.model.client.card.ClientCardState;
+import it.polimi.ingsw.model.client.card.ClientCargoPenaltyCardStateDecorator;
+import it.polimi.ingsw.model.client.card.ClientCargoRewardCardStateDecorator;
+import it.polimi.ingsw.model.client.card.ClientCombatZoneIndexCardStateDecorator;
+import it.polimi.ingsw.model.client.card.ClientCreditsRewardCardStateDecorator;
+import it.polimi.ingsw.model.client.card.ClientCrewPenaltyCardStateDecorator;
+import it.polimi.ingsw.model.client.card.ClientEnemyCardStateDecorator;
+import it.polimi.ingsw.model.client.card.ClientLandingCardStateDecorator;
+import it.polimi.ingsw.model.client.card.ClientMeteoriteCardStateDecorator;
+import it.polimi.ingsw.model.client.card.ClientNewCenterCardStateDecorator;
 import it.polimi.ingsw.model.client.player.ClientConstructionPlayer;
 import it.polimi.ingsw.model.client.player.ClientVerifyPlayer;
+import it.polimi.ingsw.model.client.player.ClientVoyagePlayer;
 import it.polimi.ingsw.model.client.state.*;
 import it.polimi.ingsw.model.components.BaseComponent;
 import it.polimi.ingsw.model.components.ComponentFactory;
@@ -63,52 +86,10 @@ public class GUIView extends Application implements ClientView {
     public void show(TitleScreenState state) {
 		Platform.runLater(() -> {
 			root.setBackground(new Background(new BackgroundImage(new Image("title1.jpg"), BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
-
-			Player player2 = new Player(GameModeType.TEST, "p2", PlayerColor.RED);
-			BaseComponent c;
-			ComponentFactory f2 = new ComponentFactory();
-			c = f2.getComponent(14);
-			c.rotate(ComponentRotation.U000);
-			player2.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 3, 3));
-			c = f2.getComponent(126);
-			c.rotate(ComponentRotation.U000);
-			player2.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 3, 1));
-			c = f2.getComponent(132);
-			c.rotate(ComponentRotation.U000);
-			player2.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 4, 2));
-			c = f2.getComponent(128);
-			c.rotate(ComponentRotation.U000);
-			player2.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 2, 2));
-			c = f2.getComponent(118);
-			c.rotate(ComponentRotation.U000);
-			player2.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 5, 2));
-			c = f2.getComponent(30);
-			c.rotate(ComponentRotation.U000);
-			player2.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 5, 3));
-			((StorageComponent)c).putIn(ShipmentType.YELLOW);
-			((StorageComponent)c).putIn(ShipmentType.BLUE);
-			((StorageComponent)c).putIn(ShipmentType.GREEN);
-			c = f2.getComponent(55);
-			c.rotate(ComponentRotation.U000);
-			player2.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 5, 4));
-
-
-			ClientVerifyState s = new ClientVerifyState(
-				new ArrayList<>(){{
-					add(new ClientVerifyPlayer("Gigio1", PlayerColor.RED, player2.getSpaceShip().getClientSpaceShip().getVerifyShip(player2.getSpaceShip().bulkVerify()), true, false, false, false, 1));
-					add(new ClientVerifyPlayer("Gigio2", PlayerColor.BLUE, player2.getSpaceShip().getClientSpaceShip().getVerifyShip(player2.getSpaceShip().bulkVerify()), true, true, false, false, 2));
-					add(new ClientVerifyPlayer("Gigio3", PlayerColor.GREEN, player2.getSpaceShip().getClientSpaceShip().getVerifyShip(player2.getSpaceShip().bulkVerify()), true, false, false, false, 3));
-				}});
-
-			this.view_color = PlayerColor.RED;
-			this.client_state = s;
-			var x = VerifySidePaneTreeFactory.createSidePane(this, s, view_color);
-			this.root.getChildren().add(x);
-			var node = PlacedShipTreeFactory.createPlacedShip(this, player2.getSpaceShip().getClientSpaceShip());
-			this.root.getChildren().add(node);
-			StackPane.setAlignment(x, Pos.CENTER_LEFT);
-			StackPane.setAlignment(node, Pos.CENTER_RIGHT);
-			StackPane.setMargin(x, new Insets(0, 0, 0, 60));
+			this.root.getChildren().clear();
+            var node = TitleScreenTreeFactory.createTitleScreen(state);
+            this.root.getChildren().add(node);
+            StackPane.setAlignment(node, Pos.CENTER);
         });
     }
 

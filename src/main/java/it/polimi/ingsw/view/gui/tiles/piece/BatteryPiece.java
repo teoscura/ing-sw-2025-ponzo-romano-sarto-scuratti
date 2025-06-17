@@ -15,10 +15,10 @@ public class BatteryPiece extends DraggablePiece {
 
     public BatteryPiece(GUIView view, ShipCoords starting){
         super(PieceImagePathProvider.battery(), 1);
-        if(starting==null) throw new NullPointerException();
         this.coords = starting;
 
         this.setOnDragDetected(event -> {
+            if(starting==null) return;
             Dragboard db = this.startDragAndDrop(TransferMode.ANY);
             var cb = new ClipboardContent();
             cb.putString(this.toString());
@@ -29,6 +29,7 @@ public class BatteryPiece extends DraggablePiece {
         });
 
         this.setOnDragDone(event->{
+            if(starting==null) return;
             if(event.isDropCompleted()) return;
             this.setVisible(true);
         });

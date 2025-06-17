@@ -11,6 +11,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 
 public class TitleScreenTreeFactory {
     
@@ -19,16 +20,15 @@ public class TitleScreenTreeFactory {
         TextField input = new TextField();
 
         Label prompt = new Label("Insert Username: ");
+        prompt.setFont(new Font(30));
+
         input.setMaxWidth(300);
         var image = new ImageView("galaxy_trucker_imgs/logos/galaxy_trucker_logo_med.png");
         image.setFitWidth(550);
         image.setFitHeight(500);
         Button confirm = new Button("Confirm");
-        confirm.setOnMouseClicked(new EventHandler<MouseEvent>() {
-             @Override public void handle(MouseEvent e) {
-                if(e.getClickCount()!=1) return;
-                state.setUsername(input.getText());
-            }
+        confirm.setOnAction(event -> {
+            state.setUsername(input.getText());
         });
         VBox res = new VBox(10, image, prompt, input, confirm);
         res.setAlignment(Pos.CENTER);
