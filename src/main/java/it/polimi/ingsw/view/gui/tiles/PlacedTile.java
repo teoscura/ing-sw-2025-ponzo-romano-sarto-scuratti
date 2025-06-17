@@ -9,7 +9,6 @@ import it.polimi.ingsw.view.gui.tiles.piece.DraggablePiece;
 import it.polimi.ingsw.view.gui.tiles.piece.DraggablePieceDecoder;
 import javafx.geometry.Pos;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.DataFormat;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.StackPane;
 
@@ -19,7 +18,7 @@ public class PlacedTile extends ComponentTile {
     private final ArrayList<DraggablePiece> tiles;
 
     public PlacedTile(GUIView view, String path, ShipCoords coords){
-        super(path);
+        super(path, 1.0);
         this.coords = coords;
         tiles = new ArrayList<>();
 

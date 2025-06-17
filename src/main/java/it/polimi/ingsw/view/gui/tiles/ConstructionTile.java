@@ -14,8 +14,8 @@ public class ConstructionTile extends ComponentTile {
     private final Integer ID;
     private ComponentRotation rotation;
 
-    public ConstructionTile(GUIView view, Integer ID, boolean discarded, boolean primary){
-        super("galaxy_trucker_imgs/tiles/GT-tile-" + ID + ".jpg");
+    public ConstructionTile(GUIView view, Integer ID, boolean discarded, boolean primary, double scale){
+        super("galaxy_trucker_imgs/tiles/transparent/GT-tile-" + ID + "_transparent.png", scale);
         this.ID = ID;
         this.rotation = ComponentRotation.U000;
 
@@ -51,6 +51,8 @@ public class ConstructionTile extends ComponentTile {
         });
 
     }
+
+    
 
     public ComponentRotation getRotation(){
         return this.rotation;
