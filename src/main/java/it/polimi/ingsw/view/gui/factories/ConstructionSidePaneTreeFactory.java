@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view.gui.factories;
 
+import it.polimi.ingsw.message.server.SendContinueMessage;
 import it.polimi.ingsw.model.client.player.ClientConstructionPlayer;
 import it.polimi.ingsw.model.client.state.ClientConstructionState;
 import it.polimi.ingsw.model.player.PlayerColor;
@@ -29,6 +30,11 @@ public class ConstructionSidePaneTreeFactory {
         res.getChildren().add(createReservedConstructionTileTree(view, you));
         res.getChildren().add(createDiscardedConstructionTileTree(view, state));
         if(state.getType().getLevel()>1) res.getChildren().add((createLevelTwoAddons(view, state)));
+        Button confirm = new Button("Finish building!");
+        confirm.setOnMouseClicked(event -> {
+            view.sendMessage(new SendContinueMessage());
+        });
+        res.getChildren().add(confirm);
         res.getChildren().add(createColorSwitchTree(view, state, color));
         res.setAlignment(Pos.CENTER);
         res.setPrefHeight(10000);

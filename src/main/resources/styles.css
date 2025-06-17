@@ -2,3 +2,7 @@
     -fx-border-color: white;
     -fx-border-width: 2px;
 }
+
+.costr-pane-base {
+    background-color: darkgrey;
+}

@@ -7,6 +7,14 @@ public class PieceImagePathProvider {
     
     //TODO
 
+    static public String destroy(){
+        return "galaxy_trucker_imgs/piece/drill.png";
+    }
+
+    static public String blob(){
+        return "galaxy_trucker_imgs/piece/pointing.png";
+    }
+
     static public String crew(AlienType type){
         switch(type){
             case BROWN:

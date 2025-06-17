@@ -97,10 +97,10 @@ public class TerminalWrapper {
 	}
 
 	/**
-	 * Returns a {@link KeyMap} properly set up for the inputs the {@link TUIView} requires.
+	 * Returns a keymap properly set up for the inputs the {@link TUIView} requires.
 	 * 
 	 * @param view {@link TUIView} View that will be notified of ESC/Enter keypresses.
-	 * @return {@link KeyMap} A properly set-up keymap.
+	 * @return A properly set-up keymap.
 	 */
 	private KeyMap<Widget> setupBindings(TUIView view) {
 		KeyMap<Widget> km = new KeyMap<>();

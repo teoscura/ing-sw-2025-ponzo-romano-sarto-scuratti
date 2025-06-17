@@ -26,7 +26,8 @@ public class ConstructionTile extends ComponentTile {
             cb.putString(this.toString());
             db.setContent(cb);
             event.consume();
-            db.setDragView(this.image.getImage(), 20.0, 20.0);
+            var img = this.image.getImage();
+            db.setDragView(img, 20.0, 20.0);
             this.setVisible(false);
         });
 
@@ -52,7 +53,7 @@ public class ConstructionTile extends ComponentTile {
 
     }
 
-    
+
 
     public ComponentRotation getRotation(){
         return this.rotation;
