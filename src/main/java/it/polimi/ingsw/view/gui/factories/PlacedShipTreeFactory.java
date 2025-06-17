@@ -28,7 +28,6 @@ public class PlacedShipTreeFactory {
         res.setMaxHeight(500);
 
         res.setOnDragDropped(event -> {
-            System.out.println("Drag received`.");
             var src = event.getGestureSource();
             var node = event.getPickResult().getIntersectedNode();
             if(src==null || node == null) return;
@@ -43,7 +42,6 @@ public class PlacedShipTreeFactory {
         });
 
         res.setOnDragOver(event -> {
-            System.out.println("Drag detected.");
             event.acceptTransferModes(TransferMode.ANY);
             event.consume();
         });

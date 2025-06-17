@@ -4,10 +4,12 @@ import it.polimi.ingsw.message.server.DiscardComponentMessage;
 import it.polimi.ingsw.message.server.TakeDiscardedComponentMessage;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.view.gui.GUIView;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.TransferMode;
+import javafx.scene.paint.Color;
 
 public class ConstructionTile extends ComponentTile {
     
@@ -26,8 +28,10 @@ public class ConstructionTile extends ComponentTile {
             cb.putString(this.toString());
             db.setContent(cb);
             event.consume();
-            var img = this.image.getImage();
-            db.setDragView(img, 20.0, 20.0);
+            SnapshotParameters parameters = new SnapshotParameters();
+            parameters.setFill(Color.TRANSPARENT);
+            var dragged = this.image.snapshot(parameters, null);
+            db.setDragView(dragged, 20.0, 20.0);
             this.setVisible(false);
         });
 

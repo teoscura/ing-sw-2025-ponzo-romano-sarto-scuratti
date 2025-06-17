@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view.gui.factories;
 
 import it.polimi.ingsw.message.server.ToggleHourglassMessage;
+import it.polimi.ingsw.message.server.ReserveComponentMessage;
 import it.polimi.ingsw.message.server.SendContinueMessage;
 import it.polimi.ingsw.message.server.TakeComponentMessage;
 import it.polimi.ingsw.model.client.player.ClientConstructionPlayer;
@@ -39,13 +40,26 @@ public class ConstructionSidePaneTreeFactory {
     }
 
     public static void showCards(GUIView view, ClientConstructionState state, Node root){
-        ListView<ImageView> card_list = new ListView();
-        ObservableList<ImageView> list = FXCollections.observableArrayList();
+        // ListView<ImageView> card_list = new ListView<>();
+        // ObservableList<ImageView> list = FXCollections.observableArrayList();
+        // for(int id : state.getConstructionCards()){
+        //     var t = new ImageView("galaxy_trucker_imgs/cards/GT-card-" + id + ".jpg");
+        //     t.setScaleX(0.5);
+        //     t.setScaleY(0.5);
+        //     list.add(t);
+        // }
+        // card_list.setOrientation(Orientation.HORIZONTAL);
+        // card_list.setMaxWidth(1000);
+        // card_list.setItems(list);
+        HBox card_list = new HBox(10);
         for(int id : state.getConstructionCards()){
-            list.add(new ImageView("galaxy_trucker_imgs/cards/GT-card-" + id + ".jpg"));
+            ImageView t = new ImageView("galaxy_trucker_imgs/cards/GT-card-" + id + ".jpg");
+            t.setScaleX(0.5);
+            t.maxWidth(0.5*t.getFitWidth());
+            t.setScaleY(0.5);
+            t.maxWidth(0.5*t.getFitHeight());
+            card_list.getChildren().add(t);
         }
-
-        card_list.setItems(list);
         Popup popup = new Popup();
         popup.getContent().add(card_list);
         popup.setAutoFix(true);
@@ -99,16 +113,25 @@ public class ConstructionSidePaneTreeFactory {
     static public Node createMainConstructionTileTree(GUIView view, ClientConstructionPlayer p, int left){
         StackPane sp = new StackPane();
         sp.setMaxHeight(120);
-        sp.setMaxWidth(120);
-        Button pickb = new Button("Take Component: ["+left+" LEFT]");
-        pickb.setOnAction(event->{
-            view.sendMessage(new TakeComponentMessage());
-        });
-        pickb.setId("constr-pick-button");
-        sp.getChildren().add(pickb);
-        if(p.getCurrent()==-1) return sp;
-        sp.getChildren().add(new ImageView("galaxy_trucker_imgs/tiles/transparent/bg.png"));
-        sp.getChildren().add(new ConstructionTile(view, p.getCurrent(), false, true, 1.0));
+        sp.setMaxWidth(120);;
+        if(p.getCurrent()==-1){
+            Button pickb = new Button("Take Component: ["+left+" LEFT]");
+            pickb.setOnAction(event->{
+                view.sendMessage(new TakeComponentMessage());
+            });
+            pickb.setId("constr-pick-button");
+            sp.getChildren().add(pickb);
+            
+        } else {
+            sp.getChildren().add(new ImageView("galaxy_trucker_imgs/tiles/transparent/bg.png"));
+            sp.getChildren().add(new ConstructionTile(view, p.getCurrent(), false, true, 1.0));
+            Button res = new Button("Reserve Component");
+            res.setOnAction(event -> {
+                view.sendMessage(new ReserveComponentMessage());
+            });
+            res.setId("constr-reserve-button");
+            sp.getChildren().add(res);
+        }
         return sp;
     }
 

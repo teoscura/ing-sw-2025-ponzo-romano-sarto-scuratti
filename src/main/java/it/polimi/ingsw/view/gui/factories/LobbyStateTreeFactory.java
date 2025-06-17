@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view.gui.factories;
 
+import it.polimi.ingsw.message.server.EnterLobbyMessage;
 import it.polimi.ingsw.message.server.EnterSetupMessage;
 import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.client.state.ClientLobbySelectState;
@@ -28,7 +29,7 @@ public class LobbyStateTreeFactory {
 			l.add(getEntry(e.getModelId(), e.getType(), e.getPlayers(), view));
 		}
 		list.setItems(l);
-		list.setMaxWidth(400);
+		list.setMaxWidth(700);
 		Button confirm = new Button("Enter Setup");
 		confirm.setOnMouseClicked(event -> {
 			view.sendMessage(new EnterSetupMessage());
@@ -44,7 +45,6 @@ public class LobbyStateTreeFactory {
         res.setMaxWidth(400);
         res.setMaxHeight(90);
          
-        
         Color fill = t.getLevel()==2 ? new Color(163/255f, 5/255f, 63/255f, 1.0): new Color(13/255f, 88/255f, 209/255f, 1.0);
         Rectangle icon = new Rectangle(450, 150, fill);
         String emoji = t.getLevel() == 2 ? "  🚀  " : "  🛰️  ";
@@ -61,6 +61,9 @@ public class LobbyStateTreeFactory {
         res.getChildren().addAll(icon, decorator, l);
         StackPane.setAlignment(icon, Pos.CENTER);
         StackPane.setAlignment(decorator, Pos.CENTER_LEFT);
+        res.setOnMouseClicked(event -> {
+            view.sendMessage(new EnterLobbyMessage(id));
+        });
         return res;
     }
 
