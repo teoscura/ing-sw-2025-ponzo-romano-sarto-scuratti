@@ -1,6 +1,10 @@
 package it.polimi.ingsw.view.gui;
 
 
+import java.time.Duration;
+import java.time.Instant;
+import java.util.ArrayList;
+
 import it.polimi.ingsw.controller.client.ClientController;
 import it.polimi.ingsw.controller.client.state.*;
 import it.polimi.ingsw.controller.server.ClientDescriptor;
@@ -9,6 +13,8 @@ import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.client.components.ClientBaseComponent;
 import it.polimi.ingsw.model.client.components.ClientBatteryComponentDecorator;
 import it.polimi.ingsw.model.client.components.ClientShipmentsComponentDecorator;
+import it.polimi.ingsw.model.client.components.ClientSpaceShip;
+import it.polimi.ingsw.model.client.player.ClientConstructionPlayer;
 import it.polimi.ingsw.model.client.state.*;
 import it.polimi.ingsw.model.components.BaseComponent;
 import it.polimi.ingsw.model.components.ComponentFactory;
@@ -32,6 +38,7 @@ import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.StackPane;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 public class GUIView extends Application implements ClientView {
@@ -39,12 +46,14 @@ public class GUIView extends Application implements ClientView {
     private StackPane root;
     private ClientState client_state;
     private ConnectedState state;
+	private PlayerColor view_color;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("Galaxy Trucker");
         root = new StackPane();
-        Scene scene = new Scene(root, 1600, 900);
+        Scene scene = new Scene(root, 1368, 768);
+		scene.getStylesheets().add("styles.css");
         primaryStage.setScene(scene);
         primaryStage.show();
         new ClientController(this);
@@ -59,10 +68,10 @@ public class GUIView extends Application implements ClientView {
 
     @Override
     public void show(TitleScreenState state) {
-        Platform.runLater(() -> {
-			Player player2 = new Player(GameModeType.TEST, "p2", PlayerColor.RED);
-			BaseComponent c;
+		Platform.runLater(() -> {
+			Player player2; BaseComponent c;
 			ComponentFactory f2 = new ComponentFactory();
+			player2 = new Player(GameModeType.TEST, "p2", PlayerColor.RED);
 			c = f2.getComponent(14);
 			c.rotate(ComponentRotation.U000);
 			player2.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 3, 3));
@@ -78,24 +87,28 @@ public class GUIView extends Application implements ClientView {
 			c = f2.getComponent(118);
 			c.rotate(ComponentRotation.U000);
 			player2.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 5, 2));
-			c = f2.getComponent(30);
-			c.rotate(ComponentRotation.U000);
-			player2.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 5, 3));
-			((StorageComponent)c).putIn(ShipmentType.YELLOW);
-			((StorageComponent)c).putIn(ShipmentType.BLUE);
-			((StorageComponent)c).putIn(ShipmentType.GREEN);
-			var node = PlacedShipTreeFactory.createPlacedShip(this, player2.getSpaceShip().getClientSpaceShip());
-			root.getChildren().add(node);
-
-			ConstructionTile ct1 = new ConstructionTile(this, 101, true, false);
-			root.getChildren().addAll(ct1);
+			ClientSpaceShip ship = player2.getSpaceShip().getClientSpaceShip();
+			var discarded = new ArrayList<Integer>(){{add(1);add(3);add(14);add(99);add(100);}};
+			var construction = new ArrayList<Integer>(){{add(1);add(3);add(14);}};
+			var playerlist = new ArrayList<ClientConstructionPlayer>(){{
+				add(new ClientConstructionPlayer("Gigio", PlayerColor.RED, ship, -1, new ArrayList<Integer>(){{add(3);}}, false, false));
+				add(new ClientConstructionPlayer("Gigio2", PlayerColor.BLUE, ship, 120, new ArrayList<Integer>(){{add(3);}}, false, false));
+				add(new ClientConstructionPlayer("Gigio3", PlayerColor.GREEN, ship, 120, new ArrayList<Integer>(){{add(3);}}, false, false));
+			}};
+			ClientConstructionState test = new ClientConstructionState(GameModeType.TEST, playerlist, construction, discarded, 123, 3, 2, Duration.ofSeconds(123), Instant.now());
+			this.view_color = PlayerColor.RED;
+			var x = ConstructionSidePaneTreeFactory.createSidePane(this, test, view_color);
+			this.root.getChildren().add(x);
+			var node = PlacedShipTreeFactory.createPlacedShip(this, ship);
+			this.root.getChildren().add(node);
+			StackPane.setAlignment(x, Pos.CENTER_LEFT);
 			StackPane.setAlignment(node, Pos.CENTER_RIGHT);
-			StackPane.setAlignment(ct1, Pos.TOP_CENTER);
 			// root.setBackground(new Background(new BackgroundImage(new Image("title1.jpg"), BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
             // this.root.getChildren().clear();
             // var node = TitleScreenTreeFactory.createTitleScreen(state);
             // this.root.getChildren().add(node);
             // StackPane.setAlignment(node, Pos.CENTER);
+
         });
     }
 
@@ -144,6 +157,7 @@ public class GUIView extends Application implements ClientView {
 		Platform.runLater(() -> {
             if(state.getType().getLevel()==2) root.setBackground(new Background(new BackgroundImage(new Image("title2.jpg"), BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
 			this.root.getChildren().clear();
+			this.view_color = state.getPlayerList().stream().filter(p->p.getUsername().equals(this.state.getUsername())).map(p->p.getColor()).findFirst().orElse(PlayerColor.RED);
 
 		});
 	}
@@ -153,6 +167,7 @@ public class GUIView extends Application implements ClientView {
 		Platform.runLater(() -> {
             if(state.getPlayerList().getFirst().getShip().getType().getLevel()==2) root.setBackground(new Background(new BackgroundImage(new Image("title2.jpg"), BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
 			this.root.getChildren().clear();
+			this.view_color = state.getPlayerList().stream().filter(p->p.getUsername().equals(this.state.getUsername())).map(p->p.getColor()).findFirst().orElse(PlayerColor.RED);
 
 		});
 	}
@@ -162,6 +177,8 @@ public class GUIView extends Application implements ClientView {
 		Platform.runLater(() -> {
             if(state.getType().getLevel()==2) root.setBackground(new Background(new BackgroundImage(new Image("title2.jpg"), BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
 			this.root.getChildren().clear();
+			this.view_color = state.getPlayerList().stream().filter(p->p.getUsername().equals(this.state.getUsername())).map(p->p.getColor()).findFirst().orElse(PlayerColor.RED);
+
 		});
 	}
 
@@ -192,5 +209,32 @@ public class GUIView extends Application implements ClientView {
 	public void disconnect() {
 		this.state = null;
 	}
+
+	// Player player2 = new Player(GameModeType.TEST, "p2", PlayerColor.RED);
+	// BaseComponent c;
+	// ComponentFactory f2 = new ComponentFactory();
+	// c = f2.getComponent(14);
+	// c.rotate(ComponentRotation.U000);
+	// player2.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 3, 3));
+	// c = f2.getComponent(126);
+	// c.rotate(ComponentRotation.U000);
+	// player2.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 3, 1));
+	// c = f2.getComponent(132);
+	// c.rotate(ComponentRotation.U000);
+	// player2.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 4, 2));
+	// c = f2.getComponent(128);
+	// c.rotate(ComponentRotation.U000);
+	// player2.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 2, 2));
+	// c = f2.getComponent(118);
+	// c.rotate(ComponentRotation.U000);
+	// player2.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 5, 2));
+	// c = f2.getComponent(30);
+	// c.rotate(ComponentRotation.U000);
+	// player2.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 5, 3));
+	// ((StorageComponent)c).putIn(ShipmentType.YELLOW);
+	// ((StorageComponent)c).putIn(ShipmentType.BLUE);
+	// ((StorageComponent)c).putIn(ShipmentType.GREEN);
+	// var node = PlacedShipTreeFactory.createPlacedShip(this, player2.getSpaceShip().getClientSpaceShip());
+	// root.getChildren().add(node);
 
 }

@@ -1,10 +1,8 @@
 package it.polimi.ingsw.view.gui.tiles.piece;
 
-import it.polimi.ingsw.message.server.DiscardCargoMessage;
 import it.polimi.ingsw.message.server.RemoveCrewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.components.enums.AlienType;
-import it.polimi.ingsw.model.components.enums.ShipmentType;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.view.gui.GUIView;
 import javafx.scene.input.ClipboardContent;

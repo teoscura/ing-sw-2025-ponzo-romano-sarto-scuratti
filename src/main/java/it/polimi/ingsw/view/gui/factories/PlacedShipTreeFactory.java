@@ -24,7 +24,8 @@ public class PlacedShipTreeFactory {
                 res.add(f.createTile(tmp, ship.getComponent(tmp)), i, j, 1, 1);
             }
         }
-        res.setMaxSize(700, 500);
+        res.setMaxWidth(700);
+        res.setMaxHeight(500);
 
         res.setOnDragDropped(event -> {
             System.out.println("Drag received`.");

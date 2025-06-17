@@ -46,9 +46,11 @@ public class PlacedTile extends ComponentTile {
     }
 
     public void addToList(DraggablePiece piece){
+        piece.getStyleClass().add("draggable-piece");
         this.getChildren().add(piece);
         StackPane.setAlignment(piece, Pos.BOTTOM_RIGHT);
-        piece.setTranslateX(-40*tiles.size());
+        piece.setTranslateX(-30*tiles.size()+7);
+        piece.setTranslateY(3);
         this.tiles.add(piece);
     }
 
