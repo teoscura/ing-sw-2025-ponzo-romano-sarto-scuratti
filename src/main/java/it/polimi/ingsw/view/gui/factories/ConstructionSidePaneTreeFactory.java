@@ -49,6 +49,7 @@ public class ConstructionSidePaneTreeFactory {
         Popup popup = new Popup();
         popup.getContent().add(card_list);
         popup.setAutoFix(true);
+        popup.setAutoHide(true);
         popup.show(root.getScene().getWindow());
     }
 
