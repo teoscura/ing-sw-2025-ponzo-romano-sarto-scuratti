@@ -3,6 +3,11 @@
     src: url('font.ttf');
 }
 
+@font-face {
+    font-family: 'Roboto Mono';
+    src: url('fontbold.ttf');
+}
+
 .costr-pane-base {
     background-color: darkgrey;
 }
@@ -10,15 +15,66 @@
 .ui-rectangle {
     -fx-arc-width: 15;
     -fx-arc-height: 15;
+    -fx-stroke: white;
+    -fx-stroke-width: 3;
 }
 
 .label {
     -fx-font-size: 17px;
     -fx-text-fill: rgb(82, 255, 90);
-    -fx-stroke-width: 2;
+    -fx-stroke-width: 4;
     -fx-font-family: Roboto Mono;
 }
 
-#ship-bg-img {
-    -fx-corner-radius: 10px
+.list-label {
+    -fx-font-size: 23px;
+    -fx-text-fill: rgb(255, 255, 255);
+    -fx-font-style: bold;
 }
+
+.list-label-big {
+    -fx-font-size: 40px;
+    -fx-font-style: bold;
+    -fx-text-fill: rgb(255, 255, 255);
+}
+
+.list-red-bg {
+    -fx-fill: #a10005;
+    -fill: #a10005;
+}   
+
+.list-red-faint {
+    -fx-fill: #fc5361;
+    -fill: #fc5361;
+}
+
+.list-blue-bg {
+    -fx-fill: #5e72f7;
+    -fill: #5e72f7;
+}
+
+.list-blue-faint {
+    -fx-fill: #53a5fc;
+    -fill: #53a5fc;
+}
+
+.list-green-bg {
+    -fx-fill: #2eb062;
+    -fill: #2eb062;
+}
+
+.list-green-faint {
+    -fx-fill: #8fffe5;
+    -fill: #8fffe5;
+}
+
+.list-yellow-bg {
+    -fx-fill: #ccc502;
+    -fill: #ccc502;
+}
+
+.list-yellow-faint {
+    -fx-fill: #fcee68;
+    -fill: #fcee68;
+}
+

@@ -1,11 +1,13 @@
 package it.polimi.ingsw.view.gui.factories;
 
+import it.polimi.ingsw.message.server.SendContinueMessage;
 import it.polimi.ingsw.model.client.player.ClientEndgamePlayer;
 import it.polimi.ingsw.model.client.state.ClientEndgameState;
 import it.polimi.ingsw.model.components.enums.ShipmentType;
 import it.polimi.ingsw.view.gui.GUIView;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -24,6 +26,11 @@ public class EndgameTreeFactory {
         }
         list.setAlignment(Pos.CENTER);
         list.getChildren().add(awaiting(state));
+        Button leave = new Button("Motion to leave.");
+        leave.setOnAction(event -> {
+            view.sendMessage(new SendContinueMessage());
+        });
+        list.getChildren().add(leave);
         return list;
     }
 
@@ -85,26 +92,53 @@ public class EndgameTreeFactory {
         HBox fields = new HBox();
         fields.setMaxHeight(100);
         fields.setMaxWidth(720);
-        String s = p.getPlanche_slot() >= 0 ? " - #" + p.getPlanche_slot() + " - " : " - DNF - ";
-        fields.getChildren().add(new Label(p.getUsername() + p));
-        int value = 1;
+        fields.setAlignment(Pos.CENTER);
+        String s = p.getPlanche_slot() >= 0 ? " - #" + (p.getPlanche_slot()+1) + " - " : " - DNF - ";
+        var name = new Label(p.getUsername() + s);
+        fields.getChildren().add(name);
+        name.getStyleClass().clear();
+        name.getStyleClass().add("list-label");
+        int value = 0;
         for(var c : p.getShipments()){
-            fields.getChildren().add(new ImageView("galaxy_trucker_imgs/piece/"+ShipmentType.fromValue(value)+".png"));
-            fields.getChildren().add(new Label(" "+c+" "));
+            if(value==0){
+                value++;
+                continue;
+            }
+            fields.getChildren().add(new ImageView("galaxy_trucker_imgs/piece/"+ShipmentType.fromValue(value).toString().toLowerCase()+".png"));
+            var lab = new Label(" "+c+" ");
+            lab.getStyleClass().clear();
+            lab.getStyleClass().add("list-label");
+            fields.getChildren().add(lab);
             value++;   
         }
         ImageView moneybag = new ImageView("galaxy_trucker_imgs/piece/money.png");
         moneybag.setPreserveRatio(true);
         moneybag.setFitWidth(60);
         fields.getChildren().add(moneybag);
-        fields.getChildren().add(new Label(" "+p.getCredits()));
+        var lab = new Label(" "+p.getCredits());
+        fields.getChildren().add(lab);
+        lab.getStyleClass().clear();
+        lab.getStyleClass().add("list-label");
         sb.getChildren().add(fields);
         StackPane.setAlignment(fields, Pos.CENTER_RIGHT);
         return sb;
     }
 
-    static public Node awaiting(ClientEndgameState e){
-        return null;
+    static public Node awaiting(ClientEndgameState s){
+        VBox res = new VBox(10);
+        res.setMaxWidth(333);
+        Label awaiting_lab = new Label("Awaiting: ");
+        HBox awaiting = new HBox(8);
+        awaiting.setAlignment(Pos.CENTER);
+        awaiting.getStyleClass().add("verify-list");
+        for(var e : s.awaiting()){
+            awaiting.getChildren().add(new ImageView("galaxy_trucker_imgs/piece/"+e.toString()+".png"));
+        }
+        awaiting.setMaxWidth(333);
+        res.getChildren().add(awaiting_lab);
+        res.getChildren().add(awaiting);
+        res.setAlignment(Pos.CENTER);
+        return res;
     }
 
 }

@@ -23,12 +23,11 @@ public class ClientEndgameStateFormatter {
 		res.add("Game Results:");
 
 		list.stream().sorted((p1, p2) -> -Integer.compare(p1.getCredits(), p2.getCredits()));
-		int finished = (int) list.stream().filter(p -> p.getPlanche_slot() >= 0).count();
 		for (var e : list) {
 			AttributedStringBuilder b = new AttributedStringBuilder()
 				.append(e.getUsername())
 				.append(" - " + e.getColor())
-				.append(e.getPlanche_slot() >= 0 ? " - #" + e.getPlanche_slot() + " - " : " - DNF - ")
+				.append(e.getPlanche_slot() >= 0 ? " - #" + (e.getPlanche_slot()+1) + " - " : " - DNF - ")
 				.append(String.format("🟦: %3d | ", e.getShipments()[1]))
 				.append(String.format("🟩: %3d | ", e.getShipments()[2]))
 				.append(String.format("🟨: %3d | ", e.getShipments()[3]))

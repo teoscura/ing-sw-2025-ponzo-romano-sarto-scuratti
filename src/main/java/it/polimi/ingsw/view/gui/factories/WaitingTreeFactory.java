@@ -43,7 +43,10 @@ public class WaitingTreeFactory {
         sp.setMaxWidth(390);
         Rectangle r = new Rectangle(390, 135, getColor(p.getColor()));
         r.getStyleClass().add("ui-rectangle");
-        sp.getChildren().addAll(r, new Label(p.getUsername()));
+        Label l = new Label(p.getUsername());
+        l.getStyleClass().clear();
+        l.getStyleClass().add("list-label-big");
+        sp.getChildren().addAll(r, l);
         return sp;
     }
 
@@ -66,7 +69,7 @@ public class WaitingTreeFactory {
         StackPane sp = new StackPane();
         switch(t){
             case LVL2: {
-                var splash = new Rectangle(390, 600, new Color(163/255f, 5/255f, 63/255f, 1.0));
+                var splash = new Rectangle(390, 596, new Color(163/255f, 5/255f, 63/255f, 1.0));
                 splash.getStyleClass().add("ui-rectangle");
                 sp.getChildren().add(splash);
                 var logo = new ImageView("/galaxy_trucker_imgs/logos/lvl2.png");
@@ -75,7 +78,7 @@ public class WaitingTreeFactory {
                 sp.getChildren().add(logo);
             } break;
             case TEST: {
-                var splash = new Rectangle(390, 600, new Color(13/255f, 88/255f, 209/255f, 1.0));
+                var splash = new Rectangle(390, 596, new Color(13/255f, 88/255f, 209/255f, 1.0));
                 sp.getChildren().add(splash);
                 splash.getStyleClass().add("ui-rectangle");
                 var logo = new ImageView("/galaxy_trucker_imgs/logos/test.png");
@@ -84,11 +87,12 @@ public class WaitingTreeFactory {
                 sp.getChildren().add(logo);
             } break;
         }
-        Label title = new Label(t.toString());
-        title.setFont(new Font(30.0));
-        sp.getChildren().add(title);
-        StackPane.setAlignment(title, Pos.BOTTOM_CENTER);
-        StackPane.setMargin(title, new Insets(0, 0, 40, 0));    
+        Label l = new Label(t.toString());
+        l.getStyleClass().clear();
+        l.getStyleClass().add("list-label-big");
+        sp.getChildren().add(l);
+        StackPane.setAlignment(l, Pos.BOTTOM_CENTER);
+        StackPane.setMargin(l, new Insets(0, 0, 40, 0));    
         return sp;
     }
     

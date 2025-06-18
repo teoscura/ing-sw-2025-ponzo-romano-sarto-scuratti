@@ -97,6 +97,18 @@ public class ConstructionSidePaneTreeFactory {
         res.setPrefHeight(10000);
         res.setMaxWidth(333);
 
+        var awaiting_list = state.getPlayerList().stream().filter(p->!p.isFinished()).map(p->p.getColor()).toList();
+        Label awaiting_lab = new Label("Awaiting: ");
+        HBox awaiting = new HBox(8);
+        awaiting.setAlignment(Pos.CENTER);
+        awaiting.getStyleClass().add("verify-list");
+        for(var e : awaiting_list){
+            awaiting.getChildren().add(new ImageView("galaxy_trucker_imgs/piece/"+e.toString()+".png"));
+        }
+        awaiting.setMaxWidth(333);
+        res.getChildren().add(awaiting_lab);
+        res.getChildren().add(awaiting);
+
         sp.getChildren().add(res);
         return sp;
     }
