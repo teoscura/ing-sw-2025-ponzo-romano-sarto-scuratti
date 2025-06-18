@@ -1,38 +1,35 @@
 package it.polimi.ingsw.view.gui;
 
-import java.util.ArrayList;
 
 import it.polimi.ingsw.controller.client.ClientController;
 import it.polimi.ingsw.controller.client.state.*;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.GameModeType;
-import it.polimi.ingsw.model.PlayerCount;
-import it.polimi.ingsw.model.client.player.ClientWaitingPlayer;
 import it.polimi.ingsw.model.client.state.*;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.view.ClientView;
 import it.polimi.ingsw.view.gui.factories.*;
+import javafx.animation.Animation;
+import javafx.animation.Interpolator;
+import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundRepeat;
-import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public class GUIView extends Application implements ClientView {
 
     private StackPane root;
 	private StackPane gameroot;
 	private StackPane bgroot;
+	private int bg_type = 1;
     private ClientState client_state;
 	private ClientState prev_client_state;
     private ConnectedState state;
@@ -63,8 +60,9 @@ public class GUIView extends Application implements ClientView {
     @Override
     public void show(TitleScreenState state) {
 		Platform.runLater(() -> {
+			this.bg_type = 1;
 			this.view_color = PlayerColor.NONE;
-			this.bgAnimation(GameModeType.TEST);
+			this.bgAnimation(1);
 			this.gameroot.getChildren().clear();
             var node = TitleScreenTreeFactory.createTitleScreen(state);
 			this.gameroot.getChildren().add(node);
@@ -75,8 +73,10 @@ public class GUIView extends Application implements ClientView {
     @Override
     public void show(ConnectingState state) {
         Platform.runLater(() -> {
+			this.bg_type = 1;
 			this.view_color = PlayerColor.NONE;
-           	this.bgAnimation(GameModeType.TEST);
+           	if(this.bg_type != 1 ) this.bgAnimation(1);
+			this.bg_type = 1;
 			this.gameroot.getChildren().clear();
             var node = ConnectionSetupTreeFactory.createConnectionScreen(state);
             this.gameroot.getChildren().add(node);
@@ -87,8 +87,10 @@ public class GUIView extends Application implements ClientView {
 	@Override
 	public void show(ClientLobbySelectState state) {
 		Platform.runLater(() -> {
+			this.bg_type = 1;
 			this.view_color = PlayerColor.NONE;
-			this.bgAnimation(GameModeType.TEST);
+			if(this.bg_type != 1 ) this.bgAnimation(1);
+			this.bg_type = 1;
 			this.gameroot.getChildren().clear();
 			var node = LobbyStateTreeFactory.createLobbyScreen(state, this);
 			this.gameroot.getChildren().add(node);
@@ -99,8 +101,10 @@ public class GUIView extends Application implements ClientView {
 	@Override
 	public void show(ClientSetupState state) {
 		Platform.runLater(() -> {
+			this.bg_type = 1;
 			this.view_color = PlayerColor.NONE;
-			this.bgAnimation(GameModeType.TEST);
+			if(this.bg_type != 1 ) this.bgAnimation(1);
+			this.bg_type = 1;
 			this.gameroot.getChildren().clear();
 			var node = SetupTreeFactory.createSetupScreen(state, this);
 			this.gameroot.getChildren().add(node);
@@ -111,7 +115,8 @@ public class GUIView extends Application implements ClientView {
 	@Override
 	public void show(ClientWaitingRoomState state) {
 		Platform.runLater(() -> {
-            this.bgAnimation(GameModeType.TEST);
+			if(state.getType().getLevel()!=this.bg_type) this.bgAnimation(state.getType().getLevel());
+			this.bg_type = state.getType().getLevel();
 			if(this.view_color==PlayerColor.NONE) 
 				this.view_color = state.getPlayerList().stream().filter(s -> s.getUsername().equals(username)).map(p -> p.getColor()).findFirst().orElse(PlayerColor.NONE);
 
@@ -125,7 +130,8 @@ public class GUIView extends Application implements ClientView {
 	@Override
 	public void show(ClientConstructionState state) {
 		Platform.runLater(() -> {
-            this.bgAnimation(GameModeType.TEST);
+            if(state.getType().getLevel()!=this.bg_type) this.bgAnimation(state.getType().getLevel());
+			this.bg_type = state.getType().getLevel();
 			if(this.view_color==PlayerColor.NONE) 
 				this.view_color = state.getPlayerList().stream().filter(s -> s.getUsername().equals(username)).map(p -> p.getColor()).findFirst().orElse(PlayerColor.NONE);
 
@@ -185,8 +191,10 @@ public class GUIView extends Application implements ClientView {
 	@Override
 	public void show(ClientVerifyState state) {
 		Platform.runLater(() -> {
-            this.bgAnimation(GameModeType.TEST);
-			
+			GameModeType t = state.getPlayerList().getFirst().getShip().getType();
+            if(t.getLevel()!=this.bg_type) this.bgAnimation(t.getLevel());
+			this.bg_type = t.getLevel();
+
 			if(this.view_color==PlayerColor.NONE) 
 				this.view_color = state.getPlayerList().stream().filter(s -> s.getUsername().equals(username)).map(p -> p.getColor()).findFirst().orElse(PlayerColor.NONE);
 
@@ -207,7 +215,8 @@ public class GUIView extends Application implements ClientView {
 	@Override
 	public void show(ClientVoyageState state) {
 		Platform.runLater(() -> {
-            this.bgAnimation(GameModeType.TEST);
+            if(state.getType().getLevel()!=this.bg_type) this.bgAnimation(state.getType().getLevel());
+			this.bg_type = state.getType().getLevel();
 			if(this.view_color==PlayerColor.NONE) 
 				this.view_color = state.getPlayerList().stream().filter(s -> s.getUsername().equals(username)).map(p -> p.getColor()).findFirst().orElse(PlayerColor.NONE);
 			
@@ -227,8 +236,10 @@ public class GUIView extends Application implements ClientView {
 	@Override
 	public void show(ClientEndgameState state) {
 		Platform.runLater(() -> {
+			if(this.bg_type!=1) this.bgAnimation(1);
+			this.bg_type = 1;
+
 			this.view_color = PlayerColor.NONE;
-			this.bgAnimation(GameModeType.TEST);
 			this.gameroot.getChildren().clear();
 			var node = EndgameTreeFactory.createEnding(this, state);
 			this.gameroot.getChildren().add(node);
@@ -266,10 +277,17 @@ public class GUIView extends Application implements ClientView {
 		this.client_state.sendToView(this);
 	}
 
-	private void bgAnimation(GameModeType type){
+	private void bgAnimation(int i){
 		this.bgroot.getChildren().clear();
-		ImageView bg = new ImageView("title"+type.getLevel()+".png");
-		this.bgroot.getChildren();
+		ImageView bg = new ImageView("title"+i+".png");
+		TranslateTransition anim = new TranslateTransition(Duration.seconds(70), bg);
+		anim.setInterpolator(Interpolator.LINEAR);
+		anim.setFromX(0);
+		anim.setToY(-2000);
+		anim.setCycleCount(Animation.INDEFINITE);
+		anim.play();
+		this.bgroot.getChildren().addAll(bg);
+
 	}
 
 

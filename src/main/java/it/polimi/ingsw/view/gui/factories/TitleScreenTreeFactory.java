@@ -8,6 +8,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 
 public class TitleScreenTreeFactory {
@@ -18,16 +20,18 @@ public class TitleScreenTreeFactory {
 
         Label prompt = new Label("Insert Username: ");
         //prompt.setFont(new Font(30));
-        prompt.setId("title-prompt");
         input.setMaxWidth(300);
         var image = new ImageView("galaxy_trucker_imgs/logos/galaxy_trucker_logo_med.png");
         image.setFitWidth(550);
         image.setFitHeight(500);
-        Button confirm = new Button("Confirm");
-        confirm.setOnAction(event -> {
-            state.setUsername(input.getText());
+        prompt.getStyleClass().add("list-label-big");
+        input.setOnKeyPressed(event -> {
+            if (event.getCode().equals(KeyCode.ENTER)) {
+                state.setUsername(input.getText());
+            }
         });
-        VBox res = new VBox(10, image, prompt, input, confirm);
+        input.getStyleClass().add("titlescreen-field");
+        VBox res = new VBox(10, image, prompt, input);
         res.setAlignment(Pos.CENTER);
         res.setMaxHeight(800);
         return res;
