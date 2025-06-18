@@ -14,28 +14,26 @@ import javafx.scene.layout.VBox;
 
 public class SetupTreeFactory {
 	static public Node createSetupScreen(ClientSetupState state, GUIView view) {
-
-
 		SetupOptionsContainer setupOptionsContainer = new SetupOptionsContainer();
 
 
 		Button p2 = new Button("2");
-		p2.setOnAction(event -> setupOptionsContainer.setCount(PlayerCount.TWO));
+		p2.setOnAction(event -> setupOptionsContainer.setCount(PlayerCount.TWO, p2));
 
 		Button p3 = new Button("3");
-		p3.setOnAction(event -> setupOptionsContainer.setCount(PlayerCount.THREE));
+		p3.setOnAction(event -> setupOptionsContainer.setCount(PlayerCount.THREE, p3));
 
 		Button p4 = new Button("4");
-		p4.setOnAction(event -> setupOptionsContainer.setCount(PlayerCount.FOUR));
+		p4.setOnAction(event -> setupOptionsContainer.setCount(PlayerCount.FOUR, p4));
 
 		HBox playerNumber = new HBox(10, p2, p3, p4);
 		playerNumber.setAlignment(Pos.CENTER);
 
 		Button tf = new Button("Test Flight");
-		tf.setOnAction(event -> setupOptionsContainer.setMode(GameModeType.TEST));
+		tf.setOnAction(event -> setupOptionsContainer.setMode(GameModeType.TEST, tf));
 
 		Button l2 = new Button("Level 2");
-		l2.setOnAction(event -> setupOptionsContainer.setMode(GameModeType.LVL2));
+		l2.setOnAction(event -> setupOptionsContainer.setMode(GameModeType.LVL2, l2));
 
 		HBox gameMode = new HBox(10, tf, l2);
 		gameMode.setAlignment(Pos.CENTER);
@@ -47,4 +45,5 @@ public class SetupTreeFactory {
 		res.setAlignment(Pos.CENTER);
 		return res;
 	}
+
 }
