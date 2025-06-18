@@ -57,8 +57,6 @@ public class ConstructionTile extends ComponentTile {
 
     }
 
-
-
     public ComponentRotation getRotation(){
         return this.rotation;
     }

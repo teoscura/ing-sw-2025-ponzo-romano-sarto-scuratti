@@ -41,7 +41,7 @@ public class LevelTwoCards implements iCards {
 			tmp.addLast(shuffled);
 		}
 		this.cards = new ArrayDeque<iCard>(tmp);
-		this.construction_cards = new ArrayList<>(tmp.stream().map((c) -> c.getId()).toList());
+		this.construction_cards = new ArrayList<>(tmp.stream().map((c) -> c.getId()).toList().subList(0, 9));
 	}
 
 	/**

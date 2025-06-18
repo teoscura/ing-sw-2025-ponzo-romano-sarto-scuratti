@@ -58,8 +58,7 @@ public class ConstructionStateHourglass implements Serializable {
 	}
 
 	public boolean isRunning() {
-		if (this.toggled == null) return true;
-		return Duration.between(Instant.now(), toggled).compareTo(period) >= 0;
+		return Duration.between(toggled, Instant.now()).compareTo(period) < 0;
 	}
 
 	public Instant getInstant() {

@@ -28,7 +28,7 @@ public class PlacedTileFactory implements ClientComponentVisitor {
     @Override
     public void show(ClientBaseComponent component) {
         tile = new PlacedTile(view, "galaxy_trucker_imgs/tiles/transparent/GT-tile-" + component.getId() + "_transparent.png", center);
-        tile.setRotate(90*component.getRotation().getShift());
+        tile.getImage().setRotate(90*component.getRotation().getShift());
     }
 
     @Override

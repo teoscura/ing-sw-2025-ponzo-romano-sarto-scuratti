@@ -40,24 +40,14 @@ public class ConstructionSidePaneTreeFactory {
     }
 
     public static void showCards(GUIView view, ClientConstructionState state, Node root){
-        // ListView<ImageView> card_list = new ListView<>();
-        // ObservableList<ImageView> list = FXCollections.observableArrayList();
-        // for(int id : state.getConstructionCards()){
-        //     var t = new ImageView("galaxy_trucker_imgs/cards/GT-card-" + id + ".jpg");
-        //     t.setScaleX(0.5);
-        //     t.setScaleY(0.5);
-        //     list.add(t);
-        // }
-        // card_list.setOrientation(Orientation.HORIZONTAL);
-        // card_list.setMaxWidth(1000);
-        // card_list.setItems(list);
-        HBox card_list = new HBox(10);
+        //TODO rifare
+        HBox card_list = new HBox(-120);
         for(int id : state.getConstructionCards()){
             ImageView t = new ImageView("galaxy_trucker_imgs/cards/GT-card-" + id + ".jpg");
-            t.setScaleX(0.5);
-            t.maxWidth(0.5*t.getFitWidth());
-            t.setScaleY(0.5);
-            t.maxWidth(0.5*t.getFitHeight());
+            t.setScaleX(0.4);
+            t.maxWidth(0.4*t.getFitWidth());
+            t.setScaleY(0.4);
+            t.maxWidth(0.4*t.getFitHeight());
             card_list.getChildren().add(t);
         }
         Popup popup = new Popup();

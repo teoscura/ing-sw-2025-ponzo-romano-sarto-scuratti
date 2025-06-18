@@ -15,4 +15,8 @@ public class ComponentTile extends StackPane {
         this.setMaxHeight(image.getFitHeight()*scale);
         this.getChildren().add(image);
     }
+
+    public final ImageView getImage(){
+        return this.image;
+    }
 }
