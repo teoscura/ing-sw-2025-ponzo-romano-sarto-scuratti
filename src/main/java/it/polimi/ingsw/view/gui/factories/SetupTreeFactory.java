@@ -1,75 +1,50 @@
 package it.polimi.ingsw.view.gui.factories;
 
-import it.polimi.ingsw.message.server.OpenLobbyMessage;
 import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.PlayerCount;
 import it.polimi.ingsw.model.client.state.ClientSetupState;
 import it.polimi.ingsw.view.gui.GUIView;
+import it.polimi.ingsw.view.gui.utils.SetupOptionsContainer;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+
 
 public class SetupTreeFactory {
 	static public Node createSetupScreen(ClientSetupState state, GUIView view) {
-		Label l1 = new Label("Player number: ");
-		ChoiceBox<String> player_number = new ChoiceBox<>();
 
-		player_number.getItems().addAll("2", "3", "4");
 
-		Label l2 = new Label("Game mode: ");
-		ChoiceBox<String> game_type = new ChoiceBox<>();
-		game_type.getItems().addAll("Test Flight", "Level 2");
+		SetupOptionsContainer setupOptionsContainer = new SetupOptionsContainer();
 
-		Button create = new Button();
-		create.setOnMouseClicked(event -> {
-			String selectedPlayerNumber = player_number.getValue();
-			String selectedGameType = game_type.getValue();
-			GameModeType gameModeType = null;
-			PlayerCount numPlayers = null;
-			if (selectedPlayerNumber == null) {
-				view.showTextMessage("Select the number of players.");
-				return;
-			}
-			if (selectedGameType == null) {
-				view.showTextMessage("Select the game type.");
-				return;
-			}
-			switch (selectedPlayerNumber) {
-				case "2":
-					numPlayers = PlayerCount.TWO;
-					break;
-				case "3":
-					numPlayers = PlayerCount.THREE;
-					break;
-				case "4":
-					numPlayers = PlayerCount.FOUR;
-					break;
-				default:
-					view.showTextMessage("Invalid player number.");
-			}
-			switch (selectedGameType) {
-				case "Test Flight":
-					gameModeType = GameModeType.TEST;
-					break;
-				case "Level 2":
-					gameModeType = GameModeType.LVL2;
-					break;
-				default:
-					view.showTextMessage("Invalid game ViewMessagetype.");
-			}
-			System.out.println(gameModeType);
-			System.out.println(numPlayers);
 
-			view.sendMessage(new OpenLobbyMessage(gameModeType, numPlayers));
+		Button p2 = new Button("2");
+		p2.setOnAction(event -> setupOptionsContainer.setCount(PlayerCount.TWO));
 
-		});
+		Button p3 = new Button("3");
+		p3.setOnAction(event -> setupOptionsContainer.setCount(PlayerCount.THREE));
 
-		VBox res = new VBox(10.0, l1, player_number, l2, game_type, create);
+		Button p4 = new Button("4");
+		p4.setOnAction(event -> setupOptionsContainer.setCount(PlayerCount.FOUR));
+
+		HBox playerNumber = new HBox(10, p2, p3, p4);
+		playerNumber.setAlignment(Pos.CENTER);
+
+		Button tf = new Button("Test Flight");
+		tf.setOnAction(event -> setupOptionsContainer.setMode(GameModeType.TEST));
+
+		Button l2 = new Button("Level 2");
+		l2.setOnAction(event -> setupOptionsContainer.setMode(GameModeType.LVL2));
+
+		HBox gameMode = new HBox(10, tf, l2);
+		gameMode.setAlignment(Pos.CENTER);
+
+		Button confirm = new Button("Create lobby");
+		confirm.setOnAction(event -> setupOptionsContainer.sendSetup(view));
+
+		VBox res = new VBox(20.0, playerNumber, gameMode, confirm);
 		res.setAlignment(Pos.CENTER);
-		res.setMaxHeight(800);
 		return res;
 	}
 }

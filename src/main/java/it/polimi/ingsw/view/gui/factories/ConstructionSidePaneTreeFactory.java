@@ -1,9 +1,9 @@
 package it.polimi.ingsw.view.gui.factories;
 
-import it.polimi.ingsw.message.server.ToggleHourglassMessage;
 import it.polimi.ingsw.message.server.ReserveComponentMessage;
 import it.polimi.ingsw.message.server.SendContinueMessage;
 import it.polimi.ingsw.message.server.TakeComponentMessage;
+import it.polimi.ingsw.message.server.ToggleHourglassMessage;
 import it.polimi.ingsw.model.client.player.ClientConstructionPlayer;
 import it.polimi.ingsw.model.client.state.ClientConstructionState;
 import it.polimi.ingsw.model.player.PlayerColor;
@@ -34,170 +34,170 @@ import java.time.Instant;
 
 public class ConstructionSidePaneTreeFactory {
 
-    private static void toggleHourglass(GUIView view){
-        ToggleHourglassMessage message = new ToggleHourglassMessage();
-        view.sendMessage(message);
-    }
+	private static void toggleHourglass(GUIView view) {
+		ToggleHourglassMessage message = new ToggleHourglassMessage();
+		view.sendMessage(message);
+	}
 
-    public static void showCards(GUIView view, ClientConstructionState state, Node root){
-        VBox card_list = new VBox(0);
-        int k = 0;
-        for(int id : state.getConstructionCards()){
-            if(k%5==0) card_list.getChildren().addLast(new HBox());
-            ImageView t = new ImageView("galaxy_trucker_imgs/cards/GT-card-" + id + ".jpg");
-            t.setPreserveRatio(true);
-            t.setPreserveRatio(true);
-            t.setFitHeight(250);
-            ((HBox)card_list.getChildren().getLast()).getChildren().add(t);
-            k++;
-        }
-        Popup popup = new Popup();
-        popup.getContent().add(card_list);
-        popup.setAutoFix(true);
-        popup.setAutoHide(true);
-        popup.show(root.getScene().getWindow());
-    }
+	public static void showCards(GUIView view, ClientConstructionState state, Node root) {
+		VBox card_list = new VBox(0);
+		int k = 0;
+		for (int id : state.getConstructionCards()) {
+			if (k % 5 == 0) card_list.getChildren().addLast(new HBox());
+			ImageView t = new ImageView("galaxy_trucker_imgs/cards/GT-card-" + id + ".jpg");
+			t.setPreserveRatio(true);
+			t.setPreserveRatio(true);
+			t.setFitHeight(250);
+			((HBox) card_list.getChildren().getLast()).getChildren().add(t);
+			k++;
+		}
+		Popup popup = new Popup();
+		popup.getContent().add(card_list);
+		popup.setAutoFix(true);
+		popup.setAutoHide(true);
+		popup.show(root.getScene().getWindow());
+	}
 
-    public static void updateHourglassAnimation(ClientConstructionState state, Button hourglass){
-        Instant end = state.getLastToggle().plus(Duration.ofSeconds(90));
-        AnimationTimer hourglass_timer = new AnimationTimer() {
-            @Override
-            public void handle(long l) {
-                Duration time_left = Duration.between(Instant.now(), end);
-                hourglass.setText(("[Left: "+state.getTogglesLeft())+"/"+state.getTogglesTotal()+"] " + (time_left.toSeconds()) + " seconds left");
-                if (Instant.now().isAfter(end)) {
-                    stop();
-                    hourglass.setText(("[Left: "+state.getTogglesLeft())+"/"+state.getTogglesTotal()+"] Toggle hourglass");
-                }
-            }
-        };
-        hourglass_timer.start();
-    }
+	public static void updateHourglassAnimation(ClientConstructionState state, Button hourglass) {
+		Instant end = state.getLastToggle().plus(Duration.ofSeconds(90));
+		AnimationTimer hourglass_timer = new AnimationTimer() {
+			@Override
+			public void handle(long l) {
+				Duration time_left = Duration.between(Instant.now(), end);
+				hourglass.setText(("[Left: " + state.getTogglesLeft()) + "/" + state.getTogglesTotal() + "] " + (time_left.toSeconds()) + " seconds left");
+				if (Instant.now().isAfter(end)) {
+					stop();
+					hourglass.setText(("[Left: " + state.getTogglesLeft()) + "/" + state.getTogglesTotal() + "] Toggle hourglass");
+				}
+			}
+		};
+		hourglass_timer.start();
+	}
 
 
-    static public Node createSidePane(GUIView view, ClientConstructionState state, PlayerColor color, Node root){
-        ClientConstructionPlayer you = state.getPlayerList().stream().filter(p->p.getColor()==color).findAny().orElse(state.getPlayerList().getFirst());
-        StackPane sp = new StackPane();
-        sp.setMaxWidth(333);
-        sp.getChildren().add(new Rectangle(333, 10000, new Color(169/255f,169/255f,169/255f,0.7)));
-        VBox res = new VBox(20);
-        res.setId("constr-pane-base");
-        res.getChildren().add(createMainConstructionTileTree(view, you, state.getTilesLeft()));
-        res.getChildren().add(createReservedConstructionTileTree(view, you));
-        res.getChildren().add(createDiscardedConstructionTileTree(view, state));
-        if(state.getType().getLevel()>1) res.getChildren().add((createLevelTwoAddons(view, state, root)));
-        Button confirm = new Button("Finish building!");
-        confirm.setId("constr-confirm-button");
-        confirm.setOnMouseClicked(event -> {
-            view.sendMessage(new SendContinueMessage());
-        });
-        res.getChildren().add(confirm);
-        res.getChildren().add(createColorSwitchTree(view, state, color));
-        res.setAlignment(Pos.CENTER);
-        res.setPrefHeight(10000);
-        res.setMaxWidth(333);
+	static public Node createSidePane(GUIView view, ClientConstructionState state, PlayerColor color, Node root) {
+		ClientConstructionPlayer you = state.getPlayerList().stream().filter(p -> p.getColor() == color).findAny().orElse(state.getPlayerList().getFirst());
+		StackPane sp = new StackPane();
+		sp.setMaxWidth(333);
+		sp.getChildren().add(new Rectangle(333, 10000, new Color(169 / 255f, 169 / 255f, 169 / 255f, 0.7)));
+		VBox res = new VBox(20);
+		res.setId("constr-pane-base");
+		res.getChildren().add(createMainConstructionTileTree(view, you, state.getTilesLeft()));
+		res.getChildren().add(createReservedConstructionTileTree(view, you));
+		res.getChildren().add(createDiscardedConstructionTileTree(view, state));
+		if (state.getType().getLevel() > 1) res.getChildren().add((createLevelTwoAddons(view, state, root)));
+		Button confirm = new Button("Finish building!");
+		confirm.setId("constr-confirm-button");
+		confirm.setOnMouseClicked(event -> {
+			view.sendMessage(new SendContinueMessage());
+		});
+		res.getChildren().add(confirm);
+		res.getChildren().add(createColorSwitchTree(view, state, color));
+		res.setAlignment(Pos.CENTER);
+		res.setPrefHeight(10000);
+		res.setMaxWidth(333);
 
-        var awaiting_list = state.getPlayerList().stream().filter(p->!p.isFinished()).map(p->p.getColor()).toList();
-        Label awaiting_lab = new Label("Awaiting: ");
-        HBox awaiting = new HBox(8);
-        awaiting.setAlignment(Pos.CENTER);
-        awaiting.getStyleClass().add("verify-list");
-        for(var e : awaiting_list){
-            awaiting.getChildren().add(new ImageView("galaxy_trucker_imgs/piece/"+e.toString()+".png"));
-        }
-        awaiting.setMaxWidth(333);
-        res.getChildren().add(awaiting_lab);
-        res.getChildren().add(awaiting);
+		var awaiting_list = state.getPlayerList().stream().filter(p -> !p.isFinished()).map(p -> p.getColor()).toList();
+		Label awaiting_lab = new Label("Awaiting: ");
+		HBox awaiting = new HBox(8);
+		awaiting.setAlignment(Pos.CENTER);
+		awaiting.getStyleClass().add("verify-list");
+		for (var e : awaiting_list) {
+			awaiting.getChildren().add(new ImageView("galaxy_trucker_imgs/piece/" + e.toString() + ".png"));
+		}
+		awaiting.setMaxWidth(333);
+		res.getChildren().add(awaiting_lab);
+		res.getChildren().add(awaiting);
 
-        sp.getChildren().add(res);
-        return sp;
-    }
+		sp.getChildren().add(res);
+		return sp;
+	}
 
-    static public Node createMainConstructionTileTree(GUIView view, ClientConstructionPlayer p, int left){
-        VBox resv = new VBox();
-        resv.setMaxHeight(120);
-        resv.setMaxWidth(120);
-        StackPane sp = new StackPane();
-        sp.setMaxHeight(120);
-        sp.setMaxWidth(120);;
-        if(p.getCurrent()==-1){
-            Button pickb = new Button("Take Component: ["+left+" LEFT]");
-            pickb.setOnAction(event->{
-                view.sendMessage(new TakeComponentMessage());
-            });
-            pickb.setId("constr-pick-button");
-            sp.getChildren().add(pickb);
-            resv.getChildren().add(sp);
-        } else {
-            sp.getChildren().add(new ImageView("galaxy_trucker_imgs/tiles/transparent/bg.png"));
-            sp.getChildren().add(new ConstructionTile(view, p.getCurrent(), false, true, 1.0));
-            Button res = new Button("Reserve Component");
-            res.setOnAction(event -> {
-                view.sendMessage(new ReserveComponentMessage());
-            });
-            res.setId("constr-reserve-button");
-            resv.getChildren().add(sp);
-            resv.getChildren().add(res);
-        }
-        resv.setId("constr-tile-pane");
-        return resv;
-    }
+	static public Node createMainConstructionTileTree(GUIView view, ClientConstructionPlayer p, int left) {
+		VBox resv = new VBox();
+		resv.setMaxHeight(120);
+		resv.setMaxWidth(120);
+		StackPane sp = new StackPane();
+		sp.setMaxHeight(120);
+		sp.setMaxWidth(120);
+		if (p.getCurrent() == -1) {
+			Button pickb = new Button("Take Component: [" + left + " LEFT]");
+			pickb.setOnAction(event -> {
+				view.sendMessage(new TakeComponentMessage());
+			});
+			pickb.setId("constr-pick-button");
+			sp.getChildren().add(pickb);
+			resv.getChildren().add(sp);
+		} else {
+			sp.getChildren().add(new ImageView("galaxy_trucker_imgs/tiles/transparent/bg.png")); //TODO mettere rettangolo w/o immagine
+			sp.getChildren().add(new ConstructionTile(view, p.getCurrent(), false, true, 1.0));
+			Button res = new Button("Reserve Component");
+			res.setOnAction(event -> {
+				view.sendMessage(new ReserveComponentMessage());
+			});
+			res.setId("constr-reserve-button");
+			resv.getChildren().add(sp);
+			resv.getChildren().add(res);
+		}
+		resv.setId("constr-tile-pane");
+		return resv;
+	}
 
-    static public Node createReservedConstructionTileTree(GUIView view, ClientConstructionPlayer p){
-        HBox res = new HBox(20);
-        res.setAlignment(Pos.CENTER);
-        for(int id : p.getReserved()){
-            res.getChildren().add(new ConstructionTile(view, id, false, false, 0.5));
-        }
-        res.setId("constr-reserved-pane");
-        return res;
-    }
+	static public Node createReservedConstructionTileTree(GUIView view, ClientConstructionPlayer p) {
+		HBox res = new HBox(20);
+		res.setAlignment(Pos.CENTER);
+		for (int id : p.getReserved()) {
+			res.getChildren().add(new ConstructionTile(view, id, false, false, 0.5));
+		}
+		res.setId("constr-reserved-pane");
+		return res;
+	}
 
-    static public Node createDiscardedConstructionTileTree(GUIView view, ClientConstructionState state){
-        ListView<ConstructionTile> res = new ListView<>();
-        res.setMaxHeight(130);
-        res.setOrientation(Orientation.HORIZONTAL);
-        res.setId("constr-discarded-list");
-        ObservableList<ConstructionTile> list = FXCollections.observableArrayList();
-        for(int id : state.getDiscardedTiles()){
-            list.add(new ConstructionTile(view, id, true, false, 0.8));
-        }
-        res.setItems(list);
-        return res;
-    }
+	static public Node createDiscardedConstructionTileTree(GUIView view, ClientConstructionState state) {
+		ListView<ConstructionTile> res = new ListView<>();
+		res.setMaxHeight(130);
+		res.setOrientation(Orientation.HORIZONTAL);
+		res.setId("constr-discarded-list");
+		ObservableList<ConstructionTile> list = FXCollections.observableArrayList();
+		for (int id : state.getDiscardedTiles()) {
+			list.add(new ConstructionTile(view, id, true, false, 0.8));
+		}
+		res.setItems(list);
+		return res;
+	}
 
-    static public Node createLevelTwoAddons(GUIView view, ClientConstructionState state, Node root){
-        HBox res = new HBox(30);
-        res.setAlignment(Pos.CENTER);
-        res.setId("constr-leveltwo-addons");
-        Button cards = new Button("Peek the cards");
-        cards.setOnAction(e -> showCards(view, state, root));
-        cards.setId("constr-peek-cards");
-        Button toggle = new Button("Toggle hourglass");
-        toggle.setOnAction(e -> toggleHourglass(view));
-        toggle.setId("constr-toggle-hourglass");
-        res.getChildren().addAll(cards, toggle);
-        updateHourglassAnimation(state, toggle); //will be moved once update is selective
-        return res;
-    }
+	static public Node createLevelTwoAddons(GUIView view, ClientConstructionState state, Node root) {
+		HBox res = new HBox(30);
+		res.setAlignment(Pos.CENTER);
+		res.setId("constr-leveltwo-addons");
+		Button cards = new Button("Peek the cards");
+		cards.setOnAction(e -> showCards(view, state, root));
+		cards.setId("constr-peek-cards");
+		Button toggle = new Button("Toggle hourglass");
+		toggle.setOnAction(e -> toggleHourglass(view));
+		toggle.setId("constr-toggle-hourglass");
+		res.getChildren().addAll(cards, toggle);
+		updateHourglassAnimation(state, toggle); //will be moved once update is selective
+		return res;
+	}
 
-    static public Node createColorSwitchTree(GUIView view, ClientConstructionState state, PlayerColor color){
-        HBox res = new HBox(20);
-        Label lab = new Label("View: ");
-        lab.setFont(new Font(18));
-        res.getChildren().add(lab);
-        res.setId("constr-color-switch");
-        for(var p : state.getPlayerList()){
-            if(p.getColor()==color) continue;
-            ImageView v = new ImageView("galaxy_trucker_imgs/piece/"+p.getColor()+".png");
-            v.setOnMouseClicked(event->{
-                view.selectColor(p.getColor());
-            });
-            res.getChildren().add(v);
-        }
-        res.setAlignment(Pos.CENTER);
-        return res;
-    }
+	static public Node createColorSwitchTree(GUIView view, ClientConstructionState state, PlayerColor color) {
+		HBox res = new HBox(20);
+		Label lab = new Label("View: ");
+		lab.setFont(new Font(18));
+		res.getChildren().add(lab);
+		res.setId("constr-color-switch");
+		for (var p : state.getPlayerList()) {
+			if (p.getColor() == color) continue;
+			ImageView v = new ImageView("galaxy_trucker_imgs/piece/" + p.getColor() + ".png");
+			v.setOnMouseClicked(event -> {
+				view.selectColor(p.getColor());
+			});
+			res.getChildren().add(v);
+		}
+		res.setAlignment(Pos.CENTER);
+		return res;
+	}
 
 
 }
