@@ -43,7 +43,7 @@ public class ConstructionSidePaneTreeFactory {
         VBox card_list = new VBox(0);
         int k = 0;
         for(int id : state.getConstructionCards()){
-            if(k%3==0) card_list.getChildren().addLast(new HBox());
+            if(k%5==0) card_list.getChildren().addLast(new HBox());
             ImageView t = new ImageView("galaxy_trucker_imgs/cards/GT-card-" + id + ".jpg");
             t.setPreserveRatio(true);
             t.setPreserveRatio(true);
@@ -102,6 +102,9 @@ public class ConstructionSidePaneTreeFactory {
     }
 
     static public Node createMainConstructionTileTree(GUIView view, ClientConstructionPlayer p, int left){
+        VBox resv = new VBox();
+        resv.setMaxHeight(120);
+        resv.setMaxWidth(120);
         StackPane sp = new StackPane();
         sp.setMaxHeight(120);
         sp.setMaxWidth(120);;
@@ -112,7 +115,7 @@ public class ConstructionSidePaneTreeFactory {
             });
             pickb.setId("constr-pick-button");
             sp.getChildren().add(pickb);
-            
+            resv.getChildren().add(sp);
         } else {
             sp.getChildren().add(new ImageView("galaxy_trucker_imgs/tiles/transparent/bg.png"));
             sp.getChildren().add(new ConstructionTile(view, p.getCurrent(), false, true, 1.0));
@@ -121,10 +124,11 @@ public class ConstructionSidePaneTreeFactory {
                 view.sendMessage(new ReserveComponentMessage());
             });
             res.setId("constr-reserve-button");
-            sp.getChildren().add(res);
+            resv.getChildren().add(sp);
+            resv.getChildren().add(res);
         }
-        sp.setId("constr-tile-pane");
-        return sp;
+        resv.setId("constr-tile-pane");
+        return resv;
     }
 
     static public Node createReservedConstructionTileTree(GUIView view, ClientConstructionPlayer p){
@@ -182,6 +186,6 @@ public class ConstructionSidePaneTreeFactory {
         res.setAlignment(Pos.CENTER);
         return res;
     }
-    
+
 
 }

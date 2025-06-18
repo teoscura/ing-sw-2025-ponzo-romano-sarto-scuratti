@@ -47,6 +47,7 @@ public class LobbyStateTreeFactory {
          
         Color fill = t.getLevel()==2 ? new Color(163/255f, 5/255f, 63/255f, 1.0): new Color(13/255f, 88/255f, 209/255f, 1.0);
         Rectangle icon = new Rectangle(450, 150, fill);
+        icon.getStyleClass().add("ui-rectangle");
         String emoji = t.getLevel() == 2 ? "  🚀  " : "  🛰️  ";
         Label decorator = new Label(emoji);
         decorator.setFont(new Font(30.0));

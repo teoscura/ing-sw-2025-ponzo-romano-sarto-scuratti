@@ -28,20 +28,15 @@ public class VerifySidePaneTreeFactory {
         sp.getChildren().add(new Rectangle(333, 10000, new Color(169/255f,169/255f,169/255f,0.7)));
         VBox res = new VBox(25);
         res.setId("verify-pane-base");
-        //Add destroy
-        Label remove_lab = new Label("Drag to remove:");
-        remove_lab.setFont(new Font(27.0));
-        remove_lab.getStyleClass().add("verify_hint_label");
+        Label select_lab = new Label("Drag to remove/select blob:");
+        HBox wide = new HBox();
+        wide.setAlignment(Pos.CENTER);
+        wide.setMinWidth(333);
         RemoveComponentPiece removep  = new RemoveComponentPiece();
-        //Add select blob
-        Label select_lab = new Label("Drag to select blob:");
-        select_lab.setFont(new Font(27.0));
-        remove_lab.getStyleClass().add("verify_hint_label");
         SelectBlobPiece selectp = new SelectBlobPiece();
+        wide.getChildren().addAll(removep, selectp);
         //Add the three crew types
         Label crew_lab = new Label("Drag to change crew type:");
-        crew_lab.setFont(new Font(27.0));
-        remove_lab.getStyleClass().add("verify_hint_label");
         HBox box = new HBox(40);
         box.getChildren().add(new CrewSetPiece(AlienType.HUMAN));
         box.getChildren().add(new CrewSetPiece(AlienType.BROWN));
@@ -54,7 +49,7 @@ public class VerifySidePaneTreeFactory {
             view.sendMessage(new SendContinueMessage());
         });
         var await = createAwaitingTree(state);
-        res.getChildren().addAll(remove_lab, removep, select_lab, selectp, crew_lab, box, confirm, await);
+        res.getChildren().addAll(select_lab, wide, crew_lab, box, confirm, await);
         StackPane.setAlignment(await, Pos.CENTER);
         res.getChildren().add(createColorSwitchTree(view, state, color));
         //Final alignment
@@ -67,40 +62,42 @@ public class VerifySidePaneTreeFactory {
     }
 
     static public Node createAwaitingTree(ClientVerifyState state){
-        HBox res = new HBox(20);
+        VBox res = new VBox(12);
         res.setId("verify-player-lists");
         res.setMaxWidth(333);
-        VBox awaiting = new VBox(15);
-        awaiting.setMaxWidth(333);
-        VBox finished = new VBox(15);
-        finished.setMaxWidth(333);
         var list_finished = state.getPlayerList().stream()
             .filter(p->p.isValid())
             .sorted((p1, p2) -> -Integer.compare(p1.getOrder(), p1.getOrder()))
+            .map(p->p.getColor())
             .toList();
         var list_to_finish = state.getPlayerList().stream()
             .filter(p->!p.hasProgressed())
+            .map(p->p.getColor())
             .toList();
-        //Todo: rifarlo bene.
+
         Label awaiting_lab = new Label("Awaiting: ");
+        HBox awaiting = new HBox(8);
+        awaiting.setAlignment(Pos.CENTER);
+        awaiting.getStyleClass().add("verify-list");
+        for(var e : list_to_finish){
+            awaiting.getChildren().add(new ImageView("galaxy_trucker_imgs/piece/"+e.toString()+".png"));
+        }
+        awaiting.setMaxWidth(333);
+        res.getChildren().add(awaiting_lab);
+        res.getChildren().add(awaiting);
+
         Label finished_lab = new Label("Finish order:");
-        awaiting_lab.setFont(new Font(25));
-        awaiting_lab.getStyleClass().add("verify_player_label_title");
-        finished_lab.setFont(new Font(25));
-        finished_lab.getStyleClass().add("verify_player_label_title");
-        awaiting.getChildren().add(awaiting_lab);
-        finished.getChildren().add(finished_lab);
-        for(var p : list_to_finish){
-            var l = new Label(p.getColor().toString()+" - "+p.getUsername());
-            l.getStyleClass().add("verify_player_label");
-            awaiting.getChildren().add(l);
+        HBox finished = new HBox(8);
+        finished .setAlignment(Pos.CENTER);
+        finished .getStyleClass().add("verify-list");
+        for(var e : list_finished){
+            finished.getChildren().add(new ImageView("galaxy_trucker_imgs/piece/"+e.toString()+".png"));
         }
-        for(var p : list_finished){
-            var l = new Label(p.getColor().toString()+" - "+p.getUsername());
-            l.getStyleClass().add("verify_player_label");
-            finished.getChildren().add(l);
-        }
-        res.getChildren().addAll(awaiting, finished);
+        finished .setMaxWidth(333);
+        res.getChildren().add(finished_lab);
+        res.getChildren().add(finished);
+
+        
         res.setAlignment(Pos.CENTER);
         return res;
     }

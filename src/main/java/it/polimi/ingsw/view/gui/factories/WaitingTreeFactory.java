@@ -42,6 +42,7 @@ public class WaitingTreeFactory {
         sp.setMaxHeight(135);
         sp.setMaxWidth(390);
         Rectangle r = new Rectangle(390, 135, getColor(p.getColor()));
+        r.getStyleClass().add("ui-rectangle");
         sp.getChildren().addAll(r, new Label(p.getUsername()));
         return sp;
     }
@@ -65,14 +66,18 @@ public class WaitingTreeFactory {
         StackPane sp = new StackPane();
         switch(t){
             case LVL2: {
-                sp.getChildren().add(new Rectangle(390, 600, new Color(163/255f, 5/255f, 63/255f, 1.0)));
+                var splash = new Rectangle(390, 600, new Color(163/255f, 5/255f, 63/255f, 1.0));
+                splash.getStyleClass().add("ui-rectangle");
+                sp.getChildren().add(splash);
                 var logo = new ImageView("/galaxy_trucker_imgs/logos/lvl2.png");
                 logo.setScaleX(0.6);
                 logo.setScaleY(0.6);
                 sp.getChildren().add(logo);
             } break;
             case TEST: {
-                sp.getChildren().add(new Rectangle(390, 600, new Color(13/255f, 88/255f, 209/255f, 1.0)));
+                var splash = new Rectangle(390, 600, new Color(13/255f, 88/255f, 209/255f, 1.0));
+                sp.getChildren().add(splash);
+                splash.getStyleClass().add("ui-rectangle");
                 var logo = new ImageView("/galaxy_trucker_imgs/logos/test.png");
                 logo.setScaleX(0.6);
                 logo.setScaleY(0.6);

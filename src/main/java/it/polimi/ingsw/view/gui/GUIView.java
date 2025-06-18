@@ -6,11 +6,14 @@ import it.polimi.ingsw.controller.client.ClientController;
 import it.polimi.ingsw.controller.client.state.*;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.GameModeType;
-import it.polimi.ingsw.model.client.card.ClientBaseCardState;
+import it.polimi.ingsw.model.client.components.ClientSpaceShip;
+import it.polimi.ingsw.model.client.player.ClientVoyagePlayer;
 import it.polimi.ingsw.model.client.state.*;
+import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.view.ClientView;
 import it.polimi.ingsw.view.gui.factories.*;
+import it.polimi.ingsw.view.gui.tiles.piece.BatteryPiece;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
@@ -24,6 +27,7 @@ import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 public class GUIView extends Application implements ClientView {
@@ -43,6 +47,9 @@ public class GUIView extends Application implements ClientView {
 		scene.getStylesheets().add("styles.css");
         primaryStage.setScene(scene);
         primaryStage.show();
+		primaryStage.setOnCloseRequest(event -> {
+			System.exit(0);
+		});
         new ClientController(this);
     }
 
@@ -57,9 +64,6 @@ public class GUIView extends Application implements ClientView {
 			root.setBackground(new Background(new BackgroundImage(new Image("title1.jpg"), BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
 			this.root.getChildren().clear();
             var node = TitleScreenTreeFactory.createTitleScreen(state);
-			// VoyageSidePaneTreeFactory f = new VoyageSidePaneTreeFactory(this);
-			// var s = new ClientVoyageState(GameModeType.TEST, new ArrayList<>(), new ClientBaseCardState("", 12), 2);
-			// var node = f.createSidePane(s, view_color);
 
             this.root.getChildren().add(node);
             StackPane.setAlignment(node, Pos.CENTER);
@@ -127,39 +131,33 @@ public class GUIView extends Application implements ClientView {
 			if(prev!=null){
 				var prevp = ((ClientConstructionState)prev_client_state).getPlayerList().stream().filter(p->p.getColor()==this.view_color).findFirst().orElse(((ClientConstructionState)prev_client_state).getPlayerList().getFirst());				
 				if(prevp.getCurrent()!=player.getCurrent()){
-					System.out.println("Replacing tile!");
 					int indx =	prev.getChildren().indexOf(root.getScene().lookup("#constr-tile-pane"));
 					prev.getChildren().remove(indx);
 					prev.getChildren().add(indx, ConstructionSidePaneTreeFactory.createMainConstructionTileTree(this, player, state.getTilesLeft()));
 				}
 				if(!prevp.getReserved().equals(player.getReserved())){
-					System.out.println("Replacing reserved!");
 					int indx =	prev.getChildren().indexOf(root.getScene().lookup("#constr-reserved-pane"));
 					prev.getChildren().remove(indx);
 					prev.getChildren().add(indx, ConstructionSidePaneTreeFactory.createReservedConstructionTileTree(this, player));
 				}
 				if(!prevp.getShip().equals(player.getShip())){
-					System.out.println("Replacing Ship!");
 					int indx =	root.getChildren().indexOf(root.getScene().lookup("#ship"));
 					root.getChildren().remove(indx);
-					var node = PlacedShipTreeFactory.createPlacedShip(this, player.getShip());
+					var node = PlacedShipTreeFactory.createPlacedShip(this, player.getShip(), 0, true, player.isDisconnected());
 					root.getChildren().add(indx, node);
 					StackPane.setMargin(node, new Insets(0, 60, 0, 0));
 					StackPane.setAlignment(node, Pos.CENTER_RIGHT);
 				}
 				if(!((ClientConstructionState)prev_client_state).getDiscardedTiles().equals(state.getDiscardedTiles())){
-					System.out.println("Replacing Discarded!");
 					int indx =	prev.getChildren().indexOf(root.getScene().lookup("#constr-discarded-list"));
 					prev.getChildren().remove(indx);
 					prev.getChildren().add(indx, ConstructionSidePaneTreeFactory.createDiscardedConstructionTileTree(this, state));
 				}
-				System.out.println("Replacing addons!");
 				int indx = prev.getChildren().indexOf(root.getScene().lookup("#constr-leveltwo-addons"));
 				if(indx!=-1){
 					prev.getChildren().remove(indx);
 					prev.getChildren().add(indx, ConstructionSidePaneTreeFactory.createLevelTwoAddons(this, state, root));
 				}
-				System.out.println("Replacing Colors!");
 				indx = prev.getChildren().indexOf(root.getScene().lookup("#constr-color-switch"));
 				if(indx!=-1){
 					prev.getChildren().remove(indx);
@@ -170,10 +168,10 @@ public class GUIView extends Application implements ClientView {
 				this.root.getChildren().clear();
 				var x = ConstructionSidePaneTreeFactory.createSidePane(this, state, view_color, root);
 				this.root.getChildren().add(x);
-				var node = PlacedShipTreeFactory.createPlacedShip(this, player.getShip());
+				var node = PlacedShipTreeFactory.createPlacedShip(this, player.getShip(), 0, true, player.isDisconnected());
 				this.root.getChildren().add(node);
 				StackPane.setAlignment(x, Pos.CENTER_LEFT);
-				StackPane.setMargin(x, new Insets(0, 0, 0, 60));
+				StackPane.setMargin(x, new Insets(0, 0, 0, 50));
 				StackPane.setMargin(node, new Insets(0, 60, 0, 0));
 				StackPane.setAlignment(node, Pos.CENTER_RIGHT);
 			}
@@ -192,7 +190,7 @@ public class GUIView extends Application implements ClientView {
 			this.root.getChildren().clear();
 			var x = VerifySidePaneTreeFactory.createSidePane(this, state, view_color);
 			this.root.getChildren().add(x);
-			var node = PlacedShipTreeFactory.createPlacedShip(this, player.getShip());
+			var node = PlacedShipTreeFactory.createPlacedShip(this, player.getShip(), 0, player.startsLosing(), player.isDisconnected());
 			this.root.getChildren().add(node);
 			StackPane.setAlignment(x, Pos.CENTER_LEFT);
 			StackPane.setMargin(x, new Insets(0, 0, 0, 60));
@@ -208,12 +206,11 @@ public class GUIView extends Application implements ClientView {
 			if(this.view_color==PlayerColor.NONE) 
 				this.view_color = state.getPlayerList().stream().filter(s -> s.getUsername().equals(username)).map(p -> p.getColor()).findFirst().orElse(PlayerColor.NONE);
 			
-			var player = state.getPlayerList().stream().filter(p->p.getColor()==this.view_color).findFirst().orElse(state.getPlayerList().getFirst());
 			this.root.getChildren().clear();
 			VoyageSidePaneTreeFactory v = new VoyageSidePaneTreeFactory(this);
 			var x = v.createSidePane(state, view_color);
 			this.root.getChildren().add(x);
-			var node = PlacedShipTreeFactory.createPlacedShip(this, player.getShip());
+			var node = PlacedShipTreeFactory.voyageShipPlanche(this, state, view_color);
 			this.root.getChildren().add(node);
 			StackPane.setAlignment(x, Pos.CENTER_LEFT);
 			StackPane.setMargin(x, new Insets(0, 0, 0, 60));

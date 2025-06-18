@@ -8,7 +8,7 @@ import javafx.scene.input.TransferMode;
 public class SelectBlobPiece extends DraggablePiece {
     
     public SelectBlobPiece() {
-        super(PieceImagePathProvider.blob(), 1);
+        super(PieceImagePathProvider.blob(), 0.8);
         
         this.setOnDragDetected(event -> {
             Dragboard db = this.startDragAndDrop(TransferMode.ANY);

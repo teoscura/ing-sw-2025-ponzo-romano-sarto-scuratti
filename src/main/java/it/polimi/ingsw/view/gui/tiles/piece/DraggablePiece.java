@@ -7,8 +7,8 @@ public abstract class DraggablePiece extends ImageView {
     
     protected DraggablePiece(String path, double scale){
         super(path);
-        this.setScaleX(scale);
-        this.setScaleY(scale);
+        this.setPreserveRatio(true);
+        this.setFitWidth(scale*this.getImage().getWidth());
     }
 
     abstract public ServerMessage getDecoded(DraggablePieceDecoder dec);

@@ -41,7 +41,7 @@ public class VoyageSidePaneTreeFactory implements ClientCardStateVisitor {
         this.cstatetree = new VBox(10);
         this.cstatetree.setAlignment(Pos.CENTER);
         this.cstatetree.setMaxWidth(333);
-        Label card = new Label("Card: "+(state.getType().getLenght()-state.getCardsLeft()+1)+"/"+state.getType().getLenght());
+        Label card = new Label("Card: "+(state.getType().getTurns()-state.getCardsLeft())+"/"+state.getType().getTurns());
         card.setFont(new Font(18));
         card.setFont(new Font(18));
         this.cstatetree.getChildren().add(card);
@@ -98,19 +98,11 @@ public class VoyageSidePaneTreeFactory implements ClientCardStateVisitor {
         required.setAlignment(Pos.CENTER);
         required.setMaxWidth(333);
         required.getStyleClass().add("voyage-cargo-pen-required");
-        required.getChildren().add(new BatteryPiece(view, null));
-        int k = 0;
-        for(int i : state.getShipments()){
-            if(k==0){
-                for(int j = 0; j < i; j++){
-                    required.getChildren().add(new BatteryPiece(view, null));
-                }   
-                continue;   
+        for(int i = 0; i<state.getShipments().length;i++){
+            for(int j = 0; j<state.getShipments()[i]; j++){
+                var node = i == 0 ? new BatteryPiece(view, null) : new CargoPiece(view, null, ShipmentType.fromValue(i));
+                required.getChildren().add(node);
             }
-            for(int j = 0; j < i; j++){
-                required.getChildren().add(new CargoPiece(view, null, ShipmentType.fromValue(k)));
-            }
-            k++;
         }
         this.cstatetree.getChildren().add(required);
     }
@@ -159,7 +151,7 @@ public class VoyageSidePaneTreeFactory implements ClientCardStateVisitor {
         awaiting.setAlignment(Pos.CENTER);
         awaiting.setMaxWidth(333);
         awaiting.getStyleClass().add("voyage-credits-rew-label");
-        Label message = new Label("Credits Reward ["+state.getDaysTaken()+" DAYS]: ");
+        Label message = new Label("Credits Reward: ");
         message.setFont(new Font(18));
         ImageView piece = new ImageView("galaxy_trucker_imgs/piece/"+state.getTurn().toString()+".png");
         awaiting.getChildren().addAll(message, piece);
@@ -201,7 +193,7 @@ public class VoyageSidePaneTreeFactory implements ClientCardStateVisitor {
         awaiting.getStyleClass().add("voyage-landing-label");
         this.cstatetree.getChildren().add(awaiting);
         if(state.getCredits()==0 && state.getCrewNeeded() == 0){
-            Label message = new Label("Planet ["+state.getCrewNeeded()+" DAYS]: ");
+            Label message = new Label("Awaiting: ");
             message.setFont(new Font(18));
             ImageView piece = new ImageView("galaxy_trucker_imgs/piece/"+state.getTurn().toString()+".png");
             awaiting.getChildren().addAll(message, piece);
@@ -227,7 +219,7 @@ public class VoyageSidePaneTreeFactory implements ClientCardStateVisitor {
                 i++;
             }
         } else if (state.getCredits()==0) {
-            Label message = new Label("Abandoned Station ["+state.getCrewNeeded()+" CREW NEEDED/"+state.getDaysTaken()+" DAYS]: ");
+            Label message = new Label("Awaiting: ");
             message.setFont(new Font(18));
             ImageView piece = new ImageView("galaxy_trucker_imgs/piece/"+state.getTurn().toString()+".png");
             awaiting.getChildren().addAll(message, piece);
@@ -253,7 +245,7 @@ public class VoyageSidePaneTreeFactory implements ClientCardStateVisitor {
                 i++;
             }
         } else {
-            Label message = new Label("Abandoned Ship ["+state.getCrewNeeded()+" CREW NEEDED/"+state.getDaysTaken()+" DAYS]: ");
+            Label message = new Label("Awaiting: ");
             message.setFont(new Font(18));
             ImageView piece = new ImageView("galaxy_trucker_imgs/piece/"+state.getTurn().toString()+".png");
             awaiting.getChildren().addAll(message, piece);
@@ -286,7 +278,7 @@ public class VoyageSidePaneTreeFactory implements ClientCardStateVisitor {
         HBox awaiting = new HBox(8);
         awaiting.setAlignment(Pos.CENTER);
         awaiting.getStyleClass().add("voyage-awaiting-list");
-        Label label = new Label("Awaiting select from:");
+        Label label = new Label("Awaiting:");
         label.setFont(new Font(18));
         awaiting.getChildren().add(label);
         for(var e : state.getAwaiting()){
@@ -311,9 +303,6 @@ public class VoyageSidePaneTreeFactory implements ClientCardStateVisitor {
 
     @Override//a
     public void show(ClientEnemyCardStateDecorator state) {
-        Label flavour = new Label("Incoming enemy!");
-        flavour.setFont(new Font(18));
-        this.cstatetree.getChildren().add(flavour);
     }
 
     private int normalizeOffset(int shift, int roll) {
@@ -327,7 +316,7 @@ public class VoyageSidePaneTreeFactory implements ClientCardStateVisitor {
 
     public Node createColorSwitchTree(GUIView view, ClientVoyageState state, PlayerColor color){
         HBox res = new HBox(20);
-        Label lab = new Label("View: ");
+        Label lab = new Label("Jump to: ");
         lab.setFont(new Font(18));
         res.getChildren().add(lab);
         res.setId("constr-color-switch");

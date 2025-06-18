@@ -8,7 +8,7 @@ import javafx.scene.input.TransferMode;
 public class RemoveComponentPiece extends DraggablePiece {
     
     public RemoveComponentPiece() {
-        super(PieceImagePathProvider.destroy(), 1.0);
+        super(PieceImagePathProvider.destroy(), 0.8);
 
         this.setOnDragDetected(event -> {
             Dragboard db = this.startDragAndDrop(TransferMode.ANY);

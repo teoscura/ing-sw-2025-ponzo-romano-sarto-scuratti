@@ -11,7 +11,7 @@ public class CrewSetPiece extends DraggablePiece {
     private final AlienType type;
 
     public CrewSetPiece(AlienType type) {
-        super(PieceImagePathProvider.crew(type), 2.0);
+        super(PieceImagePathProvider.crew(type), 1.5);
         
         this.type = type;
 

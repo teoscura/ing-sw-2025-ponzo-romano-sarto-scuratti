@@ -233,6 +233,9 @@ public class VoyageState extends GameState {
 	 * @param next {@link CardState} Next state to set.
 	 */
 	public void setCardState(CardState next) {
+		for(var p : this.players){
+			p.getSpaceShip().resetPower();
+		}
 		if (next == null) {
 			if (this.getOrder(CardOrder.NORMAL).size() == 0) {
 				this.transition();

@@ -1,16 +1,22 @@
-.draggable-piece {
-    -fx-border-color: white;
-    -fx-border-width: 2px;
+@font-face {
+    font-family: 'Roboto Mono';
+    src: url('font.ttf');
 }
 
 .costr-pane-base {
     background-color: darkgrey;
 }
 
+.ui-rectangle {
+    -fx-arc-width: 15;
+    -fx-arc-height: 15;
+}
+
 .label {
-    -fx-font-size: 20px;
-    -fx-text-fill: rgb(0, 255, 13);
+    -fx-font-size: 17px;
+    -fx-text-fill: rgb(82, 255, 90);
     -fx-stroke-width: 2;
+    -fx-font-family: Roboto Mono;
 }
 
 #ship-bg-img {

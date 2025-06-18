@@ -2,7 +2,6 @@ package it.polimi.ingsw.view.gui.factories;
 
 import it.polimi.ingsw.controller.client.connections.ConnectionType;
 import it.polimi.ingsw.controller.client.state.ConnectingState;
-import it.polimi.ingsw.view.gui.GUIView;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -33,6 +32,7 @@ public class ConnectionSetupTreeFactory {
             ipv = ip.getText();
             try{
                 portv = Integer.parseInt(port.getText());
+                if(portv<0||portv>65535) throw new NumberFormatException();
             } catch (NumberFormatException e){
                 portv = 0;
                 tv = ConnectionType.NONE;

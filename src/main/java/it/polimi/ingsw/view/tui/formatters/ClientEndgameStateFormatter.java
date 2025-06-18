@@ -28,7 +28,7 @@ public class ClientEndgameStateFormatter {
 			AttributedStringBuilder b = new AttributedStringBuilder()
 				.append(e.getUsername())
 				.append(" - " + e.getColor())
-				.append(e.getPlanche_slot() >= 0 ? " - #" + (finished - list.indexOf(e)) + " - " : " - DNF- ")
+				.append(e.getPlanche_slot() >= 0 ? " - #" + e.getPlanche_slot() + " - " : " - DNF - ")
 				.append(String.format("🟦: %3d | ", e.getShipments()[1]))
 				.append(String.format("🟩: %3d | ", e.getShipments()[2]))
 				.append(String.format("🟨: %3d | ", e.getShipments()[3]))
