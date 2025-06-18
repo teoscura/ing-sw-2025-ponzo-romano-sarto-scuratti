@@ -9,6 +9,7 @@ import it.polimi.ingsw.model.client.state.*;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.view.ClientView;
 import it.polimi.ingsw.view.gui.factories.*;
+import it.polimi.ingsw.view.gui.tiles.piece.RemoveComponentPiece;
 import javafx.animation.Animation;
 import javafx.animation.Interpolator;
 import javafx.animation.TranslateTransition;
@@ -64,7 +65,8 @@ public class GUIView extends Application implements ClientView {
 			this.view_color = PlayerColor.NONE;
 			this.bgAnimation(1);
 			this.gameroot.getChildren().clear();
-            var node = TitleScreenTreeFactory.createTitleScreen(state);
+            //var node = TitleScreenTreeFactory.createTitleScreen(state);
+			var node = new RemoveComponentPiece();
 			this.gameroot.getChildren().add(node);
             StackPane.setAlignment(node, Pos.CENTER);
         });
