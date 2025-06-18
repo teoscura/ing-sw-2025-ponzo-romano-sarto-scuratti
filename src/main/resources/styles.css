@@ -12,3 +12,7 @@
     -fx-text-fill: rgb(0, 255, 13);
     -fx-stroke-width: 2;
 }
+
+#ship-bg-img {
+    -fx-corner-radius: 10px
+}

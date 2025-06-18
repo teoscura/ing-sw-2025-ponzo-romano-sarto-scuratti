@@ -25,7 +25,7 @@ public class ConnectionSetupTreeFactory {
         ChoiceBox<String> connection_menu = new ChoiceBox<>();
         connection_menu.getItems().addAll("TCP", "RMI");
         Button confirm = new Button();
-        confirm.setOnMouseClicked(event->{
+        confirm.setOnAction(event->{
             String ipv = null;
             int portv = 0;
             ConnectionType tv = ConnectionType.NONE;

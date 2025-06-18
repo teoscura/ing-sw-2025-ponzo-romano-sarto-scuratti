@@ -122,6 +122,7 @@ public class ConstructionSidePaneTreeFactory {
             res.setId("constr-reserve-button");
             sp.getChildren().add(res);
         }
+        sp.setId("constr-tile-pane");
         return sp;
     }
 
@@ -131,6 +132,7 @@ public class ConstructionSidePaneTreeFactory {
         for(int id : p.getReserved()){
             res.getChildren().add(new ConstructionTile(view, id, false, false, 0.5));
         }
+        res.setId("constr-reserved-pane");
         return res;
     }
 
@@ -163,7 +165,6 @@ public class ConstructionSidePaneTreeFactory {
     }
 
     static public Node createColorSwitchTree(GUIView view, ClientConstructionState state, PlayerColor color){
-        
         HBox res = new HBox(20);
         Label lab = new Label("View: ");
         lab.setFont(new Font(18));

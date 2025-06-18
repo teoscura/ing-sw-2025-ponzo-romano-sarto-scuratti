@@ -45,7 +45,7 @@ public class PlacedTileFactory implements ClientComponentVisitor {
 
     @Override
     public void show(ClientBrokenVerifyComponentDecorator component) {
-        tile.setOverlay(new ImageView("galaxy_trucker_imgs/tiles/broken.jpg"));
+        tile.setOverlay(new ImageView("galaxy_trucker_imgs/tiles/transparent/broken.png"));
     }
 
     @Override
@@ -70,7 +70,10 @@ public class PlacedTileFactory implements ClientComponentVisitor {
     @Override
     public void show(ClientPoweredComponentDecorator component) {
         if(!component.getPowered()) return;
-        tile.setOverlay(new ImageView("galaxy_trucker_imgs/tiles/powered.jpg"));
+        var over = new ImageView("galaxy_trucker_imgs/tiles/transparent/powered.png");
+        over.setOpacity(0.3);
+        tile.setOverlay(over);
+        
     }
 
     @Override

@@ -67,6 +67,9 @@ public class VoyageSidePaneTreeFactory implements ClientCardStateVisitor {
         this.cstatetree.getChildren().add(awaiting);
         Button confirm = new Button("Continue");
         confirm.setId("confirm-button");
+        confirm.setOnAction(event->{
+            view.sendMessage(new SendContinueMessage());
+        });
         this.cstatetree.getChildren().add(confirm);
     }
 
@@ -74,6 +77,8 @@ public class VoyageSidePaneTreeFactory implements ClientCardStateVisitor {
     public void show(ClientBaseCardState state) {
         var e = new ImageView("galaxy_trucker_imgs/cards/GT-card-"+state.getID()+".jpg");
         e.getStyleClass().add("voyage-card-image");
+        e.setFitHeight(0.7*e.getFitHeight());
+        e.setFitWidth(0.7);
         this.cstatetree.getChildren().add(e);
     }
 
@@ -265,7 +270,7 @@ public class VoyageSidePaneTreeFactory implements ClientCardStateVisitor {
         message.setId("meteor-announce-label");
         this.cstatetree.getChildren().add(message);
         var img = new ImageView("galaxy_trucker_imgs/piece/meteor_"+(state.getProjectile().getDimension()==ProjectileDimension.BIG?"b":"s")+".png");
-        img.setRotate(90*state.getProjectile().getDirection().getShift());
+        img.setRotate(90*(state.getProjectile().getDirection().getShift()+2));
         this.cstatetree.getChildren().add(img);
     }
 
@@ -293,7 +298,7 @@ public class VoyageSidePaneTreeFactory implements ClientCardStateVisitor {
         message.setId("shot-announce-label");
         this.cstatetree.getChildren().add(message);
         var img = new ImageView("galaxy_trucker_imgs/piece/shot_"+(state.getProjectile().getDimension()==ProjectileDimension.BIG?"b":"s")+".png");
-        img.setRotate(90*state.getProjectile().getDirection().getShift());
+        img.setRotate(90*(state.getProjectile().getDirection().getShift()+2));
         this.cstatetree.getChildren().add(img);
     }
 
