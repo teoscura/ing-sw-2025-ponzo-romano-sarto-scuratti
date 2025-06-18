@@ -28,9 +28,11 @@ public class SetupOptionsContainer {
 
 	public void setCount(PlayerCount count, Button countButton) {
 		this.count = count;
-		this.countButton.getStyleClass().remove("countOptionSelected");
+		if (this.countButton != null) {
+			this.countButton.getStyleClass().remove("count-option-selected");
+		}
 		this.countButton = countButton;
-		this.countButton.getStyleClass().add("countOptionSelected");
+		this.countButton.getStyleClass().add("count-option-selected");
 		System.out.println("PlayerCount set to: " + count);
 	}
 
@@ -40,9 +42,11 @@ public class SetupOptionsContainer {
 
 	public void setMode(GameModeType mode, Button modeButton) {
 		this.mode = mode;
-		this.countButton.getStyleClass().remove("modeOptionSelected");
+		if (this.modeButton != null) {
+			this.modeButton.getStyleClass().remove("mode-option-selected");
+		}
 		this.modeButton = modeButton;
-		this.modeButton.getStyleClass().add("modeOptionSelected");
+		this.modeButton.getStyleClass().add("mode-option-selected");
 		System.out.println("GameMode set to: " + mode);
 	}
 

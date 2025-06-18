@@ -94,6 +94,12 @@
     -fx-fill: #fcee68;
     -fill: #fcee68;
 }
+.mode-option-selected {
+    -fx-effect: dropshadow(gaussian, rgba(255,0,0,0.8), 10, 0.5, 0, 0);
+}
+.count-option-selected{
+    -fx-effect: dropshadow(gaussian, rgba(0,255,0,0.8), 10, 0.5, 0, 0);
+}
 
 .entry-list {
     -fx-background-color: rgba(133, 133, 133, 0);
