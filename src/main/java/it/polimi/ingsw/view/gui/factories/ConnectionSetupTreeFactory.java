@@ -14,11 +14,15 @@ public class ConnectionSetupTreeFactory {
     
 	static public Node createConnectionScreen(ConnectingState state) {
         Label l1 = new Label("Set IP: ");
+        l1.getStyleClass().add("list-label-big");
         TextField ip = new TextField();
+        ip.getStyleClass().add("titlescreen-field");
         ip.setMaxWidth(300);
         ip.setCenterShape(true);
         Label l2 = new Label("Set Port: ");
+        l2.getStyleClass().add("list-label-big");
         TextField port = new TextField();
+        port.getStyleClass().add("titlescreen-field");
         port.setMaxWidth(300);
         port.setCenterShape(true);
         ChoiceBox<String> connection_menu = new ChoiceBox<>();

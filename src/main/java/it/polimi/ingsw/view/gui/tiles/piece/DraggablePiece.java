@@ -9,6 +9,7 @@ public abstract class DraggablePiece extends ImageView {
         super(path);
         this.setPreserveRatio(true);
         this.setFitWidth(scale*this.getImage().getWidth());
+        this.getStyleClass().add("draggable-piece-line");
     }
 
     abstract public ServerMessage getDecoded(DraggablePieceDecoder dec);
