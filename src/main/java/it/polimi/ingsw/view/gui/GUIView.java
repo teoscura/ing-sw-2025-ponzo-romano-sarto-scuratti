@@ -57,8 +57,12 @@ public class GUIView extends Application implements ClientView {
 		this.root.getChildren().addAll(bgroot, gameroot, notifroot);
 		this.notif_box = new VBox(10);
 		notif_box.setMaxWidth(305);
+		StackPane.setAlignment(notifroot, Pos.TOP_LEFT);
+		notifroot.setMaxWidth(305);
+		notifroot.setMaxHeight(400);
 		this.notifroot.getChildren().add(this.notif_box);
-		StackPane.setAlignment(notif_box, Pos.TOP_RIGHT);
+		this.notifroot.setMouseTransparent(true);
+		StackPane.setAlignment(notif_box, Pos.TOP_LEFT);
 		StackPane.setMargin(notif_box, new Insets(10, 0, 0, 10));
 	}
 
@@ -184,6 +188,7 @@ public class GUIView extends Application implements ClientView {
 					prev.getChildren().remove(indx);
 					prev.getChildren().add(indx, ConstructionSidePaneTreeFactory.createColorSwitchTree(this, state, view_color));
 				}
+				//TODO: check awaiting e refresh.
 				return;
 			} else {
 				this.gameroot.getChildren().clear();

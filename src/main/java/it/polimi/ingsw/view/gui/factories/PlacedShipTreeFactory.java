@@ -74,51 +74,57 @@ public class PlacedShipTreeFactory {
     }
 
     static public Node statsBar(String username, ClientSpaceShip ship, int credits, boolean alive, boolean disconnected){
-        //TODO: immagini al posto delle emoji.
         StackPane sb = new StackPane();
         HBox values = new HBox(10);
-        values.setMaxWidth(700);
-        sb.setMaxWidth(700);
+        values.setMaxWidth(800);
+        values.setAlignment(Pos.CENTER);
+        sb.setMaxWidth(800);
         sb.setMaxHeight(80);
-        var s = new Rectangle(700, 70, new Color(169/255f,169/255f,169/255f,0.45));
+        var s = new Rectangle(800, 70, new Color(169/255f,169/255f,169/255f,0.45));
         sb.getChildren().add(s);
         s.getStyleClass().add("ui-rectangle");
         int totalcrew = 0;
         for(var i : ship.getCrew()) totalcrew+=i;
-        String tail = "";
+        String tail = " - ";
         tail += disconnected ? "disconnected - " : "";
         tail += alive ? "alive" : "retired";
-        ImageView gun = new ImageView("galaxy_trucker_imgs/powerc.png");
+        ImageView gun = new ImageView("galaxy_trucker_imgs/piece/powerc.png");
         gun.setPreserveRatio(true);
         gun.setFitWidth(50);
         Label gunv = new Label(Double.toString(ship.getCannonPower()));
-        ImageView engine = new ImageView("galaxy_trucker_imgs/powere.png");
+        gunv.getStyleClass().add("list-label");
+        ImageView engine = new ImageView("galaxy_trucker_imgs/piece/powere.png");
         engine.setPreserveRatio(true);
         engine.setFitWidth(50);
         Label enginev = new Label(Integer.toString(ship.getEnginePower()));
-
-        ImageView crew = new ImageView("galaxy_trucker_imgs/crewt.png");
+        enginev.getStyleClass().add("list-label");
+        ImageView crew = new ImageView("galaxy_trucker_imgs/piece/crewt.png");
         crew.setPreserveRatio(true);
         crew.setFitWidth(50);
         Label crewv = new Label(Integer.toString(totalcrew));
-
-        ImageView brown = new ImageView("galaxy_trucker_imgs/crewb.png");
+        crewv.getStyleClass().add("list-label");
+        ImageView brown = new ImageView("galaxy_trucker_imgs/piece/crewb.png");
         brown.setPreserveRatio(true);
         brown.setFitWidth(50);
         Label brownv = new Label(Integer.toString(ship.getCrew()[1]));
-
-        ImageView purple = new ImageView("galaxy_trucker_imgs/crewp.png");
+        brownv.getStyleClass().add("list-label");
+        ImageView purple = new ImageView("galaxy_trucker_imgs/piece/crewp.png");
         purple.setPreserveRatio(true);
         purple.setFitWidth(50);
         Label purplev = new Label(Integer.toString(ship.getCrew()[2]));
-
-        ImageView money = new ImageView("galaxy_trucker_imgs/money.png");
+        purplev.getStyleClass().add("list-label");
+        ImageView money = new ImageView("galaxy_trucker_imgs/piece/money.png");
         money.setPreserveRatio(true);
         money.setFitWidth(50);
         Label moneyv = new Label(Integer.toString(credits));
+        moneyv.getStyleClass().add("list-label");
         Label usernamel = new Label(username);
+        usernamel.getStyleClass().add("list-label");
         Label label = new Label(tail);
+        label.getStyleClass().add("list-label");
         values.getChildren().addAll(usernamel, gun, gunv, engine, enginev, crew, crewv, brown, brownv, purple, purplev, money, moneyv, label);
+        sb.getChildren().add(values);
+        sb.setAlignment(Pos.CENTER);
         return sb;
     }
 

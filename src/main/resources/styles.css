@@ -95,3 +95,9 @@
     -fill: #fcee68;
 }
 
+.entry-list {
+    -fx-background-color: rgba(133, 133, 133, 0);
+    -fx-alignment: center;
+    -fx-border-color: rgb(255, 225, 31);
+}
+
