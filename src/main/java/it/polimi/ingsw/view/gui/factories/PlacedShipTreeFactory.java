@@ -24,7 +24,7 @@ import javafx.scene.shape.Rectangle;
 
 public class PlacedShipTreeFactory {
     
-    static public Node createPlacedShip(GUIView view, ClientSpaceShip ship, int credits, boolean alive, boolean disconnected){
+    static public Node createPlacedShip(GUIView view, String username, ClientSpaceShip ship, int credits, boolean alive, boolean disconnected){
         var res = new GridPane();
         res.setGridLinesVisible(true);
         PlacedTileFactory f = new PlacedTileFactory(view);
@@ -63,7 +63,7 @@ public class PlacedShipTreeFactory {
         bg.setOpacity(0.4);
 
         
-        var stats = statsBar(ship, credits, alive, disconnected);
+        var stats = statsBar(username, ship, credits, alive, disconnected);
         StackPane sp = new StackPane(bg, res, stats);
         sp.setMaxWidth(840);
         sp.setMaxHeight(768);
@@ -73,22 +73,52 @@ public class PlacedShipTreeFactory {
         return sp;
     }
 
-    static public Node statsBar(ClientSpaceShip ship, int credits, boolean alive, boolean disconnected){
+    static public Node statsBar(String username, ClientSpaceShip ship, int credits, boolean alive, boolean disconnected){
         //TODO: immagini al posto delle emoji.
         StackPane sb = new StackPane();
+        HBox values = new HBox(10);
+        values.setMaxWidth(700);
         sb.setMaxWidth(700);
         sb.setMaxHeight(80);
         var s = new Rectangle(700, 70, new Color(169/255f,169/255f,169/255f,0.45));
         sb.getChildren().add(s);
         s.getStyleClass().add("ui-rectangle");
-        Label stats = new Label();
         int totalcrew = 0;
         for(var i : ship.getCrew()) totalcrew+=i;
-        String label = "";
-        label += disconnected ? "disconnected - " : "";
-        label += alive ? "alive" : "retired";
-        stats.setText("🔫: "+ship.getCannonPower()+" 🚀: "+ship.getEnginePower()+" 🧍: "+totalcrew+" 🐻: "+ship.getCrew()[1]+" 😈: "+ship.getCrew()[2]+" 💰: "+credits+" | "+label);
-        sb.getChildren().add(stats);
+        String tail = "";
+        tail += disconnected ? "disconnected - " : "";
+        tail += alive ? "alive" : "retired";
+        ImageView gun = new ImageView("galaxy_trucker_imgs/powerc.png");
+        gun.setPreserveRatio(true);
+        gun.setFitWidth(50);
+        Label gunv = new Label(Double.toString(ship.getCannonPower()));
+        ImageView engine = new ImageView("galaxy_trucker_imgs/powere.png");
+        engine.setPreserveRatio(true);
+        engine.setFitWidth(50);
+        Label enginev = new Label(Integer.toString(ship.getEnginePower()));
+
+        ImageView crew = new ImageView("galaxy_trucker_imgs/crewt.png");
+        crew.setPreserveRatio(true);
+        crew.setFitWidth(50);
+        Label crewv = new Label(Integer.toString(totalcrew));
+
+        ImageView brown = new ImageView("galaxy_trucker_imgs/crewb.png");
+        brown.setPreserveRatio(true);
+        brown.setFitWidth(50);
+        Label brownv = new Label(Integer.toString(ship.getCrew()[1]));
+
+        ImageView purple = new ImageView("galaxy_trucker_imgs/crewp.png");
+        purple.setPreserveRatio(true);
+        purple.setFitWidth(50);
+        Label purplev = new Label(Integer.toString(ship.getCrew()[2]));
+
+        ImageView money = new ImageView("galaxy_trucker_imgs/money.png");
+        money.setPreserveRatio(true);
+        money.setFitWidth(50);
+        Label moneyv = new Label(Integer.toString(credits));
+        Label usernamel = new Label(username);
+        Label label = new Label(tail);
+        values.getChildren().addAll(usernamel, gun, gunv, engine, enginev, crew, crewv, brown, brownv, purple, purplev, money, moneyv, label);
         return sb;
     }
 
@@ -134,7 +164,7 @@ public class PlacedShipTreeFactory {
         bg.setOpacity(0.4);
 
         var planche = planche(state);
-        var stats = statsBar(ship, p.getCredits(), !p.isRetired(), p.isDisconnected());
+        var stats = statsBar(p.getUsername(), ship, p.getCredits(), !p.isRetired(), p.isDisconnected());
         StackPane sp = new StackPane(planche, bg, res, stats);
         sp.setMaxWidth(840);
         sp.setMaxHeight(768);

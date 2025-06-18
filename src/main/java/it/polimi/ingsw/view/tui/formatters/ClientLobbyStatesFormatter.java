@@ -32,7 +32,7 @@ public class ClientLobbyStatesFormatter {
 					.style(AttributedStyle.BOLD.foreground(full ? AttributedStyle.BLUE : AttributedStyle.GREEN))
 					.append("| " + e.getPlayers().size() + "/" + e.getCount().getNumber())
 					.style(AttributedStyle.DEFAULT)
-					.append(" - ");
+					.append(" - "+e.getState());
 			for (String s : e.getPlayers()) {
 				t.append(s + " ");
 			}
@@ -62,7 +62,7 @@ public class ClientLobbyStatesFormatter {
 					.style(AttributedStyle.BOLD.foreground(AttributedStyle.BLUE))
 					.append("| " + e.getCount())
 					.style(AttributedStyle.DEFAULT)
-					.append(" - ");
+					.append(" - "+e.getState());
 			for (String s : e.getPlayers()) {
 				t.append(s + " ");
 			}

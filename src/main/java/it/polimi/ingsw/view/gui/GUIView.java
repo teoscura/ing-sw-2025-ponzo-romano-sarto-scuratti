@@ -9,15 +9,14 @@ import it.polimi.ingsw.model.client.state.*;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.view.ClientView;
 import it.polimi.ingsw.view.gui.factories.*;
-import it.polimi.ingsw.view.gui.tiles.piece.RemoveComponentPiece;
 import javafx.animation.Animation;
+import javafx.animation.FadeTransition;
 import javafx.animation.Interpolator;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
@@ -30,12 +29,15 @@ public class GUIView extends Application implements ClientView {
     private StackPane root;
 	private StackPane gameroot;
 	private StackPane bgroot;
+	private StackPane notifroot;
 	private int bg_type = 1;
     private ClientState client_state;
 	private ClientState prev_client_state;
     private ConnectedState state;
 	private PlayerColor view_color;
 	private String username;
+
+	private VBox notif_box;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -51,8 +53,14 @@ public class GUIView extends Application implements ClientView {
         new ClientController(this);
 		this.bgroot = new StackPane();
 		this.gameroot = new StackPane();
-		this.root.getChildren().addAll(bgroot, gameroot);
-    }
+		this.notifroot = new StackPane();
+		this.root.getChildren().addAll(bgroot, gameroot, notifroot);
+		this.notif_box = new VBox(10);
+		notif_box.setMaxWidth(305);
+		this.notifroot.getChildren().add(this.notif_box);
+		StackPane.setAlignment(notif_box, Pos.TOP_RIGHT);
+		StackPane.setMargin(notif_box, new Insets(10, 0, 0, 10));
+	}
 
 	public void sendMessage(ServerMessage message) {
 		state.sendMessage(message);
@@ -61,12 +69,12 @@ public class GUIView extends Application implements ClientView {
     @Override
     public void show(TitleScreenState state) {
 		Platform.runLater(() -> {
+			this.showTextMessage("TITLE");
 			this.bg_type = 1;
 			this.view_color = PlayerColor.NONE;
 			this.bgAnimation(1);
 			this.gameroot.getChildren().clear();
-            //var node = TitleScreenTreeFactory.createTitleScreen(state);
-			var node = new RemoveComponentPiece();
+            var node = TitleScreenTreeFactory.createTitleScreen(state);
 			this.gameroot.getChildren().add(node);
             StackPane.setAlignment(node, Pos.CENTER);
         });
@@ -75,6 +83,7 @@ public class GUIView extends Application implements ClientView {
     @Override
     public void show(ConnectingState state) {
         Platform.runLater(() -> {
+			this.showTextMessage("Connected");
 			this.bg_type = 1;
 			this.view_color = PlayerColor.NONE;
            	if(this.bg_type != 1 ) this.bgAnimation(1);
@@ -155,7 +164,7 @@ public class GUIView extends Application implements ClientView {
 				if(!prevp.getShip().equals(player.getShip())){
 					int indx =	gameroot.getChildren().indexOf(gameroot.getScene().lookup("#ship"));
 					gameroot.getChildren().remove(indx);
-					var node = PlacedShipTreeFactory.createPlacedShip(this, player.getShip(), 0, true, player.isDisconnected());
+					var node = PlacedShipTreeFactory.createPlacedShip(this, player.getUsername(), player.getShip(), 0, true, player.isDisconnected());
 					gameroot.getChildren().add(indx, node);
 					StackPane.setMargin(node, new Insets(0, 60, 0, 0));
 					StackPane.setAlignment(node, Pos.CENTER_RIGHT);
@@ -180,7 +189,7 @@ public class GUIView extends Application implements ClientView {
 				this.gameroot.getChildren().clear();
 				var x = ConstructionSidePaneTreeFactory.createSidePane(this, state, view_color, gameroot);
 				this.gameroot.getChildren().add(x);
-				var node = PlacedShipTreeFactory.createPlacedShip(this, player.getShip(), 0, true, player.isDisconnected());
+				var node = PlacedShipTreeFactory.createPlacedShip(this, player.getUsername(), player.getShip(), 0, true, player.isDisconnected());
 				this.gameroot.getChildren().add(node);
 				StackPane.setAlignment(x, Pos.CENTER_LEFT);
 				StackPane.setMargin(x, new Insets(0, 0, 0, 50));
@@ -205,7 +214,7 @@ public class GUIView extends Application implements ClientView {
 			this.gameroot.getChildren().clear();
 			var x = VerifySidePaneTreeFactory.createSidePane(this, state, view_color);
 			this.gameroot.getChildren().add(x);
-			var node = PlacedShipTreeFactory.createPlacedShip(this, player.getShip(), 0, player.startsLosing(), player.isDisconnected());
+			var node = PlacedShipTreeFactory.createPlacedShip(this, player.getUsername(), player.getShip(), 0, player.startsLosing(), player.isDisconnected());
 			this.gameroot.getChildren().add(node);
 			StackPane.setAlignment(x, Pos.CENTER_LEFT);
 			StackPane.setMargin(x, new Insets(0, 0, 0, 60));
@@ -251,7 +260,18 @@ public class GUIView extends Application implements ClientView {
 
 	@Override
 	public void showTextMessage(String message) {
-        //TODO notifiche.
+        var notif = new GUINotification(message, 7);
+		Platform.runLater(()->{
+			this.notif_box.getChildren().addFirst(notif);
+			FadeTransition anim = new FadeTransition(Duration.seconds(notif.seconds()), notif);
+			anim.setToValue(0.0);
+			anim.setFromValue(1.0);
+			anim.setInterpolator(Interpolator.EASE_IN);
+			anim.setOnFinished(event -> {
+				this.notif_box.getChildren().remove(notif);
+			});
+			anim.play();
+		});	
 	}
 
 	@Override
@@ -289,7 +309,6 @@ public class GUIView extends Application implements ClientView {
 		anim.setCycleCount(Animation.INDEFINITE);
 		anim.play();
 		this.bgroot.getChildren().addAll(bg);
-
 	}
 
 

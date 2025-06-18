@@ -13,7 +13,6 @@
     -fx-font-family: Roboto Mono;
     -fx-font-size: 30px;
     -fx-text-fill: rgb(255, 225, 31);
-    -fx-font-style: bold;
     -fx-background-color: rgba(133, 133, 133, 0.492);
     -fx-alignment: center;
     -fx-border-color: rgb(255, 225, 31);
@@ -38,15 +37,21 @@
     -fx-font-family: Roboto Mono;
 }
 
+.notif-text {
+    -fx-font-size: 18px;
+    -fx-text-fill: rgb(255, 255, 255);
+    -fx-stroke-width: 4;
+    -fx-font-family: Roboto Mono;
+}
+
+
 .list-label {
     -fx-font-size: 23px;
     -fx-text-fill: rgb(255, 255, 255);
-    -fx-font-style: bold;
 }
 
 .list-label-big {
     -fx-font-size: 40px;
-    -fx-font-style: bold;
     -fx-text-fill: rgb(255, 255, 255);
 }
 
