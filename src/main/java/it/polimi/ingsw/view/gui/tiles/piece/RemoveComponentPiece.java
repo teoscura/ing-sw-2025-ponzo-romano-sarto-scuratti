@@ -1,7 +1,6 @@
 package it.polimi.ingsw.view.gui.tiles.piece;
 
 import it.polimi.ingsw.message.server.ServerMessage;
-import it.polimi.ingsw.model.components.enums.AlienType;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;

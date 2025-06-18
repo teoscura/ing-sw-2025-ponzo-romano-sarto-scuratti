@@ -40,15 +40,16 @@ public class ConstructionSidePaneTreeFactory {
     }
 
     public static void showCards(GUIView view, ClientConstructionState state, Node root){
-        //TODO rifare
-        HBox card_list = new HBox(-120);
+        VBox card_list = new VBox(0);
+        int k = 0;
         for(int id : state.getConstructionCards()){
+            if(k%3==0) card_list.getChildren().addLast(new HBox());
             ImageView t = new ImageView("galaxy_trucker_imgs/cards/GT-card-" + id + ".jpg");
-            t.setScaleX(0.4);
-            t.maxWidth(0.4*t.getFitWidth());
-            t.setScaleY(0.4);
-            t.maxWidth(0.4*t.getFitHeight());
-            card_list.getChildren().add(t);
+            t.setPreserveRatio(true);
+            t.setPreserveRatio(true);
+            t.setFitHeight(250);
+            ((HBox)card_list.getChildren().getLast()).getChildren().add(t);
+            k++;
         }
         Popup popup = new Popup();
         popup.getContent().add(card_list);

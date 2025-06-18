@@ -1,6 +1,5 @@
 package it.polimi.ingsw.view.gui.tiles.piece;
 
-import it.polimi.ingsw.message.server.RemoveCrewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.components.enums.AlienType;
 import javafx.scene.input.ClipboardContent;

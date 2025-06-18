@@ -48,6 +48,7 @@ public class VoyageSidePaneTreeFactory implements ClientCardStateVisitor {
         state.getCardState().showCardState(this);
         cstatetree.setId("voyage-card-state-pane");
         sp.getChildren().add(cstatetree);
+        cstatetree.getChildren().add(createColorSwitchTree(view, state, color));
         cstatetree.toFront();
         return sp;
     }
@@ -77,8 +78,8 @@ public class VoyageSidePaneTreeFactory implements ClientCardStateVisitor {
     public void show(ClientBaseCardState state) {
         var e = new ImageView("galaxy_trucker_imgs/cards/GT-card-"+state.getID()+".jpg");
         e.getStyleClass().add("voyage-card-image");
-        e.setFitHeight(0.7*e.getFitHeight());
-        e.setFitWidth(0.7);
+        e.setPreserveRatio(true);
+        e.setFitHeight(250);
         this.cstatetree.getChildren().add(e);
     }
 
@@ -98,8 +99,14 @@ public class VoyageSidePaneTreeFactory implements ClientCardStateVisitor {
         required.setMaxWidth(333);
         required.getStyleClass().add("voyage-cargo-pen-required");
         required.getChildren().add(new BatteryPiece(view, null));
-        int k = 1;
+        int k = 0;
         for(int i : state.getShipments()){
+            if(k==0){
+                for(int j = 0; j < i; j++){
+                    required.getChildren().add(new BatteryPiece(view, null));
+                }   
+                continue;   
+            }
             for(int j = 0; j < i; j++){
                 required.getChildren().add(new CargoPiece(view, null, ShipmentType.fromValue(k)));
             }
@@ -274,7 +281,7 @@ public class VoyageSidePaneTreeFactory implements ClientCardStateVisitor {
         this.cstatetree.getChildren().add(img);
     }
 
-    @Override
+    @Override//a
     public void show(ClientNewCenterCardStateDecorator state) {
         HBox awaiting = new HBox(8);
         awaiting.setAlignment(Pos.CENTER);
@@ -291,7 +298,7 @@ public class VoyageSidePaneTreeFactory implements ClientCardStateVisitor {
         this.cstatetree.getChildren().add(p);
     }
 
-    @Override
+    @Override//a
     public void show(ClientProjectileCardStateDecorator state) {
         Label message = new Label(state.getProjectile().getDimension()+" shot on index: "+normalizeOffset(state.getProjectile().getDirection().getShift(), state.getProjectile().getOffset()));
         message.setFont(new Font(18));
@@ -317,5 +324,23 @@ public class VoyageSidePaneTreeFactory implements ClientCardStateVisitor {
 		if (roll < 5 || roll > 9) return -1;
 		return roll - 5;
 	}
+
+    public Node createColorSwitchTree(GUIView view, ClientVoyageState state, PlayerColor color){
+        HBox res = new HBox(20);
+        Label lab = new Label("View: ");
+        lab.setFont(new Font(18));
+        res.getChildren().add(lab);
+        res.setId("constr-color-switch");
+        for(var p : state.getPlayerList()){
+            if(p.getColor()==color) continue;
+            ImageView v = new ImageView("galaxy_trucker_imgs/piece/"+p.getColor()+".png");
+            v.setOnMouseClicked(event->{
+                view.selectColor(p.getColor());
+            });
+            res.getChildren().add(v);
+        }
+        res.setAlignment(Pos.CENTER);
+        return res;
+    }
 
 }

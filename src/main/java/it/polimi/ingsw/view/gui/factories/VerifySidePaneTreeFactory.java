@@ -1,10 +1,6 @@
 package it.polimi.ingsw.view.gui.factories;
 
-import it.polimi.ingsw.message.server.RemoveComponentMessage;
 import it.polimi.ingsw.message.server.SendContinueMessage;
-import it.polimi.ingsw.model.client.player.ClientConstructionPlayer;
-import it.polimi.ingsw.model.client.player.ClientVerifyPlayer;
-import it.polimi.ingsw.model.client.state.ClientConstructionState;
 import it.polimi.ingsw.model.client.state.ClientVerifyState;
 import it.polimi.ingsw.model.components.enums.AlienType;
 import it.polimi.ingsw.model.player.PlayerColor;
@@ -16,6 +12,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -26,7 +23,6 @@ import javafx.scene.text.Font;
 public class VerifySidePaneTreeFactory {
     
     static public Node createSidePane(GUIView view, ClientVerifyState state, PlayerColor color){
-        ClientVerifyPlayer you = state.getPlayerList().stream().filter(p->p.getColor()==color).findAny().orElse(state.getPlayerList().getFirst());
         StackPane sp = new StackPane();
         sp.setMaxWidth(333);
         sp.getChildren().add(new Rectangle(333, 10000, new Color(169/255f,169/255f,169/255f,0.7)));
@@ -85,7 +81,7 @@ public class VerifySidePaneTreeFactory {
         var list_to_finish = state.getPlayerList().stream()
             .filter(p->!p.hasProgressed())
             .toList();
-        
+        //Todo: rifarlo bene.
         Label awaiting_lab = new Label("Awaiting: ");
         Label finished_lab = new Label("Finish order:");
         awaiting_lab.setFont(new Font(25));
@@ -110,16 +106,18 @@ public class VerifySidePaneTreeFactory {
     }
 
     static public Node createColorSwitchTree(GUIView view, ClientVerifyState state, PlayerColor color){
-        HBox res = new HBox();
+        HBox res = new HBox(20);
+        Label lab = new Label("View: ");
+        lab.setFont(new Font(18));
+        res.getChildren().add(lab);
         res.setId("constr-color-switch");
         for(var p : state.getPlayerList()){
             if(p.getColor()==color) continue;
-            //TODO: esiste costruttore Button(testo, Node), metterci un node figo.
-            Button b = new Button(p.getColor().toString());
-            b.setOnMouseClicked(event->{
+            ImageView v = new ImageView("galaxy_trucker_imgs/piece/"+p.getColor()+".png");
+            v.setOnMouseClicked(event->{
                 view.selectColor(p.getColor());
             });
-            res.getChildren().add(b);
+            res.getChildren().add(v);
         }
         res.setAlignment(Pos.CENTER);
         return res;

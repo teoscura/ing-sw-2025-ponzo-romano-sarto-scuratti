@@ -1,25 +1,16 @@
 package it.polimi.ingsw.view.gui;
 
-
-import java.time.Duration;
-import java.time.Instant;
 import java.util.ArrayList;
 
 import it.polimi.ingsw.controller.client.ClientController;
 import it.polimi.ingsw.controller.client.state.*;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.GameModeType;
-import it.polimi.ingsw.model.client.components.ClientBaseComponent;
-import it.polimi.ingsw.model.client.components.ClientPoweredComponentDecorator;
+import it.polimi.ingsw.model.client.card.ClientBaseCardState;
 import it.polimi.ingsw.model.client.state.*;
-import it.polimi.ingsw.model.components.enums.ComponentRotation;
-import it.polimi.ingsw.model.components.enums.ConnectorType;
 import it.polimi.ingsw.model.player.PlayerColor;
-import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.view.ClientView;
 import it.polimi.ingsw.view.gui.factories.*;
-import it.polimi.ingsw.view.gui.tiles.PlacedTileFactory;
-import it.polimi.ingsw.view.gui.utils.GameEntryNode;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
@@ -42,6 +33,7 @@ public class GUIView extends Application implements ClientView {
 	private ClientState prev_client_state;
     private ConnectedState state;
 	private PlayerColor view_color;
+	private String username;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -61,9 +53,14 @@ public class GUIView extends Application implements ClientView {
     @Override
     public void show(TitleScreenState state) {
 		Platform.runLater(() -> {
+			this.view_color = PlayerColor.NONE;
 			root.setBackground(new Background(new BackgroundImage(new Image("title1.jpg"), BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
 			this.root.getChildren().clear();
             var node = TitleScreenTreeFactory.createTitleScreen(state);
+			// VoyageSidePaneTreeFactory f = new VoyageSidePaneTreeFactory(this);
+			// var s = new ClientVoyageState(GameModeType.TEST, new ArrayList<>(), new ClientBaseCardState("", 12), 2);
+			// var node = f.createSidePane(s, view_color);
+
             this.root.getChildren().add(node);
             StackPane.setAlignment(node, Pos.CENTER);
         });
@@ -72,6 +69,7 @@ public class GUIView extends Application implements ClientView {
     @Override
     public void show(ConnectingState state) {
         Platform.runLater(() -> {
+			this.view_color = PlayerColor.NONE;
             root.setBackground(new Background(new BackgroundImage(new Image("title1.jpg"), BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
             this.root.getChildren().clear();
             var node = ConnectionSetupTreeFactory.createConnectionScreen(state);
@@ -83,6 +81,7 @@ public class GUIView extends Application implements ClientView {
 	@Override
 	public void show(ClientLobbySelectState state) {
 		Platform.runLater(() -> {
+			this.view_color = PlayerColor.NONE;
 			this.root.getChildren().clear();
 			var node = LobbyStateTreeFactory.createLobbyScreen(state, this);
 			this.root.getChildren().add(node);
@@ -93,6 +92,7 @@ public class GUIView extends Application implements ClientView {
 	@Override
 	public void show(ClientSetupState state) {
 		Platform.runLater(() -> {
+			this.view_color = PlayerColor.NONE;
 			this.root.getChildren().clear();
 			var node = SetupTreeFactory.createSetupScreen(state, this);
 			this.root.getChildren().add(node);
@@ -104,6 +104,9 @@ public class GUIView extends Application implements ClientView {
 	public void show(ClientWaitingRoomState state) {
 		Platform.runLater(() -> {
             if(state.getType().getLevel()==2) root.setBackground(new Background(new BackgroundImage(new Image("title2.jpg"), BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
+			if(this.view_color==PlayerColor.NONE) 
+				this.view_color = state.getPlayerList().stream().filter(s -> s.getUsername().equals(username)).map(p -> p.getColor()).findFirst().orElse(PlayerColor.NONE);
+
 			this.root.getChildren().clear();
 			var node = WaitingTreeFactory.createWaitingScreen(state, this);
 			this.root.getChildren().add(node);
@@ -115,8 +118,11 @@ public class GUIView extends Application implements ClientView {
 	public void show(ClientConstructionState state) {
 		Platform.runLater(() -> {
             if(state.getType().getLevel()==2) root.setBackground(new Background(new BackgroundImage(new Image("title2.jpg"), BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
-			var player = state.getPlayerList().stream().filter(p->p.getColor()==this.view_color).findFirst().orElse(state.getPlayerList().getFirst());
+			if(this.view_color==PlayerColor.NONE) 
+				this.view_color = state.getPlayerList().stream().filter(s -> s.getUsername().equals(username)).map(p -> p.getColor()).findFirst().orElse(PlayerColor.NONE);
 
+			
+			var player = state.getPlayerList().stream().filter(p->p.getColor()==this.view_color).findFirst().orElse(state.getPlayerList().getFirst());
 			var prev = (VBox) root.getScene().lookup("#constr-pane-base");
 			if(prev!=null){
 				var prevp = ((ClientConstructionState)prev_client_state).getPlayerList().stream().filter(p->p.getColor()==this.view_color).findFirst().orElse(((ClientConstructionState)prev_client_state).getPlayerList().getFirst());				
@@ -127,8 +133,8 @@ public class GUIView extends Application implements ClientView {
 					prev.getChildren().add(indx, ConstructionSidePaneTreeFactory.createMainConstructionTileTree(this, player, state.getTilesLeft()));
 				}
 				if(!prevp.getReserved().equals(player.getReserved())){
-					System.out.println("Replacing tiles!");
-					int indx =	prev.getChildren().indexOf(root.getScene().lookup("#constr-tile-pane"));
+					System.out.println("Replacing reserved!");
+					int indx =	prev.getChildren().indexOf(root.getScene().lookup("#constr-reserved-pane"));
 					prev.getChildren().remove(indx);
 					prev.getChildren().add(indx, ConstructionSidePaneTreeFactory.createReservedConstructionTileTree(this, player));
 				}
@@ -178,17 +184,11 @@ public class GUIView extends Application implements ClientView {
 	public void show(ClientVerifyState state) {
 		Platform.runLater(() -> {
             if(state.getPlayerList().getFirst().getShip().getType().getLevel()==2) root.setBackground(new Background(new BackgroundImage(new Image("title2.jpg"), BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
+			if(this.view_color==PlayerColor.NONE) 
+				this.view_color = state.getPlayerList().stream().filter(s -> s.getUsername().equals(username)).map(p -> p.getColor()).findFirst().orElse(PlayerColor.NONE);
+
+			
 			var player = state.getPlayerList().stream().filter(p->p.getColor()==this.view_color).findFirst().orElse(state.getPlayerList().getFirst());
-
-			var prev = root.getScene().lookup("#verify-pane-base");
-			if(prev!=null){
-				//Update selective.
-
-				return;
-			} else {
-
-			}
-
 			this.root.getChildren().clear();
 			var x = VerifySidePaneTreeFactory.createSidePane(this, state, view_color);
 			this.root.getChildren().add(x);
@@ -205,17 +205,10 @@ public class GUIView extends Application implements ClientView {
 	public void show(ClientVoyageState state) {
 		Platform.runLater(() -> {
             if(state.getType().getLevel()==2) root.setBackground(new Background(new BackgroundImage(new Image("title2.jpg"), BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
+			if(this.view_color==PlayerColor.NONE) 
+				this.view_color = state.getPlayerList().stream().filter(s -> s.getUsername().equals(username)).map(p -> p.getColor()).findFirst().orElse(PlayerColor.NONE);
+			
 			var player = state.getPlayerList().stream().filter(p->p.getColor()==this.view_color).findFirst().orElse(state.getPlayerList().getFirst());
-
-			var prev = root.getScene().lookup("#voyage-card-state-pane");
-			if(prev!=null){
-				//Update selective.
-
-				return;
-			} else {
-
-			}
-
 			this.root.getChildren().clear();
 			VoyageSidePaneTreeFactory v = new VoyageSidePaneTreeFactory(this);
 			var x = v.createSidePane(state, view_color);
@@ -232,8 +225,9 @@ public class GUIView extends Application implements ClientView {
 	@Override
 	public void show(ClientEndgameState state) {
 		Platform.runLater(() -> {
+			this.view_color = PlayerColor.NONE;
 			this.root.getChildren().clear();
-
+			//TODO
 		});
 	}
 
@@ -251,11 +245,13 @@ public class GUIView extends Application implements ClientView {
 	@Override
 	public void connect(ConnectedState state) {
 		this.state = state;
+		this.username = state.getUsername();
 	}
 
 	@Override
 	public void disconnect() {
 		this.state = null;
+		this.username = null;
 	}
 
 	public void selectColor(PlayerColor c){

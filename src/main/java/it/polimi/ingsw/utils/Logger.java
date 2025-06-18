@@ -9,8 +9,6 @@ public class Logger {
 
 	static private Logger instance = null;
 
-	//TODO. Add extra file printing support, a threadpool so theyre async.
-
 	private final Object stream_lock;
 	private PrintStream out;
 	private LoggerLevel level = LoggerLevel.MODEL;

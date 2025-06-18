@@ -106,6 +106,7 @@ public class TUIView implements ClientView {
 	 */
 	@Override
 	public void show(ClientLobbySelectState state) {
+		this.selected_color = PlayerColor.NONE;
 		this.screen_runnable = () -> ClientLobbyStatesFormatter.format(terminal, state);
 		this.status_runnable = () -> ClientLobbyStatesFormatter.formatStatus(terminal, state);
 	}
@@ -115,6 +116,7 @@ public class TUIView implements ClientView {
 	 */
 	@Override
 	public void show(ClientSetupState state) {
+		this.selected_color = PlayerColor.NONE;
 		this.screen_runnable = () -> ClientLobbyStatesFormatter.format(terminal, state);
 		this.status_runnable = () -> ClientLobbyStatesFormatter.formatStatus(terminal, state);
 	}
