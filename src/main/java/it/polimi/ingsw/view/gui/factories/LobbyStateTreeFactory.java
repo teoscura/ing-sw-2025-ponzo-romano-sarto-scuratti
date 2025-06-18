@@ -54,6 +54,7 @@ public class LobbyStateTreeFactory {
         for(var u : usernames){
             if(i==2) f+= "\n";
             f += u;
+            f += " ";
             i++;
         }
         Label l = new Label(f);

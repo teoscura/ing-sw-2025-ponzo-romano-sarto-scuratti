@@ -8,39 +8,8 @@ import java.util.ArrayList;
 import it.polimi.ingsw.controller.client.ClientController;
 import it.polimi.ingsw.controller.client.state.*;
 import it.polimi.ingsw.message.server.ServerMessage;
-import it.polimi.ingsw.model.GameModeType;
-import it.polimi.ingsw.model.cards.PlanetCard;
-import it.polimi.ingsw.model.cards.utils.CombatZoneCriteria;
-import it.polimi.ingsw.model.cards.utils.CombatZonePenalty;
-import it.polimi.ingsw.model.cards.utils.CombatZoneSection;
-import it.polimi.ingsw.model.cards.utils.Planet;
-import it.polimi.ingsw.model.cards.utils.Projectile;
-import it.polimi.ingsw.model.cards.utils.ProjectileDimension;
-import it.polimi.ingsw.model.cards.utils.ProjectileDirection;
-import it.polimi.ingsw.model.client.card.ClientAwaitConfirmCardStateDecorator;
-import it.polimi.ingsw.model.client.card.ClientBaseCardState;
-import it.polimi.ingsw.model.client.card.ClientCardState;
-import it.polimi.ingsw.model.client.card.ClientCargoPenaltyCardStateDecorator;
-import it.polimi.ingsw.model.client.card.ClientCargoRewardCardStateDecorator;
-import it.polimi.ingsw.model.client.card.ClientCombatZoneIndexCardStateDecorator;
-import it.polimi.ingsw.model.client.card.ClientCreditsRewardCardStateDecorator;
-import it.polimi.ingsw.model.client.card.ClientCrewPenaltyCardStateDecorator;
-import it.polimi.ingsw.model.client.card.ClientEnemyCardStateDecorator;
-import it.polimi.ingsw.model.client.card.ClientLandingCardStateDecorator;
-import it.polimi.ingsw.model.client.card.ClientMeteoriteCardStateDecorator;
-import it.polimi.ingsw.model.client.card.ClientNewCenterCardStateDecorator;
-import it.polimi.ingsw.model.client.player.ClientConstructionPlayer;
-import it.polimi.ingsw.model.client.player.ClientVerifyPlayer;
-import it.polimi.ingsw.model.client.player.ClientVoyagePlayer;
 import it.polimi.ingsw.model.client.state.*;
-import it.polimi.ingsw.model.components.BaseComponent;
-import it.polimi.ingsw.model.components.ComponentFactory;
-import it.polimi.ingsw.model.components.StorageComponent;
-import it.polimi.ingsw.model.components.enums.ComponentRotation;
-import it.polimi.ingsw.model.components.enums.ShipmentType;
-import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
-import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.view.ClientView;
 import it.polimi.ingsw.view.gui.factories.*;
 import javafx.application.Application;
@@ -104,7 +73,6 @@ public class GUIView extends Application implements ClientView {
 	@Override
 	public void show(ClientLobbySelectState state) {
 		Platform.runLater(() -> {
-			//TODO update selective.
 			this.root.getChildren().clear();
 			var node = LobbyStateTreeFactory.createLobbyScreen(state, this);
 			this.root.getChildren().add(node);
@@ -136,11 +104,10 @@ public class GUIView extends Application implements ClientView {
 	@Override
 	public void show(ClientConstructionState state) {
 		Platform.runLater(() -> {
-			//TODO update selective.
             if(state.getType().getLevel()==2) root.setBackground(new Background(new BackgroundImage(new Image("title2.jpg"), BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
-			this.root.getChildren().clear();
 			var player = state.getPlayerList().stream().filter(p->p.getColor()==this.view_color).findFirst().orElse(state.getPlayerList().getFirst());
 
+			this.root.getChildren().clear();
 			var x = ConstructionSidePaneTreeFactory.createSidePane(this, state, view_color, root);
 			this.root.getChildren().add(x);
 			var node = PlacedShipTreeFactory.createPlacedShip(this, player.getShip());
@@ -155,11 +122,10 @@ public class GUIView extends Application implements ClientView {
 	@Override
 	public void show(ClientVerifyState state) {
 		Platform.runLater(() -> {
-			//TODO update selective.
             if(state.getPlayerList().getFirst().getShip().getType().getLevel()==2) root.setBackground(new Background(new BackgroundImage(new Image("title2.jpg"), BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
-			this.root.getChildren().clear();
-			var player = state.getPlayerList().stream().filter(p->p.getUsername().equals(this.state.getUsername())).findFirst().orElse(state.getPlayerList().getFirst());
+			var player = state.getPlayerList().stream().filter(p->p.getColor()==this.view_color).findFirst().orElse(state.getPlayerList().getFirst());
 
+			this.root.getChildren().clear();
 			var x = VerifySidePaneTreeFactory.createSidePane(this, state, view_color);
 			this.root.getChildren().add(x);
 			var node = PlacedShipTreeFactory.createPlacedShip(this, player.getShip());
@@ -174,18 +140,19 @@ public class GUIView extends Application implements ClientView {
 	@Override
 	public void show(ClientVoyageState state) {
 		Platform.runLater(() -> {
-			//TODO update selective.
             if(state.getType().getLevel()==2) root.setBackground(new Background(new BackgroundImage(new Image("title2.jpg"), BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
+			var player = state.getPlayerList().stream().filter(p->p.getColor()==this.view_color).findFirst().orElse(state.getPlayerList().getFirst());
+
 			this.root.getChildren().clear();
-			var player = state.getPlayerList().stream().filter(p->p.getUsername().equals(this.state.getUsername())).findFirst().orElse(state.getPlayerList().getFirst());
-			//var x = VoyageSidePaneTreeFactory.createSidePane(this, state, view_color);
-			// this.root.getChildren().add(x);
-			// var node = PlacedShipTreeFactory.createPlacedShip(this, player.getShip());
-			// this.root.getChildren().add(node);
-			// StackPane.setAlignment(x, Pos.CENTER_LEFT);
-			// StackPane.setMargin(x, new Insets(0, 0, 0, 60));
-			// StackPane.setMargin(node, new Insets(0, 60, 0, 0));
-			// StackPane.setAlignment(node, Pos.CENTER_RIGHT);
+			VoyageSidePaneTreeFactory v = new VoyageSidePaneTreeFactory(this);
+			var x = v.createSidePane(state, view_color);
+			this.root.getChildren().add(x);
+			var node = PlacedShipTreeFactory.createPlacedShip(this, player.getShip());
+			this.root.getChildren().add(node);
+			StackPane.setAlignment(x, Pos.CENTER_LEFT);
+			StackPane.setMargin(x, new Insets(0, 0, 0, 60));
+			StackPane.setMargin(node, new Insets(0, 60, 0, 0));
+			StackPane.setAlignment(node, Pos.CENTER_RIGHT);
 		});
 	}
 
@@ -199,7 +166,7 @@ public class GUIView extends Application implements ClientView {
 
 	@Override
 	public void showTextMessage(String message) {
-        
+        //TODO notifiche.
 	}
 
 	@Override

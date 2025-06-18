@@ -33,7 +33,7 @@ public class VoyageSidePaneTreeFactory implements ClientCardStateVisitor {
         this.view = view;
     }
 
-    public Node createSidePane(GUIView view, ClientVoyageState state, PlayerColor color){
+    public Node createSidePane(ClientVoyageState state, PlayerColor color){
         StackPane sp = new StackPane();
         sp.setMaxWidth(333);
         sp.setAlignment(Pos.CENTER);
