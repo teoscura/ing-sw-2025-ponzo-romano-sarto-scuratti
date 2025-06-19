@@ -225,7 +225,7 @@ public class ClientLargeComponentPrinter implements ClientComponentVisitor {
 	public List<String> getForbidden() {
 		List<String> l = new ArrayList<>();
 		for (int i = 0; i < 3; i++) {
-			l.add("🮆🮆🮆🮆🮆🮆");
+			l.add("######");
 		}
 		return l;
 	}

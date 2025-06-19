@@ -148,7 +148,7 @@ public class ClientSpaceShipFormatter {
 				p.reset();
 				ship.getComponent(c).showComponent(p);
 				if (!ship.getType().isForbidden(c)) tmp.get(i + 1).append(p.getComponentStringSmall());
-				else tmp.get(i + 1).append("＃");
+				else tmp.get(i + 1).append("##");
 			}
 		}
 		tmp.add(new StringBuffer(bottom));

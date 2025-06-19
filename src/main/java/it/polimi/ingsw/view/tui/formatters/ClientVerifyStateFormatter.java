@@ -25,26 +25,26 @@ public class ClientVerifyStateFormatter {
 		else terminal.print(ClientSpaceShipFormatter.getEmptyShipLarge(), 2, 4);
 		list.remove(p);
 		if (list.size() > 0) {
-			terminal.print(ClientSpaceShipFormatter.formatSmall(list.getFirst().getShip(), list.getFirst().getUsername(), list.getFirst().getColor(), 0, false, p.isDisconnected()), 3, 60);
+			terminal.print(ClientSpaceShipFormatter.formatSmall(list.getFirst().getShip(), list.getFirst().getUsername(), list.getFirst().getColor(), 0, false, list.getFirst().isDisconnected()), 3, 60);
 			list.removeFirst();
 		} else {
 			terminal.print(ClientSpaceShipFormatter.getEmptyShipSmall(), 3, 60);
 		}
 		if (list.size() > 0) {
-			terminal.print(ClientSpaceShipFormatter.formatSmall(list.getFirst().getShip(), list.getFirst().getUsername(), list.getFirst().getColor(), 0, false, p.isDisconnected()), 11, 60);
+			terminal.print(ClientSpaceShipFormatter.formatSmall(list.getFirst().getShip(), list.getFirst().getUsername(), list.getFirst().getColor(), 0, false, list.getFirst().isDisconnected()), 11, 60);
 			list.removeFirst();
 		} else {
 			terminal.print(ClientSpaceShipFormatter.getEmptyShipSmall(), 11, 60);
 		}
 		if (list.size() > 0) {
-			terminal.print(ClientSpaceShipFormatter.formatSmall(list.getFirst().getShip(), list.getFirst().getUsername(), list.getFirst().getColor(), 0, false, p.isDisconnected()), 3, 94);
+			terminal.print(ClientSpaceShipFormatter.formatSmall(list.getFirst().getShip(), list.getFirst().getUsername(), list.getFirst().getColor(), 0, false, list.getFirst().isDisconnected()), 3, 94);
 		} else {
 			terminal.print(ClientSpaceShipFormatter.getEmptyShipSmall(), 3, 94);
 		}
 		if (color != PlayerColor.NONE || list.isEmpty())
 			terminal.print(ClientSpaceShipFormatter.getHelpCorner(), 11, 94);
 		else
-			terminal.print(ClientSpaceShipFormatter.formatSmall(list.getFirst().getShip(), list.getFirst().getUsername(), list.getFirst().getColor(), 0, false, p.isDisconnected()), 11, 94);
+			terminal.print(ClientSpaceShipFormatter.formatSmall(list.getFirst().getShip(), list.getFirst().getUsername(), list.getFirst().getColor(), 0, false, list.getFirst().isDisconnected()), 11, 94);
 	}
 
 	static public void formatStatus(TerminalWrapper terminal, ClientVerifyState state) {
