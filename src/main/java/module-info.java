@@ -1,6 +1,5 @@
 module it.polimi.ingsw {
 	requires javafx.controls;
-	requires javafx.fxml;
 	requires java.rmi;
 	requires org.jline;
     requires javafx.graphics;
