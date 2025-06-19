@@ -211,7 +211,11 @@ public class GUIView extends Application implements ClientView {
 					prev.getChildren().remove(indx);
 					prev.getChildren().add(indx, ConstructionSidePaneTreeFactory.createColorSwitchTree(this, state, view_color));
 				}
-				//TODO: check awaiting e refresh.
+				indx = prev.getChildren().indexOf(gameroot.getScene().lookup("#constr-awaiting-list"));
+				if(indx!=-1){
+					prev.getChildren().remove(indx);
+					prev.getChildren().add(indx, ConstructionSidePaneTreeFactory.createAwaitingList(state));
+				}
 				return;
 			} else {
 				this.gameroot.getChildren().clear();

@@ -97,20 +97,25 @@ public class ConstructionSidePaneTreeFactory {
 		res.setPrefHeight(10000);
 		res.setMaxWidth(333);
 
-		var awaiting_list = state.getPlayerList().stream().filter(p -> !p.isFinished()).map(p -> p.getColor()).toList();
 		Label awaiting_lab = new Label("Awaiting: ");
+		res.getChildren().add(awaiting_lab);
+		res.getChildren().add(createAwaitingList(state));
+
+		sp.getChildren().add(res);
+		return sp;
+	}
+
+	static public Node createAwaitingList(ClientConstructionState state){
+		var awaiting_list = state.getPlayerList().stream().filter(p -> !p.isFinished()).map(p -> p.getColor()).toList();
 		HBox awaiting = new HBox(8);
 		awaiting.setAlignment(Pos.CENTER);
 		awaiting.getStyleClass().add("verify-list");
 		for (var e : awaiting_list) {
 			awaiting.getChildren().add(new ImageView("galaxy_trucker_imgs/piece/" + e.toString() + ".png"));
 		}
+		awaiting.setId("constr-awaiting-list");
 		awaiting.setMaxWidth(333);
-		res.getChildren().add(awaiting_lab);
-		res.getChildren().add(awaiting);
-
-		sp.getChildren().add(res);
-		return sp;
+		return awaiting;
 	}
 
 	static public Node createMainConstructionTileTree(GUIView view, ClientConstructionPlayer p, int left) {
@@ -129,7 +134,10 @@ public class ConstructionSidePaneTreeFactory {
 			sp.getChildren().add(pickb);
 			resv.getChildren().add(sp);
 		} else {
-			sp.getChildren().add(new ImageView("galaxy_trucker_imgs/tiles/transparent/bg.png")); //TODO mettere rettangolo w/o immagine
+			Rectangle rect = new Rectangle(150, 150);
+			rect.setFill(new Color(186/255f, 186/255f, 186/255f, 0.4));
+			rect.getStyleClass().add("ui-rectangle");
+			sp.getChildren().add(rect);
 			sp.getChildren().add(new ConstructionTile(view, p.getCurrent(), false, true, 1.0));
 			Button res = new Button("Reserve Component");
 			res.setOnAction(event -> {
