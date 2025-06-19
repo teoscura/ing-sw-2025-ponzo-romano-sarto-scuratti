@@ -2249,6 +2249,245 @@ package View {
 	    {method} + disconnect() : void
     }
 
+    package GUI {
+
+        ClientView <-d- GUIView
+        class GUIView {
+            {field} - root : StackPane
+            {field} - gameroot : StackPane
+            {field} - bgroot : StackPane
+            {field} - notifroot : StackPane
+            {field} - bg_type : int
+            {field} - client_state : ClientState
+            {field} - prev_client_state : ClientState
+            {field} - state : ConnectedState
+            {field} - view_color : PlayerColor
+            {field} - username : String
+            {method} + start(Stage) : void
+            {method} + sendMessage(ServerMessage) : void
+            {method} + show(TitleScreenState) : void
+            {method} + show(ConnectingState) : void
+            {method} + show(ClientLobbySelectState) : void
+            {method} + show(ClientSetupState) : void
+            {method} + show(ClientWaitingRoomState) : void
+            {method} + show(ClientConstructionState) : void
+            {method} + show(ClientVerifyState) : void
+            {method} + show(ClientVoyageState) : void
+            {method} + show(ClientEndgameState) : void
+            {method} + showTextMessage(String) : void
+            {method} + setClientState(ClientState) : void
+            {method} + connect(ConnectedState) : void
+            {method} + disconnect() : void
+            {method} + selectColor(PlayerColor) : void
+            {method} + bgAnimation(int) : void
+        }
+
+        class GUINotification {
+            {field} - [final] seconds : int
+            {method} + seconds() : int
+        }
+
+        package Factories {
+
+            class ConnectionSetupTreeFactory {
+                {method} + [static] createConnectionScreen(ConnectingState) : Node
+            }
+
+            class ConstructionSidePaneTreeFactory {
+                {method} - [static] toggleHourglass(GUIView) : void
+                {method} + [static] showCards(GUIView, ClientConstructionState, Node) : void
+                {method} + [static] updateHourglassAnimation(ClientConstructionState, Button) : void
+                {method} + [static] createSidePane(GUIView, ClientConstructionState, PlayerColor, Node) : Node
+                {method} + [static] createAwaitingList(ClientConstructionState) : Node
+                {method} + [static] createMainConstructionTileTree(GUIView, ClientConstructionState, int) : Node
+                {method} + [static] createReservedConstructionTileTree(GUIView, ClientConstructionState) : Node
+                {method} + [static] createDiscardedConstructionTileTree(GUIView, ClientConstructionState) : Node
+                {method} + [static] createLevelTwoAddons(GUIView, ClientConstructionState, Node) : Node
+                {method} + [static] createColorSwitchTree(GUIView, ClientConstructionState, PlayerColor) : Node
+            }
+
+            class EndgameTreeFactory {
+                {method} + [static] createEnding(GUIView, ClientEndgameState) : Node
+                {method} + [static] getEntry(ClientEndgameState) : Node
+                {method} + [static] awaiting(ClientEndgameState) : Node
+            }
+
+            class LobbyStateTreeFactory {
+                {method} + [static] createLobbyScreen(ClientLobbySelectState, GUIView) : Node
+                {method} + [static] getEntry(int, GameModeType, List<String>, GUIView : StackPane
+            }
+
+            class PlacedShipTreeFactory {
+                {method} + [static] createPlacedShip(GUIView, String, ClientSpaceShip, int, boolean, boolean) : Node
+                {method} + [static] statsBar(String, ClientSpaceShip, int, boolean, boolean) : Node
+                {method} + [static] voyageShipPlanche(GUIView, ClientVoyageState, PlayerColor) : Node
+                {method} + [static] planche(ClientVoyageState) : Node
+            }
+
+            class SetupTreeFactory {
+                {method} + [static] createSetupScreen(ClientSetupState, GUIView) : Node
+                {method} + [static] createButton(SetupOptionContainer, PlayerCount) : Node
+                {method} + [static] createButton(SetupOptionContainer, GameModeType) : Node
+                {method} + [static] confirmButton(GUIView, SetupOptionContainer) : Node
+                {method} + [static] leaveButton(GUIView) : Node
+                {method} + [static] createSavedList(ClientSetupState, GUIView) : Node
+                {method} + [static] getEntry(int, GameModeType, String, List<String>, GUIView) : StackPane
+            }
+
+            class TitleScreenState {
+                {method} + [static] createTitleScreen(TitleScreenState) : Node
+            }
+
+            class VerifySidePaneTreeFactory {
+                {method} + [static] createSidePane(GUIView, ClientVerifyState, PlayerColor) : Node
+                {method} + [static] createAwaitingTree(ClientVerifyState) : Node
+                {method} + [static] createColorSwitchTree(GUIView, ClientVerifyState, PlayerColor) : Node
+            }
+
+            Model::Client::Card::ClientCardStateVisitor <-- VoyageSidePaneTreeFactory
+            class VoyageSidePaneTreeFactory {
+                {field} - cstatetree : VBox
+                {field} - view : GUIView
+                {method} + createSidePane(ClientVoyageState, PlayerColor) : Node
+                {method} + show(ClientAwaitConfirmCardStateDecorator) : void
+                {method} + show(ClientBaseCardState) : void
+                {method} + show(ClientCargoPenaltyCardStateDecorator) : void
+                {method} + show(ClientCargoRewardCardStateDecorator) : void
+                {method} + show(ClientCombatZoneIndexCardStateDecorator) : void
+                {method} + show(ClientCreditsRewardCardStateDecorator) : void
+                {method} + show(ClientCrewPenaltyCardStateDecorator) : void
+                {method} + show(ClientLandingCardStateDecorator) : void
+                {method} + show(ClientMeteoriteCardStateDecorator) : void
+                {method} + show(ClientNewCenterCardStateDecorator) : void
+                {method} + show(ClientProjectileCardStateDecorator) : void
+                {method} + show(ClientEnemyCardStateDecorator) : void
+                {method} - normalizeOffset(int, int) : void
+                {method} + createColorSwitchTree(GUIView, ClientVoyageState, PlayerColor) : Node
+            }
+
+            class WaitingTreeFactory {
+                {method} + [static] createWaitingScreen(ClientWaitingRoomState, GUIView) : Node
+                {method} + [static] getWaitingPlayer(ClientWaitingPlayer) : Node
+                {method} + [static] getColor(PlayerColor) : Color
+                {method} + [static] getGameModeSplash(GameModeType) : StackPane
+            }
+
+        }
+
+        package Tiles {
+
+            class ComponentTile {
+                {field} [protected] [final] image : ImageView
+                {method} + [final] getImage : ImageView
+            }
+
+            ComponentTile <-- ConstructionTile
+            class ConstructionTile {
+                {field} - [final] ID : Integer
+                {field} - rotation : ComponentRotation
+                {method} + getRotation() : ComponentRotation
+                {method} + getID() : Integer
+            }
+
+            ComponentTile <-- PlacedTile
+            class PlacedTile {
+                {field} - [final] coords : ShipCoords
+                {field} - [final] tiles : ArrayList<DraggablePiece>
+                {method} + setOverlay(ImageView) : void
+                {method} + addToList(DraggablePiece) : void
+                {method} + getCoords() : ShipCoords
+            }
+
+            Model::Client::Components::ClientComponentVisitor <--PlacedTileFactory
+            class PlacedTileFactory {
+                {field} - [final] view : GUIView
+                {field} - tile : PlacedTile
+                {field} - center : ShipCoords
+                {method} + createTile(ShipCoords, ClientComponent) : PlacedTile
+                {method} + show(ClientBaseComponent) : void
+                {method} + show(ClientEmptyComponent) : void
+                {method} + show(ClientBatteryComponentDecorator) : void
+                {method} + show(ClientBrokenVerifyComponentDecorator) : void
+                {method} + show(ClientCabinComponentDecorator) : void
+                {method} + show(ClientPoweredComponentDecorator) : void
+                {method} + show(ClientShipmentsComponentDecorator) : void
+            }
+
+            package Piece {
+
+                abstract DraggablePiece <<abstract>> {
+                    {method} + [abstract] getDecoded(DraggablePieceDecoder) : ServerMessage
+                }
+
+                DraggablePiece <-- BatteryPiece
+                class BatteryPiece {
+                    {field} - [final] coords : ShipCoords
+                    {method} + getCoords() : ShipCoords
+                    {method} + getDecoded(DraggablePieceDecoder) : ServerMessage
+                }
+
+                DraggablePiece <-- CargoPiece
+                class CargoPiece {
+                    {field} - [final] type : ShipmentType
+                    {field} - [final] coords : ShipCoords
+                    {method} + getCoords() : ShipCoords
+                    {method} + getType() : ShipmentType
+                    {method} + getDecoded(DraggablePieceDecoder) : ServerMessage
+                }
+
+                DraggablePiece <-- CrewPiece
+                class CrewPiece {
+                    {field} - [final] coords : ShipCoords
+                    {method} + getDecoded(DraggablePieceDecoder) : ServerMessage
+                }
+
+                DraggablePiece <-- CrewSetPiece
+                class CrewSetPiece {
+                    {field} - [final] type : AlienType
+                    {method} + getDecoded(DraggablePieceDecoder) : ServerMessage
+                    {method} + getType() : AlienType
+                }
+
+                class PieceImagePathProvider {
+                    {method} + [static] destroy() : String
+                    {method} + [static] blob() : String
+                    {method} + [static] crew(AlienType) : String
+                    {method} + [static] cargo(ShipmentType) : String
+                    {method} + [static] battery() : String
+                }
+
+                DraggablePiece <-- RemoveComponentPiece
+                class RemoveComponentPiece {
+                    {method} + getDecoded(DraggablePieceDecoder) : ServerMessage
+                }
+
+                DraggablePiece <-- SelectBlobPiece
+                class SelectBlobPiece {
+                    {method} + getDecoded(DraggablePieceDecoder) : ServerMessage
+                }
+
+            }
+
+            package Utils {
+                class SetupOptionContainer {
+                    {field} - count : PlayerCount
+                    {field} - mode : GameModeType
+                    {field} - count_button : Node
+                    {field} - mode_button : Node
+                    {method} + sendSetup(GUIView) : void
+                    {method} + getCount() : PlayerCount
+                    {method} + setCount(PlayerCount, Node) : void
+                    {method} + getMode() : GameModeType
+                    {method} + setMode(GameModeType, Node) : void
+                    {method} + getCountButton() : Node
+                    {method} + getModeButton() : Node
+                }
+            }
+
+        }
+
+    }
+
     package TUI {
 
         ClientView <-d- TUIView
