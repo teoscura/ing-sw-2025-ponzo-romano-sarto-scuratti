@@ -1,17 +1,11 @@
 @font-face {
-    font-family: 'Roboto Mono';
+    font-family: ''Roboto Mono'';
     src: url('font.ttf');
-}
-
-@font-face {
-    font-family: 'Roboto Mono';
-    src: url('fontbold.ttf');
 }
 
 
 .titlescreen-field {
-    -fx-font-family: Roboto Mono;
-    font-family: Roboto Mono;
+    -fx-font-family: 'Roboto Mono';
     -fx-font-size: 30px;
     font-size: 30px;
     -fx-text-fill: rgb(255, 225, 31);
@@ -42,8 +36,7 @@
     -fx-text-fill: rgb(255, 225, 31);
     -fx-stroke-width: 4;
     stroke-width: 4;
-    -fx-font-family: Roboto Mono;
-    font-family: Roboto Mono;
+    -fx-font-family: 'Roboto Mono';
 }
 
 .notif-text {
@@ -52,8 +45,7 @@
     -fx-text-fill: rgb(255, 255, 255);
     -fx-stroke-width: 4;
     stroke-width: 4;
-    -fx-font-family: Roboto Mono;
-    font-family: Roboto Mono;
+    -fx-font-family: 'Roboto Mono';
 }
 
 
@@ -126,19 +118,16 @@
 
 .button-label {
     -fx-font-size: 80px;
-    font-size: 80px;
     -fx-text-fill: rgb(255, 255, 255);
 }
 
 .button-label-yellow {
     -fx-font-size: 80px;
-    font-size: 80px;
     -fx-text-fill: rgb(255, 225, 31);
 }
 
 .button-label-small {
     -fx-font-size: 35px;
-    font-size: 35px;
     -fx-text-fill: rgb(255, 255, 255);
 }
 

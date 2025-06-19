@@ -7,6 +7,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.TextAlignment;
 
 /**
  * Represents a text message to be shown on the GUI that disappears after a certain {@link Duration}.
@@ -29,6 +30,8 @@ public class GUINotification extends StackPane {
         this.getChildren().add(notifback);
         StackPane.setAlignment(notifback, Pos.CENTER);
         Label notiftext = new Label(text);
+		notiftext.setAlignment(Pos.CENTER);
+		notiftext.setTextAlignment(TextAlignment.CENTER);
 		StackPane.setAlignment(notiftext, Pos.CENTER);
         notiftext.setWrapText(true);
         notiftext.getStyleClass().add("notif-text");
