@@ -210,7 +210,7 @@ public class GUIView extends Application implements ClientView {
 	@Override
 	public void show(ClientVerifyState state) {
 		Platform.runLater(() -> {
-			GameModeType t = state.getPlayerList().getFirst().getShip().getType();
+			GameModeType t = state.getType();
             if(t.getLevel()!=this.bg_type) this.bgAnimation(t.getLevel());
 			this.bg_type = t.getLevel();
 

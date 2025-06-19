@@ -137,7 +137,7 @@ public class VerifyState extends GameState {
 					p.getDisconnected(),
 					this.finish_order.indexOf(p)));
 		}
-		return new ClientVerifyState(tmp);
+		return new ClientVerifyState(this.type, tmp);
 	}
 
 	/**

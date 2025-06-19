@@ -39,7 +39,7 @@ public class ConstructionSidePaneTreeFactory {
 		view.sendMessage(message);
 	}
 
-	public static void showCards(GUIView view, ClientConstructionState state, Node root) {
+	public static void showCards(ClientConstructionState state, Node root) {
 		VBox card_list = new VBox(0);
 		int k = 0;
 		for (int id : state.getConstructionCards()) {
@@ -179,7 +179,7 @@ public class ConstructionSidePaneTreeFactory {
 		res.setAlignment(Pos.CENTER);
 		res.setId("constr-leveltwo-addons");
 		Button cards = new Button("Peek the cards");
-		cards.setOnAction(e -> showCards(view, state, root));
+		cards.setOnAction(e -> showCards(state, root));
 		cards.setId("constr-peek-cards");
 		Button toggle = new Button("Toggle hourglass");
 		toggle.setOnAction(e -> toggleHourglass(view));

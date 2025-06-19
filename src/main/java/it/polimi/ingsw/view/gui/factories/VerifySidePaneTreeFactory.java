@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view.gui.factories;
 
 import it.polimi.ingsw.message.server.SendContinueMessage;
+import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.client.state.ClientVerifyState;
 import it.polimi.ingsw.model.components.enums.AlienType;
 import it.polimi.ingsw.model.player.PlayerColor;
@@ -39,8 +40,10 @@ public class VerifySidePaneTreeFactory {
         Label crew_lab = new Label("Drag to change crew type:");
         HBox box = new HBox(40);
         box.getChildren().add(new CrewSetPiece(AlienType.HUMAN));
-        box.getChildren().add(new CrewSetPiece(AlienType.BROWN));
-        box.getChildren().add(new CrewSetPiece(AlienType.PURPLE));
+        if (state.getType() == GameModeType.LVL2){
+            box.getChildren().add(new CrewSetPiece(AlienType.BROWN));
+            box.getChildren().add(new CrewSetPiece(AlienType.PURPLE));
+        }
         box.setAlignment(Pos.CENTER);
         //Bottom
         Button confirm = new Button("Finish verifying!");

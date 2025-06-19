@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.client.state;
 
+import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.client.player.ClientVerifyPlayer;
 
 import java.util.ArrayList;
@@ -10,8 +11,10 @@ import java.util.ArrayList;
 public class ClientVerifyState implements ClientState {
 
 	private final ArrayList<ClientVerifyPlayer> players;
+	private final GameModeType type;
 
-	public ClientVerifyState(ArrayList<ClientVerifyPlayer> playerlist) {
+	public ClientVerifyState(GameModeType type, ArrayList<ClientVerifyPlayer> playerlist) {
+		this.type = type;
 		if (playerlist == null) throw new NullPointerException();
 		if (playerlist.size() > 4) throw new IllegalArgumentException();
 		this.players = playerlist;
@@ -29,4 +32,7 @@ public class ClientVerifyState implements ClientState {
 		visitor.show(this);
 	}
 
+	public GameModeType getType() {
+		return type;
+	}
 }
