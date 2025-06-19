@@ -22,6 +22,18 @@ import java.util.List;
 public class LobbyStateTreeFactory {
 
 	public static Node createLobbyScreen(ClientLobbySelectState state, GUIView view) {
+        if(state.getLobbyList().size()==0){ 
+            Label l1 = new Label("No lobbies open!");
+            l1.getStyleClass().add("button-label-yellow");
+            Button confirm = new Button("Enter Setup");
+            confirm.setOnAction(event -> {
+                view.sendMessage(new EnterSetupMessage());
+            });
+            var res = new VBox(10.0, l1, confirm);
+            res.setAlignment(Pos.CENTER);
+            res.setMaxHeight(800);
+            return res;
+        }
 		ScrollPane list = new ScrollPane();
         VBox contents = new VBox();
         list.setContent(contents);
@@ -29,6 +41,7 @@ public class LobbyStateTreeFactory {
         list.setMaxHeight(550);
         list.setHbarPolicy(ScrollBarPolicy.NEVER);
         list.setVbarPolicy(ScrollBarPolicy.NEVER);
+
 		for (var e : state.getLobbyList()) {
 			contents.getChildren().add(getEntry(e.getModelId(), e.getType(), e.getPlayers(), view));
 		}
@@ -38,8 +51,7 @@ public class LobbyStateTreeFactory {
 			view.sendMessage(new EnterSetupMessage());
 		});
 		var res = new VBox(10.0, list, confirm);
-		res.setAlignment(Pos.CENTER);
-		res.setMaxHeight(800);
+		
 		return res;
         
 	}
