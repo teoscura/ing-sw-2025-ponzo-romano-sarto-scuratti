@@ -223,6 +223,11 @@ public class VerifyState extends GameState {
 			this.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' tried to set crew type after finishing!"));
 			return;
 		}
+		if(this.type==GameModeType.TEST){
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' tried to set crew in a test match!");
+			this.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' tried to set crew in a test match!"));
+			return;
+		}
 		try {
 			CrewSetVisitor v = new CrewSetVisitor(p.getSpaceShip(), type);
 			p.getSpaceShip().getComponent(coords).check(v);

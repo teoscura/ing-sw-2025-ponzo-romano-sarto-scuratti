@@ -257,7 +257,6 @@ public class GUIView extends Application implements ClientView {
 		Platform.runLater(() -> {
 			if(this.bg_type!=1) this.bgAnimation(1);
 			this.bg_type = 1;
-
 			this.view_color = PlayerColor.NONE;
 			this.gameroot.getChildren().clear();
 			var node = EndgameTreeFactory.createEnding(this, state);
