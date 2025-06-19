@@ -1,10 +1,14 @@
 package it.polimi.ingsw.view.gui;
 
 
+import java.util.ArrayList;
+
 import it.polimi.ingsw.controller.client.ClientController;
 import it.polimi.ingsw.controller.client.state.*;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.GameModeType;
+import it.polimi.ingsw.model.PlayerCount;
+import it.polimi.ingsw.model.client.ClientGameListEntry;
 import it.polimi.ingsw.model.client.state.*;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.view.ClientView;
@@ -57,12 +61,12 @@ public class GUIView extends Application implements ClientView {
 		this.root.getChildren().addAll(bgroot, gameroot, notifroot);
 		this.notif_box = new VBox(10);
 		notif_box.setMaxWidth(305);
-		StackPane.setAlignment(notifroot, Pos.TOP_LEFT);
+		StackPane.setAlignment(notifroot, Pos.TOP_RIGHT);
 		notifroot.setMaxWidth(305);
 		notifroot.setMaxHeight(400);
 		this.notifroot.getChildren().add(this.notif_box);
 		this.notifroot.setMouseTransparent(true);
-		StackPane.setAlignment(notif_box, Pos.TOP_LEFT);
+		StackPane.setAlignment(notif_box, Pos.TOP_RIGHT);
 		StackPane.setMargin(notif_box, new Insets(10, 0, 0, 10));
 	}
 
@@ -73,12 +77,32 @@ public class GUIView extends Application implements ClientView {
     @Override
     public void show(TitleScreenState state) {
 		Platform.runLater(() -> {
-			this.showTextMessage("TITLE");
 			this.bg_type = 1;
 			this.view_color = PlayerColor.NONE;
 			this.bgAnimation(1);
 			this.gameroot.getChildren().clear();
-            var node = TitleScreenTreeFactory.createTitleScreen(state);
+            //var node = TitleScreenTreeFactory.createTitleScreen(state);
+			ClientSetupState st = new ClientSetupState("Gigione", 
+				new ArrayList<>(){{
+					add(new ClientGameListEntry(GameModeType.TEST, PlayerCount.TWO,   "Voyage State", 
+						new ArrayList<>(){{add("Nunzio");add("Carlo");}}, 2));
+					add(new ClientGameListEntry(GameModeType.LVL2, PlayerCount.THREE, "Construction State",  
+						new ArrayList<>(){{add("Nunzio");add("Carlo");add("Nanni");}}, 3));
+					add(new ClientGameListEntry(GameModeType.TEST, PlayerCount.TWO,   "Verify State",  
+						new ArrayList<>(){{add("Nunzio");add("Nanni");}}, 5));
+					add(new ClientGameListEntry(GameModeType.TEST, PlayerCount.FOUR,  "Verify State",  
+						new ArrayList<>(){{add("Nunzio");add("Carlo");add("Nanni");add("Giorgio");}}, 4));
+					add(new ClientGameListEntry(GameModeType.LVL2, PlayerCount.THREE, "Construction State",  
+						new ArrayList<>(){{add("Nunzio");add("Carlo");add("Nanni");}}, 3));
+					add(new ClientGameListEntry(GameModeType.TEST, PlayerCount.TWO,   "Verify State",  
+						new ArrayList<>(){{add("Nunzio");add("Nanni");}}, 5));
+					add(new ClientGameListEntry(GameModeType.TEST, PlayerCount.FOUR,  "Verify State",  
+						new ArrayList<>(){{add("Nunzio");add("Carlo");add("Nanni");add("Giorgio");}}, 4));
+
+				}});
+			
+			var node = SetupTreeFactory.createSetupScreen(st, this);
+
 			this.gameroot.getChildren().add(node);
             StackPane.setAlignment(node, Pos.CENTER);
         });
@@ -87,7 +111,6 @@ public class GUIView extends Application implements ClientView {
     @Override
     public void show(ConnectingState state) {
         Platform.runLater(() -> {
-			this.showTextMessage("Connected");
 			this.bg_type = 1;
 			this.view_color = PlayerColor.NONE;
            	if(this.bg_type != 1 ) this.bgAnimation(1);

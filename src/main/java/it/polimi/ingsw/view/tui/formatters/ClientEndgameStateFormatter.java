@@ -16,7 +16,6 @@ public class ClientEndgameStateFormatter {
 
 	private static final String bottom_line = "━Typed line:━";
 
-	//TODO fix formatting on this
 	public static void format(TerminalWrapper terminal, ClientEndgameState state) {
 		ArrayList<String> res = new ArrayList<>();
 		ArrayList<ClientEndgamePlayer> list = new ArrayList<>(state.getPlayerList());

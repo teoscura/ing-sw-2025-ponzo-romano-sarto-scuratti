@@ -26,7 +26,6 @@ public class TextMessageFormatter {
 		}
 	}
 
-	//TODO trim length of message because if not we have an issue xd xd xd xd xd;
 	static private ArrayList<String> format(String message) {
 		ArrayList<String> res = new ArrayList<>();
 		int wraplength = 32;

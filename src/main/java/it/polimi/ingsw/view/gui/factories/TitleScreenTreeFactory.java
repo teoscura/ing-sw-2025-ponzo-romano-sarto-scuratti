@@ -4,12 +4,10 @@ import it.polimi.ingsw.controller.client.state.TitleScreenState;
 
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 
 public class TitleScreenTreeFactory {

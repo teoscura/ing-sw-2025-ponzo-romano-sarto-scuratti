@@ -1951,7 +1951,6 @@ package Controller {
 }
 
 package Message {
-    '//TODO: muovi e metti in controller i messaggi che ha senso
 
     interface Message <<interface, serializable>>
 

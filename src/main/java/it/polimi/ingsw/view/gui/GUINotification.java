@@ -1,7 +1,6 @@
 package it.polimi.ingsw.view.gui;
 
 import java.time.Duration;
-import java.time.Instant;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;

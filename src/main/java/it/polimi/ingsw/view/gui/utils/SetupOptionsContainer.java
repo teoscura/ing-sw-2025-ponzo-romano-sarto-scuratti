@@ -5,18 +5,17 @@ import it.polimi.ingsw.message.server.OpenLobbyMessage;
 import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.PlayerCount;
 import it.polimi.ingsw.view.gui.GUIView;
-import javafx.scene.control.Button;
+import javafx.scene.Node;
 
 public class SetupOptionsContainer {
 	private PlayerCount count;
 	private GameModeType mode;
-	private Button countButton;
-	private Button modeButton;
+	private Node count_button;
+	private Node mode_button;
 
 	public void sendSetup(GUIView view) {
 		if (count != null && mode != null) {
 			view.sendMessage(new OpenLobbyMessage(mode, count));
-			System.out.println("GameMode:" + mode + ", PlayerCount:" + count);
 		} else {
 			System.err.println("Something was not selected.");
 		}
@@ -26,36 +25,34 @@ public class SetupOptionsContainer {
 		return count;
 	}
 
-	public void setCount(PlayerCount count, Button countButton) {
+	public void setCount(PlayerCount count, Node button) {
 		this.count = count;
-		if (this.countButton != null) {
-			this.countButton.getStyleClass().remove("count-option-selected");
+		if (this.count_button != null) {
+			this.count_button.getStyleClass().remove("count-option-selected");
 		}
-		this.countButton = countButton;
-		this.countButton.getStyleClass().add("count-option-selected");
-		System.out.println("PlayerCount set to: " + count);
+		this.count_button = button;
+		this.count_button.getStyleClass().add("count-option-selected");
 	}
 
 	public GameModeType getMode() {
 		return mode;
 	}
 
-	public void setMode(GameModeType mode, Button modeButton) {
+	public void setMode(GameModeType mode, Node button) {
 		this.mode = mode;
-		if (this.modeButton != null) {
-			this.modeButton.getStyleClass().remove("mode-option-selected");
+		if (this.mode_button != null) {
+			this.mode_button.getStyleClass().remove("mode-option-selected");
 		}
-		this.modeButton = modeButton;
-		this.modeButton.getStyleClass().add("mode-option-selected");
-		System.out.println("GameMode set to: " + mode);
+		this.mode_button = button;
+		this.mode_button.getStyleClass().add("mode-option-selected");
 	}
 
-	public Button getCountButton() {
-		return countButton;
+	public Node getcount_button() {
+		return count_button;
 	}
 
-	public Button getModeButton() {
-		return modeButton;
+	public Node getmode_button() {
+		return mode_button;
 	}
 }
 
