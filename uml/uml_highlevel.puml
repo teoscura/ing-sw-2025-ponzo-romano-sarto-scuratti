@@ -1,4 +1,4 @@
-@startuml high_level
+@startuml uml_highlevel
 hide circle
 skinparam classFontStyle bold
 skinparam groupInheritance 1
