@@ -49,7 +49,6 @@ public class DummyVoyageState extends VoyageState {
 	public void validate(ServerMessage message) throws ForbiddenCallException {
 		message.receive(this);
 		Player p = message.getDescriptor().getPlayer();
-		if (!p.getRetired() && p.getSpaceShip().getCrew()[0] <= 0) this.loseGame(p);
 		if (this.state != null) return;
 		this.transition();
 	}
@@ -175,6 +174,16 @@ public class DummyVoyageState extends VoyageState {
 
 	public void setCardState(CardState next) {
 		if (next == null) {
+			for (Player p : this.getOrder(CardOrder.NORMAL)) {
+				if (p.getSpaceShip().getCrew()[0] == 0 || p.getSpaceShip().getBlobsSize() <= 0) loseGame(p);
+			}
+			for (Player p : this.getOrder(CardOrder.NORMAL)) {
+				if (planche.checkLapped(p)) loseGame(p);
+			}
+			for (Player p : this.to_give_up) {
+				if (!p.getRetired()) this.loseGame(p);
+			}
+			this.to_give_up.clear();
 			this.state = null;
 			return;
 		}

@@ -162,7 +162,7 @@ public class PiratesCardTest {
 		message.setDescriptor(p1desc);
 		state.validate(message);
 		assertEquals(x - 3, player1.getCredits());
-		assertTrue(player1.getRetired());
+		
 		//P2 accende e vince
 		x = player2.getCredits();
 		int pos = planche.getPlayerPosition(player2);
@@ -184,6 +184,7 @@ public class PiratesCardTest {
 		assertEquals(player2.getCredits(), x + this.card.getCredits() + 4 + 2);
 		assertEquals(pos - this.card.getDays(), planche.getPlayerPosition(player2));
 		assertTrue(card.getExhausted());
+		assertTrue(player1.getRetired());
 		assertNull(state.getCardState(player1));
 	}
 
