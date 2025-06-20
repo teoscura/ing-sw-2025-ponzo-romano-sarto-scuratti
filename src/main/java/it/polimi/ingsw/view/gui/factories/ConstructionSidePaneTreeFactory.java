@@ -52,6 +52,7 @@ public class ConstructionSidePaneTreeFactory {
 			((HBox) card_list.getChildren().getLast()).getChildren().add(t);
 			k++;
 		}
+		card_list.setAlignment(Pos.CENTER);
 		Popup popup = new Popup();
 		popup.getContent().add(card_list);
 		popup.setAutoFix(true);

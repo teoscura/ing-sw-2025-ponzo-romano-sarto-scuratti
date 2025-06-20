@@ -200,19 +200,19 @@ public class VoyageState extends GameState {
 		tmp.addAll(this.players);
 		switch (criteria) {
 			case LEAST_CANNON:
-				double min_cannon_power = tmp.stream().mapToDouble(p -> p.getSpaceShip().getCannonPower()).min().orElse(0);
+				double min_cannon_power = tmp.stream().filter(p->!p.getRetired()&&!p.getDisconnected()).mapToDouble(p -> p.getSpaceShip().getCannonPower()).min().orElse(0);
 				return tmp.stream()
 						.filter((p) -> p.getSpaceShip().getCannonPower() == min_cannon_power && !p.getRetired() && !p.getDisconnected())
 						.sorted((p1, p2) -> -Integer.compare(planche.getPlayerPosition(p1), planche.getPlayerPosition(p1)))
 						.findFirst().orElse(null);
 			case LEAST_CREW:
-				int min_crew = tmp.stream().mapToInt(p -> p.getSpaceShip().getTotalCrew()).min().orElse(0);
+				int min_crew = tmp.stream().filter(p->!p.getRetired()&&!p.getDisconnected()).mapToInt(p -> p.getSpaceShip().getTotalCrew()).min().orElse(0);
 				return tmp.stream()
 						.filter((p) -> p.getSpaceShip().getTotalCrew() == min_crew && !p.getRetired() && !p.getDisconnected())
 						.sorted((p1, p2) -> -Integer.compare(planche.getPlayerPosition(p1), planche.getPlayerPosition(p1)))
 						.findFirst().orElse(null);
 			case LEAST_ENGINE:
-				int min_engine_power = tmp.stream().mapToInt(p -> p.getSpaceShip().getEnginePower()).min().orElse(0);
+				int min_engine_power = tmp.stream().filter(p->!p.getRetired()&&!p.getDisconnected()).mapToInt(p -> p.getSpaceShip().getEnginePower()).min().orElse(0);
 				return tmp.stream()
 						.filter((p) -> p.getSpaceShip().getEnginePower() == min_engine_power && !p.getRetired() && !p.getDisconnected())
 						.sorted((p1, p2) -> -Integer.compare(planche.getPlayerPosition(p1), planche.getPlayerPosition(p1)))
