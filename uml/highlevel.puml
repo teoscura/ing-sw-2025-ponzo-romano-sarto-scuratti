@@ -713,8 +713,6 @@ package Message {
     
 }
 
-'//TODO add clientstatevisitor e clientcardvisitor
-
 package View {
 
     Model::Client::State::ClientStateVisitor <--d-- ClientView

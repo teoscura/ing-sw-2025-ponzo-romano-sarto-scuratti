@@ -1216,6 +1216,21 @@ package Model {
                 {method} showCardState(ClientView) : void
             }
 
+            interface ClientCardStateVisitor <<interface>> { 
+                {method} + show(ClientAwaitConfirmCardStateDecorator) : void
+                {method} + show(ClientBaseCardState) : void
+                {method} + show(ClientCargoPenaltyCardStateDecorator) : void
+                {method} + show(ClientCargoRewardCardStateDecorator) : void
+                {method} + show(ClientCombatZoneIndexCardStateDecorator) : void
+                {method} + show(ClientCreditsRewardCardStateDecorator) : void
+                {method} + show(ClientCrewPenaltyCardStateDecorator) : void
+                {method} + show(ClientLandingCardStateDecorator) : void
+                {method} + show(ClientMeteoriteCardStateDecorator) : void
+                {method} + show(ClientNewCenterCardStateDecorator) : void
+                {method} + show(ClientProjectileCardStateDecorator) : void
+                {method} + show(ClientEnemyCardStateDecorator) : void
+            }
+
             ClientCardState ^.. ClientBaseCardState
             class ClientBaseCardState {
                 {field} - [final] id : int
@@ -1342,7 +1357,17 @@ package Model {
             }
 
             interface ClientComponentVisitor <<interface>> {
-                {method} + show(ClientComponent) : void
+                {method} + show(ClientBaseComponent) : void
+                {method} + show(ClientEmptyComponent) : void
+                {method} + show(ClientBatteryComponentDecorator) : void
+                {method} + show(ClientBrokenVerifyComponentDecorator) : void
+                {method} + show(ClientCabinComponentDecorator) : void
+                {method} + show(ClientCannonComponentDecorator) : void
+                {method} + show(ClientEngineComponentDecorator) : void
+                {method} + show(ClientLifeSupportComponentDecorator) : void
+                {method} + show(ClientPoweredComponentDecorator) : void
+                {method} + show(ClientShieldComponentDecorator) : void
+                {method} + show(ClientShipmentsComponentDecorator) : void
             }
 
             ClientComponent ^.. ClientBaseComponent
@@ -1550,6 +1575,16 @@ package Model {
 
             interface ClientState <<interface>> {
                 {method} + sendToView(ClientView) : void
+            }
+
+            interface ClientStateVisitor <<interface>> {
+                {method} + show(ClientLobbySelectState) : void
+                {method} + show(ClientSetupState) : void
+                {method} + show(ClientWaitingRoomState) : void
+                {method} + show(ClientConstructionState) : void
+                {method} + show(ClientVerifyState) : void
+                {method} + show(ClientVoyageState) : void
+                {method} + show(ClientEndgameState) : void
             }
 
             ClientState ^.. ClientSetupState
@@ -2229,8 +2264,6 @@ package Message {
     }
     
 }
-
-'//TODO add clientstatevisitor e clientcardvisitor
 
 package View {
 
