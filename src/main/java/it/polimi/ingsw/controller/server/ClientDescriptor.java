@@ -45,6 +45,13 @@ public class ClientDescriptor {
 	}
 
 	/**
+	 * Unbinds any {@link it.polimi.ingsw.model.player.Player} from this descriptor.
+	 */
+	public void unbindPlayer() {
+		this.player = null;
+	}
+
+	/**
 	 * Sends a {@link ClientMessage} using the {@link ClientConnection} tied to the descriptor.
 	 * @param m {@link ClientMessage} Message to be sent.
 	 * @throws IOException if there are any connection related issues during the process.
@@ -57,7 +64,7 @@ public class ClientDescriptor {
 		return this.username;
 	}
 
-	public int getId() {
+	public int getID() {
 		return this.lobby_id;
 	}
 
@@ -94,3 +101,7 @@ public class ClientDescriptor {
 	}
 
 }
+
+
+
+

@@ -1965,13 +1965,22 @@ package Controller {
         }
 
         class ClientDescriptor {
-            {field} - username : String
-            {field} - color : PlayerColor
-            {field} - disconnected : boolean
+            {field} - [final] username : String
+            {field} - [final] timer : Timer
+            {field} - [final] connection : ClientConnection
+            {field} - lobby_id : int
+            {field} - task : TimerTask
+            {field} - player : Player
+            {method} + bindPlayer(Player) : void
+            {method} + unbindPlayer() : void
+            {method} + sendMessage(ClientMessage) : void
             {method} + getUsername() : String
-            {method} + getColor() : PlayerColor
-            {method} + getDisconnected() : boolean
-            {method} + sendMessage(ClientMessage m) : void
+            {method} + getID() : int
+            {method} + setID(int) : void
+            {method} + getPlayer() : Player
+            {method} + getPingTimerTask() : TimerTask
+            {method} + setPingTimerTask(TimerTask) : void
+            {method} + getConnection() : ClientConnection
         }
 
     }
@@ -2527,7 +2536,7 @@ package View {
         TUIStrategy "1" -- TUIView:tuistrategy;
         TUI::TUINotification "0..N" -- TUIView:notifications
         TUI::TerminalWrapper "1" -- TUIView:terminal
-        Model::Client::ClientState "1" --u-- TUIView:state
+        Model::Client::State::ClientState "1" --u--- TUIView:state
         class TUIView {
 	        {field} - [final] drawthread : Thread
             {field} - [final] inputthread : Thread

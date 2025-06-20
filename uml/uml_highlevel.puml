@@ -669,14 +669,23 @@ package Controller {
             {method} + ping(ClientDescriptor) : void
         }
 
+        ClientConnection -- ClientDescriptor:connection
         class ClientDescriptor {
-            {field} - username : String
-            {field} - color : PlayerColor
-            {field} - disconnected : boolean
+            {field} - [final] username : String
+            {field} - [final] timer : Timer
+            {field} - lobby_id : int
+            {field} - task : TimerTask
+            {field} - player : Player
+            {method} + bindPlayer(Player) : void
+            {method} + unbindPlayer() : void
+            {method} + sendMessage(ClientMessage) : void
             {method} + getUsername() : String
-            {method} + getColor() : PlayerColor
-            {method} + getDisconnected() : boolean
-            {method} + sendMessage(ClientMessage m) : void
+            {method} + getID() : int
+            {method} + setID(int) : void
+            {method} + getPlayer() : Player
+            {method} + getPingTimerTask() : TimerTask
+            {method} + setPingTimerTask(TimerTask) : void
+            {method} + getConnection() : ClientConnection
         }
 
     }

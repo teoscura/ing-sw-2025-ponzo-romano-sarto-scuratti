@@ -269,7 +269,7 @@ public class SpaceShip implements Serializable {
 	public void removeComponent(ShipCoords coords) {
 		if (coords == null) throw new NullPointerException();
 		if (player.getDescriptor() != null)
-			Logger.getInstance().print(LoggerLevel.MODEL, "[" + this.player.getDescriptor().getId() + "] " + "[Player: '" + this.player.getUsername() + "'] " + "Removed component on coords: " + coords + ".");
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + this.player.getDescriptor().getID() + "] " + "[Player: '" + this.player.getUsername() + "'] " + "Removed component on coords: " + coords + ".");
 		BaseComponent tmp = this.getComponent(coords);
 		if (this.components[coords.y][coords.x] == this.empty) throw new IllegalTargetException();
 		this.components[coords.y][coords.x] = this.empty;

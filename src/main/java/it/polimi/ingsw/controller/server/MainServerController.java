@@ -136,11 +136,11 @@ public class MainServerController extends Thread implements VirtualServer {
 				return;
 			}
 		}
-		if (message.getDescriptor().getId() == -1) {
+		if (message.getDescriptor().getID() == -1) {
 			Logger.getInstance().print(LoggerLevel.DEBUG, "Received message from Client: '" + message.getDescriptor().getUsername() + "' of class: " + message.getClass().getSimpleName() + ".");
 			this.queue.insert(message);
 		}
-		var target = this.lobbies.get(message.getDescriptor().getId());
+		var target = this.lobbies.get(message.getDescriptor().getID());
 		if (target == null) {
 			message.getDescriptor().setID(-1);
 		} else {
@@ -350,7 +350,7 @@ public class MainServerController extends Thread implements VirtualServer {
      * @param client {@link it.polimi.ingsw.controller.server.ClientDescriptor} Client being disconnected.
      */
 	public void disconnect(ClientDescriptor client) {
-		int id = client.getId();
+		int id = client.getID();
 		if (client.getPingTimerTask() != null) client.getPingTimerTask().cancel();
 		synchronized (listeners_lock) {
 			if (!all_listeners.containsKey(client.getUsername())) {
@@ -689,7 +689,7 @@ public class MainServerController extends Thread implements VirtualServer {
 			if (!all_listeners.containsKey(client.getUsername())) {
 				Logger.getInstance().print(LoggerLevel.WARN, "Client: '" + client.getUsername() + "' attempted to join a lobby, but was never connected!");
 				return;
-			} else if (client.getId() != -1) {
+			} else if (client.getID() != -1) {
 				Logger.getInstance().print(LoggerLevel.WARN, "Client: '" + client.getUsername() + "' attempted to join a lobby, but is already playing!");
 				return;
 			}
@@ -739,6 +739,7 @@ public class MainServerController extends Thread implements VirtualServer {
 			Logger.getInstance().print(LoggerLevel.DEBUG, "Rejoining Client: '" + client.getUsername() + "' to lobby select");
 			this.lob_listeners.put(client.getUsername(), client);
 		}
+		client.unbindPlayer();
 		client.setID(-1);
 	}
 
