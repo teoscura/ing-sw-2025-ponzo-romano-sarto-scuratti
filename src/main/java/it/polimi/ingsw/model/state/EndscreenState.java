@@ -55,6 +55,7 @@ public class EndscreenState extends GameState {
 			min = p.getSpaceShip().countExposedConnectors() <= min ? p.getSpaceShip().countExposedConnectors() : min;
 		}
 		for (Player p : this.players) {
+			if (p.getDisconnected()) this.awaiting.remove(p);
 			if (p.getRetired()) continue;
 			if (p.getSpaceShip().countExposedConnectors() == min) p.giveCredits(2);
 			if (this.order_arrival.contains(p)) p.giveCredits(4 - order_arrival.indexOf(p));

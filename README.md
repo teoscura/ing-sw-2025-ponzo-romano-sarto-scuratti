@@ -46,12 +46,12 @@ At any point the server can be closed by typing `stop` in the console, The serve
 ## How to start a game client
 
 > [!CAUTION]
-> If you wish to play with a mac, make sure to use the right jar! The jar made to support Intel Macs is denoted by a final _intel in its name, while the normal jar supports ARM Macs.
+> If you wish to play with a mac, make sure to use the right jar! The jar made to support Intel Macs is denoted by a _intel in its name, while the normal jar supports ARM Macs.
 
 ### GUI
 
 You can start the GUI client by opening the provided .JAR file with:
-```java -jar GC13-gui-1.0.jar``` (Make sure to match the name of the jar!)
+```java -jar GC13-gui-1.0.jar``` (Make sure to match the name of the jar if youre on an Intel Mac by adding "_intel"!)
 
 #### How to play it.
 
