@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view.tui;
 
 import it.polimi.ingsw.controller.client.state.ConnectedState;
+import it.polimi.ingsw.message.server.ServerMessage;
 
 /**
  * Class in charge of handling TUI input strings and converting them into requests to either the view or the remote game server.
@@ -40,7 +41,12 @@ public class CommandPreprocessor {
 				state.disconnect();
 				break;
 			default:
-				state.sendMessage(MessageBuilder.build(s, view));
+				try {
+					ServerMessage message = MessageBuilder.build(s, view);
+					state.sendMessage(message);
+				} catch (Throwable e) {
+					view.showTextMessage("Input an illegal command!");
+				}
 				break;
 		}
 	}

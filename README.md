@@ -56,6 +56,8 @@ You can start the GUI client by opening the provided .JAR file with:
 > [!TIP] 
 > To open any saved game, you can simply click it in the list available on the setup screen.
 
+//TODO write indications for how to play gui.
+
 ### TUI
 
 > [!IMPORTANT]  

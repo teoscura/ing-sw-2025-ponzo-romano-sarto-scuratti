@@ -32,7 +32,7 @@ public class ClientLobbyStatesFormatter {
 					.style(AttributedStyle.BOLD.foreground(full ? AttributedStyle.BLUE : AttributedStyle.GREEN))
 					.append("| " + e.getPlayers().size() + "/" + e.getCount().getNumber())
 					.style(AttributedStyle.DEFAULT)
-					.append(" - "+e.getState());
+					.append(" - "+e.getState() + " | ");
 			for (String s : e.getPlayers()) {
 				t.append(s + " ");
 			}
