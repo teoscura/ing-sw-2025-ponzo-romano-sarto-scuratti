@@ -86,7 +86,7 @@ public class PlacedShipTreeFactory {
     static public Node statsBar(String username, ClientSpaceShip ship, int credits, boolean disconnected){
         StackPane sb = new StackPane();
         HBox values = new HBox(10);
-        values.setMaxWidth(800);
+        values.setMaxWidth(850);
         values.setAlignment(Pos.CENTER);
         sb.setMaxWidth(850);
         sb.setMaxHeight(80);
