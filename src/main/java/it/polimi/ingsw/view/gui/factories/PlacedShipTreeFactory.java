@@ -66,8 +66,15 @@ public class PlacedShipTreeFactory {
         bg.setOpacity(0.4);
 
         
-        var stats = statsBar(username, ship, credits, alive, disconnected);
+        var stats = statsBar(username, ship, credits, disconnected);
         StackPane sp = new StackPane(bg, res, stats);
+        if(!alive) {
+            sp.getChildren().add(new Rectangle(840, 600, new Color(255/255f, 0, 0, 0.2)));
+            Label l = new Label("Retired");
+            l.getStyleClass().add("button-label");
+            sp.getChildren().add(l);
+        }
+        
         sp.setMaxWidth(840);
         sp.setMaxHeight(768);
         sp.setAlignment(Pos.CENTER);
@@ -76,21 +83,19 @@ public class PlacedShipTreeFactory {
         return sp;
     }
 
-    static public Node statsBar(String username, ClientSpaceShip ship, int credits, boolean alive, boolean disconnected){
+    static public Node statsBar(String username, ClientSpaceShip ship, int credits, boolean disconnected){
         StackPane sb = new StackPane();
         HBox values = new HBox(10);
         values.setMaxWidth(800);
         values.setAlignment(Pos.CENTER);
-        sb.setMaxWidth(800);
+        sb.setMaxWidth(850);
         sb.setMaxHeight(80);
         var s = new Rectangle(800, 70, new Color(169/255f,169/255f,169/255f,0.45));
         sb.getChildren().add(s);
         s.getStyleClass().add("ui-rectangle");
         int totalcrew = 0;
         for(var i : ship.getCrew()) totalcrew+=i;
-        String tail = " - ";
-        tail += disconnected ? "disconnected - " : "";
-        tail += alive ? "alive" : "retired";
+        String tail = disconnected ? " - disconnected" : "";
         ImageView gun = new ImageView("galaxy_trucker_imgs/piece/powerc.png");
         gun.setPreserveRatio(true);
         gun.setFitWidth(50);
@@ -173,8 +178,15 @@ public class PlacedShipTreeFactory {
         bg.setOpacity(0.4);
 
         var planche = planche(state);
-        var stats = statsBar(p.getUsername(), ship, p.getCredits(), !p.isRetired(), p.isDisconnected());
+        var stats = statsBar(p.getUsername(), ship, p.getCredits(), p.isDisconnected());
         StackPane sp = new StackPane(planche, bg, res, stats);
+        if(p.isRetired()) {
+            sp.getChildren().add(new Rectangle(840, 600, new Color(255/255f, 0, 0, 0.2)));
+            Label l = new Label("Retired");
+            l.getStyleClass().add("button-label");
+            sp.getChildren().add(l);
+        }
+        
         sp.setMaxWidth(840);
         sp.setMaxHeight(768);
         sp.setAlignment(Pos.CENTER);
