@@ -44,7 +44,6 @@ public class LobbyStateTreeFactory {
         list.setMaxHeight(550);
         list.setHbarPolicy(ScrollBarPolicy.NEVER);
         list.setVbarPolicy(ScrollBarPolicy.NEVER);
-
 		for (var e : state.getLobbyList()) {
 			contents.getChildren().add(getEntry(e.getModelId(), e.getType(), e.getPlayers(), view));
 		}
@@ -54,7 +53,7 @@ public class LobbyStateTreeFactory {
 			view.sendMessage(new EnterSetupMessage());
 		});
 		var res = new VBox(10.0, list, confirm);
-		
+        res.setAlignment(Pos.CENTER);
 		return res;
         
 	}
