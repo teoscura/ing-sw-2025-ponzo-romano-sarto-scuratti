@@ -116,7 +116,7 @@ public class VoyageSidePaneTreeFactory implements ClientCardStateVisitor {
         awaiting.setAlignment(Pos.CENTER);
         awaiting.setMaxWidth(333);
         awaiting.getStyleClass().add("voyage-cargo-rew-label");
-        Label message = new Label("Cargo Reward ["+state.getDaysTaken()+" DAYS]: ");
+        Label message = new Label("Cargo Reward: ");
         message.setFont(new Font(18));
         ImageView piece = new ImageView("galaxy_trucker_imgs/piece/"+state.getTurn().toString()+".png");
         awaiting.getChildren().addAll(message, piece);
@@ -202,6 +202,7 @@ public class VoyageSidePaneTreeFactory implements ClientCardStateVisitor {
             awaiting.getChildren().addAll(message, piece);
             int i = 0;
             for(var p : state.getAvailable()){
+                if(p.getVisited()) continue;
                 HBox landing_contains = new HBox(10);
                 landing_contains.setAlignment(Pos.CENTER);
                 landing_contains.setMaxWidth(333);
@@ -228,6 +229,7 @@ public class VoyageSidePaneTreeFactory implements ClientCardStateVisitor {
             awaiting.getChildren().addAll(message, piece);
             int i = 0;
             for(var p : state.getAvailable()){
+                if(p.getVisited()) continue;
                 HBox landing_contains = new HBox(10);
                 landing_contains.setAlignment(Pos.CENTER);
                 landing_contains.setMaxWidth(333);

@@ -39,9 +39,9 @@ public class EndgameTreeFactory {
 
 	public static Node getEntry(ClientEndgamePlayer p) {
 		StackPane sb = new StackPane();
-		sb.setMaxWidth(840);
+		sb.setMaxWidth(940);
 		sb.setMaxHeight(120);
-		Rectangle base = new Rectangle(840, 120);
+		Rectangle base = new Rectangle(940, 120);
 		base.getStyleClass().add("ui-rectangle");
 		switch (p.getColor()) {
 			case BLUE:
@@ -88,13 +88,13 @@ public class EndgameTreeFactory {
 		piece.setFitWidth(120);
 		sb.getChildren().add(piece);
 		StackPane.setAlignment(piece, Pos.CENTER_LEFT);
-		Rectangle textbackdrop = new Rectangle(720, 100, new Color(169 / 255f, 169 / 255f, 169 / 255f, 0.7));
+		Rectangle textbackdrop = new Rectangle(820, 100, new Color(169 / 255f, 169 / 255f, 169 / 255f, 0.7));
 		textbackdrop.getStyleClass().add("ui-rectangle");
 		sb.getChildren().add(textbackdrop);
 		StackPane.setAlignment(textbackdrop, Pos.CENTER_RIGHT);
 		HBox fields = new HBox();
 		fields.setMaxHeight(100);
-		fields.setMaxWidth(720);
+		fields.setMaxWidth(820);
 		fields.setAlignment(Pos.CENTER);
 		String s = p.getPlanche_slot() >= 0 ? " - #" + (p.getPlanche_slot() + 1) + " - " : " - DNF - ";
 		var name = new Label(p.getUsername() + s);
