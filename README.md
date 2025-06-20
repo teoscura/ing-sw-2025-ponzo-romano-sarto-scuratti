@@ -35,7 +35,7 @@ All unfinished games are available to load in the lobby setup screen, provided t
 | Test Flight Ruleset             |     ✅      |
 | Persistence/Game save system    |     ✅      |
 
-### How to start a server
+## How to start a server
 
 To start a game server, launch the jar with this command, the tcp port can be omitted, the server will choose a random port to use and log it at launch:
 
@@ -43,12 +43,12 @@ To start a game server, launch the jar with this command, the tcp port can be om
 
 At any point the server can be closed by typing `stop` in the console, The server is multi-threaded, don't use Ctrl-C to close it, as it will lead to undefined behaviour.
 
-### How to start a game client
+## How to start a game client
 
 > [!CAUTION]
 > Due to the unavailability of Apple Silicon OSX machines between the members of our group, we were unable to thoroughly test the any of the two clients on it. We included the needed libraries on the .JAR, but we cannot guarantee its correct functioning.
 
-#### GUI
+### GUI
 
 You can start the GUI client by opening the provided .JAR file with:
 ```java -jar GC13-gui-1.0.jar```
@@ -56,7 +56,7 @@ You can start the GUI client by opening the provided .JAR file with:
 > [!TIP] 
 > To open any saved game, you can simply click it in the list available on the setup screen.
 
-#### TUI
+### TUI
 
 > [!IMPORTANT]  
 > Make sure to launch the TUI with a terminal emulator having size equal or larger than 128 columns by 32 rows, using the flag ```--enable-native-access=ALL-UNNAMED``` could be necessary for the JLine library to successfully load the supported capabilities of the terminal used.
@@ -71,7 +71,7 @@ A proven way to launch the TUI on windows is to launch a windows terminal instan
 Simply launch the jar in a unicode supporting terminal using the command: ```java --enable-native-access=ALL-UNNAMED -jar GC13-tui-1.0.jar```.
 
 > [!TIP]
-> If at any point while connected to a server you don't know what any of the symbols mean, or if you forgot what particular syntax a command might require, type `help` and a helpful screen showing anything you might need will pop up! Also, during any card state that requires to land, you can choosenot to land using `selectlanding -1`, any other kind of state expects either a penalty or a `sendcontinue` command.
+> If at any point while connected to a server you don't know what any of the symbols mean, or if you forgot what particular syntax a command might require, type `help` and a helpful screen showing anything you might need will pop up! Also, during any card state that requires to land, you can choose not to land using `selectlanding -1`, any other kind of state expects either a penalty or a `sendcontinue` command.
 
 ## Notes and tips
 
