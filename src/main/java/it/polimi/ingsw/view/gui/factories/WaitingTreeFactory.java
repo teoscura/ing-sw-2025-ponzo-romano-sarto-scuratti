@@ -16,6 +16,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
+/**
+ * Factory that exposes a static method to create all Nodes needed to display a {@link it.polimi.ingsw.model.client.state.ClientWaitingRoomState}.
+ */
 public class WaitingTreeFactory {
 
     static public Node createWaitingScreen(ClientWaitingRoomState state, GUIView guiView) {

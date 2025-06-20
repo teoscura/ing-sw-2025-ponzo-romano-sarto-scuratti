@@ -19,6 +19,9 @@ import javafx.scene.shape.Rectangle;
 
 import java.util.List;
 
+/**
+ * Factory that exposes a static method to create all Nodes needed to display a {@link it.polimi.ingsw.model.client.state.ClientLobbySelectState}.
+ */
 public class LobbyStateTreeFactory {
 
 	public static Node createLobbyScreen(ClientLobbySelectState state, GUIView view) {

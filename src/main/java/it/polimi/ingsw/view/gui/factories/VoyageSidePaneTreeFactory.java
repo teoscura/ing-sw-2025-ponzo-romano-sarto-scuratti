@@ -24,6 +24,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 
+/**
+ * Factory that exposes a static method to create all Nodes needed to display a {@link it.polimi.ingsw.model.client.state.ClientVoyageState}.
+ */
 public class VoyageSidePaneTreeFactory implements ClientCardStateVisitor {
 
     private VBox cstatetree = null;

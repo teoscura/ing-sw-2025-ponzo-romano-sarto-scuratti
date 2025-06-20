@@ -1,7 +1,5 @@
 package it.polimi.ingsw.view.gui;
 
-
-
 import it.polimi.ingsw.controller.client.ClientController;
 import it.polimi.ingsw.controller.client.state.*;
 import it.polimi.ingsw.message.server.ServerMessage;
@@ -25,6 +23,10 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+
+/**
+ * GUI implementation of {@link it.polimi.ingsw.view.ClientView}.
+ */
 public class GUIView extends Application implements ClientView {
 
     private StackPane root;
@@ -37,9 +39,11 @@ public class GUIView extends Application implements ClientView {
     private ConnectedState state;
 	private PlayerColor view_color;
 	private String username;
-
 	private VBox notif_box;
 
+	/**
+	 * Starts and sets up the {@link it.polimi.ingsw.view.gui.GUIView} object.
+	 */
     @Override
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("Galaxy Trucker");
@@ -67,10 +71,18 @@ public class GUIView extends Application implements ClientView {
 		StackPane.setMargin(notif_box, new Insets(10, 0, 0, 10));
 	}
 
+	/**
+	 * Sends a message to the controller, used to avoid confusing dependency injection with composed classes.
+	 * 
+	 * @param message {@link it.polimi.ingsw.message.server.ServerMessage} Message to be sent.
+	 */
 	public void sendMessage(ServerMessage message) {
 		state.sendMessage(message);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
     @Override
     public void show(TitleScreenState state) {
 		Platform.runLater(() -> {
@@ -84,6 +96,9 @@ public class GUIView extends Application implements ClientView {
         });
     }
 
+	/**
+	 * {@inheritDoc}
+	 */
     @Override
     public void show(ConnectingState state) {
         Platform.runLater(() -> {
@@ -98,6 +113,9 @@ public class GUIView extends Application implements ClientView {
         });
     }
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void show(ClientLobbySelectState state) {
 		Platform.runLater(() -> {
@@ -112,6 +130,9 @@ public class GUIView extends Application implements ClientView {
 		});
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void show(ClientSetupState state) {
 		Platform.runLater(() -> {
@@ -126,6 +147,9 @@ public class GUIView extends Application implements ClientView {
 		});
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void show(ClientWaitingRoomState state) {
 		Platform.runLater(() -> {
@@ -141,6 +165,9 @@ public class GUIView extends Application implements ClientView {
 		});
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void show(ClientConstructionState state) {
 		Platform.runLater(() -> {
@@ -207,6 +234,9 @@ public class GUIView extends Application implements ClientView {
 		});
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void show(ClientVerifyState state) {
 		Platform.runLater(() -> {
@@ -231,6 +261,9 @@ public class GUIView extends Application implements ClientView {
 		});
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void show(ClientVoyageState state) {
 		Platform.runLater(() -> {
@@ -252,6 +285,9 @@ public class GUIView extends Application implements ClientView {
 		});
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void show(ClientEndgameState state) {
 		Platform.runLater(() -> {
@@ -265,6 +301,9 @@ public class GUIView extends Application implements ClientView {
 		});
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void showTextMessage(String message) {
         var notif = new GUINotification(message, 7);
@@ -281,24 +320,38 @@ public class GUIView extends Application implements ClientView {
 		});	
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void setClientState(ClientState state) {
 		this.prev_client_state = this.client_state;
 		this.client_state = state;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void connect(ConnectedState state) {
 		this.state = state;
 		this.username = state.getUsername();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void disconnect() {
 		this.state = null;
 		this.username = null;
 	}
 
+	/**
+	 * Changes the currently displayed player on the GUI.
+	 * 
+	 * @param c {@link it.polimi.ingsw.model.player.PlayerColor} Color of the player to display.
+	 */
 	public void selectColor(PlayerColor c){
 		if(c==null || c == PlayerColor.NONE) return;
 		this.view_color = c;
@@ -306,6 +359,11 @@ public class GUIView extends Application implements ClientView {
 		this.client_state.sendToView(this);
 	}
 
+	/**
+	 * Helper method in charge of displaying, animating and changing the background.
+	 * 
+	 * @param i Type of background to display, corresponds to {@link it.polimi.ingsw.model.GameModeType#getLevel()}.
+	 */
 	private void bgAnimation(int i){
 		this.bgroot.getChildren().clear();
 		ImageView bg = new ImageView("title"+i+".png");
@@ -317,6 +375,5 @@ public class GUIView extends Application implements ClientView {
 		anim.play();
 		this.bgroot.getChildren().addAll(bg);
 	}
-
 
 }

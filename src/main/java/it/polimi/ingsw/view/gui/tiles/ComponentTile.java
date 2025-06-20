@@ -3,7 +3,10 @@ package it.polimi.ingsw.view.gui.tiles;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 
-public class ComponentTile extends StackPane {
+/**
+ * Abstract class representing a tile to be used in the game.
+ */
+public abstract class ComponentTile extends StackPane {
 
     protected final ImageView image;
 

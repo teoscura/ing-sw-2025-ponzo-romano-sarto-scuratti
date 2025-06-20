@@ -9,6 +9,9 @@ import it.polimi.ingsw.message.server.TakeCargoMessage;
 import it.polimi.ingsw.message.server.TurnOnMessage;
 import it.polimi.ingsw.model.player.ShipCoords;
 
+/**
+ * Visitor class used to discertain what {@link it.polimi.ingsw.message.server.ServerMessage} to generate due to a Drag and Drop event.
+ */
 public class DraggablePieceDecoder {
 
     private final ShipCoords ending_coords;

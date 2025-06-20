@@ -11,11 +11,24 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.TransferMode;
 import javafx.scene.paint.Color;
 
+
+/**
+ * GUI representation of a construction phase {@link it.polimi.ingsw.model.client.components.ClientComponent} that allows for Drag and Drop support.
+ */
 public class ConstructionTile extends ComponentTile {
     
     private final Integer ID;
     private ComponentRotation rotation;
 
+    /**
+     * Constructs a {@link it.polimi.ingsw.view.gui.tiles.ConstructionTile} object.
+     * 
+     * @param view {@link it.polimi.ingsw.view.gui.GUIView} View used to forward the {@link it.polimi.ingsw.message.server.OpenLobbyMessage} to the {@link it.polimi.ingsw.controller.client.state.ConnectedState}.
+     * @param ID Integer ID of the component to display.
+     * @param discarded Boolean flag representing if the tile is in the discarded pile.
+     * @param primary Boolean flag representing whether the tile is the main one for a player.
+     * @param scale Double indicating the scale multiplier for the underlying image.
+     */
     public ConstructionTile(GUIView view, Integer ID, boolean discarded, boolean primary, double scale){
         super("galaxy_trucker_imgs/tiles/transparent/GT-tile-" + ID + "_transparent.png", scale);
         this.ID = ID;

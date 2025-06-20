@@ -9,7 +9,7 @@ import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.PlayerCount;
 import it.polimi.ingsw.model.client.state.ClientSetupState;
 import it.polimi.ingsw.view.gui.GUIView;
-import it.polimi.ingsw.view.gui.utils.SetupOptionsContainer;
+import it.polimi.ingsw.view.gui.SetupOptionsContainer;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -24,8 +24,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.TextAlignment;
 
-
+/**
+ * Factory that exposes a static method to create all Nodes needed to display a {@link it.polimi.ingsw.model.client.state.ClientSetupState}.
+ */
 public class SetupTreeFactory {
+
 	static public Node createSetupScreen(ClientSetupState state, GUIView view) {
 		SetupOptionsContainer options = new SetupOptionsContainer();
 

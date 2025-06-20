@@ -9,6 +9,9 @@ import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 
+/**
+ * Represents a Battery owned by a {@link it.polimi.ingsw.view.gui.tiles.PlacedTile} that represents a client side {@link it.polimi.ingsw.model.components.BatteryComponent}.
+ */
 public class BatteryPiece extends DraggablePiece {
  
     private final ShipCoords coords;
@@ -45,6 +48,9 @@ public class BatteryPiece extends DraggablePiece {
         return coords;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ServerMessage getDecoded(DraggablePieceDecoder dec) {
         return dec.decode(this);

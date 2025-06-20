@@ -10,6 +10,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
 
+/**
+ * Factory that exposes a static method to create all Nodes needed to display a {@link it.polimi.ingsw.controller.client.state.TitleScreenState}.
+ */
 public class TitleScreenTreeFactory {
     
     static public Node createTitleScreen(TitleScreenState state){

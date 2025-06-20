@@ -5,6 +5,9 @@ import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 
+/**
+ * Drag and drop piece allowing for the creation of a {@link it.polimi.ingsw.message.server.SelectBlobMessage}.
+ */
 public class SelectBlobPiece extends DraggablePiece {
     
     public SelectBlobPiece() {
@@ -27,6 +30,9 @@ public class SelectBlobPiece extends DraggablePiece {
         
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ServerMessage getDecoded(DraggablePieceDecoder dec) {
         return dec.decode(this);

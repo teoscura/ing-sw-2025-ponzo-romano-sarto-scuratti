@@ -9,6 +9,9 @@ import it.polimi.ingsw.view.gui.tiles.piece.CargoPiece;
 import it.polimi.ingsw.view.gui.tiles.piece.CrewPiece;
 import javafx.scene.image.ImageView;
 
+/**
+ * Implementation of {@link it.polimi.ingsw.model.client.components.ClientComponentVisitor}, creates a {@link it.polimi.ingsw.view.gui.tiles.PlacedTile} that represents the given {@link it.polimi.ingsw.model.client.components.ClientComponent}.
+ */
 public class PlacedTileFactory implements ClientComponentVisitor {
 
     private final GUIView view;
@@ -19,6 +22,12 @@ public class PlacedTileFactory implements ClientComponentVisitor {
         this.view = view;
     }
 
+    /**
+     * Returns the corresponding {@link it.polimi.ingsw.view.gui.tiles.PlacedTile} from the given Client Component.
+     * @param center {@link it.polimi.ingsw.model.player.ShipCoords} Coordinates used to create {@link it.polimi.ingsw.message.server.ServerMessage} triggered by Drag and Drop events.
+     * @param component {@link it.polimi.ingsw.model.client.components.ClientComponent} Component to convert.
+     * @return {@link it.polimi.ingsw.view.gui.tiles.PlacedTile} Produced tile.
+     */
     public PlacedTile createTile(ShipCoords center, ClientComponent component){
         this.center = center;
         component.showComponent(this);

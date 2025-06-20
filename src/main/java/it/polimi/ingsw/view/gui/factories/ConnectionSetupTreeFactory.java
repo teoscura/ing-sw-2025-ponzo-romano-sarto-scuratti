@@ -10,6 +10,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 
+/**
+ * Factory that exposes a static method to create all Nodes needed to display a {@link it.polimi.ingsw.controller.client.state.ConnectingState}.
+ */
 public class ConnectionSetupTreeFactory {
     
 	static public Node createConnectionScreen(ConnectingState state) {

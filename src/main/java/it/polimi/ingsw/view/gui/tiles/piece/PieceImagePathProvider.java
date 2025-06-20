@@ -3,6 +3,9 @@ package it.polimi.ingsw.view.gui.tiles.piece;
 import it.polimi.ingsw.model.components.enums.AlienType;
 import it.polimi.ingsw.model.components.enums.ShipmentType;
 
+/**
+ * Utility class used to retrieve the paths for the images representing each used piece.
+ */
 public class PieceImagePathProvider {
 
     static public String destroy(){

@@ -9,6 +9,9 @@ import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 
+/**
+ * Represents a {@link it.polimi.ingsw.model.components.enums.AlienType} owned by a {@link it.polimi.ingsw.view.gui.tiles.PlacedTile} that represents a client side {@link it.polimi.ingsw.model.components.CabinComponent} or derivates.
+ */
 public class CrewPiece extends DraggablePiece {
 
     private final ShipCoords coords;
@@ -39,6 +42,9 @@ public class CrewPiece extends DraggablePiece {
         });
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ServerMessage getDecoded(DraggablePieceDecoder dec) {
         return dec.decode(this);

@@ -21,6 +21,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 
+/**
+ * Factory that exposes a static method to create all Nodes needed to display a {@link it.polimi.ingsw.model.client.state.ClientVerifyState}.
+ */
 public class VerifySidePaneTreeFactory {
     
     static public Node createSidePane(GUIView view, ClientVerifyState state, PlayerColor color){

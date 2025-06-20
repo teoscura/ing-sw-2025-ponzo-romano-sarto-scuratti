@@ -6,6 +6,9 @@ import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 
+/**
+ * Drag and drop piece allowing for the creation of a {@link it.polimi.ingsw.message.server.SetCrewMessage}.
+ */
 public class CrewSetPiece extends DraggablePiece {
 
     private final AlienType type;
@@ -36,6 +39,9 @@ public class CrewSetPiece extends DraggablePiece {
         return type;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ServerMessage getDecoded(DraggablePieceDecoder dec) {
         return dec.decode(this);

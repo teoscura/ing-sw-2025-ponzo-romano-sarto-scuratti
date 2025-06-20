@@ -30,8 +30,9 @@ import javafx.stage.Popup;
 import java.time.Duration;
 import java.time.Instant;
 
-//gray: 169 169 169
-
+/**
+ * Factory that exposes a static method to create all Nodes needed to display a {@link it.polimi.ingsw.model.client.state.ClientConstructionState}.
+ */
 public class ConstructionSidePaneTreeFactory {
 
 	private static void toggleHourglass(GUIView view) {

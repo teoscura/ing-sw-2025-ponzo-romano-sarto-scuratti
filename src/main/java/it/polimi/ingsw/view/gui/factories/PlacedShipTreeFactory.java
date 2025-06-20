@@ -22,6 +22,9 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
+/**
+ * Factory that exposes a static method to create all Nodes needed to display a {@link it.polimi.ingsw.model.client.components.ClientSpaceShip} and a Planche.
+ */
 public class PlacedShipTreeFactory {
     
     static public Node createPlacedShip(GUIView view, String username, ClientSpaceShip ship, int credits, boolean alive, boolean disconnected){

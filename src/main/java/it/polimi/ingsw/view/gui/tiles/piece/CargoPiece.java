@@ -9,6 +9,9 @@ import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 
+/**
+ * Represents a {@link it.polimi.ingsw.model.components.enums.ShipmentType} owned by a {@link it.polimi.ingsw.view.gui.tiles.PlacedTile} that represents a client side {@link it.polimi.ingsw.model.components.StorageComponent}.
+ */
 public class CargoPiece extends DraggablePiece {
  
     private final ShipmentType type;
@@ -51,6 +54,9 @@ public class CargoPiece extends DraggablePiece {
         return type;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ServerMessage getDecoded(DraggablePieceDecoder dec) {
         return dec.decode(this);

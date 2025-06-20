@@ -16,6 +16,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
+/**
+ * Factory that exposes a static method to create all Nodes needed to display a {@link it.polimi.ingsw.model.client.state.ClientEndgameState}.
+ */
 public class EndgameTreeFactory {
     
     public static Node createEnding(GUIView view, ClientEndgameState state){
