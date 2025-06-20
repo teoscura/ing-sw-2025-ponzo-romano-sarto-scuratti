@@ -46,17 +46,23 @@ At any point the server can be closed by typing `stop` in the console, The serve
 ## How to start a game client
 
 > [!CAUTION]
-> Due to the unavailability of Apple Silicon OSX machines between the members of our group, we were unable to thoroughly test the any of the two clients on it. We included the needed libraries on the .JAR, but we cannot guarantee its correct functioning.
+> If you wish to play with a mac, make sure to use the right jar! The jar made to support Intel Macs is denoted by a final _intel in its name.
 
 ### GUI
 
 You can start the GUI client by opening the provided .JAR file with:
-```java -jar GC13-gui-1.0.jar```
+```java -jar GC13-gui-1.0.jar``` (Make sure to match the name of the jar!)
 
-> [!TIP] 
-> To open any saved game, you can simply click it in the list available on the setup screen.
+#### How to play it.
 
-//TODO write indications for how to play gui.
++ **Lobby and setup state**: If the list is too long for the view port, you can scroll with the mouse wheel to see all available lobbies to join/reopen by clicking them.
++ **Construction State**: Discard a tile by rightclicking it, rotate it by double clicking it, you can pick up discarded tiles by double clicking them in the list.
++ **Verify State**: Drag the showed tiles to remove a component, select the half of the ship you wish to carry (we call them *blobs*!), and drag the crew icons to select a crew type for a cabin, provided that the cabin can support them!
++ **Voyage State**: Each component can have some little markers indicating how much cargo, crew, or batteries it has, they can be removed/discarded by double clicking, and used by dragging them to the needed tile! \
+(example, I can move cargo by dragging it from one storage tile to another, provided it supports the cargo type, or I can turn on a component by dragging a battery to it).\
+Sometimes cargo is made available by a card state, if you're the receiver of that cargo, you just need to drag it to one of your storage tiles!. \
+If a shot is being announced, its accompanied by the index and direction its facing, indexes start from the top left corner at 0.
++ **Ending screen**: As long as your credits are positive, you won! Make sure to signal to continue, as the game only deletes the savefile after everyone makes sure to have read the results.
 
 ### TUI
 
