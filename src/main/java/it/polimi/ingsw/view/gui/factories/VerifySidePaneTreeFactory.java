@@ -39,15 +39,6 @@ public class VerifySidePaneTreeFactory {
         RemoveComponentPiece removep  = new RemoveComponentPiece();
         SelectBlobPiece selectp = new SelectBlobPiece();
         wide.getChildren().addAll(removep, selectp);
-        //Add the three crew types
-        Label crew_lab = new Label("Drag to change crew type:");
-        HBox box = new HBox(40);
-        box.getChildren().add(new CrewSetPiece(AlienType.HUMAN));
-        if (state.getType() == GameModeType.LVL2){
-            box.getChildren().add(new CrewSetPiece(AlienType.BROWN));
-            box.getChildren().add(new CrewSetPiece(AlienType.PURPLE));
-        }
-        box.setAlignment(Pos.CENTER);
         //Bottom
         Button confirm = new Button("Finish verifying!");
         confirm.setId("constr-confirm-button");
@@ -55,7 +46,18 @@ public class VerifySidePaneTreeFactory {
             view.sendMessage(new SendContinueMessage());
         });
         var await = createAwaitingTree(state);
-        res.getChildren().addAll(select_lab, wide, crew_lab, box, confirm, await);
+        res.getChildren().addAll(select_lab, wide);
+        if (state.getType() == GameModeType.LVL2){
+            //Add the three crew types
+            Label crew_lab = new Label("Drag to change crew type:");
+            HBox box = new HBox(40);
+            box.getChildren().add(new CrewSetPiece(AlienType.HUMAN));
+            box.getChildren().add(new CrewSetPiece(AlienType.BROWN));
+            box.getChildren().add(new CrewSetPiece(AlienType.PURPLE));
+            box.setAlignment(Pos.CENTER);
+            res.getChildren().addAll(crew_lab, box);
+        }
+        res.getChildren().addAll(confirm, await);
         StackPane.setAlignment(await, Pos.CENTER);
         res.getChildren().add(createColorSwitchTree(view, state, color));
         //Final alignment
