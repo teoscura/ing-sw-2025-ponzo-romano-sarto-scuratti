@@ -46,7 +46,7 @@ At any point the server can be closed by typing `stop` in the console, The serve
 ## How to start a game client
 
 > [!CAUTION]
-> If you wish to play with a mac, make sure to use the right jar! The jar made to support Intel Macs is denoted by a final _intel in its name.
+> If you wish to play with a mac, make sure to use the right jar! The jar made to support Intel Macs is denoted by a final _intel in its name, while the normal jar supports ARM Macs.
 
 ### GUI
 
