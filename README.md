@@ -1,6 +1,6 @@
 
 <h3 align="center">
-    <a> <img src="assets/galaxy_trucker_logo.png" alt="logo" width="250"/> </a>
+    <a> <img src="src/main/resources/galaxy_trucker_imgs/logos/galaxy_trucker_logo_med.png" alt="logo" width="250"/> </a>
 </h3>
 <h4 align="center"> IngSw Project - 2024/2025 </h4>
 <p align="center">
@@ -45,29 +45,33 @@ At any point the server can be closed by typing `stop` in the console, The serve
 
 ### How to start a game client
 
-> [!TIP]
-> TUI: if at any point while connected to a server you don't know what any of the symbols mean, or if you forgot what particular syntax a command might require, type `help` and a helpful screen showing anything you might need will pop up!
+> [!CAUTION]
+> Due to the unavailability of Apple Silicon OSX machines between the members of our group, we were unable to thoroughly test the any of the two clients on it. We included the needed libraries on the .JAR, but we cannot guarantee its correct functioning.
+
+#### GUI
+
+You can start the GUI client by opening the provided .JAR file with:
+```java -jar GC13-gui-1.0.jar```
+
+> [!TIP] 
+> To open any saved game, you can simply click it in the list available on the setup screen.
+
+#### TUI
 
 > [!IMPORTANT]  
-> Make sure to launch the TUI with a terminal emulator having size equal or larger than 128 columns by 32 rows.
+> Make sure to launch the TUI with a terminal emulator having size equal or larger than 128 columns by 32 rows, using the flag ```--enable-native-access=ALL-UNNAMED``` could be necessary for the JLine library to successfully load the supported capabilities of the terminal used.
 
-#### Windows
++ Windows: \
+A proven way to launch the TUI on windows is to launch a windows terminal instance with ```wt --size 128,32```. The TUI should automatically enable a UTF-8 supporting codepage for any windows terminal, but in case characters are not displayed properly, or the TUI doesn't launch, try forcing any codepage that supports Unicode. You can then finally launch the TUI with ```java --enable-native-access=ALL-UNNAMED -jar GC13-tui-1.0.jar```. 
 
-If you want to start a client using the TUI, make sure to first run:
+> [!CAUTION]
+> If by any chance this TUI is to be used on a Windows build that doesn't include the new Windows Terminal, you can launch it from Powershell, making sure the size is big enough.
 
-```wt --size 128,32```
++ Any OS:
+Simply launch the jar in a unicode supporting terminal using the command: ```java --enable-native-access=ALL-UNNAMED -jar GC13-tui-1.0.jar```.
 
-And then for both types of clients run:
-
-`java -jar GC13-client.jar <tui|gui>`
-
-
-#### OSX & Linux.
-
-There aren't any specific requirements for linux and OSX, while using the TUI, a monospaced font with basic unicode support should be used, most linux distros use one by default, and OSX runs zsh with a monospaced font by default
-
-`java -jar GC13-client.jar <tui|gui>`
-
+> [!TIP]
+> If at any point while connected to a server you don't know what any of the symbols mean, or if you forgot what particular syntax a command might require, type `help` and a helpful screen showing anything you might need will pop up! Also, during any card state that requires to land, you can choosenot to land using `selectlanding -1`, any other kind of state expects either a penalty or a `sendcontinue` command.
 
 ## Notes and tips
 
