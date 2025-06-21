@@ -70,7 +70,7 @@ public class TUIView implements ClientView {
 		}
 		if (username != null) {
 			String topline = "You are: " + username;
-			terminal.print(topline, 0, (128 - topline.length()) / 2);
+			terminal.print(topline, 0, (terminal.getCols() - topline.length()) / 2);
 		}
 		this.status_runnable.run();
 		if(!overlay){
@@ -181,7 +181,7 @@ public class TUIView implements ClientView {
 	@Override
 	public void showTextMessage(String message) {
 		synchronized (this.notifications) {
-			notifications.add(new TUINotification(message, Instant.now(), Duration.ofSeconds(10)));
+			notifications.add(new TUINotification(message, Instant.now(), Duration.ofSeconds(6)));
 		}
 	}
 

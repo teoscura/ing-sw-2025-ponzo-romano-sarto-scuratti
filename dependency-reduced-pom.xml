@@ -56,9 +56,6 @@
                     <exclude>*.css</exclude>
                     <exclude>*.png</exclude>
                     <exclude>*.jpg</exclude>
-                    <exclude>META-INF/*.SF</exclude>
-                    <exclude>META-INF/*.DSA</exclude>
-                    <exclude>META-INF/*.RSA</exclude>
                   </excludes>
                 </filter>
               </filters>
@@ -91,9 +88,6 @@
                     <exclude>*.css</exclude>
                     <exclude>*.png</exclude>
                     <exclude>*.jpg</exclude>
-                    <exclude>META-INF/*.SF</exclude>
-                    <exclude>META-INF/*.DSA</exclude>
-                    <exclude>META-INF/*.RSA</exclude>
                   </excludes>
                 </filter>
               </filters>

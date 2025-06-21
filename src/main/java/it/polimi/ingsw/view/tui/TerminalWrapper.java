@@ -60,9 +60,8 @@ public class TerminalWrapper {
 		legal = true;
 		this.size = terminal.getSize();
 		if (size.getRows() < 32 || size.getColumns() < 128) {
-			this.size = terminal.getSize();
-			showSmallScreen(size);
-			legal = false;
+			System.out.println("Terminal requires a starting size of 128r by 32c! You have: "+size.getColumns()+"c by "+size.getRows()+"r!");
+			System.exit(0);
 		}
 	}
 
@@ -74,6 +73,7 @@ public class TerminalWrapper {
 		if (size.getRows() < 32 || size.getColumns() < 128) showSmallScreen(size);
 		terminal.handle(Terminal.Signal.WINCH, signal -> {
 			this.size = terminal.getSize();
+			this.terminal.puts(Capability.clear_screen);
 			display.resize(this.size.getRows(), this.size.getColumns());
 			if (size.getRows() < 32 || size.getColumns() < 128) {
 				showSmallScreen(size);
@@ -233,7 +233,7 @@ public class TerminalWrapper {
 	 */
 	public void print(Collection<String> lines, int srow, int scol) {
 		for (String line : lines) {
-			this.print(line, srow, scol);
+			this.print(line, srow + this.getRowsOffset(), scol + this.getColsOffset());
 			srow++;
 		}
 	}
@@ -302,13 +302,39 @@ public class TerminalWrapper {
 		res.add(new AttributedStringBuilder().style(AttributedStyle.BOLD.foreground(AttributedStyle.RED)).append("Must be 128x32 minimum!").toAttributedString());
 		res.add(new AttributedStringBuilder().style(AttributedStyle.BOLD.foreground(AttributedStyle.RED)).append("Current one is " + s.getColumns() + "x" + s.getRows() + "!").toAttributedString());
 		res.add(new AttributedStringBuilder().style(AttributedStyle.BOLD.foreground(AttributedStyle.RED)).append("Press any key when resized.").toAttributedString());
-		this.terminal.puts(Capability.clear_screen);
 		int firstrow = (s.getRows() - res.size()) / 2;
 		for (String line : res.stream().map(as->as.toAnsi()).toList()) {
 			this.terminal.puts(Capability.cursor_address, firstrow, (s.getColumns() - line.length()) / 2);
 			this.terminal.writer().print(line);
 			firstrow++;
 		}
+	}
+
+	public int getCols(){
+		return this.size.getColumns();
+	}
+
+	public int getRows(){
+		return this.size.getRows();
+	}
+
+	public int getColsOffset(){
+		int off = (this.size.getColumns() - 128)/2;
+		return off;
+	}
+
+	public int getRowsOffset(){
+		int off = (this.size.getRows() - 32)/2;
+		return off;
+	}
+
+	public void printBottom(String line, int offset){
+		int row = this.size.getRows() - 1 - offset;
+		this.print(line, row, 0);
+	}
+
+	public void printNotif(Collection<String> strings) {
+		
 	}
 
 }

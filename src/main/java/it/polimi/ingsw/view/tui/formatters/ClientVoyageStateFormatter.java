@@ -52,13 +52,13 @@ public class ClientVoyageStateFormatter {
 	public static void formatStatus(TerminalWrapper terminal, ClientVoyageState state) {
 		ClientCardStateFormatter csf = new ClientCardStateFormatter();
 		state.getCardState().showCardState(csf);
-		terminal.print(new AttributedStringBuilder().style(AttributedStyle.BOLD.foreground(AttributedStyle.YELLOW)).append("Card " + (state.getType().getTurns() - state.getCardsLeft()) + "/" + state.getType().getTurns() + ".").toAnsi(), 28, 0);
-		terminal.print(" ".repeat(128), 29, 0);
-		terminal.print(" ".repeat(128), 30, 0);
-		terminal.print(" ".repeat(128), 31, 0);
-		terminal.print(csf.getFormatted().toAnsi(), 29, 0);
-		terminal.print(bottom_line + "━".repeat(128 - bottom_line.length()), 30, 0);
-		terminal.print(terminal.peekInput(), 31, 0);
+		terminal.printBottom(new AttributedStringBuilder().style(AttributedStyle.BOLD.foreground(AttributedStyle.YELLOW)).append("Card " + (state.getType().getTurns() - state.getCardsLeft()) + "/" + state.getType().getTurns() + ".").toAnsi(), 3);
+		terminal.printBottom(" ".repeat(terminal.getCols()), 2);
+		terminal.printBottom(" ".repeat(terminal.getCols()), 1);
+		terminal.printBottom(" ".repeat(terminal.getCols()), 0);
+		terminal.printBottom(csf.getFormatted().toAnsi(), 2);
+		terminal.printBottom(bottom_line + "━".repeat(terminal.getCols() - bottom_line.length()), 1);
+		terminal.printBottom(terminal.peekInput(), 0);
 	}
 
 	static private List<String> printPlanche(ClientVoyageState state, PlayerColor color) {
