@@ -131,6 +131,12 @@
     -fx-text-fill: rgb(255, 255, 255);
 }
 
+.button-label-connection {
+    -fx-font-size: 35px;
+    -fx-text-fill: rgb(255, 255, 31);
+    -fx-background-color: rgba(133, 133, 133, 0.5);
+}
+
 .entry-list {
     -fx-background-color:transparent;
     background-color: rgba(133, 133, 133, 0);
