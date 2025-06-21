@@ -107,7 +107,7 @@ public class ConstructionSidePaneTreeFactory {
 		return sp;
 	}
 
-	static public Node createAwaitingList(ClientConstructionState state){
+	static public Node createAwaitingList(ClientConstructionState state) {
 		var awaiting_list = state.getPlayerList().stream().filter(p -> !p.isFinished()).map(p -> p.getColor()).toList();
 		HBox awaiting = new HBox(8);
 		awaiting.setAlignment(Pos.CENTER);
@@ -123,29 +123,37 @@ public class ConstructionSidePaneTreeFactory {
 	static public Node createMainConstructionTileTree(GUIView view, ClientConstructionPlayer p, int left) {
 		VBox resv = new VBox();
 		resv.setMaxHeight(120);
-		resv.setMaxWidth(120);
+		resv.setMaxWidth(240);
 		StackPane sp = new StackPane();
 		sp.setMaxHeight(120);
-		sp.setMaxWidth(120);
+		sp.setMaxWidth(240);
+		Rectangle rect = new Rectangle(150, 150);
+		rect.setFill(new Color(186 / 255f, 186 / 255f, 186 / 255f, 0.4));
+		rect.getStyleClass().add("ui-rectangle");
+		sp.getChildren().add(rect);
 		if (p.getCurrent() == -1) {
+
 			Button pickb = new Button("Take Component: [" + left + " LEFT]");
+			//pickb.getStyleClass().add("button-construction");
 			pickb.setOnAction(event -> {
 				view.sendMessage(new TakeComponentMessage());
 			});
 			pickb.setId("constr-pick-button");
-			sp.getChildren().add(pickb);
+			sp.setAlignment(Pos.CENTER);
+			resv.setAlignment(Pos.CENTER);
 			resv.getChildren().add(sp);
+			resv.getChildren().add(pickb);
 		} else {
-			Rectangle rect = new Rectangle(150, 150);
-			rect.setFill(new Color(186/255f, 186/255f, 186/255f, 0.4));
-			rect.getStyleClass().add("ui-rectangle");
-			sp.getChildren().add(rect);
+
 			sp.getChildren().add(new ConstructionTile(view, p.getCurrent(), false, true, 1.0));
 			Button res = new Button("Reserve Component");
 			res.setOnAction(event -> {
 				view.sendMessage(new ReserveComponentMessage());
 			});
 			res.setId("constr-reserve-button");
+
+			sp.setAlignment(Pos.CENTER);
+			resv.setAlignment(Pos.CENTER);
 			resv.getChildren().add(sp);
 			resv.getChildren().add(res);
 		}
@@ -154,7 +162,8 @@ public class ConstructionSidePaneTreeFactory {
 	}
 
 	static public Node createReservedConstructionTileTree(GUIView view, ClientConstructionPlayer p) {
-		HBox res = new HBox(20);
+		HBox res = new HBox(10);
+		res.setMinHeight(125);
 		res.setAlignment(Pos.CENTER);
 		for (int id : p.getReserved()) {
 			res.getChildren().add(new ConstructionTile(view, id, false, false, 0.5));
