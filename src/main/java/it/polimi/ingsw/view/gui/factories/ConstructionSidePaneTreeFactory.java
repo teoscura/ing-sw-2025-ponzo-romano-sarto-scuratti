@@ -79,9 +79,30 @@ public class ConstructionSidePaneTreeFactory {
 
 	static public Node createSidePane(GUIView view, ClientConstructionState state, PlayerColor color, Node root) {
 		ClientConstructionPlayer you = state.getPlayerList().stream().filter(p -> p.getColor() == color).findAny().orElse(state.getPlayerList().getFirst());
+		PlayerColor yourcolor = state.getPlayerList().stream().filter(s -> s.getUsername().equals(view.getUsername())).map(ClientConstructionPlayer::getColor).findFirst().orElse(PlayerColor.NONE);
 		StackPane sp = new StackPane();
 		sp.setMaxWidth(333);
-		sp.getChildren().add(new Rectangle(333, 10000, new Color(169 / 255f, 169 / 255f, 169 / 255f, 0.7)));
+		Color panelColor;
+		// make the stackpane the same color as yourcolor
+		switch (yourcolor) {
+			case RED:
+				panelColor = new Color(143 / 255f, 0.0, 0.0, 0.7);
+				break;
+			case BLUE:
+				panelColor = new Color(0.0, 0.0, 143 / 255f, 0.7);
+				break;
+			case GREEN:
+				panelColor = new Color(0.0, 143 / 255f, 0.0, 0.7);
+				break;
+			case YELLOW:
+				panelColor = new Color(143 / 255f, 143 / 255f, 0.0, 0.7);
+				break;
+			default:
+				panelColor = new Color(169 / 255f, 169 / 255f, 169 / 255f, 0.7);
+				break;
+		}
+		sp.getChildren().add(new Rectangle(333, 10000, panelColor));
+
 		VBox res = new VBox(20);
 		res.setId("constr-pane-base");
 		res.getChildren().add(createMainConstructionTileTree(view, you, state.getTilesLeft()));
@@ -163,7 +184,7 @@ public class ConstructionSidePaneTreeFactory {
 
 	static public Node createReservedConstructionTileTree(GUIView view, ClientConstructionPlayer p) {
 		HBox res = new HBox(10);
-		res.setMinHeight(125);
+		res.setMinHeight(75);
 		res.setAlignment(Pos.CENTER);
 		for (int id : p.getReserved()) {
 			res.getChildren().add(new ConstructionTile(view, id, false, false, 0.5));
