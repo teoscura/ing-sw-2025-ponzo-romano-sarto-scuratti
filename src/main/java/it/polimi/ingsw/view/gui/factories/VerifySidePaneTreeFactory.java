@@ -39,9 +39,10 @@ public class VerifySidePaneTreeFactory {
         RemoveComponentPiece removep  = new RemoveComponentPiece();
         SelectBlobPiece selectp = new SelectBlobPiece();
         wide.getChildren().addAll(removep, selectp);
+        wide.setId("verify-tools-box");
         //Bottom
         Button confirm = new Button("Finish verifying!");
-        confirm.setId("constr-confirm-button");
+        confirm.setId("verify-confirm-button");
         confirm.setOnMouseClicked(event -> {
             view.sendMessage(new SendContinueMessage());
         });
@@ -55,6 +56,7 @@ public class VerifySidePaneTreeFactory {
             box.getChildren().add(new CrewSetPiece(AlienType.BROWN));
             box.getChildren().add(new CrewSetPiece(AlienType.PURPLE));
             box.setAlignment(Pos.CENTER);
+            box.setId("verify-crew-box");
             res.getChildren().addAll(crew_lab, box);
         }
         res.getChildren().addAll(confirm, await);

@@ -1,9 +1,7 @@
 package it.polimi.ingsw.view.gui;
 
 import it.polimi.ingsw.controller.client.ClientController;
-import it.polimi.ingsw.controller.client.state.ConnectedState;
-import it.polimi.ingsw.controller.client.state.ConnectingState;
-import it.polimi.ingsw.controller.client.state.TitleScreenState;
+import it.polimi.ingsw.controller.client.state.*;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.client.state.*;
@@ -19,6 +17,7 @@ import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -46,11 +45,12 @@ public class GUIView extends Application implements ClientView {
 	/**
 	 * Starts and sets up the {@link it.polimi.ingsw.view.gui.GUIView} object.
 	 */
-	@Override
-	public void start(Stage primaryStage) throws Exception {
-		primaryStage.setTitle("Galaxy Trucker");
-		root = new StackPane();
-		Scene scene = new Scene(root, 1366, 768);
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        primaryStage.setTitle("Galaxy Trucker");
+		primaryStage.getIcons().add(new Image("galaxy_trucker_imgs/start_icon.png"));
+        root = new StackPane();
+        Scene scene = new Scene(root, 1368, 768);
 		scene.getStylesheets().add("styles.css");
 		primaryStage.setMinWidth(1366);
 		primaryStage.setMinHeight(768);
@@ -181,7 +181,7 @@ public class GUIView extends Application implements ClientView {
 				this.view_color = state.getPlayerList().stream().filter(s -> s.getUsername().equals(username)).map(p -> p.getColor()).findFirst().orElse(PlayerColor.NONE);
 
 
-			var player = state.getPlayerList().stream().filter(p -> p.getColor() == this.view_color).findFirst().orElse(state.getPlayerList().getFirst());
+			var player = state.getPlayerList().stream().filter(p->p.getColor()==this.view_color).findFirst().orElse(state.getPlayerList().getFirst());
 			var prev = (VBox) gameroot.getScene().lookup("#constr-pane-base");
 			if (prev != null) {
 				var prevp = ((ClientConstructionState) prev_client_state).getPlayerList().stream().filter(p -> p.getColor() == this.view_color).findFirst().orElse(((ClientConstructionState) prev_client_state).getPlayerList().getFirst());
@@ -223,6 +223,7 @@ public class GUIView extends Application implements ClientView {
 					prev.getChildren().remove(indx);
 					prev.getChildren().add(indx, ConstructionSidePaneTreeFactory.createAwaitingList(state));
 				}
+				return;
 			} else {
 				this.gameroot.getChildren().clear();
 				var x = ConstructionSidePaneTreeFactory.createSidePane(this, state, view_color, gameroot);
@@ -233,6 +234,26 @@ public class GUIView extends Application implements ClientView {
 				StackPane.setMargin(x, new Insets(0, 0, 0, 50));
 				StackPane.setMargin(node, new Insets(0, 60, 0, 0));
 				StackPane.setAlignment(node, Pos.CENTER_RIGHT);
+			}
+
+			var box = (VBox) gameroot.getScene().lookup("#constr-pane-base");
+			if (this.view_color != state.getPlayerList().stream().filter(s -> s.getUsername().equals(username)).map(p -> p.getColor()).findFirst().orElse(PlayerColor.NONE)){
+				int index;
+				index = box.getChildren().indexOf(gameroot.getScene().lookup("#constr-tile-pane"));
+				box.getChildren().get(index).setDisable(true);
+				index = box.getChildren().indexOf(gameroot.getScene().lookup("#constr-reserved-pane"));
+				if (index != -1) box.getChildren().get(index).setDisable(true);
+				index = box.getChildren().indexOf(gameroot.getScene().lookup("#constr-discarded-list"));
+				if (index != -1) box.getChildren().get(index).setDisable(true);
+			}
+			else {
+				int index;
+				index = box.getChildren().indexOf(gameroot.getScene().lookup("#constr-tile-pane"));
+				if (index != -1) box.getChildren().get(index).setDisable(false);
+				index = box.getChildren().indexOf(gameroot.getScene().lookup("#constr-reserved-pane"));
+				if (index != -1) box.getChildren().get(index).setDisable(false);
+				index = box.getChildren().indexOf(gameroot.getScene().lookup("#constr-discarded-list"));
+				if (index != -1) box.getChildren().get(index).setDisable(false);
 			}
 		});
 	}
@@ -261,6 +282,26 @@ public class GUIView extends Application implements ClientView {
 			StackPane.setMargin(x, new Insets(0, 0, 0, 60));
 			StackPane.setMargin(node, new Insets(0, 60, 0, 0));
 			StackPane.setAlignment(node, Pos.CENTER_RIGHT);
+
+			var box = (VBox) gameroot.getScene().lookup("#verify-pane-base");
+			if (this.view_color != state.getPlayerList().stream().filter(s -> s.getUsername().equals(username)).map(p -> p.getColor()).findFirst().orElse(PlayerColor.NONE)){
+				int index;
+				index = box.getChildren().indexOf(gameroot.getScene().lookup("#verify-tools-box"));
+				if (index != -1) box.getChildren().get(index).setDisable(true);
+
+				index = box.getChildren().indexOf(gameroot.getScene().lookup("#verify-crew-box"));
+				if (index != -1) box.getChildren().get(index).setDisable(true);
+
+			}
+			else {
+				int index;
+				index = box.getChildren().indexOf(gameroot.getScene().lookup("#verify-tools-box"));
+				if (index != -1) box.getChildren().get(index).setDisable(false);
+
+				index = box.getChildren().indexOf(gameroot.getScene().lookup("#verify-crew-box"));
+				if (index != -1) box.getChildren().get(index).setDisable(false);
+
+			}
 		});
 	}
 
@@ -285,6 +326,8 @@ public class GUIView extends Application implements ClientView {
 			StackPane.setMargin(x, new Insets(0, 0, 0, 60));
 			StackPane.setMargin(node, new Insets(0, 60, 0, 0));
 			StackPane.setAlignment(node, Pos.CENTER_RIGHT);
+
+
 		});
 	}
 
