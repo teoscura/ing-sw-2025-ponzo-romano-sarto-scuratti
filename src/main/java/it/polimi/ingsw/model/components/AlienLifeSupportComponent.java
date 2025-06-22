@@ -1,7 +1,6 @@
 //Done.
 package it.polimi.ingsw.model.components;
 
-import it.polimi.ingsw.exceptions.IllegalConstructorArgumentException;
 import it.polimi.ingsw.model.cards.visitors.CrewRemoveVisitor;
 import it.polimi.ingsw.model.client.components.ClientBaseComponent;
 import it.polimi.ingsw.model.client.components.ClientComponent;
@@ -36,7 +35,7 @@ public class AlienLifeSupportComponent extends BaseComponent {
 									 AlienType type) {
 		super(id, connectors, rotation);
 		if (!type.getLifeSupportExists()) {
-			throw new IllegalConstructorArgumentException();
+			throw new IllegalArgumentException();
 		}
 		this.type = type;
 	}
@@ -48,7 +47,7 @@ public class AlienLifeSupportComponent extends BaseComponent {
 									 ShipCoords coords) {
 		super(id, connectors, rotation, coords);
 		if (!type.getLifeSupportExists()) {
-			throw new IllegalConstructorArgumentException();
+			throw new IllegalArgumentException();
 		}
 		this.type = type;
 	}

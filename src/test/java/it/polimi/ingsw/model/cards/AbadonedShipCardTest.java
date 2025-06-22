@@ -3,7 +3,6 @@ package it.polimi.ingsw.model.cards;
 import it.polimi.ingsw.controller.DummyConnection;
 import it.polimi.ingsw.controller.DummyController;
 import it.polimi.ingsw.controller.server.ClientDescriptor;
-import it.polimi.ingsw.exceptions.PlayerNotFoundException;
 import it.polimi.ingsw.message.server.RemoveCrewMessage;
 import it.polimi.ingsw.message.server.SelectLandingMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
@@ -85,7 +84,7 @@ public class AbadonedShipCardTest {
 	}
 
 	@Test
-	void behaviour() throws ForbiddenCallException, PlayerNotFoundException {
+	void behaviour() throws ForbiddenCallException {
 		ServerMessage mess = null;
 		assertEquals(0, player1.getCredits());
 		assertEquals(0, player2.getCredits());
@@ -130,7 +129,7 @@ public class AbadonedShipCardTest {
 	}
 
 	@Test
-	void disconnectionResilience() throws ForbiddenCallException, PlayerNotFoundException {
+	void disconnectionResilience() throws ForbiddenCallException {
 		//Si disconnettono due tizi, prima uno in coda, poi il leader
 		model.disconnect(player2);
 		model.disconnect(player1);

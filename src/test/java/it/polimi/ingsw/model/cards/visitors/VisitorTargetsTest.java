@@ -1,4 +1,4 @@
-package it.polimi.ingsw.model.components.visitors;
+package it.polimi.ingsw.model.cards.visitors;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import it.polimi.ingsw.model.GameModeType;
+import it.polimi.ingsw.model.cards.utils.ProjectileDirection;
 import it.polimi.ingsw.model.components.*;
 import it.polimi.ingsw.model.components.enums.*;
 import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
@@ -61,18 +62,31 @@ public class VisitorTargetsTest {
 
     @Test
     public void targets(){
-        LifeSupportUpdateVisitor vls = new LifeSupportUpdateVisitor(AlienType.BROWN);
+        ContainerMoveValidationVisitor vcmv = new ContainerMoveValidationVisitor(ShipmentType.BLUE);
         for(var c : list){
-            c.check(vls);
+            if(c instanceof StorageComponent) continue;
+            assertThrows(IllegalTargetException.class, ()->c.check(vcmv));
         }
-        CrewSetVisitor vcs = new CrewSetVisitor(tmp, AlienType.BROWN);
+        ContainsLoaderVisitor vclv = new ContainsLoaderVisitor(tmp, ShipmentType.BLUE);
+        for(var c : list){
+            if(c instanceof StorageComponent) continue;
+            assertThrows(IllegalTargetException.class, ()->c.check(vclv));
+        }
+        ContainsRemoveVisitor vcrv = new ContainsRemoveVisitor(tmp, ShipmentType.BLUE);
+        for(var c : list){
+            if(c instanceof BatteryComponent) continue;
+            if(c instanceof StorageComponent) continue;
+            assertThrows(IllegalTargetException.class, ()->c.check(vcrv));
+        }
+        CrewRemoveVisitor vcr = new CrewRemoveVisitor(tmp);
         for(var c : list){
             if(c instanceof CabinComponent) continue;
-            assertThrows(IllegalTargetException.class, ()->c.check(vcs));
+            if(c instanceof StartingCabinComponent) continue;
+            assertThrows(IllegalTargetException.class, ()->c.check(vcr));
         }
-        CabinVisitor vc = new CabinVisitor();
+        LargeMeteorVisitor vlm = new LargeMeteorVisitor(ProjectileDirection.U000);
         for(var c : list){
-            c.check(vc);
+            c.check(vlm);
         }
     }
 

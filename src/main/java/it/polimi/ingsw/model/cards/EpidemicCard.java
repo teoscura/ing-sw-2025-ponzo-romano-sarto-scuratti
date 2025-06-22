@@ -1,7 +1,6 @@
 //Done.
 package it.polimi.ingsw.model.cards;
 
-import it.polimi.ingsw.exceptions.PlayerNotFoundException;
 import it.polimi.ingsw.model.cards.state.CardState;
 import it.polimi.ingsw.model.cards.state.EpidemicState;
 import it.polimi.ingsw.model.cards.visitors.CrewRemoveVisitor;
@@ -45,7 +44,7 @@ public class EpidemicCard extends Card {
 	 * @throws PlayerNotFoundException if the ship/player is not found
 	 * @throws NullPointerException    if {@code state} or {@code p} is null
 	 */
-	public void apply(VoyageState state, Player p) throws PlayerNotFoundException {
+	public void apply(VoyageState state, Player p) {
 		if (state == null || p == null) throw new NullPointerException();
 		ArrayList<ShipCoords> ill_cabins = p.getSpaceShip().findConnectedCabins();
 		CrewRemoveVisitor v = new CrewRemoveVisitor(p.getSpaceShip());
