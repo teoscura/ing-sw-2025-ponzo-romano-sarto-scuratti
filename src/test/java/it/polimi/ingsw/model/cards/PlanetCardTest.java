@@ -9,7 +9,10 @@ import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.PlayerCount;
 import it.polimi.ingsw.model.board.Planche;
 import it.polimi.ingsw.model.board.TestFlightCards;
+import it.polimi.ingsw.model.cards.exceptions.AlreadyVisitedException;
+import it.polimi.ingsw.model.cards.exceptions.CardAlreadyExhaustedException;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
+import it.polimi.ingsw.model.cards.utils.Planet;
 import it.polimi.ingsw.model.components.BaseComponent;
 import it.polimi.ingsw.model.components.ComponentFactory;
 import it.polimi.ingsw.model.components.StorageComponent;
@@ -286,6 +289,16 @@ public class PlanetCardTest {
 		assertArrayEquals(new int[]{0, 1, 0, 0, 0}, player2.getSpaceShip().getContains());
 		assertArrayEquals(new int[]{0, 0, 0, 0, 0}, player3.getSpaceShip().getContains());
 		assertNull(state.getCardState(player1));
+	}
+
+	@Test
+	public void utilstest(){
+		Planet p = new Planet(new int[]{0,1,1,0});
+		p.visit();
+		assertThrows(AlreadyVisitedException.class, ()->p.visit());
+		PlanetCard c = new PlanetCard(0, 0, new Planet[]{p});
+		c.exhaust();
+		assertThrows(CardAlreadyExhaustedException.class, ()->c.exhaust());
 	}
 
 }

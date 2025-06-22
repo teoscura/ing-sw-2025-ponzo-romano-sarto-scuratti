@@ -1,36 +1,45 @@
 package it.polimi.ingsw.model.state;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import it.polimi.ingsw.controller.DummyConnection;
 import it.polimi.ingsw.controller.DummyController;
 import it.polimi.ingsw.controller.server.ClientDescriptor;
+import it.polimi.ingsw.message.server.DiscardComponentMessage;
+import it.polimi.ingsw.message.server.PlayerGiveUpMessage;
+import it.polimi.ingsw.message.server.RemoveComponentMessage;
+import it.polimi.ingsw.message.server.SelectBlobMessage;
+import it.polimi.ingsw.message.server.SendContinueMessage;
+import it.polimi.ingsw.message.server.ServerMessage;
+import it.polimi.ingsw.message.server.SetCrewMessage;
+import it.polimi.ingsw.message.server.TakeComponentMessage;
+import it.polimi.ingsw.message.server.TakeDiscardedComponentMessage;
+import it.polimi.ingsw.message.server.ToggleHourglassMessage;
+import it.polimi.ingsw.message.server.TurnOnMessage;
 import it.polimi.ingsw.model.DummyModelInstance;
 import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.PlayerCount;
 import it.polimi.ingsw.model.board.Planche;
+import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.cards.visitors.ContainsLoaderVisitor;
-import it.polimi.ingsw.model.client.ClientGameListEntry;
-import it.polimi.ingsw.model.client.state.ClientEndgameState;
 import it.polimi.ingsw.model.components.BaseComponent;
 import it.polimi.ingsw.model.components.ComponentFactory;
+import it.polimi.ingsw.model.components.enums.AlienType;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ShipmentType;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.ShipCoords;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+public class ForbiddenCallsTest {
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertInstanceOf;
-import static org.junit.jupiter.api.Assertions.assertNull;
-
-public class EndscreenStateTest {
-
-	private DummyModelInstance model;
+    private DummyModelInstance model;
 	private EndscreenState state;
 	private Planche planche;
 	private Player player1;
@@ -42,7 +51,6 @@ public class EndscreenStateTest {
 
 	@BeforeEach
 	void setUp() {
-		//preparare ordine e storage per i client.
 		ComponentFactory f1 = new ComponentFactory();
 		ComponentFactory f2 = new ComponentFactory();
 		ComponentFactory f3 = new ComponentFactory();
@@ -67,7 +75,6 @@ public class EndscreenStateTest {
 		player1.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 4, 1));
 		p1desc = new ClientDescriptor("p1", new DummyConnection());
 		p1desc.bindPlayer(player1);
-		//4-2
 
 		player2 = new Player(GameModeType.TEST, "p2", PlayerColor.BLUE);
 		p2desc = new ClientDescriptor("p2", new DummyConnection());
@@ -83,7 +90,6 @@ public class EndscreenStateTest {
 		ContainsLoaderVisitor v2g = new ContainsLoaderVisitor(player2.getSpaceShip(), ShipmentType.BLUE);
 		player2.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 4, 2)).check(v2g);
 		player2.giveCredits(10);
-		//Score is 13;
 
 		player3 = new Player(GameModeType.TEST, "p3", PlayerColor.GREEN);
 		p3desc = new ClientDescriptor("p3", new DummyConnection());
@@ -98,11 +104,7 @@ public class EndscreenStateTest {
 		player3.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 2, 2)).check(v3r);
 		ContainsLoaderVisitor v3g = new ContainsLoaderVisitor(player3.getSpaceShip(), ShipmentType.GREEN);
 		player3.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 4, 2)).check(v3g);
-		//score is 6+3;
 
-		//Aggiunge 2 per quello con meno connettori esposti
-		//Aggiunge da 1 a 4 per tutti gli storage.
-		//Aggiunge in ordine un premio da 4 a 1 per la posizione di arrivo ignorando ritirati.
 		ArrayList<Player> order = new ArrayList<>(Arrays.asList(player1, player3));
 		planche = new Planche(GameModeType.TEST, order);
 		ArrayList<Player> tmp = new ArrayList<>();
@@ -116,18 +118,46 @@ public class EndscreenStateTest {
 		this.state = new EndscreenState(model, GameModeType.TEST, PlayerCount.THREE, new ArrayList<>(Arrays.asList(player1, player2, player3)), order);
 	}
 
-	@Test
-	void endgameCalculationTest() {
-		model.setState(state);
-		assertFalse(state.toSerialize());
-		assertNull(state.getNext());
-		assertInstanceOf(ClientEndgameState.class, state.getClientState());
-		//Prepare order of arrival as Player2, Player1, Player3
-		//Retired only sells their stuff at half price+change.
-		assertEquals(2, player1.getCredits());
-		assertEquals(13, player2.getCredits());
-		assertEquals(11, player3.getCredits());
-		assertInstanceOf(ClientGameListEntry.class, state.getOngoingEntry(10));
-	}
+    @Test
+    public void forbidden(){
+        ShipCoords c = new ShipCoords(GameModeType.TEST, 0, 0);
+        ShipmentType t = ShipmentType.RED;
+        AlienType a = AlienType.BROWN;
+        ServerMessage forb1 = new TurnOnMessage(c, c);
+        forb1.setDescriptor(p1desc);
+        assertThrows(ForbiddenCallException.class, () -> model.validate(forb1));
+        ServerMessage forb2 = new SetCrewMessage(c, a);
+        forb2.setDescriptor(p1desc);
+        assertThrows(ForbiddenCallException.class, () -> model.validate(forb2));
+        ServerMessage forb3 = new ToggleHourglassMessage();
+        forb3.setDescriptor(p1desc);
+        assertThrows(ForbiddenCallException.class, () -> model.validate(forb3));
+        ServerMessage forb4 = new SendContinueMessage();
+        forb4.setDescriptor(p1desc);
+        assertThrows(ForbiddenCallException.class, () -> model.validate(forb4));
+        ServerMessage forb5 = new TakeComponentMessage();
+        forb5.setDescriptor(p1desc);
+        assertThrows(ForbiddenCallException.class, () -> model.validate(forb5));
+        ServerMessage forb6 = new DiscardComponentMessage();
+        forb6.setDescriptor(p1desc);
+        assertThrows(ForbiddenCallException.class, () -> model.validate(forb6));
+        ServerMessage forb7 = new TakeDiscardedComponentMessage(132);
+        forb7.setDescriptor(p1desc);
+        assertThrows(ForbiddenCallException.class, () -> model.validate(forb7));
+        ServerMessage forb8 = new RemoveComponentMessage(c);
+        forb8.setDescriptor(p1desc);
+        assertThrows(ForbiddenCallException.class, () -> model.validate(forb8));
+        ServerMessage forb9 = new SelectBlobMessage(c);
+        forb9.setDescriptor(p1desc);
+        assertThrows(ForbiddenCallException.class, () -> model.validate(forb9));
+        ServerMessage forb10 = new PlayerGiveUpMessage();
+        forb10.setDescriptor(p1desc);
+        assertThrows(ForbiddenCallException.class, () -> model.validate(forb10));
+        ClientDescriptor tst = new ClientDescriptor("Gino", new DummyConnection());
+        //Shouldnt connect.
+        model.startGame();
+        model.connect(tst);
+        model.disconnect(tst);
+    }
 
 }

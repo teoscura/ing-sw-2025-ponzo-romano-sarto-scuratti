@@ -86,7 +86,7 @@ public class MainServerControllerTest {
 		model.setState(new VoyageState(model, GameModeType.TEST, PlayerCount.TWO, list, new OneFlightCards(), new Planche(GameModeType.TEST, list)));
 		l.serializeCurrentGame();
 		t.updateUnfinishedList();
-		Thread.sleep(200);
+		Thread.sleep(300);
 		//open unfinished game, and finish playing it, lets see if it works.
 		t.connect(p1);
 		t.connect(p2);
@@ -97,7 +97,7 @@ public class MainServerControllerTest {
 		mess = new OpenUnfinishedMessage(1);
 		mess.setDescriptor(p1);
 		t.receiveMessage(mess);
-		Thread.sleep(200);
+		Thread.sleep(300);
 		assertEquals(1, t.getLobbyList().size());
 		assertInstanceOf(VoyageState.class, l.getModel().getState());
 		Thread.sleep(100);

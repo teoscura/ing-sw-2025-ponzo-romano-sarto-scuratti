@@ -4,8 +4,4 @@ public class AlreadyVisitedException extends RuntimeException {
 	public AlreadyVisitedException() {
 		super();
 	}
-
-	public AlreadyVisitedException(String message) {
-		super(message);
-	}
 }

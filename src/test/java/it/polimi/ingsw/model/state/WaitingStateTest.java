@@ -35,6 +35,7 @@ class WaitingStateTest {
 	@Test
 	void behaviour() throws ForbiddenCallException {
 		assertFalse(model.hasStarted());
+		assertFalse(waiting_state.toSerialize());
 		//player1 connects
 		waiting_state.connect(p1desc);
 		//player1 attempts connection again

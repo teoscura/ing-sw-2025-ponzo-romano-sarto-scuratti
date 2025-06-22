@@ -48,7 +48,6 @@ public class DummyVoyageState extends VoyageState {
 	@Override
 	public void validate(ServerMessage message) throws ForbiddenCallException {
 		message.receive(this);
-		Player p = message.getDescriptor().getPlayer();
 		if (this.state != null) return;
 		this.transition();
 	}

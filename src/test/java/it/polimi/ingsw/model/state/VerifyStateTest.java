@@ -160,7 +160,8 @@ class VerifyStateTest {
 		message.setDescriptor(p2desc);
 		model.validate(message);
 		//State should be voyage.
-		assertInstanceOf(VoyageState.class, model.getState());
+		var s = state.getNext();
+		assertInstanceOf(s.getClass(), model.getState());
 		assertEquals(((VoyageState) model.getState()).getPlanche().getPlayerPosition(player1), GameModeType.LVL2.getLength() + 6);
 		assertEquals(((VoyageState) model.getState()).getPlanche().getPlayerPosition(player2), GameModeType.LVL2.getLength() + 3);
 		assertEquals(((VoyageState) model.getState()).getPlanche().getPlayerPosition(player3), GameModeType.LVL2.getLength() + 1);
