@@ -38,6 +38,11 @@ public class VoyageSidePaneTreeFactory implements ClientCardStateVisitor {
 
     public Node createSidePane(ClientVoyageState state, PlayerColor color){
         StackPane sp = new StackPane();
+        VBox side_pane = new VBox(0);
+        side_pane.setAlignment(Pos.CENTER);
+        side_pane.setPrefHeight(10000);
+        side_pane.setMaxWidth(333);
+        side_pane.setId("#voyage-side-pane");
         sp.setMaxWidth(333);
         sp.setAlignment(Pos.CENTER);
         sp.getChildren().add(new Rectangle(333, 10000, new Color(169/255f,169/255f,169/255f,0.7)));
@@ -47,12 +52,17 @@ public class VoyageSidePaneTreeFactory implements ClientCardStateVisitor {
         Label card = new Label("Card: "+(state.getType().getTurns()-state.getCardsLeft())+"/"+state.getType().getTurns());
         card.setFont(new Font(18));
         card.setFont(new Font(18));
-        this.cstatetree.getChildren().add(card);
+        side_pane.getChildren().add(card);
         state.getCardState().showCardState(this);
         cstatetree.setId("voyage-card-state-pane");
-        sp.getChildren().add(cstatetree);
-        cstatetree.getChildren().add(createColorSwitchTree(view, state, color));
-        cstatetree.toFront();
+        side_pane.getChildren().add(cstatetree);
+        side_pane.getChildren().add(createColorSwitchTree(view, state, color));
+        sp.getChildren().add(side_pane);
+        side_pane.toFront();
+        if (color != state.getPlayerList().stream().filter(s -> s.getUsername().equals(view.getUsername())).map(p -> p.getColor()).findFirst().orElse(PlayerColor.NONE)){
+            cstatetree.setDisable(true);
+        }
+        else cstatetree.setDisable(false);
         return sp;
     }
 

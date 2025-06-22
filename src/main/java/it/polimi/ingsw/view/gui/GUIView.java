@@ -223,7 +223,6 @@ public class GUIView extends Application implements ClientView {
 					prev.getChildren().remove(indx);
 					prev.getChildren().add(indx, ConstructionSidePaneTreeFactory.createAwaitingList(state));
 				}
-				return;
 			} else {
 				this.gameroot.getChildren().clear();
 				var x = ConstructionSidePaneTreeFactory.createSidePane(this, state, view_color, gameroot);
@@ -326,8 +325,6 @@ public class GUIView extends Application implements ClientView {
 			StackPane.setMargin(x, new Insets(0, 0, 0, 60));
 			StackPane.setMargin(node, new Insets(0, 60, 0, 0));
 			StackPane.setAlignment(node, Pos.CENTER_RIGHT);
-
-
 		});
 	}
 
@@ -403,6 +400,10 @@ public class GUIView extends Application implements ClientView {
 		this.view_color = c;
 		this.gameroot.getChildren().clear();
 		this.client_state.sendToView(this);
+	}
+
+	public String getUsername() {
+		return this.username;
 	}
 
 	/**
