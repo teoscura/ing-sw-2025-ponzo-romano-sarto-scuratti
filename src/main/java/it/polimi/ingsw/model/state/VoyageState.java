@@ -174,12 +174,6 @@ public class VoyageState extends GameState {
 		p.retire();
 	}
 
-	public List<Player> getAllConnectedPlayers() {
-		List<Player> tmp = new ArrayList<>();
-		tmp.addAll(this.players);
-		return tmp.stream().filter((p) -> !p.getDisconnected()).toList();
-	}
-
 	/**
 	 * @param order {@link CardOrder} Order to sort the list by.
 	 * @return A list of {@link it.polimi.ingsw.model.player.Player} sorted in respect to the specified order on the planche.

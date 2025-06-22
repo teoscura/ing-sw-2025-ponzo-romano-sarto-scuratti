@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model.state;
 
 import it.polimi.ingsw.controller.server.ClientDescriptor;
-import it.polimi.ingsw.exceptions.PlayerNotFoundException;
 import it.polimi.ingsw.message.client.ClientMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
@@ -15,7 +14,6 @@ import it.polimi.ingsw.model.client.state.ClientState;
 import it.polimi.ingsw.model.components.enums.AlienType;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.player.Player;
-import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.utils.Logger;
 import it.polimi.ingsw.utils.LoggerLevel;
@@ -102,12 +100,6 @@ public abstract class GameState implements Serializable {
 
 	public PlayerCount getCount() {
 		return this.count;
-	}
-
-	public Player getPlayer(PlayerColor c) throws PlayerNotFoundException {
-		if (this.players == null || c.getOrder() >= players.size())
-			throw new PlayerNotFoundException("Player: color is not present in this match");
-		return this.players.get(c.getOrder());
 	}
 
 	public GameModeType getType() {

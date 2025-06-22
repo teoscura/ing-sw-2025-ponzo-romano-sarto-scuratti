@@ -121,12 +121,6 @@ public class DummyVoyageState extends VoyageState {
 		p.retire();
 	}
 
-	public List<Player> getAllConnectedPlayers() {
-		List<Player> tmp = new ArrayList<>();
-		tmp.addAll(this.players);
-		return tmp.stream().filter((p) -> !p.getDisconnected()).toList();
-	}
-
 	public List<Player> getOrder(CardOrder order) {
 		List<Player> tmp = this.players.stream().filter(p -> !p.getRetired() && !p.getDisconnected()).sorted((Player player1, Player player2) -> Integer.compare(planche.getPlayerPosition(player1), planche.getPlayerPosition(player2))).toList();
 		return order != CardOrder.NORMAL ? tmp : tmp.reversed();

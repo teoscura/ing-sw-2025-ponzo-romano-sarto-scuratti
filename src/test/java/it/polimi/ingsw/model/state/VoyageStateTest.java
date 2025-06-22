@@ -93,6 +93,9 @@ public class VoyageStateTest {
 		message.setDescriptor(p3desc);
 		model.validate(message);
 		//Lets check who retired;
+		assertInstanceOf(EndscreenState.class, state.getNext());
+		assertTrue(state.toSerialize());
+		state.getOngoingEntry(10);
 		assertFalse(player1.getRetired());
 		assertTrue(player2.getRetired());
 		assertTrue(player3.getRetired());
