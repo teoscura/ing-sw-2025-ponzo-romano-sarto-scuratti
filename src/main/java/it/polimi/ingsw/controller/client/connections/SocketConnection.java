@@ -34,6 +34,7 @@ public class SocketConnection extends Thread implements ServerConnection {
 			throw new NullPointerException();
 		this.inqueue = inqueue;
 		this.socket = new Socket(server_ip, server_port);
+		socket.setSoTimeout(15000);
 		this.out = new ObjectOutputStream(socket.getOutputStream());
 		this.in = new ObjectInputStream(socket.getInputStream());
 	}

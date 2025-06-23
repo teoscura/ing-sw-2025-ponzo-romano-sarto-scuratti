@@ -81,6 +81,15 @@ Simply launch the jar in a unicode supporting terminal using the command: ```jav
 > [!TIP]
 > If at any point while connected to a server you don't know what any of the symbols mean, or if you forgot what particular syntax a command might require, type `help` and a helpful screen showing anything you might need will pop up! Also, during any card state that requires to land, you can choose not to land using `selectlanding -1`, any other kind of state expects either a penalty or a `sendcontinue` command.
 
+## Developement notes
+
+Testing was mostly done using JUnit and its unit testing utilities, using it we reached a **98% coverage of the model's classes and 94% of its methods**, the controller, being almost wholly comprised of networking related methods and classes, was mostly tested manually as unit testing provided a number of logistical challenges regarding the lack of reproducability of the errors we could, and had, encountered along the developement of this software, any gameplay related functionality (lobby creation, saved games) of the controller was tested.
+A screenshot of the coverage for each package is available in the `./deliverables` folder of this repo, and previewed here. 
+
+<h3 align="center">
+    <a> <img src="deliverables/coverage.jpg"/> </a>
+</h3>
+
 ## Notes and tips
 
 To correctly adapt the rules of the boardgame, which employ physical tiles to deepen the gameplay experience, certain rules had to be tweaked slightly to make the game feel coherent in a digital space.
