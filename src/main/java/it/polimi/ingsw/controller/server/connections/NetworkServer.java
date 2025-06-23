@@ -123,7 +123,6 @@ public class NetworkServer extends Thread implements VirtualServerProvider, Seri
 		while (true) {
 			try {
 				var socket = server.accept();
-				socket.setSoTimeout(15000);
 				SocketClient new_connection = new SocketClient(socket);
 				MainServerController.getInstance().connectListener(new_connection);
 				this.serverPool.submit(new_connection);

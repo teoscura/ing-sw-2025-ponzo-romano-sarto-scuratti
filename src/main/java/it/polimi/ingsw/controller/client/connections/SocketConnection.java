@@ -8,6 +8,7 @@ import it.polimi.ingsw.message.server.ServerMessage;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 
 /**
@@ -33,8 +34,8 @@ public class SocketConnection extends Thread implements ServerConnection {
 		if (inqueue == null)
 			throw new NullPointerException();
 		this.inqueue = inqueue;
-		this.socket = new Socket(server_ip, server_port);
-		socket.setSoTimeout(15000);
+		this.socket = new Socket();
+		this.socket.connect(new InetSocketAddress(server_ip, server_port), 15000);
 		this.out = new ObjectOutputStream(socket.getOutputStream());
 		this.in = new ObjectInputStream(socket.getInputStream());
 	}

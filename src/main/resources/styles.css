@@ -1,8 +1,10 @@
 @font-face {
-    font-family: ''Roboto Mono'';
+    font-family: 'Roboto Mono';
     src: url('font.ttf');
+}
 
-    font-family: ''Anton-Regular'';
+@font-face {
+    font-family: 'Anton-Regular';
     src: url('Anton-Regular.ttf');
 }
 
