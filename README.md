@@ -1,6 +1,6 @@
 
 <h3 align="center">
-    <a> <img src="assets/galaxy_trucker_logo.png" alt="logo" width="250"/> </a>
+    <a> <img src="src/main/resources/galaxy_trucker_imgs/logos/galaxy_trucker_logo_med.png" alt="logo" width="250"/> </a>
 </h3>
 <h4 align="center"> IngSw Project - 2024/2025 </h4>
 <p align="center">
@@ -35,7 +35,7 @@ All unfinished games are available to load in the lobby setup screen, provided t
 | Test Flight Ruleset             |     ✅      |
 | Persistence/Game save system    |     ✅      |
 
-### How to start a server
+## How to start a server
 
 To start a game server, launch the jar with this command, the tcp port can be omitted, the server will choose a random port to use and log it at launch:
 
@@ -43,31 +43,43 @@ To start a game server, launch the jar with this command, the tcp port can be om
 
 At any point the server can be closed by typing `stop` in the console, The server is multi-threaded, don't use Ctrl-C to close it, as it will lead to undefined behaviour.
 
-### How to start a game client
+## How to start a game client
 
-> [!TIP]
-> TUI: if at any point while connected to a server you don't know what any of the symbols mean, or if you forgot what particular syntax a command might require, type `help` and a helpful screen showing anything you might need will pop up!
+> [!CAUTION]
+> If you wish to play with a mac, make sure to use the right jar! The jar made to support Intel Macs is denoted by a _intel in its name, while the normal jar supports ARM Macs.
+
+### GUI
+
+You can start the GUI client by opening the provided .JAR file with:
+```java -jar GC13-gui-1.0.jar``` (Make sure to match the name of the jar if youre on an Intel Mac by adding "_intel"!)
+
+#### How to play it.
+
++ **Lobby and setup state**: If the list is too long for the view port, you can scroll with the mouse wheel to see all available lobbies to join/reopen by clicking them.
++ **Construction State**: Discard a tile by rightclicking it, rotate it by double clicking it, you can pick up discarded tiles by double clicking them in the list.
++ **Verify State**: Drag the showed tiles to remove a component, select the half of the ship you wish to carry (we call them *blobs*!), and drag the crew icons to select a crew type for a cabin, provided that the cabin can support them!
++ **Voyage State**: Each component can have some little markers indicating how much cargo, crew, or batteries it has, they can be removed/discarded by double clicking, and used by dragging them to the needed tile! \
+(example, I can move cargo by dragging it from one storage tile to another, provided it supports the cargo type, or I can turn on a component by dragging a battery to it).\
+Sometimes cargo is made available by a card state, if you're the receiver of that cargo, you just need to drag it to one of your storage tiles!. \
+If a shot is being announced, its accompanied by the index and direction its facing, indexes start from the top left corner at 0.
++ **Ending screen**: As long as your credits are positive, you won! Make sure to signal to continue, as the game only deletes the savefile after everyone makes sure to have read the results.
+
+### TUI
 
 > [!IMPORTANT]  
-> Make sure to launch the TUI with a terminal emulator having size equal or larger than 128 columns by 32 rows.
+> Make sure to launch the TUI with a terminal emulator having size equal or larger than 128 columns by 32 rows, using the flag ```--enable-native-access=ALL-UNNAMED``` could be necessary for the JLine library to successfully load the supported capabilities of the terminal used.
 
-#### Windows
++ Windows: \
+A proven way to launch the TUI on windows is to launch a windows terminal instance with ```wt --size 128,32```. The TUI should automatically enable a UTF-8 supporting codepage for any windows terminal, but in case characters are not displayed properly, or the TUI doesn't launch, try forcing any codepage that supports Unicode. You can then finally launch the TUI with ```java --enable-native-access=ALL-UNNAMED -jar GC13-tui-1.0.jar```. 
 
-If you want to start a client using the TUI, make sure to first run:
+> [!CAUTION]
+> If by any chance this TUI is to be used on a Windows build that doesn't include the new Windows Terminal, you can launch it from Powershell, making sure the size is big enough.
 
-```wt --size 128,32```
++ Any OS:
+Simply launch the jar in a unicode supporting terminal using the command: ```java --enable-native-access=ALL-UNNAMED -jar GC13-tui-1.0.jar```.
 
-And then for both types of clients run:
-
-`java -jar GC13-client.jar <tui|gui>`
-
-
-#### OSX & Linux.
-
-There aren't any specific requirements for linux and OSX, while using the TUI, a monospaced font with basic unicode support should be used, most linux distros use one by default, and OSX runs zsh with a monospaced font by default
-
-`java -jar GC13-client.jar <tui|gui>`
-
+> [!TIP]
+> If at any point while connected to a server you don't know what any of the symbols mean, or if you forgot what particular syntax a command might require, type `help` and a helpful screen showing anything you might need will pop up! Also, during any card state that requires to land, you can choose not to land using `selectlanding -1`, any other kind of state expects either a penalty or a `sendcontinue` command.
 
 ## Notes and tips
 

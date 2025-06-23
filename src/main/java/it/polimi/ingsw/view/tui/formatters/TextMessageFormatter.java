@@ -21,12 +21,11 @@ public class TextMessageFormatter {
 		int row = 1;
 		for (int i = 0; i < to_show.size(); i++) {
 			var notif = format(to_show.get(i).getText());
-			terminal.print(notif, row, 94);
+			terminal.print(notif, row-terminal.getRowsOffset(), terminal.getCols()-notif.getFirst().length()-terminal.getColsOffset()-1);
 			row += notif.size();
 		}
 	}
 
-	//TODO trim length of message because if not we have an issue xd xd xd xd xd;
 	static private ArrayList<String> format(String message) {
 		ArrayList<String> res = new ArrayList<>();
 		int wraplength = 32;

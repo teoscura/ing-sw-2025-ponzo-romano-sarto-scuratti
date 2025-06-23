@@ -3,11 +3,16 @@ package it.polimi.ingsw.model.state;
 import it.polimi.ingsw.controller.DummyConnection;
 import it.polimi.ingsw.controller.DummyController;
 import it.polimi.ingsw.controller.server.ClientDescriptor;
+import it.polimi.ingsw.message.server.DiscardComponentMessage;
+import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.DummyModelInstance;
 import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.PlayerCount;
 import it.polimi.ingsw.model.board.Planche;
+import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.cards.visitors.ContainsLoaderVisitor;
+import it.polimi.ingsw.model.client.ClientGameListEntry;
+import it.polimi.ingsw.model.client.state.ClientEndgameState;
 import it.polimi.ingsw.model.components.BaseComponent;
 import it.polimi.ingsw.model.components.ComponentFactory;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
@@ -22,6 +27,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class EndscreenStateTest {
 
@@ -112,14 +121,22 @@ public class EndscreenStateTest {
 	}
 
 	@Test
-	void endgameCalculationTest() {
+	void endgameCalculationTest() throws ForbiddenCallException {
 		model.setState(state);
+		assertFalse(state.toSerialize());
+		assertNull(state.getNext());
+		assertInstanceOf(ClientEndgameState.class, state.getClientState());
 		//Prepare order of arrival as Player2, Player1, Player3
 		//Retired only sells their stuff at half price+change.
 		assertEquals(2, player1.getCredits());
 		assertEquals(13, player2.getCredits());
 		assertEquals(11, player3.getCredits());
-
+		state.disconnect(player1);
+		ServerMessage mess = new DiscardComponentMessage();
+		mess.setDescriptor(p1desc);
+		assertThrows(ForbiddenCallException.class, ()->state.validate(mess));
+		assertEquals("Endscreen State", state.toString());
+		assertInstanceOf(ClientGameListEntry.class, state.getOngoingEntry(10));
 	}
 
 }

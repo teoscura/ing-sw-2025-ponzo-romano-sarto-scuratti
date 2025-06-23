@@ -47,6 +47,18 @@
                   <exclude>org.jline*</exclude>
                 </excludes>
               </artifactSet>
+              <filters>
+                <filter>
+                  <artifact>*:*</artifact>
+                  <excludes>
+                    <exclude>galaxy_trucker_imgs/**</exclude>
+                    <exclude>*.ttf</exclude>
+                    <exclude>*.css</exclude>
+                    <exclude>*.png</exclude>
+                    <exclude>*.jpg</exclude>
+                  </excludes>
+                </filter>
+              </filters>
             </configuration>
           </execution>
           <execution>
@@ -56,10 +68,42 @@
               <goal>shade</goal>
             </goals>
             <configuration>
-              <finalName>${project.artifactId}-client-${project.version}</finalName>
+              <finalName>${project.artifactId}-tui-${project.version}</finalName>
               <transformers>
                 <transformer>
-                  <mainClass>it.polimi.ingsw.ClientMain</mainClass>
+                  <mainClass>it.polimi.ingsw.TUIMain</mainClass>
+                </transformer>
+              </transformers>
+              <artifactSet>
+                <excludes>
+                  <exclude>org.openjfx:javafx-*</exclude>
+                </excludes>
+              </artifactSet>
+              <filters>
+                <filter>
+                  <artifact>*:*</artifact>
+                  <excludes>
+                    <exclude>galaxy_trucker_imgs/**</exclude>
+                    <exclude>*.ttf</exclude>
+                    <exclude>*.css</exclude>
+                    <exclude>*.png</exclude>
+                    <exclude>*.jpg</exclude>
+                  </excludes>
+                </filter>
+              </filters>
+            </configuration>
+          </execution>
+          <execution>
+            <id>3</id>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <finalName>${project.artifactId}-gui-${project.version}</finalName>
+              <transformers>
+                <transformer>
+                  <mainClass>it.polimi.ingsw.GUIMain</mainClass>
                 </transformer>
               </transformers>
             </configuration>
@@ -104,12 +148,6 @@
           <groupId>org.apiguardian</groupId>
         </exclusion>
       </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.jline</groupId>
-      <artifactId>jline</artifactId>
-      <version>3.30.0</version>
-      <scope>provided</scope>
     </dependency>
   </dependencies>
   <properties>

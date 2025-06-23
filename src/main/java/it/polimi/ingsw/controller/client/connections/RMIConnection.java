@@ -37,7 +37,6 @@ public class RMIConnection implements ServerConnection {
 		Registry registry = LocateRegistry.getRegistry(server_ip, port);
 		this.stub = new RMIClientStub(inqueue, username);
 		this.server = ((VirtualServerProvider) registry.lookup("galaxy_truckers")).accept(stub);
-		//TODO: fix this and make the client reset.
 		if (this.server == null) throw new NullPointerException();
 	}
 

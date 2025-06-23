@@ -1,0 +1,173 @@
+@font-face {
+    font-family: ''Roboto Mono'';
+    src: url('font.ttf');
+}
+
+
+.titlescreen-field {
+    -fx-font-family: 'Roboto Mono';
+    -fx-font-size: 30px;
+    font-size: 30px;
+    -fx-text-fill: rgb(255, 225, 31);
+    -fx-background-color: rgba(133, 133, 133, 0.492);
+    background-color: rgba(133, 133, 133, 0.492);
+    -fx-alignment: center;
+    -fx-border-color: rgb(255, 225, 31);
+    border-color: rgb(255, 225, 31);
+}
+
+
+.costr-pane-base {
+    background-color: darkgrey;
+}
+
+.ui-rectangle {
+    -fx-arc-width: 15;
+    -fx-arc-height: 15;
+    -fx-stroke: white;
+    stroke: white;
+    -fx-stroke-width: 3;
+    stroke-width: 3;
+}
+
+.label {
+    -fx-font-size: 17px;
+    font-size: 17px;
+    -fx-text-fill: rgb(255, 225, 31);
+    -fx-stroke-width: 4;
+    stroke-width: 4;
+    -fx-font-family: 'Roboto Mono';
+}
+
+.notif-text {
+    -fx-font-size: 18px;
+    font-size: 18px;
+    -fx-text-fill: rgb(255, 255, 255);
+    -fx-stroke-width: 4;
+    stroke-width: 4;
+    -fx-font-family: 'Roboto Mono';
+}
+
+
+.list-label {
+    -fx-font-size: 23px;
+    font-size: 23px;
+    -fx-text-fill: rgb(255, 255, 255);
+}
+
+.list-label-big {
+    -fx-font-size: 40px;
+    font-size: 40px;
+    -fx-text-fill: rgb(255, 255, 255);
+}
+
+.list-red-bg {
+    -fx-fill: #a10005;
+    fill: #a10005;
+}   
+
+.list-red-faint {
+    -fx-fill: #fc5361;
+    fill: #fc5361;
+}
+
+.list-blue-bg {
+    -fx-fill: #5e72f7;
+    fill: #5e72f7;
+}
+
+.list-blue-faint {
+    -fx-fill: #53a5fc;
+    fill: #53a5fc;
+}
+
+.list-green-bg {
+    -fx-fill: #2eb062;
+    fill: #2eb062;
+}
+
+.list-green-faint {
+    -fx-fill: #8fffe5;
+    fill: #8fffe5;
+}
+
+.list-yellow-bg {
+    -fx-fill: #ccc502;
+    fill: #ccc502;
+}
+
+.list-yellow-faint {
+    -fx-fill: #fcee68;
+    fill: #fcee68;
+}
+
+/*Vecchi per riusarli nel caso non funza.*/
+/* .mode-option-selected {
+    -fx-effect: dropshadow(gaussian, rgba(255,0,0,0.8), 10, 0.5, 0, 0);
+}
+.count-option-selected{
+    -fx-effect: dropshadow(gaussian, rgba(0,255,0,0.8), 10, 0.5, 0, 0);
+} */
+
+.mode-option-selected {
+    -fx-effect: dropshadow(gaussian, rgba(255, 170, 0, 0.951), 20, 0.5, 0, 0);
+}
+.count-option-selected{
+    -fx-effect: dropshadow(gaussian, rgba(255, 166, 0, 0.976), 20, 0.5, 0, 0);
+}
+
+.button-label {
+    -fx-font-size: 80px;
+    -fx-text-fill: rgb(255, 255, 255);
+}
+
+.button-label-yellow {
+    -fx-font-size: 80px;
+    -fx-text-fill: rgb(255, 225, 31);
+}
+
+.button-label-small {
+    -fx-font-size: 35px;
+    -fx-text-fill: rgb(255, 255, 255);
+}
+
+.button-label-connection {
+    -fx-font-size: 35px;
+    -fx-text-fill: rgb(255, 255, 31);
+    -fx-background-color: rgba(133, 133, 133, 0.5);
+}
+
+.entry-list {
+    -fx-background-color:transparent;
+    background-color: rgba(133, 133, 133, 0);
+    -fx-alignment: center;
+    -fx-border-color: rgb(255, 225, 31);
+    border-color: rgb(255, 225, 31);
+}
+
+.saved-list {
+    -fx-background-color:transparent;
+    background-color: transparent;
+    -fx-alignment: center;
+    -fx-border-color: rgba(255, 225, 31, 0);
+    border-color: rgba(255, 225, 31, 0);
+}
+
+.saved-list .viewport {
+    -fx-background-color:transparent;
+    background-color: transparent
+}
+
+.button-construction {
+    -fx-background-color: #5A189A;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: black;
+    -fx-border-width: 4px;
+
+    -fx-background-insets: 0, 4;
+    -fx-padding: 6 12 6 12;
+}

@@ -86,7 +86,7 @@ public class MainServerControllerTest {
 		model.setState(new VoyageState(model, GameModeType.TEST, PlayerCount.TWO, list, new OneFlightCards(), new Planche(GameModeType.TEST, list)));
 		l.serializeCurrentGame();
 		t.updateUnfinishedList();
-		Thread.sleep(200);
+		Thread.sleep(300);
 		//open unfinished game, and finish playing it, lets see if it works.
 		t.connect(p1);
 		t.connect(p2);
@@ -97,7 +97,7 @@ public class MainServerControllerTest {
 		mess = new OpenUnfinishedMessage(1);
 		mess.setDescriptor(p1);
 		t.receiveMessage(mess);
-		Thread.sleep(200);
+		Thread.sleep(300);
 		assertEquals(1, t.getLobbyList().size());
 		assertInstanceOf(VoyageState.class, l.getModel().getState());
 		Thread.sleep(100);
@@ -157,7 +157,7 @@ public class MainServerControllerTest {
 		mess.setDescriptor(p1);
 		t.receiveMessage(mess);
 		Thread.sleep(100);
-		assertEquals(id, p1.getId());
+		assertEquals(id, p1.getID());
 		assertEquals(1, t.getLobbyList().size());
 		mess = new EnterSetupMessage();
 		mess.setDescriptor(p2);
@@ -167,7 +167,7 @@ public class MainServerControllerTest {
 		mess.setDescriptor(p2);
 		t.receiveMessage(mess);
 		Thread.sleep(100);
-		assertEquals(id + 1, p2.getId());
+		assertEquals(id + 1, p2.getID());
 		assertEquals(2, t.getLobbyList().size());
 		mess = new EnterLobbyMessage(id + 1);
 		mess.setDescriptor(p3);
@@ -195,7 +195,7 @@ public class MainServerControllerTest {
 		t.disconnect(p1);
 		Thread.sleep(100);
 		t.connect(p1);
-		assertEquals(-1, p1.getId());
+		assertEquals(-1, p1.getID());
 		assertEquals(1, t.getLobbyList().size());
 	}
 
@@ -215,7 +215,7 @@ public class MainServerControllerTest {
 		mess.setDescriptor(p2);
 		t.receiveMessage(mess);
 		Thread.sleep(500);
-		assertEquals(2, p2.getId());
+		assertEquals(2, p2.getID());
 		assertEquals(1, t.getLobbyList().size());
 		t.disconnect(p2);
 		Thread.sleep(300);

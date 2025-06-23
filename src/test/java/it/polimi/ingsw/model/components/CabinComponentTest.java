@@ -59,4 +59,5 @@ class CabinComponentTest {
 		component_both.setCrew(ship, 2, AlienType.HUMAN);
 		assertEquals(2, component_both.getCrew());
 	}
+
 }

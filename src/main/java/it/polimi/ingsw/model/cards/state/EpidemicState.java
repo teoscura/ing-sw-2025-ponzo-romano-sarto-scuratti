@@ -1,6 +1,5 @@
 package it.polimi.ingsw.model.cards.state;
 
-import it.polimi.ingsw.exceptions.PlayerNotFoundException;
 import it.polimi.ingsw.message.client.NotifyStateUpdateMessage;
 import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
@@ -69,11 +68,7 @@ public class EpidemicState extends CardState {
 			return;
 		}
 		for (Player p : this.state.getOrder(CardOrder.INVERSE)) {
-			try {
-				card.apply(this.state, p);
-			} catch (PlayerNotFoundException e) {
-				e.printStackTrace();
-			}
+			card.apply(this.state, p);
 		}
 		this.transition();
 	}

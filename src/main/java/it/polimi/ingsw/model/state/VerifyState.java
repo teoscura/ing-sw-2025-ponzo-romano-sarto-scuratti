@@ -133,11 +133,11 @@ public class VerifyState extends GameState {
 					p.getSpaceShip().getClientSpaceShip().getVerifyShip(p.getSpaceShip().bulkVerify()),
 					this.finish_order.contains(p),
 					!this.awaiting.contains(p),
-					this.starts_losing.contains(p),
+					!this.starts_losing.contains(p),
 					p.getDisconnected(),
 					this.finish_order.indexOf(p)));
 		}
-		return new ClientVerifyState(tmp);
+		return new ClientVerifyState(this.type, tmp);
 	}
 
 	/**
@@ -221,6 +221,11 @@ public class VerifyState extends GameState {
 		if (!this.awaiting.contains(p)) {
 			Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' tried to set crew type after finishing!");
 			this.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' tried to set crew type after finishing!"));
+			return;
+		}
+		if(this.type==GameModeType.TEST){
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Player: '" + p.getUsername() + "' tried to set crew in a test match!");
+			this.broadcastMessage(new ViewMessage("Player: '" + p.getUsername() + "' tried to set crew in a test match!"));
 			return;
 		}
 		try {

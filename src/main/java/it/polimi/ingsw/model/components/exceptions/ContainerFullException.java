@@ -5,7 +5,4 @@ public class ContainerFullException extends RuntimeException {
 	public ContainerFullException() {
 	}
 
-	public ContainerFullException(String message) {
-		super(message);
-	}
 }

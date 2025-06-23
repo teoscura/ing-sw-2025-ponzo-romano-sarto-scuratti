@@ -645,8 +645,7 @@ public class CombatZoneCardTest {
 		message = new ServerDisconnectMessage();
 		message.setDescriptor(p2desc);
 		model.validate(message);
-		assertFalse(player3.getRetired());
-		//p2 disconnects, its p3's penalty. and he gets killed.
+		assertFalse(player3.getRetired()); 
 		message = new SendContinueMessage();
 		message.setDescriptor(p3desc);
 		state.validate(message);
@@ -663,7 +662,6 @@ public class CombatZoneCardTest {
 		message = new ServerDisconnectMessage();
 		message.setDescriptor(p1desc);
 		model.validate(message);
-		//p2 disconnects, its p3's penalty. and he gets killed.
 		message = new SendContinueMessage();
 		message.setDescriptor(p3desc);
 		state.validate(message);

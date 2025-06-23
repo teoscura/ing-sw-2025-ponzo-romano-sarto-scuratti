@@ -87,6 +87,7 @@ public class CombatZoneAnnounceState extends CardState {
 			return;
 		}
 		this.target = this.state.findCriteria(this.sections.getFirst().getCriteria());
+		if (target == null) this.target = state.getOrder(CardOrder.INVERSE).getFirst();
 		if (target != null)
 			Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Applying penalty to player: '" + target.getUsername() + "'");
 		this.transition();

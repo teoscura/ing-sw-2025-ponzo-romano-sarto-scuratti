@@ -25,35 +25,35 @@ public class ClientVerifyStateFormatter {
 		else terminal.print(ClientSpaceShipFormatter.getEmptyShipLarge(), 2, 4);
 		list.remove(p);
 		if (list.size() > 0) {
-			terminal.print(ClientSpaceShipFormatter.formatSmall(list.getFirst().getShip(), list.getFirst().getUsername(), list.getFirst().getColor(), 0, false, p.isDisconnected()), 3, 60);
+			terminal.print(ClientSpaceShipFormatter.formatSmall(list.getFirst().getShip(), list.getFirst().getUsername(), list.getFirst().getColor(), 0, false, list.getFirst().isDisconnected()), 3, 60);
 			list.removeFirst();
 		} else {
 			terminal.print(ClientSpaceShipFormatter.getEmptyShipSmall(), 3, 60);
 		}
 		if (list.size() > 0) {
-			terminal.print(ClientSpaceShipFormatter.formatSmall(list.getFirst().getShip(), list.getFirst().getUsername(), list.getFirst().getColor(), 0, false, p.isDisconnected()), 11, 60);
+			terminal.print(ClientSpaceShipFormatter.formatSmall(list.getFirst().getShip(), list.getFirst().getUsername(), list.getFirst().getColor(), 0, false, list.getFirst().isDisconnected()), 11, 60);
 			list.removeFirst();
 		} else {
 			terminal.print(ClientSpaceShipFormatter.getEmptyShipSmall(), 11, 60);
 		}
 		if (list.size() > 0) {
-			terminal.print(ClientSpaceShipFormatter.formatSmall(list.getFirst().getShip(), list.getFirst().getUsername(), list.getFirst().getColor(), 0, false, p.isDisconnected()), 3, 94);
+			terminal.print(ClientSpaceShipFormatter.formatSmall(list.getFirst().getShip(), list.getFirst().getUsername(), list.getFirst().getColor(), 0, false, list.getFirst().isDisconnected()), 3, 94);
 		} else {
 			terminal.print(ClientSpaceShipFormatter.getEmptyShipSmall(), 3, 94);
 		}
 		if (color != PlayerColor.NONE || list.isEmpty())
 			terminal.print(ClientSpaceShipFormatter.getHelpCorner(), 11, 94);
 		else
-			terminal.print(ClientSpaceShipFormatter.formatSmall(list.getFirst().getShip(), list.getFirst().getUsername(), list.getFirst().getColor(), 0, false, p.isDisconnected()), 11, 94);
+			terminal.print(ClientSpaceShipFormatter.formatSmall(list.getFirst().getShip(), list.getFirst().getUsername(), list.getFirst().getColor(), 0, false, list.getFirst().isDisconnected()), 11, 94);
 	}
 
 	static public void formatStatus(TerminalWrapper terminal, ClientVerifyState state) {
-		terminal.print(" ".repeat(128), 29, 0);
-		terminal.print(getMissingLine(state).toAnsi(), 29, 0);
-		terminal.print(" ".repeat(128), 30, 0);
-		terminal.print(bottom_line + "━".repeat(128 - bottom_line.length()), 30, 0);
-		terminal.print(" ".repeat(128), 31, 0);
-		terminal.print(terminal.peekInput(), 31, 0);
+		terminal.printBottom(" ".repeat(terminal.getCols()), 2);
+		terminal.printBottom(" ".repeat(terminal.getCols()), 0);
+		terminal.printBottom(" ".repeat(terminal.getCols()), 1);
+		terminal.printBottom(getMissingLine(state).toAnsi(), 2);
+		terminal.printBottom(bottom_line + "━".repeat(terminal.getCols() - bottom_line.length()), 1);
+		terminal.printBottom(terminal.peekInput(), 0);
 	}
 
 

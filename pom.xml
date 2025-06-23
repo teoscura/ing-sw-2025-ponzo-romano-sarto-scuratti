@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
@@ -36,15 +36,34 @@
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
-            <artifactId>javafx-fxml</artifactId>
+            <artifactId>javafx-graphics</artifactId>
             <version>21</version>
+            <classifier>win</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-graphics</artifactId>
+            <version>21</version>
+            <classifier>linux</classifier>
+        </dependency>
+        <!-- <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-graphics</artifactId>
+            <version>21</version>
+            <classifier>mac</classifier>
+        </dependency> -->
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-graphics</artifactId>
+            <version>21</version>
+            <classifier>mac-aarch64</classifier>
         </dependency>
         <!-- TUI -->
         <dependency>
             <groupId>org.jline</groupId>
             <artifactId>jline</artifactId>
             <version>3.30.0</version>
-            <scope>provided</scope>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.jline</groupId>
@@ -98,12 +117,24 @@
                                     <mainClass>it.polimi.ingsw.ServerMain</mainClass>
                                 </transformer>
                             </transformers>
-                                <artifactSet>
+                            <artifactSet>
+                                <excludes>
+                                    <exclude>org.openjfx:javafx-*</exclude>
+                                    <exclude>org.jline*</exclude>
+                                </excludes>
+                            </artifactSet>
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
                                     <excludes>
-                                        <exclude>org.openjfx:javafx-*</exclude>
-                                        <exclude>org.jline*</exclude>
+                                        <exclude>galaxy_trucker_imgs/**</exclude>
+                                        <exclude>*.ttf</exclude>
+                                        <exclude>*.css</exclude>
+                                        <exclude>*.png</exclude>
+                                        <exclude>*.jpg</exclude>
                                     </excludes>
-                                </artifactSet>
+                                </filter>
+                            </filters>
                         </configuration>
                     </execution>
                     <execution>
@@ -113,11 +144,44 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
-                            <finalName>${project.artifactId}-client-${project.version}</finalName>
+                            <finalName>${project.artifactId}-tui-${project.version}</finalName>
                             <transformers>
                                 <transformer
                                         implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>it.polimi.ingsw.ClientMain</mainClass>
+                                    <mainClass>it.polimi.ingsw.TUIMain</mainClass>
+                                </transformer>
+                            </transformers>
+                            <artifactSet>
+                                <excludes>
+                                    <exclude>org.openjfx:javafx-*</exclude>
+                                </excludes>
+                            </artifactSet>
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>galaxy_trucker_imgs/**</exclude>
+                                        <exclude>*.ttf</exclude>
+                                        <exclude>*.css</exclude>
+                                        <exclude>*.png</exclude>
+                                        <exclude>*.jpg</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>3</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <finalName>${project.artifactId}-gui-${project.version}</finalName>
+                            <transformers>
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>it.polimi.ingsw.GUIMain</mainClass>
                                 </transformer>
                             </transformers>
                         </configuration>

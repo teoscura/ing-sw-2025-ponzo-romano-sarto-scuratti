@@ -98,10 +98,6 @@ public enum GameModeType {
 		return false;
 	}
 
-	public int getLenght() {
-		return this.length;
-	}
-
 	public int[] getStartingPos() {
 		if (this.level == 1) {
 			return new int[]{4, 2, 1, 0};

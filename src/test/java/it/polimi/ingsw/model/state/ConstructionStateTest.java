@@ -8,8 +8,11 @@ import it.polimi.ingsw.model.DummyModelInstance;
 import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.PlayerCount;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
+import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.model.player.ShipCoords;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -71,6 +74,9 @@ public class ConstructionStateTest {
 		mess = new SendContinueMessage();
 		mess.setDescriptor(p1desc);
 		model.validate(mess);
+		state.getHoarded(player1);
+		state.getOngoingEntry(10);
+		assertTrue(state.toSerialize());
 		assertEquals(-1, player1.getCredits());
 		assertEquals(-2, player2.getCredits());
 		assertInstanceOf(VerifyState.class, model.getState());
@@ -87,6 +93,15 @@ public class ConstructionStateTest {
 		mess.setDescriptor(p1desc);
 		model.validate(mess);
 		mess = new ToggleHourglassMessage();
+		mess.setDescriptor(p1desc);
+		model.validate(mess);
+		mess = new DiscardComponentMessage();
+		mess.setDescriptor(p1desc);
+		model.validate(mess);
+		mess = new TakeDiscardedComponentMessage(10);
+		mess.setDescriptor(p1desc);
+		model.validate(mess);
+		mess = new PutComponentMessage(10, new ShipCoords(GameModeType.TEST, 3, 3), ComponentRotation.U000);
 		mess.setDescriptor(p1desc);
 		model.validate(mess);
 		mess = new SendContinueMessage();

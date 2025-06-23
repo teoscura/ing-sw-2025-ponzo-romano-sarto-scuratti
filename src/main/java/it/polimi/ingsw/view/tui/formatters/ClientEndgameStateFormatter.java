@@ -16,19 +16,17 @@ public class ClientEndgameStateFormatter {
 
 	private static final String bottom_line = "━Typed line:━";
 
-	//TODO fix formatting on this
 	public static void format(TerminalWrapper terminal, ClientEndgameState state) {
 		ArrayList<String> res = new ArrayList<>();
 		ArrayList<ClientEndgamePlayer> list = new ArrayList<>(state.getPlayerList());
 		res.add("Game Results:");
 
 		list.stream().sorted((p1, p2) -> -Integer.compare(p1.getCredits(), p2.getCredits()));
-		int finished = (int) list.stream().filter(p -> p.getPlanche_slot() >= 0).count();
 		for (var e : list) {
 			AttributedStringBuilder b = new AttributedStringBuilder()
 				.append(e.getUsername())
 				.append(" - " + e.getColor())
-				.append(e.getPlanche_slot() >= 0 ? " - #" + (finished - list.indexOf(e)) + " - " : " - DNF- ")
+				.append(e.getPlanche_slot() >= 0 ? " - #" + (e.getPlanche_slot()+1) + " - " : " - DNF - ")
 				.append(String.format("🟦: %3d | ", e.getShipments()[1]))
 				.append(String.format("🟩: %3d | ", e.getShipments()[2]))
 				.append(String.format("🟨: %3d | ", e.getShipments()[3]))
@@ -51,10 +49,10 @@ public class ClientEndgameStateFormatter {
 	}
 
 	public static void formatStatus(TerminalWrapper terminal, ClientEndgameState state) {
-		terminal.print(" ".repeat(128), 30, 0);
-		terminal.print(" ".repeat(128), 31, 0);
-		terminal.print(bottom_line + "━".repeat(128 - bottom_line.length()), 30, 0);
-		terminal.print(terminal.peekInput(), 31, 0);
+		terminal.printBottom(" ".repeat(terminal.getCols()), 1);
+		terminal.printBottom(" ".repeat(terminal.getCols()), 0);
+		terminal.printBottom(bottom_line + "━".repeat(terminal.getCols() - bottom_line.length()), 1);
+		terminal.printBottom(terminal.peekInput(), 0);
 	}
 
  	private static int getColor(PlayerColor color) {

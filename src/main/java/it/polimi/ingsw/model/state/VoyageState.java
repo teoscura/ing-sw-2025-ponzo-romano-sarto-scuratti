@@ -174,12 +174,6 @@ public class VoyageState extends GameState {
 		p.retire();
 	}
 
-	public List<Player> getAllConnectedPlayers() {
-		List<Player> tmp = new ArrayList<>();
-		tmp.addAll(this.players);
-		return tmp.stream().filter((p) -> !p.getDisconnected()).toList();
-	}
-
 	/**
 	 * @param order {@link CardOrder} Order to sort the list by.
 	 * @return A list of {@link it.polimi.ingsw.model.player.Player} sorted in respect to the specified order on the planche.
@@ -200,22 +194,22 @@ public class VoyageState extends GameState {
 		tmp.addAll(this.players);
 		switch (criteria) {
 			case LEAST_CANNON:
-				double min_cannon_power = tmp.stream().mapToDouble(p -> p.getSpaceShip().getCannonPower()).min().orElse(0);
+				double min_cannon_power = tmp.stream().filter(p->!p.getRetired()&&!p.getDisconnected()).mapToDouble(p -> p.getSpaceShip().getCannonPower()).min().orElse(0);
 				return tmp.stream()
 						.filter((p) -> p.getSpaceShip().getCannonPower() == min_cannon_power && !p.getRetired() && !p.getDisconnected())
-						.sorted((p1, p2) -> -Integer.compare(planche.getPlayerPosition(p1), planche.getPlayerPosition(p1)))
+						.sorted((p1, p2) -> -Integer.compare(planche.getPlayerPosition(p1), planche.getPlayerPosition(p2)))
 						.findFirst().orElse(null);
 			case LEAST_CREW:
-				int min_crew = tmp.stream().mapToInt(p -> p.getSpaceShip().getTotalCrew()).min().orElse(0);
+				int min_crew = tmp.stream().filter(p->!p.getRetired()&&!p.getDisconnected()).mapToInt(p -> p.getSpaceShip().getTotalCrew()).min().orElse(0);
 				return tmp.stream()
 						.filter((p) -> p.getSpaceShip().getTotalCrew() == min_crew && !p.getRetired() && !p.getDisconnected())
-						.sorted((p1, p2) -> -Integer.compare(planche.getPlayerPosition(p1), planche.getPlayerPosition(p1)))
+						.sorted((p1, p2) -> -Integer.compare(planche.getPlayerPosition(p1), planche.getPlayerPosition(p2)))
 						.findFirst().orElse(null);
 			case LEAST_ENGINE:
-				int min_engine_power = tmp.stream().mapToInt(p -> p.getSpaceShip().getEnginePower()).min().orElse(0);
+				int min_engine_power = tmp.stream().filter(p->!p.getRetired()&&!p.getDisconnected()).mapToInt(p -> p.getSpaceShip().getEnginePower()).min().orElse(0);
 				return tmp.stream()
 						.filter((p) -> p.getSpaceShip().getEnginePower() == min_engine_power && !p.getRetired() && !p.getDisconnected())
-						.sorted((p1, p2) -> -Integer.compare(planche.getPlayerPosition(p1), planche.getPlayerPosition(p1)))
+						.sorted((p1, p2) -> -Integer.compare(planche.getPlayerPosition(p1), planche.getPlayerPosition(p2)))
 						.findFirst().orElse(null);
 			default:
 				return null;
@@ -233,6 +227,9 @@ public class VoyageState extends GameState {
 	 * @param next {@link CardState} Next state to set.
 	 */
 	public void setCardState(CardState next) {
+		for(var p : this.players){
+			p.getSpaceShip().resetPower();
+		}
 		if (next == null) {
 			if (this.getOrder(CardOrder.NORMAL).size() == 0) {
 				this.transition();

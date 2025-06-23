@@ -5,8 +5,5 @@ public class ConnectorsSizeException extends RuntimeException {
 	public ConnectorsSizeException() {
 	}
 
-	public ConnectorsSizeException(String message) {
-		super(message);
-	}
 }
 

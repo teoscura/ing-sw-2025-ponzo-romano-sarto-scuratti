@@ -48,8 +48,6 @@ public class DummyVoyageState extends VoyageState {
 	@Override
 	public void validate(ServerMessage message) throws ForbiddenCallException {
 		message.receive(this);
-		Player p = message.getDescriptor().getPlayer();
-		if (!p.getRetired() && p.getSpaceShip().getCrew()[0] <= 0) this.loseGame(p);
 		if (this.state != null) return;
 		this.transition();
 	}
@@ -123,12 +121,6 @@ public class DummyVoyageState extends VoyageState {
 		p.retire();
 	}
 
-	public List<Player> getAllConnectedPlayers() {
-		List<Player> tmp = new ArrayList<>();
-		tmp.addAll(this.players);
-		return tmp.stream().filter((p) -> !p.getDisconnected()).toList();
-	}
-
 	public List<Player> getOrder(CardOrder order) {
 		List<Player> tmp = this.players.stream().filter(p -> !p.getRetired() && !p.getDisconnected()).sorted((Player player1, Player player2) -> Integer.compare(planche.getPlayerPosition(player1), planche.getPlayerPosition(player2))).toList();
 		return order != CardOrder.NORMAL ? tmp : tmp.reversed();
@@ -175,6 +167,16 @@ public class DummyVoyageState extends VoyageState {
 
 	public void setCardState(CardState next) {
 		if (next == null) {
+			for (Player p : this.getOrder(CardOrder.NORMAL)) {
+				if (p.getSpaceShip().getCrew()[0] == 0 || p.getSpaceShip().getBlobsSize() <= 0) loseGame(p);
+			}
+			for (Player p : this.getOrder(CardOrder.NORMAL)) {
+				if (planche.checkLapped(p)) loseGame(p);
+			}
+			for (Player p : this.to_give_up) {
+				if (!p.getRetired()) this.loseGame(p);
+			}
+			this.to_give_up.clear();
 			this.state = null;
 			return;
 		}

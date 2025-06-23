@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.components;
 import it.polimi.ingsw.model.GameModeType;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ConnectorType;
+import it.polimi.ingsw.model.components.exceptions.ConnectorsSizeException;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.ShipCoords;
@@ -129,5 +130,11 @@ class BaseComponentTest {
 		assertEquals(ship.getEmpty(), results[1]);
 		assertEquals(down_component, results[2]);
 		assertEquals(ship.getEmpty(), results[3]);
+	}
+
+	@Test
+	void exceptions(){
+		var conns = new ConnectorType[]{ConnectorType.EMPTY};
+		assertThrows(ConnectorsSizeException.class, ()->new StructuralComponent(1, conns, ComponentRotation.U000));
 	}
 }

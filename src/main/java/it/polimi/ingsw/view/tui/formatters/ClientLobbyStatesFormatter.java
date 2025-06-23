@@ -32,7 +32,7 @@ public class ClientLobbyStatesFormatter {
 					.style(AttributedStyle.BOLD.foreground(full ? AttributedStyle.BLUE : AttributedStyle.GREEN))
 					.append("| " + e.getPlayers().size() + "/" + e.getCount().getNumber())
 					.style(AttributedStyle.DEFAULT)
-					.append(" - ");
+					.append(" - "+e.getState() + " | ");
 			for (String s : e.getPlayers()) {
 				t.append(s + " ");
 			}
@@ -42,10 +42,10 @@ public class ClientLobbyStatesFormatter {
 	}
 
 	public static void formatStatus(TerminalWrapper terminal, ClientLobbySelectState state) {
-		terminal.print(" ".repeat(128), 30, 0);
-		terminal.print(" ".repeat(128), 31, 0);
-		terminal.print(new AttributedStringBuilder().append(bottom_line + "━".repeat(128 - bottom_line.length())).toAttributedString().toAnsi(), 30, 0);
-		terminal.print(terminal.peekInput(), 31, 0);
+		terminal.printBottom(" ".repeat(terminal.getCols()), 1);
+		terminal.printBottom(" ".repeat(terminal.getCols()), 0);
+		terminal.printBottom(new AttributedStringBuilder().append(bottom_line + "━".repeat(terminal.getCols() - bottom_line.length())).toAttributedString().toAnsi(), 1);
+		terminal.printBottom(terminal.peekInput(), 0);
 	}
 
 	public static void format(TerminalWrapper terminal, ClientSetupState state) {
@@ -62,7 +62,7 @@ public class ClientLobbyStatesFormatter {
 					.style(AttributedStyle.BOLD.foreground(AttributedStyle.BLUE))
 					.append("| " + e.getCount())
 					.style(AttributedStyle.DEFAULT)
-					.append(" - ");
+					.append(" - "+e.getState());
 			for (String s : e.getPlayers()) {
 				t.append(s + " ");
 			}
@@ -72,10 +72,10 @@ public class ClientLobbyStatesFormatter {
 	}
 
 	public static void formatStatus(TerminalWrapper terminal, ClientSetupState state) {
-		terminal.print(" ".repeat(128), 30, 0);
-		terminal.print(" ".repeat(128), 31, 0);
-		terminal.print(new AttributedStringBuilder().append(bottom_line + "━".repeat(128 - bottom_line.length())).toAttributedString().toAnsi(), 30, 0);
-		terminal.print(terminal.peekInput(), 31, 0);
+		terminal.printBottom(" ".repeat(128), 1);
+		terminal.printBottom(" ".repeat(128), 0);
+		terminal.printBottom(new AttributedStringBuilder().append(bottom_line + "━".repeat(128 - bottom_line.length())).toAttributedString().toAnsi(), 1);
+		terminal.printBottom(terminal.peekInput(), 0);
 	}
 
 }
