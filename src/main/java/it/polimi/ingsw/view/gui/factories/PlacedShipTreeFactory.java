@@ -93,7 +93,7 @@ public class PlacedShipTreeFactory {
         s.getStyleClass().add("ui-rectangle");
         int totalcrew = 0;
         for(var i : ship.getCrew()) totalcrew+=i;
-        String tail = disconnected ? " - disconnected" : "";
+        String tail = disconnected ? "| discon." : "";
         ImageView gun = new ImageView("galaxy_trucker_imgs/piece/powerc.png");
         gun.setPreserveRatio(true);
         gun.setFitWidth(50);
