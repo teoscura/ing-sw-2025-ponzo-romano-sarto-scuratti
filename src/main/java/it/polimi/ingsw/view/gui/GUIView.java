@@ -185,7 +185,7 @@ public class GUIView extends Application implements ClientView {
 			var prev = (VBox) gameroot.getScene().lookup("#constr-pane-base");
 			if (prev != null) {
 				var prevp = ((ClientConstructionState) prev_client_state).getPlayerList().stream().filter(p -> p.getColor() == this.view_color).findFirst().orElse(((ClientConstructionState) prev_client_state).getPlayerList().getFirst());
-				if (prevp.getCurrent() != player.getCurrent()) {
+				if (prevp.getCurrent() != player.getCurrent() || state.getTilesLeft() != ((ClientConstructionState) prev_client_state).getTilesLeft()) {
 					int indx = prev.getChildren().indexOf(gameroot.getScene().lookup("#constr-tile-pane"));
 					prev.getChildren().remove(indx);
 					prev.getChildren().add(indx, ConstructionSidePaneTreeFactory.createMainConstructionTileTree(this, player, state.getTilesLeft()));

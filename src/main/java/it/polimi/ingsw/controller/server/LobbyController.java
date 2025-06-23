@@ -209,7 +209,7 @@ public class LobbyController extends Thread implements VirtualServer {
 				Logger.getInstance().print(LoggerLevel.LOBCN, "[" + this.id + "] " + "Client '" + client.getUsername() + "' connected to waiting room!");
 				this.model.connect(client);
 			} else if (reconnect) {
-				broadcast(new ViewMessage("Player: '"+client.getUsername()+"' resconnected!"));
+				broadcast(new ViewMessage("Player: '"+client.getUsername()+"' reconnected!"));
 				this.model.connect(client.getPlayer());
 				if (dsctimer != null) {
 					this.dsctimer.cancel();
