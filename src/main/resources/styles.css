@@ -16,6 +16,17 @@
     border-color: rgb(255, 225, 31);
 }
 
+.list-view .scroll-bar:vertical {
+    -fx-scale-x: 0;
+}
+
+.discarded-list-view.list-cell:odd {
+    -fx-background-color: rgba(255, 255, 255, 0.08);
+}
+
+.discarded-list-view.list-cell:even {
+    -fx-background-color: rgba(255, 255, 255, 0.08);
+}
 
 .costr-pane-base {
     background-color: darkgrey;

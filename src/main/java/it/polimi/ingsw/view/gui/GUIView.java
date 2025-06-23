@@ -349,9 +349,10 @@ public class GUIView extends Application implements ClientView {
 	 */
 	@Override
 	public void showTextMessage(String message) {
-		var notif = new GUINotification(message, 7);
+		var notif = new GUINotification(message, 9);
 		Platform.runLater(() -> {
 			this.notif_box.getChildren().addFirst(notif);
+			while(this.notif_box.getChildren().size()>3) this.notif_box.getChildren().removeLast();
 			FadeTransition anim = new FadeTransition(Duration.seconds(notif.seconds()), notif);
 			anim.setToValue(0.0);
 			anim.setFromValue(1.0);

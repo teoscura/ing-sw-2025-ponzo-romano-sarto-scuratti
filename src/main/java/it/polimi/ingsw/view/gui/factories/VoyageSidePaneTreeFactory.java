@@ -66,7 +66,10 @@ public class VoyageSidePaneTreeFactory implements ClientCardStateVisitor {
 				panelColor = new Color(169 / 255f, 169 / 255f, 169 / 255f, 0.7);
 				break;
 		}
-		sp.getChildren().add(new Rectangle(333, 10000, panelColor));
+		var rect = new Rectangle(333, 10000, panelColor);
+		rect.getStyleClass().add("ui-rectangle");
+		sp.getChildren().add(rect);
+		
 		this.cstatetree = new VBox(10);
 		this.cstatetree.setAlignment(Pos.CENTER);
 		this.cstatetree.setMaxWidth(333);

@@ -50,7 +50,10 @@ public class VerifySidePaneTreeFactory {
 				panelColor = new Color(169 / 255f, 169 / 255f, 169 / 255f, 0.7);
 				break;
 		}
-		sp.getChildren().add(new Rectangle(333, 10000, panelColor));
+		var rect = new Rectangle(333, 10000, panelColor);
+		rect.getStyleClass().add("ui-rectangle");
+		sp.getChildren().add(rect);
+		
 		VBox res = new VBox(25);
 		res.setId("verify-pane-base");
 		Label select_lab = new Label("Drag to remove/select blob:");

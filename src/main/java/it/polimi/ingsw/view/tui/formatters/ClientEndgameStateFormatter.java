@@ -21,8 +21,8 @@ public class ClientEndgameStateFormatter {
 		ArrayList<ClientEndgamePlayer> list = new ArrayList<>(state.getPlayerList());
 		res.add("Game Results:");
 
-		list.stream().sorted((p1, p2) -> -Integer.compare(p1.getCredits(), p2.getCredits()));
-		for (var e : list) {
+		var x = list.stream().sorted((p1, p2) -> -Integer.compare(p1.getCredits(), p2.getCredits())).toList();
+		for (var e : x) {
 			AttributedStringBuilder b = new AttributedStringBuilder()
 				.append(e.getUsername())
 				.append(" - " + e.getColor())

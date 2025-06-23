@@ -66,10 +66,10 @@ public class ConstructionSidePaneTreeFactory {
 			@Override
 			public void handle(long l) {
 				Duration time_left = Duration.between(Instant.now(), end);
-				hourglass.setText(("[Left: " + state.getTogglesLeft()) + "/" + state.getTogglesTotal() + "] " + (time_left.toSeconds()) + " seconds left");
+				hourglass.setText(("[Left: " + state.getTogglesLeft()) + "/" + state.getTogglesTotal() + "] " + (time_left.toSeconds()) + "s left!");
 				if (Instant.now().isAfter(end)) {
 					stop();
-					hourglass.setText(("[Left: " + state.getTogglesLeft()) + "/" + state.getTogglesTotal() + "] Toggle hourglass");
+					hourglass.setText(("[Left: " + state.getTogglesLeft()) + "/" + state.getTogglesTotal() + "] Toggle ⧗");
 				}
 			}
 		};
@@ -101,9 +101,11 @@ public class ConstructionSidePaneTreeFactory {
 				panelColor = new Color(169 / 255f, 169 / 255f, 169 / 255f, 0.7);
 				break;
 		}
-		sp.getChildren().add(new Rectangle(333, 10000, panelColor));
+		var rect = new Rectangle(333, 10000, panelColor);
+		rect.getStyleClass().add("ui-rectangle");
+		sp.getChildren().add(rect);
 
-		VBox res = new VBox(20);
+		VBox res = new VBox(10);
 		res.setId("constr-pane-base");
 		res.getChildren().add(createMainConstructionTileTree(view, you, state.getTilesLeft()));
 		res.getChildren().add(createReservedConstructionTileTree(view, you));
@@ -167,7 +169,7 @@ public class ConstructionSidePaneTreeFactory {
 			resv.getChildren().add(pickb);
 		} else {
 
-			sp.getChildren().add(new ConstructionTile(view, p.getCurrent(), false, true, 1.0));
+			sp.getChildren().add(new ConstructionTile(view, p.getCurrent(), false, true, 0.9));
 			Button res = new Button("Reserve Component");
 			res.getStyleClass().add("button-construction");
 			res.setOnAction(event -> {
@@ -186,12 +188,12 @@ public class ConstructionSidePaneTreeFactory {
 
 	static public Node createReservedConstructionTileTree(GUIView view, ClientConstructionPlayer p) {
 		HBox res = new HBox(10);
-		res.setMinHeight(75);
 		res.setAlignment(Pos.CENTER);
 		for (int id : p.getReserved()) {
 			res.getChildren().add(new ConstructionTile(view, id, false, false, 0.5));
 		}
 		res.setId("constr-reserved-pane");
+		res.getStyleClass().add("ui-rectangle");
 		return res;
 	}
 
@@ -204,19 +206,20 @@ public class ConstructionSidePaneTreeFactory {
 		for (int id : state.getDiscardedTiles()) {
 			list.add(new ConstructionTile(view, id, true, false, 0.8));
 		}
+		res.getStyleClass().add("discarded-list-view");
 		res.setItems(list);
 		return res;
 	}
 
 	static public Node createLevelTwoAddons(GUIView view, ClientConstructionState state, Node root) {
-		HBox res = new HBox(30);
+		HBox res = new HBox(10);
 		res.setAlignment(Pos.CENTER);
 		res.setId("constr-leveltwo-addons");
-		Button cards = new Button("Peek the cards");
+		Button cards = new Button("Peek cards");
 		cards.getStyleClass().add("button-construction");
 		cards.setOnAction(e -> showCards(state, root));
 		cards.setId("constr-peek-cards");
-		Button toggle = new Button("Toggle hourglass");
+		Button toggle = new Button("Toggle ⧗");
 		toggle.getStyleClass().add("button-construction");
 		toggle.setOnAction(e -> toggleHourglass(view));
 		toggle.setId("constr-toggle-hourglass");
