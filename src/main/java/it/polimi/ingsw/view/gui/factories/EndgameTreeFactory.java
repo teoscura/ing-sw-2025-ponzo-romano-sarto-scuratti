@@ -22,7 +22,7 @@ import javafx.scene.shape.Rectangle;
 public class EndgameTreeFactory {
 
 	public static Node createEnding(GUIView view, ClientEndgameState state) {
-		VBox list = new VBox(20);
+		VBox list = new VBox(5);
 		list.setMaxWidth(840);
 		var tmp = state.getPlayerList().stream().sorted((p1, p2) -> -Integer.compare(p1.getCredits(), p2.getCredits())).toList();
 		for (var p : tmp) {

@@ -217,6 +217,7 @@ public class LobbyController extends Thread implements VirtualServer {
 				}
 			} else {
 				Logger.getInstance().print(LoggerLevel.LOBCN, "[" + this.id + "] " + "Client '" + client.getUsername() + "' started spectating!");
+				this.sendMessage(client, new NotifyStateUpdateMessage(model.getState().getClientState()));
 			}
 		}
 		if (reconnect) this.sendMessage(client, new NotifyStateUpdateMessage(model.getState().getClientState()));
