@@ -5,6 +5,7 @@ import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.cards.PlanetCard;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
+import it.polimi.ingsw.model.cards.utils.Planet;
 import it.polimi.ingsw.model.client.card.ClientBaseCardState;
 import it.polimi.ingsw.model.client.card.ClientCardState;
 import it.polimi.ingsw.model.client.card.ClientLandingCardStateDecorator;
@@ -15,6 +16,7 @@ import it.polimi.ingsw.utils.Logger;
 import it.polimi.ingsw.utils.LoggerLevel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class representing the Announce State of the {@link PlanetCard}.
@@ -84,6 +86,8 @@ public class PlanetAnnounceState extends CardState {
 
 	@Override
 	public ClientCardState getClientCardState() {
+		List<Planet> filtered = this.card.getPlanets().stream().filter(p->!p.getVisited()).toList();
+		ArrayList<Planet> tmp = new ArrayList<>(filtered);
 		return new ClientLandingCardStateDecorator(
 				new ClientBaseCardState(
 						this.getClass().getSimpleName(),
@@ -91,7 +95,7 @@ public class PlanetAnnounceState extends CardState {
 				this.list.getFirst().getColor(),
 				this.card.getDays(),
 				0, 0,
-				card.getPlanets());
+				tmp);
 	}
 
 	/**
