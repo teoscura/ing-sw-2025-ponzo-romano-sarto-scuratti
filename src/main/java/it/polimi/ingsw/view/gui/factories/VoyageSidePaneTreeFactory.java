@@ -98,6 +98,7 @@ public class VoyageSidePaneTreeFactory implements ClientCardStateVisitor {
 		awaiting.setMaxWidth(333);
 		this.cstatetree.getChildren().add(awaiting);
 		Button confirm = new Button("Continue");
+		confirm.getStyleClass().add("button-construction");
 		confirm.setId("confirm-button");
 		confirm.setOnAction(event -> {
 			view.sendMessage(new SendContinueMessage());
@@ -162,6 +163,7 @@ public class VoyageSidePaneTreeFactory implements ClientCardStateVisitor {
 		}
 		this.cstatetree.getChildren().add(required);
 		Button ignore = new Button("Continue");
+		ignore.getStyleClass().add("button-construction");
 		ignore.setOnAction(event -> {
 			view.sendMessage(new SendContinueMessage());
 		});
@@ -192,10 +194,12 @@ public class VoyageSidePaneTreeFactory implements ClientCardStateVisitor {
 		selection.setMaxWidth(333);
 		selection.setId("voyage-credits-rew-selection");
 		Button refuse = new Button("Refuse reward");
+		refuse.getStyleClass().add("button-construction");
 		refuse.setOnAction(event -> {
 			view.sendMessage(new TakeRewardMessage(false));
 		});
 		Button accept = new Button("Take reward");
+		accept.getStyleClass().add("button-construction");
 		accept.setOnAction(event -> {
 			view.sendMessage(new TakeRewardMessage(true));
 		});
@@ -235,6 +239,7 @@ public class VoyageSidePaneTreeFactory implements ClientCardStateVisitor {
 				landing_contains.setAlignment(Pos.CENTER);
 				landing_contains.setMaxWidth(333);
 				Button land = new Button("Land here:");
+				land.getStyleClass().add("button-construction");
 				int x = i;
 				land.setOnAction(event -> {
 					view.sendMessage(new SelectLandingMessage(x));
@@ -262,6 +267,7 @@ public class VoyageSidePaneTreeFactory implements ClientCardStateVisitor {
 				landing_contains.setAlignment(Pos.CENTER);
 				landing_contains.setMaxWidth(333);
 				Button land = new Button("Land here:");
+				land.getStyleClass().add("button-construction");
 				int x = i;
 				land.setOnAction(event -> {
 					view.sendMessage(new SelectLandingMessage(x));
@@ -283,12 +289,14 @@ public class VoyageSidePaneTreeFactory implements ClientCardStateVisitor {
 			ImageView piece = new ImageView("galaxy_trucker_imgs/piece/" + state.getTurn().toString() + ".png");
 			awaiting.getChildren().addAll(message, piece);
 			Button ship_landing = new Button(state.getCredits() + " credits.");
+			ship_landing.getStyleClass().add("button-construction");
 			ship_landing.setOnAction(event -> {
 				view.sendMessage(new SelectLandingMessage(0));
 			});
 			this.cstatetree.getChildren().add(ship_landing);
 		}
 		Button refuse = new Button("Don't land.");
+		refuse.getStyleClass().add("button-construction");
 		refuse.setOnAction(event -> {
 			view.sendMessage(new SelectLandingMessage(-1));
 		});

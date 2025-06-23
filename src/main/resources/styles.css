@@ -157,3 +157,17 @@
     -fx-background-color:transparent;
     background-color: transparent
 }
+
+.button-construction {
+    -fx-background-color: #5A189A;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: black;
+    -fx-border-width: 4px;
+
+    -fx-background-insets: 0, 4;
+    -fx-padding: 6 12 6 12;
+}

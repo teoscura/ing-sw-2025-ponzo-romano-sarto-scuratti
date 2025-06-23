@@ -110,6 +110,7 @@ public class ConstructionSidePaneTreeFactory {
 		res.getChildren().add(createDiscardedConstructionTileTree(view, state));
 		if (state.getType().getLevel() > 1) res.getChildren().add((createLevelTwoAddons(view, state, root)));
 		Button confirm = new Button("Finish building!");
+		confirm.getStyleClass().add("button-construction");
 		confirm.setId("constr-confirm-button");
 		confirm.setOnMouseClicked(event -> {
 			view.sendMessage(new SendContinueMessage());
@@ -155,7 +156,7 @@ public class ConstructionSidePaneTreeFactory {
 		if (p.getCurrent() == -1) {
 
 			Button pickb = new Button("Take Component: [" + left + " LEFT]");
-			//pickb.getStyleClass().add("button-construction");
+			pickb.getStyleClass().add("button-construction");
 			pickb.setOnAction(event -> {
 				view.sendMessage(new TakeComponentMessage());
 			});
@@ -168,6 +169,7 @@ public class ConstructionSidePaneTreeFactory {
 
 			sp.getChildren().add(new ConstructionTile(view, p.getCurrent(), false, true, 1.0));
 			Button res = new Button("Reserve Component");
+			res.getStyleClass().add("button-construction");
 			res.setOnAction(event -> {
 				view.sendMessage(new ReserveComponentMessage());
 			});
@@ -211,9 +213,11 @@ public class ConstructionSidePaneTreeFactory {
 		res.setAlignment(Pos.CENTER);
 		res.setId("constr-leveltwo-addons");
 		Button cards = new Button("Peek the cards");
+		cards.getStyleClass().add("button-construction");
 		cards.setOnAction(e -> showCards(state, root));
 		cards.setId("constr-peek-cards");
 		Button toggle = new Button("Toggle hourglass");
+		toggle.getStyleClass().add("button-construction");
 		toggle.setOnAction(e -> toggleHourglass(view));
 		toggle.setId("constr-toggle-hourglass");
 		res.getChildren().addAll(cards, toggle);

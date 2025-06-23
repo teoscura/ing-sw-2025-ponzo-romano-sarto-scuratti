@@ -63,6 +63,7 @@ public class VerifySidePaneTreeFactory {
 		wide.setId("verify-tools-box");
 		//Bottom
 		Button confirm = new Button("Finish verifying!");
+		confirm.getStyleClass().add("button-construction");
 		confirm.setId("verify-confirm-button");
 		confirm.setOnMouseClicked(event -> {
 			view.sendMessage(new SendContinueMessage());

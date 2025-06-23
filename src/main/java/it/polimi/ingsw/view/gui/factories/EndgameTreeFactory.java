@@ -30,6 +30,7 @@ public class EndgameTreeFactory {
 		list.setAlignment(Pos.CENTER);
 		list.getChildren().add(awaiting(state));
 		Button leave = new Button("Motion to leave.");
+		leave.getStyleClass().add("button-construction");
 		leave.setOnAction(event -> {
 			view.sendMessage(new SendContinueMessage());
 		});
