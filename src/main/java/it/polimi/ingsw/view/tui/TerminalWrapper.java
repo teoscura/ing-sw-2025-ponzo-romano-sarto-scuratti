@@ -223,6 +223,16 @@ public class TerminalWrapper {
 		}
 	}
 
+	/**
+	 * Prints a string with an offset from the bottom line.
+	 * 
+	 * @param string String to be printed.
+	 * @param offset Desired number of rows below of the string.
+	 */
+	public void printBottom(String line, int offset){
+		int row = this.size.getRows() - 1 - offset;
+		this.print(line, row, 0);
+	}
 
 	/**
 	 * Prints a collection of strings starting from the specified cell, and moving downwards.
@@ -326,15 +336,6 @@ public class TerminalWrapper {
 	public int getRowsOffset(){
 		int off = (this.size.getRows() - 32)/2;
 		return off;
-	}
-
-	public void printBottom(String line, int offset){
-		int row = this.size.getRows() - 1 - offset;
-		this.print(line, row, 0);
-	}
-
-	public void printNotif(Collection<String> strings) {
-		
 	}
 
 }

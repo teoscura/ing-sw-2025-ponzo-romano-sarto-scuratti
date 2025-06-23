@@ -2323,6 +2323,20 @@ package View {
             {method} + selectColor(PlayerColor) : void
             {method} + bgAnimation(int) : void
         }
+        
+        class SetupOptionContainer {
+            {field} - count : PlayerCount
+            {field} - mode : GameModeType
+            {field} - count_button : Node
+            {field} - mode_button : Node
+            {method} + sendSetup(GUIView) : void
+            {method} + getCount() : PlayerCount
+            {method} + setCount(PlayerCount, Node) : void
+            {method} + getMode() : GameModeType
+            {method} + setMode(GameModeType, Node) : void
+            {method} + getCountButton() : Node
+            {method} + getModeButton() : Node
+        }
 
         class GUINotification {
             {field} - [final] seconds : int
@@ -2418,43 +2432,6 @@ package View {
 
         package Tiles {
 
-            class ComponentTile {
-                {field} [protected] [final] image : ImageView
-                {method} + [final] getImage : ImageView
-            }
-
-            ComponentTile <-- ConstructionTile
-            class ConstructionTile {
-                {field} - [final] ID : Integer
-                {field} - rotation : ComponentRotation
-                {method} + getRotation() : ComponentRotation
-                {method} + getID() : Integer
-            }
-
-            ComponentTile <-- PlacedTile
-            class PlacedTile {
-                {field} - [final] coords : ShipCoords
-                {field} - [final] tiles : ArrayList<DraggablePiece>
-                {method} + setOverlay(ImageView) : void
-                {method} + addToList(DraggablePiece) : void
-                {method} + getCoords() : ShipCoords
-            }
-
-            Model::Client::Components::ClientComponentVisitor <--PlacedTileFactory
-            class PlacedTileFactory {
-                {field} - [final] view : GUIView
-                {field} - tile : PlacedTile
-                {field} - center : ShipCoords
-                {method} + createTile(ShipCoords, ClientComponent) : PlacedTile
-                {method} + show(ClientBaseComponent) : void
-                {method} + show(ClientEmptyComponent) : void
-                {method} + show(ClientBatteryComponentDecorator) : void
-                {method} + show(ClientBrokenVerifyComponentDecorator) : void
-                {method} + show(ClientCabinComponentDecorator) : void
-                {method} + show(ClientPoweredComponentDecorator) : void
-                {method} + show(ClientShipmentsComponentDecorator) : void
-            }
-
             package Piece {
 
                 abstract DraggablePiece <<abstract>> {
@@ -2510,63 +2487,48 @@ package View {
 
             }
 
-            package Utils {
-                class SetupOptionContainer {
-                    {field} - count : PlayerCount
-                    {field} - mode : GameModeType
-                    {field} - count_button : Node
-                    {field} - mode_button : Node
-                    {method} + sendSetup(GUIView) : void
-                    {method} + getCount() : PlayerCount
-                    {method} + setCount(PlayerCount, Node) : void
-                    {method} + getMode() : GameModeType
-                    {method} + setMode(GameModeType, Node) : void
-                    {method} + getCountButton() : Node
-                    {method} + getModeButton() : Node
-                }
+            class ComponentTile {
+                {field} [protected] [final] image : ImageView
+                {method} + [final] getImage : ImageView
             }
+
+            ComponentTile <-- ConstructionTile
+            class ConstructionTile {
+                {field} - [final] ID : Integer
+                {field} - rotation : ComponentRotation
+                {method} + getRotation() : ComponentRotation
+                {method} + getID() : Integer
+            }
+
+            ComponentTile <-- PlacedTile
+            class PlacedTile {
+                {field} - [final] coords : ShipCoords
+                {field} - [final] tiles : ArrayList<DraggablePiece>
+                {method} + setOverlay(ImageView) : void
+                {method} + addToList(DraggablePiece) : void
+                {method} + getCoords() : ShipCoords
+            }
+
+            Model::Client::Components::ClientComponentVisitor <--PlacedTileFactory
+            class PlacedTileFactory {
+                {field} - [final] view : GUIView
+                {field} - tile : PlacedTile
+                {field} - center : ShipCoords
+                {method} + createTile(ShipCoords, ClientComponent) : PlacedTile
+                {method} + show(ClientBaseComponent) : void
+                {method} + show(ClientEmptyComponent) : void
+                {method} + show(ClientBatteryComponentDecorator) : void
+                {method} + show(ClientBrokenVerifyComponentDecorator) : void
+                {method} + show(ClientCabinComponentDecorator) : void
+                {method} + show(ClientPoweredComponentDecorator) : void
+                {method} + show(ClientShipmentsComponentDecorator) : void
+            } 
 
         }
 
     }
 
     package TUI {
-
-        ClientView <-d- TUIView
-        TUIStrategy "1" -- TUIView:tuistrategy;
-        TUI::TUINotification "0..N" -- TUIView:notifications
-        TUI::TerminalWrapper "1" -- TUIView:terminal
-        Model::Client::State::ClientState "1" --u--- TUIView:state
-        class TUIView {
-	        {field} - [final] drawthread : Thread
-            {field} - [final] inputthread : Thread
-	        {field} - screen_runnable : Runnable
-	        {field} - status_runnable : Runnable
-            {field} - overlay_runnable : Runnable
-	        {field} - overlay : boolean
-            {field} - String username : String
-            {field} - selected_color : PlayerColor
-            {method} + redraw() : void
-	        {method} + show(TitleScreenState) : void
-	        {method} + show(ConnectingState) : void
-	        {method} + show(ClientLobbySelectState) : void
-	        {method} + show(ClientSetupState) : void
-	        {method} + show(ClientWaitingRoomState) : void
-	        {method} + show(ClientConstructionState) : void
-	        {method} + show(ClientVerifyState) : void
-	        {method} + show(ClientVoyageState) : void
-	        {method} + show(ClientEndgameState) : void
-	        {method} + showTextMessage(String) : void
-	        {method} + setClientState(ClientState) : void
-	        {method} + showHelpScreen() : void
-	        {method} + showStateInfo() : void
-	        {method} + resetOverlay() : void
-	        {method} + getStatusRunnable() : Runnable
-	        {method} + handleLine(String) : void
-	        {method} + changeShip(String) : void
-            {method} + connect(ConnectedState) : void
-	        {method} + disconnect() : void
-        }
 
         package Concurrent {
             
@@ -2764,6 +2726,42 @@ package View {
 
         }
 
+        ClientView <-d- TUIView
+        TUIStrategy "1" -- TUIView:tuistrategy;
+        TUI::TUINotification "0..N" -- TUIView:notifications
+        TUI::TerminalWrapper "1" -- TUIView:terminal
+        Model::Client::State::ClientState "1" --u--- TUIView:state
+        class TUIView {
+	        {field} - [final] drawthread : Thread
+            {field} - [final] inputthread : Thread
+	        {field} - screen_runnable : Runnable
+	        {field} - status_runnable : Runnable
+            {field} - overlay_runnable : Runnable
+	        {field} - overlay : boolean
+            {field} - String username : String
+            {field} - selected_color : PlayerColor
+            {method} + redraw() : void
+	        {method} + show(TitleScreenState) : void
+	        {method} + show(ConnectingState) : void
+	        {method} + show(ClientLobbySelectState) : void
+	        {method} + show(ClientSetupState) : void
+	        {method} + show(ClientWaitingRoomState) : void
+	        {method} + show(ClientConstructionState) : void
+	        {method} + show(ClientVerifyState) : void
+	        {method} + show(ClientVoyageState) : void
+	        {method} + show(ClientEndgameState) : void
+	        {method} + showTextMessage(String) : void
+	        {method} + setClientState(ClientState) : void
+	        {method} + showHelpScreen() : void
+	        {method} + showStateInfo() : void
+	        {method} + resetOverlay() : void
+	        {method} + getStatusRunnable() : Runnable
+	        {method} + handleLine(String) : void
+	        {method} + changeShip(String) : void
+            {method} + connect(ConnectedState) : void
+	        {method} + disconnect() : void
+        }
+
         class CommandBuilder {
             {method} + [static] build(String,TUIView) : ServerMessage
         }
@@ -2772,7 +2770,6 @@ package View {
         Controller::Client::State::ConnectedState "1" -- CommandPreprocessor:state
         class CommandPreprocessor {
             {method} + process(String) : void
-            {method} - forward(String) : void
         }
 
         class TerminalWrapper {
@@ -2794,13 +2791,18 @@ package View {
 	        {method} + takeInput() : String
 	        {method} + peekInput() : String
 	        {method} + print(String, int, int) : void
+            {method} + printBottom(String, int) : void
 	        {method} + print(Collection<String>, int, int) : void
 	        {method} + printCentered(Collection<String>) : void
 	        {method} + printCenteredCorner(List<String>) : void
 	        {method} + puts(Capability, Object...) : void
 	        {method} + setStatus(List<AttributedString>) : void
-	        {method} - cleanUp(Attributes a) : void
-	        {method} - showSmallScreen(Size s) : void
+	        {method} - cleanUp(Attributes) : void
+            {method} - showSmallScreen(Size) : void
+            {method} + getCols() : int
+            {method} + getRows() : int
+            {method} + getColsOffset() : int
+            {method} + getRowsOffset() : int
         }
 
         class TUINotification {
