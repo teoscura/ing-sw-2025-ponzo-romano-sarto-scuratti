@@ -17,7 +17,7 @@ public class LevelOneCardFactory implements iCardFactory {
 		this.cards = new HashMap<Integer, iCard>() {{
 			put(1, new SlaversCard(1, 1, 6F, 3, 5));
 			put(2, new SmugglersCard(2, 1,
-					new Planet(new int[]{1, 1, 1, 0}),
+					new Planet(0, new int[]{1, 1, 1, 0}),
 					2, 4F)
 			);
 			put(3, new PiratesCard(3, 1,
@@ -58,27 +58,27 @@ public class LevelOneCardFactory implements iCardFactory {
 			);
 			put(12, new PlanetCard(12, 3,
 					new Planet[]{
-							new Planet(new int[]{3, 1, 0, 1}),
-							new Planet(new int[]{1, 0, 1, 1}),
-							new Planet(new int[]{3, 0, 0, 1}),
-							new Planet(new int[]{0, 1, 0, 1})})
+							new Planet(0, new int[]{3, 1, 0, 1}),
+							new Planet(1, new int[]{1, 0, 1, 1}),
+							new Planet(2, new int[]{3, 0, 0, 1}),
+							new Planet(3, new int[]{0, 1, 0, 1})})
 			);
 			put(13, new PlanetCard(13, 2,
 					new Planet[]{
-							new Planet(new int[]{0, 0, 0, 2}),
-							new Planet(new int[]{2, 0, 0, 1}),
-							new Planet(new int[]{0, 0, 1, 0})})
+							new Planet(0, new int[]{0, 0, 0, 2}),
+							new Planet(1, new int[]{2, 0, 0, 1}),
+							new Planet(2, new int[]{0, 0, 1, 0})})
 			);
 			put(14, new PlanetCard(14, 3,
 					new Planet[]{
-							new Planet(new int[]{2, 1, 1, 0}),
-							new Planet(new int[]{0, 0, 2, 0})})
+							new Planet(0, new int[]{2, 1, 1, 0}),
+							new Planet(1, new int[]{0, 0, 2, 0})})
 			);
 			put(15, new PlanetCard(15, 1,
 					new Planet[]{
-							new Planet(new int[]{0, 2, 0, 0}),
-							new Planet(new int[]{0, 0, 1, 0}),
-							new Planet(new int[]{3, 0, 0, 0})})
+							new Planet(0, new int[]{0, 2, 0, 0}),
+							new Planet(1, new int[]{0, 0, 1, 0}),
+							new Planet(2, new int[]{3, 0, 0, 0})})
 			);
 			put(16, new CombatZoneCard(16,
 					new ArrayList<>(Arrays.asList(new CombatZoneSection(
@@ -98,11 +98,11 @@ public class LevelOneCardFactory implements iCardFactory {
 			put(17, new AbandonedShipCard(17, 1, 2, 3));
 			put(18, new AbandonedShipCard(18, 1, 3, 4));
 			put(19, new AbandonedStationCard(19, 1,
-					new Planet(new int[]{0, 1, 1, 0}),
+					new Planet(0, new int[]{0, 1, 1, 0}),
 					5)
 			);
 			put(20, new AbandonedStationCard(20, 1,
-					new Planet(new int[]{0, 0, 0, 2}),
+					new Planet(0, new int[]{0, 0, 0, 2}),
 					6)
 			);
 		}};

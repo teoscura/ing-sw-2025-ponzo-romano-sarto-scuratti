@@ -235,7 +235,6 @@ public class VoyageSidePaneTreeFactory implements ClientCardStateVisitor {
 			message.setFont(new Font(18));
 			ImageView piece = new ImageView("galaxy_trucker_imgs/piece/" + state.getTurn().toString() + ".png");
 			awaiting.getChildren().addAll(message, piece);
-			int i = 0;
 			for (var p : state.getAvailable()) {
 				if (p.getVisited()) continue;
 				HBox landing_contains = new HBox(10);
@@ -243,9 +242,8 @@ public class VoyageSidePaneTreeFactory implements ClientCardStateVisitor {
 				landing_contains.setMaxWidth(333);
 				Button land = new Button("Land here:");
 				land.getStyleClass().add("button-construction");
-				int x = i;
 				land.setOnAction(event -> {
-					view.sendMessage(new SelectLandingMessage(x));
+					view.sendMessage(new SelectLandingMessage(p.getID()));
 				});
 				landing_contains.getChildren().add(land);
 				int k = 0;
@@ -261,7 +259,6 @@ public class VoyageSidePaneTreeFactory implements ClientCardStateVisitor {
 					k++;
 				}
 				this.cstatetree.getChildren().add(landing_contains);
-				i++;
 			}
 		} else if (state.getCredits() == 0) {
 			Label message = new Label("Awaiting: ");

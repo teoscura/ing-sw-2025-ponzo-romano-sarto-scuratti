@@ -28,7 +28,7 @@ public class ClientCardStateDecoratorsTest {
         ClientCreditsRewardCardStateDecorator d5 = new ClientCreditsRewardCardStateDecorator(d4, PlayerColor.RED, 2, 1);
         ClientCrewPenaltyCardStateDecorator d6 = new ClientCrewPenaltyCardStateDecorator(d5, PlayerColor.RED, 1);
         ClientEnemyCardStateDecorator d7 = new ClientEnemyCardStateDecorator(d6, 1, CombatZonePenalty.CARGO, 2);
-        ArrayList<Planet> l = new ArrayList<>(){{add(new Planet(new int[]{1,1,1,1}));}};
+        ArrayList<Planet> l = new ArrayList<>(){{add(new Planet(0, new int[]{1,1,1,1}));}};
         ClientLandingCardStateDecorator d8 = new ClientLandingCardStateDecorator(d7, PlayerColor.RED, 1, 2, 3, l);
         var p = new Projectile(ProjectileDirection.U000, ProjectileDimension.BIG, 2);
         ClientMeteoriteCardStateDecorator d9 = new ClientMeteoriteCardStateDecorator(d8, p);

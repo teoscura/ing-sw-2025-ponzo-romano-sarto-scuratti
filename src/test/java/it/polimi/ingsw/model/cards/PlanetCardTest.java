@@ -293,7 +293,7 @@ public class PlanetCardTest {
 
 	@Test
 	public void utilstest(){
-		Planet p = new Planet(new int[]{0,1,1,0});
+		Planet p = new Planet(0, new int[]{0,1,1,0});
 		p.visit();
 		assertThrows(AlreadyVisitedException.class, ()->p.visit());
 		PlanetCard c = new PlanetCard(0, 0, new Planet[]{p});

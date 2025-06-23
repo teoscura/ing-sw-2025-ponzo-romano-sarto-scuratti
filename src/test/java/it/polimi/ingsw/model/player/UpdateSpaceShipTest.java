@@ -95,7 +95,7 @@ public class UpdateSpaceShipTest {
 		c = f.getComponent(41);
 		c.rotate(ComponentRotation.U000);
 		nocabin.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 2, 2));
-		c = f.getComponent(39);
+		c = f.getComponent(47);
 		c.rotate(ComponentRotation.U000);
 		nocabin.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 1, 2));
 		c = f.getComponent(42);
@@ -233,6 +233,7 @@ public class UpdateSpaceShipTest {
 		assertEquals(10, nocabin.getSpaceShip().getTotalCrew());
 		nocabin.getSpaceShip().handleShot(new Projectile(ProjectileDirection.U180, ProjectileDimension.SMALL, 7));
 		assertTrue(nocabin.getSpaceShip().getBlobsSize() > 1);
+		System.out.println(nocabin.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 2, 2)).getClass().getSimpleName());
 		nocabin.getSpaceShip().selectShipBlob(new ShipCoords(GameModeType.TEST, 1, 2));
 		assertEquals(1, nocabin.getSpaceShip().getBlobsSize());
 		assertEquals(4, nocabin.getSpaceShip().getTotalCrew());
