@@ -1,8 +1,10 @@
 @font-face {
     font-family: ''Roboto Mono'';
     src: url('font.ttf');
-}
 
+    font-family: ''Anton-Regular'';
+    src: url('Anton-Regular.ttf');
+}
 
 .titlescreen-field {
     -fx-font-family: 'Roboto Mono';
@@ -16,17 +18,6 @@
     border-color: rgb(255, 225, 31);
 }
 
-.list-view .scroll-bar:vertical {
-    -fx-scale-x: 0;
-}
-
-.discarded-list-view.list-cell:odd {
-    -fx-background-color: rgba(255, 255, 255, 0.08);
-}
-
-.discarded-list-view.list-cell:even {
-    -fx-background-color: rgba(255, 255, 255, 0.08);
-}
 
 .costr-pane-base {
     background-color: darkgrey;
@@ -69,13 +60,16 @@
 .list-label-big {
     -fx-font-size: 40px;
     font-size: 40px;
-    -fx-text-fill: rgb(255, 255, 255);
+    -fx-font-weight: bold;
+    -fx-text-fill: #FFD700;
+    -fx-effect: dropshadow(gaussian, black, 4, 0.5, 2, 2);
+    -fx-font-family: 'Anton-Regular';
 }
 
 .list-red-bg {
     -fx-fill: #a10005;
     fill: #a10005;
-}   
+}
 
 .list-red-faint {
     -fx-fill: #fc5361;
