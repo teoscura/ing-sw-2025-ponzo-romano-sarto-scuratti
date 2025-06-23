@@ -131,8 +131,8 @@ public class PlanetAnnounceState extends CardState {
 			this.responded = true;
 			return;
 		} else if (this.card.getPlanet(planet).getVisited()) {
-			Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Player: '" + p.getUsername() + "' attempted to land on a planet that was already visited!");
-			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to land on a planet that was already visited!"));
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Player: '" + p.getUsername() + "' attempted to land on a planet that was already visited! ("+planet+")");
+			this.state.broadcastMessage(new ViewMessage("Player'" + p.getUsername() + "' attempted to land on a planet that was already visited! ("+planet+")"));
 			return;
 		}
 		Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Player: '" + p.getUsername() + "' landed on: " + planet);

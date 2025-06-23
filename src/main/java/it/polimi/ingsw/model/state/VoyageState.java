@@ -250,6 +250,7 @@ public class VoyageState extends GameState {
 				this.transition();
 				return;
 			}
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + getModelID() + "] " + "Pulled card ID: "+card.getId());
 			this.state = card.getState(this);
 			this.model.serialize();
 			this.state.init(this.getClientState());
