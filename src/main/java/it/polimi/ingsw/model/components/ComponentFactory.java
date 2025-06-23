@@ -431,8 +431,8 @@ public class ComponentFactory {
 			put(39, new CabinComponent(
 					39,
 					new ConnectorType[]{
-							ConnectorType.SINGLE_CONNECTOR,
 							ConnectorType.DOUBLE_CONNECTOR,
+							ConnectorType.SINGLE_CONNECTOR,
 							ConnectorType.EMPTY,
 							ConnectorType.SINGLE_CONNECTOR
 					},
