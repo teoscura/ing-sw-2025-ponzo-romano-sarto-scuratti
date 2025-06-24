@@ -3,6 +3,7 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.controller.server.ClientDescriptor;
 import it.polimi.ingsw.controller.server.LobbyController;
 import it.polimi.ingsw.message.client.ClientMessage;
+import it.polimi.ingsw.message.client.ViewMessage;
 import it.polimi.ingsw.message.server.ServerConnectMessage;
 import it.polimi.ingsw.message.server.ServerDisconnectMessage;
 import it.polimi.ingsw.message.server.ServerMessage;
@@ -22,6 +23,7 @@ import java.io.Serializable;
  */
 public class ModelInstance implements Serializable {
 
+	private boolean paused = false;
 	protected final int id;
 	protected transient LobbyController controller;
 	protected boolean started;
@@ -47,6 +49,10 @@ public class ModelInstance implements Serializable {
 	 * @throws ForbiddenCallException if the model refuses the message.
 	 */
 	public void validate(ServerMessage message) throws ForbiddenCallException {
+		if(paused){
+			this.broadcast(new ViewMessage("Client: '"+message.getDescriptor().getUsername()+"' acted, but the game is paused waiting for more than one client to be connected!"));
+			return;
+		}
 		message.receive(this);
 	}
 
@@ -58,7 +64,16 @@ public class ModelInstance implements Serializable {
 		this.controller.serializeCurrentGame();
 	}
 
+	public void pauseGame(){
+		this.paused = true;
+	}
+
+	public void unpauseGame(){
+		this.paused = false;
+	}
+
 	public void startGame() {
+		this.paused = false;
 		this.started = true;
 	}
 

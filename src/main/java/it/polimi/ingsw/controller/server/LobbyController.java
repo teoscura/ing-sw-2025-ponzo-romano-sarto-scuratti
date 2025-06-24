@@ -211,6 +211,7 @@ public class LobbyController extends Thread implements VirtualServer {
 			} else if (reconnect) {
 				broadcast(new ViewMessage("Player: '"+client.getUsername()+"' reconnected!"));
 				this.model.connect(client.getPlayer());
+				this.model.unpauseGame();
 				if (dsctimer != null) {
 					this.dsctimer.cancel();
 					this.dsctimer = null;
@@ -256,9 +257,10 @@ public class LobbyController extends Thread implements VirtualServer {
 				return;
 			}
 			if (this.disconnected_usernames.size() >= this.model.getState().getCount().getNumber() - 1) {
-				Logger.getInstance().print(LoggerLevel.LOBCN, "Lobby [" + this.id + "] has only one player left, starting timer, if nobody joins, game's over!");
+				Logger.getInstance().print(LoggerLevel.LOBCN, "Lobby [" + this.id + "] has only one player left, starting timer and pausing game, if nobody joins, game's over!");
 				this.dsctimer = new Timer(true);
 				this.dsctimer.schedule(this.getEndMatchTask(this), 60000L);
+				this.model.pauseGame();
 			}
 		}
 		synchronized (model_lock) {
