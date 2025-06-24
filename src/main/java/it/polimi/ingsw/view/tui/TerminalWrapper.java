@@ -229,9 +229,9 @@ public class TerminalWrapper {
 	 * @param string String to be printed.
 	 * @param offset Desired number of rows below of the string.
 	 */
-	public void printBottom(String line, int offset){
+	public void printBottom(String string, int offset){
 		int row = this.size.getRows() - 1 - offset;
-		this.print(line, row, 0);
+		this.print(string, row, 0);
 	}
 
 	/**

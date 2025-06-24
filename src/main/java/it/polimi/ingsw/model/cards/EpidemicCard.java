@@ -41,7 +41,6 @@ public class EpidemicCard extends Card {
 	 * the player is considered to have lost the game.
 	 * </p>
 	 *
-	 * @throws PlayerNotFoundException if the ship/player is not found
 	 * @throws NullPointerException    if {@code state} or {@code p} is null
 	 */
 	public void apply(VoyageState state, Player p) {
