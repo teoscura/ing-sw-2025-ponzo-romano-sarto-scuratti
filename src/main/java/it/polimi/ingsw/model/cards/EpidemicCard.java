@@ -8,6 +8,8 @@ import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.VoyageState;
+import it.polimi.ingsw.utils.Logger;
+import it.polimi.ingsw.utils.LoggerLevel;
 
 import java.util.ArrayList;
 
@@ -45,9 +47,11 @@ public class EpidemicCard extends Card {
 	 */
 	public void apply(VoyageState state, Player p) {
 		if (state == null || p == null) throw new NullPointerException();
-		ArrayList<ShipCoords> ill_cabins = p.getSpaceShip().findConnectedCabins();
+		ArrayList<ShipCoords> ill_cabins = p.getSpaceShip().findConnectedInhabitedCabins();
+		Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Player: '"+p.getUsername()+"' has "+ill_cabins.size()+" ill cabins.");
 		CrewRemoveVisitor v = new CrewRemoveVisitor(p.getSpaceShip());
 		for (ShipCoords s : ill_cabins) {
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + state.getModelID() + "] " + "Removing crew from: "+s+" for Player: '"+p.getUsername()+"'.");
 			try {
 				p.getSpaceShip().getComponent(s).check(v);
 			} catch (IllegalTargetException e) {
