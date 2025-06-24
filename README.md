@@ -45,10 +45,13 @@ At any point the server can be closed by typing `stop` in the console, The serve
 
 ## How to start a game client
 
-> [!CAUTION]
-> If you wish to play with a mac, make sure to use the right jar! The jar made to support Intel Macs is denoted by a _intel in its name, while the normal jar supports ARM Macs.
-
 ### GUI
+
+> [!CAUTION]
+> If you wish to play with a mac, make sure to use the right GUI client jar! The jar made to support Intel Macs is denoted by a _intel in its name, while the unmarked jar supports Apple Silicon.
+
+> [!IMPORTANT]  
+> When opening the jar, some warnings regarding unnamed modules may appear, these are due to the shade maven plugin used to build the Jars, which "flattens" modules, making module distinctions moot.
 
 You can start the GUI client by opening the provided .JAR file with:
 ```java -jar GC13-gui-1.0.jar``` (Make sure to match the name of the jar if youre on an Intel Mac by adding "_intel"!)
@@ -67,13 +70,13 @@ If a shot is being announced, its accompanied by the index and direction its fac
 ### TUI
 
 > [!IMPORTANT]  
-> Make sure to launch the TUI with a terminal emulator having size equal or larger than 128 columns by 32 rows, using the flag ```--enable-native-access=ALL-UNNAMED``` could be necessary for the JLine library to successfully load the supported capabilities of the terminal used.
+> Make sure to launch the TUI with a terminal emulator having size equal or larger than 128 columns by 32 rows, using the flag ```--enable-native-access=ALL-UNNAMED``` could be necessary for the JLine library to successfully fetch and load the supported capabilities of the terminal used.
 
 + Windows: \
 A proven way to launch the TUI on windows is to launch a windows terminal instance with ```wt --size 128,32```. The TUI should automatically enable a UTF-8 supporting codepage for any windows terminal, but in case characters are not displayed properly, or the TUI doesn't launch, try forcing any codepage that supports Unicode. You can then finally launch the TUI with ```java --enable-native-access=ALL-UNNAMED -jar GC13-tui-1.0.jar```. 
 
 > [!CAUTION]
-> If by any chance this TUI is to be used on a Windows build that doesn't include the new Windows Terminal, you can launch it from Powershell, making sure the size is big enough.
+> If by any chance this TUI is to be used on a Windows build that doesn't include the new Windows Terminal, you can launch it from Powershell, making sure the size is big enough. (Tested on Windows 11 22H2).
 
 + Any OS:
 Simply launch the jar in a unicode supporting terminal using the command: ```java --enable-native-access=ALL-UNNAMED -jar GC13-tui-1.0.jar```.
