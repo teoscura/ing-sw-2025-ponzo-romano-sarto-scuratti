@@ -250,10 +250,8 @@ public class VoyageSidePaneTreeFactory implements ClientCardStateVisitor {
 				for (int l : p.getContains()) {
 					for (int j = 0; j < l; j++) {
 						CargoPiece cargo = new CargoPiece(view, null, ShipmentType.fromValue(k + 1));
-						if (p.getContains().length >= 4) {
-							cargo.setPreserveRatio(true);
-							cargo.setFitWidth(cargo.getFitWidth() * 0.8);
-						}
+						cargo.setPreserveRatio(true);
+						cargo.setFitWidth(cargo.getFitWidth() * 0.8);
 						landing_contains.getChildren().add(cargo);
 					}
 					k++;

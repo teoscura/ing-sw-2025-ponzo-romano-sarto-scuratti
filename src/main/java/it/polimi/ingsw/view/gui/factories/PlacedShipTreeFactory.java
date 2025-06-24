@@ -173,7 +173,6 @@ public class PlacedShipTreeFactory {
         if(ship.getType()==GameModeType.TEST) bg = new ImageView("galaxy_trucker_imgs/ship_background_lv1.png");
         else bg = new ImageView("galaxy_trucker_imgs/ship_background_lv2.png");
         bg.setId("ship-bg-img");
-        bg.setOpacity(0.4);
 
         var planche = planche(state);
         var stats = statsBar(p.getUsername(), ship, p.getCredits(), p.isDisconnected());

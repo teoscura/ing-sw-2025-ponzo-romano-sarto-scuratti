@@ -310,7 +310,7 @@ public class MainServerController extends Thread implements VirtualServer {
 	 * @throws ForbiddenCallException if for any reason connecting is forbidden
      */
 	public void connect(ClientDescriptor client) throws ForbiddenCallException {
-		//Either add him to a game if hes reconnecting, or add
+		//Either add him to a game if he's reconnecting, or add
 		int id = -1;
 		boolean disconnected = false;
 		synchronized (listeners_lock) {
