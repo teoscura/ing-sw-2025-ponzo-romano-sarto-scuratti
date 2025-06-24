@@ -73,6 +73,7 @@ package Model {
             {method} getPlayerPosition(Player) : int
             {method} getPlayerAt(int) : Player
             {method} movePlayer(VoyageState, Player, int) : void
+            {method} checkLapped(Player) : boolean
             {method} loseGame(Player) : void
         }
 
@@ -129,10 +130,11 @@ package Model {
             {field} credits : int
             {field} retired : boolean
             {field} disconnected : boolean
+            {field} ship : SpaceShip
             {method} + getUsername() : String
             {method} + getColor() : String
             {method} + retire() : void
-            {method} + getRetired : boolean
+            {method} + getRetired() : boolean
             {method} + reconnect() : void
             {method} + disconnect() : void
             {method} + getDisconnected() : boolean
@@ -151,6 +153,7 @@ package Model {
         BaseComponent -u- SpaceShip:"components[][]"
         class SpaceShip {
             {field} [final] player : Player
+            {field} [final] components : BaseComponent[][]
             {field} [final] storage_coords : ArrayList<ShipCoords>
             {field} [final] cabin_coords : ArrayList<ShipCoords>
             {field} [final] battery_coords : ArrayList<ShipCoords>
@@ -231,6 +234,8 @@ package Model {
         abstract GameState <<abstract>> {
             {field} # [final] type : GameModeType
             {field} # [final] count : PlayerCount
+            {field} # [final] model : ModelInstance
+            {field} # [final] players : ArrayList<Player>
             {method} + [abstract] validate(ServerMessage message) : void
             {method} + [abstract] getNext() : GameState 
             {method} + [abstract] getClientState() : ClientState
@@ -268,24 +273,27 @@ package Model {
         iCard "1" --- VoyageState:card
         CardState "1" --- VoyageState:state
         class VoyageState {
-            {field} - [final] to_give_up : ArrayList<Player>
-            {method} + validate(ServerMessage message) : void
-            {method} + getNext() : GameState 
-            {method} + getClientState() : ClientState 
+            {field} - card: iCard
+            {field} - [final] planche: iPlanche
+            {field} - state: CardState
+            {field} - [final] to_give_up: ArrayList<Player>
+            {field} - [final] voyage_deck: iCards
+            {method} + connect(Player p) : void
+            {method} + disconnect(Player p) : void
+            {method} + findCriteria(CombatZoneCriteria criteria) : Player
+            {method} + getCardState(Player p) : CardState
+            {method} + getClientState() : ClientState
+            {method} + getNext() : GameState
+            {method} + getOngoingEntry(int id) : ClientGameListEntry
+            {method} + getOrder(CardOrder order) : List<Player>
+            {method} + getPlanche() : iPlanche
+            {method} + giveUp(Player p) : void
             {method} + init() : void
-            {method} + connect(Player) : void
-            {method} + disconnect(Player) : void
-            {method} + giveUp(Player) : void
-            {method} + getCardState(Player) : CardState
-            {method} + loseGame(Player) : void
-            {method} + getAllConnectedPlayers() : List<Player> 
-            {method} + getOrder(CardOrder) : List<Player>
-            {method} + findCriteria(CombatZoneCriteria) : Player
-            {method} + getPlanche() : iPlanche 
-            {method} + setCardState(CardState) : void
+            {method} + loseGame(Player p) : void
+            {method} + setCardState(CardState next) : void
             {method} + toSerialize() : boolean
             {method} + toString() : String
-            {method} + getOngoingEntry(int) : ClientGameListEntry
+            {method} + validate(ServerMessage message) : void
         }
         
     }
@@ -293,9 +301,11 @@ package Model {
 
     State::GameState "1" ---- ModelInstance:state 
     class ModelInstance {
+        {field} - controller: LobbyController
+        {field} - ended: boolean
         {field} - [final] id: int
         {field} - started: boolean
-        {field} - ended: boolean
+        {field} - state: GameState
         {method} + getID() : int
         {method} + validate(ServerMessage message) : void
         {method} + serialize() : void
@@ -377,6 +387,7 @@ package Model {
                 {method} + show(ClientConstructionState) : void
                 {method} + show(ClientVerifyState) : void
                 {method} + show(ClientVoyageState) : void
+                {method} + show(ClientEndgameState state) : void
             }
         }
 
