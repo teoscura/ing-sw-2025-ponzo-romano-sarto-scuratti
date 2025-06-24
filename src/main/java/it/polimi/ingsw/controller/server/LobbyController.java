@@ -258,6 +258,7 @@ public class LobbyController extends Thread implements VirtualServer {
 			}
 			if (this.disconnected_usernames.size() >= this.model.getState().getCount().getNumber() - 1) {
 				Logger.getInstance().print(LoggerLevel.LOBCN, "Lobby [" + this.id + "] has only one player left, starting timer and pausing game, if nobody joins, game's over!");
+				this.broadcast(new ViewMessage("Lobby [" + this.id + "] has only one player left, starting timer and pausing game, if nobody joins, game's over!"));
 				this.dsctimer = new Timer(true);
 				this.dsctimer.schedule(this.getEndMatchTask(this), 60000L);
 				this.model.pauseGame();
