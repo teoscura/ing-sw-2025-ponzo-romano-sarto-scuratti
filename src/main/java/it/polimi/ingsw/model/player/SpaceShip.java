@@ -481,19 +481,17 @@ public class SpaceShip implements Serializable {
 
 	public ArrayList<ShipCoords> findConnectedInhabitedCabins() {
 		ArrayList<ShipCoords> res = new ArrayList<>();
-		for (ShipCoords coords : this.cabin_coords) {
-			EpidemicVisitor e = new EpidemicVisitor();
-			this.getComponent(coords).check(e);
-			boolean check = e.getResult();
-			if (check) {
-				for (BaseComponent c : this.getComponent(coords).getConnectedComponents(this)) {
-					if (c.getCoords() == coords || !this.cabin_coords.contains(c.getCoords())){
-						continue;
-					}
-					EpidemicVisitor v = new EpidemicVisitor();
-					c.check(v);
-					boolean result = v.getResult();
-					if (result) res.add(coords);
+		for(var c1 : this.cabin_coords){
+			EpidemicVisitor v1 = new EpidemicVisitor();
+			var comp1 = this.getComponent(c1);
+			comp1.check(v1);
+			if(!v1.getResult()) continue;
+			for(var c2 : comp1.getConnectedComponents(this)){
+				if(!this.cabin_coords.contains(c2.getCoords())) continue;
+				EpidemicVisitor v2 = new EpidemicVisitor();
+				c2.check(v2);
+				if(v2.getResult()) {
+					res.add(c1);
 					break;
 				}
 			}

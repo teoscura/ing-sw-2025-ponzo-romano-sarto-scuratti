@@ -23,6 +23,8 @@ import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.ShipCoords;
 import it.polimi.ingsw.model.state.DummyVoyageState;
+import it.polimi.ingsw.view.tui.formatters.ClientSpaceShipFormatter;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -50,7 +52,6 @@ class EpidemicCardTest {
 	@BeforeEach
 	void setUp() throws IOException {
 
-		player1 = new Player(GameModeType.TEST, "Player1", PlayerColor.RED);
 		player2 = new Player(GameModeType.TEST, "Player2", PlayerColor.BLUE);
 		player3 = new Player(GameModeType.TEST, "Player3", PlayerColor.GREEN);
 
@@ -72,16 +73,18 @@ class EpidemicCardTest {
 		c = f.getComponent(49);
 		c.rotate(ComponentRotation.U000);
 
-		c = f.getComponent(45);
+		ComponentFactory f2 = new ComponentFactory();
+		c = f2.getComponent(45);
 		c.rotate(ComponentRotation.U000);
 		player3.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 2, 2));
-		c = f.getComponent(47);
+		c = f2.getComponent(47);
 		c.rotate(ComponentRotation.U000);
 		player3.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 1, 2));
 
 		CabinComponent cabin = (CabinComponent) player3.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 2, 2));
 		cabin.setCrew(player3.getSpaceShip(), 0, AlienType.HUMAN);
 
+		c = f.getComponent(47);
 		player1.getSpaceShip().addComponent(c, new ShipCoords(GameModeType.TEST, 5, 3));
 		p1desc = new ClientDescriptor(player1.getUsername(), new DummyConnection());
 		p1desc.bindPlayer(player1);
@@ -110,6 +113,7 @@ class EpidemicCardTest {
 	void test() throws ForbiddenCallException {
 		// Check status before card application
 		int[] exp1 = new int[]{8, 0, 0};
+		CabinComponent cabin3 = (CabinComponent) player3.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 1, 2));
 		assertArrayEquals(exp1, player1.getSpaceShip().getCrew());
 		state.setCardState(cstate);
 		// Unsupported message (it should fail)
@@ -121,15 +125,19 @@ class EpidemicCardTest {
 		message.setDescriptor(p1desc);
 		state.validate(message);
 		// try again (it should fail)
+		assertEquals(2, cabin3.getCrew());
 		message = new SendContinueMessage();
 		message.setDescriptor(p1desc);
 		state.validate(message);
+		assertEquals(2, cabin3.getCrew());
 		message = new SendContinueMessage();
 		message.setDescriptor(p2desc);
 		state.validate(message);
+		assertEquals(2, cabin3.getCrew());
 		message = new SendContinueMessage();
 		message.setDescriptor(p3desc);
 		state.validate(message);
+		assertEquals(2, cabin3.getCrew());
 		assertNull(state.getCardState(player1));
 		// Check status after card application
 		ShipCoords coords = new ShipCoords(GameModeType.TEST, 4, 3);
@@ -141,7 +149,6 @@ class EpidemicCardTest {
 		exp1 = new int[]{6, 0, 0};
 		assertArrayEquals(exp1, player1.getSpaceShip().getCrew());
 		//test new function
-		CabinComponent cabin3 = (CabinComponent) player3.getSpaceShip().getComponent(new ShipCoords(GameModeType.TEST, 1, 2));
 		assertEquals(2, cabin3.getCrew());
 	}
 
@@ -156,11 +163,10 @@ class EpidemicCardTest {
 		server_message_wrong.setDescriptor(p1desc);
 		assertThrows(ForbiddenCallException.class, () -> state.validate(server_message_wrong));
 
-		// Send message for both players
 		model.disconnect(player1);
-		// try again (it should fail)
+
 		message = new SendContinueMessage();
-		message.setDescriptor(p1desc);
+		message.setDescriptor(p3desc);
 		state.validate(message);
 		// Woop
 		message = new SendContinueMessage();
