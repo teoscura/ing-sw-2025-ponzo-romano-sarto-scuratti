@@ -45,7 +45,7 @@ public class EpidemicCard extends Card {
 	 */
 	public void apply(VoyageState state, Player p) {
 		if (state == null || p == null) throw new NullPointerException();
-		ArrayList<ShipCoords> ill_cabins = p.getSpaceShip().findConnectedCabins();
+		ArrayList<ShipCoords> ill_cabins = p.getSpaceShip().findConnectedInhabitedCabins();
 		CrewRemoveVisitor v = new CrewRemoveVisitor(p.getSpaceShip());
 		for (ShipCoords s : ill_cabins) {
 			try {

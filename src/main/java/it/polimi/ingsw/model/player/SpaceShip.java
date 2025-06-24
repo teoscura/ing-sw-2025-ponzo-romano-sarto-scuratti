@@ -11,14 +11,12 @@ import it.polimi.ingsw.model.cards.utils.ProjectileDirection;
 import it.polimi.ingsw.model.cards.visitors.LargeMeteorVisitor;
 import it.polimi.ingsw.model.client.components.ClientComponent;
 import it.polimi.ingsw.model.client.components.ClientSpaceShip;
-import it.polimi.ingsw.model.components.BaseComponent;
-import it.polimi.ingsw.model.components.BatteryComponent;
-import it.polimi.ingsw.model.components.EmptyComponent;
-import it.polimi.ingsw.model.components.StartingCabinComponent;
+import it.polimi.ingsw.model.components.*;
 import it.polimi.ingsw.model.components.enums.ComponentRotation;
 import it.polimi.ingsw.model.components.enums.ConnectorType;
 import it.polimi.ingsw.model.components.exceptions.IllegalTargetException;
 import it.polimi.ingsw.model.components.visitors.EnergyVisitor;
+import it.polimi.ingsw.model.components.visitors.EpidemicVisitor;
 import it.polimi.ingsw.model.components.visitors.SpaceShipUpdateVisitor;
 import it.polimi.ingsw.model.player.exceptions.IllegalComponentAdd;
 import it.polimi.ingsw.utils.Logger;
@@ -476,6 +474,28 @@ public class SpaceShip implements Serializable {
 				if (c.getCoords() == coords || !this.cabin_coords.contains(c.getCoords())) continue;
 				res.add(coords);
 				break;
+			}
+		}
+		return res;
+	}
+
+	public ArrayList<ShipCoords> findConnectedInhabitedCabins() {
+		ArrayList<ShipCoords> res = new ArrayList<>();
+		for (ShipCoords coords : this.cabin_coords) {
+			EpidemicVisitor e = new EpidemicVisitor();
+			this.getComponent(coords).check(e);
+			boolean check = e.getResult();
+			if (check) {
+				for (BaseComponent c : this.getComponent(coords).getConnectedComponents(this)) {
+					if (c.getCoords() == coords || !this.cabin_coords.contains(c.getCoords())){
+						continue;
+					}
+					EpidemicVisitor v = new EpidemicVisitor();
+					c.check(v);
+					boolean result = v.getResult();
+					if (result) res.add(coords);
+					break;
+				}
 			}
 		}
 		return res;
