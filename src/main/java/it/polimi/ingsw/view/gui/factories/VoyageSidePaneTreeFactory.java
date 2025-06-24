@@ -240,7 +240,7 @@ public class VoyageSidePaneTreeFactory implements ClientCardStateVisitor {
 				HBox landing_contains = new HBox(10);
 				landing_contains.setAlignment(Pos.CENTER);
 				landing_contains.setMaxWidth(333);
-				Button land = new Button("Land here:");
+				Button land = new Button("Land:");
 				land.getStyleClass().add("button-construction");
 				land.setOnAction(event -> {
 					view.sendMessage(new SelectLandingMessage(p.getID()));
@@ -250,9 +250,9 @@ public class VoyageSidePaneTreeFactory implements ClientCardStateVisitor {
 				for (int l : p.getContains()) {
 					for (int j = 0; j < l; j++) {
 						CargoPiece cargo = new CargoPiece(view, null, ShipmentType.fromValue(k + 1));
-						if (p.getContains().length > 4) {
+						if (p.getContains().length >= 4) {
 							cargo.setPreserveRatio(true);
-							cargo.setFitWidth(cargo.getImage().getWidth()*0.8);
+							cargo.setFitWidth(cargo.getFitWidth() * 0.8);
 						}
 						landing_contains.getChildren().add(cargo);
 					}
