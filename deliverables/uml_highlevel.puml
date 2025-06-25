@@ -1,0 +1,792 @@
+@startuml uml_highlevel
+hide circle
+skinparam classFontStyle bold
+skinparam groupInheritance 1
+set separator ::
+skinparam classAttributeIconSize 12
+
+package Model {
+
+    package Cards {
+
+        package State {
+
+            Model::State::VoyageState --d-- CardState:state
+            abstract CardState {
+                {method} + init(ClientState) : void
+                {method} + [abstract] validate() : void
+                {method} + [abstract] getClientCardState() : ClientCardState
+                {method} + [abstract] getNext() : CardState
+                {method} + transition() : void
+                {method} + setNewShipCentre(Player, ShipCoords) : void
+                {method} + turnOn(Player, ShipCoords, ShipCoords) : void
+                {method} + removeCrew(Player, ShipCoords): void
+                {method} + moveCargo(Player, ShipmentType, ShipCoords, ShipCoords) : void
+                {method} + takeCargo(Player, ShipmentType, ShipCoords) : void
+                {method} + discardCargo(Player, ShipmentType, ShipCoords) : void
+                {method} + selectLanding(Player, int) : void
+                {method} + progressTurn(Player) : void
+                {method} + setTakeReward(Player, boolean) : void
+                {method} + connect(Player) : void
+                {method} + disconnect(Player) : void
+            }
+
+        }
+
+        interface iCard <<interface>> {
+            {method} getId() : int
+            {method} getDays() : int
+            {method} getState(VoyageState) : CardState
+            {method} getExhausted() : boolean
+        }
+
+        iCard^--Card
+        abstract Card <<abstract>> {
+            {field} id : int
+            {field} days : int
+            {field} exhausted : boolean
+            {method} + getId() : int
+            {method} + getDays() : int
+            {method} + getExhausted() : boolean
+            {method} [protected] exhaust() : void
+        }
+
+    }
+
+    package Board {
+
+        interface iCards <<interface>> {
+            {method} pullCard() : iCard
+            {method} getLeft() : int
+            {method} getConstructionCards : List<Integer>
+        }
+
+        interface iCommonBoard <<interface>> {
+            {method} getCoveredSize() : int
+            {method} pullComponent() : BaseComponent
+            {method} discardComponent(BaseComponent) : void
+            {method} pullDiscarded(int) : BaseComponent
+            {method} getDiscarded() : ArrayList<Integer>
+        }
+
+        interface iPlanche <<interface>> {
+            {method} getPlayerPosition(Player) : int
+            {method} getPlayerAt(int) : Player
+            {method} movePlayer(VoyageState, Player, int) : void
+            {method} checkLapped(Player) : boolean
+            {method} loseGame(Player) : void
+        }
+
+    }
+
+    package Components {
+        
+        package Visitors {
+
+            interface iVisitor <<interface>> {
+                {method} + visit(CabinComponent) : void
+                {method} + visit(EngineComponent) : void
+                {method} + visit(AlienLifeSupportComponent) : void
+                {method} + visit(CannonComponent) : void
+                {method} + visit(StorageComponent) : void
+                {method} + visit(BatteryComponent) : void
+                {method} + visit(ShieldComponent) : void
+                {method} + visit(EmptyComponent) : void
+                {method} + visit(StructuralComponent) : void
+                {method} + visit(StartingCabinComponent) : void
+            }
+        
+        }
+
+        abstract BaseComponent <<abstract>> {
+            {field} [final] id : int
+            {field} [final] connectors : ConnectorType[]
+            {field} [protected] coords : ShipCoords
+            {field} rotation : ComponentRotation
+            {method} + getID() : int
+            {method} + getConnectors() : ConnectorType[]
+            {method} + getRotation() : ComponentRotation
+            {method} + rotate(ComponentRotation) : void
+            {method} + verify(SpaceShip) : boolean
+            {method} + getConnector(ComponentRotation) : ConnectorType
+            {method} + getCoords() : ShipCoords
+            {method} + powerable() : boolean
+            {method} + [abstract] onCreation(SpaceShip, ShipCoords) : void
+            {method} + [abstract] onDelete(SpaceShip) : void
+            {method} + [abstract] getClientComponent() : ClientComponent
+            {method} + [abstract] check(iVisitor) : void
+            {method} + getConnectedComponents(SpaceShip) : BaseComponent[]
+        }
+
+    }
+
+    package Player {
+
+        SpaceShip - Player:ship
+        class Player {
+            {field} [final] username : String
+            {field} [final] color : PlayerColor
+            {field} [transient] descriptor : ClientDescriptor
+            {field} credits : int
+            {field} retired : boolean
+            {field} disconnected : boolean
+            {field} ship : SpaceShip
+            {method} + getUsername() : String
+            {method} + getColor() : String
+            {method} + retire() : void
+            {method} + getRetired() : boolean
+            {method} + reconnect() : void
+            {method} + disconnect() : void
+            {method} + getDisconnected() : boolean
+            {method} + giveCredits(int) : int
+            {method} + getCredits() : int
+            {method} + finalScore() : void
+            {method} + reconnect(ClientDescriptor) : void
+            {method} + getSpaceShip() : SpaceShip
+            {method} + bindDescriptor(ClientDescriptor) : void
+            {method} + getDescriptor() : ClientDescriptor
+            {method} + voyageInfo(iPlanche) : String
+            {method} + equals : boolean
+        }
+
+
+        BaseComponent -u- SpaceShip:"components[][]"
+        class SpaceShip {
+            {field} [final] player : Player
+            {field} [final] components : BaseComponent[][]
+            {field} [final] storage_coords : ArrayList<ShipCoords>
+            {field} [final] cabin_coords : ArrayList<ShipCoords>
+            {field} [final] battery_coords : ArrayList<ShipCoords>
+            {field} [final] powerable_coords : ArrayList<ShipCoords>
+            {field} [final] type : GameModeType
+            {field} [final] empty : BaseComponent
+            {field} blobs : ArrayList<ArrayList<ShipCoords>>
+            {field} crew : int[]
+            {field} center : ShipCoords
+            {field} containers : int[]
+            {field} shielded_directions : boolean[]
+            {field} cannon_power : double
+            {field} engine_power : int
+            {method} + getType() : GameModeType
+            {method} + getCrew() : int[]
+            {method} + bulkVerify() : VerifyResult[][]
+            {method} + bulkVerifyResult() : boolean
+            {method} + getBlobsSize() : int
+            {method} + updateShipBlobs() : void
+            {method} + verifyBlob(VerifyResult[][]) : ArrayList<ShipCoords>
+            {method} + selectShipBlob(ShipCoords) : void
+            {method} + addComponent(BaseComponent, ShipCoords) : void
+            {method} + removeComponent(ShipCoords) : void
+            {method} + updateShip() : void
+            {method} + resetPower() : void
+            {method} + turnOn(ShipCoords, ShipCoords) : void
+            {method} + getComponent : BaseComponent
+            {method} + getCannonPower() : double
+            {method} + getEnginePower() : int
+            {method} + getEnergyPOwer() : int
+            {method} + getShieldedDirections() : int
+            {method} + getHeight() : int
+            {method} + getWidth() : int
+            {method} + getEmpty() : BaseComponent
+            {method} + addStorageCoords(ShipCoords) : void
+            {method} + delStorageCoords(ShipCoords) : void
+            {method} + addCabinCoords(ShipCoords) : void
+            {method} + delCabinCoords(ShipCoords) : void
+            {method} + addBatteryCoords(ShipCoords) : void
+            {method} + delBatteryCoords(ShipCoords) : void
+            {method} + addPowerableCoords(ShipCoords) : void
+            {method} + delPowerableCoords(ShipCoords) : void
+            {method} + getTotalCrew() : int
+            {method} + findConnectedCabins() : ArrayList<ShipCoords>
+            {method} + countExposedConnectors() : int
+            {method} + handleMeteorite(Projectile) : void
+            {method} + handleShot(Projectile) : void
+            {method} + normalizeRoll(ProjectileDirection, int) : int
+            {method} + getFirst(ProjectileDirection, int) : ShipCoords
+            {method} + constrctCol(int) : BaseComponent[]
+            {method} + findCannon(ProjectileDirection, int) : boolean
+            {method} + getContains() : int[]
+            {method} + isCabin(ShipCoords) : boolean
+            {method} + getClientSpaceShip() : ClientSpaceShip
+        }
+
+        ShipCoords <-- "1" Model::Components::BaseComponent
+        class ShipCoords{
+            {field} [final] x : int
+            {field} [final] y : int
+            {field} [final] type : GameModeType
+            {method} + getType() : GameModeType
+            {method} + getNextTo() : ShipCoords[]
+            {method} + up() : ShipCoords
+            {method} + down() : ShipCoords
+            {method} + right() : ShipCoords
+            {method} + left() : ShipCoords
+            {method} + toString() : String
+            {method} + equals(Object) : boolean
+        }
+
+    }
+
+    package State {
+        
+        Model::Player::Player "0..n" --r-- GameState:players
+        Model::ModelInstance -d- GameState:model
+        abstract GameState <<abstract>> {
+            {field} # [final] type : GameModeType
+            {field} # [final] count : PlayerCount
+            {field} # [final] model : ModelInstance
+            {field} # [final] players : ArrayList<Player>
+            {method} + [abstract] validate(ServerMessage message) : void
+            {method} + [abstract] getNext() : GameState 
+            {method} + [abstract] getClientState() : ClientState
+            {method} + [abstract] toSerialize() : boolean
+            {method} + [abstract] toString() : String
+            {method} + [abstract] getOngoingEntry(int) : ClientGameListEntry
+            {method} + init() : void
+            {method} + broadcastMessage(ClientMessage) : void
+            {method} + transition() : void
+            {method} + getCount() : PlayerCount
+            {method} + getPlayer(PlayerColor) : Player
+            {method} + getType() : GameModeType
+            {method} + getModelID() : int
+            {method} + getPlayers() : ArrayList<Player>
+            {method} + connect(ClientDescriptor client) : void
+            {method} + disconnect(ClientDescriptor client) : void
+            {method} + connect(Player) : void
+            {method} + disconnect(Player) : void
+            {method} + sendContinue(Player) : void
+            {method} + putComponent(Player, ShipCoords coords) : void
+            {method} + takeComponent(Player) : void
+            {method} + takeDiscarded(Player, int) : void
+            {method} + reserveComponent(Player) : void
+            {method} + discardComponent(Player, int) : void
+            {method} + toggleHourglass(Player) : void
+            {method} + removeComponent(Player, ShipCoords coords) : void
+            {method} + setCrewType(Player, ShipCoords coords, AlienType type) : void
+            {method} + giveUp(Player) : void
+            {method} + selectBlob(Player, ShipCoords) : void
+            {method} + getCardState(Player) : CardState
+        }
+
+        GameState ^... VoyageState
+        iPlanche "1" --- VoyageState:planche
+        iCards "1" --- VoyageState:voyage_deck
+        iCard "1" --- VoyageState:card
+        CardState "1" --- VoyageState:state
+        class VoyageState {
+            {field} - card: iCard
+            {field} - [final] planche: iPlanche
+            {field} - state: CardState
+            {field} - [final] to_give_up: ArrayList<Player>
+            {field} - [final] voyage_deck: iCards
+            {method} + connect(Player p) : void
+            {method} + disconnect(Player p) : void
+            {method} + findCriteria(CombatZoneCriteria criteria) : Player
+            {method} + getCardState(Player p) : CardState
+            {method} + getClientState() : ClientState
+            {method} + getNext() : GameState
+            {method} + getOngoingEntry(int id) : ClientGameListEntry
+            {method} + getOrder(CardOrder order) : List<Player>
+            {method} + getPlanche() : iPlanche
+            {method} + giveUp(Player p) : void
+            {method} + init() : void
+            {method} + loseGame(Player p) : void
+            {method} + setCardState(CardState next) : void
+            {method} + toSerialize() : boolean
+            {method} + toString() : String
+            {method} + validate(ServerMessage message) : void
+        }
+        
+    }
+
+
+    State::GameState "1" ---- ModelInstance:state 
+    class ModelInstance {
+        {field} - controller: LobbyController
+        {field} - ended: boolean
+        {field} - [final] id: int
+        {field} - started: boolean
+        {field} - state: GameState
+        {method} + getID() : int
+        {method} + validate(ServerMessage message) : void
+        {method} + serialize() : void
+        {method} + pauseGame() : void
+        {method} + unpauseGame() : void
+        {method} + cutShort() : void
+        {method} + startGame() : void
+        {method} + endGame() : void
+        {method} + getStarted() : boolean
+        {method} + getState() : GameState
+        {method} + setState(GameState) : void
+        {method} + resumeState(GameState) : void
+        {method} + connect(ClientDescriptor) : void
+        {method} + disconnect(ClientDescriptor) : void
+        {method} + connect(Player) : void
+        {method} + disconnect(Player) : void
+        {method} + getController() : LobbyController 
+        {method} + setController(LobbyController) : void 
+        {method} + afterSerialRestart() : void
+        {method} + broadcast(ClientMessage) : void
+        {method} + getEntry() : ClientGameListEntry
+    }
+
+    package Client {
+        
+        package Card {
+            
+            interface ClientCardState <<interface>> {
+                {method} showCardState(ClientCardStateVisitor) : void
+            }
+
+            interface ClientCardStateVisitor <<interface>> { 
+                {method} + show(ClientAwaitConfirmCardStateDecorator) : void
+                {method} + show(ClientBaseCardState) : void
+                {method} + show(ClientCargoPenaltyCardStateDecorator) : void
+                {method} + show(ClientCargoRewardCardStateDecorator) : void
+                {method} + show(ClientCombatZoneIndexCardStateDecorator) : void
+                {method} + show(ClientCreditsRewardCardStateDecorator) : void
+                {method} + show(ClientCrewPenaltyCardStateDecorator) : void
+                {method} + show(ClientLandingCardStateDecorator) : void
+                {method} + show(ClientMeteoriteCardStateDecorator) : void
+                {method} + show(ClientNewCenterCardStateDecorator) : void
+                {method} + show(ClientProjectileCardStateDecorator) : void
+                {method} + show(ClientEnemyCardStateDecorator) : void
+            }
+        
+        }
+        
+        package Components {
+            
+            interface ClientComponent <<interface>> {
+                {method} + showComponent(ClientComponentVisitor) : void
+            }
+
+            interface ClientComponentVisitor <<interface>> {
+                {method} + show(ClientBaseComponent) : void
+                {method} + show(ClientEmptyComponent) : void
+                {method} + show(ClientBatteryComponentDecorator) : void
+                {method} + show(ClientBrokenVerifyComponentDecorator) : void
+                {method} + show(ClientCabinComponentDecorator) : void
+                {method} + show(ClientCannonComponentDecorator) : void
+                {method} + show(ClientEngineComponentDecorator) : void
+                {method} + show(ClientLifeSupportComponentDecorator) : void
+                {method} + show(ClientPoweredComponentDecorator) : void
+                {method} + show(ClientShieldComponentDecorator) : void
+                {method} + show(ClientShipmentsComponentDecorator) : void
+            }
+
+        }
+
+        package State {
+        
+
+            interface ClientState <<interface>> {
+                {method} + sendToView(ClientStateVisitor) : void
+            }
+
+            interface ClientStateVisitor <<interface>> {
+                {method} + show(ClientLobbySelectState) : void
+                {method} + show(ClientSetupState) : void
+                {method} + show(ClientWaitingRoomState) : void
+                {method} + show(ClientConstructionState) : void
+                {method} + show(ClientVerifyState) : void
+                {method} + show(ClientVoyageState) : void
+                {method} + show(ClientEndgameState state) : void
+            }
+        }
+
+    }
+
+}
+
+package Controller {
+
+    package Client {
+
+        package Connections {
+
+            enum ConnectionType <<enum>> {
+                SOCKET
+                RMI
+                NONE
+            }
+
+            interface ServerConnection <<interface>> {
+                {method} sendMessage(ServerMessage) : void
+                {method} close() : void
+                {method} getShutdownHook() : Thread
+            }
+
+            ServerConnection ^.. SocketConnection
+            class SocketConnection {
+                {field} - [final] inqueue : ThreadSafeMessageQueue<ClientMessage)
+                {field} - [final] socket : Socket
+                {field} - [final] out : ObjectOutputStream
+                {field} - [final] in : ObjectInputStream
+                {method} + run() : void
+                {method} + sendMessage(ServerMessage) : void
+                {method} + close() : void
+                {method} + getShutdownHook() : Thread
+            }
+
+            ServerConnection ^.. RMIConnection
+            RMIClientStub -d- RMIConnection:stub
+
+            class RMIConnection {
+                {field} - [final] stub : RMIClientStub
+                {field} - [final] server : VirtualServer
+                {method} + sendMessage(ServerMessage) : void
+                {method} + close() : void
+                {method} + getShutdownHook() : Thread
+            }
+
+            class RMIClientStub {
+                {field} - [transient] [final] inqueue ThreadSafeMessageQueue<ClientMessage>
+                {field} - [final] username : String
+                {method} + sendMessage(ServerMessage) : void
+                {method} + close() : void
+                {method} + getUsername() : String
+            }
+
+        }
+
+        package State {
+            
+            Controller::Client::ClientController "1" -- ClientControllerState:controller
+            ::View::ClientView --r-- ClientControllerState:view
+            abstract ClientControllerState <<abstract>> {
+                {field} - [final] controller : ClientController
+                {field} - [final] view : ClientView
+                {method} + init() : void
+                {method} + getNext() : ClientControllerState
+                {method} # transition() : void
+                {method} # getView() : ClientView
+                {method} + onClose() : void
+            }
+
+            ClientControllerState ^.. ConnectedState
+            Controller::Client::Connections::ServerConnection "1" -r- ConnectedState:connection
+            class ConnectedState {
+                {field} - [final] connection : ServerConnection
+                {field} - [final] outqueue : ThreadSafeMessageQueue<ServerMessage>
+                {field} - [final] username : String
+                {field} - [final] consumer_thread : Thread
+                {field} - [final] sender_thread : Thread
+                {field} - [final] shutdown_hook : Thread
+                {field} - [final] pingtimer : Timer
+                {method} + init() : void
+                {method} + getNext() : ClientControllerState
+                {method} + onClose() : void
+                {method} + sendMessage(ServerMessage) : void
+                {method} + disconnect() : void
+                {method} + getView() : ClientView
+                {method} + getUsername() : String
+                {method} + showTextMessage(String) : void
+                {method} - startPingTask() : void
+                {method} - stopPingTask() : void
+                {method} - getPingTask(ConnectedState) : TimerTask
+                {method} - ping() : void
+                {method} - getShutdownHook() : Thread
+            }
+
+            ClientControllerState ^.. ConnectingState
+            Controller::Client::Connections::ServerConnection "1" -- ConnectingState:connection
+            class ConnectingState {
+                {field} - [final] username : String
+                {field} - connection : ServerConnection
+                {field} - inqueue : ThreadSafeMessageQueue<ServerMessage>
+                {method} + init() : void
+                {method} + getController() : ClientController
+                {method} + getNext() : ClientControllerState
+                {method} + connect(String, int, ConnectionType) : void
+            }
+
+            ClientControllerState ^.. TitleScreenState
+            class TitleScreenState {
+                {field} - username : String
+                {method} + init() : void
+                {method} + getNext() : ClientControllerState
+                {method} + setUsername(String) : void
+                {method} + exit() : void
+                {method} + validateUsername(String) : boolean
+            }
+        
+        }
+
+        View::ClientView -r- ClientController:view
+        Controller::Client::State::ClientControllerState "1" -- ClientController:state
+        class ClientController {
+            {field} - state : ClientControllerState
+            {field} - view : ClientView
+            {field} - [final] closed : boolean
+            {method} + getState() : ClientControllerState
+            {method} + setState(ClientControllerState) : void
+            {method} + close() : void
+            {method} + getClosed() : boolean
+            {method} + reset() : void
+        }
+
+        Controller::Client::State::ConnectedState "1" -- ConsumerThread:state
+        class ConsumerThread {
+            {field} - [final] state : ConnectedState
+            {field} - [final] inqueue : ThreadSafeMessageQueue<ClientMessage>
+            {method} + run() : void
+        }
+
+        Controller::Client::Connections::ServerConnection "1" -- SenderThread:connection
+        Controller::Client::State::ConnectedState "1" -- SenderThread:state
+        class SenderThread {
+            {field} - [final] connection : ServerConnection
+            {field} - [final] state : ConnectedState
+            {field} - [final] outqueue : ThreadSafeMessageQueue<ServerMessage>
+            {method} + run() : void
+        }
+
+    }
+
+    package Server{
+
+        package Connections {
+
+            interface ClientConnection <<interface>> {
+                {method} sendMessage(ClientMessage) : void
+                {method} close() : void
+            }
+
+            RMIClientConnection .. RMIClientStub
+            interface RMIClientConnection <<interface>> {
+                {method} getUsername() : String
+            }
+
+            interface VirtualServerProvider <<interface>> {
+                {method} accept(RMIClientConnection) : VirtualServer
+            }
+
+            interface VirtualServer <<interface>> {
+                {method} receiveMessage(ServerMessage) : void
+            }
+
+            VirtualServerProvider ^.. NetworkServer
+            class NetworkServer {
+                {field} - [final] serverPool : ExecutorService
+                {field} - ip : String
+                {field} - tcpport : int
+                {field} - rmiport : int
+                {field} - init : boolean
+                {field} - server : ServerSocket
+                {method} + init(String, int, int) : void
+                {method} + init(String, int) : void
+                {method} + startServer() : void
+                {method} + run() : void
+                {method} + RMICleanup() : Thread
+                {method} + TCPCleanup() : Thread
+                {method} + accept(RMIClientConnection) : VirtualServer
+            }
+
+            VirtualServer ^.. RMIServerStubImpl
+            Controller::Server::MainServerController "1" -- RMIServerStubImpl:controller
+            Controller::Server::ClientDescriptor "1" -- RMIServerStubImpl:client
+            class RMIServerStubImpl {
+                {method} + receiveMessage(ServerMessage) : void
+            }
+
+            ClientConnection ^.. SocketClient
+            class SocketClient {
+                {field} - [final] socket : Socket
+                {field} - [final] out : ObjectOutputStream
+                {field} - [final] in : ObjectInputStream
+                {field} - setup_timeout : TimerTask
+                {field} - username : String
+                {method} + setTimeout(TimerTask) : void
+                {method} + cancelTimeout() : void
+                {method} + getSocket() : Socket
+                {method} + run() : void
+                {method} + sendMessage(ClientMessage) : void
+                {method} + readSetup() : void
+                {method} + read() : void
+                {method} + close() : void
+            }
+
+        }
+
+
+        Controller::Server::MainServerController "static" --d-- MainServerController:instance
+        Controller::Server::Connections::NetworkServer "1" -- MainServerController:server
+        class MainServerController <<singleton>> {
+            {field} - [final] server : NetworkServer
+            {field} - [final] all_listeners : HashMap<String, ClientDescriptor> 
+            {field} - [final] lob_listeners : HashMap<String, ClientDescriptor> 
+            {field} - [final] stp_listeners : HashMap<String, ClientDescriptor> 
+            {field} - [final] disconnected : HashMap<String, Integer> 
+            {field} - [final] to_setup_tcp : List<SocketClient> 
+            {field} - [final] listeners_lock : Object 
+            {field} - [final] queue : ThreadSafeMessageQueue<ServerMessage> 
+            {field} - [final] lobbies_lock : Object 
+            {field} - [final] saved_lock : Object 
+            {field} - [final] lobbies : HashMap<Integer, LobbyController> 
+            {field} - [final] saved : HashMap<Integer, ModelInstance>
+            {field} - init : boolean
+            {field} - next_id : int
+            {method} + [static] getInstance() : MainServerController
+            {method} + [static] reset() : void
+            {method} + init(String, int, int) : void
+            {method} + run() : void
+            {method} + receiveMessage(ServerMessage) : void
+            {method} + broadcast(ClientMessage) : void
+            {method} + sendMessage(ClientDescriptor, ClientMessage) : void
+            {method} + getDescriptor(String) : ClientDescriptor
+            {method} + connectListener(SocketClient) : void
+            {method} + setupSocketListener(SocketClient, String) : void
+            {method} + connectListener(RMIClientConnection) : ClientDescriptor 
+            {method} + getStub(ClientDescriptor) : VirtualServer
+            {method} - validateUsername(String) : boolean 
+            {method} + connect(ClientDescriptor) : void
+            {method} + disconnect(ClientDescriptor) : void
+            {method} + addDisconnected(String, int) : void
+            {method} + removeDisconnected(String) : void
+            {method} + ping(ClientDescriptor) : void
+            {method} - TCPTimeoutTask(MainServerController, SocketClient) : TimerTask
+            {method} - timeoutTask(MainServerController, ClientDescriptor) : TimerTask
+            {method} + getNext() : int
+            {method} + updateUnfinishedList() : void
+            {method} + enterSetup(ClientDescriptor) : void
+            {method} + leaveSetup(ClientDescriptor) : void
+            {method} + openNewRoom(ClientDescriptor, GameModeType, PlayerCount) : void
+            {method} + openUnfinished(ClientDescriptor, int) : void
+            {method} + lobbyCloseCleanup(int) : void
+            {method} + connectToLobby(ClientDescriptor, int) : void
+            {method} + notifyLobbyListeners() : void
+            {method} + getLobbyList() : ArrayList<ClientGameListEntry> 
+            {method} + joinFromClosedLobby(ClientDescriptor) : void
+        }
+
+        Model::ModelInstance "1" -- LobbyController:model
+        class LobbyController {
+            {field} - [final] id : int
+            {field} - [final] listeners : HashMap<String, ClientDescriptor>
+            {field} - [final] disconnected_usernames : HashMap<String, Player>
+            {field} - [final] listeners_lock : Object
+            {field} - [final] queue : ThreadSafeMessageQueue<ServerMessage> 
+            {field} - [final] serializer_path : String
+            {field} - [final] model_lock : Object
+            {field} - model : ModelInstance
+            {field} - dsctimer : Timer
+            {method} + getID() : int
+            {method} + run() : void
+            {method} + receiveMessage(ServerMessage)  : void
+            {method} + broadcast(ClientMessage) : void
+            {method} + sendMessage(ClientDescriptor, ClientMessage) : void
+            {method} + getModel() : ModelInstance
+            {method} + setModel(ModelInstance) : void
+            {method} + serializeCurrentGame() : void
+            {method} + endGame() : void
+            {method} - getEndMatchTask(LobbyController) : TimerTask
+            {method} + connect(ClientDescriptor) : void
+            {method} + disconnect(ClientDescriptor)  : void
+            {method} + disconnectProcedure(ClientDescriptor) : void
+            {method} + getClientInfo() : ClientGameListEntry
+            {method} + ping(ClientDescriptor) : void
+        }
+
+        ClientConnection -- ClientDescriptor:connection
+        class ClientDescriptor {
+            {field} - [static] [final] TIMEOUT_DURATION : long
+            {field} - [final] username : String
+            {field} - [transient] [final] timer : Timer
+            {field} - [transient] [final] connection : ClientConnection
+            {field} - lobby_id : int
+            {field} - task : TimerTask
+            {field} - player : Player
+            {method} + bindPlayer(Player) : void
+            {method} + unbindPlayer() : void
+            {method} + sendMessage(ClientMessage) : void
+            {method} + getUsername() : String
+            {method} + getID() : int
+            {method} + setID(int) : void
+            {method} + getPlayer() : Player
+            {method} + getPingTimerTask() : TimerTask
+            {method} + setPingTimerTask(TimerTask) : void
+            {method} + getConnection() : ClientConnection
+        }
+
+    }
+
+}
+
+package Message {
+
+    interface Message <<interface, serializable>>
+
+    Message ^-d- ServerMessage::ServerMessage
+    package ServerMessage{
+        abstract ServerMessage <<abstract>> {
+            {field} # [transient] descriptor : ClientDescriptor
+            {method} + getDescriptor() : ClientDescriptor
+            {method} + setDescriptor(ClientDescriptor) : void
+            {method} + [abstract] receive(MainServerController) : void
+            {method} + receive(LobbyController) : void
+            {method} + receive(ModelInstance) : void
+            {method} + receive(GameState) : void
+            {method} + receive(CardState) : void
+        }
+
+    }
+
+    Message ^-- ClientMessage::ClientMessage
+    package ClientMessage {
+
+        abstract ClientMessage <<abstract>> {
+            {method} + [abstract] receive(ConnectedState) : void
+        }
+
+    }
+    
+}
+
+package View {
+
+    Model::Client::State::ClientStateVisitor <--d-- ClientView
+    interface ClientView <<interface>> {
+        {method} + show(TitleScreenState) : void
+	    {method} + show(ConnectingState) : void
+	    {method} + showTextMessage(String) : void
+	    {method} + setClientState(ClientState) : void
+	    {method} + connect(ConnectedState) : void
+	    {method} + disconnect() : void
+    }
+
+}
+
+@enduml
+
+'⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣤⣤⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+'⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣾⣿⣿⣿⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣼⣿⣿⣿⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+'⠀⠀⠀⠀⠀⠀⠀⠀⢀⣾⣿⣿⣿⣿⣷⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣼⣿⣿⣿⣿⣿⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+'⠀⠀⠀⠀⠀⠀⠀⠀⣾⣿⣿⣿⣿⣿⣿⣧⠀⠀⠀⠀⠀⠀⠀⠀⠀⢰⣿⣿⣿⣿⣿⣿⣧⠀⠀⠀⠀⠀⠀⠀⠀⠀
+'⠀⠀⠀⠀⠀⠀⠀⣼⣿⣿⣿⣿⣿⣿⣿⣿⣇⠀⠀⠀⠀⠀⠀⠀⢀⣿⣿⣿⣿⣿⣿⣿⣿⡆⠀⠀⠀⠀⠀⠀⠀⠀
+'⠀⠀⠀⠀⠀⠀⢰⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡄⠀⠀⠀⠀⠀⠀⣼⣿⣿⣿⣿⣿⣿⣿⣿⣷⠀⠀⠀⠀⠀⠀⠀⠀
+'⠀⠀⠀⠀⠀⢀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣧⠀⠀⠀⠀⠀⢰⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀
+'⠀⠀⠀⠀⠀⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡄⠀⠀⠀⢀⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣇⠀⠀⠀⠀⠀⠀⠀
+'⠀⠀⠀⠀⠀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠀⠀⠀⠀⠀⠀⠀
+'⠀⠀⠀⠀⢀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠀⠀⠀⠀⠀⠀⠀
+'⠀⠀⠀⠀⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠀⠀⠀⠀⠀⠀⠀
+'⠀⠀⠀⠀⠈⣿⣿⣿⣿⣿⣿⠟⠉⠀⠀⠀⠙⢿⣿⣿⣿⣿⣿⣿⣿⡿⠋⠀⠀⠙⢻⣿⣿⣿⣿⠀⠀⠀⠀⠀⠀⠀
+'⠀⠀⠀⠀⠀⣿⣿⣿⣿⣿⠃⠀⠀⠀⠀⣠⣄⠀⢻⣿⣿⣿⣿⣿⡿⠀⣠⣄⠀⠀⠀⢻⣿⣿⣏⠀⠀⠀⠀⠀⠀⠀
+'⠀⠀⠀⠀⠀⣾⣿⣿⣿⣿⠀⠀⠀⠀⠰⣿⣿⠀⢸⣿⣿⣿⣿⣿⡇⠀⣿⣿⡇⠀⠀⢸⣿⣿⣿⠀⠀⠀⠀⠀⠀⠀
+'⠀⠀⠀⠀⠀⣿⣿⣿⣿⣿⣄⠀⠀⠀⠀⠙⠃⠀⣼⣿⣿⣿⣿⣿⣇⠀⠙⠛⠁⠀⠀⣼⣿⣿⣿⡇⠀⠀⠀⠀⠀⠀
+'⠀⠀⠀⠀⠀⣿⣿⣿⣿⣿⣿⣷⣤⣄⣀⣠⣤⣾⣿⣿⣿⣿⣽⣿⣿⣦⣄⣀⣀⣤⣾⣿⣿⣿⣿⠃⠀⠀⢀⣀⠀⠀
+'⠰⡶⠶⠶⠶⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡟⠛⠉⠉⠙⠛⠋⠀
+'⠀⠀⢀⣀⣠⣤⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠷⠶⠶⠶⢤⣤⣀⠀
+'⠀⠛⠋⠉⠁⠀⣀⣴⡿⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣯⣤⣀⡀⠀⠀⠀⠀⠘⠃
+'⠀⠀⢀⣤⡶⠟⠉⠁⠀⠀⠉⠛⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⠟⠉⠀⠀⠀⠉⠙⠳⠶⣄⡀⠀⠀
+'⠀⠀⠙⠁⠀⠀⠀⠀⠀⠀⠀⠀⢰⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠁⠀⠀
+'⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+'⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+'⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣼⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+'⠀⠀⠀⠀⠀⠀⠀⠀⠀⣸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+'⠀⠀⠀⠀⠀⠀⠀⠀⣴⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+'⠀⠀⠀⠀⠀⠀⠀⣴⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+'⠀⠀⠀⠀⠀⠀⣰⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+'⠀⠀⠀⠀⠀⢰⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+'⠀⠀⠀⠀⢀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+'⠀⠀⠀⠀⣸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀

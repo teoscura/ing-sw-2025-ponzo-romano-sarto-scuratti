@@ -39,7 +39,7 @@ All unfinished games are available to load in the lobby setup screen, provided t
 
 To start a game server, launch the jar with this command, the tcp port can be omitted, the server will choose a random port to use and log it at launch:
 
-`java -jar GC13-server.jar <server-address> [tcp port] <rmi port>`
+`java -jar GC13-server-1.0.jar <server-address> [tcp port] <rmi port>`
 
 At any point the server can be closed by typing `stop` in the console, The server is multi-threaded, don't use Ctrl-C to close it, as it will lead to undefined behaviour.
 
@@ -82,7 +82,7 @@ A proven way to launch the TUI on windows is to launch a windows terminal instan
 Simply launch the jar in a unicode supporting terminal using the command: ```java --enable-native-access=ALL-UNNAMED -jar GC13-tui-1.0.jar```.
 
 > [!TIP]
-> If at any point while connected to a server you don't know what any of the symbols mean, or if you forgot what particular syntax a command might require, type `help` and a helpful screen showing anything you might need will pop up! Also, during any card state that requires to land, you can choose not to land using `selectlanding -1`, any other kind of state expects either a penalty or a `sendcontinue` command.
+> If at any point while connected to a server you don't know what any of the symbols mean, or if you forgot what particular syntax a command might require, type `help` and a helpful screen showing anything you might need will pop up! Also, during any card state that requires to land, you can choose not to land using `selectlanding -1`, any other kind of state expects either penalty compliance or a `sendcontinue` command.
 
 ## Developement notes
 
