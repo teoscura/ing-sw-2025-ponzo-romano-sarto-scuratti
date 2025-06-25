@@ -4,7 +4,7 @@
   <groupId>it.polimi.ingsw</groupId>
   <artifactId>GC13</artifactId>
   <name>prova-finale</name>
-  <version>0.8</version>
+  <version>1.0</version>
   <build>
     <plugins>
       <plugin>

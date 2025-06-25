@@ -6,7 +6,7 @@
 
     <groupId>it.polimi.ingsw</groupId>
     <artifactId>GC13</artifactId>
-    <version>0.8</version>
+    <version>1.0</version>
     <name>prova-finale</name>
 
     <properties>
@@ -46,18 +46,18 @@
             <version>21</version>
             <classifier>linux</classifier>
         </dependency>
-        <!-- <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-graphics</artifactId>
-            <version>21</version>
-            <classifier>mac</classifier>
-        </dependency> -->
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-graphics</artifactId>
             <version>21</version>
-            <classifier>mac-aarch64</classifier>
+            <classifier>mac</classifier>
         </dependency>
+        <!-- <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-graphics</artifactId>
+            <version>21</version>
+            <classifier>mac-aarch64</classifier>
+        </dependency> -->
         <!-- TUI -->
         <dependency>
             <groupId>org.jline</groupId>
