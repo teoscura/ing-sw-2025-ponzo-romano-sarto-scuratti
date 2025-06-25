@@ -62,6 +62,10 @@ public class EndscreenState extends GameState {
 			p.finalScore();
 		}
 		Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "New Game State -> Endscreen State");
+		if(this.awaiting.size()==0){
+			this.transition();
+			return;
+		}
 		this.broadcastMessage(new NotifyStateUpdateMessage(this.getClientState()));
 	}
 

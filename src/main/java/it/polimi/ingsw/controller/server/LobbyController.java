@@ -171,16 +171,16 @@ public class LobbyController extends Thread implements VirtualServer {
 	}
 
 	/**
-	 * Returns a new TimerTask that ends the match after a set amount of time, used to automatically close a lobby when the server is left with only one player for too long.
+	 * Returns a new TimerTask that skips to the end of the match after a set amount of time, used to automatically finalize a lobby when the server is left with only one player for too long.
 	 * 
 	 * @param controller {@link it.polimi.ingsw.controller.server.LobbyController} Controller instance.
 	 */
 	private TimerTask getEndMatchTask(LobbyController controller) {
 		return new TimerTask() {
 			public void run() {
-				Logger.getInstance().print(LoggerLevel.LOBCN, "[" + id + "] " + "Only one player was left for too long, closing the match!");
-				broadcast(new ViewMessage("Game timed out due to too few players, sending back to lobby select!"));
-				controller.endGame();
+				Logger.getInstance().print(LoggerLevel.LOBCN, "[" + id + "] " + "Only one player was left for too long, skipping to results screen!");
+				broadcast(new ViewMessage("Game timed out due to too few players, skipping to results screen!"));
+				model.cutShort();
 			}
 		};
 	}

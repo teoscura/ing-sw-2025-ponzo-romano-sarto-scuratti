@@ -64,6 +64,12 @@ public class VoyageState extends GameState {
 	@Override
 	public void init() {
 		Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "New Game State -> Voyage State");
+		if(this.getOrder(CardOrder.NORMAL).size()<=0) {
+			this.transition();
+			Logger.getInstance().print(LoggerLevel.MODEL, "[" + model.getID() + "] " + "Verify state ended with no players eligible to continue, skipping to results screen.");
+			this.broadcastMessage(new ViewMessage("[" + model.getID() + "] " + "Verify state ended with no players eligible to continue, skipping to results screen."));
+			return;
+		}
 		if (this.card == null) this.setCardState(null);
 		this.broadcastMessage(new NotifyStateUpdateMessage(this.getClientState()));
 	}

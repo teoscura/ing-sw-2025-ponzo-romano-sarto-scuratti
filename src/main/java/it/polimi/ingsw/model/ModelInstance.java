@@ -10,6 +10,7 @@ import it.polimi.ingsw.message.server.ServerMessage;
 import it.polimi.ingsw.model.cards.exceptions.ForbiddenCallException;
 import it.polimi.ingsw.model.client.ClientGameListEntry;
 import it.polimi.ingsw.model.player.Player;
+import it.polimi.ingsw.model.state.EndscreenState;
 import it.polimi.ingsw.model.state.GameState;
 import it.polimi.ingsw.model.state.ResumeWaitingState;
 import it.polimi.ingsw.model.state.WaitingState;
@@ -17,6 +18,7 @@ import it.polimi.ingsw.utils.Logger;
 import it.polimi.ingsw.utils.LoggerLevel;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * Class represeting an entire instance of a game of Galaxy Trucker.
@@ -49,7 +51,7 @@ public class ModelInstance implements Serializable {
 	 * @throws ForbiddenCallException if the model refuses the message.
 	 */
 	public void validate(ServerMessage message) throws ForbiddenCallException {
-		if(paused){
+		if(paused && this.state.toSerialize()){
 			this.broadcast(new ViewMessage("Client: '"+message.getDescriptor().getUsername()+"' acted, but the game is paused waiting for more than one client to be connected!"));
 			return;
 		}
@@ -64,12 +66,31 @@ public class ModelInstance implements Serializable {
 		this.controller.serializeCurrentGame();
 	}
 
+	/**
+	 * Pauses the game and doesn't allow any further action until unpaused, used to keep in line with the disconnection resilience spec.
+	 */
 	public void pauseGame(){
 		this.paused = true;
 	}
 
+	/**
+	 * Unpauses the game and starts allowing actions again, used to keep in line with the disconnection resilience spec.
+	 */
 	public void unpauseGame(){
 		this.paused = false;
+	}
+
+	/**
+	 * Skips to the result screen, used to keep in line with the disconnection resilience spec.
+	 */
+	public void cutShort(){
+		if(this.state==null || !this.getStarted()) return;
+		var l = state.getPlayers();
+		var p = l.stream().filter(pl->!pl.getRetired()&&!pl.getDisconnected()).findFirst().orElse(null);
+		ArrayList<Player> order = new ArrayList<>();
+		if(p!=null) order.add(p);
+		EndscreenState next = new EndscreenState(this, state.getType(), state.getCount(), l, order);
+		this.setState(next);
 	}
 
 	public void startGame() {

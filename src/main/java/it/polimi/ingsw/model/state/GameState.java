@@ -110,6 +110,10 @@ public abstract class GameState implements Serializable {
 		return this.model.getID();
 	}
 
+	public ArrayList<Player> getPlayers(){
+		return this.players;
+	}
+
 	/**
 	 * Connects a {@link it.polimi.ingsw.controller.server.ClientDescriptor} to the {{@link it.polimi.ingsw.model.state.GameState}.
 	 * 

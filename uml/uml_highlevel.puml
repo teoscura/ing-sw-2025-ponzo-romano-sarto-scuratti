@@ -249,6 +249,7 @@ package Model {
             {method} + getPlayer(PlayerColor) : Player
             {method} + getType() : GameModeType
             {method} + getModelID() : int
+            {method} + getPlayers() : ArrayList<Player>
             {method} + connect(ClientDescriptor client) : void
             {method} + disconnect(ClientDescriptor client) : void
             {method} + connect(Player) : void
@@ -309,6 +310,9 @@ package Model {
         {method} + getID() : int
         {method} + validate(ServerMessage message) : void
         {method} + serialize() : void
+        {method} + pauseGame() : void
+        {method} + unpauseGame() : void
+        {method} + cutShort() : void
         {method} + startGame() : void
         {method} + endGame() : void
         {method} + getStarted() : boolean
