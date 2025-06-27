@@ -13,12 +13,13 @@ package Model {
 
             Model::State::VoyageState --d-- CardState:state
             abstract CardState {
+                {field} # [final] state : VoyageState
                 {method} + init(ClientState) : void
                 {method} + [abstract] validate() : void
                 {method} + [abstract] getClientCardState() : ClientCardState
                 {method} + [abstract] getNext() : CardState
                 {method} + transition() : void
-                {method} + setNewShipCentre(Player, ShipCoords) : void
+                {method} + selectBlob(Player, ShipCoords) : void
                 {method} + turnOn(Player, ShipCoords, ShipCoords) : void
                 {method} + removeCrew(Player, ShipCoords): void
                 {method} + moveCargo(Player, ShipmentType, ShipCoords, ShipCoords) : void
@@ -49,7 +50,7 @@ package Model {
             class AbandonedShipRewardState {
                 {field} [final] card : AbandonedShipCard
                 {field} [final] list : List<Player>
-                {field} coords : List<ShipCoords>
+                {field} done : int
                 {field} responded : boolean
                 {method} + init(ClientState) : void
                 {method} + validate(ServerMessage) : void
@@ -61,10 +62,10 @@ package Model {
 
             CardState ^.l AbandonedStationAnnounceState
             class AbandonedStationAnnounceState {
-                {field} [final] card : AbandonedStationCard
-                {field} [final] list : List<Player>
-                {field} responded : boolean
-                {field} id : int
+                {field} - [final] card : AbandonedStationCard
+                {field} -[final] list : List<Player>
+                {field} -responded : boolean
+                {field} - id : int
                 {method} + init(ClientState) : void
                 {method} + validate(ServerMessage) : void
                 {method} + getClientCardState() : ClientCardState
@@ -75,8 +76,9 @@ package Model {
 
             CardState ^.. AbandonedStationRewardState
             class AbandonedStationRewardState {
-                {field} [final] card : AbandonedStationCard
-                {field} [final] list : List<Player>
+                {field} - [final] card : AbandonedStationCard
+                {field} - [final] list : List<Player>
+                {field} - left : int
                 {field} responded : boolean
                 {method} + init(ClientState) : void
                 {method} + validate(ServerMessage) : void
@@ -92,11 +94,11 @@ package Model {
 
             CardState ^.r CombatZoneAnnounceState
             class CombatZoneAnnounceState {
-                {field} [final] card_id : int
-                {field} [final] sections : List<CombatZoneSection>
-                {field} [final] shots : ProjectileArray
-                {field} awaiting : List<Player>
-                {field} target : Player
+                {field} - [final] card_id : int
+                {field} - [final] sections : ArrayList<CombatZoneSection>
+                {field} - [final] shots : ProjectileArray
+                {field} - awaiting : ArrayList<Player>
+                {field} - target : Player
                 {method} + init(ClientState) : void
                 {method} + validate(ServerMessage) : void
                 {method} + getClientCardState() : ClientCardState
@@ -108,13 +110,13 @@ package Model {
 
             CardState ^.. CombatZonePenaltyState
             class CombatZonePenaltyState {
-                {field} [final] card_id : int
-                {field} [final] sections : List<CombatZoneSection>
-                {field} [final] shots : ProjectileArray
-                {field} target : Player
-                {field} [final] required : int[]
-                {field} responded : boolean
-                {field} coords : List<ShipCoords>
+                {field} - [final] card_id : int
+                {field} - [final] sections : ArrayList<CombatZoneSection>
+                {field} - [final] shots : ProjectileArray
+                {field} - [final] target : Player
+                {field} - [final] required : int[]
+                {field} - responded : boolean
+                {field} - coords : List<ShipCoords>
                 {method} + init(ClientState) : void
                 {method} + validate(ServerMessage) : void
                 {method} + getClientCardState() : ClientCardState
@@ -128,10 +130,10 @@ package Model {
 
             CardState ^.l CombatZoneSelectShipState
             class CombatZoneSelectShipState {
-                {field} [final] card_id : int
-                {field} [final] sections : ArrayList<CombatZoneSection>
-                {field} [final] shots : ProjectileArray
-                {field} [final] target : Player
+                {field} - [final] card_id : int
+                {field} - [final] sections : ArrayList<CombatZoneSection>
+                {field} - [final] shots : ProjectileArray
+                {field} - [final] target : Player
                 {method} + init(ClientState) : void
                 {method} + validate(ServerMessage) : void
                 {method} + getClientCardState() : ClientCardState
@@ -142,8 +144,8 @@ package Model {
 
             CardState ^.. EpidemicState
             class EpidemicState {
-                {field} [final] card : EpidemicCard
-                {field} [final] awaiting : List<Player>
+                {field} - [final] card : EpidemicCard
+                {field} - [final] awaiting : List<Player>
                 {method} + init(ClientState) : void
                 {method} + validate(ServerMessage) : void
                 {method} + getClientCardState() : ClientCardState
@@ -154,10 +156,10 @@ package Model {
 
             CardState ^.r MeteorAnnounceState
             class MeteorAnnounceState {
-                {field} [final] card_id : int
-                {field} [final] left : ProjectileArray
-                {field} [final] awaiting : List<Player>
-                {field} broke_cabin : boolean
+                {field} - [final] card_id : int
+                {field} - [final] left : ProjectileArray
+                {field} - [final] awaiting : ArrayList<Player>
+                {field} - reselect : boolean
                 {method} + init(ClientState) : void
                 {method} + validate(ServerMessage) : void
                 {method} + getClientCardState() : ClientCardState
@@ -169,8 +171,8 @@ package Model {
 
             CardState ^.. MeteorSelectShipState
             class MeteorSelectShipState {
-                {field} [final] card_id : int
-                {field} [final] left : ProjectileArray
+                {field} - [final] card_id : int
+                {field} - [final] left : ProjectileArray
                 {method} + init(ClientState) : void
                 {method} + validate(ServerMessage) : void
                 {method} + getClientCardState() : ClientCardState
@@ -181,8 +183,8 @@ package Model {
 
             CardState ^.l OpenSpaceState
             class OpenSpaceState {
-                {field} [final] card : OpenSpaceCard
-                {field} [final] awaiting : List<Player>
+                {field} - [final] card : OpenSpaceCard
+                {field} - [final] awaiting : ArrayList<Player>
                 {method} + init(ClientState) : void
                 {method} + validate(ServerMessage) : void
                 {method} + getClientCardState() : ClientCardState
@@ -194,10 +196,10 @@ package Model {
 
             CardState ^.. PiratesAnnounceState
             class PiratesAnnounceState {
-                {field} [final] card : PiratesCard
-                {field} [final] list : List<Player>
-                {field} responded : boolean
-                {field} result : boolean
+                {field} - [final] card : PiratesCard
+                {field} - [final] list : ArrayList<Player>
+                {field} - responded : boolean
+                {field} - result : boolean
                 {method} + init(ClientState) : void
                 {method} + validate(ServerMessage) : void
                 {method} + getClientCardState() : ClientCardState
@@ -209,9 +211,10 @@ package Model {
 
             CardState ^.r PiratesSelectShipState
             class PiratesSelectShipState {
-                {field} [final] card : PiratesCard
-                {field} [final] list : List<Player>
-                {field} [final] shots : ProjectileArray
+                {field} - [final] card : PiratesCard
+                {field} - [final] list : ArrayList<Player>
+                {field} - [final] shots : ArrayList<Projectile>
+                {field} - responded : boolean
                 {method} + init(ClientState) : void
                 {method} + validate(ServerMessage) : void
                 {method} + getClientCardState() : ClientCardState
@@ -222,14 +225,14 @@ package Model {
 
             CardState ^.. PiratesPenaltyState
             class PiratesPenaltyState {
-                {field} [final] card : PiratesCard
-                {field} [final] list : List<Player>
-                {field} [final] shots : ProjectileArray
-                {field} responded : boolean
+                {field} - [final] card : PiratesCard
+                {field} - [final] list : ArrayList<Player>
+                {field} - [final] shots : ArrayList<Projectile>
+                {field} - responded : boolean
                 {method} + init(ClientState) : void
                 {method} + validate(ServerMessage) : void
                 {method} + getClientCardState() : ClientCardState
-                {method} [protected] getNext() : CardState
+                {method} + getNext() : CardState
                 {method} + turnOn(Player, ShipCoords, ShipCoords) : void
                 {method} + progressTurn(Player) : void
                 {method} + disconnect(Player) : void
@@ -237,24 +240,24 @@ package Model {
 
             CardState ^.l PiratesRewardState
             class PiratesRewardState {
-                {field} [final] card : PiratesCard
-                {field} [final] list : List<Player>
-                {field} responded : boolean
-                {field} took_reward : boolean
+                {field} - [final] card : PiratesCard
+                {field} - [final] list : ArrayList<Player>
+                {field} - responded : boolean
+                {field} - took_reward : boolean
                 {method} + init(ClientState) : void
                 {method} + validate(ServerMessage) : void
                 {method} + getClientCardState() : ClientCardState
-                {method} [protected] getNext() : CardState
+                {method} + getNext() : CardState
                 {method} + setTakeReward(Player, boolean) : void
                 {method} + disconnect(Player) : void
             }
 
             CardState ^.. PlanetAnnounceState
             class PlanetAnnounceState {
-                {field} [final] card : PlanetCard
-                {field} [final] list : List<Player>
-                {field} responded : boolean
-                {field} id : int
+                {field} - [final] card : PlanetCard
+                {field} - [final] list : ArrayList<Player>
+                {field} - responded : boolean
+                {field} - id : int
                 {method} + init(ClientState) : void
                 {method} + validate(ServerMessage) : void
                 {method} + getClientCardState() : ClientCardState
@@ -265,10 +268,11 @@ package Model {
 
             CardState ^.r PlanetRewardState
             class PlanetRewardState {
-                {field} [final] card : PlanetCard
-                {field} [final] list : List<Player>
-                {field} [final] id : int
-                {field} responded : boolean
+                {field} - [final] card : PlanetCard
+                {field} - [final] list : ArrayList<Player>
+                {field} - [final] id : int
+                {field} - left : int
+                {field} - responded : boolean
                 {method} + init(ClientState) : void
                 {method} + validate(ServerMessage) : void
                 {method} + getClientCardState() : ClientCardState
@@ -282,10 +286,10 @@ package Model {
 
             CardState ^.. SlaversAnnounceState
             class SlaversAnnounceState {
-                {field} [final] card : SlaversCard
-                {field} [final] list : List<Player>
-                {field} responded : boolean
-                {field} result : boolean
+                {field} - [final] card : SlaversCard
+                {field} - [final] list : ArrayList<Player>
+                {field} - responded : boolean
+                {field} - result : boolean
                 {method} + init(ClientState) : void
                 {method} + validate(ServerMessage) : void
                 {method} + getClientCardState() : ClientCardState
@@ -297,10 +301,10 @@ package Model {
 
             CardState ^.l SlaversLoseState
             class SlaversLoseState {
-                {field} [final] card : SlaversCard
-                {field} [final] list : List<Player>
-                {field} responded : boolean
-                {field} coords : List<ShipCoords>
+                {field} - [final] card : SlaversCard
+                {field} - [final] list : ArrayList<Player>
+                {field} - responded : boolean
+                {field} - coords : List<ShipCoords>
                 {method} + init(ClientState) : void
                 {method} + validate(ServerMessage) : void
                 {method} + getClientCardState() : ClientCardState
@@ -311,10 +315,10 @@ package Model {
 
             CardState ^.. SlaversRewardState
             class SlaversRewardState {
-                {field} [final] card : SlaversCard
-                {field} [final] list : List<Player>
-                {field} responded : boolean
-                {field} took_reward : boolean
+                {field} - [final] card : SlaversCard
+                {field} - [final] list : ArrayList<Player>
+                {field} - responded : boolean
+                {field} - took_reward : boolean
                 {method} + init(ClientState) : void
                 {method} + validate(ServerMessage) : void
                 {method} + getClientCardState() : ClientCardState
@@ -325,10 +329,10 @@ package Model {
 
             CardState ^.r SmugglersAnnounceState
             class SmugglersAnnounceState {
-                {field} [final] card : SmugglersCard
-                {field} [final] list : List<Player>
-                {field} responded : boolean
-                {field} result : boolean
+                {field} - [final] card : SmugglersCard
+                {field} - [final] list : ArrayList<Player>
+                {field} - responded : boolean
+                {field} - result : boolean
                 {method} + init(ClientState) : void
                 {method} + validate(ServerMessage) : void
                 {method} + getClientCardState() : ClientCardState
@@ -340,10 +344,10 @@ package Model {
 
             CardState ^.. SmugglersLoseState
             class SmugglersLoseState {
-                {field} [final] card : SmugglersCard
-                {field} [final] list : List<Player>
-                {field} [final] required : int[]
-                {field} responded : boolean
+                {field} - [final] card : SmugglersCard
+                {field} - [final] list : ArrayList<Player>
+                {field} - [final] required : int[]
+                {field} - responded : boolean
                 {method} + init(ClientState) : void
                 {method} + validate(ServerMessage) : void
                 {method} + getClientCardState() : ClientCardState
@@ -354,10 +358,11 @@ package Model {
 
             CardState ^.l SmugglersRewardState
             class SmugglersRewardState {
-                {field} [final] card : SmugglersCard
-                {field} [final] list : List<Player>
-                {field} responded : boolean
-                {field} took_reward : boolean
+                {field} - [final] card : SmugglersCard
+                {field} - [final] list : ArrayList<Player>
+                {field} - left : int
+                {field} - responded : boolean
+                {field} - took_reward : boolean
                 {method} + init(ClientState) : void
                 {method} + validate(ServerMessage) : void
                 {method} + getClientCardState() : ClientCardState
@@ -371,19 +376,20 @@ package Model {
 
             CardState ^.. StardustState
             class StardustState {
-                {field} [final] card : StardustCard
-                {field} awaiting : List<Player>
+                {field} - [final] card : StardustCard
+                {field} - awaiting : ArrayList<Player>
                 {method} + init(ClientState) : void
                 {method} + validate(ServerMessage) : void
                 {method} + getClientCardState() : ClientCardState
                 {method} + getNext() : CardState
                 {method} + progressTurn(Player) : void
+                {method} + disconnect(Player) : void
             }
 
             CardState ^.r SelectShipReconnectState
             class SelectShipReconnectState {
-                {field} [final] resume : CardState
-                {field} [final] awaiting : Player
+                {field} - [final] resume : CardState
+                {field} - [final] awaiting : Player
                 {method} + init(ClientState) : void
                 {method} + validate(ServerMessage) : void
                 {method} + getClientCardState() : ClientCardState
@@ -396,69 +402,72 @@ package Model {
         package Utils {
 
             class CombatZoneSection {
-                {field} [final] criteria : CombatZoneCriteria
-                {field} [final] penalty : CombatZonePenalty
-                {field} [final] amount : int
+                {field} - [final] criteria : CombatZoneCriteria
+                {field} - [final] penalty : CombatZonePenalty
+                {field} - [final] amount : int
                 {method} + getCriteria)() : CombatZoneCriteria
                 {method} + getPenalty() : CombatZonePenalty
                 {method} + getAmount() : int
             }
 
             class Planet {
-                {field} [final] contains : int[]
-                {field} [final] visited : boolean
+                {field} - [final] contains : int[]
+                {field} - [final] id : int
+                {field} - [final] visited : boolean
                 {method} + getContains() : int[]
+                {method} + getId() : int
                 {method} + visit() : void
                 {method} + getVisited() : boolean
                 {method} + getTotalContains() : int
             }
             
             class Projectile {
-                {field} [final] direction : ProjectileDirection
-                {field} [final] dimension : ProjectileDimension
-                {field} [final] offset : int
+                {field} - [final] direction : ProjectileDirection
+                {field} - [final] dimension : ProjectileDimension
+                {field} - [final] offset : int
                 {method} + getDirection() : ProjectileDirection
                 {method} + getDimension() : PrjectileDimension
                 {method} + getOffset() : int
             }         
 
             class ProjectileArray {
-                {field} [field] projectiles : List<Projectile>
-                {method} + getProjectiles : List<Projectile>
+                {field} - [field] projectiles : ArrayList<Projectile>
+                {method} + getProjectiles : ArrayList<Projectile>
             }
         }
 
         package Visitors {
             
             class ContainerMoveValidationVisitor {
-                {field} [final] searching_for : ShipmentType
-                {field} found : boolean
+                {field} - [final] searching_for : ShipmentType
+                {field} - found : boolean
                 {method} + visit(StorageComponent) : void
             }
 
             class ContainsLoaderVisitor {
-                {field} [final] ship : SpaceShip
-                {field} [final] cargo : ShipmentType
+                {field} - [final] ship : SpaceShip
+                {field} - [final] cargo : ShipmentType
                 {method} + visit(StorageComponent) : void
             }
             
             class ContainsRemoveVisitor {
-                {field} [final] searching : shipmentType
+                {field} - searching : shipmentType
+                {field} - [final] ship : SpaceShip
+                {method} + changeType(ShipmentType) : void
                 {method} + visit(StorageComponent) : void
                 {method} + visit(BatteryCompoent) : void
             }
 
             class CrewRemoveVisitor {
-                {field} [final] ship : SpaceShip
+                {field} - [final] ship : SpaceShip
                 {field} searching : ShipmentType
-                {method} + changeType(ShipmentType) : void
                 {method} + visit(CabinComponent) : void
-                {method} + visit(AlienLifeSupportComponent) : void
+                {method} + visit(StartingCabinComponent) : void
             }
 
             class LargeMeteorVisitor {
-                {field} d : ProjectileDirection
-                {field} found_cannon : boolean
+                {field} - [final] d : ProjectileDirection
+                {field} - found_cannon : boolean
                 {method} + visit(CannonComponent) : void
             }
 
@@ -471,21 +480,35 @@ package Model {
             {method} getExhausted() : boolean
         }
 
+        interface iCardFactory <<interface>> {
+            {method} getCard(int) : iCard
+        }
+
+        iCardFactory^--LevelOneCardFactory
+        class LevelOneCardFactory {
+            {field} - [final] cards : HashMap<Integer, iCard>
+        }
+
+        iCardFactory^--LeveltwoCardFactory
+        class LevelTwoCardFactory {
+            {field} - [final] cards : HashMap<Integer, iCard>
+        }
+
         iCard^--Card
         abstract Card <<abstract>> {
-            {field} id : int
-            {field} days : int
-            {field} exhausted : boolean
+            {field} - [final] id : int
+            {field} - days : int
+            {field} - exhausted : boolean
             {method} + getId() : int
             {method} + getDays() : int
             {method} + getExhausted() : boolean
-            {method} [protected] exhaust() : void
+            {method} # exhaust() : void
         }
 
         Card ^.r AbandonedShipCard
         class AbandonedShipCard {
-            {field} credits_gained : int
-            {field} crew_lost : int
+            {field} - [final] credits_gained : int
+            {field} - [final] crew_lost : int
             {method} + getState(VoyageState) : CardState
             {method} + getCredits() : int
             {method} + getCrewLost() : int
@@ -494,8 +517,8 @@ package Model {
 
         Card ^.. AbandonedStationCard
         class AbandonedStationCard {
-            {field} planet : Planet
-            {field} crew : int
+            {field} - [final] planet : Planet
+            {field} - [final] crew : int
             {method} + getState(VoyageState) : CardState
             {method} + getPlanet() : Planet
             {method} + getCrewLost() : int
@@ -504,9 +527,10 @@ package Model {
 
         Card ^.l CombatZoneCard
         class CombatZoneCard {
-            {field} sections : List<CombatZoneSection>
-            {field} shots : ProjectileArray
-            {method} + getState(VoyageState) : C
+            {field} - [final] sections : ArrayList<CombatZoneSection>
+            {field} - [final] shots : ProjectileArray
+            {method} + getState(VoyageState) : CardState
+            {method} + getShots() : ArrayList<Projectile>
         }
 
         Card ^.. EpidemicCard
@@ -517,10 +541,9 @@ package Model {
 
         Card ^.r MeteorSwarmCard
         class MeteorSwarmCard {
-            {field} meteorites : ProjectileArray
+            {field} - [final] meteorites : ProjectileArray
             {method} + getState(VoyageState) : CardState
             {method} + getMeteorites() : ProjectileArray
-            {method} + apply(VoyageState, Projectile) : void
         }
 
         Card ^.. OpenSpaceCard
@@ -531,32 +554,35 @@ package Model {
 
         Card ^.l PiratesCard
         class PiratesCard {
-            {field} [final] shots : ProjectileArray
-            {field} [field] credits : int
-            {field} [final] min_power : int
+            {field} - [final] shots : ProjectileArray
+            {field} - [field] credits : int
+            {field} - [final] min_power : int
             {method} + getState(VoyageState) : CardState
             {method} + getCredits() : int
+            {method} + getShotsCopy : ArrayList<Projectile>
             {method} + getShots() : ProjectileArray
             {method} + apply(VoyageState, Player) : void
         }
 
         Card ^.. PlanetCard
         class PlanetCard {
-            {field} [final] planets : List<Planet>
-            {field} [final] left : int
+            {field} - [final] planets : ArrayList<Planet>
+            {field} - [final] left : int
             {method} + getState(VoyageState) : CardState
             {method} + getVisited() : List<boolean>
-            {method} + getPlanet() : Planet
+            {method} + getPlanet(int) : Planet
             {method} + getSize() : int
+            {method} + getPlanets() : ArrayList<Planet>
             {method} + apply(Player, int) : void
         }
 
         Card ^.r SlaversCard
         class SlaversCard {
-            {field} [final] min_power : int
-            {field} [final] crew_penalty : int
-            {field} [final] credits : int
+            {field} - [final] min_power : double
+            {field} - [final] crew_penalty : int
+            {field} - [final] credits : int
             {method} + getState(VoyageState) : CardState
+            {method} + getPower() : double
             {method} + getCrewLost() : int
             {method} + getCredits() : int
             {method} + apply(VoyageState, Player) : void
@@ -564,13 +590,14 @@ package Model {
 
         Card ^.. SmugglersCard
         class SmugglersCard {
-            {field} [final] reward : planet
-            {field} [final] cargo_taken : int
-            {field} [field] min_power : int
+            {field} - [final] reward : planet
+            {field} - [final] cargo_taken : int
+            {field} - [field] min_power : double
             {method} + getState(VoyageState) : CardState
+            {method} + getPower() : double
             {method} + getReward() : Planet
             {method} + getCargoPenalty() : int
-            {method} + apply(player) : void
+            {method} + apply(VoyageState, Player) : void
         }
 
         Card ^.l StardustCard
@@ -595,7 +622,7 @@ package Model {
 
         iCards ^--  TestFlightCards
         class TestFlightCards {
-            {field} [final] cards : ArrayDeque<iCard>
+            {field} - [final] cards : ArrayDeque<iCard>
             {method} + pullCard() : iCard
             {method} + getLeft() : int
             {method} + getConstructionCards : List<Integer>
@@ -603,8 +630,8 @@ package Model {
 
         iCards ^--  LevelTwoCards
         class LevelTwoCards {
-            {field} cards : ArrayDeque<iCard>
-            {field} construction_cards : ArrayList<Integer>
+            {field} - [final] cards : ArrayDeque<iCard>
+            {field} - [final] construction_cards : ArrayList<Integer>
             {method} + pullCard() : iCard
             {method} + getLeft() : int
             {method} + getConstructionCards : List<Integer>
@@ -620,8 +647,8 @@ package Model {
 
         iCommonBoard^..CommonBoard
         class CommonBoard {
-            {field} [final] covered_components : ArrayDeque<BaseComponent>
-            {field} [final] discarded_components : HashMap<Integer, BaseComponent>
+            {field} - [final] covered_components : ArrayDeque<BaseComponent>
+            {field} - [final] discarded_components : HashMap<Integer, BaseComponent>
             {method} + getCoveredSize() : int
             {method} + pullComponent() : BaseComponent
             {method} + discardComponent(BaseComponent) : void
@@ -633,18 +660,20 @@ package Model {
             {method} getPlayerPosition(Player) : int
             {method} getPlayerAt(int) : Player
             {method} movePlayer(VoyageState, Player, int) : void
+            {method} checkLapped(Player) : boolean
             {method} loseGame(Player) : void
         }
 
 
         iPlanche^..Planche
         class Planche{
-            {field} [final] planche : HashMap<Player, Integer>
-            {field} [final] length : int
+            {field} - [final] planche : HashMap<Player, Integer>
+            {field} - [final] length : int
             {method} + getPlayerPosition(Player) : int
             {method} + getPlayerAt(int) : Player
             {method} + movePlayer(VoyageState, Player, int) : void
             {method} + loseGame(Player) : void
+            {method} + checkLapped(Player) : boolean
         }
     }
 
@@ -652,68 +681,64 @@ package Model {
         
         package Visitors {
 
-            interface iVisitor <<interface>> {
-                {method} + visit(CabinComponent) : void
-                {method} + visit(EngineComponent) : void
-                {method} + visit(AlienLifeSupportComponent) : void
-                {method} + visit(CannonComponent) : void
-                {method} + visit(StorageComponent) : void
-                {method} + visit(BatteryComponent) : void
-                {method} + visit(ShieldComponent) : void
-                {method} + visit(EmptyComponent) : void
-                {method} + visit(StructuralComponent) : void
-                {method} + visit(StartingCabinComponent) : void
+            interface ComponentVisitor <<interface>> {
+                {method} visit(CabinComponent) : void
+                {method} visit(EngineComponent) : void
+                {method} visit(AlienLifeSupportComponent) : void
+                {method} visit(CannonComponent) : void
+                {method} visit(StorageComponent) : void
+                {method} visit(BatteryComponent) : void
+                {method} visit(ShieldComponent) : void
+                {method} visit(EmptyComponent) : void
+                {method} visit(StructuralComponent) : void
+                {method} visit(StartingCabinComponent) : void
             }
 
-            iVisitor^..CabinVisitor
+            ComponentVisitor^..CabinVisitor
             class CabinVisitor {
                 {field} type : AlienType
                 {method} + getSupportedType() : AlienType
                 {method} + visit(AlienLifeSupportComponent) : void
             }
 
-            iVisitor^--CrewSetVisitor
+            ComponentVisitor^--CrewSetVisitor
             class CrewSetVisitor {
-                {field} [field] ship : SpaceShip
-                {field} [field] type : AlienType
+                {field} - [field] ship : SpaceShip
+                {field} - [field] type : AlienType
                 {method} + visit(CabinComponent) : void
             }
 
-            iVisitor^..EnergyVisitor
+            ComponentVisitor^..EnergyVisitor
             class EnergyVisitor {
-                {field} positive : boolean
-                {field} found_battery : boolean
-                {field} powerable : boolean
-                {field} has_battery : boolean
-                {method} + visit(BaseComponent) : void
-                {method} + getFoundBatteryComponent() : boolean
-                {method} + getPowerable() : boolean
-                {method} + hasBattery() : boolean
-                {method} + toggle() : void
+                {field} - positive : boolean
+                {method} + visit(EngineComponent) : void
+                {method} + visit(CannonComponent) : void
+                {method} + visit(ShieldComponent) : void
             }
 
-            iVisitor^..FreeSpaceVisitor
-            class FreeSpaceVisitor {
-                {field} isfree : boolean
-                {method} + visit(BaseComponent) : void
-                {method} + getSpaceIsFree() : boolean
+            ComponentVisitor^..EpidemicVisitor
+            class EpidemicVisitor {
+                {field} - result : boolean
+                {method} + visit(CabinComponent) : void
+                {method} + visit(StartingCabinComponent) : void
             }
 
+            ComponentVisitor ^.. LifeSupportUpdateVisitor
             class LifeSupportUpdateVisitor {
-                {field} [final] type : AlienType
-                {field} still_alive : boolean
+                {field} - [final] type : AlienType
+                {field} - still_alive : boolean
                 {method} + getStillAlive() : boolean
                 {method} + visit(CabinComponent) : void
                 {method} + visit(AlienLifeSupportComponent) : void
             }
 
-            iVisitor^..SpaceShipUpdateVisitor
+            ComponentVisitor^..SpaceShipUpdateVisitor
             class SpaceShipUpdateVisitor {
-                {field} [final] containers : int[]
-                {field} [final] crew_members : int[]
-                {field} [field] directions : boolean[]
-                {field} engine_power : int
-                {field} cannon_power : double
+                {field} - [final] containers : int[]
+                {field} - [final] crew_members : int[]
+                {field} - [field] directions : boolean[]
+                {field} - engine_power : int
+                {field} - cannon_power : double
                 {method} + visit(BaseComponent) : void
                 {method} + getEnginePower() : int
                 {method} + getCannonPower() : double
@@ -725,10 +750,10 @@ package Model {
         }
 
         abstract BaseComponent <<abstract>> {
-            {field} [final] id : int
-            {field} [final] connectors : ConnectorType[]
-            {field} [protected] coords : ShipCoords
-            {field} rotation : ComponentRotation
+            {field} - [final] id : int
+            {field} - [final] connectors : ConnectorType[]
+            {field} # coords : ShipCoords
+            {field} - rotation : ComponentRotation
             {method} + getID() : int
             {method} + getConnectors() : ConnectorType[]
             {method} + getRotation() : ComponentRotation
@@ -740,17 +765,18 @@ package Model {
             {method} + [abstract] onCreation(SpaceShip, ShipCoords) : void
             {method} + [abstract] onDelete(SpaceShip) : void
             {method} + [abstract] getClientComponent() : ClientComponent
-            {method} + [abstract] check(iVisitor) : void
+            {method} + [abstract] check(ComponentVisitor) : void
             {method} + getConnectedComponents(SpaceShip) : BaseComponent[]
+        }
 
-
+        class ComponentFactory() {
+            {field} - [final] components : HashMap<Integer, BaseComponent>
         }
 
         BaseComponent ^.l AlienLifeSupportComponent
         class AlienLifeSupportComponent{
-          
 			{field} - type: AlienType
-			{method} + check(iVisitor) : void
+			{method} + check(ComponentVisitor) : void
 			{method} + getType() : AlienType
 			{method} + onCreation(SpaceShip) : void
 			{method} + onDelete(SpaceShip) : void
@@ -760,8 +786,8 @@ package Model {
         BaseComponent ^.. BatteryComponent
         class BatteryComponent {
 			{field} - contains : int
-			{field} - max : int
-			{method} + check(iVisitor) : void
+			{field} - [final] max : int
+			{method} + check(ComponentVisitor) : void
 			{method} + getContains() : int
 			{method} + getCapacity() : int
 			{method} + takeOne() : void
@@ -775,7 +801,7 @@ package Model {
         class CabinComponent{
 			{field} - crew_number : int
 			{field} - crew_type : AlienType
-		   	{method} + check(iVisitor) : void
+		   	{method} + check(ComponentVisitor) : void
 			{method} + getCrew() : int
 			{method} + getCrewType() : AlienType			
 			{method} + setCrew(SpaceShip, int, AlienType) : void
@@ -786,9 +812,9 @@ package Model {
 
         BaseComponent ^.. StartingCabinComponent
         class StartingCabinComponent{
-			{field} - color : PlayerColor
+			{field} - [final] color : PlayerColor
 			{field} - crew_number : int
-		   	{method} + check(iVisitor) : void
+		   	{method} + check(ComponentVisitor) : void
 			{method} + getCrew() : int
 			{method} + getCrewType() : AlienType		
 			{method} + getColor() : PlayerColor
@@ -800,10 +826,10 @@ package Model {
 
         BaseComponent ^.l CannonComponent
         class CannonComponent{			
-			{field} - max_power : int
+			{field} - [final] max_power : double
 			{field} - powered : boolean
-			{field} - powerable : boolean
-			{method} + check(iVisitor) : void
+			{field} - [final] powerable : boolean
+			{method} + check(ComponentVisitor) : void
 			{method} + verify(SpaceShip) : boolean
 			{method} + turnOn() : void
 			{method} + turnOff() : void
@@ -818,7 +844,7 @@ package Model {
         BaseComponent ^.. EmptyComponent
         class EmptyComponent{
 			{method} + verify(SpaceShip) : boolean
-			{method} + check(iVisitor) : void
+			{method} + check(ComponentVisitor) : void
 			{method} + getConnectors() : ConnectorType[]
 			{method} + onCreation(SpaceShip) : void
 			{method} + onDelete(SpaceShip) : void
@@ -827,11 +853,11 @@ package Model {
 
         BaseComponent ^.r EngineComponent
         class EngineComponent{
-			{field} - max_power : int
-			{field} - powered : boolean
+			{field} - [final] max_power : int
+			{field} - [final] powered : boolean
 			{field} - powerable : boolean
 			{method} + verify(SpaceShip) : boolean
-			{method} + check(iVisitor) : void
+			{method} + check(ComponentVisitor) : void
 			{method} + turnOn() : void
 			{method} + turnOff() : void
 			{method} + getCurrentPower() : int
@@ -845,7 +871,7 @@ package Model {
         BaseComponent ^.. ShieldComponent
         class ShieldComponent{
 			{field} - powered : boolean
-			{method} + check(iVisitor) : void
+			{method} + check(ComponentVisitor) : void
 			{method} + turnOn() : void
 			{method} + turnOff() : void
 			{method} + getPowered() : boolean
@@ -854,7 +880,6 @@ package Model {
 			{method} + onDelete(SpaceShip) : void
 			{method} + getShield() : ShieldType
 			{method} + getClientComponent() : ClientComponent
-
 		}
         
 		BaseComponent ^.l StorageComponent
@@ -870,13 +895,13 @@ package Model {
 			{method} + getCapacity() : int
 			{method} + onCreation(SpaceShip) : void
 			{method} + onDelete(SpaceShip) : void
-			{method} + check(iVisitor) : void
+			{method} + check(ComponentVisitor) : void
 			{method} + getClientComponent() : ClientComponent
 
 		}
         BaseComponent ^.. StructuralComponent
         class StructuralComponent{
-			{method} + check(iVisitor) : void
+			{method} + check(ComponentVisitor) : void
 			{method} + onCreation(SpaceShip) : void
 			{method} + onDelete(SpaceShip) : void
 			{method} + getClientComponent() : ClientComponent
@@ -888,12 +913,13 @@ package Model {
 
         SpaceShip --u-- Player:ship
         class Player {
-            {field} [final] username : String
-            {field} [final] color : PlayerColor
-            {field} [transient] descriptor : ClientDescriptor
-            {field} credits : int
-            {field} retired : boolean
-            {field} disconnected : boolean
+            {field} - [final] username : String
+            {field} - [final] color : PlayerColor
+            {field} - [final] ship : SpaceShip
+            {field} - [transient] descriptor : ClientDescriptor
+            {field} - credits : int
+            {field} - retired : boolean
+            {field} - disconnected : boolean
             {method} + getUsername() : String
             {method} + getColor() : String
             {method} + retire() : void
@@ -915,20 +941,21 @@ package Model {
 
         BaseComponent --u-- SpaceShip:"components[][]"
         class SpaceShip {
-            {field} [final] player : Player
-            {field} [final] storage_coords : ArrayList<ShipCoords>
-            {field} [final] cabin_coords : ArrayList<ShipCoords>
-            {field} [final] battery_coords : ArrayList<ShipCoords>
-            {field} [final] powerable_coords : ArrayList<ShipCoords>
-            {field} [final] type : GameModeType
-            {field} [final] empty : BaseComponent
-            {field} blobs : ArrayList<ArrayList<ShipCoords>>
-            {field} crew : int[]
-            {field} center : ShipCoords
-            {field} containers : int[]
-            {field} shielded_directions : boolean[]
-            {field} cannon_power : double
-            {field} engine_power : int
+            {field} - [final] player : Player
+            {field} - [final] storage_coords : ArrayList<ShipCoords>
+            {field} - [final] cabin_coords : ArrayList<ShipCoords>
+            {field} - [final] battery_coords : ArrayList<ShipCoords>
+            {field} - [final] powerable_coords : ArrayList<ShipCoords>
+            {field} - [final] type : GameModeType
+            {field} - [final] components : BaseComponent[][]
+            {field} - [final] empty : BaseComponent
+            {field} - blobs : ArrayList<ArrayList<ShipCoords>>
+            {field} - crew : int[]
+            {field} - center : ShipCoords
+            {field} - containers : int[]
+            {field} - shielded_directions : boolean[]
+            {field} - cannon_power : double
+            {field} - engine_power : int
             {method} + getType() : GameModeType
             {method} + getCrew() : int[]
             {method} + bulkVerify() : VerifyResult[][]
@@ -960,6 +987,7 @@ package Model {
             {method} + delPowerableCoords(ShipCoords) : void
             {method} + getTotalCrew() : int
             {method} + findConnectedCabins() : ArrayList<ShipCoords>
+            {method} + findConnectedInhabitedCabins() : ArrayList<ShipCoords>
             {method} + countExposedConnectors() : int
             {method} + handleMeteorite(Projectile) : void
             {method} + handleShot(Projectile) : void
@@ -974,9 +1002,9 @@ package Model {
 
         ShipCoords <-- "1" Components::BaseComponent
         class ShipCoords{
-            {field} [final] x : int
-            {field} [final] y : int
-            {field} [final] type : GameModeType
+            {field} - [final] x : int
+            {field} - [final] y : int
+            {field} - [final] type : GameModeType
             {method} + getType() : GameModeType
             {method} + getNextTo() : ShipCoords[]
             {method} + up() : ShipCoords
@@ -996,7 +1024,7 @@ package Model {
             {field} # [final] model : ModelInstance 
             {field} # [final] type : GameModeType
             {field} # [final] count : PlayerCount
-            {field} # [final] players : List<Player>
+            {field} # [final] players : ArrayList<Player>
             {method} + [abstract] validate(ServerMessage message) : void
             {method} + [abstract] getNext() : GameState 
             {method} + [abstract] getClientState() : ClientState
@@ -1007,7 +1035,6 @@ package Model {
             {method} + broadcastMessage(ClientMessage) : void
             {method} + transition() : void
             {method} + getCount() : PlayerCount
-            {method} + getPlayer(PlayerColor) : Player
             {method} + getType() : GameModeType
             {method} + getModelID() : int
             {method} + getPlayers() : ArrayList<Player>
@@ -1037,6 +1064,7 @@ package Model {
             {method} + getNext() : GameState 
             {method} + getClientState() : ClientState 
             {method} + init() : void
+            {method} + toSerialize() : boolean
             {method} + connect(ClientDescriptor client) : void
             {method} + disconnect(ClientDescriptor client) : void
         }
@@ -1062,10 +1090,12 @@ package Model {
         iCommonBoard --u---- ConstructionState:board
         iCards "1" --u---- ConstructionState:voyage_deck
         abstract ConstructionState <<abstract>> {
-            {field} [final] building : ArrayList<Player>
-            {field} [final] finished : ArrayList<Player>
-            {field} [final] current_tile : HashMap<Player, BaseComponent>
-            {field} [final] hoarded_tile : HashMap<Player, ArrayList<BaseComponent>>
+            {field} # [final] board : iCommonBoard
+            {field} # [final] voyage_deck : iCards
+            {field} # [final] building : ArrayList<Player>
+            {field} # [final] finished : ArrayList<Player>
+            {field} # [final] current_tile : HashMap<Player, BaseComponent>
+            {field} # [final] hoarded_tile : HashMap<Player, ArrayList<BaseComponent>>
             {method} + validate(ServerMessage message) : void
             {method} + getNext() : GameState 
             {method} + getClientState() : ClientState 
@@ -1076,6 +1106,7 @@ package Model {
             {method} + putComponent(Player, ShipCoords coords) : void
             {method} + takeComponent(Player) : void
             {method} + takeDiscarded(Player, int id) : void
+            {method} + reserveComponent(Player) : void
             {method} + discardComponent(Player, int id) : void
             {method} + toSerialize() : boolean
             {method} + toString() : String
@@ -1093,6 +1124,7 @@ package Model {
         ConstructionState ^-- LevelTwoConstructionState
         ConstructionStateHourglass -r- LevelTwoConstructionState:hourglass
         class LevelTwoConstructionState {
+            {field} - [final] hourglass :ConstructionStateHourglass
             {method} + init() : void
             {method} + getClientState() : ClientState
             {method} + sendContinue(Player) : void
@@ -1104,10 +1136,10 @@ package Model {
         }
 
         class ConstructionStateHourglass {
-            {field} [final] period : Duration
-            {field} toggled : Instant
-            {field} [final] total : int
-            {field} times : int
+            {field} - [final] period : Duration
+            {field} - toggled : Instant
+            {field} - [final] total : int
+            {field} - times : int
             {method} + timesTotal() : int
             {method} + timesLeft() : int
             {method} + getDuration() : Duration
@@ -1121,6 +1153,7 @@ package Model {
         GameState ^... VerifyState
         iCards "1" --u---- VerifyState:voyage_deck
         class VerifyState {
+            {field} - [final] voyage_deck : iCards
             {field} - [final] to_clean: ArrayList<Player>
             {field} - [final] finish_order : ArrayList<Player>
             {field} - [final] awaiting : ArrayList<Player>
@@ -1146,20 +1179,23 @@ package Model {
         iCard "1" --u---- VoyageState:card
         CardState "1" ----u-- VoyageState:state
         class VoyageState {
+            {field} - [final] planche : iPlanche
+            {field} - [final] voyage_deck : iCards
             {field} - [final] to_give_up : ArrayList<Player>
+            {field} - card : iCard
+            {field} - state : CardState
             {method} + validate(ServerMessage message) : void
-            {method} + getNext() : GameState 
-            {method} + getClientState() : ClientState 
+            {method} + getNext() : GameState
+            {method} + getClientState() : ClientState
             {method} + init() : void
             {method} + connect(Player) : void
             {method} + disconnect(Player) : void
             {method} + giveUp(Player) : void
             {method} + getCardState(Player) : CardState
             {method} + loseGame(Player) : void
-            {method} + getAllConnectedPlayers() : List<Player> 
             {method} + getOrder(CardOrder) : List<Player>
             {method} + findCriteria(CombatZoneCriteria) : Player
-            {method} + getPlanche() : iPlanche 
+            {method} + getPlanche() : iPlanche
             {method} + setCardState(CardState) : void
             {method} + toSerialize() : boolean
             {method} + toString() : String
@@ -1168,8 +1204,8 @@ package Model {
 
         GameState ^... EndscreenState
         class EndscreenState {
-            {field} - [final] awaiting : List<Player> 
-            {field} - [final] order_arrival : List<Player> 
+            {field} - [final] awaiting : ArrayList<Player>
+            {field} - [final] order_arrival : ArrayList<Player>
             {method} + validate(ServerMessage message) : void
             {method} + getNext() : GameState 
             {method} + getClientState() : ClientState 
@@ -1186,9 +1222,12 @@ package Model {
 
     State::GameState "1" ----u---- ModelInstance:state 
     class ModelInstance {
-        {field} - [final] id: int
-        {field} - started: boolean
-        {field} - ended: boolean
+        {field} # paused : boolean
+        {field} # [final] id: int
+        {field} # controller : LobbyController
+        {field} # started: boolean
+        {field} # ended: boolean
+        {field} # state : GameState
         {method} + getID() : int
         {method} + validate(ServerMessage message) : void
         {method} + serialize() : void
@@ -1221,18 +1260,18 @@ package Model {
             }
 
             interface ClientCardStateVisitor <<interface>> { 
-                {method} + show(ClientAwaitConfirmCardStateDecorator) : void
-                {method} + show(ClientBaseCardState) : void
-                {method} + show(ClientCargoPenaltyCardStateDecorator) : void
-                {method} + show(ClientCargoRewardCardStateDecorator) : void
-                {method} + show(ClientCombatZoneIndexCardStateDecorator) : void
-                {method} + show(ClientCreditsRewardCardStateDecorator) : void
-                {method} + show(ClientCrewPenaltyCardStateDecorator) : void
-                {method} + show(ClientLandingCardStateDecorator) : void
-                {method} + show(ClientMeteoriteCardStateDecorator) : void
-                {method} + show(ClientNewCenterCardStateDecorator) : void
-                {method} + show(ClientProjectileCardStateDecorator) : void
-                {method} + show(ClientEnemyCardStateDecorator) : void
+                {method} show(ClientAwaitConfirmCardStateDecorator) : void
+                {method} show(ClientBaseCardState) : void
+                {method} show(ClientCargoPenaltyCardStateDecorator) : void
+                {method} show(ClientCargoRewardCardStateDecorator) : void
+                {method} show(ClientCombatZoneIndexCardStateDecorator) : void
+                {method} show(ClientCreditsRewardCardStateDecorator) : void
+                {method} show(ClientCrewPenaltyCardStateDecorator) : void
+                {method} show(ClientLandingCardStateDecorator) : void
+                {method} show(ClientMeteoriteCardStateDecorator) : void
+                {method} show(ClientNewCenterCardStateDecorator) : void
+                {method} show(ClientProjectileCardStateDecorator) : void
+                {method} show(ClientEnemyCardStateDecorator) : void
             }
 
             ClientCardState ^.. ClientBaseCardState
@@ -1248,8 +1287,8 @@ package Model {
             ClientBaseCardState <-- ClassAwaitConfirmCardStateDecorator:base
             class ClientAwaitConfirmCardStateDecorator {
                 {field} - [final] base : ClientCardState
-                {field} - [final] awaiting : List<PlayerColor> 
-                {method} + getAwaiting() : List<PlayerColor> 
+                {field} - [final] awaiting : ArrayList<PlayerColor>
+                {method} + getAwaiting() : ArrayList<PlayerColor>
                 {method} + showCardState(ClientCardStateVisitor) : void
             }
 
@@ -1281,10 +1320,11 @@ package Model {
             ClientBaseCardState <-- ClientCombatZoneIndexCardStateDecorator:base
             class ClientCombatZoneIndexCardStateDecorator {
                 {field} - [final] base : ClientCardState
+                {field} - [final] section : CombatZoneSection
                 {field} - [final] index : int
                 {method} + getSection() : CombatZoneSection
                 {method} + getIndex() : int
-                {method} + showCardState(ClientView) : void
+                {method} + showCardState(ClientCardStateVisitor) : void
             }
             
             ClientCardState ^.. ClientCreditsRewardCardStateDecorator
@@ -1297,7 +1337,7 @@ package Model {
                 {method} + getTurn() : PlayerColor
                 {method} + getCredits() : int
                 {method} + getDaysTaken() : int 
-                {method} + showCardState(ClientView) : void
+                {method} + showCardState(ClientCardStateVisitor) : void
             }
             
             ClientCardState ^.. ClientCrewPenaltyCardStateDecorator
@@ -1305,10 +1345,23 @@ package Model {
             class ClientCrewPenaltyCardStateDecorator {
                 {field} - [final] base : ClientCardState
                 {field} - [final] turn : PlayerColor 
-                {field} - [final] days_taken : int 
+                {field} - [final] crew_amount : int
                 {method} + getTurn() : PlayerColor
                 {method} + getCrewLost() : int
-                {method} + showCardState(ClientView) : void
+                {method} + showCardState(ClientCardStateVisitor) : void
+            }
+
+            ClientCardState ^.. ClientEnemyCardStateDecorator
+            ClientBaseCardState <-- ClientEnemyCardStateDecorator:base
+            class ClientEnemyCardStateDecorator {
+                {field} - [final] base : ClientCardState
+                {field} - [final] power : double
+                {field} - [final] penalty : CombatZonePenalty
+                {field} - [final] amount : int
+                {method} + getPower() : double
+                {method} + getPenalty() : CombatZonePenalty
+                {method} + getAmount() : int
+                {method} + showCardState(ClientCardStateVisitor)
             }
             
             ClientCardState ^.. ClientLandingCardStateDecorator
@@ -1317,30 +1370,33 @@ package Model {
                 {field} - [final] base : ClientCardState
                 {field} - [final] turn : PlayerColor 
                 {field} - [final] days_taken : int 
-                {field} - [final] crew_needed: int 
-                {field} - [final] available : List<Boolean>
+                {field} - [final] crew_needed: int
+                {field} - [final] credits : int
+                {field} - [final] available : ArrayList<Planet>
                 {method} + getTurn() : PlayerColor
                 {method} + getDaysTaken() : int
                 {method} + getCrewNeeded() : int
+                {method} + getCredits() : int
                 {method} + getAvailable() : List<Boolean>
-                {method} + showCardState(ClientView) : void
+                {method} + showCardState(ClientCardStateVisitor) : void
             }
             
             ClientCardState ^.. ClientMeteoriteCardStateDecorator 
             ClientBaseCardState <-- ClientMeteoriteCardStateDecorator :base
             class ClientMeteoriteCardStateDecorator  {
+                {field} - [final] base : ClientCardState
                 {field} - [final] meteorite : Projectile
                 {method} + getProjectile() : Projectile
-                {method} + showCardState(ClientView) : void
+                {method} + showCardState(ClientCardStateVisitor) : void
             }
 
             ClientCardState ^.. ClientNewCenterCardStateDecorator
             ClientBaseCardState <-- ClientNewCenterCardStateDecorator:base
             class ClientNewCenterCardStateDecorator {
                 {field} - [final] base : ClientCardState
-                {field} - [final] awaiting : List<PlayerColor>
-                {method} + getAwaiting() : List<PlayerColor>
-                {method} + showCardState(ClientView) : void
+                {field} - [final] awaiting : ArrayList<PlayerColor>
+                {method} + getAwaiting() : ArrayList<PlayerColor>
+                {method} + showCardState(ClientCardStateVisitor) : void
             }
             
             ClientCardState ^.. ClientProjectileCardStateDecorator
@@ -1349,7 +1405,7 @@ package Model {
                 {field} - [final] base : ClientCardState
                 {field} - [final] shot : Projectile
                 {method} + getProjectile() : Projectile
-                {method} + showCardState(ClientView) : void
+                {method} + showCardState(ClientCardStateVisitor) : void
             }
         
         }
@@ -1401,10 +1457,11 @@ package Model {
                 {field} - [final] base : ClientComponent
                 {field} - [final] type : AlienType 
                 {field} - [final] crew : int
-                {field} - [final] base : ClientComponent
+                {field} - [final] starting : boolean
                 {method} + getBase() : ClientComponent
                 {method} + getAlienType() : AlienType
                 {method} + getCrew() : int
+                {method} + getStarting() : boolean
                 {method} + showComponent(ClientComponentVisitor) : void
             }
 
@@ -1455,6 +1512,8 @@ package Model {
                 {method} + showComponent(ClientComponentVisitor) : void
             }
 
+            ClientComponent ^.. ClientShieldComponentDecorator
+            ClientBaseComponent <-- ClientShieldComponentDecorator:base
             class ClientShieldComponentDecorator {
                 {field} - [final] base : ClientComponent
                 {field} - [final] type : ShieldType
@@ -1467,9 +1526,11 @@ package Model {
             ClientBaseComponent <-- ClientShipmentComponentDecorator:base
             class ClientShipmentsComponentDecorator {
                 {field} - [final] shipments : int[]
+                {field} - [final] type : StorageType
                 {field} - [final] base : ClientComponent
                 {method} + getBase() : ClientComponent
                 {method} + getShipments() : int[]
+                {method} + getType() : StorageType
                 {method} + showComponent(ClientComponentVisitor) : void
             }
 
@@ -1517,10 +1578,12 @@ package Model {
                 {field} - [final] ship : ClientSpaceShip
                 {field} - [final] reserved_components : ArrayList<Integer>
                 {field} - [final] boolean : finished
+                {field} - [final] boolean : disconnected
                 {field} - [final] current_component : int
                 {method} + getUsername() : String
                 {method} + getColor() : PlayerColor
                 {method} + getShip() : ClientSpaceShip
+                {method} + isDisconnected() : boolean
                 {method} + getReserved() : List<Integer> 
                 {method} + isFinished() : boolean
                 {method} + getCurrent() : int
@@ -1531,12 +1594,18 @@ package Model {
                 {field} - [final] username : String
                 {field} - [final] color : PlayerColor
                 {field} - [final] ship : ClientSpaceShip
-                {field} - [final] finished : boolean
+                {field} - [final] valid : boolean
+                {field} - [final] progressed : boolean
+                {field} - [final] starts_losing : boolean
+                {field} - [final] disconnected : boolean
                 {field} - [final] order : int
                 {method} + getUsername() : String
                 {method} + getColor() : PlayerColor
                 {method} + getShip() : ClientSpaceShip
-                {method} + isFinished() : boolean
+                {method} + isValid() : boolean
+                {method} + hasProgressed() : boolean
+                {method} + startsLosing() : boolean
+                {method} + isDisconnected() : boolean
                 {method} + getOrder() : int
             }
 
@@ -1555,8 +1624,8 @@ package Model {
                 {method} + getShip() : ClientSpaceShip
                 {method} + getPlancheSlot() : int
                 {method} + getCredits() : int
-                {method} + getDisconnected() : boolean
-                {method} + getRetired() : boolean
+                {method} + isDisconnected() : boolean
+                {method} + isRetired() : boolean
             }
 
             class ClientEndgamePlayer {
@@ -1575,7 +1644,6 @@ package Model {
         }
 
         package State {
-            
 
             interface ClientState <<interface>> {
                 {method} + sendToView(ClientView) : void
@@ -1644,23 +1712,28 @@ package Model {
             ClientState ^.. ClientVerifyState
             class ClientVerifyState {
                 {field} - [final] players : ArrayList<ClientVerifyPlayer>
+                {field} - [final] type : GameModeType
                 {method} + getPlayers() : ArrayList<ClientVerifyPlayer>
-                {method} + sendToView(ClientView) : void  
+                {method} + sendToView(ClientView) : void
+                {method} + getType() : GameModeType
             }
 
             ClientState ^.. ClientVoyageState
             class ClientVoyageState {
                 {field} - [final] type : GameModeType
                 {field} - [final] playerlist : ArrayList<ClientVoyagePlayer>
-                {field} - [final] card_state : ClientCardState 
+                {field} - [final] card_state : ClientCardState
+                {field} - [final] cards_left : int
                 {method} + getType() : GameModeType
                 {method} + getPlayerList() : ArrayList<ClientVoyagePlayer>
-                {method} + getCardState() : ClientCardState 
+                {method} + getCardState() : ClientCardState
+                {method} + getCardsLeft() : int
                 {method} + sendToView(ClientView) : void 
             }
 
             ClientState ^.. ClientEndgameState
             class ClientEndgameState {
+                {field} - [final] awaiting : ArrayList<ClientEndgamePlayer>
                 {field} - [final] playerlist : ArrayList<ClientEndgamePlayer>
                 {method} + getPlayerList() : List<ClientEndgamePlayer>
                 {method} + sendToView(ClientView) : void 
